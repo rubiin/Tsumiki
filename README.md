@@ -1,28 +1,64 @@
 # FabricPanel
 
-A semi customizable bar written using [Fabric Widget System](https://github.com/Fabric-Development/fabric) thus the name.
-Head over to https://its-darsh.github.io/fabric-wiki/introduction/installation-guide/ for getting started with dependencies.
+A semi-customizable bar written using the [Fabric Widget System](https://github.com/Fabric-Development/fabric)  
+For installation and getting started with dependencies, refer to the [Fabric Wiki Installation Guide](https://its-darsh.github.io/fabric-wiki/introduction/installation-guide/).
 
+---
 
-** Prequisite
-- Jetbrains Nerd font
+## **Prerequisites**
 
-Clone the repo
+- **JetBrains Nerd Font**
 
+---
 
+## **Installation**
 
-Installation in a nutshell:
-- Install these arch deps
-```sh
-    sudo pacman -S gtk3 cairo gtk-layer-shell libgirepository gobject-introspection gobject-introspection-runtime python python-pip python-gobject python-cairo python-loguru pkgconf
+### **1. Install Dependencies**
+
+Run the following command to install the required packages:
+
+```bash
+# Arch Linux
+
+sudo pacman -S gtk3 cairo gtk-layer-shell libgirepository gobject-introspection gobject-introspection-runtime python python-pip python-gobject python-cairo python-loguru pkgconf
+
+# OpenSUSE
+
+sudo zypper install gtk3-devel cairo-devel gtk-layer-shell-devel libgirepository-1_0-1 libgirepository-2_0-0 gobject-introspection-devel python311 python311-pip python311-gobject python311-gobject-cairo python311-pycairo python311-loguru pkgconf
 ```
-- Clone the repo
-- Run, `pip install -r requirements.txt` to install the python dependencies
 
+### **2. Clone the Repository**
 
+Clone this repository:
 
-For hyperland, add `python main.py` on `hypr.conf`.
-Similar for other Window managers.
+```bash
+git clone https://github.com/rubiin/FabricPanel.git
+cd FabricPanel
+```
 
+### **3. Install Dependencies**
 
-This is still in early development and will include breaking changes
+Install the requirements:
+
+```
+pip install -r requirements.txt
+```
+
+---
+
+## **Usage**
+
+### **For Hyprland:**
+
+Add the following line to your `hypr.conf` to start FabricPanel automatically:
+
+```bash
+exec = python main.py
+```
+
+### **For Other Window Managers:**
+
+Use a similar configuration for your respective window manager's autostart setup.
+
+> [!WARNING]
+> This is still in early development and will include breaking changes
