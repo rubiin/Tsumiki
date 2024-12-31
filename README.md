@@ -145,7 +145,7 @@ Once the dependencies are installed, run the following command to start the bar 
 Add this to your `.config/hyprland.conf`
 
 ```sh
-exec = "$HOME/bar/init.sh -start"
+exec = `$HOME/bar/init.sh -start`
 
 ```
 
