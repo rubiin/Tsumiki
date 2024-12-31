@@ -81,7 +81,6 @@ cd bar
 
 - Run the following command to install the required packages for particular os, few of them are already installed if you have a working system:
 
-
 ## Installation
 
 You can choose one of two installation methods: **Automated Setup** or **Manual Setup**.
@@ -93,20 +92,19 @@ You can choose one of two installation methods: **Automated Setup** or **Manual 
 ```sh
 ./init.sh -install
 ```
-    
+
 This script will:
-    
--   Install all required `pacman` and AUR packages.
--   Set up the virtual environment and any required configurations.
+
+- Install all required `pacman` and AUR packages.
+- Set up the virtual environment and any required configurations.
 
 1.  **Start the environment or bar** once the installation is complete:
-    
- ```sh
- ./init.sh -start
+
+```sh
+./init.sh -start
 ```
 
- This will launch the environment or bar as defined in your project.
-
+This will launch the environment or bar as defined in your project.
 
 ### Option 2: Manual Setup (Install Dependencies First)
 
@@ -117,7 +115,7 @@ If you prefer to have more control over the installation process, you can instal
 Run the following command to install the required system packages:
 
 ```sh
-sudo pacman -S pipewire playerctl dart-sass networkmanager wl-clipboard brightnessctl python pacman-contrib gtk3 cairo gtk-layer-shell libgirepository gobject-introspection gobject-introspection-runtime python-pip python-gobject python-psutil python-cairo python-loguru pkgconf wf-recorder kitty grimblast gnome-bluetooth 
+sudo pacman -S pipewire playerctl dart-sass networkmanager wl-clipboard brightnessctl python pacman-contrib gtk3 cairo gtk-layer-shell libgirepository gobject-introspection gobject-introspection-runtime python-pip python-gobject python-psutil python-cairo python-loguru pkgconf wf-recorder kitty grimblast gnome-bluetooth
 ```
 
 #### Step 2: Install AUR Packages with `yay`
@@ -131,12 +129,10 @@ Use `yay` to install the required AUR packages:
 #### Step 3: Run the `init.sh -start` Script
 
 Once the dependencies are installed, run the following command to start the bar or environment:
- 
- ```sh
- ./init.sh -start
+
+```sh
+./init.sh -start
 ```
-
-
 
 ## **Usage**
 

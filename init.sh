@@ -32,10 +32,10 @@ start_bar() {
 install_packages() {
   # Display an ASCII art (a small logo) in blue
   echo -e "\e[1;34m
-     /\     
-    /  \    
-   /    \   
-  /______\  
+     /\
+    /  \
+   /    \
+  /______\
  /\      /\
 /  \    /  \
 \   \/\/   /
