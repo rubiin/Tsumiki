@@ -1,8 +1,9 @@
-#!/bin/sh
+#!/bin/bash
+# shellcheck source=/dev/null
 
 start_bar() {
   # Navigate to the $HOME/bar directory
-  cd $HOME/bar || {
+  cd "$HOME/bar" || {
     echo "Directory $HOME/bar does not exist."
     exit 1
   }
@@ -59,7 +60,7 @@ case "$1" in
   start_bar # Call the start_bar function
   ;;
 -update)
-  echo "Not implemented yet" # Placeholder for the update functionality
+  git pull origin # Placeholder for the update functionality
   ;;
 -install)
   install_packages # Call the install_packages function
