@@ -140,7 +140,7 @@ DEFAULT_CONFIG = {
     "recorder": {
         "photos": "Pictures/Screenshots",
         "videos": "Videos/Screencasting",
-        "icon_size": 14,
+        "icon_size": 16,
         "tooltip": True,
     },
 }

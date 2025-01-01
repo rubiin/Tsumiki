@@ -510,8 +510,8 @@ icons = {
         "shutdown": "system-shutdown-symbolic",
     },
     "recorder": {
-        "recording": "simplescreenrecorder-recording-symbolic",
-        "stopped": "simplescreenrecorder-idle-symbolic",
+        "recording": "media-record-symbolic",
+        "stopped": "media-record-symbolic",
     },
     "notifications": {
         "noisy": "org.gnome.Settings-notifications-symbolic",

@@ -141,6 +141,6 @@
     "photos": "Pictures/Screenshots",
     "videos": "Videos/Screencasting",
     "tooltip": true,
-    "icon_size": 14
+    "icon_size": 16
   }
 }

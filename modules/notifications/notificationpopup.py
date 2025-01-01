@@ -34,6 +34,7 @@ class NotificationPopup(WaylandWindow):
             anchor=self.config["anchor"],
             layer="overlay",
             all_visible=True,
+            monitor=HyprlandWithMonitors().get_current_gdk_monitor_id(),
             visible=True,
             exclusive=False,
             child=self.notifications,

@@ -125,6 +125,8 @@ class OSDContainer(Window):
         self.audio_container = AudioOSDContainer()
         self.brightness_container = BrightnessOSDContainer()
 
+        self.hyprland_monitor = HyprlandWithMonitors()
+
         self.config = widget_config["osd"]
 
         self.timeout = self.config["timeout"]
@@ -151,6 +153,8 @@ class OSDContainer(Window):
             keyboard_mode=keyboard_mode,
             **kwargs,
         )
+
+        self.monitor = self.hyprland_monitor.get_current_gdk_monitor_id()
 
         self.last_activity_time = time.time()
 
