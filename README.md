@@ -123,7 +123,7 @@ sudo pacman -S pipewire playerctl dart-sass networkmanager wl-clipboard brightne
 Use `yay` to install the required AUR packages:
 
 ```sh
-yay -S gray-git python-fabric rlottie
+yay -S gray-git python-fabric
 ```
 
 #### Step 3: Run the `init.sh -start` Script
