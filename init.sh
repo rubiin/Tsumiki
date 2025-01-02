@@ -48,7 +48,7 @@ install_packages() {
 	echo -e "\e[1;34mInstalling the pre-requisites, may take a while....\e[0m"
 
 	# Install packages using pacman
-	sudo pacman -S --noconfirm pipewire playerctl dart-sass networkmanager wl-clipboard brightnessctl python pacman-contrib gtk3 cairo gtk-layer-shell libgirepository gobject-introspection gobject-introspection-runtime python-pip python-gobject python-psutil python-cairo python-loguru pkgconf wf-recorder kitty grimblast gnome-bluetooth
+	sudo pacman -S --noconfirm pipewire playerctl dart-sass networkmanager wl-clipboard brightnessctl python pacman-contrib gtk3 cairo gtk-layer-shell libgirepository gobject-introspection gobject-introspection-runtime python-pip python-gobject python-psutil python-cairo python-loguru python-setproctitle pkgconf wf-recorder kitty grimblast gnome-bluetooth
 
 	# Install packages using yay (AUR helper)
 	yay -S --noconfirm gray-git python-fabric
