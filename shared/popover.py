@@ -18,9 +18,8 @@ class PopOverWindow(WaylandWindow):
         margin: tuple[int, ...] | str = "0px 0px 0px 0px",
         **kwargs,
     ):
-        super().__init__(**kwargs)
+        super().__init__(style_classes="popover", **kwargs)
         self.exclusivity = "none"
-
         self._parent = parent
         self._pointing_widget = pointing_to
         self._base_margin = self.extract_margin(margin)

@@ -32,6 +32,7 @@ class NotificationWidget(EventBox):
     ):
         super().__init__(
             size=(config.NOTIFICATION_WIDTH, -1),
+            name="notification-eventbox",
             **kwargs,
         )
 

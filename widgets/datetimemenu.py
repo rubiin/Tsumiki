@@ -176,7 +176,7 @@ class DateTimeWidget(BoxWidget):
 
         popup = PopOverWindow(
             parent=bar,
-            name="popup",
+            name="date-menu-popover",
             child=date_menu,
             visible=False,
             all_visible=False,

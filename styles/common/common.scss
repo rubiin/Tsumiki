@@ -37,6 +37,11 @@ label {
   }
 }
 
+.popover {
+  min-width: 15em;
+  color: theme.$text-main;
+}
+
 .panel-text {
   font-weight: bold;
   margin-left: 10px;
@@ -192,18 +197,17 @@ radio:indeterminate:active {
 switch {
   transition: all 75ms cubic-bezier(0, 0, 0.2, 1);
   margin: 4px 0;
-  border: variable.$border-width solid theme.$text-main;
   border-radius: 9999px;
-  background-color: theme.$background;
+  background-color: lighten(theme.$background, 10%);
   background-clip: padding-box;
   font-size: 0;
   color: transparent;
 
   slider {
     transition: all 75ms cubic-bezier(0, 0, 0.2, 1);
-    min-width: 12px;
-    min-height: 12px;
-    margin: 3px;
+    min-width: 14px;
+    min-height: 14px;
+    margin: 2px;
     border-radius: 9999px;
     outline: none;
     background-color: theme.$text-main;

@@ -281,7 +281,7 @@ class WeatherWidget(ButtonWidget):
 
         popup = PopOverWindow(
             parent=self.bar,
-            name="popup",
+            name="date-menu-popover",
             child=(WeatherMenu(data=res)),
             visible=False,
             all_visible=False,

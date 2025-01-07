@@ -7,96 +7,89 @@ $hover-tranistion: background 0.15s ease-in-out;
 
 /* notification widget*/
 
-#notification {
-  padding: 0.8rem;
-  border-radius: 1rem;
-  background: theme.$background-alt;
-  color: theme.$text-main;
-  border: variable.$border-width solid theme.$surface-disabled;
+#notification-eventbox {
+  #notification {
+    padding: 0.8rem;
+    border-radius: 1rem;
+    background: theme.$background-alt;
+    color: theme.$text-main;
+    border: variable.$border-width solid theme.$surface-disabled;
+
+    .notification-body {
+      padding: 0.25em;
+    }
+  }
+
+  .notification-header {
+    .summary {
+      font-size: 14px;
+      font-weight: bold;
+      text-shadow: none;
+    }
+
+    .timestamp {
+      font-size: 12px;
+      font-weight: bold;
+      text-shadow: none;
+      margin-right: 10px;
+    }
+  }
 
   .notification-body {
-    padding: 0.25em;
-  }
-}
-
-.notification-header {
-  .summary {
-    font-size: 14px;
-    font-weight: bold;
-    text-shadow: none;
-  }
-
-  .timestamp {
-    font-size: 12px;
-    font-weight: bold;
-    text-shadow: none;
-    margin-right: 10px;
-  }
-}
-
-.notification-body {
-  .body {
-    font-size: 13px;
-    font-weight: 500;
-    background: transparent;
-    text-shadow: none;
-    padding: 5px;
-  }
-
-  .image {
-    border-radius: 15px;
-  }
-}
-
-.close-button {
-  border-radius: 100px;
-
-  &:hover {
-    box-shadow: none;
-    border: none;
-    background: color.mix(theme.$text-main, transparent, 20%);
-    transition: $hover-tranistion;
-  }
-}
-
-#notification-action-box {
-  button {
-    padding: 4px;
-    margin: 0;
-    font-weight: 600;
-    border-radius: 3rem;
-    box-shadow: none;
-    background: transparent;
-    transition: $hover-tranistion;
-
-    &.start-action {
-      margin-left: 0;
+    .body {
+      font-size: 13px;
+      font-weight: 500;
+      background: transparent;
+      text-shadow: none;
+      padding: 5px;
     }
 
-    &.end-action {
-      margin-right: 0;
+    .image {
+      border-radius: 15px;
     }
+  }
+
+  .close-button {
+    border-radius: 100px;
 
     &:hover {
-      background: theme.$background;
+      box-shadow: none;
+      border: none;
+      background: color.mix(theme.$text-main, transparent, 20%);
+      transition: $hover-tranistion;
     }
   }
+
+  #notification-action-box {
+    button {
+      padding: 4px;
+      margin: 0;
+      font-weight: 600;
+      border-radius: 3rem;
+      box-shadow: none;
+      background: transparent;
+      transition: $hover-tranistion;
+
+      &.start-action {
+        margin-left: 0;
+      }
+
+      &.end-action {
+        margin-right: 0;
+      }
+
+      &:hover {
+        background: theme.$background;
+      }
+    }
+  }
+
+  #notification-circular-progress-bar {
+    border: solid 0px rgb(151, 151, 177);
+    color: transparent;
+  }
+
+  .critical {
+    box-shadow: inset 0 0 0.15em 0 theme.$accent-red;
+  }
 }
-
-#notification-circular-progress-bar {
-  border: solid 0px rgb(151, 151, 177);
-  color: transparent;
-}
-
-.critical {
-  box-shadow: inset 0 0 0.15em 0 theme.$accent-red;
-}
-
-/* .notification-header #notification-icon {
-  Notification app icon (only visible when the primary image is set) */
-/* -gtk-icon-effect: highlight;              TODO: might use this on hover     */
-/* -gtk-icon-shadow: 0 1px 4px $text-main);
-
-} */
-/*
-*/

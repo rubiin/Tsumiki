@@ -63,7 +63,10 @@ class UpdatesWidget(ButtonWidget):
 
     def on_button_press(self, _, event):
         if event.button == 1:
-            exec_shell_command_async(f"{self.script_file} -{self.config['os']} -up",  lambda _: None,)
+            exec_shell_command_async(
+                f"{self.script_file} -{self.config['os']} -up",
+                lambda _: None,
+            )
             return True
         else:
             self.update()
