@@ -53,7 +53,7 @@ class WeatherMenu(Box):
 
         self.weather_anim = LottieAnimationWidget(
             LottieAnimation.from_file(
-                f"{self.weather_lottie_dir}/{weather_text_icons_v2[self.current_weather["weatherCode"]]["image"]}.json",
+                f"{self.weather_lottie_dir}/{weather_text_icons_v2[self.current_weather['weatherCode']]['image']}.json",
             ),
             scale=0.25,
             do_loop=True,
@@ -71,7 +71,7 @@ class WeatherMenu(Box):
                             children=(
                                 Label(
                                     style_classes="condition",
-                                    label=f"{self.current_weather["weatherDesc"][0]["value"]}",
+                                    label=f"{self.current_weather['weatherDesc'][0]['value']}",
                                 ),
                                 Label(
                                     style_classes="temperature",
@@ -158,11 +158,11 @@ class WeatherMenu(Box):
 
             hour = Label(
                 style_classes="weather-forecast-time",
-                label=f"{self.convert_to_12hr_format(column_data["time"])}",
+                label=f"{self.convert_to_12hr_format(column_data['time'])}",
                 h_align="center",
             )
             icon = Image(
-                image_file=f"{self.weather_icons_dir}/{weather_text_icons_v2[column_data["weatherCode"]]["image"]}.svg",
+                image_file=f"{self.weather_icons_dir}/{weather_text_icons_v2[column_data['weatherCode']]['image']}.svg",
                 size=70,
                 h_align="center",
                 h_expand=True,
@@ -171,7 +171,7 @@ class WeatherMenu(Box):
 
             temp = Label(
                 style_classes="weather-forecast-temp",
-                label=f"{column_data["tempC"]}°C",
+                label=f"{column_data['tempC']}°C",
                 h_align="center",
             )
             self.forecast_box.attach(hour, col, 0, 1, 1)
@@ -270,13 +270,13 @@ class WeatherWidget(ButtonWidget):
         res = value.get("weather")
         current_weather = res["current"]
         text_icon = weather_text_icons[current_weather["weatherCode"]]["icon"]
-        self.weather_label.set_label(f"{current_weather["FeelsLikeC"]}°C")
+        self.weather_label.set_label(f"{current_weather['FeelsLikeC']}°C")
         self.weather_icon.set_label(text_icon)
 
         # Update the tooltip with the city and weather condition if enabled
         if self.config["tooltip"]:
             self.set_tooltip_text(
-                f"{res['location']}, {current_weather["weatherDesc"][0]["value"]}"
+                f"{res['location']}, {current_weather['weatherDesc'][0]['value']}"
             )
 
         popup = PopOverWindow(

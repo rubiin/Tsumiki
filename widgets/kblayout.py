@@ -47,7 +47,7 @@ class KeyboardLayoutWidget(BoxWidget):
 
         if self.config["tooltip"]:
             self.set_tooltip_text(
-                f"Caps Lock 󰪛: {main_kb["capsLock"]} | Num Lock : {main_kb["numLock"]}"
+                f"Caps Lock 󰪛: {main_kb['capsLock']} | Num Lock : {main_kb['numLock']}"
             )
 
         # Update the label with the used storage if enabled
