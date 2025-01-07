@@ -29,7 +29,7 @@ class ScreenRecorder(Service):
             raise helpers.ExecutableNotFoundError("wf-recorder")
 
         self.config = widget_config["recorder"]
-        self.screenrecord_path = f"{GLib.get_home_dir()}/{self.config['path']}"
+        self.screenrecord_path = f"{GLib.get_home_dir()}/{self.config["path"]}"
 
         helpers.ensure_dir_exists(self.screenrecord_path)
 
