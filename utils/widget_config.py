@@ -1,8 +1,7 @@
 from typing import List, TypedDict
 
-from utils.config import DEFAULT_CONFIG
 import utils.functions as helpers
-
+from utils.config import DEFAULT_CONFIG
 
 # Common configuration fields that will be reused
 BaseConfig = TypedDict(

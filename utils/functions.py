@@ -15,10 +15,10 @@ from fabric.widgets.scale import ScaleMark
 from gi.repository import GLib, Gtk
 from loguru import logger
 
-from utils.config import DEFAULT_CONFIG
 import utils.icons as icons
 from shared.animated.scale import AnimatedScale
 from utils.colors import Colors
+from utils.config import DEFAULT_CONFIG
 
 gi.require_version("Gtk", "3.0")
 
