@@ -427,6 +427,9 @@
         },
         "duration": {
           "type": "integer"
+        },
+        "show_percentage": {
+          "type": "boolean"
         }
       }
     },
