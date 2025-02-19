@@ -58,29 +58,15 @@
         },
         "location": {
           "type": "string",
-          "enum": [
-            "top",
-            "bottom"
-          ]
+          "enum": ["top", "bottom"]
         },
         "layer": {
           "type": "string",
-          "enum": [
-            "background",
-            "bottom",
-            "top",
-            "overlay"
-          ]
+          "enum": ["background", "bottom", "top", "overlay"]
         },
         "widget_style": {
           "type": "string",
-          "enum": [
-            "default",
-            "wave1",
-            "wave2",
-            "flat",
-            "shadow"
-          ]
+          "enum": ["default", "wave1", "wave2", "flat", "shadow"]
         }
       }
     },
@@ -414,12 +400,7 @@
       "properties": {
         "os": {
           "type": "string",
-          "enum": [
-            "arch",
-            "fedora",
-            "opensuse",
-            "ubuntu"
-          ]
+          "enum": ["arch", "fedora", "opensuse", "ubuntu"]
         }
       }
     },

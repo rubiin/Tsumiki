@@ -3,7 +3,6 @@
 @use "variable.scss";
 @use "sass:math";
 
-
 #player-stack-button {
   border-radius: 5px;
   min-width: 20px;
@@ -51,9 +50,6 @@
     margin-left: $image_size + 10;
     min-width: $player_width - $image_size - 20;
   }
-
-
-
 
   #track-info {
     min-width: $player_width - $image_size - 20;

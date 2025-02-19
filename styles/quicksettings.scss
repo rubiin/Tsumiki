@@ -24,7 +24,6 @@ $slider-height: 12px;
   }
 
   .quick-settings-box {
-
     #user-box-grid {
       margin-bottom: 10px;
 
@@ -34,7 +33,8 @@ $slider-height: 12px;
 
       .uptime {
         font-size: 0.92rem;
-        border: variable.$border-width solid lighten($color: theme.$surface-disabled, $amount: 10%);
+        border: variable.$border-width solid
+          lighten($color: theme.$surface-disabled, $amount: 10%);
         padding: 3px 9px;
         font-weight: 600;
         border-radius: 1rem;
@@ -82,8 +82,10 @@ $slider-height: 12px;
           padding: 0 2px;
         }
 
-        @include mixins.slider($highlight-color: theme.$accent-blue,
-          $slider: true);
+        @include mixins.slider(
+          $highlight-color: theme.$accent-blue,
+          $slider: true
+        );
       }
     }
 
@@ -129,7 +131,7 @@ $slider-height: 12px;
         &:active {
           background-color: theme.$text-main;
 
-          &>* {
+          & > * {
             color: theme.$background-dark;
           }
         }
@@ -137,7 +139,7 @@ $slider-height: 12px;
 
       #scan-button {
         &:active {
-            background-color: transparent;
+          background-color: transparent;
         }
       }
     }
