@@ -44,7 +44,7 @@ from widgets import (
     WindowTitleWidget,
     WorkSpacesWidget,
 )
-
+from shared.module_group import ModuleGroup
 
 class StatusBar(WaylandWindow):
     """A widget to display the status bar panel."""
@@ -145,9 +145,29 @@ class StatusBar(WaylandWindow):
         layout = {"left_section": [], "middle_section": [], "right_section": []}
 
         for key in layout:
-            layout[key].extend(
-                self.widgets_list[widget](widget_config, bar=self)
-                for widget in widget_config["layout"][key]
-            )
+            for widget_name in widget_config["layout"][key]:
+                if widget_name.startswith("@group:"):
+                    # Handle module groups - using index-based lookup
+                    group_name = widget_name.replace("@group:", "", 1)
+                    group_config = None
+                    
+                    if group_name.isdigit():
+                        idx = int(group_name)
+                        groups = widget_config.get("module_groups", [])
+                        if isinstance(groups, list) and 0 <= idx < len(groups):
+                            group_config = groups[idx]
+                    
+                    if group_config:
+                        group = ModuleGroup.from_config(
+                            group_config,
+                            self.widgets_list,
+                            bar=self,
+                            widget_config=widget_config
+                        )
+                        layout[key].append(group)
+                else:
+                    # Handle regular widgets
+                    if widget_name in self.widgets_list:
+                        layout[key].append(self.widgets_list[widget_name](widget_config, bar=self))
 
         return layout

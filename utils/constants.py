@@ -30,7 +30,7 @@ VALID_ANCHORS = [
 
 # Default configuration values
 DEFAULT_CONFIG = {
-    "$schema": "https://raw.githubusercontent.com/rubiin/HyDePanel/refs/heads/master/hydepanel.schema.json",
+    "$schema": "./hydepanel.schema.json",
     "battery": {
         "full_battery_level": 100,
         "hide_label_when_full": True,
@@ -101,17 +101,32 @@ DEFAULT_CONFIG = {
         "tooltip": True,
         "truncation_size": 2,
     },
+    "module_groups": [
+        {
+            "widgets": ["updates", "battery"],
+            "spacing": 4,
+            "style_classes": ["bordered"]
+        },
+        {
+            "widgets": ["quick_settings", "theme_switcher"],
+            "spacing": 0,
+            "style_classes": ["compact"]
+        }
+    ],
     "layout": {
-        "left_section": ["workspaces", "window_title"],
-        "middle_section": ["date_time"],
-        "right_section": [
-            "updates",
-            "battery",
-            "bluetooth",
-            "volume",
-            "system_tray",
-            "power",
+        "left_section": [
+            "workspaces",
+            "window_title"
         ],
+        "middle_section": [
+            "date_time"
+        ],
+        "right_section": [
+            "@group:0",
+            "@group:1",
+            "system_tray",
+            "power"
+        ]
     },
     "memory": {
         "icon": "",
@@ -572,7 +587,7 @@ KBLAYOUT_MAP = {
     "Latvian": "LV",
     "Latvian (adapted)": "LV (Adapted)",
     "Latvian (apostrophe)": "LV (Apostrophe)",
-    "Latvian (ergonomic, ŪGJRMV)": "LV (Ergonomic)",
+    "Latvian (ergonomic)": "LV (Ergonomic)",
     "Latvian (F)": "LV (Fkey)",
     "Latvian (modern)": "LV (Modern)",
     "Latvian (tilde)": "LV (Tilde)",

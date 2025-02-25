@@ -193,6 +193,29 @@
               "quick_settings"
             ]
           }
+        },
+        "module_groups": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "widgets": {
+                "type": "array",
+                "items": { "type": "string" }
+              },
+              "spacing": {
+                "type": "integer",
+                "default": 4,
+                "description": "Spacing between widgets in the group"
+              },
+              "style_classes": {
+                "type": "array",
+                "items": { "type": "string" },
+                "description": "Style classes to apply to the group (e.g. 'bordered', 'compact')"
+              }
+            },
+            "required": ["widgets"]
+          }
         }
       }
     },

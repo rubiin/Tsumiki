@@ -14,15 +14,22 @@ def get_style():
 class BoxWidget(Box):
     """A container for box widgets."""
 
-    def __init__(self, **kwargs):
+    def __init__(self, spacing=None, style_classes=None, **kwargs):
+        # Handle style classes
+        all_styles = ["panel-box"]
+        if style_classes:
+            if isinstance(style_classes, str):
+                all_styles.append(style_classes)
+            else:
+                all_styles.extend(style_classes)
+
         super().__init__(
-            spacing=4,
-            style_classes="panel-box",
+            spacing=4 if spacing is None else spacing,
+            style_classes=all_styles,
             **kwargs,
         )
 
         widget_style = get_style()
-
         self.add_style_class(widget_style)
 
 

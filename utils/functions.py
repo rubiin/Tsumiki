@@ -63,12 +63,49 @@ def merge_defaults(data: dict, defaults: dict):
 
 # Validate the widgets
 def validate_widgets(parsed_data, default_config):
+    """Validates the widgets defined in the layout configuration.
+
+    Args:
+        parsed_data (dict): The parsed configuration data
+        default_config (dict): The default configuration data
+
+    Raises:
+        ValueError: If an invalid widget is found in the layout
+    """
     layout = parsed_data["layout"]
     for section in layout:
         for widget in layout[section]:
-            if widget not in default_config:
+            if widget.startswith("@group:"):
+                # Handle module groups
+                group_idx = widget.replace("@group:", "", 1)
+                if not group_idx.isdigit():
+                    raise ValueError(
+                        f"Invalid module group index '{group_idx}' in section {section}. Must be a number."
+                    )
+                idx = int(group_idx)
+                groups = parsed_data.get("module_groups", [])
+                if not isinstance(groups, list):
+                    raise ValueError(
+                        "module_groups must be an array when using @group references"
+                    )
+                if not (0 <= idx < len(groups)):
+                    raise ValueError(
+                        f"Module group index {idx} is out of range. Available indices: 0-{len(groups)-1}"
+                    )
+                # Validate widgets inside the group
+                group = groups[idx]
+                if not isinstance(group, dict) or "widgets" not in group:
+                    raise ValueError(
+                        f"Invalid module group at index {idx}. Must be an object with 'widgets' array."
+                    )
+                for group_widget in group["widgets"]:
+                    if group_widget not in default_config:
+                        raise ValueError(
+                            f"Invalid widget '{group_widget}' found in module group {idx}. Please check the widget name."
+                        )
+            elif widget not in default_config:
                 raise ValueError(
-                    f"Invalid widget {widget} found in section {section}. Please check the widget name."  # noqa: E501
+                    f"Invalid widget '{widget}' found in section {section}. Please check the widget name."
                 )
 
 

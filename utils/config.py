@@ -47,9 +47,14 @@ class HydeConfig:
         validate_widgets(parsed_data, DEFAULT_CONFIG)
 
         for key in exclude_keys(DEFAULT_CONFIG, ["$schema"]):
-            parsed_data[key] = merge_defaults(
-                parsed_data.get(key, {}), DEFAULT_CONFIG[key]
-            )
+            if key == "module_groups":
+                # For lists, use the user's value or default if not present
+                parsed_data[key] = parsed_data.get(key, DEFAULT_CONFIG[key])
+            else:
+                # For dictionaries, merge with defaults
+                parsed_data[key] = merge_defaults(
+                    parsed_data.get(key, {}), DEFAULT_CONFIG[key]
+                )
 
         self.config = parsed_data
 

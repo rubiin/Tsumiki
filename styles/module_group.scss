@@ -1,0 +1,38 @@
+@use "sass:color";
+@use "theme.scss";
+@use "common/mixins.scss";
+@use "variable.scss";
+@use "common/functions.scss"; 
+
+.panel-module-group {
+
+    &.compact {
+        padding: 0;
+        margin: 0;
+
+        > *:not(:first-child) {
+            padding-right: calc(variable.$padding * 1.5);
+            padding-left: variable.$padding;
+        }
+        > *:not(:last-child) {
+            padding-right: variable.$padding;
+            padding-left: calc(variable.$padding * 1.5);
+        }
+    }
+
+
+    &.bordered {
+        border: variable.$border-width solid theme.$accent-light;
+        background: transparent;
+        padding: 4px 5px;
+
+        > * {
+            //background: transparent;
+        }
+        separator {
+            padding: 0;
+            margin: 0;
+        }
+    }
+
+}
