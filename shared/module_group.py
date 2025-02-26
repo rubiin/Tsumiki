@@ -1,18 +1,18 @@
-from fabric.widgets.box import Box
 from .widget_container import BoxWidget
+
 
 class ModuleGroup(BoxWidget):
     def __init__(self, children=None, spacing=4, style_classes=None, **kwargs):
         # Build our list of CSS classes
         css_classes = ["panel-module-group"]
-            
+
         # Add any custom style classes
         if style_classes:
             if isinstance(style_classes, str):
                 css_classes.append(style_classes)
             elif isinstance(style_classes, list):
                 css_classes.extend(style_classes)
-        
+
         super().__init__(
             spacing=spacing,
             style_classes=css_classes,

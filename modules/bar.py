@@ -7,6 +7,7 @@ from fabric.widgets.box import Box
 from fabric.widgets.centerbox import CenterBox
 from fabric.widgets.wayland import WaylandWindow
 
+from shared.module_group import ModuleGroup
 from utils.config import widget_config
 from utils.functions import convert_seconds_to_milliseconds
 from utils.monitors import HyprlandWithMonitors
@@ -44,7 +45,7 @@ from widgets import (
     WindowTitleWidget,
     WorkSpacesWidget,
 )
-from shared.module_group import ModuleGroup
+
 
 class StatusBar(WaylandWindow):
     """A widget to display the status bar panel."""
@@ -150,13 +151,13 @@ class StatusBar(WaylandWindow):
                     # Handle module groups - using index-based lookup
                     group_name = widget_name.replace("@group:", "", 1)
                     group_config = None
-                    
+
                     if group_name.isdigit():
                         idx = int(group_name)
                         groups = widget_config.get("module_groups", [])
                         if isinstance(groups, list) and 0 <= idx < len(groups):
                             group_config = groups[idx]
-                    
+
                     if group_config:
                         group = ModuleGroup.from_config(
                             group_config,
