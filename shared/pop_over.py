@@ -2,12 +2,14 @@ import contextlib
 
 import gi
 from fabric.widgets.wayland import WaylandWindow
-from gi.repository import Gdk, Gtk, GtkLayerShell
+from gi.repository import Gtk, GtkLayerShell, Gdk
 
 gi.require_version("GtkLayerShell", "0.1")
 
 
 class PopOverWindow(WaylandWindow):
+    """Window that displays content in a popover style, positioned relative to a parent widget."""
+
     def __init__(
         self,
         parent: WaylandWindow,
@@ -29,7 +31,7 @@ class PopOverWindow(WaylandWindow):
         self.connect("notify::visible", self.do_update_handlers)
 
     def get_coords_for_widget(self, widget: Gtk.Widget) -> tuple[int, int]:
-        if not ((toplevel := widget.get_toplevel()) and toplevel.is_toplevel()):
+        if not ((toplevel := widget.get_toplevel()) and toplevel.is_toplevel()):  
             return 0, 0
         allocation = widget.get_allocation()
         x, y = widget.translate_coordinates(toplevel, allocation.x, allocation.y) or (
@@ -40,18 +42,18 @@ class PopOverWindow(WaylandWindow):
 
     def get_monitor_geometry(self) -> Gdk.Rectangle | None:
         screen = self.display.get_default_screen()
-
+        
         if self._pointing_widget:
             window = self._pointing_widget.get_window()
             if window:
                 monitor_num = screen.get_monitor_at_window(window)
                 return screen.get_monitor_geometry(monitor_num)
-
+        
         window = self._parent.get_window()
         if window:
             monitor_num = screen.get_monitor_at_window(window)
             return screen.get_monitor_geometry(monitor_num)
-
+            
         return None
 
     def set_pointing_to(self, widget: Gtk.Widget | None):
@@ -111,7 +113,7 @@ class PopOverWindow(WaylandWindow):
 
     def do_reposition(self, move_axe: str):
         parent_margin = self._parent.margin
-        parent_x_margin, parent_y_margin = parent_margin[0], parent_margin[3]
+        parent_y_margin = parent_margin[3]
 
         height = self.get_allocated_height()
         width = self.get_allocated_width()
@@ -140,21 +142,25 @@ class PopOverWindow(WaylandWindow):
 
         monitor_geometry = self.get_monitor_geometry()
         x_margin = coords_centered[0] - (width / 2)
-
+        
         if monitor_geometry and move_axe == "x":
             final_x = x_margin
             base_margins = list(self._base_margin.values())
-
+            
             if final_x + width > monitor_geometry.width:
                 if position in ["center", "right"]:
-                    x_margin = monitor_geometry.width - width + base_margins[3] + parent_margin[1]
+                    edge_position = monitor_geometry.width - width
+                    margin_adjust = base_margins[3] + parent_margin[1]
+                    x_margin = edge_position + margin_adjust
                 else:
                     x_margin = parent_margin[3]
             elif final_x < 0:
                 if position in ["center", "left"]:
                     x_margin = parent_margin[3]
                 else:
-                    x_margin = monitor_geometry.width - width + base_margins[3] + parent_margin[1]
+                    edge_position = monitor_geometry.width - width
+                    margin_adjust = base_margins[3] + parent_margin[1]
+                    x_margin = edge_position + margin_adjust
 
         calculated_margin = (
             (0, 0, 0, x_margin)
