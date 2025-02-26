@@ -2,7 +2,7 @@ import contextlib
 
 import gi
 from fabric.widgets.wayland import WaylandWindow
-from gi.repository import Gtk, GtkLayerShell, Gdk
+from gi.repository import Gdk, Gtk, GtkLayerShell
 
 gi.require_version("GtkLayerShell", "0.1")
 
@@ -31,7 +31,7 @@ class PopOverWindow(WaylandWindow):
         self.connect("notify::visible", self.do_update_handlers)
 
     def get_coords_for_widget(self, widget: Gtk.Widget) -> tuple[int, int]:
-        if not ((toplevel := widget.get_toplevel()) and toplevel.is_toplevel()):  
+        if not ((toplevel := widget.get_toplevel()) and toplevel.is_toplevel()):
             return 0, 0
         allocation = widget.get_allocation()
         x, y = widget.translate_coordinates(toplevel, allocation.x, allocation.y) or (
@@ -42,18 +42,18 @@ class PopOverWindow(WaylandWindow):
 
     def get_monitor_geometry(self) -> Gdk.Rectangle | None:
         screen = self.display.get_default_screen()
-        
+
         if self._pointing_widget:
             window = self._pointing_widget.get_window()
             if window:
                 monitor_num = screen.get_monitor_at_window(window)
                 return screen.get_monitor_geometry(monitor_num)
-        
+
         window = self._parent.get_window()
         if window:
             monitor_num = screen.get_monitor_at_window(window)
             return screen.get_monitor_geometry(monitor_num)
-            
+
         return None
 
     def set_pointing_to(self, widget: Gtk.Widget | None):
@@ -142,11 +142,11 @@ class PopOverWindow(WaylandWindow):
 
         monitor_geometry = self.get_monitor_geometry()
         x_margin = coords_centered[0] - (width / 2)
-        
+
         if monitor_geometry and move_axe == "x":
             final_x = x_margin
             base_margins = list(self._base_margin.values())
-            
+
             if final_x + width > monitor_geometry.width:
                 if position in ["center", "right"]:
                     edge_position = monitor_geometry.width - width
