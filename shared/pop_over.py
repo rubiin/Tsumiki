@@ -2,14 +2,12 @@ import contextlib
 
 import gi
 from fabric.widgets.wayland import WaylandWindow
-from gi.repository import Gtk, GtkLayerShell
+from gi.repository import Gtk, GtkLayerShell, Gdk
 
 gi.require_version("GtkLayerShell", "0.1")
 
 
 class PopOverWindow(WaylandWindow):
-    """A popover window to show the content."""
-
     def __init__(
         self,
         parent: WaylandWindow,
@@ -26,11 +24,12 @@ class PopOverWindow(WaylandWindow):
         self._pointing_widget = pointing_to
         self._base_margin = self.extract_margin(margin)
         self.margin = self._base_margin.values()
+        self.display = Gdk.Display.get_default()
 
         self.connect("notify::visible", self.do_update_handlers)
 
     def get_coords_for_widget(self, widget: Gtk.Widget) -> tuple[int, int]:
-        if not ((toplevel := widget.get_toplevel()) and toplevel.is_toplevel()):  # type: ignore
+        if not ((toplevel := widget.get_toplevel()) and toplevel.is_toplevel()):  
             return 0, 0
         allocation = widget.get_allocation()
         x, y = widget.translate_coordinates(toplevel, allocation.x, allocation.y) or (
@@ -38,6 +37,22 @@ class PopOverWindow(WaylandWindow):
             0,
         )
         return round(x / 2), round(y / 2)
+
+    def get_monitor_geometry(self) -> Gdk.Rectangle | None:
+        screen = self.display.get_default_screen()
+        
+        if self._pointing_widget:
+            window = self._pointing_widget.get_window()
+            if window:
+                monitor_num = screen.get_monitor_at_window(window)
+                return screen.get_monitor_geometry(monitor_num)
+        
+        window = self._parent.get_window()
+        if window:
+            monitor_num = screen.get_monitor_at_window(window)
+            return screen.get_monitor_geometry(monitor_num)
+            
+        return None
 
     def set_pointing_to(self, widget: Gtk.Widget | None):
         if self._pointing_widget:
@@ -77,7 +92,6 @@ class PopOverWindow(WaylandWindow):
             GtkLayerShell.Edge.LEFT in parent_anchor
             and GtkLayerShell.Edge.RIGHT in parent_anchor
         ):
-            # horizontal -> move on x-axis
             move_axe = "x"
             if GtkLayerShell.Edge.TOP in parent_anchor:
                 self.anchor = "left top"
@@ -87,7 +101,6 @@ class PopOverWindow(WaylandWindow):
             GtkLayerShell.Edge.TOP in parent_anchor
             and GtkLayerShell.Edge.BOTTOM in parent_anchor
         ):
-            # vertical -> move on y-axis
             move_axe = "y"
             if GtkLayerShell.Edge.RIGHT in parent_anchor:
                 self.anchor = "top right"
@@ -105,34 +118,52 @@ class PopOverWindow(WaylandWindow):
 
         if self._pointing_widget:
             coords = self.get_coords_for_widget(self._pointing_widget)
+            widget_width = self._pointing_widget.get_allocated_width()
             coords_centered = (
-                round(coords[0] + self._pointing_widget.get_allocated_width() / 2),
+                round(coords[0] + widget_width / 2),
                 round(coords[1] + self._pointing_widget.get_allocated_height() / 2),
             )
+            screen_width = self.display.get_default_screen().get_width()
+            third_width = screen_width // 3
+            if coords[0] < third_width:
+                position = "left"
+            elif coords[0] < 2 * third_width:
+                position = "center"
+            else:
+                position = "right"
         else:
             coords_centered = (
                 round(self._parent.get_allocated_width() / 2),
                 round(self._parent.get_allocated_height() / 2),
             )
+            position = "center"
 
-        self.margin = tuple(
-            a + b
-            for a, b in zip(
-                (
-                    (
-                        0,
-                        0,
-                        0,
-                        round((parent_x_margin + coords_centered[0]) - (width / 2)),
-                    )
-                    if move_axe == "x"
-                    else (
-                        round((parent_y_margin + coords_centered[1]) - (height / 2)),
-                        0,
-                        0,
-                        0,
-                    )
-                ),
-                self._base_margin.values(),
-            )
+        monitor_geometry = self.get_monitor_geometry()
+        x_margin = coords_centered[0] - (width / 2)
+        
+        if monitor_geometry and move_axe == "x":
+            final_x = x_margin
+            base_margins = list(self._base_margin.values())
+            
+            if final_x + width > monitor_geometry.width:
+                if position in ["center", "right"]:
+                    x_margin = monitor_geometry.width - width + base_margins[3] + parent_margin[1]
+                else:
+                    x_margin = parent_margin[3]
+            elif final_x < 0:
+                if position in ["center", "left"]:
+                    x_margin = parent_margin[3]
+                else:
+                    x_margin = monitor_geometry.width - width + base_margins[3] + parent_margin[1]
+
+        calculated_margin = (
+            (0, 0, 0, x_margin)
+            if move_axe == "x"
+            else (round((parent_y_margin + coords_centered[1]) - (height / 2)), 0, 0, 0)
         )
+
+        final_margin = tuple(
+            a + b for a, b in zip(calculated_margin, self._base_margin.values())
+        )
+
+        self.margin = final_margin
