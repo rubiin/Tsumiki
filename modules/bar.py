@@ -169,6 +169,9 @@ class StatusBar(WaylandWindow):
                 else:
                     # Handle regular widgets
                     if widget_name in self.widgets_list:
-                        layout[key].append(self.widgets_list[widget_name](widget_config, bar=self))
+                        widget_class = self.widgets_list[widget_name]
+                        layout[key].append(
+                            widget_class(widget_config, bar=self)
+                        )
 
         return layout
