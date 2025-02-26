@@ -1,5 +1,5 @@
-
 Welcome to the HyDePanel wiki!
+
 # System Configuration
 
 This repository defines the configuration settings for a modular system, allowing users to customize the layout, icons, intervals, and various components. The configuration is written in Python and structured using typed dictionaries for strong typing.
@@ -27,12 +27,12 @@ The layout configuration defines the sections of the bar and the components disp
 }
 ```
 
-* left_section: Displays workspace and window title.
-* middle_section: Displays datetime.
-* right_section: Displays weather, updates, battery, bluetooth, system tray, and power.
-
+- left_section: Displays workspace and window title.
+- middle_section: Displays datetime.
+- right_section: Displays weather, updates, battery, bluetooth, system tray, and power.
 
 # Component Configurations
+
 Each component, such as hypr_sunset, battery, cpu, memory, etc., has its own configuration with customizable options. Here's an example for the battery component:
 
 ```json
@@ -46,9 +46,11 @@ Each component, such as hypr_sunset, battery, cpu, memory, etc., has its own con
     "tooltip": true
 }
 ```
+
 Other components follow a similar structure, where each configuration defines things like icon_size, label, and tooltip.
 
 ## Battery
+
 ```json
 "battery": {
     "label": true,
@@ -57,12 +59,14 @@ Other components follow a similar structure, where each configuration defines th
     "full_battery_level": 100,
 }
 ```
-* hide_label_when_full: Hide battery level when battery is full.
-* label: Whether to show a label.
-* tooltip: Whether to show a tooltip.
-* full_battery_level: The battery level at which the battery is considered full.
+
+- hide_label_when_full: Hide battery level when battery is full.
+- label: Whether to show a label.
+- tooltip: Whether to show a tooltip.
+- full_battery_level: The battery level at which the battery is considered full.
 
 ## Bluetooth
+
 ```json
 "bluetooth": {
     "icon_size": 22,
@@ -70,11 +74,13 @@ Other components follow a similar structure, where each configuration defines th
     "tooltip": true,
 }
 ```
-* icon_size: Size of the icon in number.
-* label: Whether to show a label.
-* tooltip: Whether to show a tooltip
+
+- icon_size: Size of the icon in number.
+- label: Whether to show a label.
+- tooltip: Whether to show a tooltip
 
 ## Brightness
+
 ```json
 "brightness": {
     "icon_size": "14px",
@@ -84,13 +90,15 @@ Other components follow a similar structure, where each configuration defines th
     "step_size": 5,
 }
 ```
-* icon_size: Size of the icon in px.
-* label: Whether to show a label.
-* tooltip: Whether to show a tooltip
-* icon: The icon used to display the module.
-* step_size: The brightness step size.
+
+- icon_size: Size of the icon in px.
+- label: Whether to show a label.
+- tooltip: Whether to show a tooltip
+- icon: The icon used to display the module.
+- step_size: The brightness step size.
 
 ## CPU
+
 ```json
 "cpu": {
     "icon": "",
@@ -99,12 +107,14 @@ Other components follow a similar structure, where each configuration defines th
     "tooltip": true,
 }
 ```
-* icon: The icon used to display the module.
-* icon_size: Size of the icon in px.
-* label: Whether to show a label.
-* tooltip: Whether to show a tooltip.
+
+- icon: The icon used to display the module.
+- icon_size: Size of the icon in px.
+- label: Whether to show a label.
+- tooltip: Whether to show a tooltip.
 
 ## HyprIdle
+
 ```json
 "hypr_idle": {
     "enabled_icon": "",
@@ -114,13 +124,15 @@ Other components follow a similar structure, where each configuration defines th
     "tooltip": true,
 }
 ```
-* enabled_icon: The icon used when enabled.
-* disabled_icon: The icon used when disabled.
-* icon_size: Size of the icon.
-* label: Whether to show a label.
-* tooltip: Whether to show a tooltip.
+
+- enabled_icon: The icon used when enabled.
+- disabled_icon: The icon used when disabled.
+- icon_size: Size of the icon.
+- label: Whether to show a label.
+- tooltip: Whether to show a tooltip.
 
 ## HyprSunset
+
 ```json
 "hypr_sunset": {
     "temperature": "2800k",
@@ -131,21 +143,25 @@ Other components follow a similar structure, where each configuration defines th
     "tooltip": true,
 }
 ```
-* temperature: Sets the color temperature.
-* enabled_icon: The icon used when enabled.
-* disabled_icon: The icon used when disabled.
-* icon_size: Size of the icon.
-* label: Whether to show a label.
-* tooltip: Whether to show a tooltip.
+
+- temperature: Sets the color temperature.
+- enabled_icon: The icon used when enabled.
+- disabled_icon: The icon used when disabled.
+- icon_size: Size of the icon.
+- label: Whether to show a label.
+- tooltip: Whether to show a tooltip.
 
 ## Language
+
 ```json
 "language": {"length": 3}
 
 ```
-* length - Sets the length of the language display.
+
+- length - Sets the length of the language display.
 
 ## Memory
+
 ```json
 "memory": {
     "icon": "",
@@ -154,33 +170,39 @@ Other components follow a similar structure, where each configuration defines th
     "tooltip": true,
 }
 ```
-* icon: The icon used to display the module.
-* icon_size: Size of the icon in px.
-* label: Whether to show a label.
-* tooltip: Whether to show a tooltip
+
+- icon: The icon used to display the module.
+- icon_size: Size of the icon in px.
+- label: Whether to show a label.
+- tooltip: Whether to show a tooltip
 
 ## MPRIS
+
 ```json
 "mpris": {
     "truncation_size": 30,
     "format": "{artist} - {title}",
 }
 ```
+
 Configures the media player information system (MPRIS) display settings.
 
-* truncation_size: The length of the MPRIS display.
-* format: The format of the MPRIS display.
+- truncation_size: The length of the MPRIS display.
+- format: The format of the MPRIS display.
 
 ## Power Button
+
 ```json
 "power": {"icon": "󰐥", "icon_size": "12px", "tooltip": true}
 
 ```
-* icon: The icon used to display the module.
-* icon_size: Size of the icon in px.
-* tooltip: Whether to show a tooltip
+
+- icon: The icon used to display the module.
+- icon_size: Size of the icon in px.
+- tooltip: Whether to show a tooltip
 
 ## Recorder
+
 ```json
 "recorder": {
     "videos": "Videos/Screencasting",
@@ -190,13 +212,14 @@ Configures the media player information system (MPRIS) display settings.
 }
 
 ```
-* videos: Path to the videos directory.
-* audio: Whether to record video with audio.
-* tooltip: Whether to show a tooltip
-* icon_size: Size of the icon in number
 
+- videos: Path to the videos directory.
+- audio: Whether to record video with audio.
+- tooltip: Whether to show a tooltip
+- icon_size: Size of the icon in number
 
 ## Submap
+
 ```json
 "submap": {
     "icon": "󰋊",
@@ -205,13 +228,14 @@ Configures the media player information system (MPRIS) display settings.
     "tooltip": true,
 }
 ```
-* icon: The icon used to display the module.
-* icon_size: Size of the icon in px.
-* label: Whether to show a label.
-* tooltip: Whether to show a tooltip
 
+- icon: The icon used to display the module.
+- icon_size: Size of the icon in px.
+- label: Whether to show a label.
+- tooltip: Whether to show a tooltip
 
 ## Storage
+
 ```json
 "storage": {
     "icon": "󰋊",
@@ -220,20 +244,24 @@ Configures the media player information system (MPRIS) display settings.
     "tooltip": true,
 }
 ```
-* icon: The icon used to display the module.
-* icon_size: Size of the icon in px.
-* label: Whether to show a label.
-* tooltip: Whether to show a tooltip
+
+- icon: The icon used to display the module.
+- icon_size: Size of the icon in px.
+- label: Whether to show a label.
+- tooltip: Whether to show a tooltip
 
 ## TaskBar and System Tray
+
 ```json
 "task_bar": {"icon_size": 22, "ignored": ["firefox"]},
 "system_tray": {"icon_size": 22, "ignored": ["firefox"]},
 ```
-* icon_size - the size of the icon in number
-* ignored - list of applications to ignore
+
+- icon_size - the size of the icon in number
+- ignored - list of applications to ignore
 
 ## Updates
+
 ```json
 "updates": {
     "os": "arch",
@@ -245,14 +273,15 @@ Configures the media player information system (MPRIS) display settings.
 }
 ```
 
-* os: The os to fetch updates count for.
-* icon: The icon used to display the module.
-* icon_size: Size of the icon in px.
-* interval: The update interval for update.
-* label: Whether to show a label.
-* tooltip: Whether to show a tooltip
+- os: The os to fetch updates count for.
+- icon: The icon used to display the module.
+- icon_size: Size of the icon in px.
+- interval: The update interval for update.
+- label: Whether to show a label.
+- tooltip: Whether to show a tooltip
 
 ## Volume
+
 ```json
 "volume": {
     "icon_size": "14px",
@@ -261,12 +290,14 @@ Configures the media player information system (MPRIS) display settings.
     "step_size": 5,
 }
 ```
-* icon_size: Size of the icon in px.
-* label: Whether to show a label.
-* tooltip: Whether to show a tooltip
-* step_size: The volume step size.
+
+- icon_size: Size of the icon in px.
+- label: Whether to show a label.
+- tooltip: Whether to show a tooltip
+- step_size: The volume step size.
 
 ## Weather
+
 ```json
 "weather": {
     "location": "Kathmandu",
@@ -277,13 +308,14 @@ Configures the media player information system (MPRIS) display settings.
 }
 ```
 
-* location: The location to display weather for.
-* interval: The update interval for weather.
-* label: Whether to show a label.
-* tooltip: Whether to show a tooltip
-* detect_location: Whether to detect the location automatically.
+- location: The location to display weather for.
+- interval: The update interval for weather.
+- label: Whether to show a label.
+- tooltip: Whether to show a tooltip
+- detect_location: Whether to detect the location automatically.
 
 ## Window Title
+
 ```json
 "window_title": {
     "truncation": true,
@@ -293,12 +325,14 @@ Configures the media player information system (MPRIS) display settings.
     }
 
 ```
-* truncation: whether to limit the window title.
-* truncation_size: Maximum length for the window title (requires truncation set to true).
-* enable_icon: Whether to display the icon in the title bar.
-* title_map: Map of window title to icon.
+
+- truncation: whether to limit the window title.
+- truncation_size: Maximum length for the window title (requires truncation set to true).
+- enable_icon: Whether to display the icon in the title bar.
+- title_map: Map of window title to icon.
 
 ## Workspaces
+
 ```json
 "workspaces": {
   "count": 8,
@@ -318,9 +352,10 @@ Configures the media player information system (MPRIS) display settings.
     "ignored": [1]
     }
 ```
-* count: Number of workspaces.
-* hide_unoccupied: Indicates whether workspaces should show as occupied or not.
-* reverse_scroll: Invert scroll direction
-* empty_scroll: scroll to empty workspaces
-* icon_map: map an icon to a workspace instead of number
-* ignored: ignores workspaces from the widget
+
+- count: Number of workspaces.
+- hide_unoccupied: Indicates whether workspaces should show as occupied or not.
+- reverse_scroll: Invert scroll direction
+- empty_scroll: scroll to empty workspaces
+- icon_map: map an icon to a workspace instead of number
+- ignored: ignores workspaces from the widget
