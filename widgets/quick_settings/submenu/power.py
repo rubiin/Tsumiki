@@ -61,7 +61,7 @@ class PowerProfileSubMenu(QuickSubMenu):
         self.client = PowerProfiles().get_default()
         self.profiles = self.client.power_profiles
         self.active = self.client.get_current_profile()
-        
+
         self.profile_items = {
             key: PowerProfileItem(key=key, profile=profile, active=self.active)
             for key, profile in self.profiles.items()
