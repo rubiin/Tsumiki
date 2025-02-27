@@ -22,49 +22,50 @@ class PowerProfileItem(Button):
             **kwargs,
         )
         self.profile = profile
-
-        self.power_profile_service = PowerProfiles().get_default()
-
-        self.children = (
-            Box(
-                orientation="h",
-                spacing=10,
-                children=(
-                    Image(
-                        icon_name=profile["icon_name"],
-                        icon_size=18,
-                    ),
-                    Label(
-                        label=profile["name"],
-                        style_classes="submenu-item-label",
-                    ),
+        self.key = key
+        self.box = Box(
+            orientation="h",
+            spacing=10,
+            children=(
+                Image(
+                    icon_name=profile["icon_name"],
+                    icon_size=18,
+                ),
+                Label(
+                    label=profile["name"],
+                    style_classes="submenu-item-label",
                 ),
             ),
         )
+
+        self.power_profile_service = PowerProfiles().get_default()
+        self.children = (self.box,)
 
         self.connect(
             "button-press-event",
             lambda *_: self.power_profile_service.set_power_profile(key),
         )
-        self.set_active(key, active)
+        self.set_active(active)
 
-    def set_active(self, key, active):
-        self.children.pop().add_style_class(f"{'active' if key == active else ''}")
+    def set_active(self, active):
+        if self.key == active:
+            self.box.add_style_class("active")
+        else:
+            self.box.remove_style_class("active")
 
 
 class PowerProfileSubMenu(QuickSubMenu):
-    """A submenu to display the Wifi settings."""
+    """A submenu to display power profile options."""
 
     def __init__(self, **kwargs):
         self.client = PowerProfiles().get_default()
-
         self.profiles = self.client.power_profiles
         self.active = self.client.get_current_profile()
-
-        self.child = [
-            PowerProfileItem(key=key, profile=profile, active=self.active)
+        
+        self.profile_items = {
+            key: PowerProfileItem(key=key, profile=profile, active=self.active)
             for key, profile in self.profiles.items()
-        ]
+        }
 
         self.scan_button = Button(
             style="background-color: transparent",
@@ -74,9 +75,16 @@ class PowerProfileSubMenu(QuickSubMenu):
             title="Power profiles",
             title_icon="power-profile-power-saver-symbolic",
             scan_button=self.scan_button,
-            child=Box(orientation="v", children=self.child, spacing=8),
+            child=Box(orientation="v", children=list(self.profile_items.values()), spacing=8),
             **kwargs,
         )
+
+        # Update items when profile changes
+        self.client.connect("profile", self.on_profile_changed)
+
+    def on_profile_changed(self, _, profile):
+        for item in self.profile_items.values():
+            item.set_active(profile)
 
 
 class PowerProfileToggle(QuickSubToggle):
