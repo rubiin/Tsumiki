@@ -8,7 +8,7 @@ from modules.bar import StatusBar
 from modules.notification_pop_up import NotificationPopup
 from modules.osd import OSDContainer
 from utils.colors import Colors
-from utils.config import configuration, widget_config
+from utils.config import widget_config
 from utils.constants import APP_CACHE_DIRECTORY, APPLICATION_NAME
 from utils.exceptions import ExecutableNotFoundError
 from widgets.corners import ScreenCorners
@@ -68,9 +68,6 @@ if __name__ == "__main__":
     common_css_file = monitor_file(get_relative_path("styles/common"))
     main_css_file.connect("changed", lambda *_: process_and_apply_css(app))
     common_css_file.connect("changed", lambda *_: process_and_apply_css(app))
-
-    config_monitor = monitor_file(get_relative_path("config.json"))
-    config_monitor.connect("changed", lambda *_: configuration.default_config())
 
     process_and_apply_css(app)
 
