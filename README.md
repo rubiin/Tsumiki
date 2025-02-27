@@ -151,7 +151,7 @@ If you prefer to have more control over the installation process, you can instal
 Run the following command to install the required system packages:
 
 ```sh
-	sudo pacman -S --noconfirm pipewire vnstat playerctl dart-sass power-profiles-daemon networkmanager brightnessctl pkgconf wf-recorder kitty python pacman-contrib gtk3 cairo gtk-layer-shell libgirepository gobject-introspection gobject-introspection-runtime python-pip python-gobject python-psutil python-dbus python-cairo python-loguru python-setproctitle
+	sudo pacman -S --noconfirm --needed pipewire vnstat playerctl dart-sass power-profiles-daemon networkmanager brightnessctl pkgconf wf-recorder kitty python pacman-contrib gtk3 cairo gtk-layer-shell libgirepository gobject-introspection gobject-introspection-runtime python-pip python-gobject python-psutil python-dbus python-cairo python-loguru python-setproctitle
 ```
 
 #### Step 2: Install AUR Packages
@@ -159,7 +159,7 @@ Run the following command to install the required system packages:
 Using `yay` to install the required AUR packages:
 
 ```sh
-yay -S gray-git python-fabric gnome-bluetooth-3.0 python-rlottie-python
+yay -S --needed gray-git python-fabric gnome-bluetooth-3.0 python-rlottie-python
 ```
 
 If you have something else besides `yay`, install with the respective aur helper.
