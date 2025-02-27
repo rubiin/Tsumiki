@@ -71,11 +71,18 @@ class PowerProfileSubMenu(QuickSubMenu):
             style="background-color: transparent",
         )
 
+        profile_items = list(self.profile_items.values())
+        profile_box = Box(
+            orientation="v",
+            children=profile_items,
+            spacing=8,
+        )
+
         super().__init__(
             title="Power profiles",
             title_icon="power-profile-power-saver-symbolic",
             scan_button=self.scan_button,
-            child=Box(orientation="v", children=list(self.profile_items.values()), spacing=8),
+            child=profile_box,
             **kwargs,
         )
 
