@@ -113,21 +113,21 @@ def get_brightness_icon_name(level: int) -> dict[Literal["icon_text", "icon"], s
             "icon": "display-brightness-off-symbolic",
         }
 
-    if level > 0 and level < 32:
+    if level <= 32:
         return {
             "text_icon": brightness_text_icons["low"],
             "icon": "display-brightness-low-symbolic",
         }
-    if level > 32 and level < 66:
+    if level <= 66:
         return {
             "text_icon": brightness_text_icons["medium"],
             "icon": "display-brightness-medium-symbolic",
         }
-    if level >= 66 and level <= 100:
-        return {
-            "text_icon": brightness_text_icons["high"],
-            "icon": "display-brightness-high-symbolic",
-        }
+    # level > 66
+    return {
+        "text_icon": brightness_text_icons["high"],
+        "icon": "display-brightness-high-symbolic",
+    }
 
 
 # Create a scale widget

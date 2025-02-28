@@ -13,6 +13,9 @@ class BrightnessSlider(SettingSlider):
         super().__init__(
             pixel_size=20,
             icon_name=icons["brightness"]["screen"],
+            min=0,
+            max=self.client.max_screen,  # Use actual max brightness
+            start_value=self.client.screen_brightness
         )
 
         if self.client.screen_brightness == -1:
@@ -28,4 +31,6 @@ class BrightnessSlider(SettingSlider):
 
     def on_brightness_change(self, service: Brightness, _):
         self.scale.set_value(service.screen_brightness)
-        self.scale.set_tooltip_text(f"{round(service.screen_brightness)}%")
+        # Show percentage in tooltip
+        percentage = int((service.screen_brightness / service.max_screen) * 100)
+        self.scale.set_tooltip_text(f"{percentage}%")

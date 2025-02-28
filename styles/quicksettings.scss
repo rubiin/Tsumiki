@@ -81,7 +81,27 @@ $slider-height: 12px;
       }
     }
 
-    .slider-box {
+    .shortcuts-box {
+      border-radius: variable.$radius;
+      margin: 0;
+      padding: 0;
+
+      button {
+        padding: functions.toEm(5);
+        border-radius: variable.$radius;
+        background-color: theme.$accent-blue;
+        color: theme.$background;
+        min-height: 32px;
+
+        &:hover {
+          background-color: darken(theme.$accent-blue, 4%);
+          color: theme.$background;
+        }
+      }
+    }
+
+    // Base slider box styles
+    %slider-box-base {
       padding: functions.toEm(20) functions.toEm(15);
       border-radius: variable.$radius;
       background-color: theme.$background;
@@ -101,11 +121,37 @@ $slider-height: 12px;
           background-color: transparent;
           padding: 0 functions.toEm(2);
         }
+      }
+    }
 
+    .slider-box-long {
+      @extend %slider-box-base;
+      #setting-slider {
         @include mixins.slider(
           $highlight-color: theme.$accent-blue,
           $slider: true,
           $min-length: 320px
+        );
+      }
+    }
+
+    .slider-box-short {
+      @extend %slider-box-base;
+      #setting-slider {
+        @include mixins.slider(
+          $highlight-color: theme.$accent-blue,
+          $slider: true,
+          $min-length: 230px
+        );
+      }
+    }
+    .slider-box-shorter {
+      @extend %slider-box-base;
+      #setting-slider {
+        @include mixins.slider(
+          $highlight-color: theme.$accent-blue,
+          $slider: true,
+          $min-length: 140px
         );
       }
     }

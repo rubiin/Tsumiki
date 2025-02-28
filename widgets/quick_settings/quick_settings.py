@@ -22,6 +22,7 @@ from utils.widget_utils import (
     util_fabricator,
 )
 from widgets.media import PlayerBoxStack
+from widgets.quick_settings.shortcuts import ShortcutsContainer
 from widgets.quick_settings.togglers import (
     HyprIdleQuickSetting,
     HyprSunsetQuickSetting,
@@ -212,6 +213,82 @@ class QuickSettingsMenu(Box):
             4,
         )
 
+        # Create sliders grid
+        sliders_grid = Gtk.Grid(
+            visible=True,
+            row_spacing=10,
+            column_spacing=10,
+            column_homogeneous=True,
+            row_homogeneous=False,
+            hexpand=True,
+            vexpand=True,
+        )
+
+        # Add sliders to the grid in a single column
+        sliders_grid.attach(BrightnessSlider(), 0, 0, 1, 1)
+        sliders_grid.attach(AudioSlider(), 0, 1, 1, 1)
+        sliders_grid.attach(MicrophoneSlider(), 0, 2, 1, 1)
+
+        # Create center box with sliders and shortcuts if configured
+        center_box = Box(
+            orientation="h",
+            spacing=10,
+            style_classes="section-box",
+            hexpand=True
+        )
+
+        main_grid = Gtk.Grid(
+            visible=True,
+            column_spacing=10,
+            hexpand=True,
+            column_homogeneous=False
+        )
+        center_box.add(main_grid)
+
+        # Set up grid columns
+        for i in range(3):
+            main_grid.insert_column(i)
+
+        # Determine slider box class based on number of shortcuts
+        if self.config.get("shortcuts"):
+            num_shortcuts = len(self.config["shortcuts"])
+            if num_shortcuts > 2:
+                slider_class = "slider-box-shorter"
+            else:
+                slider_class = "slider-box-short"
+        else:
+            slider_class = "slider-box-long"
+
+        sliders_box = Box(
+            orientation="v",
+            spacing=10,
+            style_classes=[slider_class],
+            children=(sliders_grid,),
+            hexpand=True
+        )
+
+        if self.config.get("shortcuts"):
+            shortcuts_box = Box(
+                orientation="v",
+                spacing=10,
+                style_classes=["section-box", "shortcuts-box"],
+                children=(
+                    ShortcutsContainer(
+                        shortcuts_config=self.config["shortcuts"],
+                        style_classes="shortcuts-grid",
+                        v_align="start",
+                        h_align="fill"
+                    ),
+                ),
+                hexpand=False
+            )
+
+            main_grid.attach(sliders_box, 0, 0, 2, 1)
+            main_grid.attach(shortcuts_box, 2, 0, 1, 1)
+        else:
+            main_grid.attach(sliders_box, 0, 0, 3, 1)
+
+        # Create main layout box
         box = CenterBox(
             orientation="v",
             style_classes="quick-settings-box",
@@ -222,12 +299,7 @@ class QuickSettingsMenu(Box):
                 style_classes="section-box",
                 children=(self.user_box, QuickSettingsButtonBox()),
             ),
-            center_children=Box(
-                orientation="v",
-                spacing=10,
-                style_classes=["section-box", "slider-box"],
-                children=(BrightnessSlider(), AudioSlider(), MicrophoneSlider()),
-            ),
+            center_children=center_box,
             end_children=(
                 Box(
                     orientation="v",
@@ -358,12 +430,29 @@ class QuickSettingsButtonWidget(ButtonWidget):
         self.update_brightness()
 
     def update_brightness(self, *_):
-        normalized_brightness = helpers.convert_to_percent(
-            self.brightness_service.screen_brightness,
-            self.brightness_service.max_screen,
-        )
-
-        self.brightness_icon.set_from_icon_name(
-            get_brightness_icon_name(normalized_brightness)["icon"],
-            self.panel_icon_size,
-        )
+        """Update the brightness icon."""
+        try:
+            # Convert brightness to percentage (0-100)
+            normalized_brightness = int(
+                (self.brightness_service.screen_brightness /
+                self.brightness_service.max_screen) * 100
+            )
+            icon_info = get_brightness_icon_name(normalized_brightness)
+            if icon_info:
+                self.brightness_icon.set_from_icon_name(
+                    icon_info["icon"],
+                    self.panel_icon_size,
+                )
+            else:
+                # Fallback icon if something goes wrong
+                self.brightness_icon.set_from_icon_name(
+                    "display-brightness-symbolic",
+                    self.panel_icon_size,
+                )
+        except Exception as e:
+            print(f"Error updating brightness icon: {e}")
+            # Fallback icon if something goes wrong
+            self.brightness_icon.set_from_icon_name(
+                "display-brightness-symbolic",
+                self.panel_icon_size,
+            )
