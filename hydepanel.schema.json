@@ -138,36 +138,19 @@
         },
         "location": {
           "type": "string",
-          "enum": [
-            "top",
-            "bottom"
-          ]
+          "enum": ["top", "bottom"]
         },
         "bar_style": {
           "type": "string",
-          "enum": [
-            "default",
-            "floating"
-          ]
+          "enum": ["default", "floating"]
         },
         "layer": {
           "type": "string",
-          "enum": [
-            "background",
-            "bottom",
-            "top",
-            "overlay"
-          ]
+          "enum": ["background", "bottom", "top", "overlay"]
         },
         "widget_style": {
           "type": "string",
-          "enum": [
-            "default",
-            "wave1",
-            "wave2",
-            "flat",
-            "shadow"
-          ]
+          "enum": ["default", "wave1", "wave2", "flat", "shadow"]
         }
       }
     },
@@ -210,9 +193,7 @@
                 "description": "Style classes to apply to the group (e.g. 'bordered', 'compact')"
               }
             },
-            "required": [
-              "widgets"
-            ]
+            "required": ["widgets"]
           }
         }
       }
@@ -390,12 +371,7 @@
         "$ref": "#/definitions/baseProperties",
         "os": {
           "type": "string",
-          "enum": [
-            "arch",
-            "fedora",
-            "opensuse",
-            "ubuntu"
-          ]
+          "enum": ["arch", "fedora", "opensuse", "ubuntu"]
         },
         "interval": {
           "type": "integer"
