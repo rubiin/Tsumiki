@@ -159,6 +159,30 @@ Other components follow a similar structure, where each configuration defines th
 - label: Whether to show a label.
 - tooltip: Whether to show a tooltip.
 
+## CPU Temperature
+
+```json
+"cpu_temp": {
+    "icon": "",
+    "icon_size": "12px",
+    "tooltip": true,
+    "label": true,
+    "round": true,
+    "unit": "celsius",
+    "show_unit": true,
+    "sensor": "acpitz"
+}
+```
+
+- icon: The icon used to display the module.
+- icon_size: Size of the icon in px.
+- label: Whether to show a label.
+- tooltip: Whether to show a tooltip.
+- round: Whether to round the temperature.
+- unit: The unit of the temperature.
+- show_unit: Whether to show the unit.
+- sensor: The sensor to use for temperature.
+
 ## HyprIdle
 
 ```json

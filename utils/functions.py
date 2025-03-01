@@ -54,6 +54,12 @@ def copy_theme(theme: str):
         exit(1)
 
 
+# Function to convert celsius to fahrenheit
+def celsius_to_fahrenheit(celsius):
+    fahrenheit = (celsius * 9 / 5) + 32
+    return fahrenheit
+
+
 # Merge the parsed data with the default configuration
 def merge_defaults(data: dict, defaults: dict):
     return {**defaults, **data}

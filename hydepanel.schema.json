@@ -41,6 +41,7 @@
               "cava",
               "clickcounter",
               "cpu",
+              "cpu_temp",
               "date_time",
               "divider",
               "hypr_idle",
@@ -222,6 +223,28 @@
           "type": "integer"
         },
         "color": {
+          "type": "string"
+        }
+      }
+    },
+    "cpu_temp": {
+      "type": "object",
+      "properties": {
+        "$ref": "#/definitions/baseProperties",
+        "icon": {
+          "type": "string"
+        },
+        "unit": {
+          "type": "string",
+          "enum": ["celsius", "fahrenheit"]
+        },
+        "round": {
+          "type": "boolean"
+        },
+        "show_unit": {
+          "type": "boolean"
+        },
+        "sensor": {
           "type": "string"
         }
       }

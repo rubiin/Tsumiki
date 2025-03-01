@@ -96,6 +96,16 @@ DEFAULT_CONFIG = {
         "label": True,
         "tooltip": True,
     },
+    "cpu_temp": {
+        "icon": "",
+        "icon_size": "12px",
+        "label": True,
+        "round": True,
+        "tooltip": True,
+        "unit": "celsius",
+        "show_unit": True,
+        "sensor": "",
+    },
     "language": {
         "icon": "",
         "icon_size": "14px",

@@ -130,6 +130,19 @@ Updates = TypedDict(
     },
 )
 
+# Cpu temp configuration
+CpuTemp = TypedDict(
+    "CpuTemp",
+    {
+        **BaseConfig.__annotations__,
+        "icon": str,
+        "sensor": str,
+        "unit": Literal["celsius", "fahrenheit"],
+        "show_unit": bool,
+        "round": bool,
+    },
+)
+
 # Bluetooth configuration
 BlueTooth = TypedDict("BlueTooth", {"label": bool, "tooltip": bool, "icon_size": int})
 

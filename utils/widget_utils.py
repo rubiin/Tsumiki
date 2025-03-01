@@ -29,6 +29,7 @@ def stats_poll(fabricator):
             "battery": psutil.sensors_battery(),
             "user": psutil.users()[0][0],
             "uptime": uptime(),
+            "temperature": psutil.sensors_temperatures(),
         }
         sleep(1)
 
