@@ -1,14 +1,11 @@
-import math
-
 from fabric.widgets.box import Box
 from fabric.widgets.image import Image
 from fabric.widgets.label import Label
 
-from services.battery import BatteryService
+from services import battery_service
 from shared.widget_container import ButtonWidget
 from utils.functions import format_time
 from utils.widget_settings import BarConfig
-from utils.widget_utils import util_fabricator
 
 
 class BatteryWidget(ButtonWidget):
@@ -32,30 +29,38 @@ class BatteryWidget(ButtonWidget):
 
         self.children = (self.box,)
 
-        self.client = BatteryService().get_default()
+        self.client = battery_service
 
+        self.client.connect("changed", lambda *_: self.update_ui())
+
+        self.update_ui()
 
     def update_ui(self):
         """Update the battery status by fetching the current battery information
         and updating the widget accordingly.
         """
-        # Get the battery status
-        battery = value.get("battery")
+        is_present = self.client.get("IsPresent")
 
-
-        battery_percent = round(battery.percent) if battery else 0
+        battery_percent = round(self.client.get("Percentage")) if is_present else 0
 
         self.battery_label = Label(
             label=f"{battery_percent}%", style_classes="panel-text", visible=False
         )
 
-        is_charging = battery.power_plugged if battery else False
+        battery_state = self.client.get("State")
+
+        is_charging = battery_state == 1 if is_present else False
+
+        temperature = self.client.get("Temperature")
+
+        time_remaining = (
+            self.client.get("TimeToFull")
+            if is_charging
+            else self.client.get("TimeToEmpty")
+        )
 
         self.battery_icon = Image(
-            icon_name=self.get_icon_name(
-                battery_percent=battery_percent,
-                is_charging=is_charging,
-            ),
+            icon_name=self.client.get("IconName"),
             icon_size=14,
         )
 
@@ -77,18 +82,12 @@ class BatteryWidget(ButtonWidget):
             if battery_percent == self.full_battery_level:
                 self.set_tooltip_text("Full")
             elif is_charging and battery_percent < self.full_battery_level:
-                self.set_tooltip_text(f"Time to full: {format_time(battery.secsleft)}")
+                self.set_tooltip_text(
+                    f"󰄉 Time to full: {format_time(time_remaining)}\n Temperature: {temperature}°C"
+                )
             else:
-                self.set_tooltip_text(f"Time to empty: {format_time(battery.secsleft)}")
+                self.set_tooltip_text(
+                    f"󰄉 Time to empty: {format_time(time_remaining)}\n Temperature: {temperature}°C"
+                )
 
         return True
-
-    def get_icon_name(self, battery_percent: int, is_charging: bool):
-        """Determine the icon name based on the percentage and charging status."""
-        # Determine the icon name based on the battery percentage and charging status
-        if battery_percent == self.full_battery_level:
-            return "battery-level-100-charged-symbolic"
-        icon_level = math.floor(battery_percent / 10) * 10
-        return (
-            f"battery-level-{icon_level}{'-charging' if is_charging else ''}-symbolic"
-        )
