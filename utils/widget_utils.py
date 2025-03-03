@@ -27,7 +27,6 @@ def stats_poll(fabricator):
             "ram_usage": f"{round(psutil.virtual_memory().percent)}%",
             "memory": psutil.virtual_memory(),
             "disk": psutil.disk_usage(storage_config["path"]),
-            "battery": psutil.sensors_battery(),
             "user": psutil.users()[0][0],
             "uptime": uptime(),
         }

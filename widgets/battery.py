@@ -4,6 +4,7 @@ from fabric.widgets.box import Box
 from fabric.widgets.image import Image
 from fabric.widgets.label import Label
 
+from services.battery import BatteryService
 from shared.widget_container import ButtonWidget
 from utils.functions import format_time
 from utils.widget_settings import BarConfig
@@ -31,19 +32,16 @@ class BatteryWidget(ButtonWidget):
 
         self.children = (self.box,)
 
-        # Set up a repeater to call the update_battery_status method
-        util_fabricator.connect("changed", self.update_ui)
+        self.client = BatteryService().get_default()
 
-    def update_ui(self, fabricator, value):
+
+    def update_ui(self):
         """Update the battery status by fetching the current battery information
         and updating the widget accordingly.
         """
         # Get the battery status
         battery = value.get("battery")
 
-        if battery is None:
-            self.hide()
-            return None
 
         battery_percent = round(battery.percent) if battery else 0
 

@@ -8,6 +8,7 @@ from .mpris import *
 from .network import NetworkClient
 from .power_profile import *
 from .screen_record import *
+from .battery import *
 from .weather import *
 
 # Fabric services
