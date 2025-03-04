@@ -58,10 +58,37 @@ class CustomNotifications(Notifications):
         if os.path.exists(NOTIFICATION_CACHE_FILE):
             try:
                 with open(NOTIFICATION_CACHE_FILE, "r") as file:
-                    self.all_notifications = json.load(file)
-                    self._count = len(self.all_notifications)
+                    notifications = json.load(file)
+
+                def validate_with_id(notif):
+                    """Helper to validate and return ID if valid."""
+                    try:
+                        self._deserialize_notification(notif)
+                        return (True, notif, notif.get("id", 0))
+                    except Exception as e:
+                        msg = f"[Notification] Invalid: {str(e)[:50]}"
+                        logger.error(f"{Colors.INFO}{msg}")
+                        return (False, None, 0)
+
+                # Validate all notifications at once
+                results = [validate_with_id(n) for n in notifications]
+
+                # Process results
+                valid_notifications = []
+                max_id = 0
+                for is_valid, notif, notif_id in results:
+                    if is_valid:
+                        valid_notifications.append(notif)
+                        max_id = max(max_id, notif_id)
+
+                self.all_notifications = valid_notifications
+                self._count = max_id  # Continue from highest ID
+                self._write_notifications(self.all_notifications)
+
             except (json.JSONDecodeError, KeyError, ValueError, IndexError) as e:
                 logger.error(f"{Colors.INFO}[Notification] {e}")
+                self.all_notifications = []
+                self._count = 0
 
     def remove_notification(self, id: int):
         """Remove the notification of given id."""
@@ -87,8 +114,12 @@ class CustomNotifications(Notifications):
             "app_name": data.app_name
         })
 
+        # Get app-specific limit
         per_app_limits = widget_config.get("notification", {}).get("per_app_limits", {})
         app_limit = per_app_limits.get(data.app_name, max_count)
+
+        # First clean up any invalid notifications
+        self._cleanup_invalid_notifications()
 
         # Get current notifications for this app
         app_notifications = [
@@ -116,6 +147,40 @@ class CustomNotifications(Notifications):
         self._write_notifications(self.all_notifications)
         self.emit("notification_count", len(self.all_notifications))
 
+    def _cleanup_invalid_notifications(self):
+        """Remove any invalid notifications."""
+        def validate_with_id(notif):
+            """Helper to validate and return result with ID."""
+            try:
+                self._deserialize_notification(notif)
+                return (True, notif, None)
+            except Exception as e:
+                msg = f"[Notification] Removing invalid: {str(e)[:50]}"
+                logger.debug(msg)
+                return (False, None, notif.get("id", 0))
+
+        # Validate all notifications at once
+        results = [validate_with_id(n) for n in self.all_notifications]
+
+        # Process results
+        valid_notifications = []
+        invalid_count = 0
+        for is_valid, notif, invalid_id in results:
+            if is_valid:
+                valid_notifications.append(notif)
+            else:
+                invalid_count += 1
+                self.emit("notification-closed", invalid_id, "dismissed-by-limit")
+
+        if invalid_count > 0:
+            self.all_notifications = valid_notifications
+            self._write_notifications(self.all_notifications)
+            self.emit("notification_count", len(self.all_notifications))
+
+    def _deserialize_notification(self, notification):
+        """Deserialize a notification."""
+        return Notification.deserialize(notification)
+
     def clear_all_notifications(self):
         """Empty the notifications."""
         logger.info("[Notification] Clearing all notifications")
@@ -133,8 +198,32 @@ class CustomNotifications(Notifications):
 
     def get_deserialized(self) -> List[Notification]:
         """Return the notifications."""
-        if not self.deserialized_notifications:
-            self.deserialized_notifications = [
-                Notification.deserialize(data) for data in self.all_notifications
-            ]
-        return self.deserialized_notifications
+        def deserialize_with_id(notif):
+            """Helper to deserialize and return result with ID."""
+            try:
+                return (self._deserialize_notification(notif), None)
+            except Exception as e:
+                msg = f"[Notification] Deserialize failed: {str(e)[:50]}"
+                logger.error(f"{Colors.INFO}{msg}")
+                return (None, notif.get("id"))
+
+        # Process all notifications at once
+        results = [
+            deserialize_with_id(notification)
+            for notification in self.all_notifications
+        ]
+
+        # Split into successful and failed
+        deserialized = []
+        invalid_ids = []
+        for result, error_id in results:
+            if result is not None:
+                deserialized.append(result)
+            elif error_id is not None:
+                invalid_ids.append(error_id)
+
+        # Clean up invalid notifications
+        for invalid_id in invalid_ids:
+            self.remove_notification(invalid_id)
+
+        return deserialized
