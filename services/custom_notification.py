@@ -48,7 +48,7 @@ class CustomNotifications(Notifications):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.all_notifications = []
-        self._count = 0
+        self._count = 0  # Will be updated to highest ID when loading
         self.deserialized_notifications = []
         self._dont_disturb = False
         self._load_notifications()
@@ -73,16 +73,16 @@ class CustomNotifications(Notifications):
                 # Validate all notifications at once
                 results = [validate_with_id(n) for n in notifications]
 
-                # Process results
+                # Process results and find highest ID
                 valid_notifications = []
-                max_id = 0
+                highest_id = self._count  # Start with current count
                 for is_valid, notif, notif_id in results:
                     if is_valid:
                         valid_notifications.append(notif)
-                        max_id = max(max_id, notif_id)
+                        highest_id = max(highest_id, notif_id)
 
                 self.all_notifications = valid_notifications
-                self._count = max_id  # Continue from highest ID
+                self._count = highest_id  # Update to highest ID seen
                 self._write_notifications(self.all_notifications)
 
             except (json.JSONDecodeError, KeyError, ValueError, IndexError) as e:
@@ -104,30 +104,29 @@ class CustomNotifications(Notifications):
 
     def cache_notification(self, data: Notification, max_count: int):
         """Cache the notification."""
+        # First clean up any invalid notifications
+        self._cleanup_invalid_notifications()
+
+        # Get app-specific limit
+        per_app_limits = widget_config.get("notification", {}).get("per_app_limits", {})
+        app_limit = per_app_limits.get(data.app_name, max_count)
+
+        # Create the new notification
         self._count += 1
         new_id = self._count
-
-        # Create the new notification data
         serialized_data = data.serialize()
         serialized_data.update({
             "id": new_id,
             "app_name": data.app_name
         })
 
-        # Get app-specific limit
-        per_app_limits = widget_config.get("notification", {}).get("per_app_limits", {})
-        app_limit = per_app_limits.get(data.app_name, max_count)
-
-        # First clean up any invalid notifications
-        self._cleanup_invalid_notifications()
-
-        # Get current notifications for this app
-        app_notifications = [
+        # Get current notifications for this app and enforce limit
+        app_notifications = list([  # Make copy to avoid modification issues
             n for n in self.all_notifications
             if n["app_name"] == data.app_name
-        ]
+        ])
 
-        # If we'll exceed the limit, remove oldest ones
+        # If we'll exceed the limit, remove oldest ones first
         if len(app_notifications) >= app_limit:
             # Sort by ID to get oldest first
             app_notifications.sort(key=lambda x: x["id"])
@@ -139,7 +138,7 @@ class CustomNotifications(Notifications):
 
         self.all_notifications.append(serialized_data)
 
-        # Remove oldest notification if total count exceeds max_count
+        # Remove oldest notifications if total count exceeds max_count
         while len(self.all_notifications) > max_count:
             oldest = self.all_notifications.pop(0)
             self.emit("notification-closed", oldest["id"], "dismissed-by-limit")
@@ -184,11 +183,14 @@ class CustomNotifications(Notifications):
     def clear_all_notifications(self):
         """Empty the notifications."""
         logger.info("[Notification] Clearing all notifications")
+        # Clear notifications but preserve the highest ID we've seen
+        highest_id = self._count
         self.all_notifications = []
-        self._count = 0
         self._write_notifications(self.all_notifications)
-        self.emit("notification_count", len(self.all_notifications))
+        self.emit("notification_count", 0)
         self.emit("clear_all", True)
+        # Restore the ID counter so new notifications get unique IDs
+        self._count = highest_id
 
     def _write_notifications(self, data):
         """Write the notifications to the cache file."""
