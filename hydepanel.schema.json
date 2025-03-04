@@ -618,33 +618,34 @@
               "type": "string"
             }
           },
-          "$ref": "#/definitions/anchor",
+          "anchor": {
+            "$ref": "#/definitions/anchor"
+          },
           "auto_dismiss": {
             "type": "boolean"
           },
           "timeout": {
             "type": "integer"
           },
-          "count": {
-            "type": "integer"
+          "max_count": {
+            "type": "integer",
+            "description": "Maximum total number of notifications to keep across all apps"
+          },
+          "per_app_limits": {
+            "type": "object",
+            "description": "Maximum number of notifications to keep per specific app",
+            "patternProperties": {
+              "^.*$": {
+                "type": "integer",
+                "description": "Maximum number of notifications to keep for this app"
+              }
+            }
           },
           "play_sound": {
             "type": "boolean"
           },
-          "sound_fie": {
-            "type": "string",
-            "enum": [
-              "notification1",
-              "notification2",
-              "notification3",
-              "notification4",
-              "notification5",
-              "notification6",
-              "notification7",
-              "notification8",
-              "notification9",
-              "notification10"
-            ]
+          "sound_file": {
+            "type": "string"
           }
         }
       },

@@ -7,6 +7,7 @@ from fabric.notifications import Notification, Notifications
 from loguru import logger
 
 from utils.colors import Colors
+from utils.config import widget_config
 from utils.constants import NOTIFICATION_CACHE_FILE
 
 
@@ -31,7 +32,7 @@ class CustomNotifications(Notifications):
     @property
     def count(self) -> int:
         """Return the count of notifications."""
-        return self._count
+        return len(self.all_notifications)
 
     @property
     def dont_disturb(self) -> bool:
@@ -44,58 +45,85 @@ class CustomNotifications(Notifications):
         self._dont_disturb = value
         self.emit("dnd", value)
 
-    def __init__(self, **kwargs):
-        super().__init__()
-        self.all_notifications = self._read_notifications()
-        self._count = len(self.all_notifications)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.all_notifications = []
+        self._count = 0
         self.deserialized_notifications = []
         self._dont_disturb = False
+        self._load_notifications()
 
-    def _read_notifications(self):
+    def _load_notifications(self):
         """Read notifications from the cache file."""
         if os.path.exists(NOTIFICATION_CACHE_FILE):
             try:
                 with open(NOTIFICATION_CACHE_FILE, "r") as file:
-                    return json.load(file)
+                    self.all_notifications = json.load(file)
+                    self._count = len(self.all_notifications)
             except (json.JSONDecodeError, KeyError, ValueError, IndexError) as e:
                 logger.error(f"{Colors.INFO}[Notification] {e}")
-        return []
 
     def remove_notification(self, id: int):
         """Remove the notification of given id."""
         item = next((p for p in self.all_notifications if p["id"] == id), None)
         if item:
             self.all_notifications.remove(item)
-            self._count -= 1
             self._write_notifications(self.all_notifications)
-            self.emit("notification_count", self._count)
+            self.emit("notification_count", len(self.all_notifications))
 
             # Emit clear_all signal if there are no notifications left
-            if self._count == 0:
+            if len(self.all_notifications) == 0:
                 self.emit("clear_all", True)
 
     def cache_notification(self, data: Notification, max_count: int):
         """Cache the notification."""
-        serialized_data = data.serialize()
-        serialized_data.update({"id": self._count + 1})
-        self.all_notifications.append(serialized_data)
         self._count += 1
+        new_id = self._count
 
-        # Remove the oldest notification if the count exceeds the max count
-        if self._count > max_count:
-            self.all_notifications.pop(0)
-            self._count -= 1
+        # Create the new notification data
+        serialized_data = data.serialize()
+        serialized_data.update({
+            "id": new_id,
+            "app_name": data.app_name
+        })
+
+        per_app_limits = widget_config.get("notification", {}).get("per_app_limits", {})
+        app_limit = per_app_limits.get(data.app_name, max_count)
+
+        # Get current notifications for this app
+        app_notifications = [
+            n for n in self.all_notifications
+            if n["app_name"] == data.app_name
+        ]
+
+        # If we'll exceed the limit, remove oldest ones
+        if len(app_notifications) >= app_limit:
+            # Sort by ID to get oldest first
+            app_notifications.sort(key=lambda x: x["id"])
+            # Remove enough to stay under limit
+            to_remove = len(app_notifications) - app_limit + 1
+            for old in app_notifications[:to_remove]:
+                self.all_notifications.remove(old)
+                self.emit("notification-closed", old["id"], "dismissed-by-limit")
+
+        self.all_notifications.append(serialized_data)
+
+        # Remove oldest notification if total count exceeds max_count
+        while len(self.all_notifications) > max_count:
+            oldest = self.all_notifications.pop(0)
+            self.emit("notification-closed", oldest["id"], "dismissed-by-limit")
 
         self._write_notifications(self.all_notifications)
-        self.emit("notification_count", self._count)
+        self.emit("notification_count", len(self.all_notifications))
 
     def clear_all_notifications(self):
         """Empty the notifications."""
+        logger.info("[Notification] Clearing all notifications")
         self.all_notifications = []
         self._count = 0
         self._write_notifications(self.all_notifications)
+        self.emit("notification_count", len(self.all_notifications))
         self.emit("clear_all", True)
-        self.emit("notification_count", self._count)
 
     def _write_notifications(self, data):
         """Write the notifications to the cache file."""

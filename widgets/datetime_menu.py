@@ -45,6 +45,7 @@ class DateMenuNotification(EventBox):
         )
 
         self._notification = notification
+        self._id = id
 
         self._timeout_id = None
 
@@ -99,7 +100,7 @@ class DateMenuNotification(EventBox):
                 ),
                 icon_size=16,
             ),
-            on_clicked=lambda _: self.clear_notification(id),
+            on_clicked=lambda _: self.clear_notification(),
         )
 
         header_container.pack_end(
@@ -162,8 +163,17 @@ class DateMenuNotification(EventBox):
             },
         )
 
-    def clear_notification(self, id):
-        self.cache_notification_service.remove_notification(id)
+        # Handle notification signals
+        self._notification.connect("closed", self.on_notification_closed)
+
+    def on_notification_closed(self, notification, reason):
+        """Handle notification being closed."""
+        if reason in ["dismissed-by-user", "dismissed-by-limit"]:
+            self.revealer.set_reveal_child(False)
+            GLib.timeout_add(400, self.destroy)
+
+    def clear_notification(self):
+        self.cache_notification_service.remove_notification(self._id)
         self.revealer.set_reveal_child(False)
         GLib.timeout_add(400, self.destroy)
 
@@ -332,9 +342,17 @@ class DateNotificationMenu(Box):
         if config["calendar"]:
             date_column.set_visible(True)
 
-        notification_service.connect("notification-added", self.on_new_notification)
         self.cache_notification_service.connect(
-            "clear_all", self.on_clear_all_notifications
+            "notification-added",
+            self.on_new_notification
+        )
+        self.cache_notification_service.connect(
+            "clear_all",
+            self.on_clear_all_notifications
+        )
+        self.cache_notification_service.connect(
+            "notification-closed",
+            self.on_notification_closed
         )
 
         self.dnd_switch.connect("notify::active", self.on_dnd_switch)
@@ -358,20 +376,60 @@ class DateNotificationMenu(Box):
         self.notification_list_box.set_visible(False)
         self.placeholder.set_visible(True)
 
+    def on_notification_closed(self, _, id, reason):
+        """Handle notification being closed."""
+
+        for child in self.notification_list_box.children:
+            is_target = (
+                isinstance(child, DateMenuNotification) and
+                child._notification["id"] == id
+            )
+            if is_target:
+                if reason in ["dismissed-by-user", "dismissed-by-limit"]:
+                    child.revealer.set_reveal_child(False)
+                    GLib.timeout_add(400, lambda: self._remove_notification(child))
+                break
+
+        # Update visibility if no notifications left
+        has_notifications = any(
+            isinstance(c, DateMenuNotification)
+            for c in self.notification_list_box.children
+        )
+        if not has_notifications:
+            self.notification_list_box.set_visible(False)
+            self.placeholder.set_visible(True)
+            self.clear_icon.set_from_icon_name(icons["trash"]["empty"], 15)
+
+    def _remove_notification(self, widget):
+        if widget in self.notification_list_box.children:
+            self.notification_list_box.remove(widget)
+            widget.destroy()
+        return False
+
     def on_new_notification(self, fabric_notif, id):
         if self.cache_notification_service.dont_disturb:
             return
 
         notification: Notification = fabric_notif.get_notification_from_id(id)
 
-        count = len(self.notification_list_box.children)
+        # Clean up any destroyed widgets first
+        try:
+            active_children = [
+                child for child in self.notification_list_box.children
+                if child.get_parent() is not None
+            ]
+        except GLib.Error:
+            logger.debug("[DateMenu] Error checking widget validity")
+            active_children = []
+
+        self.notification_list_box.children = active_children
 
         self.clear_icon.set_from_icon_name(icons["trash"]["full"], 15)
 
         self.notification_list_box.add(
             DateMenuNotification(
                 notification=notification,
-                id=count + 1 if count > 0 else 1,
+                id=id,
             )
         )
         self.placeholder.set_visible(False)

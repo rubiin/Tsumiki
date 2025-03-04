@@ -158,8 +158,9 @@ DEFAULT_CONFIG = {
         "ignored": [],
         "timeout": 3000,
         "max_count": 200,
+        "per_app_limits": {},
         "play_sound": False,
-        "sound_file": "notification4",
+        "sound_file": "notification4"
     },
     "osd": {
         "enabled": True,
