@@ -136,12 +136,12 @@ DEFAULT_CONFIG = {
         "tooltip": True,
     },
     "network_usage": {
-        "adapter_name": "wlan0",
         "icon_size": "14px",
         "upload_icon": "",
         "download_icon": "",
-        "disconnected_icon": "󰤩",
         "tooltip": True,
+        "download": True,
+        "upload": True,
     },
     "microphone": {
         "icon_size": "12px",

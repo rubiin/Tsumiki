@@ -7,6 +7,7 @@ from .brightness import *
 from .custom_notification import *
 from .mpris import *
 from .network import NetworkClient
+from .networkspeed import *
 from .power_profile import *
 from .screen_record import *
 from .weather import *
@@ -17,3 +18,4 @@ notification_service = CustomNotifications()
 bluetooth_service = BluetoothClient()
 network_service = NetworkClient()
 battery_service = BatteryService().get_default()
+network_speed = NetworkSpeed().get_default()

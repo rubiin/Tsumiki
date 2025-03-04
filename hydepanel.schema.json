@@ -652,9 +652,6 @@
       "network_usage": {
         "type": "object",
         "properties": {
-          "adapter_name": {
-            "type": "string"
-          },
           "icon_size": {
             "type": "string",
             "pattern": "^[0-9]+px$"
@@ -665,10 +662,13 @@
           "download_icon": {
             "type": "string"
           },
-          "disconnected_icon": {
-            "type": "string"
-          },
           "tooltip": {
+            "type": "boolean"
+          },
+          "upload": {
+            "type": "boolean"
+          },
+          "download": {
             "type": "boolean"
           }
         }

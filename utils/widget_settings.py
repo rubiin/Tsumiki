@@ -102,10 +102,10 @@ NetworkUsage = TypedDict(
     "NetworkUsage",
     {
         **BaseConfig.__annotations__,
-        "adapter_name": str,
         "upload_icon": str,
         "download_icon": str,
-        "disconnected_icon": str,
+        "download": bool,
+        "upload": bool,
     },
 )
 
