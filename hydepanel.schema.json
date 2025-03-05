@@ -313,7 +313,8 @@
       "type": "object",
       "properties": {
         "count": {
-          "type": "integer"
+          "type": "integer",
+          "minimum": 1
         },
         "hide_unoccupied": {
           "type": "boolean"
@@ -323,6 +324,18 @@
         },
         "empty_scroll": {
           "type": "boolean"
+        },
+        "icon_map": {
+          "type": "object",
+          "description": "Map workspace IDs to custom labels or icons. Keys are workspace IDs, values are the labels/icons",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "default_label_format": {
+          "type": "string",
+          "description": "Format for workspace labels when not in icon_map. Use '{id}' for workspace number, or any other string/icon",
+          "default": "{id}"
         },
         "ignored": {
           "type": "array",

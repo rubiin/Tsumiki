@@ -2,7 +2,9 @@
 @use "common/functions.scss";
 @use "variable.scss";
 
-$workspace-transition: all 0.2s ease-in-out;
+$workspace-transition:
+  padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+  background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 
 /** workspace switcher widget */
 
@@ -14,8 +16,7 @@ $workspace-transition: all 0.2s ease-in-out;
     padding: functions.toEm(2) 0.5em;
     transition: $workspace-transition;
     border-radius: variable.$radius-large;
-    background-color: transparent;
-    transition-delay: 200ms;
+    background-color: theme.$background;
 
     label {
       color: theme.$text-main;
@@ -40,6 +41,14 @@ $workspace-transition: all 0.2s ease-in-out;
 
       & > label {
         color: theme.$background-dark;
+      }
+    }
+
+    &.unoccupied {
+      opacity: 0.5;
+
+      &:hover {
+        opacity: 1;
       }
     }
   }

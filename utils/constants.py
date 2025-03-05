@@ -238,7 +238,12 @@ DEFAULT_CONFIG = {
         "ignored": [-99],
         "reverse_scroll": False,
         "empty_scroll": False,
-        "icon_map": {},
+        "default_label_format": "{id}",
+        "icon_map": {
+            "1": "1",
+            "2": "2",
+            "3": "3"
+        },
     },
 }
 
