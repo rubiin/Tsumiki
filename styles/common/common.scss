@@ -225,7 +225,7 @@ switch {
   transition: all 75ms cubic-bezier(0, 0, 0.2, 1);
   margin: functions.toEm(4) 0;
   border-radius: 9999px;
-  background-color: lighten(theme.$background, 10%);
+  background-color: color.adjust(theme.$background, $lightness: 10%);
   background-clip: padding-box;
   font-size: 0;
   color: transparent;
@@ -279,7 +279,7 @@ expander {
     }
 
     &:hover {
-      color: lighten($color: variable.$border-color, $amount: 60);
+      color: color.adjust($color: variable.$border-color, $lightness: 60%);
     }
 
     &:checked {

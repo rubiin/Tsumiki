@@ -73,25 +73,26 @@ class UpdatesWidget(ButtonWidget):
         return True
 
     def on_button_press(self, _, event):
-        # todo : merge this with the check_update method
         if event.button == 1:
-            exec_shell_command_async(
-                f"{self.script_file} -{self.config['os']} -up",
-                lambda _: None,
-            )
+            self.check_update(update=True)
         else:
             self.check_update()
         return True
 
     @cooldown(1)
     @run_in_thread
-    def check_update(self):
-        logger.info(f"{Colors.INFO}[Updates] Checking for updates...")
-
+    def check_update(self, update=False):
         # Execute the update script asynchronously and update values
-        exec_shell_command_async(
-            f"{self.script_file} -{self.config['os']}",
-            lambda output: self.update_values(output),
-        )
+        if update:
+            exec_shell_command_async(
+                f"{self.script_file} -{self.config['os']} -up",
+                lambda output: self.update_values(output),
+            )
+        else:
+            logger.info(f"{Colors.INFO}[Updates] Checking for updates...")
+            exec_shell_command_async(
+                f"{self.script_file} -{self.config['os']}",
+                lambda output: self.update_values(output),
+            )
 
         return True

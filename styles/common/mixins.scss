@@ -1,3 +1,4 @@
+@use "sass:color";
 @use "../theme.scss";
 @use "../variable.scss";
 @use "./functions.scss";
@@ -109,7 +110,10 @@
       min-height: $width;
 
       &:hover {
-        background-color: darken($color: $highlight-color, $amount: 5%);
+        background-color: color.adjust(
+          $color: $highlight-color,
+          $lightness: -5%
+        );
       }
     }
   }
@@ -133,7 +137,10 @@
       margin: -$slider-width;
 
       &:hover {
-        background-color: darken($color: theme.$text-main, $amount: 10%);
+        background-color: color.adjust(
+          $color: theme.$text-main,
+          $lightness: -10%
+        );
       }
     }
   }
@@ -141,7 +148,7 @@
   &:disabled {
     highlight,
     progress {
-      background-color: transparentize(theme.$text-main, 0.4);
+      background-color: color.adjust(theme.$text-main, $alpha: -0.4);
       background-image: none;
     }
   }
@@ -172,7 +179,7 @@
 
 @mixin spacing($multiplier: 1, $spacing: variable.$spacing, $rec: false) {
   &.horizontal > * {
-    margin: 0 ($spacing * $multiplier / 2);
+    margin: 0 calc($spacing * $multiplier / 2);
 
     &:first-child {
       margin-left: 0;
@@ -184,7 +191,7 @@
   }
 
   &.vertical > * {
-    margin: ($spacing * $multiplier / 2) 0;
+    margin: calc($spacing * $multiplier / 2) 0;
 
     &:first-child {
       margin-top: 0;

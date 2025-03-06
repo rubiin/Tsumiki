@@ -12,6 +12,7 @@ from utils.monitors import HyprlandWithMonitors
 
 class Padding(EventBox):
     """A widget to add padding around the child widget."""
+
     def __init__(self, name: str | None = None, style: str = "", **kwargs):
         super().__init__(
             name=name,
@@ -26,6 +27,7 @@ class Padding(EventBox):
 
 class PopupRevealer(EventBox):
     """A widget to reveal a popup window."""
+
     def __init__(
         self,
         popup_window: WaylandWindow,
@@ -196,6 +198,7 @@ def make_layout(anchor: str, name: str, popup: PopupRevealer, **kwargs) -> Box:
 
 class PopupWindow(WaylandWindow):
     """A popup window to display a message."""
+
     def __init__(
         self,
         layer: Literal["background", "bottom", "top", "overlay"] = "top",

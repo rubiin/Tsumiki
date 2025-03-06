@@ -1,3 +1,4 @@
+@use "sass:color";
 @use "theme.scss";
 @use "common/mixins.scss";
 @use "variable.scss";
@@ -13,7 +14,7 @@
 
   &.active {
     border-radius: 5px;
-    background-color: lighten($color: theme.$background, $amount: 15%);
+    background-color: color.adjust($color: theme.$background, $lightness: 15%);
   }
 
   &.empty {
@@ -38,8 +39,8 @@
   #inner-player-box {
     background-color: theme.$background;
     border-radius: 15px;
-    margin-left: math.floor($image_size / 2);
-    min-width: math.floor($player_width - $image_size / 2);
+    margin-left: math.floor(calc($image_size / 2));
+    min-width: math.floor(calc($player_width - $image_size / 2));
     min-height: $player_height;
   }
 
@@ -111,14 +112,14 @@
     trough {
       border-radius: variable.$radius-large;
       min-height: 8px;
-      background-color: darken(theme.$background, 5%);
+      background-color: color.adjust(theme.$background, $lightness: -5%);
 
       highlight {
         border-radius: 400px;
       }
 
       &:hover {
-        background-color: darken(theme.$background, 7%);
+        background-color: color.adjust(theme.$background, $lightness: -7%);
       }
     }
   }

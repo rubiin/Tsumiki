@@ -14,7 +14,7 @@ $border: $border-width solid $border-color;
 $active-gradient: linear-gradient(
   to right,
   theme.$background-dark,
-  darken(theme.$background-dark, 4%)
+  color.adjust(theme.$background-dark, $lightness: -4%)
 );
 
 $text-shadow: 2pt 2pt 2pt theme.$shadow-color;

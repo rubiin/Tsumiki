@@ -77,7 +77,10 @@ $slider-height: 12px;
 
         button {
           margin: 0 5px;
-          background-color: lighten($color: theme.$background, $amount: 5%);
+          background-color: color.adjust(
+            $color: theme.$background,
+            $lightness: 5%
+          );
           border-radius: variable.$radius-large;
           padding: functions.toEm(4);
 
@@ -98,7 +101,7 @@ $slider-height: 12px;
       .uptime {
         font-size: 0.92rem;
         border: variable.$border-width solid
-          lighten($color: theme.$surface-disabled, $amount: 10%);
+          color.adjust($color: theme.$surface-disabled, $lightness: 10%);
         padding: functions.toEm(3) functions.toEm(10);
         font-weight: 600;
         border-radius: 1rem;
@@ -137,7 +140,7 @@ $slider-height: 12px;
         min-height: 32px;
 
         &:hover {
-          background-color: darken(theme.$accent-blue, 4%);
+          background-color: color.adjust(theme.$accent-blue, $lightness: -4%);
           color: theme.$background;
         }
       }
@@ -302,15 +305,15 @@ $slider-height: 12px;
         background-color: theme.$accent-blue;
 
         &:hover {
-          background-color: darken(theme.$accent-blue, 4%);
+          background-color: color.adjust(theme.$accent-blue, $lightness: -4%);
         }
 
         label {
-          color: lighten($color: #000000, $amount: 8%);
+          color: color.adjust($color: #000000, $lightness: 8%);
         }
 
         image {
-          color: lighten($color: #000000, $amount: 8%);
+          color: color.adjust($color: #000000, $lightness: 8%);
         }
       }
     }
@@ -319,7 +322,7 @@ $slider-height: 12px;
     #quicksettings-togglebutton.active button label,
     #quicksettings-togglebutton.active button {
       background-color: theme.$accent-blue;
-      color: lighten($color: #000000, $amount: 8%);
+      color: color.adjust($color: #000000, $lightness: 8%);
       padding-left: functions.toEm(1);
       padding-right: functions.toEm(4);
     }
@@ -327,13 +330,13 @@ $slider-height: 12px;
     #quicksettings-togglebutton.active button:hover image,
     #quicksettings-togglebutton.active button:hover label,
     #quicksettings-togglebutton.active button:hover {
-      background-color: darken(theme.$accent-blue, 4%);
+      background-color: color.adjust(theme.$accent-blue, $lightness: -4%);
     }
 
     #quicksettings-togglebutton.active button:active image,
     #quicksettings-togglebutton.active button:active label,
     #quicksettings-togglebutton.active button:active {
-      background-color: darken(theme.$accent-blue, 10%);
+      background-color: color.adjust(theme.$accent-blue, $lightness: -10%);
     }
 
     #quicksettings-togglebutton button image,
