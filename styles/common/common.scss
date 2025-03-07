@@ -338,3 +338,29 @@ scrollbar {
   background-size: contain;
   margin: functions.toEm(3) functions.toEm(10) functions.toEm(3) 0;
 }
+
+// Menu styling
+menu#ocr-menu {
+  padding: 0.5em;
+
+  menuitem {
+    padding: 0.5em 1em;
+
+    &:hover {
+      background-color: theme.$surface-neutral;
+
+      label#ocr-menu-item {
+        color: theme.$background-dark;
+      }
+    }
+
+    label#ocr-menu-item {
+      color: theme.$surface-highlight;
+
+      &.selected {
+        font-weight: bold;
+        color: theme.$accent-light;
+      }
+    }
+  }
+}
