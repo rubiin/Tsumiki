@@ -66,7 +66,7 @@ case "$1" in
 -rgb)
     pick_rgb
     ;;
--hsb)
+-hsv)
     pick_hsv
     ;;
 -hex)
