@@ -1,6 +1,10 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "definitions": {
+    "style": {
+      "type": "string",
+      "enum": ["default", "wave1", "wave2", "flat", "shadow", "bordered"]
+    },
     "anchor": {
       "type": "string",
       "enum": [
@@ -181,8 +185,7 @@
           "enum": ["background", "bottom", "top", "overlay"]
         },
         "widget_style": {
-          "type": "string",
-          "enum": ["default", "wave1", "wave2", "flat", "shadow", "bordered"]
+          "$ref": "#/definitions/style"
         }
       }
     },
@@ -466,6 +469,9 @@
         },
         "show_percentage": {
           "type": "boolean"
+        },
+        "style": {
+          "$ref": "#/definitions/style"
         }
       }
     },

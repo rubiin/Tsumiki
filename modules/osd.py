@@ -38,6 +38,9 @@ class GenericOSDContainer(Box):
         self.icon = Image(icon_name=icons.icons["brightness"]["screen"], icon_size=28)
         self.scale = create_scale()
 
+        if config["style"]:
+            self.add_style_class(config["style"])
+
         self.children = (self.icon, self.scale, self.level)
 
         if config["show_percentage"]:

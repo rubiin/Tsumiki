@@ -28,8 +28,11 @@ label {
 
 .panel-box,
 .panel-button {
-  border-radius: variable.$radius-large;
   background-color: theme.$background-dark;
+}
+
+.default {
+  border-radius: variable.$radius-large;
 }
 
 .panel-box {

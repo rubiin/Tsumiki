@@ -168,6 +168,7 @@ DEFAULT_CONFIG = {
         "anchor": "bottom-center",
         "show_label": True,
         "show_percentage": True,
+        "style": "default",
     },
     "ocr": {
         "icon": "󰐳",

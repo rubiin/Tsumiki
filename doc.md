@@ -236,11 +236,20 @@ Other components follow a similar structure, where each configuration defines th
 }
 ```
 
-- enabled_icon: The icon used when enabled.
-- disabled_icon: The icon used when disabled.
-- icon_size: Size of the icon.
-- label: Whether to show a label.
-- tooltip: Whether to show a tooltip.
+- **enabled_icon** (string):
+  Specifies the icon to be displayed when the element is enabled. In this case, the enabled icon is represented by `""`.
+
+- **disabled_icon** (string):
+  Specifies the icon to be displayed when the element is disabled. In this case, the disabled icon is represented by `""`.
+
+- **icon_size** (string):
+  Defines the size of the icon. In this case, the icon size is set to `"12px"`.
+
+- **label** (boolean):
+  Specifies whether a label should be displayed. In this case, the value is `true`, meaning the label will be shown.
+
+- **tooltip** (boolean):
+  Specifies whether a tooltip should be displayed. In this case, the value is `true`, meaning the tooltip will be shown.
 
 ## HyprSunset
 
@@ -255,12 +264,23 @@ Other components follow a similar structure, where each configuration defines th
 }
 ```
 
-- temperature: Sets the color temperature.
-- enabled_icon: The icon used when enabled.
-- disabled_icon: The icon used when disabled.
-- icon_size: Size of the icon.
-- label: Whether to show a label.
-- tooltip: Whether to show a tooltip.
+- **temperature** (string):
+  Specifies the color temperature. In this case, the temperature is set to `"2800k"`.
+
+- **enabled_icon** (string):
+  Specifies the icon to be displayed when the element is enabled. In this case, the enabled icon is represented by `"󱩌"`.
+
+- **disabled_icon** (string):
+  Specifies the icon to be displayed when the element is disabled. In this case, the disabled icon is represented by `"󰛨"`.
+
+- **icon_size** (string):
+  Defines the size of the icon. In this case, the icon size is set to `"12px"`.
+
+- **label** (boolean):
+  Specifies whether a label should be displayed. In this case, the value is `true`, meaning the label will be shown.
+
+- **tooltip** (boolean):
+  Specifies whether a tooltip should be displayed. In this case, the value is `true`, meaning the tooltip will be shown.
 
 ## Hyprpicker
 
@@ -273,10 +293,17 @@ Other components follow a similar structure, where each configuration defines th
 }
 ```
 
-- icon: The icon used to display the module.
-- icon_size: Size of the icon in px.
-- label: Whether to show a label.
-- tooltip: Whether to show a tooltip
+- **icon** (string):
+  Specifies the icon to be displayed. In this case, the icon is represented by `""`.
+
+- **icon_size** (string):
+  Defines the size of the icon. In this case, the icon size is set to `"14px"`.
+
+- **label** (boolean):
+  Specifies whether a label should be displayed. In this case, the value is `true`, meaning the label will be shown.
+
+- **tooltip** (boolean):
+  Specifies whether a tooltip should be displayed. In this case, the value is `true`, meaning the tooltip will be shown.
 
 ## Language
 
@@ -298,10 +325,17 @@ Other components follow a similar structure, where each configuration defines th
 }
 ```
 
-- icon: The icon used to display the module.
-- icon_size: Size of the icon in px.
-- label: Whether to show a label.
-- tooltip: Whether to show a tooltip
+- **icon** (string):
+  Specifies the icon to be displayed. In this case, the icon is represented by `""`.
+
+- **icon_size** (string):
+  Defines the size of the icon. In this case, the icon size is set to `"12px"`.
+
+- **label** (boolean):
+  Specifies whether a label should be displayed. In this case, the value is `true`, meaning the label will be shown.
+
+- **tooltip** (boolean):
+  Specifies whether a tooltip should be displayed. In this case, the value is `true`, meaning the tooltip will be shown.
 
 ## MPRIS
 
@@ -312,26 +346,35 @@ Other components follow a similar structure, where each configuration defines th
 }
 ```
 
-Configures the media player information system (MPRIS) display settings.
+- **truncation_size** (integer):
+  Specifies the length of the MPRIS display. In this case, it is set to 30.
 
-- truncation_size: The length of the MPRIS display.
-- format: The format of the MPRIS display.
+- **format** (string):
+  Defines the format of the MPRIS display. In this case, it is set to "{artist} - {title}".
 
 ## OCR
 
 ```json
 "ocr": {
-    "icon": "󰐳",
-    "icon_size": "14px",
-    "label": true,
-    "tooltip": true,
+"icon": "󰐳",
+"icon_size": "14px",
+"label": true,
+"tooltip": true,
 }
+
 ```
 
-- icon: The icon used to display the module.
-- icon_size: Size of the icon in px.
-- label: Whether to show a label.
-- tooltip: Whether to show a tooltip
+- **icon** (string):
+  The icon used to display the module. In this case, the icon is "󰐳".
+
+- **icon_size** (string):
+  The size of the icon in px. In this case, it is set to "14px".
+
+- **label** (boolean):
+  Whether to show a label. In this case, it is set to true.
+
+- **tooltip** (boolean):
+  Whether to show a tooltip. In this case, it is set to true.
 
 ## Power Button
 
@@ -340,58 +383,85 @@ Configures the media player information system (MPRIS) display settings.
 
 ```
 
-- icon: The icon used to display the module.
-- icon_size: Size of the icon in px.
-- tooltip: Whether to show a tooltip
+- **icon** (string):
+  The icon used to display the module. In this case, the icon is "󰐥".
+
+- **icon_size** (string):
+  The size of the icon in px. In this case, it is set to "12px".
+
+- **tooltip** (boolean):
+  Whether to show a tooltip. In this case, it is set to true.
 
 ## Recorder
 
 ```json
 "recorder": {
-    "videos": "Videos/Screencasting",
-    "tooltip": true,
-    "audio": true,
-    "icon_size": 14
+"videos": "Videos/Screencasting",
+"tooltip": true,
+"audio": true,
+"icon_size": 14
 }
 
 ```
 
-- videos: Path to the videos directory.
-- audio: Whether to record video with audio.
-- tooltip: Whether to show a tooltip
-- icon_size: Size of the icon in number
+- **videos** (string):
+  The path to the videos directory. In this case, it is set to "Videos/Screencasting".
+
+- **audio** (boolean):
+  Whether to record video with audio. In this case, it is set to true.
+
+- **tooltip** (boolean):
+  Whether to show a tooltip. In this case, it is set to true.
+
+- **icon_size** (integer):
+  The size of the icon in number. In this case, it is set to 14.
 
 ## Submap
 
 ```json
 "submap": {
-    "icon": "󰋊",
-    "icon_size": "14px",
-    "label": true,
-    "tooltip": true,
+"icon": "󰋊",
+"icon_size": "14px",
+"label": true,
+"tooltip": true,
 }
+
 ```
 
-- icon: The icon used to display the module.
-- icon_size: Size of the icon in px.
-- label: Whether to show a label.
-- tooltip: Whether to show a tooltip
+- **icon** (string):
+  The icon used to display the module. In this case, the icon is "󰋊".
+
+- **icon_size** (string):
+  The size of the icon in px. In this case, it is set to "14px".
+
+- **label** (boolean):
+  Whether to show a label. In this case, it is set to true.
+
+- **tooltip** (boolean):
+  Whether to show a tooltip. In this case, it is set to true.
 
 ## Storage
 
 ```json
 "storage": {
-    "icon": "󰋊",
-    "icon_size": "14px",
-    "label": true,
-    "tooltip": true,
+"icon": "󰋊",
+"icon_size": "14px",
+"label": true,
+"tooltip": true,
 }
 ```
 
-- icon: The icon used to display the module.
-- icon_size: Size of the icon in px.
-- label: Whether to show a label.
-- tooltip: Whether to show a tooltip
+- **icon** (string):
+  The icon used to display the module. In this case, the icon is "󰋊".
+
+- **icon_size** (string):
+  The size of the icon in px. In this case, it is set to "14px".
+
+- **label** (boolean):
+  Whether to show a label. In this case, it is set to true.
+
+- **tooltip** (boolean):
+  Whether to show a tooltip. In this case, it is set to true.
 
 ## TaskBar and System Tray
 
@@ -400,79 +470,115 @@ Configures the media player information system (MPRIS) display settings.
 "system_tray": {"icon_size": 22, "ignored": ["firefox"]},
 ```
 
-- icon_size - the size of the icon in number
-- ignored - list of applications to ignore
+- **icon_size** (integer):
+  The size of the icon in number. In this case, it is set to 22.
+
+- **ignored** (array):
+  List of applications to ignore. In this case, it is set to ["firefox"].
 
 ## Updates
 
 ```json
 "updates": {
-    "os": "arch",
-    "icon": "󱧘",
-    "icon_size": "14px",
-    "interval": 60000,
-    "tooltip": true,
-    "label": true,
+"os": "arch",
+"icon": "󱧘",
+"icon_size": "14px",
+"interval": 60000,
+"tooltip": true,
+"label": true,
 }
 ```
 
-- os: The os to fetch updates count for.
-- icon: The icon used to display the module.
-- icon_size: Size of the icon in px.
-- interval: The update interval for update.
-- label: Whether to show a label.
-- tooltip: Whether to show a tooltip
+- **os** (string):
+  The OS to fetch updates count for. In this case, it is set to "arch".
+
+- **icon** (string):
+  The icon used to display the module. In this case, the icon is "󱧘".
+
+- **icon_size** (string):
+  The size of the icon in px. In this case, it is set to "14px".
+
+- **interval** (integer):
+  The update interval for updates. In this case, it is set to 60000 milliseconds.
+
+- **label** (boolean):
+  Whether to show a label. In this case, it is set to true.
+
+- **tooltip** (boolean):
+  Whether to show a tooltip. In this case, it is set to true.
 
 ## Volume
 
 ```json
 "volume": {
-    "icon_size": "14px",
-    "label": true,
-    "tooltip": true,
-    "step_size": 5,
+"icon_size": "14px",
+"label": true,
+"tooltip": true,
+"step_size": 5,
 }
 ```
 
-- icon_size: Size of the icon in px.
-- label: Whether to show a label.
-- tooltip: Whether to show a tooltip
-- step_size: The volume step size.
+- **icon_size** (string):
+  The size of the icon in px. In this case, it is set to "14px".
+
+- **label** (boolean):
+  Whether to show a label. In this case, it is set to true.
+
+- **tooltip** (boolean):
+  Whether to show a tooltip. In this case, it is set to true.
+
+- **step_size** (integer):
+  The volume step size. In this case, it is set to 5.
 
 ## Weather
 
 ```json
 "weather": {
-    "location": "Kathmandu",
-    "interval": 60000,
-    "tooltip": true,
-    "label": true,
-    "detect_location": false,
+"location": "Kathmandu",
+"interval": 60000,
+"tooltip": true,
+"label": true,
+"detect_location": false,
 }
 ```
 
-- location: The location to display weather for.
-- interval: The update interval for weather.
-- label: Whether to show a label.
-- tooltip: Whether to show a tooltip
-- detect_location: Whether to detect the location automatically.
+- **location** (string):
+  The location to display weather for. In this case, it is set to "Kathmandu".
+
+- **interval** (integer):
+  The update interval for weather. In this case, it is set to 60000 milliseconds.
+
+- **label** (boolean):
+  Whether to show a label. In this case, it is set to true.
+
+- **tooltip** (boolean):
+  Whether to show a tooltip. In this case, it is set to true.
+
+- **detect_location** (boolean):
+  Whether to detect the location automatically. In this case, it is set to false.
 
 ## Window Title
 
 ```json
 "window_title": {
-    "truncation": true,
-    "truncation_size": 50,
-    "enable_icon": true,
-    "title_map": []
-    }
-
+"truncation": true,
+"truncation_size": 50,
+"enable_icon": true,
+"title_map": []
+}
 ```
 
-- truncation: whether to limit the window title.
-- truncation_size: Maximum length for the window title (requires truncation set to true).
-- enable_icon: Whether to display the icon in the title bar.
-- title_map: Map of window title to icon.
+- **truncation** (boolean):
+  Whether to limit the window title. In this case, it is set to true.
+
+- **truncation_size** (integer):
+  Maximum length for the window title (requires truncation set to true). In this case, it is set to 50.
+
+- **enable_icon** (boolean):
+  Whether to display the icon in the title bar. In this case, it is set to true.
+
+- **title_map** (array):
+  A map of window titles to icons. In this case, it is an empty array [].
 
 ## Workspaces
 
@@ -480,25 +586,36 @@ Configures the media player information system (MPRIS) display settings.
 "workspaces": {
   "count": 8,
   "hide_unoccupied": true,
-    "reverse_scroll": false,
-    "empty_scroll": false,
-    "icon_map": {
-      "1":"",
-      "2": "",
-      "3": "",
-      "4": "󰏆",
-      "5": "",
-      "6": "󰕼",
-      "7": "󰏦",
-      "8": "󰏧"
-    },
-    "ignored": [1]
-    }
+  "reverse_scroll": false,
+  "empty_scroll": false,
+  "icon_map": {
+    "1": "",
+    "2": "",
+    "3": "",
+    "4": "󰏆",
+    "5": "",
+    "6": "󰕼",
+    "7": "󰏦",
+    "8": "󰏧"
+  },
+  "ignored": [1]
+}
 ```
 
-- count: Number of workspaces.
-- hide_unoccupied: Indicates whether workspaces should show as occupied or not.
-- reverse_scroll: Invert scroll direction
-- empty_scroll: scroll to empty workspaces
-- icon_map: map an icon to a workspace instead of number
-- ignored: ignores workspaces from the widget
+- **count** (integer):
+  Number of workspaces. In this case, it is set to 8.
+
+- **hide_unoccupied** (boolean):
+  Indicates whether workspaces should show as occupied or not. In this case, it is set to true.
+
+- **reverse_scroll** (boolean):
+  Invert scroll direction. In this case, it is set to false.
+
+- **empty_scroll** (boolean):
+  Scroll to empty workspaces. In this case, it is set to false.
+
+- **icon_map** (object):
+  Map an icon to a workspace instead of the number. In this case, the icons are mapped as shown.
+
+- **ignored** (array):
+  Ignores specific workspaces from the widget. In this case, workspace 1 is ignored.
