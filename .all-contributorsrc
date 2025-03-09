@@ -34,7 +34,7 @@
       "profile": "https://github.com/Anshul-007",
       "contributions": [
         "code"
-        ]
+      ]
     },
     {
       "login": "S4NKALP",
@@ -43,6 +43,15 @@
       "profile": "https://github.com/S4NKALP",
       "contributions": [
         "bug"
+      ]
+    },
+    {
+      "login": "keepo-dot",
+      "name": "Keepo",
+      "avatar_url": "https://avatars.githubusercontent.com/u/201014163?v=4",
+      "profile": "https://github.com/keepo-dot",
+      "contributions": [
+        "code"
       ]
     }
   ],
