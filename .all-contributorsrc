@@ -53,6 +53,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "Evren-os",
+      "name": "Sayeed Mahmood Evrenos",
+      "avatar_url": "https://avatars.githubusercontent.com/u/138004078?v=4",
+      "profile": "https://evrenos-dev.vercel.app/",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,
