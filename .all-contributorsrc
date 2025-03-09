@@ -1,0 +1,27 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "commitType": "docs",
+  "commitConvention": "angular",
+  "contributors": [
+    {
+      "login": "PixelKhaos",
+      "name": "Robin Seger",
+      "avatar_url": "https://avatars.githubusercontent.com/u/5213174?v=4",
+      "profile": "https://github.com/PixelKhaos",
+      "contributions": [
+        "code",
+        "design"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "skipCi": true,
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "projectName": "HyDePanel",
+  "projectOwner": "rubiin"
+}
