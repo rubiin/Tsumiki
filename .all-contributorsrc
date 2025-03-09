@@ -26,6 +26,15 @@
         "code",
         "bug"
       ]
+    },
+    {
+      "login": "S4NKALP",
+      "name": "Sankalp Tharu",
+      "avatar_url": "https://avatars.githubusercontent.com/u/98226895?v=4",
+      "profile": "https://github.com/S4NKALP",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,
