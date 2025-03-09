@@ -1,0 +1,284 @@
+{
+    "$schema": "./hydepanel.schema.json",
+    "battery": {
+        "full_battery_level": 100,
+        "hide_label_when_full": true,
+        "label": true,
+        "tooltip": true
+    },
+    "bluetooth": {
+        "icon_size": 14,
+        "label": true,
+        "tooltip": true
+    },
+    "brightness": {
+        "icon_size": "14px",
+        "label": true,
+        "tooltip": true,
+        "step_size": 5
+    },
+    "cava": {
+        "bars": 10
+    },
+    "click_counter": {
+        "count": 0
+    },
+    "cpu": {
+        "icon": "",
+        "icon_size": "12px",
+        "label": true,
+        "tooltip": true,
+        "unit": "celsius",
+        "round": true,
+        "show_unit": true,
+        "sensor": "acpitz"
+    },
+    "date_time": {
+        "format": "%b %d %H:%M",
+        "notification_count": true,
+        "notification": true,
+        "calendar": true
+    },
+    "divider": {
+        "size": 2
+    },
+    "hypr_idle": {
+        "enabled_icon": "",
+        "disabled_icon": "",
+        "icon_size": "12px",
+        "label": true,
+        "tooltip": true
+    },
+    "hypr_sunset": {
+        "temperature": "2800k",
+        "enabled_icon": "󱩌",
+        "disabled_icon": "󰛨",
+        "icon_size": "12px",
+        "label": true,
+        "tooltip": true
+    },
+    "keyboard": {
+        "icon": "󰌌",
+        "icon_size": "14px",
+        "label": true,
+        "tooltip": true
+    },
+    "language": {
+        "truncation_size": 2,
+        "icon_size": "14px",
+        "tooltip": true,
+        "icon": ""
+    },
+    "layout": {
+        "left_section": [
+            "workspaces",
+            "window_title"
+        ],
+        "middle_section": [
+            "date_time"
+        ],
+        "right_section": [
+            "recorder",
+            "@group:1",
+            "@group:0",
+            "system_tray"
+        ]
+    },
+    "module_groups": [
+        {
+            "widgets": [
+                "updates",
+                "ocr",
+                "battery"
+            ],
+            "spacing": 4,
+            "style_classes": [
+                "compact"
+            ]
+        },
+        {
+            "widgets": [
+                "quick_settings",
+                "cpu",
+                "network_usage"
+            ],
+            "spacing": 0,
+            "style_classes": [
+                "compact"
+            ]
+        }
+    ],
+    "memory": {
+        "icon": "",
+        "icon_size": "12px",
+        "label": true,
+        "tooltip": true
+    },
+    "submap": {
+        "icon": "󰌌",
+        "icon_size": "12px",
+        "label": true,
+        "tooltip": true
+    },
+    "microphone": {
+        "icon_size": "12px",
+        "label": false,
+        "tooltip": true
+    },
+    "ocr": {
+        "icon": "󰐳",
+        "icon_size": "14px",
+        "tooltip": true,
+        "label": true
+    },
+    "mpris": {
+        "truncation_size": 200,
+        "tooltip": true
+    },
+    "notification": {
+        "anchor": "top-right",
+        "auto_dismiss": true,
+        "ignored": [],
+        "timeout": 3000,
+        "play_sound": true,
+        "sound_file": "notification4",
+        "max_count": 5
+    },
+    "osd": {
+        "enabled": true,
+        "timeout": 1500,
+        "anchor": "bottom-center",
+        "show_percentage": true,
+        "widget_style": "wave2"
+    },
+    "general": {
+        "screen_corners": {
+            "enabled": false,
+            "size": 20
+        },
+        "desktop_clock": {
+            "enabled": true,
+            "anchor": "bottom-right",
+            "date_format": "%A, %d %B %Y"
+        },
+        "check_updates": false,
+        "layer": "top",
+        "auto_hide": false,
+        "debug": true,
+        "bar_style": "default",
+        "location": "top",
+        "widget_style": "default"
+    },
+    "power": {
+        "icon": "󰐥",
+        "icon_size": "18px",
+        "tooltip": true
+    },
+    "recorder": {
+        "path": "Videos/Screencasting",
+        "audio": true,
+        "icon_size": 16,
+        "tooltip": true
+    },
+    "spacing": {
+        "size": 20
+    },
+    "network_usage": {
+        "icon_size": "14px",
+        "upload_icon": "",
+        "download_icon": "",
+        "tooltip": true,
+        "upload": true,
+        "download": false
+    },
+    "quick_settings": {
+        "media": {
+            "ignore": [],
+            "truncation_size": 30,
+            "show_album": true,
+            "show_artist": true,
+            "show_time": true,
+            "show_time_tooltip": true
+        },
+        "shortcuts": [
+            {
+                "icon": "terminal-symbolic",
+                "label": "Terminal",
+                "command": "kitty",
+                "tooltip": "Open terminal",
+                "icon_size": 18
+            },
+            {
+                "icon": "firefox-symbolic",
+                "label": "Browser",
+                "command": "firefox",
+                "tooltip": "Launch Firefox",
+                "icon_size": 18
+            }
+        ]
+    },
+    "stop_watch": {
+        "stopped_icon": "󱫞",
+        "running_icon": "󱫠",
+        "icon_size": "16px"
+    },
+    "storage": {
+        "icon": "󰋊",
+        "icon_size": "14px",
+        "label": true,
+        "tooltip": true
+    },
+    "system_tray": {
+        "icon_size": 16,
+        "ignored": []
+    },
+    "task_bar": {
+        "icon_size": 22
+    },
+    "theme": {
+        "name": "catpuccin-mocha"
+    },
+    "theme_switcher": {
+        "icon": "",
+        "icon_size": "14px",
+        "silent": true
+    },
+    "updates": {
+        "os": "arch",
+        "icon": "󱧘",
+        "icon_size": "14px",
+        "interval": 3600000,
+        "tooltip": true,
+        "label": true
+    },
+    "volume": {
+        "icon_size": "14px",
+        "label": true,
+        "tooltip": true,
+        "step_size": 5
+    },
+    "weather": {
+        "detect_location": true,
+        "location": "kathmandu",
+        "label": true,
+        "tooltip": true,
+        "interval": 3600000
+    },
+    "window_title": {
+        "enable_icon": true,
+        "truncation": true,
+        "truncation_size": 50,
+        "title_map": []
+    },
+    "workspaces": {
+        "count": 8,
+        "hide_unoccupied": true,
+        "default_label_format": "{id}",
+        "ignored": [
+            -99
+        ],
+        "reverse_scroll": false,
+        "empty_scroll": false,
+        "icon_map": {}
+    }
+}

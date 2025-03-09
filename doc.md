@@ -7,6 +7,7 @@ This repository defines the configuration settings for a modular system, allowin
 ## Default Configuration
 
 The default configuration is stored in the `DEFAULT_CONFIG` dictionary. It includes default values for various sections, such as the layout of the bar, settings for battery, CPU, weather, and other system components.
+By default, `config.json` is read. If the config is not found, then `config.toml` is read. For sample configuration, please see `example` folder.
 
 # General Configuration
 
