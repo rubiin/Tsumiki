@@ -16,6 +16,16 @@
         "code",
         "design"
       ]
+    },
+    {
+      "login": "Axenide",
+      "name": "Adriano Tisera",
+      "avatar_url": "https://avatars.githubusercontent.com/u/66109459?v=4",
+      "profile": "https://zaap.bio/Axenide",
+      "contributions": [
+        "code",
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,
