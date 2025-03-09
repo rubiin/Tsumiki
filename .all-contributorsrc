@@ -26,6 +26,15 @@
         "code",
         "bug"
       ]
+    },
+    {
+      "login": "Anshul-007",
+      "name": "Anshul J.",
+      "avatar_url": "https://avatars.githubusercontent.com/u/81582218?v=4",
+      "profile": "https://github.com/Anshul-007",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
