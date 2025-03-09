@@ -1,6 +1,7 @@
 import json
 import os
 
+import pytomlpp
 from fabric.utils import get_relative_path
 from loguru import logger
 
@@ -22,26 +23,35 @@ class HydeConfig:
         return HydeConfig.instance
 
     def __init__(self):
+        self.json_config = get_relative_path("../config.json")
+        self.toml_config = get_relative_path("../config.toml")
         self.default_config()
 
-    # Function to read the configuration file
-    def read_config(self) -> dict:
-        config_file = get_relative_path("../config.json")
-        if not os.path.exists(config_file):
-            with open(config_file, "w") as destination_file:
-                json.dump(
-                    DEFAULT_CONFIG, destination_file, indent=4, ensure_ascii=False
-                )
-            return DEFAULT_CONFIG
-
-        with open(config_file) as file:
+    # Function to read the configuration file in json
+    def read_config_json(self) -> dict:
+        logger.info(f"[Config] Reading json config from {self.json_config}")
+        with open(self.json_config) as file:
             # Load JSON data into a Python dictionary
             data = json.load(file)
         return data
 
+    # Function to read the configuration file in json
+    def read_config_toml(self) -> dict:
+        logger.info(f"[Config] Reading toml config from {self.toml_config}")
+        with open(self.toml_config) as file:
+            # Load JSON data into a Python dictionary
+            data = pytomlpp.load(file)
+        return data
+
     def default_config(self) -> BarConfig:
         # Read the configuration from the JSON file
-        parsed_data = self.read_config()
+        check_toml = os.path.exists(self.toml_config)
+        check_json = os.path.exists(self.json_config)
+
+        if not check_json and not check_toml:
+            raise FileNotFoundError("Please provide either a json or toml config.")
+
+        parsed_data = self.read_config_json() if check_json else self.read_config_toml()
 
         validate_widgets(parsed_data, DEFAULT_CONFIG)
 

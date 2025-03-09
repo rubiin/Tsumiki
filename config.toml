@@ -1,0 +1,258 @@
+'$schema' = './hydepanel.schema.json'
+
+[battery]
+full_battery_level = 100
+hide_label_when_full = true
+label = true
+tooltip = true
+
+[bluetooth]
+icon_size = 14
+label = true
+tooltip = true
+
+[brightness]
+icon_size = '14px'
+label = true
+step_size = 5
+tooltip = true
+
+[cava]
+bars = 10
+color = '#89b4fa'
+
+[click_counter]
+count = 0
+
+[cpu]
+icon = ''
+icon_size = '12px'
+label = true
+round = true
+sensor = ''
+show_unit = true
+tooltip = true
+unit = 'celsius'
+
+[date_time]
+calendar = true
+format = '%b %d %H:%M'
+notification = true
+notification_count = true
+
+[divider]
+size = 2
+
+[general]
+auto_hide = false
+bar_style = 'default'
+check_updates = false
+debug = true
+layer = 'top'
+location = 'top'
+widget_style = 'default'
+
+    [general.desktop_clock]
+    anchor = 'center'
+    date_format = '%A, %d %B %Y'
+    enabled = true
+
+    [general.screen_corners]
+    enabled = false
+    size = 20
+
+[hypr_idle]
+disabled_icon = ''
+enabled_icon = ''
+icon_size = '12px'
+label = true
+tooltip = true
+
+[hypr_picker]
+icon = ''
+icon_size = '14px'
+label = true
+tooltip = true
+
+[hypr_sunset]
+disabled_icon = '󰛨'
+enabled_icon = '󱩌'
+icon_size = '12px'
+label = true
+temperature = '2800k'
+tooltip = true
+
+[keyboard]
+icon = '󰌌'
+icon_size = '14px'
+label = true
+tooltip = true
+
+[language]
+icon = ''
+icon_size = '14px'
+tooltip = true
+truncation_size = 2
+
+[layout]
+left_section = [ 'workspaces', 'window_title' ]
+middle_section = [ 'date_time' ]
+right_section = [ '@group:0', '@group:1', 'system_tray', 'power' ]
+
+[memory]
+icon = ''
+icon_size = '12px'
+label = true
+tooltip = true
+
+[microphone]
+icon_size = '12px'
+label = false
+tooltip = true
+
+[mpris]
+tooltip = true
+truncation_size = 30
+
+[network_usage]
+download = true
+download_icon = ''
+icon_size = '14px'
+tooltip = true
+upload = true
+upload_icon = ''
+
+[notification]
+anchor = 'top-right'
+auto_dismiss = true
+ignored = []
+max_count = 200
+play_sound = false
+sound_file = 'notification4'
+timeout = 3000
+
+    [notification.per_app_limits]
+
+[ocr]
+icon = '󰐳'
+icon_size = '14px'
+label = true
+tooltip = true
+
+[osd]
+anchor = 'bottom-center'
+enabled = true
+show_label = true
+show_percentage = true
+style = 'default'
+timeout = 1500
+
+[overview]
+
+[power]
+icon = '󰐥'
+icon_size = '18px'
+tooltip = true
+
+[quick_settings]
+shortcuts = []
+
+    [quick_settings.media]
+    ignore = []
+    show_album = true
+    show_artist = true
+    show_time = true
+    show_time_tooltip = true
+    truncation_size = 26
+
+[recorder]
+audio = true
+icon_size = 16
+path = 'Videos/Screencasting'
+tooltip = true
+
+[spacing]
+size = 20
+
+[stop_watch]
+icon_size = '16px'
+running_icon = '󱫠'
+stopped_icon = '󱫞'
+
+[storage]
+icon = '󰋊'
+icon_size = '14px'
+label = true
+path = '/'
+tooltip = true
+
+[submap]
+icon = '󰌌'
+icon_size = '12px'
+label = true
+tooltip = true
+
+[system_tray]
+icon_size = 16
+ignored = []
+
+[task_bar]
+icon_size = 22
+
+[theme]
+name = 'catpuccin-mocha'
+
+[theme_switcher]
+icon = ''
+icon_size = '14px'
+silent = true
+
+[updates]
+icon = '󱧘'
+icon_size = '14px'
+interval = 3600
+label = true
+os = 'arch'
+tooltip = true
+
+[volume]
+icon_size = '14px'
+label = true
+step_size = 5
+tooltip = true
+
+[weather]
+detect_location = true
+interval = 3600
+label = true
+location = 'kathmandu'
+tooltip = true
+
+[window_title]
+enable_icon = true
+title_map = []
+truncation = true
+truncation_size = 50
+
+[workspaces]
+count = 8
+default_label_format = '{id}'
+empty_scroll = false
+hide_unoccupied = true
+ignored = [ -99 ]
+reverse_scroll = false
+
+    [workspaces.icon_map]
+    1 = '1'
+    2 = '2'
+    3 = '3'
+
+[[module_groups]]
+spacing = 4
+style_classes = [ 'bordered' ]
+widgets = [ 'updates', 'battery' ]
+
+[[module_groups]]
+spacing = 0
+style_classes = [ 'compact' ]
+widgets = [ 'quick_settings', 'theme_switcher' ]
