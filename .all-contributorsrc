@@ -71,6 +71,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "DIMFLIX-OFFICIAL",
+      "name": "DIMFLIX",
+      "avatar_url": "https://avatars.githubusercontent.com/u/112165977?v=4",
+      "profile": "https://dimflix-official.github.io/",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,
