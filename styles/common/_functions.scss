@@ -1,9 +1,76 @@
+@use "sass:map";
+@use "sass:list";
+@use "defaults";
+
+// Convert px to rem units
 @function toRem($value) {
   $remValue: calc($value / 16) + rem;
   @return $remValue;
 }
 
+// Convert px to em units with configurable base
 @function toEm($value, $base: 16) {
   $emValue: calc($value / $base) + em;
   @return $emValue;
+}
+
+// Helper to get default value for a property
+@function get-default($key) {
+  @return map.get(defaults.$defaults, $key);
+}
+
+// Helper to find first non-null value in a list
+@function find-first-value($values...) {
+  @each $value in $values {
+    @if $value != null and $value != "inherit" {
+      @return $value;
+    }
+  }
+  @return null;
+}
+
+@function get-color($map, $state, $type) {
+  @if map.has-key($map, $state) {
+    $color-set: map.get($map, $state);
+    @if map.has-key($color-set, $type) {
+      @return map.get($color-set, $type);
+    }
+  }
+  @return null;
+}
+
+// Helper for handling property inheritance
+@function get-inherited-value($map, $key, $parent-value) {
+  $value: map.get($map, $key);
+
+  // If value is explicitly set to inherit, use parent
+  @if $value == "inherit" {
+    @return $parent-value;
+  }
+
+  // If value is not set (null), use parent or default
+  @if $value == null {
+    @return if($parent-value != null, $parent-value, get-default($key));
+  }
+
+  // Otherwise use the explicitly set value
+  @return $value;
+}
+
+// Helper for converting values to em units
+@function to-unit($value) {
+  @if $value == null or $value == "inherit" {
+    @return $value;
+  }
+
+  @if type-of($value) == "number" {
+    @return toEm($value * defaults.$base-font-size);
+  } @else if type-of($value) == "list" {
+    $result: ();
+    @each $item in $value {
+      $result: list.append($result, to-unit($item));
+    }
+    @return $result;
+  }
+  @return $value;
 }

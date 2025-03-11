@@ -1,6 +1,120 @@
 @use "sass:color";
+@use "sass:map";
 @use "theme.scss";
 
+// Module configurations - values are unitless and relative to base-font-size
+$modules: (
+  "workspaces": (
+    "font-size": 0.5,
+    "padding": (
+      0.15 2,
+    ),
+    "roundness": 4,
+    "animation-speed": 1,
+    "margin": (
+      0.5 0,
+    ),
+    "buttons": (
+      "colors": (
+        "background": (
+          "default": #16faae,
+          "hover": #82ff97,
+        ),
+        "text": (
+          "default": #fff,
+          "hover": #fff,
+        ),
+      ),
+      "padding": (
+        0.15 1,
+      ),
+      "roundness": 2,
+      "margin": (
+        0.5 0.5,
+      ),
+      "active": (
+        "colors": (
+          "background": (
+            "default": #82ff97,
+            "hover": #82ff97,
+          ),
+          "text": (
+            "default": #fff,
+            "hover": #fff,
+          ),
+        ),
+        "font-size": "inherit",
+        "padding": (
+          0.15 5,
+        ),
+        "margin": (
+          1.5 0.5,
+        ),
+        "roundness": "inherit",
+      ),
+      "unoccupied": (
+        "colors": (
+          "background": (
+            "default": #1f9c68,
+            "hover": #82ff97,
+          ),
+          "text": (
+            "default": #fff,
+            "hover": #fff,
+          ),
+        ),
+        //can also just omit the keys to inherit
+      ),
+    ),
+  ),
+  "quicksettings": (
+    "font-size": 1,
+    "padding": 1,
+    "roundness": 0.5,
+    "width": 23,
+    "sections": (
+      "font-size": "inherit",
+      "padding": 0.5,
+      "gap": 0.25,
+      "active": (
+        "font-size": 1.1,
+        "padding": "inherit",
+      ),
+      "disabled": (
+        "font-size": 0.9,
+        "padding": "inherit",
+      ),
+    ),
+  ),
+);
+
+// Animation configuration
+$animations: (
+  "workspaces": (
+    "padding-left": (
+      "duration": 0.3,
+      "delay": 0.1,
+    ),
+    "padding-right": (
+      "duration": 0.3,
+      "delay": 0.1,
+    ),
+    "margin": (
+      "duration": 0.2,
+      "delay": 0.1,
+    ),
+    "border-radius": (
+      "duration": 0.3,
+      "delay": 0,
+    ),
+    "background-color": (
+      "duration": 0.4,
+      "delay": 0.1,
+    ),
+  ),
+);
+
+// Legacy measurements for parts not yet converted
 $radius: 10px;
 $radius-large: 100px;
 $padding: 7pt;
@@ -8,6 +122,7 @@ $spacing: 12pt;
 
 $quicksettings-width: 370px;
 
+// Borders
 $border-width: 1px;
 $border-color: theme.$surface-disabled;
 $border: $border-width solid $border-color;
@@ -17,14 +132,11 @@ $active-gradient: linear-gradient(
   color.adjust(theme.$background-dark, $lightness: -4%)
 );
 
+// Shadows
 $text-shadow: 2pt 2pt 2pt theme.$shadow-color;
 $box-shadow: 2pt 2pt 2pt 0 theme.$shadow-color;
 
-$popover-padding: $padding * 1.6;
-$popover-radius: 0;
-
-@if $radius !=0 {
-  $popover-radius: $radius + $popover-padding;
-}
-
+// Popover
+$popover-padding: 0.8rem;
+$popover-radius: 0.5rem;
 $popover-border-color: color.adjust($border-color, $alpha: -0.95);

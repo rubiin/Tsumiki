@@ -1,0 +1,12 @@
+// Base configuration
+$base-font-size: 12;
+$base-unit: $base-font-size * 1px;
+
+// Default values for common properties
+$defaults: (
+  "font-size": 2,
+  "padding": 0.5,
+  "roundness": 1,
+  "gap": 0.25,
+  "animation-speed": 1,
+);

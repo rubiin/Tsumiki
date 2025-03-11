@@ -1,54 +1,240 @@
 @use "theme.scss";
 @use "common" as common;
-@use "variable.scss";
+@use "variable.scss" as var;
 
-$workspace-transition:
-  padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-  background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+@use "sass:map";
+@use "sass:list";
+@use "sass:math";
+
+$conf: map.get(var.$modules, "workspaces");
+$animation-speed: map.get($conf, "animation-speed");
+$animation-speed: if($animation-speed == 0, 0, calc(1 / $animation-speed));
+
+// Generate base transitions with delays
+$base-transitions: ();
+@each $property, $config in map.get(var.$animations, "workspaces") {
+  $duration: map.get($config, "duration");
+  $delay: map.get($config, "delay");
+
+  // Scale both duration and delay by animation speed
+  $scaled-duration: $animation-speed * $duration;
+  $scaled-delay: $animation-speed * $delay;
+
+  $base-transitions: list.append(
+    $base-transitions,
+    #{$property}
+      #{$scaled-duration}s
+      cubic-bezier(0.4, 0, 0.2, 1)
+      #{$scaled-delay}s,
+    comma
+  );
+}
+
+// Generate state transitions without delays
+$state-transitions: ();
+@each $property, $config in map.get(var.$animations, "workspaces") {
+  $duration: map.get($config, "duration");
+
+  // Only scale duration for states
+  $scaled-duration: $animation-speed * $duration;
+
+  $state-transitions: list.append(
+    $state-transitions,
+    #{$property} #{$scaled-duration}s cubic-bezier(0.4, 0, 0.2, 1),
+    comma
+  );
+}
 
 /** workspace switcher widget */
+#workspaces-box {
+  $config: map.get(var.$modules, "workspaces");
+  $ws-padding: common.get-inherited-value($config, "padding", null);
+  $ws-roundness: common.get-inherited-value($config, "roundness", null);
+  $ws-font-size: common.get-inherited-value($config, "font-size", null);
+  $ws-margin: common.get-inherited-value($config, "margin", null);
 
-#workspaces {
-  padding: 0.19em 1em;
-  font-weight: 700;
+  padding: common.to-unit($ws-padding);
+  border-radius: common.to-unit($ws-roundness);
+  font-size: common.to-unit($ws-font-size);
 
-  & > button {
-    padding: common.toEm(2) 0.5em;
-    transition: $workspace-transition;
-    border-radius: variable.$radius-large;
-    background-color: theme.$background;
+  #workspaces {
+    margin: common.to-unit($ws-margin);
+    $button-config: map.get($config, "buttons");
 
-    label {
-      color: theme.$text-main;
-      transition: inherit;
-    }
+    & > button {
+      $btn-padding: common.get-inherited-value(
+        $button-config,
+        "padding",
+        $ws-padding
+      );
+      $btn-roundness: common.get-inherited-value(
+        $button-config,
+        "roundness",
+        $ws-roundness
+      );
+      $btn-margin: common.get-inherited-value($button-config, "margin", null);
+      $btn-font-size: common.get-inherited-value(
+        $button-config,
+        "font-size",
+        $ws-font-size
+      );
 
-    &:hover {
-      background-color: theme.$ws-hover;
+      $workspace-colors: map.get(
+        var.$modules,
+        "workspaces",
+        "buttons",
+        "colors"
+      );
+
+      padding: common.to-unit($btn-padding);
+      margin: common.to-unit($btn-margin);
+      transition: $base-transitions;
+
+      border-radius: common.to-unit($btn-roundness);
+      background-color: common.get-color(
+        $workspace-colors,
+        "background",
+        "default"
+      );
+      font-size: common.to-unit($btn-font-size);
+
+      &:first-child {
+        margin-left: 0;
+      }
+
+      &:last-child {
+        margin-right: 0;
+      }
 
       label {
-        color: theme.$background-dark;
+        color: common.get-color($workspace-colors, "text", "default");
+        margin: -0.5em 0;
+        transition: inherit;
+        font-size: inherit;
       }
-    }
-
-    &.active {
-      font-weight: 600;
-      padding-left: common.toEm(14);
-      padding-right: common.toEm(14);
-      background-color: theme.$ws-active;
-      min-width: 1.4rem;
-      transition: $workspace-transition;
-
-      & > label {
-        color: theme.$background-dark;
-      }
-    }
-
-    &.unoccupied {
-      opacity: 0.5;
 
       &:hover {
-        opacity: 1;
+        background-color: theme.$ws-hover;
+
+        label {
+          color: theme.$background-dark;
+        }
+      }
+
+      &.active {
+        $active-config: map.get($button-config, "active");
+        $act-padding: common.get-inherited-value(
+          $active-config,
+          "padding",
+          $btn-padding
+        );
+        $act-roundness: common.get-inherited-value(
+          $active-config,
+          "roundness",
+          $btn-roundness
+        );
+        $act-margin: common.get-inherited-value(
+          $active-config,
+          "margin",
+          $btn-margin
+        );
+        $act-font-size: common.get-inherited-value(
+          $active-config,
+          "font-size",
+          $btn-font-size
+        );
+
+        $active-colors: map.get(
+          var.$modules,
+          "workspaces",
+          "buttons",
+          "active",
+          "colors"
+        );
+
+        font-weight: 600;
+        padding: common.to-unit($act-padding);
+        margin: common.to-unit($act-margin);
+        background-color: common.get-color(
+          $active-colors,
+          "background",
+          "default"
+        );
+        color: common.get-color($active-colors, "text", "default");
+        border-radius: common.to-unit($act-roundness);
+        transition: $state-transitions;
+        font-size: common.to-unit($act-font-size);
+
+        &:first-child {
+          margin-left: 0;
+        }
+
+        &:last-child {
+          margin-right: 0;
+        }
+
+        & > label {
+          color: theme.$background-dark;
+        }
+      }
+
+      &.unoccupied {
+        $unoccupied-config: map.get($button-config, "unoccupied");
+        $un-padding: common.get-inherited-value(
+          $unoccupied-config,
+          "padding",
+          $btn-padding
+        );
+        $un-roundness: common.get-inherited-value(
+          $unoccupied-config,
+          "roundness",
+          $btn-roundness
+        );
+        $un-margin: common.get-inherited-value(
+          $unoccupied-config,
+          "margin",
+          $btn-margin
+        );
+        $un-font-size: common.get-inherited-value(
+          $unoccupied-config,
+          "font-size",
+          $btn-font-size
+        );
+
+        $unoccupied-colors: map.get(
+          var.$modules,
+          "workspaces",
+          "buttons",
+          "unoccupied",
+          "colors"
+        );
+
+        background-color: common.get-color(
+          $unoccupied-colors,
+          "background",
+          "default"
+        );
+        padding: common.to-unit($un-padding);
+        margin: common.to-unit($un-margin);
+        border-radius: common.to-unit($un-roundness);
+        transition: $state-transitions;
+        font-size: common.to-unit($un-font-size);
+
+        label {
+          color: common.get-color($unoccupied-colors, "text", "default");
+        }
+
+        &:first-child {
+          margin-left: 0;
+        }
+
+        &:last-child {
+          margin-right: 0;
+        }
+
+        &:hover {
+          opacity: 1;
+        }
       }
     }
   }

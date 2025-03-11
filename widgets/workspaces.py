@@ -15,23 +15,35 @@ class WorkSpacesWidget(BoxWidget):
         # Convert ignored workspace IDs to integers
         ignored_ws = [int(x) for x in unique_list(self.config["ignored"])]
         default_format = self.config.get("default_label_format", "{id}")
+        unoccupied_format = self.config.get("unoccupied_label_format", None)
 
-        def create_workspace_label(ws_id: int) -> str:
+        def create_workspace_label(ws_id: int, is_empty: bool = False) -> str:
             # First check icon_map for custom label/icon
             str_id = str(ws_id)
             if str_id in self.config.get("icon_map", {}):
                 return self.config["icon_map"][str_id]
-            # Otherwise use default format
+
+            # Use unoccupied format if the workspace is empty and explicitly set
+            if is_empty and unoccupied_format is not None:
+                formatted_label = unoccupied_format.format(id=ws_id)
+                return formatted_label if formatted_label.strip() else ""
+
             return default_format.format(id=ws_id)
 
-        def setup_button_empty_state(button):
+        def setup_button_empty_state(button: WorkspaceButton):
             """Set up empty state tracking for workspace button"""
 
             def update_empty_state(*args):
-                if button.get_empty():
+                is_empty = button.get_empty()
+                if is_empty:
                     button.add_style_class("unoccupied")
                 else:
                     button.remove_style_class("unoccupied")
+
+                # Force re-labeling to ensure correct format is applied
+                new_label = create_workspace_label(button.id, is_empty=is_empty)
+                if button.get_label() != new_label:
+                    button.set_label(new_label)
 
             button.connect("notify::empty", update_empty_state)
             # Set initial state
@@ -47,7 +59,8 @@ class WorkSpacesWidget(BoxWidget):
             if self.config["hide_unoccupied"]
             else [
                 setup_button_empty_state(
-                    WorkspaceButton(id=i, label=create_workspace_label(i))
+                    WorkspaceButton(id=i,
+                    label=create_workspace_label(i, is_empty=False))
                 )
                 for i in range(1, self.config["count"] + 1)
                 if i not in ignored_ws
@@ -56,7 +69,7 @@ class WorkSpacesWidget(BoxWidget):
             buttons_factory=lambda ws_id: setup_button_empty_state(
                 WorkspaceButton(
                     id=ws_id,
-                    label=create_workspace_label(ws_id),
+                    label=create_workspace_label(ws_id, is_empty=True),
                     visible=ws_id not in ignored_ws,
                 )
             ),

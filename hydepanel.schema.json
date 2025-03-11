@@ -371,6 +371,11 @@
           "description": "Format for workspace labels when not in icon_map. Use '{id}' for workspace number, or any other string/icon",
           "default": "{id}"
         },
+        "unoccupied_label_format": {
+          "type": "string",
+          "description": "Format for workspace labels when not in icon_map. Use '{id}' for workspace number, or any other string/icon",
+          "default": "{id}"
+        },
         "ignored": {
           "type": "array",
           "items": {

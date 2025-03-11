@@ -74,17 +74,17 @@
   "layout": {
     "left_section": ["workspaces", "window_title"],
     "middle_section": ["date_time"],
-    "right_section": ["recorder", "@group:1", "@group:0", "system_tray"]
+    "right_section": ["@group:0", "quick_settings", "@group:1", "system_tray"]
   },
   "module_groups": [
     {
-      "widgets": ["updates", "ocr", "battery"],
-      "spacing": 4,
+      "widgets": ["recorder", "ocr"],
+      "spacing": 0,
       "style_classes": ["compact"]
     },
     {
-      "widgets": ["quick_settings", "cpu", "network_usage"],
-      "spacing": 0,
+      "widgets": ["updates", "cpu", "battery"],
+      "spacing": 4,
       "style_classes": ["compact"]
     }
   ],
@@ -251,9 +251,10 @@
     "title_map": []
   },
   "workspaces": {
-    "count": 8,
-    "hide_unoccupied": true,
-    "default_label_format": "{id}",
+    "count": 5,
+    "hide_unoccupied": false,
+    "default_label_format": "",
+    "unoccupied_label_format": "",
     "ignored": [-99],
     "reverse_scroll": false,
     "empty_scroll": false,
