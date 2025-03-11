@@ -38,6 +38,8 @@ format = "%b %d %H:%M"
 notification_count = true
 notification = true
 calendar = true
+clock_format = "24h",
+uptime = true
 
 [divider]
 size = 2

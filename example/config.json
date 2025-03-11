@@ -38,7 +38,7 @@
     "notification_count": true,
     "notification": true,
     "calendar": true,
-    "clock_format": "12h",
+    "clock_format": "24h",
     "uptime": true
   },
   "divider": {
@@ -72,20 +72,42 @@
     "icon": ""
   },
   "layout": {
-    "left_section": ["workspaces", "window_title"],
-    "middle_section": ["date_time"],
-    "right_section": ["recorder", "@group:1", "@group:0", "system_tray"]
+    "left_section": [
+      "workspaces",
+      "window_title"
+    ],
+    "middle_section": [
+      "date_time"
+    ],
+    "right_section": [
+      "recorder",
+      "@group:1",
+      "@group:0",
+      "system_tray"
+    ]
   },
   "module_groups": [
     {
-      "widgets": ["updates", "ocr", "battery"],
+      "widgets": [
+        "updates",
+        "ocr",
+        "battery"
+      ],
       "spacing": 4,
-      "style_classes": ["compact"]
+      "style_classes": [
+        "compact"
+      ]
     },
     {
-      "widgets": ["quick_settings", "cpu", "network_usage"],
+      "widgets": [
+        "quick_settings",
+        "cpu",
+        "network_usage"
+      ],
       "spacing": 0,
-      "style_classes": ["compact"]
+      "style_classes": [
+        "compact"
+      ]
     }
   ],
   "memory": {
@@ -254,7 +276,9 @@
     "count": 8,
     "hide_unoccupied": true,
     "default_label_format": "{id}",
-    "ignored": [-99],
+    "ignored": [
+      -99
+    ],
     "reverse_scroll": false,
     "empty_scroll": false,
     "icon_map": {}
