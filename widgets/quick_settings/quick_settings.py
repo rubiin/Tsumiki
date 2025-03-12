@@ -32,6 +32,7 @@ from widgets.quick_settings.togglers import (
 
 from .sliders import AudioSlider, BrightnessSlider, MicrophoneSlider
 from .submenu import (
+    AudioSubMenu,
     BluetoothSubMenu,
     BluetoothToggle,
     PowerProfileSubMenu,
@@ -252,6 +253,9 @@ class QuickSettingsMenu(Box):
             vexpand=True,
         )
 
+        # Add audio submenu
+        self.audio_submenu = AudioSubMenu()
+
         # Add sliders to the grid in a single column
         sliders_grid.attach(BrightnessSlider(), 0, 0, 1, 1)
         sliders_grid.attach(AudioSlider(), 0, 1, 1, 1)
@@ -285,7 +289,7 @@ class QuickSettingsMenu(Box):
             orientation="v",
             spacing=10,
             style_classes=[slider_class],
-            children=(sliders_grid,),
+            children=(sliders_grid, self.audio_submenu),
             h_expand=True,
         )
 

@@ -83,7 +83,7 @@
       "style_classes": ["compact"]
     },
     {
-      "widgets": ["quick_settings", "cpu", "network_usage"],
+      "widgets": ["quick_settings"],
       "spacing": 0,
       "style_classes": ["compact"]
     }
