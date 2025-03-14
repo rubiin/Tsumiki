@@ -114,7 +114,7 @@ install_packages() {
 	fi
 
 	# Install packages using yay (AUR helper)
-	$aur_helper -S --noconfirm --needed gray-git python-fabric gnome-bluetooth-3.0 python-rlottie-python python-pytomlpp fabric-cli-git slurp imagemagick tesseract tesseract-data-eng
+	$aur_helper -S --noconfirm --needed gray-git python-fabric gnome-bluetooth-3.0 python-rlottie-python python-pytomlpp python-pyjson5 fabric-cli-git slurp imagemagick tesseract tesseract-data-eng
 }
 
 # Check the argument passed to the script and call the appropriate function

@@ -380,7 +380,7 @@ Other components follow a similar structure, where each configuration defines th
 ## Power Button
 
 ```json
-"power": {"icon": "󰐥", "icon_size": "12px", "tooltip": true}
+"power": {"icon": "󰐥", "icon_size": "12px", "tooltip": true, "buttons": ["power", "logout", "reboot", "shutdown"] }
 
 ```
 
@@ -392,6 +392,9 @@ Other components follow a similar structure, where each configuration defines th
 
 - **tooltip** (boolean):
   Whether to show a tooltip. In this case, it is set to true.
+
+- **buttons** (array):
+  List of buttons to show. In this case, it is set to ["power", "logout", "reboot", "shutdown"].
 
 ## Recorder
 

@@ -196,7 +196,19 @@ DEFAULT_CONFIG = {
         "location": "top",
         "widget_style": "default",
     },
-    "power": {"icon": "󰐥", "icon_size": "18px", "tooltip": True},
+    "power": {
+        "icon": "󰐥",
+        "icon_size": "18px",
+        "tooltip": True,
+        "buttons": [
+            "lock",
+            "logout",
+            "suspend",
+            "hibernate",
+            "shutdown",
+            "reboot",
+        ],
+    },
     "recorder": {
         "path": "Videos/Screencasting",
         "icon_size": 16,
@@ -226,7 +238,7 @@ DEFAULT_CONFIG = {
     "theme_switcher": {
         "icon": "",
         "icon_size": "14px",
-        "silent": True,  # Whether to show a notification when the theme is changed
+        "notify": False,  # Whether to show a notification when the theme is changed
     },
     "updates": {
         "os": "arch",
@@ -243,7 +255,7 @@ DEFAULT_CONFIG = {
         "step_size": 5,
     },
     "weather": {
-        "detect_location": True,
+        "detect_location": False,
         "location": "kathmandu",
         "label": True,
         "tooltip": True,

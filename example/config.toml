@@ -215,7 +215,7 @@ name = "catpuccin-mocha"
 [theme_switcher]
 icon = ""
 icon_size = "14px"
-silent = true
+notify = false
 
 [updates]
 os = "arch"

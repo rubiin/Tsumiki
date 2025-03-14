@@ -8,18 +8,12 @@ from fabric.widgets.widget import Widget
 
 from shared import PopupWindow
 from shared.widget_container import ButtonWidget
+from utils.config import widget_config
 from utils.functions import handle_power_action
 from utils.widget_settings import BarConfig
 from utils.widget_utils import text_icon
 
-POWER_BUTTONS = [
-    {"name": "lock", "label": "Lock"},
-    {"name": "logout", "label": "Logout"},
-    {"name": "suspend", "label": "Suspend"},
-    {"name": "hibernate", "label": "Hibernate"},
-    {"name": "shutdown", "label": "Shutdown"},
-    {"name": "reboot", "label": "Reboot"},
-]
+POWER_BUTTONS = widget_config["power"]["buttons"]
 
 
 class PowerMenuPopup(PopupWindow):
@@ -48,8 +42,7 @@ class PowerMenuPopup(PopupWindow):
                     orientation="h",
                     children=[
                         PowerControlButtons(
-                            name=value["name"],
-                            label=value["label"],
+                            name=value,
                             size=self.icon_size,
                         )
                         for value in POWER_BUTTONS[0:3]
@@ -59,8 +52,7 @@ class PowerMenuPopup(PopupWindow):
                     orientation="h",
                     children=[
                         PowerControlButtons(
-                            name=value["name"],
-                            label=value["label"],
+                            name=value,
                             size=self.icon_size,
                         )
                         for value in POWER_BUTTONS[3:]
@@ -90,7 +82,7 @@ class PowerMenuPopup(PopupWindow):
 class PowerControlButtons(ButtonWidget):
     """A widget to show power options."""
 
-    def __init__(self, name, label, size, **kwargs):
+    def __init__(self, name: str, size: int, show_label=True, **kwargs):
         (
             super().__init__(
                 orientation="v",
@@ -103,7 +95,11 @@ class PowerControlButtons(ButtonWidget):
                             image_file=get_relative_path(f"../assets/icons/{name}.png"),
                             size=size,
                         ),
-                        Label(label=label, style_classes="panel-text"),
+                        Label(
+                            label=name.capitalize(),
+                            style_classes="panel-text",
+                            visible=show_label,
+                        ),
                     ],
                 ),
                 **kwargs,
@@ -143,5 +139,6 @@ class PowerWidget(ButtonWidget):
             self.set_tooltip_text("Power")
 
         self.connect(
-            "clicked", lambda *_: PowerMenuPopup().get_default().toggle_popup()
+            "clicked",
+            lambda *_: PowerMenuPopup().get_default().toggle_popup(),
         )

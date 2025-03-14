@@ -84,6 +84,19 @@ def merge_defaults(data: dict, defaults: dict):
     return {**defaults, **data}
 
 
+# Function to flatten a dictionary
+def flatten_dict(d, parent_key="", sep="-"):
+    """Flatten a nested dictionary into a single level."""
+    items = []
+    for k, v in d.items():
+        new_key = f"{parent_key}{sep}{k}" if parent_key else k
+        if isinstance(v, dict):  # If the value is a dictionary, recurse
+            items.extend(flatten_dict(v, new_key, sep=sep).items())
+        else:
+            items.append((new_key, v))
+    return dict(items)
+
+
 # Validate the widgets
 def validate_widgets(parsed_data, default_config):
     """Validates the widgets defined in the layout configuration.

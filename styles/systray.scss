@@ -4,21 +4,29 @@
 
 /* system tray widget*/
 #system-tray {
-  padding: 0.125em 0.25em;
+  padding: 1em 0.25em;
   color: theme.$text-main;
+  border-radius: variable.$radius;
+  background-color: theme.$background-dark;
+  margin-right: 1rem;
 
-  & > button {
-    margin: 0 0.1em;
-    padding: 0 0.15em;
-    border-radius: variable.$radius-large;
-    &:hover {
-      background-color: theme.$surface-disabled;
-    }
+  grid{
+  &>button {
+      margin: 0 0.1em;
+      padding: 0 0.15em;
+      border-radius: variable.$radius-large;
 
-    &:active {
-      background-color: theme.$text-main;
+      &:hover {
+        background-color: theme.$surface-disabled;
+      }
+
+      &:active {
+        background-color: theme.$text-main;
+      }
     }
   }
+
+
 }
 
 #system-tray-menu > menuitem menu,

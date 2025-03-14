@@ -2,6 +2,10 @@
 @use "theme.scss";
 @use "common" as common;
 
+#power-button-menu {
+  background-color: theme.$background;
+}
+
 #power-control-button {
   padding: common.toEm(40) common.toEm(120);
   border-radius: 0;
@@ -22,7 +26,7 @@
   &:focus,
   &:active,
   &:hover {
-    background-color: #3700b3;
+    background-color: theme.$accent-purple;
     outline-style: none;
   }
 }

@@ -1,6 +1,6 @@
-import json
 import os
 
+import pyjson5 as json
 import pytomlpp
 from fabric.utils import get_relative_path
 from loguru import logger
@@ -66,19 +66,6 @@ class HydeConfig:
                 )
 
         self.config = parsed_data
-
-    def set_css_settings(self):
-        logger.info("Applying css settings...")
-
-        settings = ""
-        # for setting in self.config["css_settings"]:
-        for setting in self.try_get_property("css_settings", [], True):
-            settings += (
-                f"${setting}: {self.try_get_property(setting, 'css_settings')};\n"
-            )
-
-        with open(get_relative_path("styles/_settings.scss"), "w") as f:
-            f.write(settings)
 
 
 configuration = HydeConfig().get_default()
