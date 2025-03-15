@@ -3,12 +3,11 @@
 @use "common" as common;
 
 /* system tray widget*/
-#system-tray {
-  padding: 1em 0.25em;
+#system-tray-menu {
+  padding: 0.5em 0.25em;
   color: theme.$text-main;
   border-radius: variable.$radius;
   background-color: theme.$background-dark;
-  margin-right: 1rem;
 
   grid{
   &>button {
@@ -29,31 +28,21 @@
 
 }
 
-#system-tray-menu > menuitem menu,
-#system-tray-menu {
-  background-color: theme.$surface-disabled;
-  border-radius: 1em;
-  padding: common.toEm(10);
-  min-width: 100px;
-}
+/* system tray widget*/
+#system-tray-widget {
 
-#system-tray-menu > menuitem menu > menuitem,
-#system-tray-menu > menuitem {
-  margin: common.toEm(5) 0;
-  background-color: theme.$surface-disabled;
-  padding: 0.3em 0.5em;
-  border-radius: variable.$radius;
-}
+  .toggle-icon, .panel-icon {
+    margin: 0;
+    padding:0;
+    &.active {
+      background-color: theme.$background-alt;
+    }
+  }
 
-#system-tray-menu > menuitem menu > menuitem:disabled,
-#system-tray-menu > menuitem:disabled {
-  background-color: transparent;
-  color: theme.$text-muted-dark;
-}
-
-#system-tray-menu > menuitem menu > menuitem:hover,
-#system-tray-menu > menuitem:hover,
-#submenu-button:hover {
-  background-color: theme.$surface-neutral;
-  color: theme.$accent-purple;
+  separator {
+    background-color: variable.$border-color;
+    border-radius: variable.$radius;
+    margin: 8px 4px;
+    min-width: 1.2px;
+  }
 }

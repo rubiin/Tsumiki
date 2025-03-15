@@ -657,6 +657,13 @@
 						"items": {
 							"type": "string"
 						}
+					},
+					"hidden": {
+						"type": "array",
+						"description": "List of system tray icons to show only in popover drawer",
+						"items": {
+							"type": "string"
+						}
 					}
 				}
 			},
