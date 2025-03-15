@@ -183,7 +183,12 @@ class SystemTrayWidget(ButtonWidget):
         # Get item title for matching
         title = item.get_property("title") or ""
 
-        # Check if item should be hidden based on title
+        # Check if item should be ignored completely
+        ignored_list = self.config.get("ignored", [])
+        if any(x.lower() in title.lower() for x in ignored_list):
+            return
+
+        # Check if item should be hidden in popover
         hidden_list = self.config.get("hidden", [])
         is_hidden = any(x.lower() in title.lower() for x in hidden_list)
 
