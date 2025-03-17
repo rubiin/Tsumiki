@@ -6,7 +6,7 @@ from gi.repository import GLib
 from loguru import logger
 
 import utils.functions as helpers
-from utils.colors import Colors
+from utils import Colors
 
 
 @helpers.run_in_thread

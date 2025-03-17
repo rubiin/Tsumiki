@@ -5,12 +5,8 @@ from fabric.widgets.image import Image
 from fabric.widgets.label import Label
 from fabric.widgets.scrolledwindow import ScrolledWindow
 
-from services import network_service
-from services.network import NetworkClient, Wifi
-from shared.animator import Animator
-from shared.circle_image import CircleImage
-from shared.submenu import QuickSubMenu, QuickSubToggle
-from shared.widget_container import HoverButton
+from services import NetworkClient, Wifi, network_service
+from shared import Animator, CircleImage, HoverButton, QuickSubMenu, QuickSubToggle
 
 
 class WifiSubMenu(QuickSubMenu):

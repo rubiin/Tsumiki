@@ -1,5 +1,5 @@
 from services import audio_service
-from shared.setting_scale import SettingSlider
+from shared import SettingSlider
 from utils.icons import icons
 
 

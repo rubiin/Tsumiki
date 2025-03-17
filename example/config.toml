@@ -232,8 +232,7 @@ tooltip = true
 step_size = 5
 
 [weather]
-detect_location = true
-location = "kathmandu"
+location = ""
 label = true
 tooltip = true
 interval = 3_600_000

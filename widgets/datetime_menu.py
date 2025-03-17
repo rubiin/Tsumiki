@@ -17,14 +17,10 @@ from loguru import logger
 import utils.constants as constants
 import utils.functions as helpers
 from services import notification_service
-from shared.custom_image import CustomImage
-from shared.pop_over import PopOverWindow
-from shared.separator import Separator
-from shared.widget_container import ButtonWidget
-from utils.colors import Colors
+from shared import ButtonWidget, CustomImage, PopOverWindow, Separator
+from utils import BarConfig, Colors
 from utils.functions import uptime
 from utils.icons import icons
-from utils.widget_settings import BarConfig
 from utils.widget_utils import get_icon, setup_cursor_hover, util_fabricator
 
 
@@ -450,7 +446,7 @@ class DateTimeWidget(ButtonWidget):
     """A widget to power off the system."""
 
     def __init__(self, widget_config: BarConfig, bar, **kwargs):
-        super().__init__(name="date-time-button", **kwargs)
+        super().__init__(widget_config, name="date-time-button", **kwargs)
 
         self.config = widget_config["date_time"]
 
@@ -464,10 +460,9 @@ class DateTimeWidget(ButtonWidget):
             child=date_menu,
             visible=False,
             all_visible=False,
+            pointing_to=self,
             margin="-18px 0 0 0",
         )
-
-        popup.set_pointing_to(self)
 
         self.notification_indicator = Image(
             icon_name=icons["notifications"]["noisy"],

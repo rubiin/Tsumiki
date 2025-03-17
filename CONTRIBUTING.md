@@ -1,10 +1,10 @@
-# Contributing to [Project Name]
+# Contributing to HydePanel
 
-Thank you for your interest in contributing to [Project Name]! We welcome contributions and are excited to work together to make this project better. To ensure a smooth collaboration, please follow the guidelines below.
+Thank you for your interest in contributing to Hydepanel ! We welcome contributions and are excited to work together to make this project better. To ensure a smooth collaboration, please follow the guidelines below.
 
 ## Table of Contents
 
-- [Contributing to \[Project Name\]](#contributing-to-project-name)
+- [Contributing to \[Project Name\]](#contributing-to-hydepanel)
   - [Table of Contents](#table-of-contents)
   - [Code of Conduct](#code-of-conduct)
   - [How to Contribute](#how-to-contribute)

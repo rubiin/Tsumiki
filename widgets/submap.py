@@ -3,8 +3,8 @@ from fabric.widgets.box import Box
 from fabric.widgets.label import Label
 from loguru import logger
 
-from shared.widget_container import ButtonWidget
-from utils.widget_settings import BarConfig
+from shared import ButtonWidget
+from utils import BarConfig
 from utils.widget_utils import text_icon
 
 
@@ -12,7 +12,7 @@ class SubMapWidget(ButtonWidget):
     """A widget to display the current submap."""
 
     def __init__(self, widget_config: BarConfig, bar, **kwargs):
-        super().__init__(name="submap", **kwargs)
+        super().__init__(widget_config, name="submap", **kwargs)
 
         self.config = widget_config["submap"]
 

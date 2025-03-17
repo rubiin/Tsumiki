@@ -1,3 +1,4 @@
+import importlib
 from time import sleep
 from typing import Literal
 
@@ -9,7 +10,7 @@ from fabric.widgets.label import Label
 from fabric.widgets.scale import ScaleMark
 from gi.repository import Gdk, GLib
 
-from shared.animated.scale import AnimatedScale
+from shared import AnimatedScale
 from utils.functions import uptime
 
 from .config import widget_config
@@ -87,6 +88,23 @@ def get_icon(app_icon, size=25) -> Image:
             icon_name=icons["fallback"]["notification"],
             icon_size=icon_size,
         )
+
+
+def lazy_load_widget(widget_name, widgets_list):
+    if widget_name in widgets_list:
+        # Get the full module path (e.g., "widgets.BatteryWidget")
+        class_path = widgets_list[widget_name]
+
+        # Dynamically import the module
+        module_name, class_name = class_path.rsplit(".", 1)
+        module = importlib.import_module(module_name)
+
+        # Get the class from the module
+        widget_class = getattr(module, class_name)
+
+        return widget_class
+    else:
+        raise KeyError(f"Widget {widget_name} not found in the dictionary.")
 
 
 # Function to create a text icon label

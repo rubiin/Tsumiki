@@ -11,10 +11,8 @@ from gi.repository import GObject
 
 import utils.functions as helpers
 import utils.icons as icons
-from services import audio_service
-from services.brightness import Brightness
-from utils.monitors import HyprlandWithMonitors
-from utils.widget_settings import BarConfig
+from services import Brightness, audio_service
+from utils import BarConfig, HyprlandWithMonitors
 from utils.widget_utils import (
     create_scale,
     get_audio_icon_name,
@@ -55,7 +53,7 @@ class BrightnessOSDContainer(GenericOSDContainer):
             config=config,
             **kwargs,
         )
-        self.brightness_service = Brightness().get_default()
+        self.brightness_service = Brightness.get_default()
         self.update_brightness()
 
         self.scale.connect("value-changed", lambda *_: self.update_brightness())

@@ -3,8 +3,8 @@ from fabric.widgets.button import Button
 from fabric.widgets.image import Image
 from fabric.widgets.label import Label
 
-from services.power_profile import PowerProfiles
-from shared.submenu import QuickSubMenu, QuickSubToggle
+from services import PowerProfiles
+from shared import QuickSubMenu, QuickSubToggle
 
 
 class PowerProfileItem(Button):
@@ -58,7 +58,7 @@ class PowerProfileSubMenu(QuickSubMenu):
     """A submenu to display power profile options."""
 
     def __init__(self, **kwargs):
-        self.client = PowerProfiles().get_default()
+        self.client = PowerProfiles.get_default()
         self.profiles = self.client.power_profiles
         self.active = self.client.get_current_profile()
 
@@ -104,7 +104,7 @@ class PowerProfileToggle(QuickSubToggle):
             submenu=submenu,
             **kwargs,
         )
-        self.client = PowerProfiles().get_default()
+        self.client = PowerProfiles.get_default()
         self.update_action_button()
         self.set_active_style(True)
         self.action_button.set_sensitive(False)

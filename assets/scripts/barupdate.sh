@@ -1,9 +1,11 @@
 #!/bin/bash
 
+INSTALL_DIR=$(dirname -- "$0")
+
 # Navigate to the $HOME/bar directory
-cd "$HOME/bar" || {
-    echo -e "\033[31mDirectory $HOME/bar does not exist.\033[0m\n"
-    exit 1
+cd "$INSTALL_DIR" || {
+		echo -e "\033[31mDirectory $INSTALL_DIR does not exist.\033[0m\n"
+		exit 1
 }
 
 # Fetch updates from the remote

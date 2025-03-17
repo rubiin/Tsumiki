@@ -1,8 +1,8 @@
 from fabric.widgets.box import Box
 from fabric.widgets.label import Label
 
-from shared.widget_container import ButtonWidget
-from utils.widget_settings import BarConfig
+from shared import ButtonWidget
+from utils import BarConfig
 from utils.widget_utils import text_icon
 
 MIC_ON_ICON = "󰍬"
@@ -13,7 +13,7 @@ class MicrophoneIndicatorWidget(ButtonWidget):
     """A widget to display the current microphone status."""
 
     def __init__(self, widget_config: BarConfig, bar, **kwargs):
-        super().__init__(**kwargs)
+        super().__init__(widget_config, **kwargs)
 
         self.config = widget_config["microphone"]
 

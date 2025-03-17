@@ -4,16 +4,15 @@ from fabric.widgets.box import Box
 from fabric.widgets.label import Label
 
 import utils.functions as helpers
-from shared.widget_container import ButtonWidget
-from utils.exceptions import ExecutableNotFoundError
-from utils.widget_settings import BarConfig
+from shared import ButtonWidget
+from utils import BarConfig, ExecutableNotFoundError
 
 
 class CavaWidget(ButtonWidget):
     """A widget to display the Cava audio visualizer."""
 
     def __init__(self, widget_config: BarConfig, bar, **kwargs):
-        super().__init__(name="cava", **kwargs)
+        super().__init__(widget_config, name="cava", **kwargs)
 
         self.config = widget_config["cava"]
         cava_command = "cava"

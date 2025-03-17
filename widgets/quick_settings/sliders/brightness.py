@@ -1,5 +1,5 @@
-from services.brightness import Brightness
-from shared.setting_scale import SettingSlider
+from services import Brightness
+from shared import SettingSlider
 from utils.icons import icons
 
 
@@ -9,7 +9,7 @@ class BrightnessSlider(SettingSlider):
     def __init__(
         self,
     ):
-        self.client = Brightness().get_default()
+        self.client = Brightness.get_default()
         super().__init__(
             pixel_size=20,
             icon_name=icons["brightness"]["screen"],

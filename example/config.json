@@ -18,7 +18,8 @@
 		"step_size": 5
 	},
 	"cava": {
-		"bars": 10
+		"bars": 10,
+		"color": "#89b4fa"
 	},
 	"click_counter": {
 		"count": 0
@@ -77,8 +78,7 @@
 			"window_title"
 		], // this is the left section of the panel
 		"middle_section": [
-			"date_time",
-			"power"
+			"date_time"
 		], // this is the middle section of the panel
 		"right_section": [
 			"recorder",
@@ -269,8 +269,7 @@
 		"step_size": 5
 	},
 	"weather": {
-		"detect_location": false,
-		"location": "kathmandu",
+		"location": "", // this is the location to show the weather, you can use city name or city id or leave it empty to use the default location
 		"label": true,
 		"tooltip": true,
 		"interval": 3600000 // this is the interval in milliseconds to update the weather, 1 hour is 3600000 milliseconds

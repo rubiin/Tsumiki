@@ -124,6 +124,7 @@ update_arch() {
     command="
     fastfetch
     yay -Syu
+    flatpak update || true
     read -n 1 -p 'Press any key to continue...'
     "
     kitty --title systemupdate sh -c "${command}"

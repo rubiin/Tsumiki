@@ -36,5 +36,10 @@ repos:
     rev: v1.9.4 # Use the sha / tag you want to point at
     hooks:
       - id: biome-check
+        exclude: |
+                    (?x)^(
+                        config.json|
+                        example/config.json
+                    )$
 
 default_stages: [pre-commit]

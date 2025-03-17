@@ -230,7 +230,7 @@ DEFAULT_CONFIG = {
         "label": True,
         "tooltip": True,
     },
-    "system_tray": {"icon_size": 16, "ignored": []},
+    "system_tray": {"icon_size": 16, "ignored": [], "hidden": []},
     "task_bar": {"icon_size": 22},
     "theme": {
         "name": "catpuccin-mocha",
@@ -255,8 +255,7 @@ DEFAULT_CONFIG = {
         "step_size": 5,
     },
     "weather": {
-        "detect_location": False,
-        "location": "kathmandu",
+        "location": "",
         "label": True,
         "tooltip": True,
         "interval": HIGH_POLL_INTERVAL,

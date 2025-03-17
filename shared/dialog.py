@@ -4,8 +4,9 @@ from fabric.widgets.box import Box
 from fabric.widgets.button import Button
 from fabric.widgets.label import Label
 
-from shared import PopupWindow
 from utils.functions import handle_power_action
+
+from .pop_up import PopupWindow
 
 
 class Dialog(PopupWindow):

@@ -8,10 +8,7 @@ from fabric.widgets.label import Label
 from fabric.widgets.scrolledwindow import ScrolledWindow
 
 from services import bluetooth_service
-from shared.animator import Animator
-from shared.circle_image import CircleImage
-from shared.submenu import QuickSubMenu, QuickSubToggle
-from shared.widget_container import HoverButton
+from shared import Animator, CircleImage, HoverButton, QuickSubMenu, QuickSubToggle
 
 
 class BluetoothDeviceBox(CenterBox):

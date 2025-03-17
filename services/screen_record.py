@@ -6,7 +6,7 @@ from gi.repository import Gio, GLib
 from loguru import logger
 
 import utils.functions as helpers
-from utils.widget_settings import BarConfig
+from utils import BarConfig
 
 
 class ScreenRecorder(Service):
@@ -51,7 +51,7 @@ class ScreenRecorder(Service):
         self.emit("recording", True)
 
     def screencast_stop(self):
-        exec_shell_command_async("killall -INT wf-recorder")
+        exec_shell_command_async("killall -INT wf-recorder", lambda *_: None)
         self.emit("recording", False)
         self.send_screencast_notification(self._current_screencast_path)
 
@@ -86,9 +86,11 @@ class ScreenRecorder(Service):
 
             match stdout.strip("\n"):
                 case "files":
-                    exec_shell_command_async(f"xdg-open {self.screenrecord_path}")
+                    exec_shell_command_async(
+                        f"xdg-open {self.screenrecord_path}", lambda *_: None
+                    )
                 case "view":
-                    exec_shell_command_async(f"xdg-open {file_path}")
+                    exec_shell_command_async(f"xdg-open {file_path}", lambda *_: None)
 
         proc.communicate_utf8_async(None, None, do_callback)
 

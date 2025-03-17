@@ -4,9 +4,9 @@ from fabric.widgets.label import Label
 
 import utils.functions as helpers
 from services import network_speed
-from shared.widget_container import ButtonWidget
+from shared import ButtonWidget
+from utils import BarConfig
 from utils.icons import common_text_icons
-from utils.widget_settings import BarConfig
 from utils.widget_utils import text_icon, util_fabricator
 
 
@@ -20,6 +20,7 @@ class CpuWidget(ButtonWidget):
     ):
         # Initialize the Box with specific name and style
         super().__init__(
+            widget_config,
             name="cpu",
             **kwargs,
         )
@@ -103,6 +104,7 @@ class MemoryWidget(ButtonWidget):
     ):
         # Initialize the Box with specific name and style
         super().__init__(
+            widget_config,
             name="memory",
             **kwargs,
         )
@@ -167,6 +169,7 @@ class StorageWidget(ButtonWidget):
     ):
         # Initialize the Box with specific name and style
         super().__init__(
+            widget_config,
             name="storage",
             **kwargs,
         )
@@ -227,6 +230,7 @@ class NetworkUsageWidget(ButtonWidget):
         **kwargs,
     ):
         super().__init__(
+            widget_config,
             name="network_usage",
             **kwargs,
         )
@@ -285,6 +289,13 @@ class NetworkUsageWidget(ButtonWidget):
         # Get the current network usage
 
         network_speed = self.client.get_network_speed()
+
+        if self.config["tooltip"]:
+            tooltip_text = (
+                f"Download: {round(network_speed.get('download', 0), 2)} MB/s\n"
+            )
+            tooltip_text += f"Upload: {round(network_speed.get('upload', 0), 2)} MB/s"
+            self.set_tooltip_text(tooltip_text)
 
         download_speed = network_speed.get("download", "0")
         upload_speed = network_speed.get("upload", "0")

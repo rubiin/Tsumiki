@@ -5,10 +5,9 @@ from fabric.widgets.revealer import Revealer
 from loguru import logger
 
 from services import MprisPlayer, MprisPlayerManager
-from shared.widget_container import ButtonWidget
-from utils.colors import Colors
+from shared import ButtonWidget
+from utils import BarConfig, Colors
 from utils.icons import common_text_icons
-from utils.widget_settings import BarConfig
 
 
 class Mpris(ButtonWidget):
@@ -22,6 +21,7 @@ class Mpris(ButtonWidget):
     ):
         # Initialize the EventBox with specific name and style
         super().__init__(
+            widget_config,
             **kwargs,
         )
         self.config = widget_config["mpris"]

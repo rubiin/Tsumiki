@@ -1,20 +1,20 @@
 import setproctitle
 from fabric import Application
-from fabric.utils import exec_shell_command, get_relative_path, monitor_file
+from fabric.utils import cooldown, exec_shell_command, get_relative_path, monitor_file
 from loguru import logger
 
 import utils.functions as helpers
-from modules.bar import StatusBar
-from modules.notification_pop_up import NotificationPopup
-from modules.osd import OSDContainer
-from utils.colors import Colors
-from utils.config import widget_config
-from utils.constants import APP_CACHE_DIRECTORY, APPLICATION_NAME
-from utils.exceptions import ExecutableNotFoundError
-from widgets.corners import ScreenCorners
-from widgets.desktop_clock import DesktopClock
+from modules import NotificationPopup, OSDContainer, StatusBar
+from utils import (
+    APP_CACHE_DIRECTORY,
+    APPLICATION_NAME,
+    Colors,
+    ExecutableNotFoundError,
+    widget_config,
+)
 
 
+@cooldown(2)
 @helpers.run_in_thread
 def process_and_apply_css(app: Application):
     if not helpers.executable_exists("sass"):
@@ -49,7 +49,7 @@ if not general_options["debug"]:
 
 if __name__ == "__main__":
     # Create the status bar
-    bar = StatusBar()
+    bar = StatusBar(widget_config)
     notifications = NotificationPopup(widget_config)
 
     windows = [notifications, bar]
@@ -58,9 +58,13 @@ if __name__ == "__main__":
         general_options["screen_corners"]
         and general_options["screen_corners"]["enabled"]
     ):
+        from widgets.corners import ScreenCorners
+
         windows.append(ScreenCorners(general_options["screen_corners"]["size"]))
 
     if general_options["desktop_clock"] and general_options["desktop_clock"]["enabled"]:
+        from widgets.desktop_clock import DesktopClock
+
         windows.append(
             DesktopClock(
                 general_options["desktop_clock"]["date_format"],

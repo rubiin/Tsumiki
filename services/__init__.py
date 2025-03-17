@@ -6,7 +6,7 @@ from .battery import *
 from .brightness import *
 from .custom_notification import *
 from .mpris import *
-from .network import NetworkClient
+from .network import *
 from .networkspeed import *
 from .power_profile import *
 from .screen_record import *
@@ -17,5 +17,5 @@ audio_service = Audio()
 notification_service = CustomNotifications()
 bluetooth_service = BluetoothClient()
 network_service = NetworkClient()
-battery_service = BatteryService().get_default()
-network_speed = NetworkSpeed().get_default()
+battery_service = BatteryService.get_default()
+network_speed = NetworkSpeed.get_default()

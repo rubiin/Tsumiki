@@ -6,7 +6,7 @@ from fabric.utils import get_relative_path
 from loguru import logger
 
 from .constants import DEFAULT_CONFIG
-from .functions import exclude_keys, merge_defaults, validate_widgets
+from .functions import exclude_keys, merge_defaults, ttl_lru_cache, validate_widgets
 from .widget_settings import BarConfig
 
 
@@ -28,6 +28,7 @@ class HydeConfig:
         self.default_config()
 
     # Function to read the configuration file in json
+    @ttl_lru_cache(600, 10)
     def read_config_json(self) -> dict:
         logger.info(f"[Config] Reading json config from {self.json_config}")
         with open(self.json_config) as file:
@@ -36,6 +37,7 @@ class HydeConfig:
         return data
 
     # Function to read the configuration file in json
+    @ttl_lru_cache(600, 10)
     def read_config_toml(self) -> dict:
         logger.info(f"[Config] Reading toml config from {self.toml_config}")
         with open(self.toml_config) as file:
@@ -68,5 +70,5 @@ class HydeConfig:
         self.config = parsed_data
 
 
-configuration = HydeConfig().get_default()
+configuration = HydeConfig.get_default()
 widget_config = configuration.config

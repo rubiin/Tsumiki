@@ -5,7 +5,7 @@ from fabric.widgets.image import Image
 from fabric.widgets.label import Label
 from gi.repository import Gtk
 
-from shared.widget_container import HoverButton
+from shared import HoverButton
 
 
 class ShortcutButton(HoverButton):

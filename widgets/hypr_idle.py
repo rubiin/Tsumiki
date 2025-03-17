@@ -1,5 +1,5 @@
 from shared import CommandSwitcher
-from utils.widget_settings import BarConfig
+from utils import BarConfig
 
 
 class HyprIdleWidget(CommandSwitcher):
@@ -13,6 +13,7 @@ class HyprIdleWidget(CommandSwitcher):
         self.command = "hypridle"
 
         super().__init__(
+            config=widget_config,
             command=self.command,
             enabled_icon=self.config["enabled_icon"],
             disabled_icon=self.config["disabled_icon"],

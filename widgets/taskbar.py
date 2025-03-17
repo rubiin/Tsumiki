@@ -9,9 +9,8 @@ from fabric.widgets.image import Image
 from gi.repository import GdkPixbuf, GLib, Gtk
 from loguru import logger
 
-from shared.widget_container import BoxWidget
-from utils.colors import Colors
-from utils.widget_settings import BarConfig
+from shared import BoxWidget
+from utils import BarConfig, Colors
 
 
 class PagerClient(TypedDict):
@@ -29,6 +28,7 @@ class TaskBarWidget(BoxWidget):
 
     def __init__(self, widget_config: BarConfig, bar, **kwargs):
         super().__init__(
+            widget_config,
             name="taskbar",
             **kwargs,
         )

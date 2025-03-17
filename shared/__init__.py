@@ -3,9 +3,14 @@ from .animated.circularprogress import *
 from .animated.scale import *
 from .animator import *
 from .button_toggle import *
+from .circle_image import *
 from .custom_image import *
+from .dialog import *
 from .lottie import *
+from .module_group import *
 from .pop_over import *
 from .pop_up import *
 from .separator import *
+from .setting_scale import *
+from .submenu import *
 from .widget_container import *

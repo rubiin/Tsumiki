@@ -9,13 +9,11 @@ from fabric.widgets.image import Image
 from fabric.widgets.label import Label
 from gi.repository import Gtk
 
-from services.weather import WeatherService
-from shared import PopOverWindow
-from shared.separator import Separator
-from shared.widget_container import ButtonWidget
+from services import WeatherService
+from shared import ButtonWidget, PopOverWindow, Separator
+from utils import BarConfig
 from utils.functions import convert_seconds_to_milliseconds
 from utils.icons import weather_icons
-from utils.widget_settings import BarConfig
 from utils.widget_utils import text_icon
 
 
@@ -224,6 +222,7 @@ class WeatherWidget(ButtonWidget):
     ):
         # Initialize the Box with specific name and style
         super().__init__(
+            widget_config,
             name="weather-button",
             **kwargs,
         )
@@ -290,9 +289,8 @@ class WeatherWidget(ButtonWidget):
             visible=False,
             all_visible=False,
             margin="-18px 0 0 0",
+            pointing_to=self,
         )
-
-        popup.set_pointing_to(self)
 
         self.connect(
             "clicked",

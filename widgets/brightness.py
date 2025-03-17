@@ -5,10 +5,10 @@ from fabric.widgets.label import Label
 from fabric.widgets.overlay import Overlay
 
 import utils.functions as helpers
-from services.brightness import Brightness
-from shared.widget_container import EventBoxWidget
+from services import Brightness
+from shared import EventBoxWidget
+from utils import BarConfig
 from utils.icons import brightness_text_icons
-from utils.widget_settings import BarConfig
 from utils.widget_utils import get_brightness_icon_name
 
 
@@ -16,12 +16,12 @@ class BrightnessWidget(EventBoxWidget):
     """a widget that displays and controls the brightness."""
 
     def __init__(self, widget_config: BarConfig, bar, **kwargs):
-        super().__init__(events=["scroll", "smooth-scroll"], **kwargs)
+        super().__init__(widget_config, events=["scroll", "smooth-scroll"], **kwargs)
 
         self.config = widget_config["brightness"]
 
         # Initialize the audio service
-        self.brightness_service = Brightness().get_default()
+        self.brightness_service = Brightness.get_default()
 
         normalized_brightness = helpers.convert_to_percent(
             self.brightness_service.screen_brightness,

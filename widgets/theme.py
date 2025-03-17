@@ -2,9 +2,9 @@ import os
 
 from fabric.utils import get_relative_path
 
-from shared.widget_container import ButtonWidget
+from shared import ButtonWidget
+from utils import BarConfig
 from utils.functions import copy_theme, send_notification
-from utils.widget_settings import BarConfig
 from utils.widget_utils import text_icon
 
 
@@ -12,7 +12,7 @@ class ThemeSwitcherWidget(ButtonWidget):
     """A widget to switch themes."""
 
     def __init__(self, widget_config: BarConfig, bar, **kwargs):
-        super().__init__(name="theme_switcher", **kwargs)
+        super().__init__(widget_config, name="theme_switcher", **kwargs)
 
         self.config = widget_config["theme_switcher"]
 

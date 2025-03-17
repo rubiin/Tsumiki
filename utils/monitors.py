@@ -6,6 +6,8 @@ import gi
 from fabric.hyprland import Hyprland
 from gi.repository import Gdk
 
+from utils.functions import ttl_lru_cache
+
 gi.require_version("Gdk", "3.0")
 
 
@@ -35,6 +37,7 @@ class HyprlandWithMonitors(Hyprland):
         super().__init__(commands_only, **kwargs)
 
     # Add new arguments
+    @ttl_lru_cache(100, 5)
     def get_all_monitors(self) -> Dict:
         monitors = json.loads(self.send_command("j/monitors").reply)
         return {monitor["id"]: monitor["name"] for monitor in monitors}

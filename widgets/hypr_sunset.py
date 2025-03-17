@@ -1,5 +1,5 @@
 from shared import CommandSwitcher
-from utils.widget_settings import BarConfig
+from utils import BarConfig
 
 
 class HyprSunsetWidget(CommandSwitcher):
@@ -13,6 +13,7 @@ class HyprSunsetWidget(CommandSwitcher):
         self.command = f"hyprsunset -t {self.config['temperature']}"
 
         super().__init__(
+            config=widget_config,
             command=self.command,
             enabled_icon=self.config["enabled_icon"],
             disabled_icon=self.config["disabled_icon"],

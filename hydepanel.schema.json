@@ -3,7 +3,8 @@
 	"definitions": {
 		"style": {
 			"type": "string",
-			"enum": ["default", "wave1", "wave2", "flat", "shadow", "bordered"]
+			"enum": ["default", "wave1", "wave2", "flat", "shadow", "bordered"],
+			"description": "Determines the style of the widget."
 		},
 		"anchor": {
 			"type": "string",
@@ -18,18 +19,22 @@
 				"bottom-left",
 				"bottom-center",
 				"bottom-right"
-			]
+			],
+			"description": "Specifies the anchor position of the widget."
 		},
 		"baseProperties": {
 			"icon_size": {
 				"type": "string",
-				"pattern": "^[0-9]+px$"
+				"pattern": "^[0-9]+px$",
+				"description": "Specifies the size of the widget icon."
 			},
 			"label": {
-				"type": "boolean"
+				"type": "boolean",
+				"description": "Determines whether the widget has a label."
 			},
 			"tooltip": {
-				"type": "boolean"
+				"type": "boolean",
+				"description": "Determines whether the widget has a tooltip."
 			}
 		},
 		"widgets": {
@@ -72,11 +77,13 @@
 							"workspaces",
 							"quick_settings",
 							"theme_switcher"
-						]
+						],
+						"description": "Specifies the widget to display."
 					},
 					{
 						"type": "string",
-						"pattern": "^@group:\\d+$"
+						"pattern": "^@group:\\d+$",
+						"description": "Specifies a group of widgets to display."
 					}
 				]
 			}
@@ -129,7 +136,8 @@
 						"tokyonight",
 						"verminal",
 						"zenburn"
-					]
+					],
+					"description": "Specifies the theme to use."
 				}
 			}
 		},
@@ -166,23 +174,28 @@
 						}
 					}
 				},
-				"corner_size": {
-					"type": "integer"
-				},
 				"debug": {
-					"type": "boolean"
+					"type": "boolean",
+					"description": "Determines whether debug mode is enabled."
+				},
+				"check_updates": {
+					"type": "boolean",
+					"description": "Determines whether to check for updates on startup."
 				},
 				"location": {
 					"type": "string",
-					"enum": ["top", "bottom"]
+					"enum": ["top", "bottom"],
+					"description": "Determines the location of the bar."
 				},
 				"bar_style": {
 					"type": "string",
-					"enum": ["default", "floating"]
+					"enum": ["default", "floating"],
+					"description": "Determines the style of the bar."
 				},
 				"layer": {
 					"type": "string",
-					"enum": ["background", "bottom", "top", "overlay"]
+					"enum": ["background", "bottom", "top", "overlay"],
+					"description": "Determines the layer of the bar."
 				},
 				"widget_style": {
 					"$ref": "#/definitions/style"
@@ -233,17 +246,17 @@
 		"weather": {
 			"type": "object",
 			"properties": {
-				"detect_location": {
-					"type": "boolean"
-				},
 				"location": {
-					"type": "string"
+					"type": "string",
+					"description": "Specifies the location for the weather widget."
 				},
 				"label": {
-					"type": "boolean"
+					"type": "boolean",
+					"description": "Determines whether the widget has a label."
 				},
 				"tooltip": {
-					"type": "boolean"
+					"type": "boolean",
+					"description": "Determines whether the widget has a tooltip."
 				}
 			}
 		},
@@ -251,10 +264,12 @@
 			"type": "object",
 			"properties": {
 				"bars": {
-					"type": "integer"
+					"type": "integer",
+					"description": "Number of bars to display"
 				},
 				"color": {
-					"type": "string"
+					"type": "string",
+					"description": "Color of the bars"
 				}
 			}
 		},
@@ -264,13 +279,16 @@
 				"$ref": "#/definitions/baseProperties",
 				"temperature": {
 					"type": "string",
-					"pattern": "^[0-9]+k$"
+					"pattern": "^[0-9]+k$",
+					"description": "Specifies the color temperature for the sunset widget."
 				},
 				"enabled_icon": {
-					"type": "string"
+					"type": "string",
+					"description": "Icon to display when the widget is enabled."
 				},
 				"disabled_icon": {
-					"type": "string"
+					"type": "string",
+					"description": "Icon to display when the widget is disabled."
 				}
 			}
 		},
@@ -279,10 +297,12 @@
 			"properties": {
 				"$ref": "#/definitions/baseProperties",
 				"enabled_icon": {
-					"type": "string"
+					"type": "string",
+					"description": "Icon to display when the widget is enabled."
 				},
 				"disabled_icon": {
-					"type": "string"
+					"type": "string",
+					"description": "Icon to display when the widget is disabled."
 				}
 			}
 		},
@@ -296,10 +316,12 @@
 			"type": "object",
 			"properties": {
 				"label": {
-					"type": "boolean"
+					"type": "boolean",
+					"description": "Determines whether the widget has a label."
 				},
 				"tooltip": {
-					"type": "boolean"
+					"type": "boolean",
+					"description": "Determines whether the widget has a tooltip."
 				}
 			}
 		},
@@ -308,20 +330,25 @@
 			"properties": {
 				"$ref": "#/definitions/baseProperties",
 				"icon": {
-					"type": "string"
+					"type": "string",
+					"description": "Icon name from icon theme"
 				},
 				"unit": {
 					"type": "string",
-					"enum": ["celsius", "fahrenheit"]
+					"enum": ["celsius", "fahrenheit"],
+					"description": "Unit to display temperature in"
 				},
 				"round": {
-					"type": "boolean"
+					"type": "boolean",
+					"description": "Determines whether to round the temperature"
 				},
 				"show_unit": {
-					"type": "boolean"
+					"type": "boolean",
+					"description": "Determines whether to show the unit"
 				},
 				"sensor": {
-					"type": "string"
+					"type": "string",
+					"description": "Sensor to use for temperature"
 				}
 			}
 		},
@@ -330,7 +357,8 @@
 			"properties": {
 				"$ref": "#/definitions/baseProperties",
 				"icon": {
-					"type": "string"
+					"type": "string",
+					"description": "Icon name from icon theme"
 				}
 			}
 		},
@@ -339,7 +367,8 @@
 			"properties": {
 				"$ref": "#/definitions/baseProperties",
 				"icon": {
-					"type": "string"
+					"type": "string",
+					"description": "Icon name from icon theme"
 				}
 			}
 		},
@@ -348,16 +377,20 @@
 			"properties": {
 				"count": {
 					"type": "integer",
-					"minimum": 1
+					"minimum": 1,
+					"description": "Number of workspaces to display"
 				},
 				"hide_unoccupied": {
-					"type": "boolean"
+					"type": "boolean",
+					"description": "Hide workspaces that are not in use"
 				},
 				"reverse_scroll": {
-					"type": "boolean"
+					"type": "boolean",
+					"description": "Reverse the scroll direction"
 				},
 				"empty_scroll": {
-					"type": "boolean"
+					"type": "boolean",
+					"description": "Scroll even when there are no workspaces"
 				},
 				"icon_map": {
 					"type": "object",
@@ -374,7 +407,8 @@
 				"ignored": {
 					"type": "array",
 					"items": {
-						"type": "integer"
+						"type": "integer",
+						"description": "List of workspace IDs to ignore"
 					}
 				}
 			}
@@ -383,18 +417,22 @@
 			"type": "object",
 			"properties": {
 				"enable_icon": {
-					"type": "boolean"
+					"type": "boolean",
+					"description": "Determines whether to enable the icon in the window title widget"
 				},
 				"truncation": {
-					"type": "boolean"
+					"type": "boolean",
+					"description": "Determines whether to truncate the window title"
 				},
 				"truncation_size": {
-					"type": "integer"
+					"type": "integer",
+					"description": "Size at which to truncate the window title"
 				},
 				"title_map": {
 					"type": "array",
 					"items": {
-						"type": "string"
+						"type": "string",
+						"description": "List of window titles to map to custom icons"
 					}
 				}
 			}
@@ -403,7 +441,8 @@
 			"type": "object",
 			"properties": {
 				"size": {
-					"type": "integer"
+					"type": "integer",
+					"description": "Size of the spacing"
 				}
 			}
 		},
@@ -411,7 +450,8 @@
 			"type": "object",
 			"properties": {
 				"size": {
-					"type": "integer"
+					"type": "integer",
+					"description": "Size of the divider"
 				}
 			}
 		},
@@ -419,7 +459,8 @@
 			"type": "object",
 			"properties": {
 				"count": {
-					"type": "integer"
+					"type": "integer",
+					"description": "Number of clicks to count"
 				}
 			}
 		},
@@ -428,7 +469,8 @@
 			"properties": {
 				"$ref": "#/definitions/baseProperties",
 				"icon": {
-					"type": "string"
+					"type": "string",
+					"description": "Icon name from icon theme"
 				}
 			}
 		},
@@ -437,7 +479,8 @@
 			"properties": {
 				"$ref": "#/definitions/baseProperties",
 				"icon": {
-					"type": "string"
+					"type": "string",
+					"description": "Icon name from icon theme"
 				}
 			}
 		},
@@ -447,10 +490,12 @@
 				"$ref": "#/definitions/baseProperties",
 				"os": {
 					"type": "string",
-					"enum": ["arch", "fedora", "opensuse", "ubuntu"]
+					"enum": ["arch", "fedora", "opensuse", "ubuntu"],
+					"description": "Specifies the OS to check for updates"
 				},
 				"interval": {
-					"type": "integer"
+					"type": "integer",
+					"description": "Interval in milliseconds to check for updates"
 				}
 			}
 		},
@@ -462,13 +507,16 @@
 					"description": "Specifies the anchor position of the OSD"
 				},
 				"enabled": {
-					"type": "boolean"
+					"type": "boolean",
+					"description": "Determines whether the OSD is enabled"
 				},
 				"duration": {
-					"type": "integer"
+					"type": "integer",
+					"description": "Duration in milliseconds to show the OSD"
 				},
 				"show_percentage": {
-					"type": "boolean"
+					"type": "boolean",
+					"description": "Determines whether to show the percentage in the OSD"
 				},
 				"style": {
 					"$ref": "#/definitions/style"
@@ -480,7 +528,8 @@
 			"properties": {
 				"$ref": "#/definitions/baseProperties",
 				"icon": {
-					"type": "string"
+					"type": "string",
+					"description": "Icon name from icon theme"
 				}
 			}
 		},
@@ -489,7 +538,8 @@
 			"properties": {
 				"$ref": "#/definitions/baseProperties",
 				"icon": {
-					"type": "string"
+					"type": "string",
+					"description": "Icon name from icon theme"
 				}
 			}
 		},
@@ -501,24 +551,30 @@
 					"properties": {
 						"ignore": {
 							"type": "array",
+							"description": "List of media players to ignore",
 							"items": {
 								"type": "string"
 							}
 						},
 						"truncation_size": {
-							"type": "integer"
+							"type": "integer",
+							"description": "Size at which to truncate the media title"
 						},
 						"show_album": {
-							"type": "boolean"
+							"type": "boolean",
+							"description": "Determines whether to show the album"
 						},
 						"show_artist": {
-							"type": "boolean"
+							"type": "boolean",
+							"description": "Determines whether to show the artist"
 						},
 						"show_time": {
-							"type": "boolean"
+							"type": "boolean",
+							"description": "Determines whether to show the time"
 						},
 						"show_time_tooltip": {
-							"type": "boolean"
+							"type": "boolean",
+							"description": "Determines whether to show the time in the tooltip"
 						}
 					}
 				},
@@ -557,7 +613,8 @@
 				"type": "object",
 				"properties": {
 					"icon_size": {
-						"type": "integer"
+						"type": "integer",
+						"description": "Size of the task bar icons"
 					}
 				}
 			},
@@ -565,7 +622,8 @@
 				"type": "object",
 				"properties": {
 					"truncation_size": {
-						"type": "integer"
+						"type": "integer",
+						"description": "Size at which to truncate the language name"
 					}
 				}
 			},
@@ -573,10 +631,12 @@
 				"type": "object",
 				"properties": {
 					"truncation_size": {
-						"type": "integer"
+						"type": "integer",
+						"description": "Size at which to truncate the media title"
 					},
 					"format": {
-						"type": "string"
+						"type": "string",
+						"description": "Format for the media title"
 					}
 				}
 			},
@@ -584,10 +644,19 @@
 				"type": "object",
 				"properties": {
 					"icon_size": {
-						"type": "integer"
+						"type": "integer",
+						"description": "Size of the system tray icons"
 					},
 					"ignored": {
 						"type": "array",
+						"description": "List of system tray icons to ignore",
+						"items": {
+							"type": "string"
+						}
+					},
+					"hidden": {
+						"type": "array",
+						"description": "List of system tray icons to show only in popover drawer",
 						"items": {
 							"type": "string"
 						}
@@ -605,7 +674,8 @@
 				"properties": {
 					"$ref": "#/definitions/baseProperties",
 					"step_size": {
-						"type": "integer"
+						"type": "integer",
+						"description": "Step size for volume control"
 					}
 				}
 			},
@@ -614,7 +684,8 @@
 				"properties": {
 					"$ref": "#/definitions/baseProperties",
 					"step_size": {
-						"type": "integer"
+						"type": "integer",
+						"description": "Step size for brightness control"
 					}
 				}
 			},
@@ -622,19 +693,23 @@
 				"type": "object",
 				"properties": {
 					"icon": {
-						"type": "string"
+						"type": "string",
+						"description": "Icon name from icon theme"
 					},
 					"icon_size": {
 						"type": "string",
-						"pattern": "^[0-9]+px$"
+						"pattern": "^[0-9]+px$",
+						"description": "Size of the power widget icon"
 					},
 					"tooltip": {
-						"type": "boolean"
+						"type": "boolean",
+						"description": "Determines whether the power widget has a tooltip"
 					},
 					"buttons": {
 						"type": "array",
 						"items": {
 							"type": "string",
+							"description": "List of power buttons to display",
 							"enum": [
 								"logout",
 								"reboot",
@@ -651,14 +726,17 @@
 				"type": "object",
 				"properties": {
 					"icon": {
-						"type": "string"
+						"type": "string",
+						"description": "Icon name from icon theme"
 					},
 					"icon_size": {
 						"type": "string",
-						"pattern": "^[0-9]+px$"
+						"pattern": "^[0-9]+px$",
+						"description": "Size of the theme switcher icon"
 					},
 					"notify": {
-						"type": "boolean"
+						"type": "boolean",
+						"description": "Determines whether to show a notification when the theme is changed"
 					}
 				}
 			},
@@ -666,23 +744,29 @@
 				"type": "object",
 				"properties": {
 					"format": {
-						"type": "string"
+						"type": "string",
+						"description": "Specifies the format of the date and time"
 					},
 					"notification_count": {
-						"type": "boolean"
+						"type": "boolean",
+						"description": "Determines whether to show the number of notifications"
 					},
 					"notification": {
-						"type": "boolean"
+						"type": "boolean",
+						"description": "Determines whether to show the notification icon"
 					},
 					"calendar": {
-						"type": "boolean"
+						"type": "boolean",
+						"description": "Determines whether to show the calendar icon"
 					},
 					"uptime": {
-						"type": "boolean"
+						"type": "boolean",
+						"description": "Determines whether to show the uptime"
 					},
 					"clock_format": {
 						"type": "string",
-						"enum": ["12h", "24h"]
+						"enum": ["12h", "24h"],
+						"description": "Specifies the clock format"
 					}
 				}
 			},
@@ -690,14 +774,17 @@
 				"type": "object",
 				"properties": {
 					"stopped_icon": {
-						"type": "string"
+						"type": "string",
+						"description": "Icon to display when the stopwatch is stopped"
 					},
 					"running_icon": {
-						"type": "string"
+						"type": "string",
+						"description": "Icon to display when the stopwatch is running"
 					},
 					"icon_size": {
 						"type": "string",
-						"pattern": "^[0-9]+px$"
+						"pattern": "^[0-9]+px$",
+						"description": "Size of the stopwatch icon"
 					}
 				}
 			},
@@ -706,6 +793,7 @@
 				"properties": {
 					"ignored": {
 						"type": "array",
+						"description": "List of notification IDs to ignore",
 						"items": {
 							"type": "string"
 						}
@@ -714,10 +802,12 @@
 						"$ref": "#/definitions/anchor"
 					},
 					"auto_dismiss": {
-						"type": "boolean"
+						"type": "boolean",
+						"description": "Determines whether notifications are automatically dismissed"
 					},
 					"timeout": {
-						"type": "integer"
+						"type": "integer",
+						"description": "Timeout in milliseconds before notifications are dismissed"
 					},
 					"max_count": {
 						"type": "integer",
@@ -734,10 +824,24 @@
 						}
 					},
 					"play_sound": {
-						"type": "boolean"
+						"type": "boolean",
+						"description": "Determines whether to play a sound when a notification is received"
 					},
 					"sound_file": {
-						"type": "string"
+						"type": "string",
+						"description": "Name of the sound file to play",
+						"enum": [
+							"notification1",
+							"notification2",
+							"notification3",
+							"notification4",
+							"notification5",
+							"notification6",
+							"notification7",
+							"notification8",
+							"notification9",
+							"notification10"
+						]
 					}
 				}
 			},
@@ -746,22 +850,28 @@
 				"properties": {
 					"icon_size": {
 						"type": "string",
-						"pattern": "^[0-9]+px$"
+						"pattern": "^[0-9]+px$",
+						"description": "Size of the network usage icon"
 					},
 					"upload_icon": {
-						"type": "string"
+						"type": "string",
+						"description": "Icon to display for upload"
 					},
 					"download_icon": {
-						"type": "string"
+						"type": "string",
+						"description": "Icon to display for download"
 					},
 					"tooltip": {
-						"type": "boolean"
+						"type": "boolean",
+						"description": "Determines whether the network usage widget has a tooltip"
 					},
 					"upload": {
-						"type": "boolean"
+						"type": "boolean",
+						"description": "Determines whether to show upload usage"
 					},
 					"download": {
-						"type": "boolean"
+						"type": "boolean",
+						"description": "Determines whether to show download usage"
 					}
 				}
 			},
@@ -769,16 +879,20 @@
 				"type": "object",
 				"properties": {
 					"videos": {
-						"type": "string"
+						"type": "string",
+						"description": "Directory to save videos"
 					},
 					"tooltip": {
-						"type": "boolean"
+						"type": "boolean",
+						"description": "Determines whether the recorder widget has a tooltip"
 					},
 					"audio": {
-						"type": "boolean"
+						"type": "boolean",
+						"description": "Determines whether to record audio"
 					},
 					"icon_size": {
-						"type": "integer"
+						"type": "integer",
+						"description": "Size of the recorder icon"
 					}
 				}
 			}

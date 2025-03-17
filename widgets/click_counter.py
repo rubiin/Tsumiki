@@ -1,12 +1,12 @@
-from shared.widget_container import ButtonWidget
-from utils.widget_settings import BarConfig
+from shared import ButtonWidget
+from utils import BarConfig
 
 
 class ClickCounterWidget(ButtonWidget):
     """A widget to count the number of clicks."""
 
     def __init__(self, widget_config: BarConfig, bar, **kwargs):
-        super().__init__(name="click-counter", **kwargs)
+        super().__init__(widget_config, name="click-counter", **kwargs)
         self.config = widget_config["click_counter"]
         self.count = self.config["count"]
         self.set_label(f"{self.count}")

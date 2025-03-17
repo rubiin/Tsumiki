@@ -2,7 +2,7 @@ from fabric.widgets.box import Box
 from fabric.widgets.image import Image
 from fabric.widgets.scale import Scale
 
-from shared.widget_container import HoverButton
+from .widget_container import HoverButton
 
 
 class SettingSlider(Box):

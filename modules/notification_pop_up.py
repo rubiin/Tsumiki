@@ -19,10 +19,7 @@ import utils.functions as helpers
 import utils.icons as icons
 from services import notification_service
 from shared import CustomImage
-from utils.colors import Colors
-from utils.config import widget_config
-from utils.monitors import HyprlandWithMonitors
-from utils.widget_settings import BarConfig
+from utils import BarConfig, Colors, HyprlandWithMonitors
 from utils.widget_utils import get_icon
 
 
@@ -33,6 +30,8 @@ class NotificationPopup(WaylandWindow):
         self._server = notification_service
 
         self.cache_notification_service = notification_service
+
+        self.widget_config = widget_config
 
         self.config = widget_config["notification"]
 
@@ -70,7 +69,7 @@ class NotificationPopup(WaylandWindow):
         ):
             return
 
-        new_box = NotificationRevealer(notification)
+        new_box = NotificationRevealer(self.config, notification)
         self.notifications.add(new_box)
         new_box.set_reveal_child(True)
         logger.info(
@@ -78,7 +77,7 @@ class NotificationPopup(WaylandWindow):
             f"{Colors.OKGREEN}{notification.app_name}"
         )
         self.cache_notification_service.cache_notification(
-            notification, self.config["max_count"]
+            self.widget_config, notification, self.config["max_count"]
         )
 
         if self.config["play_sound"]:
@@ -92,6 +91,7 @@ class NotificationWidget(EventBox):
 
     def __init__(
         self,
+        config,
         notification: Notification,
         **kwargs,
     ):
@@ -100,6 +100,8 @@ class NotificationWidget(EventBox):
             name="notification-eventbox",
             **kwargs,
         )
+
+        self.config = config
 
         self._notification = notification
 
@@ -233,7 +235,7 @@ class NotificationWidget(EventBox):
             ),
         )
 
-        if widget_config["notification"]["auto_dismiss"]:
+        if self.config["auto_dismiss"]:
             self.start_timeout()
 
     def start_timeout(self):
@@ -258,7 +260,7 @@ class NotificationWidget(EventBox):
         return (
             self._notification.timeout
             if self._notification.timeout != -1
-            else widget_config["notification"]["timeout"]
+            else self.config["timeout"]
         )
 
     def pause_timeout(self):
@@ -286,8 +288,8 @@ class NotificationWidget(EventBox):
 class NotificationRevealer(Revealer):
     """A widget to reveal a notification."""
 
-    def __init__(self, notification: Notification, **kwargs):
-        self.notification_box = NotificationWidget(notification)
+    def __init__(self, config, notification: Notification, **kwargs):
+        self.notification_box = NotificationWidget(config, notification)
         self._notification = notification
 
         super().__init__(

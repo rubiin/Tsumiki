@@ -31,7 +31,9 @@ HyprSunset = TypedDict(
 TaskBar = TypedDict("TaskBar", {"icon_size": int})
 
 # SystemTray configuration
-SystemTray = TypedDict("SystemTray", {"icon_size": int, "ignored": List[str]})
+SystemTray = TypedDict(
+    "SystemTray", {"icon_size": int, "ignored": List[str], "hidden": List[str]}
+)
 
 # HyprIdle configuration
 HyprIdle = TypedDict(
@@ -167,7 +169,6 @@ BlueTooth = TypedDict("BlueTooth", {"label": bool, "tooltip": bool, "icon_size":
 Weather = TypedDict(
     "Weather",
     {
-        "detect_location": bool,
         "location": str,
         "interval": int,
         "tooltip": bool,

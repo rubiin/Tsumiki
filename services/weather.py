@@ -5,7 +5,8 @@ from urllib.error import HTTPError
 
 from loguru import logger
 
-from utils.colors import Colors
+from utils import Colors
+from utils.functions import ttl_lru_cache
 
 # Create an SSLContext that ignores certificate validation
 context = ssl._create_unverified_context()
@@ -23,12 +24,17 @@ class WeatherService:
 
         return WeatherService.instance
 
+    @ttl_lru_cache(600, 10)
     def simple_weather_info(self, location: str):
         try:
+            url = ""
             # Construct the URL for fetching weather information
+            if location != "":
+                encoded_location = urllib.parse.quote_plus(location.capitalize())
 
-            encoded_location = urllib.parse.quote_plus(location.capitalize())
-            url = f"https://wttr.in/{encoded_location}?format=j1"
+                url = f"http://wttr.in/{encoded_location}?format=j1"
+            else:
+                url = "http://wttr.in/?format=j1"
 
             logger.info(f"[Weather] Fetching weather information from {url}")
             contents = (

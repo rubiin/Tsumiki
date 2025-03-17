@@ -4,8 +4,8 @@ from fabric.widgets.box import Box
 from fabric.widgets.label import Label
 from gi.repository import GLib
 
-from shared.widget_container import ButtonWidget
-from utils.widget_settings import BarConfig
+from shared import ButtonWidget
+from utils import BarConfig
 from utils.widget_utils import text_icon
 
 
@@ -17,7 +17,7 @@ class StopWatchWidget(ButtonWidget):
         widget_config: BarConfig,
         **kwargs,
     ):
-        super().__init__(title="stopwatch", **kwargs)
+        super().__init__(widget_config, title="stopwatch", **kwargs)
 
         self.start_time = 0
         self.running = False

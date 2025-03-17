@@ -3,9 +3,9 @@ import subprocess
 from fabric.utils import exec_shell_command_async, get_relative_path
 from gi.repository import Gdk, Gtk
 
-from shared.widget_container import ButtonWidget
+from shared import ButtonWidget
+from utils import BarConfig
 from utils.functions import ttl_lru_cache
-from utils.widget_settings import BarConfig
 
 
 class OCRWidget(ButtonWidget):
@@ -16,7 +16,7 @@ class OCRWidget(ButtonWidget):
     """
 
     def __init__(self, widget_config: BarConfig, bar, **kwargs):
-        super().__init__(name="ocr", **kwargs)
+        super().__init__(widget_config, name="ocr", **kwargs)
         self.config = widget_config["ocr"]
         self.current_lang = "eng"  # default
         self.script_file = get_relative_path("../assets/scripts/ocr.sh")

@@ -7,7 +7,7 @@ from fabric.widgets.label import Label
 from fabric.widgets.revealer import Revealer
 from fabric.widgets.widget import Widget
 
-from shared.widget_container import HoverButton
+from shared import HoverButton
 
 
 class QuickSubMenu(Box):

@@ -1,17 +1,16 @@
 from fabric.utils import exec_shell_command_async, get_relative_path
 from gi.repository import Gdk
 
-from shared.widget_container import ButtonWidget
-from utils.exceptions import ExecutableNotFoundError
+from shared import ButtonWidget
+from utils import BarConfig, ExecutableNotFoundError
 from utils.functions import executable_exists
-from utils.widget_settings import BarConfig
 
 
 class HyprPickerWidget(ButtonWidget):
     """A widget to pick a color."""
 
     def __init__(self, widget_config: BarConfig, bar, **kwargs):
-        super().__init__(name="hypr-picker", **kwargs)
+        super().__init__(widget_config, name="hypr-picker", **kwargs)
 
         self.config = widget_config["hypr_picker"]
 

@@ -12,8 +12,8 @@ from gi.repository import Gdk, Gtk
 from loguru import logger
 
 import utils.icons as icons
+from utils import BarConfig
 from utils.icon_resolver import IconResolver
-from utils.widget_settings import BarConfig
 
 icon_resolver = IconResolver()
 connection = Hyprland()

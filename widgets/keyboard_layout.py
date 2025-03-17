@@ -5,9 +5,8 @@ from fabric.widgets.box import Box
 from fabric.widgets.label import Label
 from loguru import logger
 
-from shared.widget_container import ButtonWidget
-from utils.constants import KBLAYOUT_MAP
-from utils.widget_settings import BarConfig
+from shared import ButtonWidget
+from utils import KBLAYOUT_MAP, BarConfig
 from utils.widget_utils import text_icon
 
 
@@ -15,7 +14,7 @@ class KeyboardLayoutWidget(ButtonWidget):
     """A widget to display the current keyboard layout."""
 
     def __init__(self, widget_config: BarConfig, bar, **kwargs):
-        super().__init__(name="keyboard", **kwargs)
+        super().__init__(widget_config, name="keyboard", **kwargs)
 
         self.box = Box()
         self.children = (self.box,)

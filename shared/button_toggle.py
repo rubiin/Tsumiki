@@ -3,7 +3,7 @@ from fabric.widgets.box import Box
 from fabric.widgets.label import Label
 
 import utils.functions as helpers
-from utils.exceptions import ExecutableNotFoundError
+from utils import ExecutableNotFoundError
 from utils.widget_utils import (
     text_icon,
     util_fabricator,
@@ -25,7 +25,7 @@ class CommandSwitcher(ButtonWidget):
         icon_size: str = "16px",
         label=True,
         tooltip=True,
-        interval: int = 2000,
+        config=None,
         style_classes: str = "",
         **kwargs,
     ):
@@ -33,6 +33,7 @@ class CommandSwitcher(ButtonWidget):
         self.command_without_args = self.command.split(" ")[0]  # command without args
 
         super().__init__(
+            config,
             name=name,
             **kwargs,
         )

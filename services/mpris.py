@@ -2,8 +2,7 @@ import contextlib
 
 import gi
 from fabric.core.service import Property, Service, Signal
-from fabric.utils import bulk_connect
-from gi.repository import GLib  # type: ignore
+from fabric.utils import bulk_connect, idle_add
 from loguru import logger
 
 
@@ -57,7 +56,7 @@ class MprisPlayer(Service):
             "metadata",
             lambda *args: self.update_status(),
         )
-        GLib.idle_add(lambda *args: self.update_status_once())
+        idle_add(lambda *args: self.update_status_once())
 
     def update_status(self):
         for prop in [

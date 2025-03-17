@@ -8,15 +8,16 @@ from fabric.widgets.label import Label
 from gi.repository import Gtk
 
 import utils.functions as helpers
-from services import audio_service, network_service
-from services.brightness import Brightness
-from services.mpris import MprisPlayerManager
-from shared.circle_image import CircleImage
-from shared.dialog import Dialog
-from shared.pop_over import PopOverWindow
-from shared.submenu import QuickSubToggle
-from shared.widget_container import ButtonWidget, HoverButton
-from utils.widget_settings import BarConfig
+from services import Brightness, MprisPlayerManager, audio_service, network_service
+from shared import (
+    ButtonWidget,
+    CircleImage,
+    Dialog,
+    HoverButton,
+    PopOverWindow,
+    QuickSubToggle,
+)
+from utils import BarConfig
 from utils.widget_utils import (
     get_audio_icon_name,
     get_brightness_icon_name,
@@ -354,7 +355,7 @@ class QuickSettingsButtonWidget(ButtonWidget):
     """A button to display the date and time."""
 
     def __init__(self, widget_config: BarConfig, bar, **kwargs):
-        super().__init__(name="quick-settings-button", **kwargs)
+        super().__init__(widget_config, name="quick-settings-button", **kwargs)
 
         self.config = widget_config["quick_settings"]
         self.panel_icon_size = 16
@@ -362,7 +363,7 @@ class QuickSettingsButtonWidget(ButtonWidget):
 
         self.network = network_service
 
-        self.brightness_service = Brightness().get_default()
+        self.brightness_service = Brightness.get_default()
 
         self.audio.connect("notify::speaker", self.on_speaker_changed)
         self.brightness_service.connect("screen", self.on_brightness_changed)
@@ -374,6 +375,7 @@ class QuickSettingsButtonWidget(ButtonWidget):
             visible=False,
             all_visible=False,
             margin="-18px 0 0 0",
+            pointing_to=self,
         )
 
         self.audio_icon = Image(style_classes="panel-icon")
@@ -387,8 +389,6 @@ class QuickSettingsButtonWidget(ButtonWidget):
         )
 
         self.update_brightness()
-
-        popup.set_pointing_to(self)
 
         self.children = Box(
             children=(

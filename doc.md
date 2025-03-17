@@ -29,7 +29,6 @@ By default, `config.json` is read. If the config is not found, then `config.toml
         "bar_style": "default",
         "location": "top",
         "widget_style": "default",
-        "desktop_clock": true,
     }
 
 ```
@@ -65,7 +64,7 @@ By default, `config.json` is read. If the config is not found, then `config.toml
   Specifies the format of the date displayed on the desktop clock. Example: `%A, %d %B %Y`.
 
 - **check_updates** (boolean):
-  Determines whether the system should automatically check for updates.
+  Determines whether the system should automatically check for updates on bar launch.
 
 - **auto_hide** (boolean):
   Defines whether the panel should automatically hide when not in use.
@@ -541,8 +540,7 @@ Other components follow a similar structure, where each configuration defines th
 "location": "Kathmandu",
 "interval": 60000,
 "tooltip": true,
-"label": true,
-"detect_location": false,
+"label": true
 }
 ```
 
@@ -558,8 +556,6 @@ Other components follow a similar structure, where each configuration defines th
 - **tooltip** (boolean):
   Whether to show a tooltip. In this case, it is set to true.
 
-- **detect_location** (boolean):
-  Whether to detect the location automatically. In this case, it is set to false.
 
 ## Window Title
 

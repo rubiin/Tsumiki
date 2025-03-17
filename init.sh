@@ -1,18 +1,16 @@
 #!/bin/bash
 # shellcheck source=/dev/null
 
-set -e  # Exit immediately if a command exits with a non-zero status
-set -u  # Treat unset variables as an error
-set -o pipefail  # Prevent errors in a pipeline from being masked
-
+set -e          # Exit immediately if a command exits with a non-zero status
+set -u          # Treat unset variables as an error
+set -o pipefail # Prevent errors in a pipeline from being masked
 
 if ! grep -q "arch" /etc/os-release; then
 	echo "This script is designed to run on Arch Linux."
 	exit 1
 fi
 
-INSTALL_DIR=`dirname -- "$0"`
-
+INSTALL_DIR=$(dirname -- "$0")
 
 start_bar() {
 	# Navigate to the $HOME/bar directory
@@ -94,27 +92,71 @@ install_packages() {
 	echo -e "\e[1;34mInstalling the pre-requisites, may take a while....\e[0m\n"
 
 	# Install packages using pacman
-	sudo pacman -S --noconfirm --needed pipewire playerctl dart-sass networkmanager power-profiles-daemon brightnessctl pkgconf wf-recorder kitty python pacman-contrib gtk3 cairo gtk-layer-shell libgirepository gobject-introspection gobject-introspection-runtime python-pip python-gobject python-psutil python-cairo python-dbus python-loguru python-setproctitle
+	pacman_deps=(
+		pipewire
+		playerctl
+		dart-sass
+		networkmanager
+		brightnessctl
+		power-profiles-daemon
+		pkgconf
+		wf-recorder
+		kitty
+		libnotify
+		python
+		pacman-contrib
+		gtk3
+		cairo
+		gtk-layer-shell
+		libgirepository
+		gobject-introspection
+		gobject-introspection-runtime
+		python-pip
+		python-gobject
+		python-psutil
+		python-cairo
+		python-dbus
+		python-loguru
+		python-setproctitle
+	)
+
+		aur_deps=(
+		gray-git
+		python-fabric
+		gnome-bluetooth-3.0
+		python-rlottie-python
+		python-pytomlpp
+		python-pyjson5
+		fabric-cli-git
+		slurp
+		imagemagick
+		tesseract
+		tesseract-data-eng
+		ttf-jetbrains-mono-nerd
+	)
 
 
-	if command -v yay &> /dev/null; then
+	sudo pacman -S --noconfirm --needed "${pacman_deps[@]}"  || true
+
+	if command -v yay &>/dev/null; then
 		aur_helper="yay"
-	elif command -v paru &> /dev/null; then
+	elif command -v paru &>/dev/null; then
 		aur_helper="paru"
 	else
 		echo -e "\033[33myay or paru not found. Install the aur packages \033[36mgray-git \033[36mpython-fabric \033[33mwith the aur helper installed.\033[0m\n"
 		exit 1
 	fi
 
-
-    if command -v paru &> /dev/null; then
+	if command -v paru &>/dev/null; then
 		aur_helper="paru"
 	else
 		aur_helper="yay"
 	fi
 
 	# Install packages using yay (AUR helper)
-	$aur_helper -S --noconfirm --needed gray-git python-fabric gnome-bluetooth-3.0 python-rlottie-python python-pytomlpp python-pyjson5 fabric-cli-git slurp imagemagick tesseract tesseract-data-eng
+
+	$aur_helper -S --noconfirm --needed "${aur_deps[@]}"  || true
+
 }
 
 # Check the argument passed to the script and call the appropriate function

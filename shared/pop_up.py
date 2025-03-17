@@ -7,7 +7,7 @@ from fabric.widgets.wayland import WaylandWindow
 from fabric.widgets.widget import Widget
 from gi.repository import Gdk, GLib
 
-from utils.monitors import HyprlandWithMonitors
+from utils import HyprlandWithMonitors
 
 
 class Padding(EventBox):

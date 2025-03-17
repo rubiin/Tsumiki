@@ -10,11 +10,9 @@ from fabric.widgets.box import Box
 from fabric.widgets.label import Label
 from loguru import logger
 
-from shared.widget_container import ButtonWidget
-from utils.colors import Colors
+from shared import ButtonWidget
+from utils import BarConfig, Colors, run_in_thread
 from utils.functions import convert_seconds_to_milliseconds
-from utils.thread import run_in_thread
-from utils.widget_settings import BarConfig
 from utils.widget_utils import text_icon
 
 
@@ -28,7 +26,7 @@ class UpdatesWidget(ButtonWidget):
         **kwargs,
     ):
         # Initialize the EventBox with specific name and style
-        super().__init__(name="updates", **kwargs)
+        super().__init__(widget_config, name="updates", **kwargs)
         self.config = widget_config["updates"]
 
         self.script_file = get_relative_path("../assets/scripts/systemupdates.sh")
