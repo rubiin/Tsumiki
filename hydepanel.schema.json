@@ -644,11 +644,7 @@
 									"type": "boolean"
 								}
 							},
-							"required": [
-								"avatar",
-								"name",
-								"distro_icon"
-							],
+							"required": ["avatar", "name", "distro_icon"],
 							"additionalProperties": false
 						}
 					}
