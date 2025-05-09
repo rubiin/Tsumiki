@@ -1,18 +1,20 @@
 import json
+from datetime import datetime
 
 from fabric.utils import (
     cooldown,
     exec_shell_command_async,
     get_relative_path,
-    invoke_repeater,
 )
 from fabric.widgets.label import Label
 from loguru import logger
 
 from shared import ButtonWidget
 from utils import BarConfig, Colors, run_in_thread
-from utils.functions import convert_seconds_to_milliseconds
-from utils.widget_utils import text_icon
+from utils.widget_utils import (
+    text_icon,
+    util_fabricator,
+)
 
 
 class UpdatesWidget(ButtonWidget):
@@ -25,8 +27,9 @@ class UpdatesWidget(ButtonWidget):
         **kwargs,
     ):
         # Initialize the EventBox with specific name and style
-        super().__init__(widget_config, name="updates", **kwargs)
-        self.config = widget_config["updates"]
+        super().__init__(widget_config["updates"], name="updates", **kwargs)
+
+        self.update_time = datetime.now()
 
         script_file = get_relative_path("../assets/scripts/systemupdates.sh")
 
@@ -56,10 +59,18 @@ class UpdatesWidget(ButtonWidget):
         self.connect("button-press-event", self.on_button_press)
 
         # Set up a repeater to call the update method at specified intervals
-        invoke_repeater(
-            convert_seconds_to_milliseconds(self.config["interval"]),
-            self.check_update,
-            initial_call=True,
+        self.check_update()
+
+        # reusing the fabricator to call specified intervals
+        util_fabricator.connect(
+            "changed",
+            lambda *_: (
+                self.check_update(),
+                setattr(self, "update_time", datetime.now()),
+            )
+            if (datetime.now() - self.update_time).total_seconds()
+            >= self.config["interval"]
+            else None,
         )
 
     def update_values(self, value: str):

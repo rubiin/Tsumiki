@@ -13,9 +13,8 @@ class WorldClockWidget(ButtonWidget):
     """a widget that displays the title of the active window."""
 
     def __init__(self, widget_config: BarConfig, bar, **kwargs):
-        super().__init__(widget_config["world_clock"], name="window_title", **kwargs)
+        super().__init__(widget_config["world_clock"], name="world_clock", **kwargs)
 
-        self.timezones = self.config["timezones"]
         self.clocks = []
         valid_zones = available_timezones()
 
@@ -29,7 +28,7 @@ class WorldClockWidget(ButtonWidget):
 
         self.box.set_spacing(10)
 
-        for tz_name in self.timezones:
+        for tz_name in self.config["timezones"]:
             if tz_name in valid_zones:
                 label = Label(style_classes="world-clock-label")
                 self.box.pack_start(label, True, True, 0)

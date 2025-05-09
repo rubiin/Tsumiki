@@ -18,6 +18,7 @@ from shared import (
     QSChevronButton,
 )
 from utils import BarConfig
+from utils.icons import icons
 from utils.widget_utils import (
     get_audio_icon_name,
     get_brightness_icon_name,
@@ -195,7 +196,9 @@ class QuickSettingsMenu(Box):
                 orientation="h",
                 children=(
                     HoverButton(
-                        image=Image(icon_name="system-restart-symbolic", icon_size=16),
+                        image=Image(
+                            icon_name=icons["powermenu"]["reboot"], icon_size=16
+                        ),
                         v_align="center",
                         on_clicked=lambda *_: (
                             self.get_parent().set_visible(False),
@@ -205,7 +208,9 @@ class QuickSettingsMenu(Box):
                         ),
                     ),
                     HoverButton(
-                        image=Image(icon_name="system-shutdown-symbolic", icon_size=16),
+                        image=Image(
+                            icon_name=icons["powermenu"]["shutdown"], icon_size=16
+                        ),
                         v_align="center",
                         on_clicked=lambda *_: (
                             self.get_parent().set_visible(False),
@@ -375,9 +380,10 @@ class QuickSettingsButtonWidget(ButtonWidget):
     """A button to display the date and time."""
 
     def __init__(self, widget_config: BarConfig, bar, **kwargs):
-        super().__init__(widget_config, name="quick_settings", **kwargs)
+        super().__init__(
+            widget_config["quick_settings"], name="quick_settings", **kwargs
+        )
 
-        self.config = widget_config["quick_settings"]
         self.panel_icon_size = 16
         self.audio = audio_service
 
@@ -443,7 +449,7 @@ class QuickSettingsButtonWidget(ButtonWidget):
                     )
                 else:
                     self.network_icon.set_from_icon_name(
-                        "network-offline-symbolic",
+                        icons["network"]["wifi"]["disconnected"],
                         self.panel_icon_size,
                     )
 
@@ -456,7 +462,7 @@ class QuickSettingsButtonWidget(ButtonWidget):
                     )
                 else:
                     self.network_icon.set_from_icon_name(
-                        "network-offline-symbolic",
+                        icons["network"]["wifi"]["disconnected"],
                         self.panel_icon_size,
                     )
 
@@ -501,13 +507,13 @@ class QuickSettingsButtonWidget(ButtonWidget):
             else:
                 # Fallback icon if something goes wrong
                 self.brightness_icon.set_from_icon_name(
-                    "display-brightness-symbolic",
+                    icons["brightness"]["indicator"],
                     self.panel_icon_size,
                 )
         except Exception as e:
             print(f"Error updating brightness icon: {e}")
             # Fallback icon if something goes wrong
             self.brightness_icon.set_from_icon_name(
-                "display-brightness-symbolic",
+                icons["brightness"]["indicator"],
                 self.panel_icon_size,
             )

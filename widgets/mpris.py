@@ -21,11 +21,10 @@ class Mpris(ButtonWidget):
     ):
         # Initialize the EventBox with specific name and style
         super().__init__(
-            widget_config,
+            widget_config["mpris"],
             name="mpris",
             **kwargs,
         )
-        self.config = widget_config["mpris"]
 
         self.player = None
 

@@ -18,6 +18,7 @@ from .overview import *
 from .power_button import *
 from .quick_settings.quick_settings import *
 from .recorder import *
+from .screen_shot import *
 from .stats import *
 from .stop_watch import *
 from .submap import *

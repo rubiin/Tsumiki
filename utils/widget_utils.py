@@ -15,7 +15,7 @@ from shared import AnimatedScale
 
 from .config import widget_config
 from .functions import uptime
-from .icons import brightness_text_icons, icons, volume_text_icons
+from .icons import icons, text_icons
 
 
 # Function to get the system stats using psutil
@@ -124,19 +124,19 @@ def text_icon(icon: str, props=None):
 
 # Function to get the bar graph representation
 def get_bar_graph(usage: Number):
-    if usage < 12.5:
+    if usage < 10:
         return "▁"
-    if usage < 25:
+    if usage < 30:
         return "▂"
-    if usage < 37.5:
+    if usage < 40:
         return "▃"
     if usage < 50:
         return "▄"
-    if usage < 62.5:
+    if usage < 60:
         return "▅"
-    if usage < 75:
+    if usage < 70:
         return "▆"
-    if usage < 87.5:
+    if usage < 80:
         return "▇"
     return "█"
 
@@ -145,23 +145,23 @@ def get_bar_graph(usage: Number):
 def get_brightness_icon_name(level: int) -> dict[Literal["icon_text", "icon"], str]:
     if level <= 0:
         return {
-            "text_icon": brightness_text_icons["off"],
-            "icon": "display-brightness-off-symbolic",
+            "text_icon": text_icons["brightness"]["off"],
+            "icon": icons["brightness"]["off"],
         }
 
     if level <= 32:
         return {
-            "text_icon": brightness_text_icons["low"],
-            "icon": "display-brightness-low-symbolic",
+            "text_icon": text_icons["brightness"]["low"],
+            "icon": icons["brightness"]["low"],
         }
     if level <= 66:
         return {
-            "text_icon": brightness_text_icons["medium"],
-            "icon": "display-brightness-medium-symbolic",
+            "text_icon": text_icons["brightness"]["medium"],
+            "icon": icons["brightness"]["medium"],
         }
     return {
-        "text_icon": brightness_text_icons["high"],
-        "icon": "display-brightness-high-symbolic",
+        "text_icon": text_icons["brightness"]["high"],
+        "icon": icons["brightness"]["high"],
     }
 
 
@@ -201,28 +201,28 @@ def get_audio_icon_name(
 ) -> dict[Literal["icon_text", "icon"], str]:
     if volume <= 0 or is_muted:
         return {
-            "text_icon": volume_text_icons["low"],
-            "icon": "audio-volume-muted-symbolic",
+            "text_icon": text_icons["volume"]["low"],
+            "icon": icons["audio"]["volume"]["muted"],
         }
     if volume > 0 and volume < 32:
         return {
-            "text_icon": volume_text_icons["low"],
-            "icon": "audio-volume-low-symbolic",
+            "text_icon": text_icons["volume"]["low"],
+            "icon": icons["audio"]["volume"]["low"],
         }
     if volume > 32 and volume < 66:
         return {
-            "text_icon": volume_text_icons["medium"],
-            "icon": "audio-volume-medium-symbolic",
+            "text_icon": text_icons["volume"]["medium"],
+            "icon": icons["audio"]["volume"]["medium"],
         }
     if volume >= 66 and volume <= 100:
         return {
-            "text_icon": volume_text_icons["high"],
-            "icon": "audio-volume-high-symbolic",
+            "text_icon": text_icons["volume"]["high"],
+            "icon": icons["audio"]["volume"]["high"],
         }
     else:
         return {
-            "text_icon": volume_text_icons["overamplified"],
-            "icon": "audio-volume-overamplified-symbolic",
+            "text_icon": text_icons["volume"]["overamplified"],
+            "icon": icons["audio"]["volume"]["overamplified"],
         }
 
 

@@ -244,6 +244,12 @@ DEFAULT_CONFIG = {
         "tooltip": True,
         "audio": True,
     },
+    "screen_shot": {
+        "path": "Pictures/Screenshots",
+        "icon_size": 16,
+        "tooltip": True,
+        "icon": "󰄀",
+    },
     "spacing": {"size": 20},
     "stop_watch": {"stopped_icon": "󱫞", "running_icon": "󱫠"},
     "storage": {

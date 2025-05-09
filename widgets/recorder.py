@@ -13,8 +13,6 @@ class RecorderWidget(ButtonWidget):
     def __init__(self, widget_config: BarConfig, bar, **kwargs):
         super().__init__(widget_config["recorder"], name="recorder", **kwargs)
 
-        self.is_recording = False
-
         if not executable_exists("wf-recorder"):
             raise ExecutableNotFoundError("wf-recorder")
 
@@ -41,20 +39,21 @@ class RecorderWidget(ButtonWidget):
         if self.config["tooltip"]:
             self.set_tooltip_text("Recording stopped")
 
-        recorder_service = ScreenRecorder(widget_config)
+        recorder_service = ScreenRecorder()
 
         recorder_service.connect("recording", self.update_ui)
 
         self.connect(
             "clicked",
-            lambda _: recorder_service.screencast_stop()
-            if self.is_recording
-            else recorder_service.screencast_start(),
+            lambda _: recorder_service.screenrecord_stop()
+            if recorder_service.is_recording
+            else recorder_service.screenrecord_start(
+                path=self.config["path"], allow_audio=self.config["audio"]
+            ),
         )
 
     def update_ui(self, _, is_recording: bool):
         if is_recording:
-            self.is_recording = True
             self.box.children = (self.recording_ongoing_lottie,)
             self.recording_ongoing_lottie.play_loop()
             if self.config["tooltip"]:
@@ -62,6 +61,5 @@ class RecorderWidget(ButtonWidget):
         else:
             self.box.children = self.recording_idle_image
             self.recording_ongoing_lottie.stop_play()
-            self.is_recording = False
             if self.config["tooltip"]:
                 self.set_tooltip_text("Recording stopped")

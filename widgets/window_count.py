@@ -14,8 +14,7 @@ class WindowCountWidget(ButtonWidget):
     """A widget to display windows in active workspace."""
 
     def __init__(self, widget_config: BarConfig, bar, **kwargs):
-        super().__init__(widget_config, name="window_count", **kwargs)
-        self.config = widget_config["window_count"]
+        super().__init__(widget_config["window_count"], name="window_count", **kwargs)
 
         self.connection = get_hyprland_connection()
 

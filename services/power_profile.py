@@ -4,6 +4,7 @@ from loguru import logger
 
 from shared.dbus_helper import GioDBusHelper
 from utils import Colors
+from utils.icons import icons
 
 
 class PowerProfiles(Service):
@@ -13,13 +14,12 @@ class PowerProfiles(Service):
     def profile(self, value: str) -> None:
         """Signal emitted when profile changes."""
 
-    instance = None
+    _instance = None  # Class-level private instance variable
 
-    @staticmethod
-    def get_default():
-        if PowerProfiles.instance is None:
-            PowerProfiles.instance = PowerProfiles()
-        return PowerProfiles.instance
+    def __new__(cls):
+        if cls._instance is None:
+            cls._instance = super(PowerProfiles, cls).__new__(cls)
+        return cls._instance
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -31,15 +31,15 @@ class PowerProfiles(Service):
         self.power_profiles = {
             "power-saver": {
                 "name": "Power Saver",
-                "icon_name": "power-profile-power-saver-symbolic",
+                "icon_name": icons["powerprofiles"]["power-saver"],
             },
             "balanced": {
                 "name": "Balanced",
-                "icon_name": "power-profile-balanced-symbolic",
+                "icon_name": icons["powerprofiles"]["balanced"],
             },
             "performance": {
                 "name": "Performance",
-                "icon_name": "power-profile-performance-symbolic",
+                "icon_name": icons["powerprofiles"]["performance"],
             },
         }
 

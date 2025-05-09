@@ -132,6 +132,7 @@ install_packages() {
 		tesseract
 		tesseract-data-eng
 		ttf-jetbrains-mono-nerd
+		grimblast-git
 	)
 
 

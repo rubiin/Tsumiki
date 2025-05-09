@@ -1,8 +1,8 @@
-import datetime
 import os
 import re
 import shutil
 import time
+from datetime import datetime
 from functools import lru_cache
 from typing import Dict, List, Literal, Optional
 
@@ -18,7 +18,7 @@ from loguru import logger
 
 from .colors import Colors
 from .constants import named_colors
-from .icons import distro_text_icons
+from .icons import text_icons
 from .thread import run_in_thread
 
 
@@ -175,10 +175,44 @@ def convert_bytes(bytes: int, to: Literal["kb", "mb", "gb"], format_spec=".1f"):
     return f"{format(bytes / (1024**multiplier), format_spec)}{to.upper()}"
 
 
+def check_if_day(sunrise_time, sunset_time, current_time: str | None = None) -> str:
+    time_format = "%I:%M %p"
+
+    if current_time is None:
+        current_time = datetime.now().strftime(time_format)
+
+    current_time_obj = datetime.strptime(current_time, time_format)
+    sunrise_time_obj = datetime.strptime(sunrise_time, time_format)
+    sunset_time_obj = datetime.strptime(sunset_time, time_format)
+
+    # Compare current time with sunrise and sunset
+    return sunrise_time_obj <= current_time_obj < sunset_time_obj
+
+    # wttr.in time are in 300,400...2100 format , we need to convert it to 4:00...21:00
+
+
+def convert_to_12hr_format(time: str) -> str:
+    time = int(time)
+    hour = time // 100  # Get the hour (e.g., 1200 -> 12)
+    minute = time % 100  # Get the minutes (e.g., 1200 -> 00)
+
+    # Convert to 12-hour format
+    period = "AM" if hour < 12 else "PM"
+
+    # Adjust hour for 12-hour format
+    if hour == 0:
+        hour = 12
+    elif hour > 12:
+        hour -= 12
+
+    # Format the time as a string
+    return f"{hour}:{minute:02d} {period}"
+
+
 # Function to get the system uptime
 def uptime():
     boot_time = psutil.boot_time()
-    now = datetime.datetime.now()
+    now = datetime.now()
 
     diff = now.timestamp() - boot_time
 
@@ -215,7 +249,7 @@ def get_distro_icon():
     distro_id = GLib.get_os_info("ID")
 
     # Search for the icon in the list
-    return distro_text_icons.get(distro_id, "")
+    return text_icons["distro"].get(distro_id, "")
 
 
 # Function to check if an executable exists

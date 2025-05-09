@@ -241,6 +241,12 @@
 		"icon_size": 16,
 		"tooltip": true
 	},
+	"screen_shot": {
+		"path": "Pictures/Screenshots",
+		"icon_size": 16,
+		"tooltip": true,
+		"icon": "󰄀"
+	},
 	"network_usage": {
 		"upload_icon": "",
 		"download_icon": "",
@@ -814,7 +820,7 @@
 		"show_icon": true,
 		"icon": "󱧘",
 		"os": "arch",
-		"interval": 3600000,
+		"interval": 3600,
 		"tooltip": true,
 		"label": true,
 		"flatpak": true,
@@ -836,7 +842,7 @@
 		"location": "kathmandu", // this is the location to show the weather, you can use city name, latitude, longitude or zip code or leave it empty to use the default location
 		"label": true,
 		"tooltip": true,
-		"interval": 3600000 // this is the interval in milliseconds to update the weather, 1 hour is 3600000 milliseconds
+		"interval": 3600 // this is the interval in seconds to update the weather, 1 hour is 3600 seconds
 	},
 	"window_title": {
 		"icon": true, // this is to enable the icon in the window title widget

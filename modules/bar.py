@@ -46,6 +46,7 @@ class StatusBar(Window):
             "overview": "widgets.OverviewWidget",
             "power": "widgets.PowerWidget",
             "recorder": "widgets.RecorderWidget",
+            "screen_shot": "widgets.ScreenShotWidget",
             "storage": "widgets.StorageWidget",
             "system_tray": "widgets.SystemTrayWidget",
             "task_bar": "widgets.TaskBarWidget",

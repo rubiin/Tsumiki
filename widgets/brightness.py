@@ -7,7 +7,7 @@ import utils.functions as helpers
 from services import Brightness
 from shared import EventBoxWidget
 from utils import BarConfig
-from utils.icons import brightness_text_icons
+from utils.icons import text_icons
 from utils.widget_utils import get_brightness_icon_name, text_icon
 
 
@@ -43,7 +43,7 @@ class BrightnessWidget(EventBoxWidget):
         )
 
         self.icon = text_icon(
-            icon=brightness_text_icons["medium"],
+            icon=text_icons["brightness"]["medium"],
             props={
                 "style_classes": "panel-icon overlay-icon",
             },

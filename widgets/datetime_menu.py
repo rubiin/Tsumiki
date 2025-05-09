@@ -86,12 +86,11 @@ class DateMenuNotification(EventBox):
         )
         self.close_button = Button(
             style_classes="close-button",
-            visible=True,
             image=Image(
                 name="close-icon",
                 icon_name=helpers.check_icon_exists(
-                    "close-symbolic",
                     icons["ui"]["close"],
+                    icons["ui"]["window_close"],
                 ),
                 icon_size=16,
             ),
@@ -430,9 +429,7 @@ class DateTimeWidget(ButtonWidget):
     """A widget to power off the system."""
 
     def __init__(self, widget_config: BarConfig, bar, **kwargs):
-        super().__init__(widget_config, name="datetime_menu", **kwargs)
-
-        self.config = widget_config["date_time"]
+        super().__init__(widget_config["date_time"], name="datetime_menu", **kwargs)
 
         popup = Popover(
             content_factory=lambda: DateNotificationMenu(config=self.config),

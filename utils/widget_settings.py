@@ -397,7 +397,11 @@ Notification = TypedDict(
 )
 
 # Recording configuration
-Recording = TypedDict("Recording", {"path": str, "icon_size": int, "tooltip": bool})
+Recording = TypedDict(
+    "Recording", {"path": str, "icon_size": int, "tooltip": bool, "audio": bool}
+)
+
+ScreenShot = TypedDict("ScreenShot", {"path": str, "icon_size": int, "tooltip": bool})
 
 
 # OSD configuration
@@ -442,6 +446,7 @@ class BarConfig(TypedDict):
     power: PowerButton
     quick_settings: QuickSettings
     recorder: Recording
+    screen_shot: ScreenShot
     spacing: Spacing
     stop_watch: StopWatch
     storage: Storage

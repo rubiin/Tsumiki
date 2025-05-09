@@ -21,6 +21,7 @@ from services import MprisPlayer, MprisPlayerManager
 from shared import Animator, CircleImage, HoverButton
 from utils import APP_CACHE_DIRECTORY
 from utils.functions import ensure_directory
+from utils.icons import icons
 from utils.widget_utils import setup_cursor_hover
 
 
@@ -347,32 +348,32 @@ class PlayerBox(Box):
         icon_size = 15
 
         self.skip_next_icon = Image(
-            icon_name="media-skip-forward-symbolic",
+            icon_name=icons["mpris"]["next"],
             name="player-icon",
             icon_size=icon_size,
         )
         self.skip_prev_icon = Image(
-            icon_name="media-skip-backward-symbolic",
+            icon_name=icons["mpris"]["prev"],
             name="player-icon",
             icon_size=icon_size,
         )
         self.loop_icon = Image(
-            icon_name="media-skip-backward-symbolic",
+            icon_name=icons["mpris"]["prev"],
             name="player-icon",
             icon_size=icon_size,
         )
         self.shuffle_icon = Image(
-            icon_name="media-playlist-shuffle-symbolic",
+            icon_name=icons["mpris"]["shuffle"]["enabled"],
             name="player-icon",
             icon_size=icon_size,
         )
         self.play_icon = Image(
-            icon_name="media-playback-start-symbolic",
+            icon_name=icons["mpris"]["paused"],
             name="player-icon",
             icon_size=icon_size,
         )
         self.pause_icon = Image(
-            icon_name="media-playback-pause-symbolic",
+            icon_name=icons["mpris"]["playing"],
             name="player-icon",
             icon_size=icon_size,
         )

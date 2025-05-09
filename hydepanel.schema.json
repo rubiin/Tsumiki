@@ -67,6 +67,7 @@
 							"storage",
 							"submap",
 							"mpris",
+							"screen_shot",
 							"stop_watch",
 							"system_tray",
 							"task_bar",
@@ -283,6 +284,10 @@
 				"location": {
 					"type": "string",
 					"description": "Specifies the location for the weather widget. Location can be a city name, lat/long, or  zip code."
+				},
+				"interval": {
+					"type": "integer",
+					"description": "Interval in seconds to check for updates"
 				},
 				"label": {
 					"type": "boolean",
@@ -598,7 +603,7 @@
 				},
 				"interval": {
 					"type": "integer",
-					"description": "Interval in milliseconds to check for updates"
+					"description": "Interval in seconds to check for updates"
 				}
 			}
 		},

@@ -20,6 +20,7 @@ from fabric.widgets.wayland import WaylandWindow as Window
 from gi.repository import Gdk, GLib, Gtk
 
 from utils.icon_resolver import IconResolver
+from utils.icons import icons
 from utils.monitors import HyprlandWithMonitors
 from utils.occulison import check_occlusion
 
@@ -328,12 +329,12 @@ class Dock(Window):
         if not icon_img:  # Double check after exec path try
             # Fallback icon if no DesktopApp is found
             icon_img = self.icon.get_icon_pixbuf(
-                "application-x-executable-symbolic", self.config["icon_size"]
+                icons["fallback"]["executable"], self.config["icon_size"]
             )
             # Final fallback
             if not icon_img:
                 icon_img = self.icon.get_icon_pixbuf(
-                    "image-missing", self.config["icon_size"]
+                    icons["fallback"]["image"], self.config["icon_size"]
                 )
 
         items = [Image(pixbuf=icon_img)]

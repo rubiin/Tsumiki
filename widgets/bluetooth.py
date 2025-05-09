@@ -16,8 +16,6 @@ class BlueToothWidget(ButtonWidget):
 
         self.icons = icons.icons["bluetooth"]
 
-        self.config = widget_config["bluetooth"]
-
         self.bluetooth_icon = Image(
             icon_name=self.icons["enabled"],
             icon_size=self.config["icon_size"],

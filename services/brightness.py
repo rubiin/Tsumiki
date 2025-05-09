@@ -50,6 +50,9 @@ class Brightness(Service):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
+        if not helpers.executable_exists("brightnessctl"):
+            logger.error(f"{Colors.ERROR}Command brightnessctl not found")
+
         # Path for screen backlight control
         self.screen_backlight_path = f"/sys/class/backlight/{screen_device}"
 
@@ -58,9 +61,6 @@ class Brightness(Service):
 
         if screen_device == "":
             return
-
-        if not helpers.executable_exists("brightnessctl"):
-            logger.error(f"{Colors.ERROR}Command brightnessctl not found")
 
         # Monitor screen brightness file
         self.screen_monitor = monitor_file(f"{self.screen_backlight_path}/brightness")
@@ -129,4 +129,4 @@ class Brightness(Service):
         try:
             exec_brightnessctl_async(f"--device '{kbd}' set {value}")
         except GLib.Error as e:
-            print(e.message)
+            logger.exception(e.message)

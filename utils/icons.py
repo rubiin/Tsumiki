@@ -9,36 +9,51 @@ common_text_icons = {
     "thermometer": "",
 }
 
-distro_text_icons = {
-    "deepin": "",
-    "fedora": "",
-    "arch": "",
-    "nixos": "",
-    "debian": "",
-    "opensuse-tumbleweed": "",
-    "ubuntu": "",
-    "endeavouros": "",
-    "manjaro": "",
-    "popos": "",
-    "garuda": "",
-    "zorin": "",
-    "mxlinux": "",
-    "arcolinux": "",
-    "gentoo": "",
-    "artix": "",
-    "centos": "",
-    "hyperbola": "",
-    "kubuntu": "",
-    "mandriva": "",
-    "xerolinux": "",
-    "parabola": "",
-    "void": "",
-    "linuxmint": "",
-    "archlabs": "",
-    "devuan": "",
-    "freebsd": "",
-    "openbsd": "",
-    "slackware": "",
+
+text_icons = {
+    "volume": {
+        "off": "",  # lowest brightness
+        "low": "",
+        "medium": "",
+        "high": "",  # highest brightness
+    },
+    "brightness": {
+        "off": "",  # lowest brightness
+        "low": "",
+        "medium": "",
+        "high": "",  # highest brightness
+    },
+    "distro": {
+        "deepin": "",
+        "fedora": "",
+        "arch": "",
+        "nixos": "",
+        "debian": "",
+        "opensuse-tumbleweed": "",
+        "ubuntu": "",
+        "endeavouros": "",
+        "manjaro": "",
+        "popos": "",
+        "garuda": "",
+        "zorin": "",
+        "mxlinux": "",
+        "arcolinux": "",
+        "gentoo": "",
+        "artix": "",
+        "centos": "",
+        "hyperbola": "",
+        "kubuntu": "",
+        "mandriva": "",
+        "xerolinux": "",
+        "parabola": "",
+        "void": "",
+        "linuxmint": "",
+        "archlabs": "",
+        "devuan": "",
+        "freebsd": "",
+        "openbsd": "",
+        "slackware": "",
+    },
 }
 
 # sourced from wttr.in
@@ -426,28 +441,6 @@ weather_icons = {
     },
 }
 
-volume_text_icons = {
-    "overamplified": "󰕾",
-    "high": "󰕾",
-    "medium": "󰖀",
-    "low": "󰕿",
-    "muted": "󰝟",
-}
-
-volume_text_icons = {
-    "overamplified": "󰕾",
-    "high": "󰕾",
-    "medium": "󰖀",
-    "low": "󰕿",
-    "muted": "󰝟",
-}
-
-brightness_text_icons = {
-    "off": "",  # lowest brightness
-    "low": "",
-    "medium": "",
-    "high": "",  # highest brightness
-}
 
 icons = {
     "missing": "image-missing-symbolic",
@@ -462,9 +455,12 @@ icons = {
         "notification": "dialog-information-symbolic",
         "video": "video-x-generic-symbolic",
         "audio": "audio-x-generic-symbolic",
+        "image": "image-x-generic-symbolic",
+        "package": "package-x-generic-symbolic",
     },
     "ui": {
-        "close": "window-close-symbolic",
+        "window_close": "window-close-symbolic",
+        "close": "close-symbolic",
         "colorpicker": "color-select-symbolic",
         "info": "info-symbolic",
         "link": "external-link-symbolic",
@@ -479,6 +475,8 @@ icons = {
         "toolbars": "toolbars-symbolic",
         "warning": "dialog-warning-symbolic",
         "avatar": "avatar-default-symbolic",
+        "camera": "camera-photo-symbolic",
+        "camera-video": "camera-video-symbolic",
         "arrow": {
             "right": "pan-end-symbolic",
             "left": "pan-start-symbolic",
@@ -507,14 +505,20 @@ icons = {
         },
         "mixer": "mixer-symbolic",
     },
-    "powerprofile": {
+    "powerprofiles": {
         "balanced": "power-profile-balanced-symbolic",
         "power-saver": "power-profile-power-saver-symbolic",
         "performance": "power-profile-performance-symbolic",
     },
     "battery": {
         "charging": "battery-flash-symbolic",
-        "warning": "battery-empty-symbolic",
+        "full": "battery-full-charged-symbolic",
+        "full-charging": "battery-full-charging-symbolic",
+        "full-discharging": "battery-full-discharging-symbolic",
+        "discharging": "battery-empty-symbolic",
+        "empty": "battery-empty-symbolic",
+        "charging-unknown": "battery-charging-symbolic",
+        "unknown": "battery-missing-symbolic",
     },
     "bluetooth": {
         "enabled": "bluetooth-active-symbolic",
@@ -524,9 +528,13 @@ icons = {
         "indicator": "display-brightness-symbolic",
         "keyboard": "keyboard-brightness-symbolic",
         "screen": "display-brightness-symbolic",
+        "low": "display-brightness-low-symbolic",
+        "medium": "display-brightness-medium-symbolic",
+        "high": "display-brightness-high-symbolic",
+        "off": "display-brightness-off-symbolic",
     },
     "powermenu": {
-        "sleep": "weather-clear-night-symbolic",
+        "sleep": "system-suspend-symbolic",
         "reboot": "system-reboot-symbolic",
         "logout": "system-log-out-symbolic",
         "shutdown": "system-shutdown-symbolic",
@@ -543,6 +551,25 @@ icons = {
     "trash": {
         "full": "user-trash-full-symbolic",
         "empty": "user-trash-symbolic",
+    },
+    "network": {
+        "wifi": {
+            "generic": "network-wireless-symbolic",
+            "connected": "network-wireless-connected-symbolic",
+            "disconnected": "network-wireless-disconnected-symbolic",
+            "connecting": "network-wireless-acquiring-symbolic",
+            "disabled": "network-wireless-disabled-symbolic",
+        },
+        "ethernet": {
+            "connected": "network-wired-connected-symbolic",
+            "disconnected": "network-wired-disconnected-symbolic",
+            "connecting": "network-wired-acquiring-symbolic",
+            "disabled": "network-wired-disabled-symbolic",
+        },
+        "vpn": {
+            "enabled": "network-vpn-symbolic",
+            "disabled": "network-vpn-off-symbolic",
+        },
     },
     "mpris": {
         "shuffle": {

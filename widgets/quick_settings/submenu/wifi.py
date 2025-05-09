@@ -7,6 +7,7 @@ from fabric.widgets.scrolledwindow import ScrolledWindow
 from services import NetworkClient, Wifi, network_service
 from shared import QSChevronButton, QuickSubMenu
 from shared.submenu import ScanButton
+from utils.icons import icons
 
 
 class WifiSubMenu(QuickSubMenu):
@@ -32,7 +33,7 @@ class WifiSubMenu(QuickSubMenu):
 
         super().__init__(
             title="Network",
-            title_icon="network-wireless-symbolic",
+            title_icon=icons["network"]["wifi"]["generic"],
             scan_button=self.scan_button,
             child=Box(orientation="v", children=[self.child]),
             **kwargs,
@@ -81,7 +82,7 @@ class WifiToggle(QSChevronButton):
 
     def __init__(self, submenu: QuickSubMenu, **kwargs):
         super().__init__(
-            action_icon="network-wireless-disabled-symbolic",
+            action_icon=icons["network"]["wifi"]["generic"],
             action_label=" Wifi Disabled",
             submenu=submenu,
             **kwargs,

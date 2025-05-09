@@ -30,7 +30,6 @@ def process_and_apply_css(app: Application):
         logger.info(f"{Colors.INFO}[Main] CSS applied")
         app.set_stylesheet_from_file(get_relative_path("dist/main.css"))
     else:
-        print(output)
         app.set_stylesheet_from_string("")
         logger.error(f"{Colors.ERROR}[Main]Failed to compile sass!")
 
@@ -49,6 +48,8 @@ if not general_options["debug"]:
 
 
 if __name__ == "__main__":
+    helpers.ensure_directory(APP_CACHE_DIRECTORY)
+
     # Create the status bar
     bar = StatusBar(widget_config)
 
@@ -109,8 +110,6 @@ if __name__ == "__main__":
         process_and_apply_css(app)
 
     setproctitle.setproctitle(APPLICATION_NAME)
-
-    helpers.ensure_directory(APP_CACHE_DIRECTORY)
 
     # Run the application
     app.run()
