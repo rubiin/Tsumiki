@@ -145,7 +145,6 @@ class Popover(Widget):
         self._content_window = None
         self._content = content
         self._visible = False
-        self._destroy_timeout = None
         # Use weak reference to avoid circular reference issues
         self._manager = PopoverManager.get_instance()
 
@@ -162,10 +161,6 @@ class Popover(Widget):
             self._manager.active_popover.hide_popover()
 
     def open(self, *_):
-        if self._destroy_timeout is not None:
-            GLib.source_remove(self._destroy_timeout)
-            self._destroy_timeout = None
-
         if not self._content_window:
             try:
                 self._create_popover()
@@ -250,24 +245,6 @@ class Popover(Widget):
         self._manager.overlay.hide()
         self._visible = False
 
-        if not self._destroy_timeout:
-            self._destroy_timeout = GLib.timeout_add(1000 * 5, self._destroy_popover)
-
         self.emit("popover-closed")
-
-        return False
-
-    def _destroy_popover(self):
-        """Return resources to the pool and clear references."""
-        self._destroy_timeout = None
-        self._visible = False
-
-        if self._content_window:
-            # Return window to the pool
-            self._manager.return_popover_window(self._content_window)
-            self._content_window = None
-
-        # Allow content to be garbage collected if no longer needed
-        self._content = None
 
         return False

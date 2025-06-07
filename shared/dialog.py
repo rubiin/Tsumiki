@@ -3,7 +3,7 @@ from fabric.widgets.box import Box
 from fabric.widgets.button import Button
 from fabric.widgets.label import Label
 
-from .pop_up import PopupWindow
+from .popup import PopupWindow
 
 
 class Dialog(PopupWindow):

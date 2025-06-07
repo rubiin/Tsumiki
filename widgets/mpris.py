@@ -54,7 +54,7 @@ class MprisWidget(ButtonWidget):
         }
 
         popup = Popover(
-            content_factory=lambda: Box(
+            content=Box(
                 style_classes="mpris-box",
                 children=[
                     PlayerBoxStack(self.mpris_manager, config=config),

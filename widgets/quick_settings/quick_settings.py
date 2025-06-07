@@ -22,9 +22,9 @@ from shared import (
     Dialog,
     Grid,
     HoverButton,
+    Popover,
     QSChevronButton,
 )
-from shared.popovev1 import PopupWindowV1
 from utils.icons import symbolic_icons
 from utils.widget_utils import (
     get_audio_icon_name,
@@ -418,13 +418,7 @@ class QuickSettingsButtonWidget(ButtonWidget):
 
         self.network_service.connect("device-ready", self._get_network_icon)
 
-        popup = PopupWindowV1(
-            child=QuickSettingsMenu(config=self.config),
-            point_to=self,
-            parent=self,
-            visible=False,
-            all_visible=False,
-        )
+        popup = Popover(content=QuickSettingsMenu(config=self.config), point_to=self)
 
         self.audio_icon = Image(style_classes="panel-font-icon")
 
@@ -448,7 +442,7 @@ class QuickSettingsButtonWidget(ButtonWidget):
 
         self.connect(
             "clicked",
-            lambda *_: popup.show() if not popup.is_visible() else popup.hide(),
+            popup.open,
         )
 
     def _get_network_icon(self, *_):

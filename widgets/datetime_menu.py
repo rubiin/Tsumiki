@@ -407,7 +407,7 @@ class DateTimeWidget(ButtonWidget):
         notification_config = self.config["notification"]
 
         popup = Popover(
-            content_factory=lambda: DateNotificationMenu(config=self.config),
+            content=DateNotificationMenu(config=self.config),
             point_to=self,
         )
         self.notification_indicator = Image(

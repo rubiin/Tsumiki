@@ -350,7 +350,7 @@ class EmojiPickerWidget(ButtonWidget):
             self.set_tooltip_text("Emoji Picker")
 
         popup = Popover(
-            content_factory=lambda: EmojiPickerMenu(config=self.config),
+            content=EmojiPickerMenu(config=self.config),
             point_to=self,
         )
 

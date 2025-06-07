@@ -594,7 +594,7 @@ class ClipHistoryWidget(ButtonWidget):
             self.set_tooltip_text("Clipboard History")
 
         popup = Popover(
-            content_factory=lambda: ClipHistoryMenu(),
+            content=ClipHistoryMenu(),
             point_to=self,
         )
 

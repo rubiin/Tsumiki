@@ -8,8 +8,8 @@ from .dialog import Dialog
 from .grid import Grid
 from .list import ListBox
 from .lottie import LottieAnimation, LottieAnimationWidget
-from .pop_over import Popover, PopoverManager
-from .pop_up import PopupWindow
+from .popover import Popover, PopoverManager
+from .popup import PopupWindow
 from .separator import Separator
 from .setting_scale import SettingSlider
 from .submenu import QuickSubMenu

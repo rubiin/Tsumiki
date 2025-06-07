@@ -162,7 +162,7 @@ class SystemTrayWidget(ButtonWidget):
         self.popup_menu = SystemTrayMenu(config=self.config)
 
         self.popup = Popover(
-            content_factory=lambda: self.popup_menu,
+            content=self.popup_menu,
             point_to=self,
         )
 

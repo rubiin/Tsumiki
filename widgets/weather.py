@@ -373,7 +373,7 @@ class WeatherWidget(ButtonWidget, BaseWeatherWidget):
 
         if self.popover is None:
             self.popover = Popover(
-                content_factory=lambda: WeatherMenu(data=data, config=self.config),
+                content=WeatherMenu(data=data, config=self.config),
                 point_to=self,
             )
         else:

@@ -387,7 +387,7 @@ class KanbanWidget(ButtonWidget):
             self.set_tooltip_text("Kanban Board")
 
         popup = Popover(
-            content_factory=lambda: Kanban(),
+            content=Kanban(),
             point_to=self,
         )
 
