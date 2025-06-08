@@ -174,6 +174,7 @@ class NotificationWidget(EventBox):
         # Use provided image if available
         try:
             if image_pixbuf := self._notification.image_pixbuf:
+                self._notification.image_pixbuf = None  # Release the full-size pixbuf
                 body_container.add(
                     CircleImage(
                         pixbuf=image_pixbuf.scale_simple(

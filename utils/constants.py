@@ -3,7 +3,7 @@ from gi.repository import GLib
 # constants
 
 NOTIFICATION_WIDTH = 400
-NOTIFICATION_IMAGE_SIZE = 64
+NOTIFICATION_IMAGE_SIZE = 48
 HIGH_POLL_INTERVAL = 3600  # 1 hour in seconds
 
 APPLICATION_NAME = "hydepanel"

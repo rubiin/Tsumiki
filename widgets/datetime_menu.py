@@ -94,6 +94,7 @@ class DateMenuNotification(Box):
 
         try:
             if image_pixbuf := self._notification.image_pixbuf:
+                self._notification.image_pixbuf = None  # Release the full-size pixbuf
                 body_container.add(
                     CircleImage(
                         pixbuf=image_pixbuf.scale_simple(
@@ -167,7 +168,7 @@ class DateNotificationMenu(Box):
             style_classes="clock",
         )
 
-        self.notifications: List[Notification] = notification_service.get_deserialized()
+        notifications: List[Notification] = notification_service.get_deserialized()
 
         self.notifications_listbox = ListBox(
             name="notification-list",
@@ -175,10 +176,10 @@ class DateNotificationMenu(Box):
             h_align="center",
             spacing=8,
             h_expand=True,
-            visible=len(self.notifications) > 0,
+            visible=len(notifications) > 0,
         )
 
-        for value in self.notifications:
+        for value in notifications:
             notification_item = Gtk.ListBoxRow(
                 visible=True, name="notification-list-item"
             )
@@ -197,7 +198,7 @@ class DateNotificationMenu(Box):
             v_align="center",
             v_expand=True,
             h_expand=True,
-            visible=len(self.notifications) == 0,  # visible if no notifications
+            visible=len(notifications) == 0,  # visible if no notifications
             children=(
                 Image(
                     icon_name=symbolic_icons["notifications"]["silent"],
@@ -223,7 +224,7 @@ class DateNotificationMenu(Box):
 
         self.clear_icon = Image(
             icon_name=symbolic_icons["trash"]["empty"]
-            if len(self.notifications) == 0
+            if len(notifications) == 0
             else symbolic_icons["trash"]["full"],
             icon_size=self.pixel_size,
             name="clear-icon",
@@ -262,60 +263,53 @@ class DateNotificationMenu(Box):
             0,
         )
 
-        # Notification body column
-        notification_column = Box(
-            name="notification-column",
-            orientation="v",
-            visible=False,
-            children=(
-                notification_column_header,
-                ScrolledWindow(
-                    v_expand=True,
-                    style_classes="notification-scrollable",
-                    v_scrollbar_policy="automatic",
-                    h_scrollbar_policy="never",
-                    child=Box(children=(self.placeholder, self.notifications_listbox)),
-                ),
-            ),
-        )
-
-        # Date and time column
-
-        date_column = Box(
-            style_classes="date-column",
-            orientation="v",
-            visible=False,
-            children=(
-                Box(
-                    style_classes="clock-box",
-                    orientation="v",
-                    children=(self.clock_label, self.uptime),
-                ),
-                Box(
-                    style_classes="calendar",
-                    v_expand=True,
-                    children=(
-                        Gtk.Calendar(
-                            visible=True,
-                            hexpand=True,
-                            halign=Gtk.Align.CENTER,
-                        )
+        if config["notification"]:
+            # Notification body column
+            notification_column = Box(
+                name="notification-column",
+                orientation="v",
+                children=(
+                    notification_column_header,
+                    ScrolledWindow(
+                        v_expand=True,
+                        style_classes="notification-scrollable",
+                        v_scrollbar_policy="automatic",
+                        h_scrollbar_policy="never",
+                        child=Box(
+                            children=(self.placeholder, self.notifications_listbox)
+                        ),
                     ),
                 ),
-            ),
-        )
+            )
+            self.add(notification_column)
 
-        self.children = (
-            notification_column,
-            Separator(),
-            date_column,
-        )
-
-        if config["notification"]:
-            notification_column.set_visible(True)
+        self.add(Separator())
 
         if config["calendar"]:
-            date_column.set_visible(True)
+            date_column = Box(
+                style_classes="date-column",
+                orientation="v",
+                children=(
+                    Box(
+                        style_classes="clock-box",
+                        orientation="v",
+                        children=(self.clock_label, self.uptime),
+                    ),
+                    Box(
+                        style_classes="calendar",
+                        v_expand=True,
+                        children=(
+                            Gtk.Calendar(
+                                visible=True,
+                                hexpand=True,
+                                halign=Gtk.Align.CENTER,
+                            )
+                        ),
+                    ),
+                ),
+            )
+
+            self.add(date_column)
 
         bulk_connect(
             notification_service,
@@ -357,9 +351,8 @@ class DateNotificationMenu(Box):
                 break
 
     def _remove_notification(self, widget):
-        if widget in self.notifications_listbox.get_children():
-            self.notifications_listbox.remove(widget)
-            widget.destroy()  # Ensure the object is freed
+        self.notifications_listbox.remove(widget)
+        widget.destroy()  # Ensure the object is freed
 
         return False
 
@@ -455,21 +448,19 @@ class DateTimeWidget(ButtonWidget):
         bulk_connect(
             notification_service,
             {
-                "notification_count": lambda _,
-                value,
-                *args: self.on_notification_count(value),
-                "dnd": lambda _, value, *args: self.on_dnd_switch(value),
+                "notification_count": self.on_notification_count,
+                "dnd": self.on_dnd_switch,
             },
         )
 
-    def on_notification_count(self, value):
+    def on_notification_count(self, _, value, *args):
         if value > 0:
             self.count_label.set_text(str(value))
             self.count_label.set_visible(str(value))
         else:
             self.count_label.set_visible(False)
 
-    def on_dnd_switch(self, value):
+    def on_dnd_switch(self, _, value, *args):
         if value:
             self.notification_indicator.set_from_icon_name(
                 symbolic_icons["notifications"]["silent"],
