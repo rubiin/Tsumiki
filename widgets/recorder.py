@@ -57,12 +57,20 @@ class RecorderWidget(ButtonWidget):
 
     def update_ui(self, _, is_recording: bool):
         if is_recording:
-            self.box.children = (self.recording_ongoing_lottie,)
+            if self.recording_ongoing_lottie not in self.box.get_children():
+                self.box.remove(self.recording_idle_image)
+                self.box.add(self.recording_ongoing_lottie)
+
             self.recording_ongoing_lottie.play_loop()
+
             if self.config["tooltip"]:
                 self.set_tooltip_text("Recording started")
         else:
-            self.box.children = self.recording_idle_image
+            if self.recording_idle_image not in self.box.get_children():
+                self.box.remove(self.recording_ongoing_lottie)
+                self.box.add(self.recording_idle_image)
+
             self.recording_ongoing_lottie.stop_play()
+
             if self.config["tooltip"]:
                 self.set_tooltip_text("Recording stopped")

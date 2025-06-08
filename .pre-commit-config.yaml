@@ -39,7 +39,8 @@ repos:
         exclude: |
                     (?x)^(
                         config.json|
-                        example/config.json
+                        example/config.json|
+                        assets/icons/recording.json
                     )$
 
 default_stages: [pre-commit]

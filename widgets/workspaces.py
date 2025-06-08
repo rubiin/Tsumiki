@@ -3,17 +3,6 @@ from fabric.hyprland.widgets import Workspaces
 
 from shared.widget_container import BoxWidget
 from utils.functions import unique_list
-from utils.widget_utils import setup_cursor_hover
-
-
-class WorkspaceButton(WsButton):
-    """A button to represent a workspace."""
-
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
-        # Set the hover hand
-        setup_cursor_hover(self)
 
 
 class WorkSpacesWidget(BoxWidget):
@@ -59,14 +48,14 @@ class WorkSpacesWidget(BoxWidget):
             if self.config["hide_unoccupied"]
             else [
                 setup_button_empty_state(
-                    WorkspaceButton(id=i, label=create_workspace_label(i))
+                    WsButton(id=i, label=create_workspace_label(i))
                 )
                 for i in range(1, self.config["count"] + 1)
                 if i not in ignored_ws
             ],
             # Factory function to create buttons for each workspace
             buttons_factory=lambda ws_id: setup_button_empty_state(
-                WorkspaceButton(
+                WsButton(
                     id=ws_id,
                     label=create_workspace_label(ws_id),
                     visible=ws_id not in ignored_ws,
