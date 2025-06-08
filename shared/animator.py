@@ -204,7 +204,6 @@ class Animator(Service):
             return
         return self.do_remove_tick_handlers()
 
-
     def play_pause(self):
         if self._playing:
             self.pause()

@@ -40,7 +40,6 @@ class ScanButton(HoverButton):
     def set_notify_value(self, p, *_):
         self.scan_image.set_angle(p.value)
 
-
     def play_animation(self):
         self.scan_animator.play()
 
@@ -62,7 +61,6 @@ class QSToggleButton(Box):
         **kwargs,
     ):
         self.pixel_size = pixel_size
-
 
         # required for chevron button
         self.box = Box()
