@@ -56,7 +56,8 @@ class BluetoothDeviceBox(CenterBox):
                 style_classes="submenu-item-label",
                 ellipsization="end",
             )
-        )  # type: ignore
+        )
+
         self.add_end(self.connect_button)
 
         self.on_device_connect()

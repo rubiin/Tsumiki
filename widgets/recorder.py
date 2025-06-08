@@ -1,11 +1,10 @@
 from fabric.utils import get_relative_path
-from fabric.widgets.image import Image
 
 from services import ScreenRecorderService
 from shared.lottie import LottieAnimation, LottieAnimationWidget
 from shared.widget_container import ButtonWidget
 from utils.functions import check_executable_exists
-from utils.icons import symbolic_icons
+from utils.widget_utils import text_icon
 
 
 class RecorderWidget(ButtonWidget):
@@ -20,14 +19,14 @@ class RecorderWidget(ButtonWidget):
             LottieAnimation.from_file(
                 f"{get_relative_path('../assets/icons/')}/recording.json",
             ),
-            scale=0.40,
-            h_align=True,
+            scale=0.30,
+            h_align="center",
+            v_align="center",
         )
 
-        self.recording_idle_image = Image(
-            icon_name=symbolic_icons["recorder"]["stopped"],
-            icon_size=self.config["icon_size"],
-            h_align=True,
+        self.recording_idle_image = text_icon(
+            icon="󰻂",
+            props={"style_classes": "panel-font-icon"},
         )
 
         self.box.add(
