@@ -143,25 +143,21 @@ class NotificationWidget(EventBox):
             ),
         )
 
-        header_container.pack_end(
-            Box(
-                v_align="start",
-                children=(
-                    Button(
-                        image=Image(
-                            icon_name=helpers.check_icon_exists(
-                                symbolic_icons["ui"]["close"],
-                                symbolic_icons["ui"]["window_close"],
-                            ),
-                            icon_size=16,
-                        ),
-                        style_classes="close-button",
-                        on_clicked=lambda *_: self._notification.close(
-                            "dismissed-by-user"
-                        ),
-                    ),
+        close_button = Button(
+            style_classes="close-button",
+            image=Image(
+                name="close-icon",
+                icon_name=helpers.check_icon_exists(
+                    symbolic_icons["ui"]["close"],
+                    symbolic_icons["ui"]["window_close"],
                 ),
+                icon_size=16,
             ),
+            on_clicked=self.on_close_button_clicked,
+        )
+
+        header_container.pack_end(
+            close_button,
             False,
             False,
             0,
@@ -203,11 +199,8 @@ class NotificationWidget(EventBox):
             ),
         )
 
-        actions_count = (
-            len(self._notification.actions)
-            if len(self._notification.actions) <= self.config["max_actions"]
-            else self.config["max_actions"]
-        )
+        actions_len = len(self._notification.actions)
+        actions_count = min(actions_len, self.config["max_actions"])
 
         self.actions_container_grid = Grid(
             orientation="h",
@@ -244,6 +237,10 @@ class NotificationWidget(EventBox):
 
         if self.config["auto_dismiss"]:
             self.start_timeout()
+
+    def on_close_button_clicked(self, *_):
+        self._notification.close("dismissed-by-user")
+        self.stop_timeout()
 
     def start_timeout(self):
         self.stop_timeout()

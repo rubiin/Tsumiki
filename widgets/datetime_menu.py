@@ -68,7 +68,7 @@ class DateMenuNotification(Box):
                 style="font-size: 13.5px;",
             ),
         )
-        self.close_button = Button(
+        close_button = Button(
             style_classes="close-button",
             image=Image(
                 name="close-icon",
@@ -82,7 +82,7 @@ class DateMenuNotification(Box):
         )
 
         header_container.pack_end(
-            Box(v_align="start", children=(self.close_button)),
+            close_button,
             False,
             False,
             0,
