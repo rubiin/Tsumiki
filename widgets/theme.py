@@ -2,7 +2,7 @@ import os
 
 from fabric.utils import get_relative_path
 
-from shared import ButtonWidget
+from shared.widget_container import ButtonWidget
 from utils.functions import copy_theme, send_notification
 from utils.widget_utils import text_icon
 

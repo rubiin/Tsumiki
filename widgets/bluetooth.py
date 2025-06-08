@@ -2,7 +2,7 @@ from fabric.bluetooth import BluetoothClient
 from fabric.widgets.image import Image
 from fabric.widgets.label import Label
 
-from shared import ButtonWidget
+from shared.widget_container import ButtonWidget
 from utils.icons import symbolic_icons
 
 

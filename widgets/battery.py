@@ -5,7 +5,7 @@ from fabric.widgets.label import Label
 from gi.repository import GdkPixbuf, Gtk
 
 from services import BatteryService
-from shared import ButtonWidget
+from shared.widget_container import ButtonWidget
 from utils.functions import format_time
 from utils.icons import symbolic_icons
 

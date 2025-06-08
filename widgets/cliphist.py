@@ -14,7 +14,8 @@ from fabric.widgets.scrolledwindow import ScrolledWindow
 from gi.repository import Gdk, GdkPixbuf, GLib
 from loguru import logger
 
-from shared import ButtonWidget, Popover
+from shared.popover import Popover
+from shared.widget_container import ButtonWidget
 from utils.widget_utils import text_icon
 
 

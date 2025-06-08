@@ -4,7 +4,10 @@ from fabric.widgets.image import Image
 from fabric.widgets.label import Label
 from fabric.widgets.widget import Widget
 
-from shared import ButtonWidget, Dialog, Grid, HoverButton, PopupWindow
+from shared.dialog import Dialog
+from shared.grid import Grid
+from shared.popup import PopupWindow
+from shared.widget_container import ButtonWidget, HoverButton
 from utils.widget_utils import text_icon
 
 

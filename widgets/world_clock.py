@@ -4,7 +4,7 @@ from zoneinfo import ZoneInfo, available_timezones
 import loguru
 from fabric.widgets.label import Label
 
-from shared import ButtonWidget
+from shared.widget_container import ButtonWidget
 from utils.widget_utils import text_icon, util_fabricator
 
 

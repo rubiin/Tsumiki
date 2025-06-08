@@ -12,7 +12,8 @@ from fabric.widgets.overlay import Overlay
 from gi.repository import Gdk, Gtk
 from loguru import logger
 
-from shared import ButtonWidget, PopupWindow
+from shared.popup import PopupWindow
+from shared.widget_container import ButtonWidget
 from utils.icon_resolver import IconResolver
 from utils.widget_utils import create_surface_from_widget, text_icon
 

@@ -1,4 +1,4 @@
-from shared import CommandSwitcher
+from shared.button_toggle import CommandSwitcher
 
 
 class HyprSunsetWidget(CommandSwitcher):

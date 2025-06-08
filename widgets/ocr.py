@@ -4,7 +4,7 @@ from fabric.utils import exec_shell_command_async, get_relative_path
 from fabric.widgets.label import Label
 from gi.repository import Gdk, Gtk
 
-from shared import ButtonWidget
+from shared.widget_container import ButtonWidget
 from utils.functions import ttl_lru_cache
 from utils.widget_utils import text_icon
 

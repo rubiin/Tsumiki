@@ -5,7 +5,7 @@ from fabric.hyprland.widgets import HyprlandEvent, get_hyprland_connection
 from fabric.widgets.label import Label
 from loguru import logger
 
-from shared import ButtonWidget
+from shared.widget_container import ButtonWidget
 from utils.constants import KBLAYOUT_MAP
 from utils.widget_utils import text_icon
 

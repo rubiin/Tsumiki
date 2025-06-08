@@ -5,7 +5,8 @@ from fabric.widgets.image import Image
 from fabric.widgets.label import Label
 from loguru import logger
 
-from shared import Grid, HoverButton
+from shared.grid import Grid
+from shared.widget_container import HoverButton
 
 
 class ShortcutButton(HoverButton):

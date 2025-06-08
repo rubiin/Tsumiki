@@ -12,8 +12,10 @@ from fabric.widgets.scrolledwindow import ScrolledWindow
 from gi.repository import Gdk, GLib, GObject, Gtk
 from loguru import logger
 
-from shared import ButtonWidget, ListBox, Popover
 from shared.grid import Grid
+from shared.list import ListBox
+from shared.popover import Popover
+from shared.widget_container import ButtonWidget
 from utils.widget_utils import create_surface_from_widget, text_icon
 
 

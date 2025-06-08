@@ -25,7 +25,9 @@ from gi.repository import GLib, GObject
 from loguru import logger
 
 from services import MprisPlayer, MprisPlayerManager
-from shared import Animator, CircleImage, HoverButton
+from shared.animator import Animator
+from shared.circle_image import CircleImage
+from shared.widget_container import HoverButton
 from utils.bezier import cubic_bezier
 from utils.constants import APP_CACHE_DIRECTORY
 from utils.functions import ensure_directory, grab_accent_color, rgb_to_css

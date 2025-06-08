@@ -12,7 +12,8 @@ from fabric.widgets.stack import Stack
 from gi.repository import Gdk
 from loguru import logger
 
-from shared import ButtonWidget, Popover
+from shared.popover import Popover
+from shared.widget_container import ButtonWidget
 from utils.widget_utils import text_icon
 
 

@@ -5,7 +5,9 @@ from fabric.widgets.scrolledwindow import ScrolledWindow
 from gi.repository import Gtk
 
 from services import audio_service
-from shared import ListBox, QuickSubMenu, ScanButton
+from shared.buttons import ScanButton
+from shared.list import ListBox
+from shared.submenu import QuickSubMenu
 from utils.icons import symbolic_icons
 from widgets.quick_settings.sliders.mic import MicrophoneSlider
 

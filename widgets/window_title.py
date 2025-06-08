@@ -3,7 +3,7 @@ import re
 from fabric.hyprland.widgets import ActiveWindow
 from fabric.utils import FormattedString, truncate
 
-from shared import ButtonWidget
+from shared.widget_container import ButtonWidget
 from utils.constants import WINDOW_TITLE_MAP
 
 

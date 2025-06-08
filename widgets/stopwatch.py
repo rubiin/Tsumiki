@@ -3,7 +3,7 @@ import time
 from fabric.widgets.label import Label
 from gi.repository import GLib
 
-from shared import ButtonWidget
+from shared.widget_container import ButtonWidget
 from utils.widget_utils import text_icon
 
 

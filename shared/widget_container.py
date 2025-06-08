@@ -4,7 +4,7 @@ from fabric.widgets.eventbox import EventBox
 from fabric.widgets.widget import Widget
 
 from utils.config import widget_config
-from utils.widget_utils import setup_cursor_hover
+from utils.widget_utils import lazy_load_widget, setup_cursor_hover
 
 
 class ToggleableWidget(Widget):
@@ -87,3 +87,45 @@ class HoverButton(Button):
         )
 
         setup_cursor_hover(self)
+
+
+class WidgetGroup(BoxWidget):
+    """A group of widgets that can be managed and styled together."""
+
+    def __init__(self, children=None, spacing=4, style_classes=None, **kwargs):
+        # Build our list of CSS classes
+        css_classes = ["panel-module-group"]
+
+        # Add any custom style classes
+        if style_classes:
+            if isinstance(style_classes, str):
+                css_classes.append(style_classes)
+            elif isinstance(style_classes, list):
+                css_classes.extend(style_classes)
+
+        super().__init__(
+            spacing=spacing,
+            style_classes=css_classes,
+            orientation="h",  # Default to horizontal for panel layout
+            **kwargs,
+        )
+
+        if children:
+            for child in children:
+                self.add(child)
+
+    @classmethod
+    def from_config(cls, config, widgets_map):
+        children = []
+        for widget_name in config.get("widgets", []):
+            if widget_name in widgets_map:
+                # Create widget instance using the constructor from widgets_map
+                # Pass both widget_config and bar to the widget constructor
+                widget = lazy_load_widget(widget_name, widgets_map)
+                children.append(widget())
+
+        return cls(
+            children=children,
+            spacing=config.get("spacing", 4),
+            style_classes=config.get("style_classes", []),
+        )

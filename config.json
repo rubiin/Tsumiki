@@ -309,7 +309,6 @@
 		], // this is the middle section of the panel
 		"right_section": [
 			"recorder",
-			"@group:1",
 			"@group:0",
 			"system_tray"
 		] // this is the right section of the panel
@@ -318,19 +317,9 @@
 		{
 			"widgets": [
 				"updates",
-				"cliphist",
 				"battery"
 			],
 			"spacing": 4,
-			"style_classes": [
-				"compact"
-			]
-		},
-		{
-			"widgets": [
-				"quick_settings"
-			],
-			"spacing": 0,
 			"style_classes": [
 				"compact"
 			]
@@ -386,7 +375,7 @@
 			]
 		},
 		"desktop_clock": {
-			"enabled": true,
+			"enabled": false,
 			"anchor": "bottom-right",
 			"date_format": "%A, %d %B %Y",
 			"layer": "bottom"

@@ -17,7 +17,7 @@ from fabric.widgets.image import Image
 from fabric.widgets.wayland import WaylandWindow as Window
 from gi.repository import Gdk, GLib
 
-from shared import ToggleableWidget
+from shared.widget_container import ToggleableWidget
 from utils.icon_resolver import IconResolver
 from utils.icons import symbolic_icons
 from utils.monitors import HyprlandWithMonitors

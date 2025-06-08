@@ -9,7 +9,7 @@ from fabric.utils import (
 from fabric.widgets.label import Label
 from loguru import logger
 
-from shared import ButtonWidget
+from shared.widget_container import ButtonWidget
 from utils.colors import Colors
 from utils.widget_utils import (
     text_icon,

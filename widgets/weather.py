@@ -10,7 +10,9 @@ from gi.repository import GLib, Gtk
 from loguru import logger
 
 from services import WeatherService
-from shared import ButtonWidget, Grid, Popover
+from shared.grid import Grid
+from shared.popover import Popover
+from shared.widget_container import ButtonWidget
 from utils.icons import weather_icons
 from utils.widget_utils import (
     setup_cursor_hover,

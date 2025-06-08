@@ -2,7 +2,8 @@ from fabric.utils import get_relative_path
 from fabric.widgets.image import Image
 
 from services import ScreenRecorderService
-from shared import ButtonWidget, LottieAnimation, LottieAnimationWidget
+from shared.lottie import LottieAnimation, LottieAnimationWidget
+from shared.widget_container import ButtonWidget
 from utils.functions import check_executable_exists
 from utils.icons import symbolic_icons
 

@@ -1,4 +1,4 @@
-from shared import ButtonWidget
+from shared.widget_container import ButtonWidget
 
 
 class ClickCounterWidget(ButtonWidget):

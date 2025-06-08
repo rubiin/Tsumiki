@@ -4,7 +4,9 @@ from fabric.widgets.image import Image
 from fabric.widgets.label import Label
 
 from services import PowerProfilesService
-from shared import HoverButton, QSChevronButton, QuickSubMenu
+from shared.buttons import QSChevronButton
+from shared.submenu import QuickSubMenu
+from shared.widget_container import HoverButton
 from utils.icons import symbolic_icons
 
 

@@ -15,7 +15,11 @@ from loguru import logger
 import utils.constants as constants
 import utils.functions as helpers
 from services import notification_service
-from shared import ButtonWidget, CircleImage, HoverButton, ListBox, Popover, Separator
+from shared.circle_image import CircleImage
+from shared.list import ListBox
+from shared.popover import Popover
+from shared.separator import Separator
+from shared.widget_container import ButtonWidget, HoverButton
 from utils.colors import Colors
 from utils.functions import uptime
 from utils.icons import symbolic_icons

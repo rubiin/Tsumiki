@@ -2,12 +2,11 @@ from typing import Literal
 
 import setproctitle
 from fabric import Application
-from fabric.utils import cooldown, exec_shell_command, get_relative_path, monitor_file
-from gi.repository import Gtk
+from fabric.utils import cooldown, exec_shell_command, get_relative_path
 from loguru import logger
 
 import utils.functions as helpers
-from modules import StatusBar
+from modules.bar import StatusBar
 from utils.colors import Colors
 from utils.config import theme_config, widget_config
 from utils.constants import APP_CACHE_DIRECTORY, APPLICATION_NAME
@@ -54,18 +53,18 @@ if __name__ == "__main__":
     windows = [bar]
 
     if module_options["app_launcher"]["enabled"]:
-        from modules import AppLauncher
+        from modules.app_launcher import AppLauncher
 
         app_launcher = AppLauncher(widget_config)
         windows.append(app_launcher)
 
     if module_options["notification"]["enabled"]:
-        from modules import NotificationPopup
+        from modules.notification import NotificationPopup
 
         windows.append(NotificationPopup(widget_config))
 
     if module_options["screen_corners"]["enabled"]:
-        from modules import ScreenCorners
+        from modules.corners import ScreenCorners
 
         screen_corners = ScreenCorners(widget_config)
 
@@ -79,14 +78,14 @@ if __name__ == "__main__":
         windows.append(dock)
 
     if module_options["desktop_clock"]["enabled"]:
-        from modules import DesktopClock
+        from modules.desktop_clock import DesktopClock
 
         desktop_clock = DesktopClock(widget_config)
 
         windows.append(desktop_clock)
 
     if module_options["osd"]["enabled"]:
-        from modules import OSDContainer
+        from modules.osd import OSDContainer
 
         windows.append(OSDContainer(widget_config))
 
@@ -117,25 +116,9 @@ if __name__ == "__main__":
 
     helpers.copy_theme(theme_config["name"])
 
-    # Set custom `-symbolic.svg` icons' dir
-    icon_theme = Gtk.IconTheme.get_default()
-    icons_dir = get_relative_path("./assets/icons/svg/gtk")
-    icon_theme.append_search_path(icons_dir)
+    # TODO: add scss monitoring
 
-    # Monitor styles folder for changes
-    if general_options["monitor_styles"]:
-        monitor_file(
-            get_relative_path("styles"),
-            lambda *_: process_and_apply_css(app),
-            initial_call=True,
-        )
-        monitor_file(
-            get_relative_path("styles/common"),
-            lambda *_: process_and_apply_css(app),
-            initial_call=True,
-        )
-    else:
-        process_and_apply_css(app)
+    process_and_apply_css(app)
 
     setproctitle.setproctitle(APPLICATION_NAME)
 
