@@ -8,11 +8,9 @@ from fabric.widgets.label import Label
 
 from utils.bezier import cubic_bezier
 from utils.icons import symbolic_icons
-from utils.widget_utils import setup_cursor_hover
 
 from .animator import Animator
 from .circle_image import CircleImage
-from .separator import Separator
 from .submenu import QuickSubMenu
 from .widget_container import HoverButton
 
@@ -42,6 +40,7 @@ class ScanButton(HoverButton):
     def set_notify_value(self, p, *_):
         self.scan_image.set_angle(p.value)
 
+
     def play_animation(self):
         self.scan_animator.play()
 
@@ -64,6 +63,8 @@ class QSToggleButton(Box):
     ):
         self.pixel_size = pixel_size
 
+
+        # required for chevron button
         self.box = Box()
 
         # Action button can hold an icon and a label NOTHING MORE
@@ -102,8 +103,6 @@ class QSToggleButton(Box):
             children=[self.box],
             **kwargs,
         )
-
-        setup_cursor_hover(self)
 
         self.action_button.connect("clicked", self.do_action)
 
@@ -150,8 +149,6 @@ class QSChevronButton(QSToggleButton):
             pixel_size,
             **kwargs,
         )
-
-        self.box.add(Separator())
         self.box.add(self.reveal_button)
 
         self.reveal_button.connect("clicked", self.do_reveal_toggle)

@@ -293,6 +293,7 @@ $slider-height: 12px;
       .toggle-revealer {
         border-radius: 0 variable.$radius-large variable.$radius-large 0;
         padding: common.toEm(10) common.toEm(5);
+      //  border-left: 1px solid color.mix(theme.$surface-disabled, white, 10%);
       }
     }
 
