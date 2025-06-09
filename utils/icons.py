@@ -2,6 +2,9 @@
 
 
 text_icons = {
+    "ui": {
+        "window_close": "",
+    },
     "wifi": {
         "connected": "󰤨",
         "disconnected": "󰤩",

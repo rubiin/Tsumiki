@@ -71,7 +71,7 @@ class DateMenuNotification(Box):
         close_button = Button(
             style_classes="close-button",
             child=nerd_font_icon(
-                icon="",
+                icon=text_icons["ui"]["window_close"],
                 props={
                     "style_classes": ["panel-font-icon", "close-icon"],
                 },

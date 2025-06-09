@@ -92,6 +92,10 @@
           border-radius: variable.$modules-notification-border-radius;
           margin-bottom: 6px;
 
+          .close-button{
+            opacity: 0;
+          }
+
           &:hover {
             border: 1px solid theme.$surface-highlight;
 

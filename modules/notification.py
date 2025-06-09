@@ -20,6 +20,7 @@ from shared.buttons import HoverButton
 from shared.circle_image import CircleImage
 from shared.grid import Grid
 from utils.colors import Colors
+from utils.icons import text_icons
 from utils.monitors import HyprlandWithMonitors
 from utils.widget_settings import BarConfig
 from utils.widget_utils import get_icon, nerd_font_icon
@@ -144,7 +145,7 @@ class NotificationWidget(EventBox):
         close_button = Button(
             style_classes="close-button",
             child=nerd_font_icon(
-                icon="",
+                icon=text_icons["ui"]["window_close"],
                 props={
                     "style_classes": ["panel-font-icon", "close-icon"],
                 },
