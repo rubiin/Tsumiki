@@ -2,11 +2,11 @@ from fabric.utils import cooldown
 from fabric.widgets.box import Box
 
 from services import audio_service
+from shared.buttons import HoverButton
 from shared.setting_scale import SettingSlider
-from shared.widget_container import HoverButton
 from utils.functions import set_scale_adjustment
-from utils.icons import symbolic_icons
-from utils.widget_utils import text_icon
+from utils.icons import text_icons
+from utils.widget_utils import nerd_font_icon
 
 
 class MicrophoneSlider(SettingSlider):
@@ -19,13 +19,15 @@ class MicrophoneSlider(SettingSlider):
         self.pixel_size = 16
 
         super().__init__(
-            icon_name=symbolic_icons["audio"]["mic"]["medium"],
+            icon_name=text_icons["microphone"]["medium"],
             start_value=0,
             pixel_size=self.pixel_size,
         )
 
         if show_chevron:
-            self.chevron_icon = text_icon(icon="", props={"style": "font-size:12px;"})
+            self.chevron_icon = nerd_font_icon(
+                icon=text_icons["chevron"]["right"], props={"style": "font-size:12px;"}
+            )
             self.chevron_btn = HoverButton(
                 child=Box(
                     children=(self.chevron_icon,),
@@ -67,15 +69,13 @@ class MicrophoneSlider(SettingSlider):
         set_scale_adjustment(self.scale, 0, 100, 1)
         self.scale.set_value(self.audio_stream.volume)
         self.scale.set_tooltip_text(f"{round(self.audio_stream.volume)}%")
-        self.icon.set_from_icon_name(self._get_icon_name(), self.pixel_size)
+        self.icon.set_label(self._get_icon_name())
 
     def _get_icon_name(self):
         """Get the appropriate icon name based on mute state."""
         if not self.audio_stream:
-            return symbolic_icons["audio"]["mic"]["high"]
-        return symbolic_icons["audio"]["mic"][
-            "muted" if self.audio_stream.muted else "high"
-        ]
+            return text_icons["microphone"]["high"]
+        return text_icons["microphone"]["muted" if self.audio_stream.muted else "high"]
 
     def on_button_click(self, *_):
         parent = self.get_parent()

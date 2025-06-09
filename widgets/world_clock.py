@@ -5,7 +5,7 @@ import loguru
 from fabric.widgets.label import Label
 
 from shared.widget_container import ButtonWidget
-from utils.widget_utils import text_icon, util_fabricator
+from utils.widget_utils import nerd_font_icon, util_fabricator
 
 
 class WorldClockWidget(ButtonWidget):
@@ -19,7 +19,7 @@ class WorldClockWidget(ButtonWidget):
 
         if self.config["show_icon"]:
             # Create a TextIcon with the specified icon and size
-            self.icon = text_icon(
+            self.icon = nerd_font_icon(
                 icon=self.config["icon"],
                 props={"style_classes": "panel-font-icon"},
             )

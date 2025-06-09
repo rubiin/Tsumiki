@@ -14,7 +14,7 @@ from loguru import logger
 
 from shared.popover import Popover
 from shared.widget_container import ButtonWidget
-from utils.widget_utils import text_icon
+from utils.widget_utils import nerd_font_icon
 
 
 class EmojiPickerMenu(Box):
@@ -338,7 +338,7 @@ class EmojiPickerWidget(ButtonWidget):
         )
 
         self.box.add(
-            text_icon(
+            nerd_font_icon(
                 self.config["icon"],
                 props={"style_classes": "panel-font-icon"},
             )

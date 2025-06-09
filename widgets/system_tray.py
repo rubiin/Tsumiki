@@ -8,10 +8,11 @@ from fabric.widgets.box import Box
 from fabric.widgets.image import Image
 from gi.repository import Gdk, GdkPixbuf, GLib, Gray, Gtk
 
+from shared.buttons import HoverButton
 from shared.grid import Grid
 from shared.popover import Popover
 from shared.separator import Separator
-from shared.widget_container import ButtonWidget, HoverButton
+from shared.widget_container import ButtonWidget
 from utils.icons import symbolic_icons
 
 gi.require_version("Gray", "0.1")

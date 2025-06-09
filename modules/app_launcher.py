@@ -13,8 +13,8 @@ from fabric.widgets.scrolledwindow import ScrolledWindow
 from fabric.widgets.wayland import WaylandWindow as Window
 from gi.repository import Gdk
 
+from shared.buttons import HoverButton
 from shared.tagentry import TagEntry
-from shared.widget_container import HoverButton
 
 
 class LauncherCommandType(Enum):

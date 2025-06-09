@@ -84,18 +84,18 @@
 				"enabled": true,
 				"items": [
 					{
-						"icon": "terminal-symbolic",
+						"icon": "",
 						"label": "Terminal",
 						"command": "kitty",
 						"tooltip": "Open terminal",
 						"icon_size": 18
 					},
 					{
-						"icon": "firefox-symbolic",
+						"icon": "",
 						"label": "Browser",
 						"command": "firefox",
 						"tooltip": "Launch Firefox",
-						"icon_size": 18
+						"icon_size": 20
 					}
 				]
 			}
@@ -308,8 +308,8 @@
 			"date_time"
 		], // this is the middle section of the panel
 		"right_section": [
+			"quick_settings",
 			"recorder",
-			"@group:1",
 			"@group:0",
 			"system_tray"
 		] // this is the right section of the panel
@@ -318,19 +318,9 @@
 		{
 			"widgets": [
 				"updates",
-				"cliphist",
 				"battery"
 			],
 			"spacing": 4,
-			"style_classes": [
-				"compact"
-			]
-		},
-		{
-			"widgets": [
-				"quick_settings"
-			],
-			"spacing": 0,
 			"style_classes": [
 				"compact"
 			]
@@ -386,7 +376,7 @@
 			]
 		},
 		"desktop_clock": {
-			"enabled": true,
+			"enabled": false,
 			"anchor": "bottom-right",
 			"date_format": "%A, %d %B %Y",
 			"layer": "bottom"

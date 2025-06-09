@@ -6,10 +6,10 @@ from fabric.widgets.overlay import Overlay
 import utils.functions as helpers
 from services import NetworkSpeed
 from shared.widget_container import ButtonWidget
-from utils.icons import common_text_icons
+from utils.icons import text_icons
 from utils.widget_utils import (
     get_bar_graph,
-    text_icon,
+    nerd_font_icon,
     util_fabricator,
 )
 
@@ -54,7 +54,7 @@ class CpuWidget(ButtonWidget):
                 end_angle=390,
             )
 
-            self.icon = text_icon(
+            self.icon = nerd_font_icon(
                 icon=self.config["icon"],
                 props={
                     "style_classes": "panel-font-icon overlay-icon",
@@ -68,7 +68,7 @@ class CpuWidget(ButtonWidget):
 
         else:
             # Create a TextIcon with the specified icon and size
-            self.icon = text_icon(
+            self.icon = nerd_font_icon(
                 icon=self.config["icon"],
                 props={"style_classes": "panel-font-icon"},
             )
@@ -173,7 +173,7 @@ class MemoryWidget(ButtonWidget):
                 end_angle=390,
             )
 
-            self.icon = text_icon(
+            self.icon = nerd_font_icon(
                 icon=self.config["icon"],
                 props={
                     "style_classes": "panel-font-icon overlay-icon",
@@ -187,7 +187,7 @@ class MemoryWidget(ButtonWidget):
 
         else:
             # Create a TextIcon with the specified icon and size
-            self.icon = text_icon(
+            self.icon = nerd_font_icon(
                 icon=self.config["icon"],
                 props={"style_classes": "panel-font-icon"},
             )
@@ -225,7 +225,7 @@ class MemoryWidget(ButtonWidget):
         # Update the tooltip with the memory usage details if enabled
         if self.config["tooltip"]:
             self.set_tooltip_text(
-                f"󰾆 {self.percent_used}%\n{common_text_icons['memory']} {self.ratio()}",
+                f"󰾆 {self.percent_used}%\n{text_icons['memory']} {self.ratio()}",
             )
 
         return True
@@ -277,7 +277,7 @@ class StorageWidget(ButtonWidget):
                 end_angle=390,
             )
 
-            self.icon = text_icon(
+            self.icon = nerd_font_icon(
                 icon=self.config["icon"],
                 props={
                     "style_classes": "panel-font-icon overlay-icon",
@@ -291,7 +291,7 @@ class StorageWidget(ButtonWidget):
 
         else:
             # Create a TextIcon with the specified icon and size
-            self.icon = text_icon(
+            self.icon = nerd_font_icon(
                 icon=self.config["icon"],
                 props={"style_classes": "panel-font-icon"},
             )
@@ -328,7 +328,7 @@ class StorageWidget(ButtonWidget):
         # Update the tooltip with the storage usage details if enabled
         if self.config["tooltip"]:
             self.set_tooltip_text(
-                f"󰾆 {percent}%\n{common_text_icons['storage']} {self.ratio()}"
+                f"󰾆 {percent}%\n{text_icons['storage']} {self.ratio()}"
             )
 
         return True
@@ -359,7 +359,7 @@ class NetworkUsageWidget(ButtonWidget):
         show_upload = self.config["upload"]
 
         # Create a TextIcon with the specified icon and size
-        self.upload_icon = text_icon(
+        self.upload_icon = nerd_font_icon(
             icon=self.config["upload_icon"],
             props={"style_classes": "panel-font-icon", "visible": show_upload},
         )
@@ -372,7 +372,7 @@ class NetworkUsageWidget(ButtonWidget):
             style="margin-right: 10px;",
         )
 
-        self.download_icon = text_icon(
+        self.download_icon = nerd_font_icon(
             icon=self.config["download_icon"],
             props={"style_classes": "panel-font-icon", "visible": show_download},
         )

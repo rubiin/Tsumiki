@@ -4,7 +4,7 @@ from fabric.utils import get_relative_path
 
 from shared.widget_container import ButtonWidget
 from utils.functions import copy_theme, send_notification
-from utils.widget_utils import text_icon
+from utils.widget_utils import nerd_font_icon
 
 
 class ThemeSwitcherWidget(ButtonWidget):
@@ -20,7 +20,7 @@ class ThemeSwitcherWidget(ButtonWidget):
 
         self.current_theme = "some_default_theme"  # TODO: Set a default theme
 
-        self.children = text_icon(
+        self.children = nerd_font_icon(
             self.config["icon"],
             props={"style_classes": "panel-font-icon"},
         )

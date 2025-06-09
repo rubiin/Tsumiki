@@ -1,12 +1,12 @@
 import subprocess
 
 from fabric.widgets.box import Box
-from fabric.widgets.image import Image
 from fabric.widgets.label import Label
 from loguru import logger
 
+from shared.buttons import HoverButton
 from shared.grid import Grid
-from shared.widget_container import HoverButton
+from utils.widget_utils import nerd_font_icon
 
 
 class ShortcutButton(HoverButton):
@@ -20,12 +20,14 @@ class ShortcutButton(HoverButton):
         box = Box(orientation="v", spacing=4, v_expand=True)
 
         if "icon" in shortcut_config:
-            icon = Image(
-                icon_name=shortcut_config["icon"],
-                icon_size=shortcut_config["icon_size"],
-                v_align="center",
-                h_align="center",
+            icon = nerd_font_icon(
+                icon=shortcut_config["icon"],
+                props={
+                    "style_classes": ["panel-font-icon", "shortcut-icon"],
+                    "style": f"font-size: {shortcut_config['icon_size']}px;",
+                },
             )
+
             box.add(icon)
 
         if "label" in shortcut_config:

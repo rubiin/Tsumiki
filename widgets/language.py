@@ -2,7 +2,7 @@ from fabric.hyprland.widgets import Language
 from fabric.utils import FormattedString, truncate
 
 from shared.widget_container import ButtonWidget
-from utils.widget_utils import text_icon
+from utils.widget_utils import nerd_font_icon
 
 
 class LanguageWidget(ButtonWidget):
@@ -22,7 +22,7 @@ class LanguageWidget(ButtonWidget):
         )
 
         if self.config["show_icon"]:
-            self.icon = text_icon(
+            self.icon = nerd_font_icon(
                 icon=self.config["icon"],
                 props={
                     "style_classes": "panel-font-icon",

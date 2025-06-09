@@ -16,7 +16,7 @@ from shared.grid import Grid
 from shared.list import ListBox
 from shared.popover import Popover
 from shared.widget_container import ButtonWidget
-from utils.widget_utils import create_surface_from_widget, text_icon
+from utils.widget_utils import create_surface_from_widget, nerd_font_icon
 
 
 class InlineEditor(Box):
@@ -376,7 +376,7 @@ class KanbanWidget(ButtonWidget):
         )
 
         self.box.add(
-            text_icon(
+            nerd_font_icon(
                 self.config["icon"],
                 props={"style_classes": "panel-font-icon"},
             )

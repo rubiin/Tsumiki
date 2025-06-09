@@ -3,16 +3,28 @@ from functools import partial
 from fabric.core.service import Signal
 from fabric.utils import get_relative_path
 from fabric.widgets.box import Box
+from fabric.widgets.button import Button
 from fabric.widgets.image import Image
 from fabric.widgets.label import Label
 
 from utils.bezier import cubic_bezier
 from utils.icons import symbolic_icons
+from utils.widget_utils import setup_cursor_hover
 
 from .animator import Animator
 from .circle_image import CircleImage
 from .submenu import QuickSubMenu
-from .widget_container import HoverButton
+
+
+class HoverButton(Button):
+    """A container for button with hover effects."""
+
+    def __init__(self, **kwargs):
+        super().__init__(
+            **kwargs,
+        )
+
+        setup_cursor_hover(self)
 
 
 class ScanButton(HoverButton):

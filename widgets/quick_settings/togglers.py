@@ -4,7 +4,7 @@ from fabric.widgets.label import Label
 
 from services import notification_service
 from shared.button_toggle import CommandSwitcher
-from shared.widget_container import HoverButton
+from shared.buttons import HoverButton
 from utils.icons import symbolic_icons
 
 

@@ -6,7 +6,7 @@ from gi.repository import Gdk, Gtk
 
 from shared.widget_container import ButtonWidget
 from utils.functions import ttl_lru_cache
-from utils.widget_utils import text_icon
+from utils.widget_utils import nerd_font_icon
 
 
 class OCRWidget(ButtonWidget):
@@ -24,7 +24,7 @@ class OCRWidget(ButtonWidget):
 
         if self.config["show_icon"]:
             # Create a TextIcon with the specified icon and size
-            self.icon = text_icon(
+            self.icon = nerd_font_icon(
                 icon=self.config["icon"],
                 props={"style_classes": "panel-font-icon"},
             )

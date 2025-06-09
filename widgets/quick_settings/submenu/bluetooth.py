@@ -9,10 +9,9 @@ from fabric.widgets.scrolledwindow import ScrolledWindow
 from gi.repository import Gtk
 
 from services import bluetooth_service
-from shared.buttons import QSChevronButton, ScanButton
+from shared.buttons import HoverButton, QSChevronButton, ScanButton
 from shared.list import ListBox
 from shared.submenu import QuickSubMenu
-from shared.widget_container import HoverButton
 from utils.icons import symbolic_icons
 
 

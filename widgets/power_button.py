@@ -4,11 +4,12 @@ from fabric.widgets.image import Image
 from fabric.widgets.label import Label
 from fabric.widgets.widget import Widget
 
+from shared.buttons import HoverButton
 from shared.dialog import Dialog
 from shared.grid import Grid
 from shared.popup import PopupWindow
-from shared.widget_container import ButtonWidget, HoverButton
-from utils.widget_utils import text_icon
+from shared.widget_container import ButtonWidget
+from utils.widget_utils import nerd_font_icon
 
 
 class PowerMenuPopup(PopupWindow):
@@ -126,7 +127,7 @@ class PowerWidget(ButtonWidget):
 
         if self.config["show_icon"]:
             # Create a TextIcon with the specified icon and size
-            self.icon = text_icon(
+            self.icon = nerd_font_icon(
                 icon=self.config["icon"],
                 props={"style_classes": "panel-font-icon"},
             )

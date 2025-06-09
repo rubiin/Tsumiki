@@ -15,8 +15,8 @@ from shared.popover import Popover
 from shared.widget_container import ButtonWidget
 from utils.icons import weather_icons
 from utils.widget_utils import (
+    nerd_font_icon,
     setup_cursor_hover,
-    text_icon,
     util_fabricator,
 )
 
@@ -307,7 +307,7 @@ class WeatherWidget(ButtonWidget, BaseWeatherWidget):
             **kwargs,
         )
 
-        self.weather_icon = text_icon(
+        self.weather_icon = nerd_font_icon(
             icon="",
             props={
                 "style_classes": "panel-font-icon",

@@ -4,7 +4,7 @@ from fabric.widgets.eventbox import EventBox
 from fabric.widgets.widget import Widget
 
 from utils.config import widget_config
-from utils.widget_utils import lazy_load_widget, setup_cursor_hover
+from utils.widget_utils import lazy_load_widget
 
 
 class ToggleableWidget(Widget):
@@ -56,8 +56,9 @@ class EventBoxWidget(EventBox, ToggleableWidget):
         self.config = widget_config["widgets"].get(widget_name, {})
 
         self.box = Box(style_classes="panel-box")
-        self.children = (self.box,)
-        setup_cursor_hover(self)
+        self.add(
+            self.box,
+        )
 
 
 class ButtonWidget(Button, ToggleableWidget):
@@ -73,20 +74,7 @@ class ButtonWidget(Button, ToggleableWidget):
         self.config = widget_config["widgets"].get(widget_name, {})
 
         self.box = Box()
-        self.children = (self.box,)
-
-        setup_cursor_hover(self)
-
-
-class HoverButton(Button):
-    """A container for button with hover effects."""
-
-    def __init__(self, **kwargs):
-        super().__init__(
-            **kwargs,
-        )
-
-        setup_cursor_hover(self)
+        self.add(self.box)
 
 
 class WidgetGroup(BoxWidget):

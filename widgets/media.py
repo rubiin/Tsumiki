@@ -26,14 +26,15 @@ from loguru import logger
 
 from services import MprisPlayer, MprisPlayerManager
 from shared.animator import Animator
+from shared.buttons import HoverButton
 from shared.circle_image import CircleImage
-from shared.widget_container import HoverButton
 from utils.bezier import cubic_bezier
 from utils.constants import APP_CACHE_DIRECTORY
 from utils.functions import ensure_directory, grab_accent_color, rgb_to_css
-from utils.icons import symbolic_icons
+from utils.icons import text_icons
 from utils.widget_utils import (
     create_scale,
+    nerd_font_icon,
     setup_cursor_hover,
 )
 
@@ -317,30 +318,25 @@ class PlayerBox(Box):
             end_children=self.length_label,
         )
 
-        self.skip_next_icon = Image(
-            icon_name=symbolic_icons["mpris"]["next"],
-            name="player-icon",
-            icon_size=self.icon_size,
+        self.skip_next_icon = nerd_font_icon(
+            icon=text_icons["mpris"]["next"],
+            props={"style_classes": ["panel-font-icon", "player-icon"]},
         )
-        self.skip_prev_icon = Image(
-            icon_name=symbolic_icons["mpris"]["prev"],
-            name="player-icon",
-            icon_size=self.icon_size,
+        self.skip_prev_icon = nerd_font_icon(
+            icon=text_icons["mpris"]["previous"],
+            props={"style_classes": ["panel-font-icon", "player-icon"]},
         )
-        self.loop_icon = Image(
-            icon_name=symbolic_icons["mpris"]["prev"],
-            name="player-icon",
-            icon_size=self.icon_size,
+        self.loop_icon = nerd_font_icon(
+            icon=text_icons["mpris"]["loop"],
+            props={"style_classes": ["panel-font-icon", "player-icon"]},
         )
-        self.shuffle_icon = Image(
-            icon_name=symbolic_icons["mpris"]["shuffle"]["enabled"],
-            name="player-icon",
-            icon_size=self.icon_size,
+        self.shuffle_icon = nerd_font_icon(
+            icon=text_icons["mpris"]["shuffle"],
+            props={"style_classes": ["panel-font-icon", "player-icon"]},
         )
-        self.play_pause_icon = Image(
-            icon_name=symbolic_icons["mpris"]["paused"],
-            name="player-icon",
-            icon_size=self.icon_size,
+        self.play_pause_icon = nerd_font_icon(
+            icon=text_icons["mpris"]["paused"],
+            props={"style_classes": ["panel-font-icon", "player-icon"]},
         )
 
         self.play_pause_button = HoverButton(
@@ -351,14 +347,20 @@ class PlayerBox(Box):
         self.play_pause_button.connect("clicked", self.player.play_pause)
         self.player.bind_property("can_pause", self.play_pause_button, "sensitive")
 
-        self.next_button = HoverButton(name="player-button", child=self.skip_next_icon)
+        self.next_button = HoverButton(
+            style_classes=["player-button"], child=self.skip_next_icon
+        )
         self.next_button.connect("clicked", self._on_player_next)
         self.player.bind_property("can_go_next", self.next_button, "sensitive")
 
-        self.prev_button = HoverButton(name="player-button", child=self.skip_prev_icon)
+        self.prev_button = HoverButton(
+            style_classes=["player-button"], child=self.skip_prev_icon
+        )
         self.prev_button.connect("clicked", self._on_player_prev)
 
-        self.shuffle_button = HoverButton(name="player-button", child=self.shuffle_icon)
+        self.shuffle_button = HoverButton(
+            style_classes=["player-button"], child=self.shuffle_icon
+        )
         self.shuffle_button.connect("clicked", self.player.toggle_shuffle)
         self.player.bind_property("can_shuffle", self.shuffle_button, "sensitive")
 
@@ -467,15 +469,13 @@ class PlayerBox(Box):
             self.art_animator.stop()
 
         if status == "paused":
-            self.play_pause_icon.set_from_icon_name(
-                symbolic_icons["mpris"]["paused"],
-                icon_size=self.icon_size,
+            self.play_pause_icon.set_label(
+                text_icons["mpris"]["playing"],
             )
             self.art_animator.pause()
         if status == "playing":
-            self.play_pause_icon.set_from_icon_name(
-                symbolic_icons["mpris"]["playing"],
-                icon_size=self.icon_size,
+            self.play_pause_icon.set_label(
+                text_icons["mpris"]["paused"],
             )
             self.art_animator.play()
 

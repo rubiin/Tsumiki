@@ -1,7 +1,7 @@
 from fabric.widgets.label import Label
 
 from shared.widget_container import ButtonWidget
-from utils.widget_utils import text_icon
+from utils.widget_utils import nerd_font_icon
 
 MIC_ON_ICON = "󰍬"
 MIC_OFF_ICON = "󰍭"
@@ -13,7 +13,7 @@ class MicrophoneIndicatorWidget(ButtonWidget):
     def __init__(self, **kwargs):
         super().__init__(name="microphone", **kwargs)
 
-        self.icon = text_icon(
+        self.icon = nerd_font_icon(
             icon=MIC_OFF_ICON,
             props={"style_classes": "panel-font-icon"},
         )

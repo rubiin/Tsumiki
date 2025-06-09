@@ -2,7 +2,7 @@ from fabric.widgets.label import Label
 
 import utils.functions as helpers
 from utils.widget_utils import (
-    text_icon,
+    nerd_font_icon,
     util_fabricator,
 )
 
@@ -42,7 +42,7 @@ class CommandSwitcher(ButtonWidget):
         self.label = label
         self.tooltip = tooltip
 
-        self.icon = text_icon(
+        self.icon = nerd_font_icon(
             icon=enabled_icon,
             props={"style_classes": "panel-font-icon"},
         )

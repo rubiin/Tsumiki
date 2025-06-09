@@ -15,15 +15,16 @@ from loguru import logger
 import utils.constants as constants
 import utils.functions as helpers
 from services import notification_service
+from shared.buttons import HoverButton
 from shared.circle_image import CircleImage
 from shared.list import ListBox
 from shared.popover import Popover
 from shared.separator import Separator
-from shared.widget_container import ButtonWidget, HoverButton
+from shared.widget_container import ButtonWidget
 from utils.colors import Colors
 from utils.functions import uptime
-from utils.icons import symbolic_icons
-from utils.widget_utils import get_icon, util_fabricator
+from utils.icons import symbolic_icons, text_icons
+from utils.widget_utils import get_icon, nerd_font_icon, util_fabricator
 
 
 class DateMenuNotification(Box):
@@ -222,23 +223,20 @@ class DateNotificationMenu(Box):
             children=(Label(label="Do Not Disturb", name="dnd-text"), self.dnd_switch),
         )
 
-        self.clear_icon = Image(
-            icon_name=symbolic_icons["trash"]["empty"]
-            if len(notifications) == 0
-            else symbolic_icons["trash"]["full"],
-            icon_size=self.pixel_size,
+        self.clear_icon = nerd_font_icon(
             name="clear-icon",
+            icon=text_icons["trash"]["empty"]
+            if len(notifications) == 0
+            else text_icons["trash"]["full"],
+            props={
+                "style_classes": ["panel-font-icon"],
+            },
         )
 
         self.clear_button = HoverButton(
             name="clear-button",
             v_align="center",
-            child=Box(
-                children=(
-                    Label(label="Clear"),
-                    self.clear_icon,
-                )
-            ),
+            child=Box(children=(self.clear_icon,)),
         )
 
         def handle_clear_click(*_):
@@ -247,9 +245,7 @@ class DateNotificationMenu(Box):
             self.notifications_listbox.remove_all()
 
             notification_service.clear_all_notifications()
-            self.clear_icon.set_from_icon_name(
-                symbolic_icons["trash"]["empty"], self.pixel_size
-            )
+            self.clear_icon.set_label(text_icons["trash"]["empty"])
 
         self.clear_button.connect(
             "clicked",
@@ -331,9 +327,7 @@ class DateNotificationMenu(Box):
 
     def on_clear_all_notifications(self, *_):
         """Handle clearing all notifications."""
-        self.clear_icon.set_from_icon_name(
-            symbolic_icons["trash"]["empty"], self.pixel_size
-        )
+        self.clear_icon.set_label(text_icons["trash"]["empty"])
         self.placeholder.set_visible(True)
         self.notifications_listbox.set_visible(False)
 
@@ -364,8 +358,8 @@ class DateNotificationMenu(Box):
             fabric_notification.get_notification_from_id(id)
         )
 
-        self.clear_icon.set_from_icon_name(
-            symbolic_icons["trash"]["full"], self.pixel_size
+        self.clear_icon.set_label(
+            text_icons["trash"]["full"],
         )
 
         notification_item = Gtk.ListBoxRow(visible=True)
@@ -399,18 +393,20 @@ class DateTimeWidget(ButtonWidget):
     def __init__(self, **kwargs):
         super().__init__(name="date_time", **kwargs)
 
-        self.indicator_icon_size = 14
-
         notification_config = self.config["notification"]
 
         popup = Popover(
             content=DateNotificationMenu(config=self.config),
             point_to=self,
         )
-        self.notification_indicator = Image(
-            icon_name=symbolic_icons["notifications"]["noisy"],
-            icon_size=self.indicator_icon_size,
-            visible=notification_config["enabled"],
+
+        self.notification_indicator = nerd_font_icon(
+            icon=text_icons["notifications"]["noisy"],
+            name="notification-indicator",
+            props={
+                "style_classes": ["panel-font-icon"],
+                "visible": notification_config["enabled"],
+            },
         )
 
         self.count_label = Label(
@@ -440,7 +436,6 @@ class DateTimeWidget(ButtonWidget):
             v_align="center",
             children=(
                 self.notification_indicator_box,
-                Separator(),
                 DateTime(self.config["format"], name="date-time"),
             ),
         )
@@ -462,13 +457,11 @@ class DateTimeWidget(ButtonWidget):
 
     def on_dnd_switch(self, _, value, *args):
         if value:
-            self.notification_indicator.set_from_icon_name(
-                symbolic_icons["notifications"]["silent"],
-                icon_size=self.indicator_icon_size,
+            self.notification_indicator.set_label(
+                text_icons["notifications"]["silent"],
             )
 
         else:
-            self.notification_indicator.set_from_icon_name(
-                symbolic_icons["notifications"]["noisy"],
-                icon_size=self.indicator_icon_size,
+            self.notification_indicator.set_label(
+                text_icons["notifications"]["noisy"],
             )

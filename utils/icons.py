@@ -1,24 +1,58 @@
 # ruff: noqa: E501
 
-common_text_icons = {
-    "playing": "",
-    "paused": "",
+
+text_icons = {
+    "mpris": {
+        "playing": "",
+        "paused": "",
+        "stopped": "",
+        "previous": "",
+        "next": "",
+        "shuffle": "",
+        "loop": "",
+    },
+    "trash": {
+        "full": "",
+        "empty": "",
+    },
+    "notifications": {
+        "noisy": "󰂜",
+        "silent": "󰪑",
+    },
+    "chevron": {
+        "right": "",
+        "left": "",
+        "down": "",
+        "up": "",
+    },
+    "nightlight": {
+        "enabled": "󱩌",
+        "disabled": "󰛨",
+    },
+    "bluetooth": {
+        "enabled": "󰂱",
+        "disabled": "󰂲",
+    },
     "power": "",
     "cpu": "",
     "memory": "",
     "storage": "󰋊",
     "updates": "󱧘",
     "thermometer": "",
-}
-
-
-text_icons = {
+    "recorder": "󰻂",
+    "fallback": "",
     "volume": {
         "overamplified": "󰕾",
         "high": "󰕾",
         "medium": "󰖀",
         "low": "󰕿",
         "muted": "󰝟",
+    },
+    "microphone": {
+        "muted": "",
+        "low": "󰖁",
+        "medium": "󰖂",
+        "high": "",
     },
     "brightness": {
         "off": "",  # lowest brightness

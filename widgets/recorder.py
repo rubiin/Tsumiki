@@ -4,7 +4,8 @@ from services import ScreenRecorderService
 from shared.lottie import LottieAnimation, LottieAnimationWidget
 from shared.widget_container import ButtonWidget
 from utils.functions import check_executable_exists
-from utils.widget_utils import text_icon
+from utils.icons import text_icons
+from utils.widget_utils import nerd_font_icon
 
 
 class RecorderWidget(ButtonWidget):
@@ -24,8 +25,8 @@ class RecorderWidget(ButtonWidget):
             v_align="center",
         )
 
-        self.recording_idle_image = text_icon(
-            icon="󰻂",
+        self.recording_idle_image = nerd_font_icon(
+            icon=text_icons["recorder"],
             props={"style_classes": "panel-font-icon"},
         )
 

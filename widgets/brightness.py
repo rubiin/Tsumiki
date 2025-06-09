@@ -7,7 +7,7 @@ import utils.functions as helpers
 from services import BrightnessService
 from shared.widget_container import EventBoxWidget
 from utils.icons import text_icons
-from utils.widget_utils import get_brightness_icon_name, text_icon
+from utils.widget_utils import get_brightness_icon_name, nerd_font_icon
 
 
 class BrightnessWidget(EventBoxWidget):
@@ -36,7 +36,7 @@ class BrightnessWidget(EventBoxWidget):
             value=normalized_brightness / 100,
         )
 
-        self.icon = text_icon(
+        self.icon = nerd_font_icon(
             icon=text_icons["brightness"]["medium"],
             props={
                 "style_classes": "panel-font-icon overlay-icon",

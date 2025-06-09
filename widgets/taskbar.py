@@ -8,7 +8,8 @@ from fabric.widgets.image import Image
 from gi.repository import GdkPixbuf, GLib, Gtk
 from loguru import logger
 
-from shared.widget_container import ButtonWidget, HoverButton
+from shared.buttons import HoverButton
+from shared.widget_container import ButtonWidget
 from utils.colors import Colors
 
 

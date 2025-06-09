@@ -94,7 +94,11 @@
     #button-box {
       margin: 0 common.toEm(10);
 
-      #player-button {
+      .player-icon{
+        font-size: 1.3rem;
+      }
+
+      .player-button {
         min-width: 20px;
         min-height: 20px;
         padding: common.toEm(5);

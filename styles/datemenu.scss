@@ -11,6 +11,12 @@
   border: if(variable.$bar-widgets-date_time-border-enabled, variable.$border, none);
   border-width: variable.$bar-widgets-date_time-border-width;
 
+  #notification-indicator {
+    font-weight: bold;
+    font-size: 15px;
+  }
+
+
   #notification-count {
     font-weight: 700;
     font-size: 11px;
@@ -45,15 +51,22 @@
       }
 
       #clear-button {
-        padding: variable.$padding * .5 variable.$padding;
+        padding: 3px 4px;
         border: variable.$border;
         border-radius: variable.$radius;
         background-color: theme.$background;
-        margin-right: 5px;
+        margin-right: 10px;
         border-width: 2px;
+
+
 
         label {
           padding-left: common.toEm(5);
+        }
+
+        #clear-icon {
+          padding: 0;
+          font-size: 13px;
         }
 
         &:hover {
@@ -61,6 +74,7 @@
 
           #clear-icon {
             @extend %clear_icon;
+            font-size: 13px;
           }
         }
       }
@@ -78,13 +92,14 @@
           border-radius: variable.$modules-notification-border-radius;
           margin-bottom: 5px;
 
-          &:hover{
+          &:hover {
             border: 1px solid theme.$surface-highlight;
           }
 
           &:first-child {
             margin-top: 0;
           }
+
           &:last-child {
             margin-bottom: 0;
           }

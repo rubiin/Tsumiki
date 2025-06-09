@@ -6,7 +6,7 @@ from fabric.widgets.overlay import Overlay
 from services import audio_service
 from shared.widget_container import EventBoxWidget
 from utils.icons import text_icons
-from utils.widget_utils import get_audio_icon_name, text_icon
+from utils.widget_utils import get_audio_icon_name, nerd_font_icon
 
 
 class VolumeWidget(EventBoxWidget):
@@ -29,7 +29,7 @@ class VolumeWidget(EventBoxWidget):
             size=24,
         )
 
-        self.icon = text_icon(
+        self.icon = nerd_font_icon(
             icon=text_icons["volume"]["medium"],
             props={
                 "style_classes": "panel-font-icon overlay-icon",

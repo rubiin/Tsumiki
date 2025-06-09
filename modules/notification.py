@@ -17,9 +17,9 @@ from loguru import logger
 import utils.constants as constants
 import utils.functions as helpers
 from services import notification_service
+from shared.buttons import HoverButton
 from shared.circle_image import CircleImage
 from shared.grid import Grid
-from shared.widget_container import HoverButton
 from utils.colors import Colors
 from utils.icons import symbolic_icons
 from utils.monitors import HyprlandWithMonitors
