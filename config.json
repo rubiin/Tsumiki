@@ -308,10 +308,8 @@
 			"date_time"
 		], // this is the middle section of the panel
 		"right_section": [
-			"quick_settings",
 			"recorder",
-			"@group:0",
-			"system_tray"
+			"@group:0"
 		] // this is the right section of the panel
 	},
 	"widget_groups": [ // widget groups are used to group multiple modules together, you can create multiple groups and access as @group:0, @group:1, etc

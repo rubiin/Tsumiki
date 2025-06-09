@@ -7,7 +7,6 @@ from fabric.utils import bulk_connect, get_relative_path
 from fabric.widgets.box import Box
 from fabric.widgets.button import Button
 from fabric.widgets.eventbox import EventBox
-from fabric.widgets.image import Image
 from fabric.widgets.label import Label
 from fabric.widgets.revealer import Revealer
 from fabric.widgets.wayland import WaylandWindow as Window
@@ -21,10 +20,9 @@ from shared.buttons import HoverButton
 from shared.circle_image import CircleImage
 from shared.grid import Grid
 from utils.colors import Colors
-from utils.icons import symbolic_icons
 from utils.monitors import HyprlandWithMonitors
 from utils.widget_settings import BarConfig
-from utils.widget_utils import get_icon
+from utils.widget_utils import get_icon, nerd_font_icon
 
 
 class NotificationPopup(Window):
@@ -145,13 +143,11 @@ class NotificationWidget(EventBox):
 
         close_button = Button(
             style_classes="close-button",
-            image=Image(
-                name="close-icon",
-                icon_name=helpers.check_icon_exists(
-                    symbolic_icons["ui"]["close"],
-                    symbolic_icons["ui"]["window_close"],
-                ),
-                icon_size=16,
+            child=nerd_font_icon(
+                icon="",
+                props={
+                    "style_classes": ["panel-font-icon", "close-icon"],
+                },
             ),
             on_clicked=self.on_close_button_clicked,
         )

@@ -1,12 +1,12 @@
 from fabric.widgets.box import Box
 from fabric.widgets.button import Button
-from fabric.widgets.image import Image
 from fabric.widgets.label import Label
 
 from services import PowerProfilesService
 from shared.buttons import HoverButton, QSChevronButton
 from shared.submenu import QuickSubMenu
-from utils.icons import symbolic_icons
+from utils.icons import symbolic_icons, text_icons
+from utils.widget_utils import nerd_font_icon
 
 
 class PowerProfileItem(Button):
@@ -29,9 +29,13 @@ class PowerProfileItem(Button):
             orientation="h",
             spacing=10,
             children=(
-                Image(
-                    icon_name=profile["icon_name"],
-                    icon_size=18,
+                nerd_font_icon(
+                    icon=profile["icon"],
+                    props={
+                        "style_classes": [
+                            "panel-font-icon",
+                        ],
+                    },
                 ),
                 Label(
                     label=profile["name"],
@@ -41,7 +45,7 @@ class PowerProfileItem(Button):
         )
 
         self.power_profile_service = PowerProfilesService()
-        self.children = (self.box,)
+        self.add(self.box)
 
         self.connect(
             "button-press-event",
@@ -72,15 +76,14 @@ class PowerProfileSubMenu(QuickSubMenu):
         self.scan_button = HoverButton()
 
         profile_items = list(self.profile_items.values())
+
         profile_box = Box(
-            orientation="v",
-            children=profile_items,
-            spacing=8,
+            orientation="v", children=profile_items, spacing=8, style="margin: 5px 0;"
         )
 
         super().__init__(
             title="Power profiles",
-            title_icon=symbolic_icons["powerprofiles"]["power-saver"],
+            title_icon=text_icons["powerprofiles"]["power-saver"],
             scan_button=self.scan_button,
             child=profile_box,
             **kwargs,

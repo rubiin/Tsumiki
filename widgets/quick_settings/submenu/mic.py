@@ -8,7 +8,7 @@ from services import audio_service
 from shared.buttons import ScanButton
 from shared.list import ListBox
 from shared.submenu import QuickSubMenu
-from utils.icons import symbolic_icons
+from utils.icons import symbolic_icons, text_icons
 from widgets.quick_settings.sliders.mic import MicrophoneSlider
 
 
@@ -43,7 +43,7 @@ class MicroPhoneSubMenu(QuickSubMenu):
         # Initialize parent with our components
         super().__init__(
             title="Microphones",
-            title_icon=symbolic_icons["audio"]["mic"]["high"],
+            title_icon=text_icons["microphone"]["high"],
             scan_button=self.scan_button,
             child=self.child,
             **kwargs,

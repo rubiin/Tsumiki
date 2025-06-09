@@ -8,7 +8,7 @@ from services import audio_service
 from shared.buttons import ScanButton
 from shared.list import ListBox
 from shared.submenu import QuickSubMenu
-from utils.icons import symbolic_icons
+from utils.icons import symbolic_icons, text_icons
 from widgets.quick_settings.sliders.audio import AudioSlider
 
 
@@ -27,8 +27,8 @@ class AudioSubMenu(QuickSubMenu):
             selection_mode=Gtk.SelectionMode.NONE,
             name="app-list",
             visible=True,
+            style_classes="menu",
         )
-        self.app_list.get_style_context().add_class("menu")
 
         # Wrap in scrolled window
         self.child = ScrolledWindow(
@@ -43,7 +43,7 @@ class AudioSubMenu(QuickSubMenu):
         # Initialize parent with our components
         super().__init__(
             title="Applications",
-            title_icon=symbolic_icons["audio"]["volume"]["high"],
+            title_icon=text_icons["volume"]["high"],
             scan_button=self.scan_button,
             child=self.child,
             **kwargs,

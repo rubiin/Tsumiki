@@ -9,7 +9,7 @@ from services import NetworkService, Wifi
 from shared.buttons import QSChevronButton, ScanButton
 from shared.list import ListBox
 from shared.submenu import QuickSubMenu
-from utils.icons import symbolic_icons
+from utils.icons import symbolic_icons, text_icons
 
 
 class WifiSubMenu(QuickSubMenu):
@@ -40,7 +40,7 @@ class WifiSubMenu(QuickSubMenu):
 
         super().__init__(
             title="Network",
-            title_icon=symbolic_icons["network"]["wifi"]["generic"],
+            title_icon=text_icons["wifi"]["generic"],
             scan_button=self.scan_button,
             child=self.child,
             **kwargs,

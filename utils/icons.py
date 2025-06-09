@@ -2,6 +2,13 @@
 
 
 text_icons = {
+    "wifi": {
+        "connected": "󰤨",
+        "disconnected": "󰤩",
+        "connecting": "󰤪",
+        "disabled": "󰤫",
+        "generic": "󰤬",
+    },
     "mpris": {
         "playing": "",
         "paused": "",
@@ -41,6 +48,7 @@ text_icons = {
     "thermometer": "",
     "recorder": "󰻂",
     "fallback": "",
+    "powerprofiles": {"power-saver": "󰌪", "performance": "󰓅", "balanced": "󰒂"},
     "volume": {
         "overamplified": "󰕾",
         "high": "󰕾",

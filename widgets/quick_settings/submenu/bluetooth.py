@@ -12,7 +12,7 @@ from services import bluetooth_service
 from shared.buttons import HoverButton, QSChevronButton, ScanButton
 from shared.list import ListBox
 from shared.submenu import QuickSubMenu
-from utils.icons import symbolic_icons
+from utils.icons import symbolic_icons, text_icons
 
 
 # TODO: finalize the bluetooth submenu
@@ -136,7 +136,7 @@ class BluetoothSubMenu(QuickSubMenu):
 
         super().__init__(
             title="Bluetooth",
-            title_icon=symbolic_icons["bluetooth"]["enabled"],
+            title_icon=text_icons["bluetooth"]["enabled"],
             scan_button=self.scan_button,
             child=self.child,
             **kwargs,

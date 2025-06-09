@@ -67,6 +67,12 @@ $slider-height: 12px;
   padding: 4pt 1pt;
 
   .power-profile {
+
+    .panel-font-icon {
+      font-size: 18px;
+      font-weight: bold;
+    }
+
     .active {
       color: color.mix(theme.$accent-purple, black, 80%);
     }
@@ -224,6 +230,11 @@ $slider-height: 12px;
       .submenu-title-box {
         margin-bottom: 10px;
         padding: common.toEm(5);
+
+        .panel-font-icon{
+          font-size: 18px;
+          font-weight: bold;
+        }
 
         .submenu-title-label {
           margin-left: 10px;

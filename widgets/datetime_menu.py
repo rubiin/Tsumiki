@@ -6,7 +6,6 @@ from fabric.utils import bulk_connect
 from fabric.widgets.box import Box
 from fabric.widgets.button import Button
 from fabric.widgets.datetime import DateTime
-from fabric.widgets.image import Image
 from fabric.widgets.label import Label
 from fabric.widgets.scrolledwindow import ScrolledWindow
 from gi.repository import GdkPixbuf, GLib, Gtk
@@ -23,7 +22,7 @@ from shared.separator import Separator
 from shared.widget_container import ButtonWidget
 from utils.colors import Colors
 from utils.functions import uptime
-from utils.icons import symbolic_icons, text_icons
+from utils.icons import text_icons
 from utils.widget_utils import get_icon, nerd_font_icon, util_fabricator
 
 
@@ -71,13 +70,11 @@ class DateMenuNotification(Box):
         )
         close_button = Button(
             style_classes="close-button",
-            image=Image(
-                name="close-icon",
-                icon_name=helpers.check_icon_exists(
-                    symbolic_icons["ui"]["close"],
-                    symbolic_icons["ui"]["window_close"],
-                ),
-                icon_size=16,
+            child=nerd_font_icon(
+                icon="",
+                props={
+                    "style_classes": ["panel-font-icon", "close-icon"],
+                },
             ),
             on_clicked=self.clear_notification,
         )
@@ -201,11 +198,13 @@ class DateNotificationMenu(Box):
             h_expand=True,
             visible=len(notifications) == 0,  # visible if no notifications
             children=(
-                Image(
-                    icon_name=symbolic_icons["notifications"]["silent"],
-                    icon_size=64,
+                nerd_font_icon(
+                    icon="󱇥",
+                    props={
+                        "style_classes": ["panel-font-icon", "placeholder-icon"],
+                    },
                 ),
-                Label(label="Your inbox is empty"),
+                Label(label="Your all caught up!", style_classes="placeholder-text"),
             ),
         )
 

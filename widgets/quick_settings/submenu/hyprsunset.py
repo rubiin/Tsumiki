@@ -3,6 +3,7 @@ from fabric.utils import cooldown, exec_shell_command_async
 from shared.buttons import QSChevronButton, ScanButton
 from shared.submenu import QuickSubMenu
 from utils.functions import is_app_running, toggle_command
+from utils.icons import text_icons
 from utils.widget_utils import (
     create_scale,
     util_fabricator,
@@ -26,7 +27,7 @@ class HyprSunsetSubMenu(QuickSubMenu):
 
         super().__init__(
             title="HyprSunset",
-            title_icon="redshift-status-on",
+            title_icon=text_icons["nightlight"]["enabled"],
             name="hyprsunset-sub-menu",
             scan_button=self.scan_button,
             child=self.scale,
