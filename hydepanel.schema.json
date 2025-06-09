@@ -524,11 +524,6 @@
 					"type": "boolean",
 					"description": "Determines whether the widget has a tooltip."
 				},
-				"orientation": {
-					"type": "string",
-					"enum": ["horizontal", "vertical"],
-					"description": "Specifies the orientation of the battery widget."
-				},
 				"icon_size": {
 					"type": "integer",
 					"description": "Specifies the size of the battery icon."

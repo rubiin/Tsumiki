@@ -44,7 +44,6 @@ DEFAULT_CONFIG = {
             "hide_label_when_full": True,
             "label": True,
             "tooltip": True,
-            "orientation": "vertical",
             "icon_size": 14,
             "notifications": {
                 "enabled": True,

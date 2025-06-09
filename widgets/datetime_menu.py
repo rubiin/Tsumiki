@@ -92,7 +92,6 @@ class DateMenuNotification(Box):
 
         try:
             if image_pixbuf := self._notification.image_pixbuf:
-                self._notification.image_pixbuf = None  # Release the full-size pixbuf
                 body_container.add(
                     CircleImage(
                         pixbuf=image_pixbuf.scale_simple(
@@ -105,6 +104,7 @@ class DateMenuNotification(Box):
                         v_expand=True,
                     ),
                 )
+            del image_pixbuf
         except GLib.GError:
             # If the image is not available, use the symbolic icon
             logger.warning(f"{Colors.WARNING}[Notification] Image not available.")

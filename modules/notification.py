@@ -167,7 +167,6 @@ class NotificationWidget(EventBox):
         # Use provided image if available
         try:
             if image_pixbuf := self._notification.image_pixbuf:
-                self._notification.image_pixbuf = None  # Release the full-size pixbuf
                 body_container.add(
                     CircleImage(
                         pixbuf=image_pixbuf.scale_simple(
@@ -180,6 +179,7 @@ class NotificationWidget(EventBox):
                         v_expand=True,
                     ),
                 )
+                del image_pixbuf
         except GLib.GError:
             # If the image is not available, use the symbolic icon
             logger.warning(f"{Colors.WARNING}[Notification] Image not available.")
