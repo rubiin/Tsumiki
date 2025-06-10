@@ -77,6 +77,9 @@ class ButtonWidget(Button, ToggleableWidget):
         self.add(self.box)
 
 
+4
+
+
 class WidgetGroup(BoxWidget):
     """A group of widgets that can be managed and styled together."""
 
