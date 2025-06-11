@@ -5,7 +5,7 @@ from fabric.widgets.box import Box
 from fabric.widgets.label import Label
 from loguru import logger
 
-from services import MprisPlayer, MprisPlayerManager
+from services.mpris import MprisPlayer, MprisPlayerManager
 from shared.popover import Popover
 from shared.widget_container import ButtonWidget
 from utils.colors import Colors

@@ -24,7 +24,7 @@ from fabric.widgets.stack import Stack
 from gi.repository import GLib, GObject
 from loguru import logger
 
-from services import MprisPlayer, MprisPlayerManager
+from services.mpris import MprisPlayer, MprisPlayerManager
 from shared.animator import Animator
 from shared.buttons import HoverButton
 from shared.circle_image import CircleImage

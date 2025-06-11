@@ -176,7 +176,12 @@ class AppLauncher(Window):
         return False
 
     def bake_application_slot(self, app: DesktopApp, **kwargs) -> Button:
-        return HoverButton(
+        def on_clicked(*_):
+            app.launch()
+            self.hide()
+            self.search_entry.set_text("")
+
+        return Button(
             style_classes="launcher-button",
             child=Box(
                 orientation="h",
@@ -195,11 +200,7 @@ class AppLauncher(Window):
                 ],
             ),
             tooltip_text=app.description if self.config["tooltip"] else None,
-            on_clicked=lambda *_: (
-                app.launch(),
-                self.hide(),
-                self.search_entry.set_text(""),
-            ),
+            on_clicked=on_clicked,
             **kwargs,
         )
 

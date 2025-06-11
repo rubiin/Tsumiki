@@ -8,7 +8,8 @@ from fabric.widgets.revealer import Revealer
 from fabric.widgets.wayland import WaylandWindow as Window
 from gi.repository import GLib, GObject
 
-from services import BrightnessService, audio_service
+from services import audio_service
+from services.brightness import BrightnessService
 from utils.icons import symbolic_icons
 from utils.monitors import HyprlandWithMonitors
 from utils.types import Keyboard_Mode

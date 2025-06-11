@@ -37,7 +37,6 @@
 		"recorder": {
 			"path": "Videos/Screencasting",
 			"audio": true,
-			"icon_size": 16,
 			"tooltip": true
 		},
 		"screenshot": {
@@ -174,7 +173,6 @@
 			"icon_map": {}
 		},
 		"bluetooth": {
-			"icon_size": 14,
 			"label": true,
 			"tooltip": true
 		},
@@ -330,7 +328,7 @@
 			"location": "top"
 		},
 		"app_launcher": {
-			"enabled": true,
+			"enabled": false,
 			"tooltip": true,
 			"icon_size": 30,
 			"ignored_apps": []

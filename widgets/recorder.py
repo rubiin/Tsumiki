@@ -1,6 +1,6 @@
 from fabric.utils import get_relative_path
 
-from services import ScreenRecorderService
+from services.screen_record import ScreenRecorderService
 from shared.lottie import LottieAnimation, LottieAnimationWidget
 from shared.widget_container import ButtonWidget
 from utils.functions import check_executable_exists

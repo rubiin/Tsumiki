@@ -2,7 +2,7 @@ from fabric.widgets.box import Box
 from fabric.widgets.button import Button
 from fabric.widgets.label import Label
 
-from services import PowerProfilesService
+from services.power_profile import PowerProfilesService
 from shared.buttons import HoverButton, QSChevronButton
 from shared.submenu import QuickSubMenu
 from utils.icons import symbolic_icons, text_icons

@@ -1,7 +1,7 @@
 import gi
 
 gi.require_version("Gtk", "3.0")  # Or "4.0" for GTK 4
-from gi.repository import Gtk, GLib
+from gi.repository import GLib, Gtk
 
 
 class MarqueeLabel(Gtk.Window):
@@ -16,7 +16,6 @@ class MarqueeLabel(Gtk.Window):
         self.label.set_xalign(0.0)  # Align text to the left
 
         self.add(self.label)
-
 
         GLib.timeout_add(150, self.scroll_text)
 

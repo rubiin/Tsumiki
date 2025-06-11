@@ -9,7 +9,7 @@ from fabric.widgets.svg import Svg
 from gi.repository import GLib, Gtk
 from loguru import logger
 
-from services import WeatherService
+from services.weather import WeatherService
 from shared.grid import Grid
 from shared.popover import Popover
 from shared.widget_container import ButtonWidget
@@ -19,8 +19,6 @@ from utils.widget_utils import (
     setup_cursor_hover,
     util_fabricator,
 )
-
-weather_service = WeatherService()
 
 
 class BaseWeatherWidget:
@@ -332,7 +330,7 @@ class WeatherWidget(ButtonWidget, BaseWeatherWidget):
         util_fabricator.connect("changed", self.update_ui)
 
     def fetch_data_from_url(self):
-        data = weather_service.get_weather(
+        data = WeatherService().get_weather(
             location=self.config["location"], ttl=self.config["interval"]
         )
 

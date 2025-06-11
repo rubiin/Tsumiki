@@ -4,7 +4,7 @@ from fabric.widgets.label import Label
 from fabric.widgets.overlay import Overlay
 
 import utils.functions as helpers
-from services import BrightnessService
+from services.brightness import BrightnessService
 from shared.widget_container import EventBoxWidget
 from utils.icons import text_icons
 from utils.widget_utils import get_brightness_icon_name, nerd_font_icon

@@ -2,7 +2,7 @@ from typing import Literal
 
 import setproctitle
 from fabric import Application
-from fabric.utils import cooldown, exec_shell_command, get_relative_path
+from fabric.utils import exec_shell_command, get_relative_path
 from loguru import logger
 
 import utils.functions as helpers
@@ -12,7 +12,6 @@ from utils.config import theme_config, widget_config
 from utils.constants import APP_CACHE_DIRECTORY, APPLICATION_NAME
 
 
-@cooldown(2)
 @helpers.run_in_thread
 def process_and_apply_css(app: Application):
     helpers.check_executable_exists("sass")
@@ -46,6 +45,7 @@ if not general_options["debug"]:
 
 if __name__ == "__main__":
     helpers.ensure_directory(APP_CACHE_DIRECTORY)
+    helpers.copy_theme(theme_config["name"])
 
     # Create the status bar
     bar = StatusBar(widget_config)
@@ -114,13 +114,10 @@ if __name__ == "__main__":
     # Initialize the application with the status bar
     app = Application(APPLICATION_NAME, windows=windows)
 
-    helpers.copy_theme(theme_config["name"])
-
     # TODO: add scss monitoring
 
-    process_and_apply_css(app)
-
     setproctitle.setproctitle(APPLICATION_NAME)
+    process_and_apply_css(app)
 
     # Run the application
     app.run()

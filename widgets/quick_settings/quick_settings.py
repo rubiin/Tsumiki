@@ -10,12 +10,11 @@ from loguru import logger
 
 import utils.functions as helpers
 from services import (
-    BrightnessService,
-    MprisPlayerManager,
-    NetworkService,
-    Wifi,
     audio_service,
 )
+from services.brightness import BrightnessService
+from services.mpris import MprisPlayerManager
+from services.network import NetworkService, Wifi
 from shared.buttons import HoverButton, QSChevronButton
 from shared.circle_image import CircleImage
 from shared.dialog import Dialog
