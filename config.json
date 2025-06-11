@@ -6,6 +6,7 @@
 			"hide_label_when_full": true,
 			"label": true,
 			"tooltip": true,
+			"orientation": "vertical",
 			"icon_size": 14,
 			"notifications": {
 				"low_threshold": 10,
@@ -37,6 +38,7 @@
 		"recorder": {
 			"path": "Videos/Screencasting",
 			"audio": true,
+			"icon_size": 16,
 			"tooltip": true
 		},
 		"screenshot": {
@@ -82,18 +84,18 @@
 				"enabled": true,
 				"items": [
 					{
-						"icon": "",
+						"icon": "terminal-symbolic",
 						"label": "Terminal",
 						"command": "kitty",
 						"tooltip": "Open terminal",
 						"icon_size": 18
 					},
 					{
-						"icon": "",
+						"icon": "firefox-symbolic",
 						"label": "Browser",
 						"command": "firefox",
 						"tooltip": "Launch Firefox",
-						"icon_size": 20
+						"icon_size": 18
 					}
 				]
 			}
@@ -173,6 +175,7 @@
 			"icon_map": {}
 		},
 		"bluetooth": {
+			"icon_size": 14,
 			"label": true,
 			"tooltip": true
 		},
@@ -302,33 +305,41 @@
 			"window_title"
 		], // this is the left section of the panel
 		"middle_section": [
-			"date_time"
+			"date_time",
+			"radio_player"
 		], // this is the middle section of the panel
 		"right_section": [
 			"recorder",
-			"@group:0"
+			"@group:1",
+			"@group:0",
+			"system_tray"
 		] // this is the right section of the panel
 	},
 	"widget_groups": [ // widget groups are used to group multiple modules together, you can create multiple groups and access as @group:0, @group:1, etc
 		{
 			"widgets": [
 				"updates",
+				"cliphist",
 				"battery"
 			],
 			"spacing": 4,
 			"style_classes": [
 				"compact"
 			]
+		},
+		{
+			"widgets": [
+				"quick_settings"
+			],
+			"spacing": 0,
+			"style_classes": [
+				"compact"
+			]
 		}
 	],
 	"modules": {
-		"bar": {
-			"layer": "top",
-			"auto_hide": false,
-			"location": "top"
-		},
 		"app_launcher": {
-			"enabled": false,
+			"enabled": true,
 			"tooltip": true,
 			"icon_size": 30,
 			"ignored_apps": []
@@ -343,7 +354,8 @@
 			"transition_duration": 350,
 			"play_sound": true,
 			"sound_file": "notification4",
-			"dismiss_on_hover": false // this is to dismiss the notification on hover
+			"display_actions_on_hover": false, // this is to display the actions on hover
+			"dismiss_on_hover": true // this is to dismiss the notification on hover
 		},
 		"osd": {
 			"enabled": true,
@@ -371,7 +383,7 @@
 			]
 		},
 		"desktop_clock": {
-			"enabled": false,
+			"enabled": true,
 			"anchor": "bottom-right",
 			"date_format": "%A, %d %B %Y",
 			"layer": "bottom"
@@ -379,7 +391,11 @@
 	},
 	"general": {
 		"check_updates": false,
+		"layer": "top",
+		"auto_hide": false,
 		"debug": true,
-		"monitor_styles": true
+		"monitor_styles": true,
+		"location": "top"
 	}
+
 }

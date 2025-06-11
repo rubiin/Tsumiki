@@ -163,6 +163,15 @@
 					"radius": "16px"
 				}
 			},
+			"radio_player": {
+				"spacing": ".125em",
+				"icon_size": "12px",
+				"border": {
+					"enabled": false,
+					"width": "1px",
+					"radius": "16px"
+				}
+			},
 			"kanban": {
 				"spacing": ".125em",
 				"icon_size": "12px",
@@ -342,7 +351,6 @@
 			},
 			"mpris": {
 				"spacing": ".125em",
-				"icon_size": "14px",
 				"border": {
 					"enabled": false,
 					"width": "1px",
@@ -378,7 +386,6 @@
 			},
 			"recorder": {
 				"spacing": ".125em",
-				"icon_size": "14px",
 				"border": {
 					"enabled": false,
 					"width": "1px",
