@@ -84,14 +84,14 @@
 				"enabled": true,
 				"items": [
 					{
-						"icon": "terminal-symbolic",
+						"icon": "",
 						"label": "Terminal",
 						"command": "kitty",
 						"tooltip": "Open terminal",
 						"icon_size": 18
 					},
 					{
-						"icon": "firefox-symbolic",
+						"icon": "",
 						"label": "Browser",
 						"command": "firefox",
 						"tooltip": "Launch Firefox",
