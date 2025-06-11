@@ -34,17 +34,11 @@ from widgets.quick_settings.submenu.hyprsunset import (
 
 from ..media import PlayerBoxStack
 from .shortcuts import ShortcutsContainer
-from .sliders import AudioSlider, BrightnessSlider, MicrophoneSlider
-from .submenu import (
-    AudioSubMenu,
-    BluetoothSubMenu,
-    BluetoothToggle,
-    PowerProfileSubMenu,
-    PowerProfileToggle,
-    WifiSubMenu,
-    WifiToggle,
-)
+from .submenu.audio import AudioSubMenu
+from .submenu.bluetooth import BluetoothSubMenu, BluetoothToggle
 from .submenu.mic import MicroPhoneSubMenu
+from .submenu.power import PowerProfileSubMenu, PowerProfileToggle
+from .submenu.wifi import WifiSubMenu, WifiToggle
 from .togglers import (
     HyprIdleQuickSetting,
     NotificationQuickSetting,
@@ -305,6 +299,8 @@ class QuickSettingsMenu(Box):
 
         for index, slider in enumerate(self.config["controls"]["sliders"]):
             if slider == "brightness":
+                from .sliders.brightness import BrightnessSlider
+
                 sliders_grid.attach(
                     BrightnessSlider(),
                     0,
@@ -313,6 +309,8 @@ class QuickSettingsMenu(Box):
                     1,
                 )
             elif slider == "volume":
+                from .sliders.audio import AudioSlider
+
                 sliders_grid.attach(
                     AudioSlider(),
                     0,
@@ -321,6 +319,8 @@ class QuickSettingsMenu(Box):
                     1,
                 )
             else:
+                from .sliders.mic import MicrophoneSlider
+
                 sliders_grid.attach(
                     MicrophoneSlider(),
                     0,
