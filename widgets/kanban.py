@@ -34,6 +34,7 @@ class InlineEditor(Box):
         self.text_view.set_wrap_mode(Gtk.WrapMode.WORD)
         buffer = self.text_view.get_buffer()
         buffer.set_text(initial_text)
+
         # Connect key press events to handle Return and SHIFT+Return.
         self.text_view.connect("key-press-event", self.on_key_press)
 
@@ -50,8 +51,10 @@ class InlineEditor(Box):
         cancel_btn.get_style_context().add_class("flat")
 
         # Pack the TextView inside a ScrolledWindow for better appearance.
-        sw = ScrolledWindow()
-        sw.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
+        sw = ScrolledWindow(
+            h_scrollbar_policy="never",
+            v_scrollbar_policy="automatic",
+        )
         sw.set_min_content_height(50)
         sw.add(self.text_view)
 
@@ -199,7 +202,7 @@ class KanbanColumn(Gtk.Frame):
         self.setup_dnd()
 
     def setup_ui(self):
-        self.box = Box(orientation=Gtk.Orientation.VERTICAL, spacing=4)
+        self.box = Box(orientation="vertical", spacing=4)
         self.listbox = ListBox()
         self.listbox.set_selection_mode(Gtk.SelectionMode.NONE)
 
@@ -216,8 +219,12 @@ class KanbanColumn(Gtk.Frame):
 
         self.add_btn.connect("clicked", self.on_add_clicked)
 
-        scrolled = ScrolledWindow(name="kanban-scroll", v_expand=True)
-        scrolled.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
+        scrolled = ScrolledWindow(
+            name="kanban-scroll",
+            v_expand=True,
+            v_scrollbar_policy="automatic",
+            h_scrollbar_policy="never",
+        )
         scrolled.add(self.listbox)
 
         self.box.pack_start(scrolled, True, True, 0)

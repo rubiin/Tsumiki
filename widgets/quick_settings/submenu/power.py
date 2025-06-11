@@ -68,29 +68,41 @@ class PowerProfileSubMenu(QuickSubMenu):
         self.profiles = self.client.power_profiles
         self.active = self.client.get_current_profile()
 
-        self.profile_items = {
-            key: PowerProfileItem(key=key, profile=profile, active=self.active)
-            for key, profile in self.profiles.items()
-        }
-
+        self.profile_items = None
         self.scan_button = HoverButton()
 
-        profile_items = list(self.profile_items.values())
-
-        profile_box = Box(
-            orientation="v", children=profile_items, spacing=8, style="margin: 5px 0;"
+        self.profile_box = Box(
+            orientation="v",
+            spacing=8,
+            style="margin: 5px 0;",
         )
 
         super().__init__(
             title="Power profiles",
             title_icon=text_icons["powerprofiles"]["power-saver"],
             scan_button=self.scan_button,
-            child=profile_box,
+            child=self.profile_box,
             **kwargs,
+        )
+
+        self.revealer.connect(
+            "notify::child-revealed",
+            self.on_child_revealed,
         )
 
         # Update items when profile changes
         self.client.connect("profile", self.on_profile_changed)
+
+    def on_child_revealed(self, revealer, *_):
+        """Callback when the submenu is revealed."""
+
+        if self.profile_items is None:
+            self.profile_items = [
+                PowerProfileItem(key=key, profile=profile, active=self.active)
+                for key, profile in self.profiles.items()
+            ]
+
+            self.profile_box.children = self.profile_items
 
     def on_profile_changed(self, _, profile):
         for item in self.profile_items.values():
@@ -125,5 +137,5 @@ class PowerProfileToggle(QSChevronButton):
 
         icon = self.client.get_profile_icon(self.active_pfl)
 
-        self.action_icon.set_from_icon_name(icon, self.pixel_size)
+        self.action_icon.set_label(icon)
         self.set_action_label(self.unslug(self.active_pfl))

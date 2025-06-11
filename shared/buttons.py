@@ -9,7 +9,7 @@ from fabric.widgets.label import Label
 
 from utils.bezier import cubic_bezier
 from utils.icons import symbolic_icons
-from utils.widget_utils import setup_cursor_hover
+from utils.widget_utils import nerd_font_icon, setup_cursor_hover
 
 from .animator import Animator
 from .circle_image import CircleImage
@@ -78,11 +78,14 @@ class QSToggleButton(Box):
         self.box = Box()
 
         # Action button can hold an icon and a label NOTHING MORE
-        self.action_icon = Image(
-            style_classes="panel-font-icon",
-            icon_name=action_icon,
-            icon_size=pixel_size,
+        self.action_icon = nerd_font_icon(
+            icon=action_icon,
+            props={
+                "style_classes": ["panel-font-icon"],
+                "style": f"font-size: {self.pixel_size}px;",
+            },
         )
+
         self.action_label = Label(
             style_classes="panel-text",
             label=action_label,
@@ -125,8 +128,8 @@ class QSToggleButton(Box):
     def set_action_label(self, label: str):
         self.action_label.set_label(label.strip())
 
-    def set_action_icon(self, icon_name: str):
-        self.action_icon.set_from_icon_name(icon_name, self.pixel_size)
+    def set_action_icon(self, icon: str):
+        self.action_icon.set_label(icon)
 
 
 class QSChevronButton(QSToggleButton):

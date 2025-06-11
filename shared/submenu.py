@@ -12,7 +12,7 @@ class QuickSubMenu(Box):
 
     def __init__(
         self,
-        scan_button: Button,
+        scan_button: Button | None,
         child: Widget | None,
         title: str | None = None,
         title_icon: str | None = None,
@@ -31,6 +31,7 @@ class QuickSubMenu(Box):
         self.revealer_child.add(
             self.submenu_title_box
         ) if self.submenu_title_box else None
+
         self.revealer_child.add(self.child) if child else None
 
         self.revealer = Revealer(
@@ -68,12 +69,13 @@ class QuickSubMenu(Box):
                 Label(style_classes="submenu-title-label", label=self.title)
             )
 
-        submenu_box.pack_end(
-            self.scan_button,
-            False,
-            False,
-            0,
-        )
+        if self.scan_button is not None:
+            submenu_box.pack_end(
+                self.scan_button,
+                False,
+                False,
+                0,
+            )
 
         return submenu_box
 

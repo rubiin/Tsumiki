@@ -2,7 +2,6 @@ from fabric.utils import cooldown
 
 from services.brightness import BrightnessService
 from shared.setting_scale import SettingSlider
-from utils.functions import set_scale_adjustment
 from utils.icons import text_icons
 from utils.widget_utils import get_brightness_icon_name
 
@@ -41,9 +40,13 @@ class BrightnessSlider(SettingSlider):
         self.client.screen_brightness = moved_pos
 
     def on_brightness_change(self, service: BrightnessService, _):
-        set_scale_adjustment(self.scale, 0, 100, 1)
-        self.scale.set_value(service.screen_brightness)
         brightness_percent = int((service.screen_brightness / service.max_screen) * 100)
+
+        # Avoid unnecessary updates if the value hasn't changed
+        if round(brightness_percent) == round(self.scale.get_value()):
+            return
+
+        self.scale.set_value(brightness_percent)
         self.scale.set_tooltip_text(f"{brightness_percent}%")
 
         self.update_icon(int(brightness_percent))

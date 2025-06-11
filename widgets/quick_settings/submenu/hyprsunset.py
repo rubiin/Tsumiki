@@ -1,6 +1,6 @@
 from fabric.utils import cooldown, exec_shell_command_async
 
-from shared.buttons import QSChevronButton, ScanButton
+from shared.buttons import QSChevronButton
 from shared.submenu import QuickSubMenu
 from utils.functions import is_app_running, toggle_command
 from utils.icons import text_icons
@@ -15,7 +15,7 @@ class HyprSunsetSubMenu(QuickSubMenu):
 
     def __init__(self, **kwargs):
         # Create refresh button first since parent needs it
-        self.scan_button = ScanButton(visible=False)
+        self.scan_button = None
 
         self.scale = create_scale(
             name="hyprsunset-scale",
@@ -34,10 +34,14 @@ class HyprSunsetSubMenu(QuickSubMenu):
             **kwargs,
         )
 
-        if self.scale:
-            self.scale.connect("change-value", self.on_scale_move)
-            # reusing the fabricator to call specified intervals
-            util_fabricator.connect("changed", self.update_scale)
+        self.revealer.connect("notify::revealed", self.on_revealer_revealed)
+
+    def on_revealer_revealed(self, *_):
+        """Handle the revealer being revealed."""
+        self.update_scale()
+        self.scale.connect("value-changed", self.on_scale_move)
+        util_fabricator.connect("changed", self.update_scale)
+        return True
 
     @cooldown(0.1)
     def on_scale_move(self, _, __, moved_pos):
@@ -59,17 +63,20 @@ class HyprSunsetSubMenu(QuickSubMenu):
 
     def update_ui(self, moved_pos):
         # Update the scale value based on the current temperature
-        sanitized_value = (
-            float(moved_pos.strip("\n").strip(""))
-            if isinstance(moved_pos, str)
-            else moved_pos
+        sanitized_value = int(
+            moved_pos.strip("\n").strip("") if isinstance(moved_pos, str) else moved_pos
         )
         # adj = self.scale.get_adjustment()
         # print("HyprSunsetSubMenu: Current temperature", sanitized_value)
         # print(f"HyprSunset scale: {self.scale.get_name()}")
         # print("HyprSunsetSubMenu: lower temperature", adj.get_lower())
         # print("HyprSunsetSubMenu: upper temperature", adj.get_upper())
-        self.scale.set_value(float(sanitized_value))
+
+        # Avoid unnecessary updates if the value hasn't changed
+        if round(sanitized_value) == round(self.scale.get_value()):
+            return
+
+        self.scale.set_value(sanitized_value)
         self.scale.set_tooltip_text(f"{sanitized_value}K")
 
 
@@ -78,7 +85,7 @@ class HyprSunsetToggle(QSChevronButton):
 
     def __init__(self, submenu: QuickSubMenu, **kwargs):
         super().__init__(
-            action_icon="redshift-status-off",
+            action_icon=text_icons["nightlight"]["disabled"],
             pixel_size=20,
             action_label="Enabled",
             submenu=submenu,
@@ -103,14 +110,10 @@ class HyprSunsetToggle(QSChevronButton):
         self.is_running = is_app_running("hyprsunset")
 
         if self.is_running:
-            self.action_icon.set_from_icon_name(
-                "redshift-status-on-symbolic", self.pixel_size
-            )
+            self.action_icon.set_label(text_icons["nightlight"]["enabled"])
             self.action_label.set_label("Enabled")
             self.set_active_style(True)
         else:
-            self.action_icon.set_from_icon_name(
-                "redshift-status-off-symbolic", self.pixel_size
-            )
+            self.action_icon.set_label(text_icons["nightlight"]["disabled"])
             self.action_label.set_label("Disabled")
             self.set_active_style(False)

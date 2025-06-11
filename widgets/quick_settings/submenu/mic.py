@@ -27,8 +27,8 @@ class MicroPhoneSubMenu(QuickSubMenu):
             selection_mode=Gtk.SelectionMode.NONE,
             name="app-list",
             visible=True,
+            style_classes="menu",
         )
-        self.app_list.get_style_context().add_class("menu")
 
         # Wrap in scrolled window
         self.child = ScrolledWindow(
@@ -36,7 +36,7 @@ class MicroPhoneSubMenu(QuickSubMenu):
             max_content_size=(-1, 100),
             propagate_width=True,
             propagate_height=True,
-            h_scrollbar_policy=Gtk.PolicyType.NEVER,
+            h_scrollbar_policy="never",
             child=self.app_list,
         )
 
@@ -50,6 +50,12 @@ class MicroPhoneSubMenu(QuickSubMenu):
         )
 
         # Connect signals
+        self.revealer.connect(
+            "notify::child-revealed",
+            self.start_new_scan,
+        )
+
+    def on_child_revealed(self, revealer, *_):
         self.client.connect("changed", self.update_apps)
         self.update_apps()
 
@@ -57,9 +63,9 @@ class MicroPhoneSubMenu(QuickSubMenu):
         """Update the list of applications with volume controls."""
 
         self.scan_button.play_animation()
+
         # Clear existing rows
-        while row := self.app_list.get_row_at_index(0):
-            self.app_list.remove(row)
+        self.app_list.remove_all()
 
         if len(self.client.microphones) == 0:
             self.app_list.add(
@@ -75,8 +81,7 @@ class MicroPhoneSubMenu(QuickSubMenu):
             return
 
         # Clear existing rows
-        while row := self.app_list.get_row_at_index(0):
-            self.app_list.remove(row)
+        self.app_list.remove_all()
 
         # Add applications
         for app in self.client.microphones:
@@ -131,5 +136,3 @@ class MicroPhoneSubMenu(QuickSubMenu):
 
             row.add(box)
             self.app_list.add(row)
-
-        self.app_list.show_all()

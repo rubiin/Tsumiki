@@ -208,7 +208,6 @@
 			},
 			"calendar": true,
 			"clock_format": "24h",
-			"uptime": true,
 			"auto_hide": false,
 			"auto_hide_timeout": 2000
 		},

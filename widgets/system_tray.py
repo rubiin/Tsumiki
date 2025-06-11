@@ -107,7 +107,6 @@ class SystemTrayMenu(Box):
             },
         )
 
-        button.show_all()
         self.grid.attach(button, self.column, self.row, 1, 1)
         self.column += 1
         if self.column >= self.max_columns:
@@ -243,5 +242,4 @@ class SystemTrayWidget(ButtonWidget):
                 ),
             )
 
-            button.show_all()
             self.tray_box.pack_start(button, False, False, 0)

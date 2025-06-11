@@ -4,13 +4,29 @@
 text_icons = {
     "ui": {
         "window_close": "",
+        "question": "",
+        "headset": "󰋎",
+        "headphones": "󰋋",
+        "phone": "󰏲",
+        "watch": "",
+        "keyboard": "",
+        "mouse": "",
+        "tv": "",
+        "printer": "󰐪",
+        "camera": "",
+        "speakers": "󰓃",
     },
     "wifi": {
         "connected": "󰤨",
         "disconnected": "󰤩",
         "connecting": "󰤪",
-        "disabled": "󰤫",
+        "disabled": "󰤭",
         "generic": "󰤬",
+        "strength_0": "󰤯",
+        "strength_1": "󰤟",
+        "strength_2": "󰤢",
+        "strength_3": "󰤥",
+        "strength_4": "󰤨",
     },
     "mpris": {
         "playing": "",
@@ -27,7 +43,9 @@ text_icons = {
     },
     "notifications": {
         "noisy": "󰂜",
+        "full": "󰅸",
         "silent": "󰪑",
+        "checked": "󱇥",
     },
     "chevron": {
         "right": "",
@@ -39,10 +57,7 @@ text_icons = {
         "enabled": "󱩌",
         "disabled": "󰛨",
     },
-    "bluetooth": {
-        "enabled": "󰂱",
-        "disabled": "󰂲",
-    },
+    "bluetooth": {"enabled": "󰂱", "disabled": "󰂲"},
     "power": "",
     "cpu": "",
     "memory": "",

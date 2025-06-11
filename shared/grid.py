@@ -53,3 +53,20 @@ class Grid(Gtk.Grid, Widget):
         self.set_column_spacing(column_spacing)
         self.set_column_homogeneous(column_homogeneous)
         self.set_row_homogeneous(row_homogeneous)
+
+    def attach_flow(
+        self, children: Iterable[Widget], columns, start_row=0, start_col=0
+    ):
+        """
+        Adds widgets to a Gtk.Grid in a flow layout.
+
+        Args:
+            children (list): List of Gtk.Widget to add.
+            columns (int): Number of columns in the grid.
+            start_row (int): Optional starting row.
+            start_col (int): Optional starting column.
+        """
+        for index, child in enumerate(children):
+            row = start_row + index // columns
+            col = start_col + index % columns
+            self.attach(child, col, row, 1, 1)

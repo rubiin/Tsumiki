@@ -208,9 +208,13 @@ class NotificationWidget(EventBox):
             column_spacing=4,
         )
 
-        for i, action in enumerate(notification.actions):
-            action_button = ActionButton(action, i, actions_count)
-            self.actions_container_grid.attach(action_button, i, 0, 1, 1)
+        self.actions_container_grid.attach_flow(
+            [
+                ActionButton(action, i, actions_count)
+                for i, action in enumerate(notification.actions)
+            ],
+            3,  # Number of columns for actions
+        )
 
         # Add the header, body, and actions to the notification box
         self.notification_box.children = (

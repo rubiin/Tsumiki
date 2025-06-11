@@ -101,5 +101,5 @@ class PowerProfilesService(Service):
 
     def get_profile_icon(self, profile: str) -> str:
         return self.power_profiles.get(profile, self.power_profiles["balanced"]).get(
-            "icon_name"
+            "icon"
         )

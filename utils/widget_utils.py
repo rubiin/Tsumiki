@@ -162,22 +162,22 @@ def get_bar_graph(usage: Number):
 def get_brightness_icon_name(level: int) -> dict[Literal["icon_text", "icon"], str]:
     if level <= 0:
         return {
-            "text_icon": text_icons["brightness"]["off"],
+            "icon_text": text_icons["brightness"]["off"],
             "icon": symbolic_icons["brightness"]["off"],
         }
 
     if level <= 32:
         return {
-            "text_icon": text_icons["brightness"]["low"],
+            "icon_text": text_icons["brightness"]["low"],
             "icon": symbolic_icons["brightness"]["low"],
         }
     if level <= 66:
         return {
-            "text_icon": text_icons["brightness"]["medium"],
+            "icon_text": text_icons["brightness"]["medium"],
             "icon": symbolic_icons["brightness"]["medium"],
         }
     return {
-        "text_icon": text_icons["brightness"]["high"],
+        "icon_text": text_icons["brightness"]["high"],
         "icon": symbolic_icons["brightness"]["high"],
     }
 
@@ -190,6 +190,7 @@ def create_scale(
     min_value: float = 0,
     max_value: float = 100,
     increments=(1, 1),
+    curve=(0.34, 1.56, 0.64, 1.0),
     orientation="h",
     h_expand=True,
     h_align="center",
@@ -208,6 +209,7 @@ def create_scale(
         max_value=max_value,
         increments=increments,
         orientation=orientation,
+        curve=curve,
         h_expand=h_expand,
         h_align=h_align,
         duration=duration,

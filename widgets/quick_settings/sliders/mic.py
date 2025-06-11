@@ -4,7 +4,6 @@ from fabric.widgets.box import Box
 from services import audio_service
 from shared.buttons import HoverButton
 from shared.setting_scale import SettingSlider
-from utils.functions import set_scale_adjustment
 from utils.icons import text_icons
 from utils.widget_utils import nerd_font_icon
 
@@ -65,10 +64,15 @@ class MicrophoneSlider(SettingSlider):
         if not self.audio_stream:
             return
 
+        volume = round(self.audio_stream.volume)
+
+        # Avoid unnecessary updates if the value hasn't changed
+        if round(volume) == round(self.scale.get_value()):
+            return
+
         self.scale.set_sensitive(not self.audio_stream.muted)
-        set_scale_adjustment(self.scale, 0, 100, 1)
-        self.scale.set_value(self.audio_stream.volume)
-        self.scale.set_tooltip_text(f"{round(self.audio_stream.volume)}%")
+        self.scale.set_value(volume)
+        self.scale.set_tooltip_text(f"{volume}%")
         self.icon.set_label(self._get_icon_name())
 
     def _get_icon_name(self):

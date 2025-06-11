@@ -108,7 +108,6 @@ DEFAULT_CONFIG = {
             "format": "%b %d %H:%M",
             "calendar": True,
             "clock_format": "12h",
-            "uptime": True,
             "hover_reveal": False,
             "notification": {
                 "enabled": True,

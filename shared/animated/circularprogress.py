@@ -29,6 +29,8 @@ class AnimatedCircularProgressBar(CircularProgressBar):
         )
 
     def set_notify_value(self, p, *_):
+        if p.value == self.value:
+            return
         self.set_value(p.value)
 
     def animate_value(self, value: float):

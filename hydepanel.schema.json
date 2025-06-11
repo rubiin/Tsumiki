@@ -1134,10 +1134,6 @@
 						"type": "boolean",
 						"description": "Determines whether to reveal the calendar on hover"
 					},
-					"uptime": {
-						"type": "boolean",
-						"description": "Determines whether to show the uptime"
-					},
 					"clock_format": {
 						"type": "string",
 						"enum": ["12h", "24h"],

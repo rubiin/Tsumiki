@@ -34,9 +34,7 @@ from widgets.quick_settings.submenu.hyprsunset import (
 
 from ..media import PlayerBoxStack
 from .shortcuts import ShortcutsContainer
-from .submenu.audio import AudioSubMenu
 from .submenu.bluetooth import BluetoothSubMenu, BluetoothToggle
-from .submenu.mic import MicroPhoneSubMenu
 from .submenu.power import PowerProfileSubMenu, PowerProfileToggle
 from .submenu.wifi import WifiSubMenu, WifiToggle
 from .togglers import (
@@ -261,11 +259,9 @@ class QuickSettingsMenu(Box):
             v_expand=True,
         )
 
-        # Add audio submenu
-        self.audio_submenu = AudioSubMenu()
-        self.mic_submenu = MicroPhoneSubMenu()
-
         # TODO: check gtk_adjustment_set_value: assertion 'GTK_IS_ADJUSTMENT, microphone
+
+        # TODO: add the submenu on slider add
 
         # Create center box with sliders and shortcuts if configured
         center_box = Box(
@@ -293,7 +289,7 @@ class QuickSettingsMenu(Box):
             orientation="v",
             spacing=10,
             style_classes=[slider_class],
-            children=(sliders_grid, self.audio_submenu, self.mic_submenu),
+            children=(sliders_grid),
             h_expand=True,
         )
 
@@ -313,16 +309,6 @@ class QuickSettingsMenu(Box):
 
                 sliders_grid.attach(
                     AudioSlider(),
-                    0,
-                    index,
-                    1,
-                    1,
-                )
-            else:
-                from .sliders.mic import MicrophoneSlider
-
-                sliders_grid.attach(
-                    MicrophoneSlider(),
                     0,
                     index,
                     1,
@@ -414,7 +400,10 @@ class QuickSettingsButtonWidget(ButtonWidget):
 
         self.network_service.connect("device-ready", self._get_network_icon)
 
-        popup = Popover(content=QuickSettingsMenu(config=self.config), point_to=self)
+        popup = Popover(
+            content=QuickSettingsMenu(config=self.config),
+            point_to=self,
+        )
 
         self.audio_icon = Image(style_classes="panel-font-icon")
 
@@ -495,10 +484,10 @@ class QuickSettingsButtonWidget(ButtonWidget):
         """Update the brightness icon."""
         try:
             normalized_brightness = self.brightness_service.screen_brightness_percentage
-            icon_info = get_brightness_icon_name(normalized_brightness)
+            icon_info = get_brightness_icon_name(normalized_brightness)["icon"]
             if icon_info:
                 self.brightness_icon.set_from_icon_name(
-                    icon_info["icon"],
+                    icon_info,
                     self.panel_icon_size,
                 )
             else:

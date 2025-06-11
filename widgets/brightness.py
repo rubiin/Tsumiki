@@ -83,7 +83,7 @@ class BrightnessWidget(EventBoxWidget):
         if self.config["label"]:
             self.brightness_label.set_text(f"{normalized_brightness}%")
 
-        self.icon.set_text(get_brightness_icon_name(normalized_brightness)["text_icon"])
+        self.icon.set_text(get_brightness_icon_name(normalized_brightness)["icon_text"])
 
         if self.config["tooltip"]:
             self.set_tooltip_text(f"{normalized_brightness}%")

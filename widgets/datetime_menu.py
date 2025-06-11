@@ -1,4 +1,3 @@
-import time
 from typing import List
 
 from fabric.notifications import Notification
@@ -21,9 +20,8 @@ from shared.popover import Popover
 from shared.separator import Separator
 from shared.widget_container import ButtonWidget
 from utils.colors import Colors
-from utils.functions import uptime
 from utils.icons import text_icons
-from utils.widget_utils import get_icon, nerd_font_icon, util_fabricator
+from utils.widget_utils import get_icon, nerd_font_icon
 
 
 class DateMenuNotification(Box):
@@ -159,97 +157,89 @@ class DateNotificationMenu(Box):
 
         self.pixel_size = 13
 
-        self.clock_label = Label(
-            label=time.strftime("%H:%M")
-            if self.config["clock_format"] == "24h"
-            else time.strftime("%I:%M"),
-            style_classes="clock",
-        )
+        if config["notification"]:
+            notifications: List[Notification] = notification_service.get_deserialized()
 
-        notifications: List[Notification] = notification_service.get_deserialized()
-
-        self.notifications_listbox = ListBox(
-            name="notification-list",
-            orientation="v",
-            h_align="center",
-            spacing=8,
-            h_expand=True,
-            visible=len(notifications) > 0,
-        )
-
-        for value in notifications:
-            notification_item = Gtk.ListBoxRow(
-                visible=True, name="notification-list-item"
+            self.notifications_listbox = ListBox(
+                name="notification-list",
+                orientation="v",
+                h_align="center",
+                spacing=8,
+                h_expand=True,
+                visible=len(notifications) > 0,
             )
-            notification_item.add(
-                DateMenuNotification(notification=value, id=value["id"])
-            )
-            self.notifications_listbox.add(notification_item)
 
-        self.uptime = Label(style_classes="uptime", visible=config["uptime"])
+            for value in notifications:
+                notification_item = self.bake_notification(value)
+                self.notifications_listbox.add(notification_item)
 
-        # Placeholder for when there are no notifications
-        self.placeholder = Box(
-            style_classes="placeholder",
-            orientation="v",
-            h_align="center",
-            v_align="center",
-            v_expand=True,
-            h_expand=True,
-            visible=len(notifications) == 0,  # visible if no notifications
-            children=(
-                nerd_font_icon(
-                    icon="󱇥",
-                    props={
-                        "style_classes": ["panel-font-icon", "placeholder-icon"],
-                    },
+            # Placeholder for when there are no notifications
+            self.placeholder = Box(
+                style_classes="placeholder",
+                orientation="v",
+                h_align="center",
+                v_align="center",
+                v_expand=True,
+                h_expand=True,
+                visible=len(notifications) == 0,  # visible if no notifications
+                children=(
+                    nerd_font_icon(
+                        icon=text_icons["notifications"]["checked"],
+                        props={
+                            "style_classes": ["panel-font-icon", "placeholder-icon"],
+                        },
+                    ),
+                    Label(
+                        label="Your all caught up!", style_classes="placeholder-text"
+                    ),
                 ),
-                Label(label="Your all caught up!", style_classes="placeholder-text"),
-            ),
-        )
+            )
 
-        # Header for the notification column
-        self.dnd_switch = Gtk.Switch(
-            name="notification-switch",
-            active=False,
-            valign=Gtk.Align.CENTER,
-            visible=True,
-        )
+            # Header for the notification column
+            self.dnd_switch = Gtk.Switch(
+                name="notification-switch",
+                active=False,
+                valign=Gtk.Align.CENTER,
+                visible=True,
+            )
 
-        notification_column_header = Box(
-            style_classes="header",
-            orientation="h",
-            children=(Label(label="Do Not Disturb", name="dnd-text"), self.dnd_switch),
-        )
+            notification_column_header = Box(
+                style_classes="header",
+                orientation="h",
+                children=(
+                    Label(label="Do Not Disturb", name="dnd-text"),
+                    self.dnd_switch,
+                ),
+            )
 
-        self.clear_icon = nerd_font_icon(
-            name="clear-icon",
-            icon=text_icons["trash"]["empty"]
-            if len(notifications) == 0
-            else text_icons["trash"]["full"],
-            props={
-                "style_classes": ["panel-font-icon"],
-            },
-        )
+            self.clear_icon = nerd_font_icon(
+                name="clear-icon",
+                icon=text_icons["trash"]["empty"]
+                if len(notifications) == 0
+                else text_icons["trash"]["full"],
+                props={
+                    "style_classes": ["panel-font-icon"],
+                },
+            )
 
-        self.clear_button = HoverButton(
-            name="clear-button",
-            v_align="center",
-            child=Box(children=(self.clear_icon,)),
-        )
+            self.clear_button = HoverButton(
+                name="clear-button",
+                v_align="center",
+                child=Box(children=(self.clear_icon,)),
+            )
 
-        def handle_clear_click(*_):
-            """Handle clear button click."""
+            def handle_clear_click(*_):
+                """Handle clear button click."""
 
-            self.notifications_listbox.remove_all()
+                self.notifications_listbox.remove_all()
 
-            notification_service.clear_all_notifications()
-            self.clear_icon.set_label(text_icons["trash"]["empty"])
+                notification_service.clear_all_notifications()
+                self.clear_icon.set_label(text_icons["trash"]["empty"])
 
-        self.clear_button.connect(
-            "clicked",
-            handle_clear_click,
-        )
+            self.clear_button.connect(
+                "clicked",
+                handle_clear_click,
+            )
 
         notification_column_header.pack_end(
             self.clear_button,
@@ -258,25 +248,22 @@ class DateNotificationMenu(Box):
             0,
         )
 
-        if config["notification"]:
-            # Notification body column
-            notification_column = Box(
-                name="notification-column",
-                orientation="v",
-                children=(
-                    notification_column_header,
-                    ScrolledWindow(
-                        v_expand=True,
-                        style_classes="notification-scrollable",
-                        v_scrollbar_policy="automatic",
-                        h_scrollbar_policy="never",
-                        child=Box(
-                            children=(self.placeholder, self.notifications_listbox)
-                        ),
-                    ),
+        # Notification body column
+        notification_column = Box(
+            name="notification-column",
+            orientation="v",
+            children=(
+                notification_column_header,
+                ScrolledWindow(
+                    v_expand=True,
+                    style_classes="notification-scrollable",
+                    v_scrollbar_policy="automatic",
+                    h_scrollbar_policy="never",
+                    child=Box(children=(self.placeholder, self.notifications_listbox)),
                 ),
-            )
-            self.add(notification_column)
+            ),
+        )
+        self.add(notification_column)
 
         self.add(Separator())
 
@@ -285,10 +272,9 @@ class DateNotificationMenu(Box):
                 style_classes="date-column",
                 orientation="v",
                 children=(
-                    Box(
-                        style_classes="clock-box",
-                        orientation="v",
-                        children=(self.clock_label, self.uptime),
+                    DateTime(
+                        "%H:%M" if self.config["clock_format"] == "24h" else "%I:%M",
+                        name="clock",
                     ),
                     Box(
                         style_classes="calendar",
@@ -316,10 +302,8 @@ class DateNotificationMenu(Box):
             },
         )
 
-        self.dnd_switch.connect("notify::active", self.on_dnd_switch)
-
-        # reusing the fabricator to call specified intervals
-        util_fabricator.connect("changed", self.update_ui)
+        if self.on_dnd_switch:
+            self.dnd_switch.connect("notify::active", self.on_dnd_switch)
 
     def on_dnd_switch(self, _, value, *args):
         self.dnd_switch.set_active(value)
@@ -329,6 +313,17 @@ class DateNotificationMenu(Box):
         self.clear_icon.set_label(text_icons["trash"]["empty"])
         self.placeholder.set_visible(True)
         self.notifications_listbox.set_visible(False)
+
+    def bake_notification(self, notification):
+        """Create a notification widget from a Notification object."""
+        return Gtk.ListBoxRow(
+            visible=True,
+            name="notification-list-item",
+            child=DateMenuNotification(
+                notification=notification,
+                id=notification["id"],
+            ),
+        )
 
     def on_notification_closed(self, _, id, reason):
         """Handle notification being closed."""
@@ -361,12 +356,8 @@ class DateNotificationMenu(Box):
             text_icons["trash"]["full"],
         )
 
-        notification_item = Gtk.ListBoxRow(visible=True, name="notification-list-item")
-        notification_item.add(
-            DateMenuNotification(
-                notification=fabric_notification,
-                id=id,
-            )
+        notification_item = self.bake_notification(
+            fabric_notification,
         )
 
         self.notifications_listbox.add(
@@ -375,15 +366,6 @@ class DateNotificationMenu(Box):
 
         self.placeholder.set_visible(False)
         self.notifications_listbox.set_visible(True)
-
-    def update_ui(self, fabricator, value):
-        self.clock_label.set_text(
-            time.strftime("%H:%M")
-            if self.config["clock_format"] == "24h"
-            else time.strftime("%I:%M"),
-        )
-        self.uptime.set_text(f"uptime: {uptime()}")
-        return True
 
 
 class DateTimeWidget(ButtonWidget):

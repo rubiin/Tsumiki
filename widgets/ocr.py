@@ -48,7 +48,7 @@ class OCRWidget(ButtonWidget):
             )
 
     def show_language_menu(self):
-        menu = Gtk.Menu()
+        menu = Gtk.Menu(visible=True)
         menu.set_name("ocr-menu")  # For CSS targeting
 
         # Get available languages
@@ -56,7 +56,7 @@ class OCRWidget(ButtonWidget):
 
         for lang in langs:
             if lang != "osd":  # Skip the OSD option
-                item = Gtk.MenuItem(label=lang)
+                item = Gtk.MenuItem(label=lang, visible=True)
                 label = item.get_child()
                 label.set_name("ocr-menu-item")  # For CSS targeting
                 if lang == self.current_lang:
@@ -64,7 +64,6 @@ class OCRWidget(ButtonWidget):
                 item.connect("activate", self.on_language_selected, lang)
                 menu.append(item)
 
-        menu.show_all()
         menu.popup_at_widget(self, Gdk.Gravity.SOUTH, Gdk.Gravity.NORTH, None)
 
     @ttl_lru_cache(600, 10)

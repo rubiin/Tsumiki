@@ -145,7 +145,6 @@ class EmojiPickerMenu(Box):
         page_box.add(grid_box)
         self.stack.add_named(page_box, f"page-{page_index}")
         self.stack.set_visible_child_name(f"page-{page_index}")
-        page_box.show_all()
 
         buttons = self.get_all_emoji_buttons()
         if buttons and self.selected_index != -1:

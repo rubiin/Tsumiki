@@ -24,7 +24,7 @@ class DesktopClock(Window, ToggleableWidget):
                     DateTime(formatters=["%I:%M"], name="clock"),
                     DateTime(
                         formatters=[self.config["date_format"]],
-                        interval=10000,
+                        interval=3600000,  # Update every hour
                         name="date",
                     ),
                 ],

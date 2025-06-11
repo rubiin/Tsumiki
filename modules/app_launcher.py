@@ -97,7 +97,6 @@ class AppLauncher(Window):
                 ],
             )
         )
-        self.show_all()
 
         self.search_entry.grab_focus_without_selecting()
         self.hide()
