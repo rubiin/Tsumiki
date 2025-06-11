@@ -361,7 +361,7 @@ class DateNotificationMenu(Box):
             text_icons["trash"]["full"],
         )
 
-        notification_item = Gtk.ListBoxRow(visible=True)
+        notification_item = Gtk.ListBoxRow(visible=True, name="notification-list-item")
         notification_item.add(
             DateMenuNotification(
                 notification=fabric_notification,

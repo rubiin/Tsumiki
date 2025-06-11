@@ -351,6 +351,7 @@
 			},
 			"mpris": {
 				"spacing": ".125em",
+				"icon_size": "14px",
 				"border": {
 					"enabled": false,
 					"width": "1px",
@@ -386,6 +387,7 @@
 			},
 			"recorder": {
 				"spacing": ".125em",
+				"icon_size": "14px",
 				"border": {
 					"enabled": false,
 					"width": "1px",
