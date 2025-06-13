@@ -5,6 +5,12 @@
 @use "common";
 
 
+%player_text {
+  color: theme.$text-main;
+  background-color: transparent;
+  text-shadow: 1px 1px 3px black;
+}
+
 #player-stack-button {
   @extend %dots_dots;
 
@@ -73,13 +79,16 @@
     font-weight: 700;
     color: theme.$text-main;
     font-size: 1rem;
+    color: theme.$text-main;
+    @extend %player_text;
   }
 
   #player-artist,
   #player-album {
     font-weight: 500;
     font-size: 12px;
-    color: #7d7178;
+    color: theme.$text-main;
+    @extend %player_text;
   }
 
   #player-controls {
@@ -88,13 +97,13 @@
 
     .time-label {
       @extend %caption_heading;
-      color: #7d7178;
+      @extend %player_text;
     }
 
     #button-box {
       margin: 0 common.toEm(10);
 
-      .player-icon{
+      .player-icon {
         font-size: 1.3rem;
       }
 
