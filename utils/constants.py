@@ -355,6 +355,7 @@ DEFAULT_CONFIG = {
             "layer": "bottom",
             "anchor": "center",
             "date_format": "%A, %d %B %Y",
+            "time_format": "%H:%M",
         },
     },
     "general": {

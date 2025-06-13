@@ -381,9 +381,10 @@
 			]
 		},
 		"desktop_clock": {
-			"enabled": true,
+			"enabled": false,
 			"anchor": "bottom-right",
 			"date_format": "%A, %d %B %Y",
+			"time_format": "%H:%M",
 			"layer": "bottom"
 		}
 	},

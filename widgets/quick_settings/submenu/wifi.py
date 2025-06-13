@@ -203,8 +203,6 @@ class WifiToggle(QSChevronButton):
             )
             wifi.connect("changed", self.update_status)
 
-            print(f"WifiToggle: {wifi.get_property('icon-name')=}")
-
             self.action_icon.set_label(
                 icon_to_text_icons.get(
                     wifi.get_property("icon-name"),

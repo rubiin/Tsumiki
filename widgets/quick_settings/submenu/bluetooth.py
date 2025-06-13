@@ -56,8 +56,6 @@ class BluetoothDeviceBox(CenterBox):
             },
         )
 
-        print("BluetoothDeviceBox: ", device.name, device.icon_name)
-
         self.add_start(
             nerd_font_icon(
                 icon=self.icon_to_text_icon.get(

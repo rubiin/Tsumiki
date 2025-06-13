@@ -233,7 +233,11 @@
 						"date_format": {
 							"type": "string",
 							"description": "Specifies the format of the date displayed on the desktop clock."
-						}
+						},
+						"time_format": {
+							"type": "string",
+							"description": "Specifies the format of the time displayed on the desktop clock."
+						},
 					}
 				},
 				"notification": {

@@ -20,9 +20,6 @@ class WeatherService(Service):
     _instance = None
 
     def __new__(cls):
-        print(
-            f"{Colors.INFO}[WeatherService] Creating a new instance of WeatherService"
-        )
         if cls._instance is None:
             cls._instance = super(WeatherService, cls).__new__(cls)
         return cls._instance
@@ -47,7 +44,7 @@ class WeatherService(Service):
             contents = self.request.open(url, timeout=20).read().decode("utf-8")
 
             # Parse the weather information
-            print(f"{Colors.INFO}[WeatherService] Parsing weather information")
+            logger.log(f"{Colors.INFO}[WeatherService] Parsing weather information")
             # Use json.loads to parse the JSON data
 
             data = json.loads(contents)
