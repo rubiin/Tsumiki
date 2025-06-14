@@ -164,11 +164,7 @@ class SystemTrayWidget(ButtonWidget):
         # Create popup menu for hidden items
         self.popup_menu = SystemTrayMenu(config=self.config)
 
-        self.popup = Popover(
-            content=self.popup_menu,
-            point_to=self,
-        )
-
+        self.popup = None
         # Initialize watcher
         self.watcher = Gray.Watcher()
         self.watcher.connect("item-added", self.on_item_added)
@@ -182,6 +178,12 @@ class SystemTrayWidget(ButtonWidget):
 
     # show or hide the popup menu
     def handle_click(self, *_):
+        if self.popup is None:
+            self.popup = Popover(
+                content=self.popup_menu,
+                point_to=self,
+            )
+
         visible = self.popup.get_visible()
         if visible:
             self.popup.hide()

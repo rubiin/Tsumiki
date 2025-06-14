@@ -349,12 +349,18 @@ class EmojiPickerWidget(ButtonWidget):
         if self.config["tooltip"]:
             self.set_tooltip_text("Emoji Picker")
 
-        popup = Popover(
-            content=EmojiPickerMenu(config=self.config),
-            point_to=self,
-        )
+        self.popup = None
 
         self.connect(
             "clicked",
-            popup.open,
+            self.show_popover,
         )
+
+    def show_popover(self, *_):
+        """Show the popover."""
+        if self.popup is None:
+            self.popup = Popover(
+                content=EmojiPickerMenu(config=self.config),
+                point_to=self,
+            )
+        self.popup.open()

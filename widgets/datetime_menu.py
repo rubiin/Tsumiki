@@ -376,10 +376,7 @@ class DateTimeWidget(ButtonWidget):
 
         notification_config = self.config["notification"]
 
-        popup = Popover(
-            content=DateNotificationMenu(config=self.config),
-            point_to=self,
-        )
+        self.popup = None
 
         self.notification_indicator = nerd_font_icon(
             icon=text_icons["notifications"]["noisy"],
@@ -409,7 +406,7 @@ class DateTimeWidget(ButtonWidget):
 
         self.connect(
             "clicked",
-            popup.open,
+            self.show_popover,
         )
 
         self.children = Box(
@@ -446,3 +443,12 @@ class DateTimeWidget(ButtonWidget):
             self.notification_indicator.set_label(
                 text_icons["notifications"]["noisy"],
             )
+
+    def show_popover(self, *_):
+        """Show the popover."""
+        if self.popup is None:
+            self.popup = Popover(
+                content=DateNotificationMenu(config=self.config),
+                point_to=self,
+            )
+        self.popup.open()

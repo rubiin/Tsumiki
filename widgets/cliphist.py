@@ -594,12 +594,18 @@ class ClipHistoryWidget(ButtonWidget):
         if self.config["tooltip"]:
             self.set_tooltip_text("Clipboard History")
 
-        popup = Popover(
-            content=ClipHistoryMenu(),
-            point_to=self,
-        )
+        self.popup = None
 
         self.connect(
             "clicked",
-            popup.open,
+            self.show_popover,
         )
+
+    def show_popover(self, *_):
+        """Show the popover."""
+        if self.popup is None:
+            self.popup = Popover(
+                content=ClipHistoryMenu(),
+                point_to=self,
+            )
+        self.popup.open()

@@ -189,7 +189,7 @@ class QuickSettingsMenu(Box):
             v_expand=True,
         )
 
-        dialog = Dialog()
+        self.dialog = None
 
         button_box.pack_end(
             Box(
@@ -201,13 +201,10 @@ class QuickSettingsMenu(Box):
                             icon_size=16,
                         ),
                         v_align="center",
-                        on_clicked=lambda *_: (
-                            self.get_parent().set_visible(False),
-                            dialog.add_content(
-                                title="restart",
-                                body="Do you really want to restart?",
-                                command="restart",
-                            ).toggle_popup(),
+                        on_clicked=lambda *_: self.show_dialog(
+                            title="reboot",
+                            body="Do you really want to reboot?",
+                            command="reboot",
                         ),
                     ),
                     HoverButton(
@@ -216,13 +213,10 @@ class QuickSettingsMenu(Box):
                             icon_size=16,
                         ),
                         v_align="center",
-                        on_clicked=lambda *_: (
-                            self.get_parent().set_visible(False),
-                            dialog.add_content(
-                                title="shutdown",
-                                body="Do you really want to shutdown?",
-                                command="shutdown",
-                            ).toggle_popup(),
+                        on_clicked=lambda *_: self.show_dialog(
+                            title="shutdown",
+                            body="Do you really want to shutdown?",
+                            command="shutdown",
                         ),
                     ),
                 ),
@@ -372,6 +366,18 @@ class QuickSettingsMenu(Box):
             lambda _, value: (uptime_label.set_label(f" {value.get('uptime')}"),),
         )
 
+    def show_dialog(self, title, body, command):
+        """Show a dialog with the given title and body."""
+        self.get_parent().set_visible(False)
+        if not self.dialog:
+            self.dialog = Dialog()
+
+        self.dialog.add_content(
+            title=title,
+            body=body,
+            command=command,
+        ).toggle_popup()
+
 
 class QuickSettingsButtonWidget(ButtonWidget):
     """A button to display the date and time."""
@@ -400,10 +406,7 @@ class QuickSettingsButtonWidget(ButtonWidget):
 
         self.network_service.connect("device-ready", self._get_network_icon)
 
-        popup = Popover(
-            content=QuickSettingsMenu(config=self.config),
-            point_to=self,
-        )
+        self.popup = None
 
         self.audio_icon = Image(style_classes="panel-font-icon")
 
@@ -427,8 +430,17 @@ class QuickSettingsButtonWidget(ButtonWidget):
 
         self.connect(
             "clicked",
-            popup.open,
+            self.show_popover,
         )
+
+    def show_popover(self, *_):
+        """Show the popover."""
+        if self.popup is None:
+            self.popup = Popover(
+                content=QuickSettingsMenu(config=self.config),
+                point_to=self,
+            )
+        self.popup.open()
 
     def _get_network_icon(self, *_):
         # Check if the network service is ready
