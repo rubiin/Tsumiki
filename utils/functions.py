@@ -4,6 +4,7 @@ import shutil
 import subprocess
 import threading
 import time
+from collections import Counter
 from datetime import datetime
 from functools import lru_cache
 from io import BytesIO
@@ -11,7 +12,6 @@ from typing import Callable, Dict, List, Literal, Optional
 
 import psutil
 import qrcode
-from colorthief import ColorThief
 from fabric.utils import (
     cooldown,
     exec_shell_command,
@@ -20,6 +20,7 @@ from fabric.utils import (
 )
 from gi.repository import Gdk, GdkPixbuf, Gio, GLib, Gtk
 from loguru import logger
+from PIL import Image
 
 from .colors import Colors
 from .constants import NAMED_COLORS
@@ -36,26 +37,41 @@ def rgb_to_css(rgb):
     return f"rgb({rgb[0]}, {rgb[1]}, {rgb[2]})"
 
 
-def grab_accent_color(
-    image_path: str,
-    callback: Callable,
-    quantity: int = 4,
-    quality: int = 10,
-):
-    def thread_function():
-        try:
-            ct = ColorThief(file=image_path).get_palette(
-                quality=quality, color_count=quantity
-            )
-            GLib.idle_add(callback, ct)
-        except Exception:
-            logger.error("[COLORS] Failed to grab an accent color")
-            GLib.idle_add(callback, None)
-        finally:
-            GLib.idle_add(thread.join)
+def mix_colors(color1, color2, ratio=0.5):
+    r = int(color1[0] * (1 - ratio) + color2[0] * ratio)
+    g = int(color1[1] * (1 - ratio) + color2[1] * ratio)
+    b = int(color1[2] * (1 - ratio) + color2[2] * ratio)
+    return (r, g, b)
 
-    thread = threading.Thread(target=thread_function)
-    thread.start()
+
+def tint_color(color, tint_factor=1):
+    # tint_factor: 0 means original color, 1 means full white
+    white = (255, 255, 255)
+    return mix_colors(color, white, tint_factor)
+
+
+def get_simple_palette_threaded(
+    image_path: str,
+    callback: Callable[[Optional[list[tuple[int, int, int]]]], None],
+    color_count: int = 4,
+    resize: int = 64,
+):
+    def worker():
+        try:
+            with Image.open(image_path) as img:
+                img = img.convert("RGB")
+                img.thumbnail((resize, resize), Image.LANCZOS)  # Fast, in-place resize
+                pixels = img.getdata()
+
+                most_common = Counter(pixels).most_common(color_count)
+                palette = [color for color, _ in most_common]
+
+                GLib.idle_add(callback, palette)
+        except Exception as e:
+            print(f"[ColorExtractor] Failed: {e}")
+            GLib.idle_add(callback, None)
+
+    threading.Thread(target=worker, daemon=True).start()
 
 
 # Function to escape the markup

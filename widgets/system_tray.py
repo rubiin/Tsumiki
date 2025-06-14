@@ -13,7 +13,8 @@ from shared.grid import Grid
 from shared.popover import Popover
 from shared.separator import Separator
 from shared.widget_container import ButtonWidget
-from utils.icons import symbolic_icons
+from utils.icons import text_icons
+from utils.widget_utils import nerd_font_icon
 
 gi.require_version("Gray", "0.1")
 
@@ -152,10 +153,12 @@ class SystemTrayWidget(ButtonWidget):
 
         # Create main tray box and toggle icon
         self.tray_box = Box(name="system-tray-box", orientation="horizontal", spacing=2)
-        self.toggle_icon = Image(
-            icon_name=symbolic_icons["ui"]["arrow"]["down"],
-            icon_size=self.config["icon_size"],
-            style_classes=["panel-font-icon", "toggle-icon"],
+
+        self.toggle_icon = nerd_font_icon(
+            icon=text_icons["chevron"]["down"],
+            props={
+                "style_classes": ["panel-font-icon"],
+            },
         )
 
         # Set children directly in Box to avoid double styling
@@ -165,6 +168,7 @@ class SystemTrayWidget(ButtonWidget):
         self.popup_menu = SystemTrayMenu(config=self.config)
 
         self.popup = None
+
         # Initialize watcher
         self.watcher = Gray.Watcher()
         self.watcher.connect("item-added", self.on_item_added)
@@ -187,16 +191,12 @@ class SystemTrayWidget(ButtonWidget):
         visible = self.popup.get_visible()
         if visible:
             self.popup.hide()
-            self.toggle_icon.set_from_icon_name(
-                symbolic_icons["ui"]["arrow"]["down"], self.config["icon_size"]
-            )
-            self.toggle_icon.get_style_context().remove_class("active")
+            self.toggle_icon.set_label(text_icons["chevron"]["down"])
+            self.toggle_icon.remove_style_class("active")
         else:
             self.popup.open()
-            self.toggle_icon.set_from_icon_name(
-                symbolic_icons["ui"]["arrow"]["up"], self.config["icon_size"]
-            )
-            self.toggle_icon.get_style_context().add_class("active")
+            self.toggle_icon.set_label(text_icons["chevron"]["up"])
+            self.toggle_icon.add_style_class("active")
 
     def on_item_added(self, _, identifier: str):
         item = self.watcher.get_item_for_identifier(identifier)

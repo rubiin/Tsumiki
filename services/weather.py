@@ -1,102 +1,120 @@
 import json
 import os
-import ssl
+import threading
 import time
-from urllib import error, parse, request
+from typing import Callable, Optional
 
+import requests
 from fabric.core.service import Service
+from gi.repository import GLib
 from loguru import logger
 
 from utils.colors import Colors
 from utils.constants import WEATHER_CACHE_FILE
 
-# Create an SSLContext that ignores certificate validation
-context = ssl._create_unverified_context()
-
 
 class WeatherService(Service):
-    """This class provides weather information for a given city."""
+    """A singleton service to fetch and cache weather information from wttr.in."""
 
     _instance = None
 
     def __new__(cls):
         if cls._instance is None:
-            cls._instance = super(WeatherService, cls).__new__(cls)
+            cls._instance = super().__new__(cls)
         return cls._instance
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.request = request.build_opener()
-        self.request.addheaders = [
-            (
-                "User-Agent",
-                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3",  # noqa: E501
-            )
-        ]
-
-    def simple_weather_info(self, location: str):
-        try:
-            url = f"https://wttr.in/{parse.quote_plus(location.title())}?format=j1"
-
-            logger.info(f"[WeatherService] Fetching weather information from {url}")
-
-            # Open the URL and read the contents
-            contents = self.request.open(url, timeout=20).read().decode("utf-8")
-
-            # Parse the weather information
-            logger.log(f"{Colors.INFO}[WeatherService] Parsing weather information")
-            # Use json.loads to parse the JSON data
-
-            data = json.loads(contents)
-
-            current_weather = data["current_condition"][0]
-            weather = data["weather"][0]
-            hourly_weather = weather["hourly"]
-            location = data["nearest_area"][0]["areaName"][0]["value"]
-
-            return {
-                "location": location.capitalize(),
-                "current": current_weather,  # the current weather information
-                "hourly": hourly_weather,  # tri-hourly data for the next 24 hours
-                "astronomy": weather["astronomy"][0],  # the sunrise and sunset times
+        self.session = requests.Session()
+        self.session.headers.update(
+            {
+                "User-Agent": (
+                    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+                    "(KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3"
+                )
             }
+        )
 
-        except error.HTTPError as e:
-            if e.code == 404:
-                logger.exception(
-                    f"{Colors.ERROR}[WeatherService] Error: City not found. Try a different city."  # noqa: E501
-                )
-            return None
-        except Exception as e:
-            logger.exception(f"[WeatherService] Error: {e}")
-            return None
+    def simple_weather_info(
+        self, location: str, retries: int = 3, delay: float = 2.0
+    ) -> Optional[dict]:
+        url = f"https://wttr.in/{requests.utils.quote(location.title())}?format=j1"
 
-    def get_weather(self, location: str, ttl=3600, refresh=False):
-        if not refresh:
-            # Check if cache exists and is fresh
-            if os.path.exists(WEATHER_CACHE_FILE):
-                last_modified = os.path.getmtime(WEATHER_CACHE_FILE)
+        for attempt in range(1, retries + 1):
+            try:
                 logger.info(
-                    f"{Colors.INFO}[WeatherService] Reading weather from cache file{WEATHER_CACHE_FILE}"  # noqa: E501
+                    f"[WeatherService] Fetching weather from {url} (Attempt {attempt})"
+                )
+                response = self.session.get(url, timeout=10)
+                response.raise_for_status()
+                data = response.json()
+
+                current_weather = data.get("current_condition", [{}])[0]
+                weather = data.get("weather", [{}])[0]
+                hourly_weather = weather.get("hourly", [])
+                astronomy = weather.get("astronomy", [{}])[0]
+                area_name = (
+                    data.get("nearest_area", [{}])[0]
+                    .get("areaName", [{}])[0]
+                    .get("value", location)
                 )
 
-                if time.time() - last_modified < ttl:  # 1 hour
+                return {
+                    "location": area_name.capitalize(),
+                    "current": current_weather,
+                    "hourly": hourly_weather,
+                    "astronomy": astronomy,
+                }
+
+            except requests.HTTPError as e:
+                if response.status_code == 404:
+                    logger.error(
+                        f"{Colors.ERROR}[WeatherService] City not found: {location}"
+                    )
+                    return None
+                logger.warning(f"[WeatherService] HTTP error: {e}")
+            except Exception as e:
+                logger.warning(f"[WeatherService] Network error: {e}")
+
+            time.sleep(delay * attempt)  # exponential backoff
+
+        logger.error("[WeatherService] Failed after retries.")
+        return None
+
+    def get_weather(self, location: str, ttl=3600, refresh=False) -> Optional[dict]:
+        if not refresh and os.path.exists(WEATHER_CACHE_FILE):
+            last_modified = os.path.getmtime(WEATHER_CACHE_FILE)
+            if time.time() - last_modified < ttl:
+                logger.info(
+                    f"[WeatherService] Using cached weather: {WEATHER_CACHE_FILE}"
+                )
+                try:
                     with open(WEATHER_CACHE_FILE, "r") as f:
                         return json.load(f)
+                except Exception as e:
+                    logger.warning(f"[WeatherService] Failed to load cache: {e}")
 
-            logger.info(
-                (
-                    f"{Colors.INFO}[WeatherService] Cache file {WEATHER_CACHE_FILE} stale, Fetching new data."  # noqa: E501
-                )
-            )
-
+        logger.info("[WeatherService] Cache stale or missing. Fetching new data.")
         weather = self.simple_weather_info(location)
 
-        # If the weather data is None, return None
-        if weather is None:
-            return None
-        # Save the weather data to the cache file
-        with open(WEATHER_CACHE_FILE, "w") as f:
-            json.dump(weather, f, indent=4, ensure_ascii=False)
+        if weather:
+            try:
+                with open(WEATHER_CACHE_FILE, "w") as f:
+                    json.dump(weather, f, indent=4, ensure_ascii=False)
+            except Exception as e:
+                logger.warning(f"[WeatherService] Failed to write cache: {e}")
 
         return weather
+
+    def get_weather_async(
+        self,
+        location: str,
+        callback: Callable[[Optional[dict]], None],
+        ttl: int = 3600,
+        refresh: bool = False,
+    ):
+        def worker():
+            result = self.get_weather(location, ttl=ttl, refresh=refresh)
+            GLib.idle_add(callback, result)
+
+        threading.Thread(target=worker, daemon=True).start()

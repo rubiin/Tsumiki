@@ -1,4 +1,3 @@
-import threading
 import time
 from datetime import datetime
 
@@ -6,7 +5,7 @@ from fabric.utils import cooldown, get_relative_path
 from fabric.widgets.box import Box
 from fabric.widgets.label import Label
 from fabric.widgets.svg import Svg
-from gi.repository import GLib, Gtk
+from gi.repository import Gtk
 from loguru import logger
 
 from services.weather import WeatherService
@@ -329,14 +328,6 @@ class WeatherWidget(ButtonWidget, BaseWeatherWidget):
         # Set up a fabricator to call the update_label method at specified intervals
         util_fabricator.connect("changed", self.update_ui)
 
-    def fetch_data_from_url(self):
-        data = WeatherService().get_weather(
-            location=self.config["location"], ttl=self.config["interval"]
-        )
-
-        # Update label in main GTK thread
-        GLib.idle_add(self.update_data, data)
-
     def update_data(self, data):
         self.update_time = datetime.now()
 
@@ -411,5 +402,8 @@ class WeatherWidget(ButtonWidget, BaseWeatherWidget):
             # Check if the update time is more than interval seconds ago
             return
 
-            # Start background service
-        threading.Thread(target=self.fetch_data_from_url, daemon=True).start()
+        WeatherService().get_weather_async(
+            location=self.config["location"],
+            ttl=self.config["interval"],
+            callback=self.update_data,
+        )

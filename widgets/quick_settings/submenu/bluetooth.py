@@ -11,7 +11,7 @@ from services import bluetooth_service
 from shared.buttons import HoverButton, QSChevronButton, ScanButton
 from shared.list import ListBox
 from shared.submenu import QuickSubMenu
-from utils.icons import symbolic_icons, text_icons
+from utils.icons import text_icons
 from utils.widget_utils import nerd_font_icon
 
 
@@ -186,7 +186,7 @@ class BluetoothToggle(QSChevronButton):
     def __init__(self, submenu: QuickSubMenu, **kwargs):
         super().__init__(
             action_label="Enabled",
-            action_icon=symbolic_icons["bluetooth"]["enabled"],
+            action_icon=text_icons["bluetooth"]["enabled"],
             submenu=submenu,
             **kwargs,
         )

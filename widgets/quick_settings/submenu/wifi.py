@@ -9,7 +9,7 @@ from services.network import NetworkService, Wifi
 from shared.buttons import QSChevronButton, ScanButton
 from shared.list import ListBox
 from shared.submenu import QuickSubMenu
-from utils.icons import symbolic_icons, text_icons
+from utils.icons import text_icons
 from utils.widget_utils import nerd_font_icon
 
 icon_to_text_icons = {
@@ -183,7 +183,7 @@ class WifiToggle(QSChevronButton):
 
     def __init__(self, submenu: QuickSubMenu, **kwargs):
         super().__init__(
-            action_icon=symbolic_icons["network"]["wifi"]["generic"],
+            action_icon=text_icons["wifi"]["generic"],
             action_label=" Wifi Disabled",
             submenu=submenu,
             **kwargs,

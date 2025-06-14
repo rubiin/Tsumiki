@@ -116,6 +116,7 @@ install_packages() {
 		python-psutil
 		python-cairo
 		python-loguru
+		python-requests
 		python-setproctitle
 		cliphist
 		noto-fonts-emoji
@@ -128,7 +129,6 @@ install_packages() {
 		python-rlottie-python
 		python-pytomlpp
 		python-pyjson5
-		python-colorthief
 		python-ijson
 		slurp
 		imagemagick

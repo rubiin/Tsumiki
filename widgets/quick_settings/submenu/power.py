@@ -5,7 +5,7 @@ from fabric.widgets.label import Label
 from services.power_profile import PowerProfilesService
 from shared.buttons import HoverButton, QSChevronButton
 from shared.submenu import QuickSubMenu
-from utils.icons import symbolic_icons, text_icons
+from utils.icons import text_icons
 from utils.widget_utils import nerd_font_icon
 
 
@@ -114,7 +114,7 @@ class PowerProfileToggle(QSChevronButton):
 
     def __init__(self, submenu: QuickSubMenu, **kwargs):
         super().__init__(
-            action_icon=symbolic_icons["powerprofiles"]["power-saver"],
+            action_icon=text_icons["powerprofiles"]["power-saver"],
             action_label="Power Saver",
             submenu=submenu,
             **kwargs,

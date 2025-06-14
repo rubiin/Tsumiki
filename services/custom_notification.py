@@ -5,7 +5,7 @@ from typing import List
 from fabric import Signal
 from fabric.notifications import Notification, Notifications
 from loguru import logger
-
+from gi.repository import GLib
 from utils.colors import Colors
 from utils.constants import (
     NOTIFICATION_CACHE_FILE,
@@ -84,7 +84,7 @@ class CustomNotifications(Notifications):
 
                 self.all_notifications = valid_notifications
                 self._count = highest_id  # Update to highest ID seen
-                self._write_notifications(self.all_notifications)
+                GLib.idle_add(self._write_notifications(self.all_notifications))
 
             except (json.JSONDecodeError, KeyError, ValueError, IndexError) as e:
                 logger.exception(f"{Colors.INFO}[Notification] {e}")

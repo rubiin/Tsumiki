@@ -4,7 +4,6 @@ from fabric.widgets.eventbox import EventBox
 from fabric.widgets.widget import Widget
 
 from utils.config import widget_config
-from utils.widget_utils import lazy_load_widget
 
 
 class ToggleableWidget(Widget):
@@ -112,7 +111,7 @@ class WidgetGroup(BoxWidget):
             if widget_name in widgets_map:
                 # Create widget instance using the constructor from widgets_map
                 # Pass both widget_config and bar to the widget constructor
-                widget = lazy_load_widget(widget_name, widgets_map)
+                widget = widgets_map[widget_name]
                 children.append(widget())
 
         return cls(
