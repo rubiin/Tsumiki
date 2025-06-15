@@ -296,9 +296,8 @@ def check_if_day(sunrise_time, sunset_time, current_time: str | None = None) -> 
     # Compare current time with sunrise and sunset
     return sunrise_time_obj <= current_time_obj < sunset_time_obj
 
-    # wttr.in time are in 300,400...2100 format , we need to convert it to 4:00...21:00
 
-
+# wttr.in time are in 300,400...2100 format , we need to convert it to 4:00...21:00
 def convert_to_12hr_format(time: str) -> str:
     time = int(time)
     hour = time // 100  # Get the hour (e.g., 1200 -> 12)

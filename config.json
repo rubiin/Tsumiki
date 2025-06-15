@@ -384,7 +384,6 @@
 			"enabled": false,
 			"anchor": "bottom-right",
 			"date_format": "%A, %d %B %Y",
-			"time_format": "%H:%M",
 			"layer": "bottom"
 		}
 	},
@@ -392,7 +391,7 @@
 		"check_updates": false,
 		"layer": "top",
 		"auto_hide": false,
-		"debug": false,
+		"debug": true,
 		"monitor_styles": true,
 		"location": "top"
 	}
