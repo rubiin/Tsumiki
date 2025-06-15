@@ -13,7 +13,7 @@ from shared.widget_container import ButtonWidget
 from utils.colors import Colors
 from utils.widget_utils import (
     nerd_font_icon,
-    util_fabricator,
+    reusable_fabricator,
 )
 
 
@@ -59,7 +59,7 @@ class UpdatesWidget(ButtonWidget):
         self.check_update()
 
         # reusing the fabricator to call specified intervals
-        util_fabricator.connect("changed", self.should_update)
+        reusable_fabricator.connect("changed", self.should_update)
 
     def should_update(self, *_):
         """
@@ -78,14 +78,14 @@ class UpdatesWidget(ButtonWidget):
 
         value = json.loads(value)
 
-        # Update the label if enabled
-        if self.config["label"]:
-            self.update_label.set_label(value["total"])
+        if value["total"] > "0":
+            # Update the label if enabled
+            if self.config["label"]:
+                self.update_label.set_label(value["total"])
+            if self.config["show_icon"]:
+                self.icon.set_label("󱧘")
 
-        # Update the tooltip if enabled
-        if self.config["tooltip"]:
             self.set_tooltip_text(value["tooltip"])
-        return True
 
     def on_button_press(self, _, event):
         if event.button == 1:

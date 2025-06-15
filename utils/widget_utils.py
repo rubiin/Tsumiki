@@ -15,13 +15,13 @@ from gi.repository import Gdk, GLib, Gtk
 from shared.animated.scale import AnimatedScale
 
 from .config import widget_config
-from .functions import uptime
 from .icons import symbolic_icons, text_icons
+
+storage_config = widget_config["widgets"]["storage"]
 
 
 # Function to get the system stats using psutil
 def stats_poll(fabricator):
-    storage_config = widget_config["widgets"]["storage"]
     while True:
         yield {
             "cpu_usage": round(psutil.cpu_percent(), 1),
@@ -30,7 +30,6 @@ def stats_poll(fabricator):
             "ram_usage": round(psutil.virtual_memory().percent, 1),
             "memory": psutil.virtual_memory(),
             "disk": psutil.disk_usage(storage_config["path"]),
-            "uptime": uptime(),
         }
         sleep(1)
 
@@ -250,3 +249,9 @@ def get_audio_icon_name(
 
 # Create a fabricator to poll the system stats
 util_fabricator = Fabricator(poll_from=stats_poll, stream=True)
+
+
+reusable_fabricator = Fabricator(
+    interval=1000,  # ms
+    poll_from=lambda *_: "echo",  # Dummy function to keep it alive
+)

@@ -32,9 +32,6 @@ def print_gtk_object_growth():
 
     all_objects = gc.get_objects()
     gtk_widgets = [obj for obj in all_objects if isinstance(obj, Gtk.Widget)]
-    print(f"Found {len(gtk_widgets)} GTK widgets in memory")
-
-    print(f"Found {len(gtk_widgets)} GTK widgets:")
 
     total_size = 0
     for i, w in enumerate(gtk_widgets, 1):
@@ -47,7 +44,9 @@ def print_gtk_object_growth():
         print(f"{i}: Type={type(w).__name__}, Name={name}, Approx size={size} bytes")
 
     print(
-        f"Total approx size of GTK widgets: {total_size} bytes ({total_size / (1024 * 1024):.2f} MB)"
+        f"Found {len(gtk_widgets)} GTK widgets in memory. "
+        f"Total approx size of GTK widgets: {total_size} bytes "
+        f"({total_size / (1024 * 1024):.2f} MB)"
     )
 
     return True  # Schedule to repeat every 60s
@@ -108,7 +107,10 @@ if not general_options["debug"]:
         logger.disable(log)
 
 
-if __name__ == "__main__":
+def main():
+    """Main function to run the application."""
+    logger.info(f"{Colors.INFO}[Main] Starting {APPLICATION_NAME}...")
+
     helpers.ensure_directory(APP_CACHE_DIRECTORY)
     helpers.copy_theme(theme_config["name"])
 
@@ -164,6 +166,9 @@ if __name__ == "__main__":
     # GLib.timeout_add_seconds(5, take_baseline_snapshot)
     # # Schedule filtered snapshot comparison every 5 seconds
     GLib.timeout_add_seconds(10, print_gtk_object_growth)
-
     # Run the application
     app.run()
+
+
+if __name__ == "__main__":
+    main()

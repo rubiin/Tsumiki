@@ -1,6 +1,6 @@
 import os
 
-from fabric.utils import bulk_connect, get_relative_path
+from fabric.utils import bulk_connect, get_relative_path, invoke_repeater
 from fabric.widgets.box import Box
 from fabric.widgets.centerbox import CenterBox
 from fabric.widgets.image import Image
@@ -25,7 +25,6 @@ from utils.icons import symbolic_icons
 from utils.widget_utils import (
     get_audio_icon_name,
     get_brightness_icon_name,
-    util_fabricator,
 )
 from widgets.quick_settings.submenu.hyprsunset import (
     HyprSunsetSubMenu,
@@ -188,8 +187,6 @@ class QuickSettingsMenu(Box):
             h_expand=True,
             v_expand=True,
         )
-
-        self.dialog = None
 
         button_box.pack_end(
             Box(
@@ -361,18 +358,16 @@ class QuickSettingsMenu(Box):
 
         self.add(box)
 
-        util_fabricator.connect(
-            "changed",
-            lambda _, value: (uptime_label.set_label(f" {value.get('uptime')}"),),
+        invoke_repeater(
+            1000,
+            lambda *_: uptime_label.set_label(helpers.uptime()),
         )
 
     def show_dialog(self, title, body, command):
         """Show a dialog with the given title and body."""
         self.get_parent().set_visible(False)
-        if not self.dialog:
-            self.dialog = Dialog()
 
-        self.dialog.add_content(
+        Dialog().add_content(
             title=title,
             body=body,
             command=command,

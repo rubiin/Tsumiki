@@ -206,8 +206,6 @@ class PlayerBox(Box):
             size=self.image_size, image_file=self.fallback_cover_path
         )
 
-        self.image_box.set_size_request(self.image_size, self.image_size)
-
         self.image_stack = Box(
             h_align="start", v_align="start", name="player-image-stack"
         )
@@ -401,7 +399,7 @@ class PlayerBox(Box):
                 self.player_info_box,
                 self.image_stack,
                 Box(
-                    children=Image(icon_name=self.player.player_name, icon_size=20),
+                    children=Image(icon_name=self.player.player_name, icon_size=18),
                     h_align="end",
                     v_align="start",
                     style="margin-top: 5px; margin-right: 10px;",

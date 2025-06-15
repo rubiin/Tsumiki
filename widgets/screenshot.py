@@ -11,9 +11,6 @@ class ScreenShotWidget(ButtonWidget):
     def __init__(self, **kwargs):
         super().__init__(name="screenshot", **kwargs)
 
-        if self.config["tooltip"]:
-            self.set_tooltip_text("Screen Shot")
-
         self.recorder_service = ScreenRecorderService()
 
         self.box.children = nerd_font_icon(
@@ -23,6 +20,9 @@ class ScreenShotWidget(ButtonWidget):
 
         if self.config["label"]:
             self.box.add(Label(label="screenshot", style_classes="panel-text"))
+
+        if self.config["tooltip"]:
+            self.set_tooltip_text("Screen Shot")
 
         self.connect("clicked", self.handle_click)
 

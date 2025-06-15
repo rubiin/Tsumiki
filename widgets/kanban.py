@@ -16,6 +16,7 @@ from shared.grid import Grid
 from shared.list import ListBox
 from shared.popover import Popover
 from shared.widget_container import ButtonWidget
+from utils.functions import write_json_file
 from utils.widget_utils import create_surface_from_widget, nerd_font_icon
 
 
@@ -347,11 +348,10 @@ class Kanban(Box):
                 {"title": col.title, "notes": col.get_notes()} for col in self.columns
             ]
         }
-        try:
-            with open(self.STATE_FILE, "w") as f:
-                json.dump(state, f, indent=2)
-        except Exception as e:
-            logger.exception(f"Error saving state: {e}")
+        write_json_file(
+            state,
+            self.STATE_FILE,
+        )
 
     def load_state(self):
         try:

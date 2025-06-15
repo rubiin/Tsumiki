@@ -1,11 +1,11 @@
 from fabric.widgets.box import Box
-from fabric.widgets.image import Image
 from fabric.widgets.label import Label
 
 from services import notification_service
 from shared.button_toggle import CommandSwitcher
 from shared.buttons import HoverButton
-from utils.icons import symbolic_icons
+from utils.icons import text_icons
+from utils.widget_utils import nerd_font_icon
 
 
 class QuickSettingToggler(CommandSwitcher):
@@ -50,9 +50,9 @@ class NotificationQuickSetting(HoverButton):
         self.notification_label = Label(
             label="Noisy",
         )
-        self.notification_icon = Image(
-            icon_name=symbolic_icons["notifications"]["noisy"],
-            icon_size=16,
+        self.notification_icon = nerd_font_icon(
+            icon=text_icons["notifications"]["noisy"],
+            props={"style_classes": "panel-font-icon"},
         )
 
         self.children = Box(
@@ -80,13 +80,9 @@ class NotificationQuickSetting(HoverButton):
 
         if value:
             self.notification_label.set_label("Quiet")
-            self.notification_icon.set_from_icon_name(
-                symbolic_icons["notifications"]["silent"], 16
-            )
+            self.notification_icon.set_label(text_icons["notifications"]["silent"])
             self.remove_style_class("active")
         else:
             self.notification_label.set_label("Noisy")
-            self.notification_icon.set_from_icon_name(
-                symbolic_icons["notifications"]["noisy"], 16
-            )
+            self.notification_icon.set_label(text_icons["notifications"]["noisy"])
             self.add_style_class("active")

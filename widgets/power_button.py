@@ -82,18 +82,15 @@ class PowerControlButtons(HoverButton):
         self, config, name: str, command: str, size: int, show_label=True, **kwargs
     ):
         self.config = config
-        self.dialog = Dialog(
-            title=name,
-            body=f"Are you sure you want to {name}?",
-            command=command,
-            **kwargs,
-        )
+        self.name = name
+        self.command = command
+        self.size = size
 
         super().__init__(
             config=config,
             orientation="v",
             name="power-control-button",
-            on_clicked=lambda _: self.on_button_press(),
+            on_clicked=self.on_button_press,
             child=Box(
                 orientation="v",
                 children=[
@@ -111,11 +108,14 @@ class PowerControlButtons(HoverButton):
             **kwargs,
         )
 
-    def on_button_press(
-        self,
-    ):
+    def on_button_press(self, *_):
         PowerMenuPopup.get_default(widget_config=self.config).toggle_popup()
-        self.dialog.toggle_popup()
+        Dialog().add_content(
+            title=f"{self.name.capitalize()} Confirmation",
+            body=f"Are you sure you want to {self.name}?",
+            command=self.command,
+        ).toggle_popup()
+
         return True
 
 

@@ -15,8 +15,8 @@ from shared.widget_container import ButtonWidget
 from utils.icons import weather_icons
 from utils.widget_utils import (
     nerd_font_icon,
+    reusable_fabricator,
     setup_cursor_hover,
-    util_fabricator,
 )
 
 
@@ -234,7 +234,7 @@ class WeatherMenu(Box, BaseWeatherWidget):
         self.update_widget(forced=True)
 
         # reusing the fabricator to call specified intervals
-        util_fabricator.connect("changed", self.update_widget)
+        reusable_fabricator.connect("changed", self.update_widget)
 
     def update_widget(self, *args, **kwargs):
         forced = kwargs.get("forced", False)
@@ -326,7 +326,7 @@ class WeatherWidget(ButtonWidget, BaseWeatherWidget):
         self.update_ui(forced=True)
 
         # Set up a fabricator to call the update_label method at specified intervals
-        util_fabricator.connect("changed", self.update_ui)
+        reusable_fabricator.connect("changed", self.update_ui)
 
     def update_data(self, data):
         self.update_time = datetime.now()

@@ -5,6 +5,8 @@ import re
 from gi.repository import GdkPixbuf, GLib, Gtk
 from loguru import logger
 
+from utils.thread import run_in_thread
+
 from .colors import Colors
 from .constants import APP_CACHE_DIRECTORY
 from .icons import symbolic_icons
@@ -44,7 +46,7 @@ class IconResolver:
         self._store_new_icon(app_id, new_icon)
         return new_icon
 
-    def resolve_icon(self, pixmap, icon_name, app_id: str, icon_size: int = 16):
+    def resolve_icon(self, pixmap, icon_name: str, app_id: str, icon_size: int = 16):
         try:
             return (
                 pixmap.as_pixbuf(icon_size, GdkPixbuf.InterpType.HYPER)
@@ -79,6 +81,7 @@ class IconResolver:
                 )
             )
 
+    @run_in_thread
     def _store_new_icon(self, app_id: str, icon: str):
         self._icon_dict[app_id] = icon
         with open(ICON_CACHE_FILE, "w") as f:

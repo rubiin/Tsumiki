@@ -1,3 +1,4 @@
+import json
 import os
 import re
 import shutil
@@ -429,6 +430,15 @@ def convert_to_percent(
         return int((current / max) * 100)
     else:
         return (current / max) * 100
+
+
+@run_in_thread
+def write_json_file(data: Dict, path: str):
+    try:
+        with open(path, "w") as f:
+            json.dump(data, f, indent=4, ensure_ascii=False)
+    except Exception as e:
+        logger.warning(f"Failed to write json: {e}")
 
 
 # Function to ensure the file exists

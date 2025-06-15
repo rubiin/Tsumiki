@@ -11,6 +11,7 @@ from loguru import logger
 
 from utils.colors import Colors
 from utils.constants import WEATHER_CACHE_FILE
+from utils.functions import write_json_file
 
 
 class WeatherService(Service):
@@ -98,11 +99,7 @@ class WeatherService(Service):
         weather = self.simple_weather_info(location)
 
         if weather:
-            try:
-                with open(WEATHER_CACHE_FILE, "w") as f:
-                    json.dump(weather, f, indent=4, ensure_ascii=False)
-            except Exception as e:
-                logger.warning(f"[WeatherService] Failed to write cache: {e}")
+            write_json_file(weather, WEATHER_CACHE_FILE)
 
         return weather
 

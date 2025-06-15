@@ -13,6 +13,7 @@ class SubMapWidget(ButtonWidget):
         super().__init__(name="submap", **kwargs)
 
         self.submap_label = Label(label="submap", style_classes="panel-text")
+        self.box.add(self.submap_label)
 
         if self.config["show_icon"]:
             # Create a TextIcon with the specified icon and size
@@ -21,8 +22,6 @@ class SubMapWidget(ButtonWidget):
                 props={"style_classes": "panel-font-icon"},
             )
             self.box.add(self.icon)
-
-        self.box.add(self.submap_label)
 
         self.connection = get_hyprland_connection()
 
@@ -41,8 +40,6 @@ class SubMapWidget(ButtonWidget):
 
     def get_submap(self, *_):
         submap = str(self.connection.send_command("submap").reply.decode()).strip("\n")
-        if self.config["label"]:
-            self.submap_label.set_visible(True)
 
         if submap == "unknown request":
             submap = "default"

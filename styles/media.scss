@@ -44,7 +44,7 @@
     min-height: $image_size;
   }
 
-  @include common.slider($min-length: $inner_player_width - 80, $height: 7px, $highlight-color: theme.$text-muted);
+  @include common.slider($min-length: $inner_player_width - 80, $height: 7px, $highlight-color: theme.$text-muted, $slider: true);
 
   #seek-bar {
     padding-top: 10px;
