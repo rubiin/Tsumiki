@@ -191,7 +191,7 @@ class PlayerBox(Box):
         self.player: MprisPlayer = player
         self.fallback_cover_path = get_relative_path("../assets/images/disk.png")
 
-        self.image_size = 115
+        self.image_size = 120
 
         self.config = config
 
@@ -207,7 +207,7 @@ class PlayerBox(Box):
         )
 
         self.image_stack = Box(
-            h_align="start", v_align="start", name="player-image-stack"
+            h_align="start", v_align="center", name="player-image-stack"
         )
         self.image_stack.children = [*self.image_stack.children, self.image_box]
 

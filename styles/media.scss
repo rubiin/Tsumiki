@@ -33,8 +33,8 @@
 #player-box {
   $player_width: variable.$quicksettings-width + 40;
 
-  $player_height: 125px;
-  $image_size: 115px;
+  $player_height: 130px;
+  $image_size: 120px;
   min-height: $image_size + 4;
 
   $inner_player_width: math.floor(calc($player_width - $image_size / 2));
@@ -54,7 +54,7 @@
 
   #inner-player-box {
     // background: linear-gradient(135deg, color.mix(theme.$background-alt, white, 80%), theme.$background-alt, #4b2353);
-    border-radius: 15px;
+    border-radius: 19px;
     margin-left: math.floor(calc($image_size / 2));
     min-width: $inner_player_width;
     min-height: $player_height;
