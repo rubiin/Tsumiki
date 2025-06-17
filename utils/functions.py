@@ -245,18 +245,24 @@ def validate_widgets(parsed_data, default_config):
                 )
 
 
-def make_qrcode(text: str, size: int = 200) -> bytes:
+@ttl_lru_cache(3600, 10)
+def make_qrcode(text: str, size: int = 200) -> GdkPixbuf.Pixbuf:
     # Generate QR Code image
     qr = qrcode.make(text)
     buffer = BytesIO()
     qr.save(buffer, format="PNG")
     buffer.seek(0)
 
-    # Load into GTK Image using GdkPixbuf
+    # Load into GTK Pixbuf
     loader = GdkPixbuf.PixbufLoader.new_with_type("png")
     loader.write(buffer.read())
     loader.close()
-    return loader.get_pixbuf()
+    pixbuf = loader.get_pixbuf()
+
+    # Scale Pixbuf to the desired size
+    scaled_pixbuf = pixbuf.scale_simple(size, size, GdkPixbuf.InterpType.BILINEAR)
+
+    return scaled_pixbuf
 
 
 # Function to exclude keys from a dictionary
