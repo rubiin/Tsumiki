@@ -72,7 +72,6 @@
 			"media": {
 				"enabled": true,
 				"ignore": [
-					"vlc"
 				],
 				"truncation_size": 30,
 				"show_album": true,

@@ -254,14 +254,18 @@ class PlayerBox(Box):
             self.track_title,
             "label",
             GObject.BindingFlags.DEFAULT,
-            lambda _, x: re.sub(r"\r?\n", " ", x) if x != "" else "No Title",  # type: ignore
+            lambda _, x: re.sub(r"\r?\n", " ", x)
+            if x != "" and x is not None
+            else "No Title",  # type: ignore
         )
         self.player.bind_property(
             "artist",
             self.track_artist,
             "label",
             GObject.BindingFlags.DEFAULT,
-            lambda _, x: re.sub(r"\r?\n", " ", x) if x != "" else "No Artist",  # type: ignore
+            lambda _, x: re.sub(r"\r?\n", " ", x)
+            if x != "" and x is not None
+            else "No Artist",  # type: ignore
         )
 
         self.player.bind_property(
@@ -269,7 +273,9 @@ class PlayerBox(Box):
             self.track_album,
             "label",
             GObject.BindingFlags.DEFAULT,
-            lambda _, x: re.sub(r"\r?\n", " ", x) if x != "" else "No Album",  # type: ignore
+            lambda _, x: re.sub(r"\r?\n", " ", x)
+            if x != "" and x is not None
+            else "No Album",  # type: ignore
         )
 
         self.track_info = Box(
