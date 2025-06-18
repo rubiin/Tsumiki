@@ -73,7 +73,7 @@ class HyprSunsetSubMenu(QuickSubMenu):
         # print("HyprSunsetSubMenu: upper temperature", adj.get_upper())
 
         # Avoid unnecessary updates if the value hasn't changed
-        if round(sanitized_value) == round(self.scale.get_value()):
+        if sanitized_value == round(self.scale.get_value()):
             return
 
         self.scale.set_value(sanitized_value)

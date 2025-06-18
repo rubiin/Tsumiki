@@ -1,4 +1,3 @@
-# ruff: noqa: N802
 import os
 import re
 import tempfile

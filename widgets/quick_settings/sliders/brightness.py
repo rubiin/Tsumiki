@@ -43,7 +43,7 @@ class BrightnessSlider(SettingSlider):
         brightness_percent = int((service.screen_brightness / service.max_screen) * 100)
 
         # Avoid unnecessary updates if the value hasn't changed
-        if round(brightness_percent) == round(self.scale.get_value()):
+        if (brightness_percent) == round(self.scale.get_value()):
             return
 
         self.scale.set_value(brightness_percent)
