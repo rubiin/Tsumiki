@@ -96,8 +96,9 @@
     margin-bottom: 15px;
 
     .time-label {
-      @extend %caption_heading;
+      @extend %caption;
       @extend %player_text;
+      font-weight: 600;
     }
 
     #button-box {
