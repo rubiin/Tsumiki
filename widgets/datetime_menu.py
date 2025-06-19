@@ -74,7 +74,7 @@ class DateMenuNotification(Box):
                     "style_classes": ["panel-font-icon", "close-icon"],
                 },
             ),
-            on_clicked=self.clear_notification,
+            on_clicked=self.remove_notification,
         )
 
         header_container.pack_end(
@@ -126,15 +126,7 @@ class DateMenuNotification(Box):
             body_container,
         )
 
-        # Handle notification signals
-        self._notification.connect("closed", self.on_notification_closed)
-
-    def on_notification_closed(self, notification, reason):
-        """Handle notification being closed."""
-        if reason in ["dismissed-by-user", "dismissed-by-limit"]:
-            self.destroy()
-
-    def clear_notification(self, *_):
+    def remove_notification(self, *_):
         notification_service.remove_notification(self._id)
         self.destroy()
 
@@ -316,14 +308,19 @@ class DateNotificationMenu(Box):
 
     def bake_notification(self, notification):
         """Create a notification widget from a Notification object."""
-        return Gtk.ListBoxRow(
-            visible=True,
-            name="notification-list-item",
-            child=DateMenuNotification(
-                notification=notification,
-                id=notification["id"],
-            ),
+
+        def on_child_destroyed(widget, row):
+            row.destroy()
+
+        item = DateMenuNotification(
+            notification=notification,
+            id=notification["id"],
         )
+
+        row = Gtk.ListBoxRow(visible=True, name="notification-list-item", child=item)
+        item.connect("destroy", on_child_destroyed, row)
+
+        return row
 
     def on_notification_closed(self, _, id, reason):
         """Handle notification being closed."""

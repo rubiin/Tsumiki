@@ -3,7 +3,7 @@ name = "HyDEPanel"
 version = "1.0.0"
 description = "A semi-customizable bar written using the Fabric Widget System"
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.12"
 authors = [
     { name = "Rubin Bhandari", email = "roobin.bhandari@gmail.com" },
 ]
@@ -88,8 +88,8 @@ exclude = [
 line-length = 88
 indent-width = 4
 
-# Assume Python 3.9
-target-version = "py39"
+# Assume Python 3.12
+target-version = "py312"
 
 [tool.ruff.lint]
 # Enable Pyflakes (`F`) and a subset of the pycodestyle (`E`) codes by default.
