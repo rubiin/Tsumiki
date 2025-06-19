@@ -1,3 +1,4 @@
+import json
 from fabric.utils import exec_shell_command_async
 from fabric.widgets.circularprogressbar import CircularProgressBar
 from fabric.widgets.label import Label
@@ -131,6 +132,123 @@ class CpuWidget(ButtonWidget):
                 f" Temperature: {temp}\n"
                 f"󰾆 Utilization: {usage}\n"
                 f" Clock Speed: {round(frequency[0], 2)} MHz"
+            )
+
+            self.set_tooltip_text(tooltip_text)
+
+        return True
+
+
+
+
+class GpuWidget(ButtonWidget):
+    """A widget to display the current GPU usage."""
+
+    def __init__(
+        self,
+        **kwargs,
+    ):
+        # Initialize the Box with specific name and style
+        super().__init__(
+            name="gpu",
+            **kwargs,
+        )
+
+        # Set the GPU name and mode
+        self.current_mode = self.config["mode"]
+
+
+        if self.current_mode == "graph":
+            self.graph_values = []
+            self.gpu_level_label = Label(
+                label="0%",
+                style_classes="panel-text",
+            )
+            self.box.children = self.gpu_level_label
+
+        elif self.current_mode == "progress":
+            # Create a circular progress bar to display the volume level
+            self.progress_bar = CircularProgressBar(
+                name="stat-circle",
+                line_style="round",
+                line_width=2,
+                size=28,
+                start_angle=150,
+                end_angle=390,
+            )
+
+            self.icon = nerd_font_icon(
+                icon=self.config["icon"],
+                props={
+                    "style_classes": "panel-font-icon overlay-icon",
+                },
+            )
+
+            # Create an event box to handle scroll events for volume control
+            self.box.children = (
+                Overlay(child=self.progress_bar, overlays=self.icon, name="overlay"),
+            )
+
+        else:
+            # Create a TextIcon with the specified icon and size
+            self.icon = nerd_font_icon(
+                icon=self.config["icon"],
+                props={"style_classes": "panel-font-icon"},
+            )
+
+            self.cpu_level_label = Label(
+                label="0%",
+                style_classes="panel-text",
+            )
+            self.box.children = (self.icon, self.cpu_level_label)
+
+        # Set up a fabricator to call the update_label method when the CPU usage changes
+        util_fabricator.connect("changed", self.get_gpu_info)
+
+    def get_gpu_info(self, *_):
+        exec_shell_command_async(
+            "nvtop -s",self.update_ui
+        )
+
+
+
+    def update_ui(self,value):
+        # Update the label with the current GPU usage if enabled
+        stats = json.loads(value)
+
+        if type(stats) is list:
+            stats = stats[0]
+
+        frequency = stats.get("gpu_clock", "0MHz")
+        usage = stats.get("mem_util", "0").strip("%")
+        gpu_name = stats.get("device_name", "N/A")
+
+        if self.current_mode == "graph":
+            self.graph_values.append(get_bar_graph(usage))
+
+            if len(self.graph_values) > self.config["graph_length"]:
+                self.graph_values.pop(0)
+
+            self.gpu_level_label.set_label("".join(self.graph_values))
+
+        elif self.current_mode == "progress":
+            self.progress_bar.set_value(usage)
+
+        else:
+            self.gpu_level_label.set_label(usage)
+
+        # Update the tooltip with the memory usage details if enabled
+        if self.config["tooltip"]:
+            temp = stats.get("temp")
+
+            if temp is None:
+                return "N/A"
+
+            tooltip_text = (
+                f"{gpu_name}\n"
+                f" Temperature: {temp}\n"
+                f"󰾆 Utilization: {usage}\n"
+                f" Clock Speed: {frequency}"
             )
 
             self.set_tooltip_text(tooltip_text)
