@@ -71,8 +71,7 @@
 			"auto_hide_timeout": 2000,
 			"media": {
 				"enabled": true,
-				"ignore": [
-				],
+				"ignore": [],
 				"truncation_size": 30,
 				"show_album": true,
 				"show_artist": true,
@@ -201,6 +200,13 @@
 			"sensor": "acpitz",
 			"graph_length": 4
 		},
+		"gpu": {
+			"show_icon": true,
+			"icon": "",
+			"tooltip": true,
+			"mode": "circular",
+			"graph_length": 4
+		},
 		"date_time": {
 			"format": "%b %d %H:%M",
 			"notification": {
@@ -304,7 +310,8 @@
 		], // this is the left section of the panel
 		"middle_section": [
 			"date_time",
-			"weather"
+			"weather",
+			"gpu"
 		], // this is the middle section of the panel
 		"right_section": [
 			"recorder",
@@ -395,5 +402,4 @@
 		"monitor_styles": true,
 		"location": "top"
 	}
-
 }

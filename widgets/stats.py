@@ -1,5 +1,6 @@
 import json
-from fabric.utils import exec_shell_command_async
+
+from fabric.utils import exec_shell_command, exec_shell_command_async
 from fabric.widgets.circularprogressbar import CircularProgressBar
 from fabric.widgets.label import Label
 from fabric.widgets.overlay import Overlay
@@ -139,8 +140,6 @@ class CpuWidget(ButtonWidget):
         return True
 
 
-
-
 class GpuWidget(ButtonWidget):
     """A widget to display the current GPU usage."""
 
@@ -156,7 +155,6 @@ class GpuWidget(ButtonWidget):
 
         # Set the GPU name and mode
         self.current_mode = self.config["mode"]
-
 
         if self.current_mode == "graph":
             self.graph_values = []
@@ -196,25 +194,21 @@ class GpuWidget(ButtonWidget):
                 props={"style_classes": "panel-font-icon"},
             )
 
-            self.cpu_level_label = Label(
+            self.gpu_level_label = Label(
                 label="0%",
                 style_classes="panel-text",
             )
-            self.box.children = (self.icon, self.cpu_level_label)
+            self.box.children = (self.icon, self.gpu_level_label)
 
         # Set up a fabricator to call the update_label method when the CPU usage changes
-        util_fabricator.connect("changed", self.get_gpu_info)
+        util_fabricator.connect("changed", self.update_ui)
 
-    def get_gpu_info(self, *_):
-        exec_shell_command_async(
-            "nvtop -s",self.update_ui
-        )
-
-
-
-    def update_ui(self,value):
+    def update_ui(self, *_):
         # Update the label with the current GPU usage if enabled
-        stats = json.loads(value)
+
+        value = exec_shell_command("nvtop -s")
+
+        stats = json.loads(value.strip("\n"))
 
         if type(stats) is list:
             stats = stats[0]
