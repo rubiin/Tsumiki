@@ -560,7 +560,7 @@ class PlayerBox(Box):
 
         return True
 
-    @cooldown(0.1)
+    @cooldown(1)
     def _on_scale_move(self, scale: Scale, event, pos: int):
         self.player.position = pos
         self.position_label.set_label(self.length_str(pos))

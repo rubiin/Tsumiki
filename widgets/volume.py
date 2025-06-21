@@ -51,7 +51,7 @@ class VolumeWidget(EventBoxWidget):
             self.volume_label = Label(style_classes="panel-text")
             self.box.add(self.volume_label)
 
-    @cooldown(0.1)
+    @cooldown(1)
     def on_scroll(self, _, event):
         # Adjust the volume based on the scroll direction
         val_y = event.delta_y

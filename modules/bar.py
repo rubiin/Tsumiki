@@ -7,7 +7,6 @@ from fabric.widgets.centerbox import CenterBox
 from fabric.widgets.wayland import WaylandWindow as Window
 
 from shared.widget_container import ToggleableWidget, WidgetGroup
-from utils.monitors import HyprlandWithMonitors
 from widgets.battery import BatteryWidget
 from widgets.bluetooth import BlueToothWidget
 from widgets.brightness import BrightnessWidget
@@ -130,7 +129,6 @@ class StatusBar(Window, ToggleableWidget):
             layer=bar_config["layer"],
             anchor=anchor,
             pass_through=False,
-            monitor=HyprlandWithMonitors().get_current_gdk_monitor_id(),
             exclusivity="auto",
             visible=True,
             all_visible=False,

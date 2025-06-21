@@ -35,7 +35,7 @@ class BrightnessSlider(SettingSlider):
         """Reset the brightness to the default value."""
         self.client.screen_brightness = 0
 
-    @cooldown(0.1)
+    @cooldown(1)
     def on_scale_move(self, _, __, moved_pos):
         self.client.screen_brightness = moved_pos
 

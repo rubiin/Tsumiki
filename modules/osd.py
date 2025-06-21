@@ -11,7 +11,6 @@ from gi.repository import GLib, GObject
 from services import audio_service
 from services.brightness import BrightnessService
 from utils.icons import symbolic_icons
-from utils.monitors import HyprlandWithMonitors
 from utils.types import Keyboard_Mode
 from utils.widget_utils import (
     create_scale,
@@ -87,7 +86,7 @@ class BrightnessOSDContainer(GenericOSDContainer):
             "brightness_changed", self.on_brightness_changed
         )
 
-    @cooldown(0.1)
+    @cooldown(1)
     def update_brightness(self):
         brightness_percent = self.brightness_service.screen_brightness_percentage
         self.update_values(brightness_percent)
@@ -126,7 +125,7 @@ class AudioOSDContainer(GenericOSDContainer):
             },
         )
 
-    @cooldown(0.1)
+    @cooldown(1)
     def check_mute(self, audio):
         if not audio.speaker:
             return
@@ -140,7 +139,7 @@ class AudioOSDContainer(GenericOSDContainer):
         if speaker := self.audio_service.speaker:
             speaker.connect("notify::volume", self.update_volume)
 
-    @cooldown(0.1)
+    @cooldown(1)
     def update_volume(self, speaker, _):
         speaker.handler_block_by_func(self.update_volume)
         self.emit("volume-changed")
@@ -201,8 +200,6 @@ class OSDContainer(Window):
             keyboard_mode=keyboard_mode,
             **kwargs,
         )
-
-        self.monitor = HyprlandWithMonitors().get_current_gdk_monitor_id()
 
         self.hide_timer_id = None
         self.suppressed: bool = False

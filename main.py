@@ -1,6 +1,9 @@
+import traceback
+
 import setproctitle
 from fabric import Application
 from fabric.utils import exec_shell_command, get_relative_path
+from gi.repository import GLib
 from loguru import logger
 
 import utils.functions as helpers
@@ -8,6 +11,57 @@ from modules.bar import StatusBar
 from utils.colors import Colors
 from utils.config import theme_config, widget_config
 from utils.constants import APP_CACHE_DIRECTORY, APPLICATION_NAME
+
+# Manually map log levels to readable names
+LOG_LEVEL_NAMES = {
+    GLib.LogLevelFlags.LEVEL_ERROR: "ERROR",
+    GLib.LogLevelFlags.LEVEL_CRITICAL: "CRITICAL",
+    GLib.LogLevelFlags.LEVEL_WARNING: "WARNING",
+    GLib.LogLevelFlags.LEVEL_MESSAGE: "MESSAGE",
+    GLib.LogLevelFlags.LEVEL_INFO: "INFO",
+    GLib.LogLevelFlags.LEVEL_DEBUG: "DEBUG",
+}
+
+
+def take_snapshot():
+    import tracemalloc
+
+    tracemalloc.start()
+    # Later in code
+    snapshot = tracemalloc.take_snapshot()
+    top_stats = snapshot.statistics("lineno")
+
+    print("[Top 10 Memory Lines]")
+    for stat in top_stats[:10]:
+        print(stat)
+
+
+def log_handler(domain, level, message):
+    level_name = LOG_LEVEL_NAMES.get(
+        GLib.LogLevelFlags(
+            level & ~GLib.LogLevelFlags.FLAG_FATAL & ~GLib.LogLevelFlags.FLAG_RECURSION
+        ),
+        f"UNKNOWN({level})",
+    )
+    print(f"\n[{domain or 'Default'}] {level_name}: {message}")
+    traceback.print_stack()
+
+
+# Set log levels
+log_levels = (
+    GLib.LogLevelFlags.LEVEL_ERROR
+    | GLib.LogLevelFlags.LEVEL_CRITICAL
+    | GLib.LogLevelFlags.LEVEL_WARNING
+    | GLib.LogLevelFlags.LEVEL_MESSAGE
+    | GLib.LogLevelFlags.LEVEL_INFO
+    | GLib.LogLevelFlags.LEVEL_DEBUG
+)
+
+# Common GTK/GLib log domains
+domains = [None, "Gtk", "GLib", "GLib-GObject", "Gdk", "Pango"]
+
+for domain in domains:
+    GLib.log_set_handler(domain, log_levels, log_handler)
 
 
 @helpers.run_in_thread
@@ -52,12 +106,6 @@ def main():
 
     windows = [bar]
 
-    # if module_options["app_launcher"]["enabled"]:
-    #     from modules.app_launcher import AppLauncher
-
-    #     app_launcher = AppLauncher(widget_config)
-    #     windows.append(app_launcher)
-
     if module_options["notification"]["enabled"]:
         from modules.notification import NotificationPopup
 
@@ -94,6 +142,8 @@ def main():
 
     setproctitle.setproctitle(APPLICATION_NAME)
     process_and_apply_css(app)
+
+    GLib.timeout_add_seconds(120, take_snapshot)
 
     # Run the application
     app.run()
