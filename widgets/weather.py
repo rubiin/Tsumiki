@@ -3,9 +3,9 @@ from datetime import datetime
 
 from fabric.utils import cooldown, get_relative_path
 from fabric.widgets.box import Box
+from fabric.widgets.image import Image
 from fabric.widgets.label import Label
-from fabric.widgets.svg import Svg
-from gi.repository import Gtk
+from gi.repository import GdkPixbuf, Gtk
 from loguru import logger
 
 from services.weather import WeatherService
@@ -121,8 +121,12 @@ class WeatherMenu(Box, BaseWeatherWidget):
 
         self.weather_icons_dir = get_relative_path("../assets/icons/svg/weather")
 
-        self.current_weather_image = Svg(
-            svg_file=self.get_weather_asset(self.current_weather["weatherCode"]),
+        self.current_weather_image = Image(
+            pixbuf=GdkPixbuf.Pixbuf.new_from_file_at_size(
+                self.get_weather_asset(self.current_weather["weatherCode"]),
+                100,
+                100
+            ),
             size=100,
             v_align="start",
             h_align="start",
@@ -263,10 +267,14 @@ class WeatherMenu(Box, BaseWeatherWidget):
                 label=f"{self.convert_to_12hr_format(column_data['time'])}",
                 h_align="center",
             )
-            icon = Svg(
-                svg_file=self.get_weather_asset(
-                    column_data["weatherCode"],
-                    self.convert_to_12hr_format(column_data["time"]),
+            icon = Image(
+                pixbuf=GdkPixbuf.Pixbuf.new_from_file_at_size(
+                    self.get_weather_asset(
+                        column_data["weatherCode"],
+                        self.convert_to_12hr_format(column_data["time"]),
+                    ),
+                    65,
+                    65,
                 ),
                 size=65,
                 h_align="center",

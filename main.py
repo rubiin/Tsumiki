@@ -35,6 +35,8 @@ def take_snapshot():
     for stat in top_stats[:10]:
         print(stat)
 
+    return True  # Keep the timeout active
+
 
 def log_handler(domain, level, message):
     level_name = LOG_LEVEL_NAMES.get(
