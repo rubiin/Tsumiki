@@ -29,10 +29,22 @@ class BaseWeatherWidget:
     def sunrise_sunset_time(self) -> str:
         return f" {self.sunrise_time}  {self.sunset_time}"
 
-    def update_sunrise_sunset(self, data):
+
+    def update_app_data(self, data):
+        """Update the weather data."""
+        self.data = data
+
+        # Get the current weather
+        self.current_weather = self.data["current"]
+
+        # Get the hourly forecast
+        self.hourly_forecast = self.data["hourly"]
+
+        # Update sunrise and sunset times
         # Get the sunrise and sunset times
-        self.sunrise_time = data["astronomy"]["sunrise"]
-        self.sunset_time = data["astronomy"]["sunset"]
+        self.sunrise_time = self.data["astronomy"]["sunrise"]
+        self.sunset_time = self.data["astronomy"]["sunset"]
+
         return True
 
     def get_wind_speed(self):
@@ -97,7 +109,6 @@ class WeatherMenu(Box, BaseWeatherWidget):
     def __init__(
         self,
         config,
-        data,
         **kwargs,
     ):
         super().__init__(
@@ -108,16 +119,12 @@ class WeatherMenu(Box, BaseWeatherWidget):
             **kwargs,
         )
 
+
+
         self.config = config
 
         self.update_time = datetime.now()
-        self.update_sunrise_sunset(data)
 
-        # Get the current weather
-        self.current_weather = data["current"]
-
-        # Get the hourly forecast
-        self.hourly_forecast = data["hourly"]
 
         self.weather_icons_dir = get_relative_path("../assets/icons/svg/weather")
 
@@ -148,7 +155,7 @@ class WeatherMenu(Box, BaseWeatherWidget):
             Label(
                 style_classes="header-label",
                 h_align="start",
-                label=f"{data['location']}",
+                label=f"{self.data['location']}",
             ),
             2,
             0,
@@ -235,13 +242,27 @@ class WeatherMenu(Box, BaseWeatherWidget):
 
         self.children = (self.title_box, expander)
 
-        self.update_widget(forced=True)
+
+
+
+        WeatherService().get_weather_async(
+            location=self.config["location"],
+            ttl=self.config["interval"],
+            callback=self.update_data,
+        )
+
 
         # reusing the fabricator to call specified intervals
         reusable_fabricator.connect("changed", self.update_widget)
 
+    def update_data(self, data):
+        self.update_app_data(data)
+
+        self.update_widget(forced=True)
+
     def update_widget(self, *args, **kwargs):
         forced = kwargs.get("forced", False)
+
 
         # Check if the update time is more than 1 minute ago
         if (datetime.now() - self.update_time).total_seconds() < 60 and not forced:
@@ -339,6 +360,7 @@ class WeatherWidget(ButtonWidget, BaseWeatherWidget):
     def update_data(self, data):
         self.update_time = datetime.now()
 
+
         if data is None:
             self.weather_label.set_label("")
             self.weather_icon.set_label("")
@@ -346,10 +368,10 @@ class WeatherWidget(ButtonWidget, BaseWeatherWidget):
                 self.set_tooltip_text("Error fetching weather data, try again later.")
             return
 
-        # Get the current weather
-        self.current_weather = data["current"]
 
-        self.update_sunrise_sunset(data)
+
+        # Get the current weather
+        self.update_app_data(data)
 
         weather_icon = weather_icons[self.current_weather["weatherCode"]]
 
@@ -372,13 +394,8 @@ class WeatherWidget(ButtonWidget, BaseWeatherWidget):
 
         if self.popover is None:
             self.popover = Popover(
-                content=WeatherMenu(data=data, config=self.config),
+                content=WeatherMenu(config=self.config),
                 point_to=self,
-            )
-        else:
-            # Just update content_factory with latest data
-            self.popover.set_content_factory(
-                lambda: WeatherMenu(data=data, config=self.config)
             )
 
         return False
