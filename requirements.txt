@@ -1,5 +1,5 @@
 click==8.1.7
-fabric @ git+https://github.com/Fabric-Development/fabric.git
+fabric @ git+https://github.com/rubiin/fabric.git
 ijson==3.4.0
 loguru==0.7.2
 pillow==11.2.1

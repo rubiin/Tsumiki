@@ -1,11 +1,11 @@
 import subprocess
 
 from fabric.widgets.box import Box
+from fabric.widgets.grid import Grid
 from fabric.widgets.label import Label
 from loguru import logger
 
 from shared.buttons import HoverButton
-from shared.grid import Grid
 from utils.widget_utils import nerd_font_icon
 
 

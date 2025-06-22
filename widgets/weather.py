@@ -3,13 +3,13 @@ from datetime import datetime
 
 from fabric.utils import cooldown, get_relative_path
 from fabric.widgets.box import Box
+from fabric.widgets.grid import Grid
 from fabric.widgets.image import Image
 from fabric.widgets.label import Label
 from gi.repository import GdkPixbuf, Gtk
 from loguru import logger
 
 from services.weather import WeatherService
-from shared.grid import Grid
 from shared.popover import Popover
 from shared.widget_container import ButtonWidget
 from utils.icons import weather_icons
@@ -307,7 +307,6 @@ class WeatherMenu(Box, BaseWeatherWidget):
                     65,
                     65,
                 ),
-                size=65,
                 h_align="center",
                 h_expand=True,
                 style_classes="weather-forecast-icon",

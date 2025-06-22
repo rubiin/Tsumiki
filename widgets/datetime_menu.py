@@ -7,6 +7,7 @@ from fabric.widgets.button import Button
 from fabric.widgets.datetime import DateTime
 from fabric.widgets.label import Label
 from fabric.widgets.scrolledwindow import ScrolledWindow
+from fabric.widgets.separator import Separator
 from gi.repository import GdkPixbuf, GLib, Gtk
 from loguru import logger
 
@@ -17,7 +18,6 @@ from shared.buttons import HoverButton
 from shared.circle_image import CircleImage
 from shared.list import ListBox
 from shared.popover import Popover
-from shared.separator import Separator
 from shared.widget_container import ButtonWidget
 from utils.colors import Colors
 from utils.icons import text_icons
@@ -97,7 +97,6 @@ class DateMenuNotification(Box):
                             constants.NOTIFICATION_IMAGE_SIZE,
                             GdkPixbuf.InterpType.BILINEAR,
                         ),
-                        size=constants.NOTIFICATION_IMAGE_SIZE,
                         h_expand=True,
                         v_expand=True,
                     ),

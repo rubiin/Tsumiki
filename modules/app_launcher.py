@@ -189,7 +189,6 @@ class AppLauncher(Window):
                     Image(
                         pixbuf=app.get_icon_pixbuf(self.config["icon_size"]),
                         h_align="start",
-                        size=self.config["icon_size"],
                     ),
                     Label(
                         label=app.display_name or "Unknown",

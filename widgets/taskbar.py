@@ -114,7 +114,7 @@ class TaskBarWidget(ButtonWidget):
         else:
             pixbuf = self.load_icon(window_class, fallback_icon)
 
-        return Image(pixbuf=pixbuf, size=self.config["icon_size"])
+        return Image(pixbuf=pixbuf)
 
     def get_icon_from_desktop_entry(self, window_class: str) -> str:
         for data_dir in GLib.get_system_data_dirs():

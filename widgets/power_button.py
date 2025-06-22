@@ -1,12 +1,12 @@
 from fabric.utils import get_relative_path
 from fabric.widgets.box import Box
+from fabric.widgets.grid import Grid
 from fabric.widgets.image import Image
 from fabric.widgets.label import Label
 from fabric.widgets.widget import Widget
 
 from shared.buttons import HoverButton
 from shared.dialog import Dialog
-from shared.grid import Grid
 from shared.popup import PopupWindow
 from shared.widget_container import ButtonWidget
 from utils.widget_utils import nerd_font_icon

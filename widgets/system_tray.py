@@ -5,13 +5,13 @@ from fabric.utils import (
     bulk_connect,
 )
 from fabric.widgets.box import Box
+from fabric.widgets.grid import Grid
 from fabric.widgets.image import Image
+from fabric.widgets.separator import Separator
 from gi.repository import Gdk, GdkPixbuf, GLib, Gray, Gtk
 
 from shared.buttons import HoverButton
-from shared.grid import Grid
 from shared.popover import Popover
-from shared.separator import Separator
 from shared.widget_container import ButtonWidget
 from utils.icons import text_icons
 from utils.widget_utils import nerd_font_icon
@@ -126,10 +126,8 @@ class SystemTrayMenu(Box):
         return button
 
     def do_update_item_button(self, item: Gray.Item, button: HoverButton):
-        pixbuf = resolve_icon(
-            item=item,
-        )
-        button.set_image(Image(pixbuf=pixbuf, pixel_size=self.config["icon_size"]))
+        pixbuf = resolve_icon(item=item, icon_size=self.config["icon_size"])
+        button.set_image(Image(pixbuf=pixbuf))
 
     def on_button_click(self, button, item: Gray.Item, event):
         if event.button in (1, 3):
@@ -232,8 +230,9 @@ class SystemTrayWidget(ButtonWidget):
 
             pixbuf = resolve_icon(
                 item=item,
+                icon_size=self.config["icon_size"],
             )
-            button.set_image(Image(pixbuf=pixbuf, pixel_size=self.config["icon_size"]))
+            button.set_image(Image(pixbuf=pixbuf))
 
             # Connect signals
             item.connect("removed", lambda *args: button.destroy())

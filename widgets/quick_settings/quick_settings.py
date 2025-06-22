@@ -3,6 +3,7 @@ import os
 from fabric.utils import bulk_connect, get_relative_path, invoke_repeater
 from fabric.widgets.box import Box
 from fabric.widgets.centerbox import CenterBox
+from fabric.widgets.grid import Grid
 from fabric.widgets.image import Image
 from fabric.widgets.label import Label
 from gi.repository import GLib, Gtk
@@ -18,7 +19,6 @@ from services.network import NetworkService, Wifi
 from shared.buttons import HoverButton, QSChevronButton
 from shared.circle_image import CircleImage
 from shared.dialog import Dialog
-from shared.grid import Grid
 from shared.popover import Popover
 from shared.widget_container import ButtonWidget
 from utils.icons import symbolic_icons
