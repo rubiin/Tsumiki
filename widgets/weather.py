@@ -129,11 +129,6 @@ class WeatherMenu(Box, BaseWeatherWidget):
         self.weather_icons_dir = get_relative_path("../assets/icons/svg/weather")
 
         self.current_weather_image = Image(
-            pixbuf=GdkPixbuf.Pixbuf.new_from_file_at_size(
-                self.get_weather_asset(self.current_weather["weatherCode"]),
-                100,
-                100
-            ),
             size=100,
             v_align="start",
             h_align="start",
@@ -155,7 +150,7 @@ class WeatherMenu(Box, BaseWeatherWidget):
             Label(
                 style_classes="header-label",
                 h_align="start",
-                label=f"{self.data['location']}",
+                label="",
             ),
             2,
             0,
@@ -167,7 +162,7 @@ class WeatherMenu(Box, BaseWeatherWidget):
             Label(
                 name="condition",
                 h_align="start",
-                label=f"{self.get_description()}",
+                label="",
             ),
             2,
             1,
@@ -180,7 +175,7 @@ class WeatherMenu(Box, BaseWeatherWidget):
                 style_classes="header-label",
                 name="sunrise-sunset",
                 h_align="start",
-                label=self.sunrise_sunset_time(),
+                label="",
             ),
             2,
             2,
@@ -192,7 +187,7 @@ class WeatherMenu(Box, BaseWeatherWidget):
             Label(
                 style_classes="stats",
                 h_align="center",
-                label=f" {self.get_temperature()}",
+                label="",
             ),
             3,
             0,
@@ -204,7 +199,7 @@ class WeatherMenu(Box, BaseWeatherWidget):
             Label(
                 style_classes="stats",
                 h_align="center",
-                label=f"󰖎 {self.current_weather['humidity']}%",
+                label="",
             ),
             3,
             1,
@@ -216,7 +211,7 @@ class WeatherMenu(Box, BaseWeatherWidget):
             Label(
                 style_classes="stats",
                 h_align="center",
-                label=f" {self.get_wind_speed()}",
+                label=""
             ),
             3,
             2,
@@ -241,8 +236,6 @@ class WeatherMenu(Box, BaseWeatherWidget):
         setup_cursor_hover(expander)
 
         self.children = (self.title_box, expander)
-
-
 
 
         WeatherService().get_weather_async(
@@ -278,6 +271,7 @@ class WeatherMenu(Box, BaseWeatherWidget):
 
         if current_time > 1200:
             next_values = self.hourly_forecast[4:8]
+            # clear the forecast box grid here : TODO: fix this
 
         # show next 4 hours forecast
         for col in range(4):
