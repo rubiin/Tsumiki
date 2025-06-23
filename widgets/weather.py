@@ -261,7 +261,7 @@ class WeatherMenu(Box, BaseWeatherWidget):
     def update_widget(self, *args, **kwargs):
         forced = kwargs.get("forced", False)
 
-        # Check if the update time is more than 1 minute ago
+        # Check if the update time is more than 4 minute ago
         if (datetime.now() - self.update_time).total_seconds() < 60 and not forced:
             return
 
@@ -271,15 +271,17 @@ class WeatherMenu(Box, BaseWeatherWidget):
 
         current_time = int(time.strftime("%H00"))
 
-        self.current_weather_image.set_from_file(
-            self.get_weather_asset(self.current_weather["weatherCode"]),
-        )
-        self.location.set_label(self.data["location"])
-        self.weather_description.set_label(self.get_description())
-        self.sunset_sunrise.set_label(self.sunrise_sunset_time())
-        self.humidity.set_label(f"󰖎 {self.current_weather['humidity']}%")
-        self.temperature.set_label(f"  {self.get_temperature()}")
-        self.wind_speed.set_label(f" {self.get_wind_speed()}")
+
+        if forced:
+            self.current_weather_image.set_from_file(
+                self.get_weather_asset(self.current_weather["weatherCode"]),
+            )
+            self.location.set_label(self.data["location"])
+            self.weather_description.set_label(self.get_description())
+            self.sunset_sunrise.set_label(self.sunrise_sunset_time())
+            self.humidity.set_label(f"󰖎 {self.current_weather['humidity']}%")
+            self.temperature.set_label(f"  {self.get_temperature()}")
+            self.wind_speed.set_label(f" {self.get_wind_speed()}")
 
         next_values = self.hourly_forecast[:4]
 
