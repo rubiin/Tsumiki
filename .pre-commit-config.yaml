@@ -40,7 +40,8 @@ repos:
                     (?x)^(
                         config.json|
                         example/config.json|
-                        assets/icons/recording.json
+                        assets/icons/recording.json |
+                        assets/matugen/tsumiki.css
                     )$
 
 default_stages: [pre-commit]
