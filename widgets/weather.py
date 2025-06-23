@@ -6,7 +6,7 @@ from fabric.widgets.box import Box
 from fabric.widgets.grid import Grid
 from fabric.widgets.image import Image
 from fabric.widgets.label import Label
-from gi.repository import GdkPixbuf, Gtk
+from gi.repository import Gtk
 from loguru import logger
 
 from services.weather import WeatherService
@@ -126,6 +126,7 @@ class WeatherMenu(Box, BaseWeatherWidget):
         self.current_weather_image = Image(
             v_align="start",
             h_align="start",
+            size=100,
         )
 
         self.title_box = Grid(
@@ -269,12 +270,8 @@ class WeatherMenu(Box, BaseWeatherWidget):
 
         current_time = int(time.strftime("%H00"))
 
-        self.current_weather_image.set_from_pixbuf(
-            GdkPixbuf.Pixbuf.new_from_file_at_size(
-                self.get_weather_asset(self.current_weather["weatherCode"]),
-                100,
-                100,
-            )
+        self.current_weather_image.set_from_file(
+            self.get_weather_asset(self.current_weather["weatherCode"]),
         )
         self.location.set_label(self.data["location"])
         self.weather_description.set_label(self.get_description())
@@ -299,14 +296,11 @@ class WeatherMenu(Box, BaseWeatherWidget):
                 h_align="center",
             )
             icon = Image(
-                pixbuf=GdkPixbuf.Pixbuf.new_from_file_at_size(
-                    self.get_weather_asset(
-                        column_data["weatherCode"],
-                        self.convert_to_12hr_format(column_data["time"]),
-                    ),
-                    65,
-                    65,
+                image_file=self.get_weather_asset(
+                    column_data["weatherCode"],
+                    self.convert_to_12hr_format(column_data["time"]),
                 ),
+                size=65,
                 h_align="center",
                 h_expand=True,
                 style_classes="weather-forecast-icon",

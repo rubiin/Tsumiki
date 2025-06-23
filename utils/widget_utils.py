@@ -10,7 +10,7 @@ from fabric.utils import bulk_connect
 from fabric.widgets.image import Image
 from fabric.widgets.label import Label
 from fabric.widgets.scale import ScaleMark
-from gi.repository import Gdk, GLib, Gtk
+from gi.repository import Gdk, GdkPixbuf, GLib, Gtk
 
 from shared.animated.scale import AnimatedScale
 
@@ -64,13 +64,17 @@ def get_icon(app_icon, size=25) -> Image:
             case str(x) if "file://" in x:
                 return Image(
                     name="app-icon",
-                    image_file=app_icon[7:],
+                    image_file=GdkPixbuf.Pixbuf.new_from_file_at_size(
+                        app_icon[7:], size, size
+                    ),
                     size=size,
                 )
             case str(x) if len(x) > 0 and x[0] == "/":
                 return Image(
                     name="app-icon",
-                    image_file=app_icon,
+                    image_file=GdkPixbuf.Pixbuf.new_from_file_at_size(
+                        app_icon, size, size
+                    ),
                     size=size,
                 )
             case _:
