@@ -71,9 +71,7 @@
 			"auto_hide_timeout": 2000,
 			"media": {
 				"enabled": true,
-				"ignore": [
-					"vlc"
-				],
+				"ignore": [],
 				"truncation_size": 30,
 				"show_album": true,
 				"show_artist": true,
@@ -84,14 +82,14 @@
 				"enabled": true,
 				"items": [
 					{
-						"icon": "terminal-symbolic",
+						"icon": "",
 						"label": "Terminal",
 						"command": "kitty",
 						"tooltip": "Open terminal",
 						"icon_size": 18
 					},
 					{
-						"icon": "firefox-symbolic",
+						"icon": "",
 						"label": "Browser",
 						"command": "firefox",
 						"tooltip": "Launch Firefox",
@@ -202,6 +200,13 @@
 			"sensor": "acpitz",
 			"graph_length": 4
 		},
+		"gpu": {
+			"show_icon": true,
+			"icon": "",
+			"tooltip": true,
+			"mode": "circular",
+			"graph_length": 4
+		},
 		"date_time": {
 			"format": "%b %d %H:%M",
 			"notification": {
@@ -211,7 +216,6 @@
 			},
 			"calendar": true,
 			"clock_format": "24h",
-			"uptime": true,
 			"auto_hide": false,
 			"auto_hide_timeout": 2000
 		},
@@ -305,7 +309,8 @@
 			"window_title"
 		], // this is the left section of the panel
 		"middle_section": [
-			"date_time"
+			"date_time",
+			"weather"
 		], // this is the middle section of the panel
 		"right_section": [
 			"recorder",
@@ -337,11 +342,6 @@
 		}
 	],
 	"modules": {
-		"bar": {
-			"layer": "top",
-			"auto_hide": false,
-			"location": "top"
-		},
 		"app_launcher": {
 			"enabled": true,
 			"tooltip": true,
@@ -358,7 +358,8 @@
 			"transition_duration": 350,
 			"play_sound": true,
 			"sound_file": "notification4",
-			"dismiss_on_hover": false // this is to dismiss the notification on hover
+			"display_actions_on_hover": false, // this is to display the actions on hover
+			"dismiss_on_hover": true // this is to dismiss the notification on hover
 		},
 		"osd": {
 			"enabled": true,
@@ -386,7 +387,7 @@
 			]
 		},
 		"desktop_clock": {
-			"enabled": true,
+			"enabled": false,
 			"anchor": "bottom-right",
 			"date_format": "%A, %d %B %Y",
 			"layer": "bottom"
@@ -394,7 +395,10 @@
 	},
 	"general": {
 		"check_updates": false,
+		"layer": "top",
+		"auto_hide": false,
 		"debug": true,
-		"monitor_styles": true
+		"monitor_styles": true,
+		"location": "top"
 	}
 }

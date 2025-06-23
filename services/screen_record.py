@@ -1,4 +1,3 @@
-import subprocess
 from datetime import datetime
 
 from fabric.core.service import Property, Service, Signal
@@ -107,9 +106,11 @@ class ScreenRecorderService(Service):
         if not fullscreen:
             command[2] = "area"
         try:
-            subprocess.run(command, check=True)
-            self.send_screenshot_notification(
-                file_path=file_path if file_path else None,
+            exec_shell_command_async(
+                " ".join(command),
+                lambda *_: self.send_screenshot_notification(
+                    file_path=file_path if file_path else None,
+                ),
             )
         except Exception:
             logger.exception(f"[SCREENSHOT] Failed to run command: {command}")

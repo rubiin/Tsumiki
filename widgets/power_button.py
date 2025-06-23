@@ -1,11 +1,15 @@
 from fabric.utils import get_relative_path
 from fabric.widgets.box import Box
-from fabric.widgets.image import Image
+from fabric.widgets.grid import Grid
 from fabric.widgets.label import Label
+from fabric.widgets.svg import Svg
 from fabric.widgets.widget import Widget
 
-from shared import ButtonWidget, Dialog, Grid, HoverButton, PopupWindow
-from utils.widget_utils import text_icon
+from shared.buttons import HoverButton
+from shared.dialog import Dialog
+from shared.popup import PopupWindow
+from shared.widget_container import ButtonWidget
+from utils.widget_utils import nerd_font_icon
 
 
 class PowerMenuPopup(PopupWindow):
@@ -78,23 +82,20 @@ class PowerControlButtons(HoverButton):
         self, config, name: str, command: str, size: int, show_label=True, **kwargs
     ):
         self.config = config
-        self.dialog = Dialog(
-            title=name,
-            body=f"Are you sure you want to {name}?",
-            command=command,
-            **kwargs,
-        )
+        self.name = name
+        self.command = command
+        self.size = size
 
         super().__init__(
             config=config,
             orientation="v",
             name="power-control-button",
-            on_clicked=lambda _: self.on_button_press(),
+            on_clicked=self.on_button_press,
             child=Box(
                 orientation="v",
                 children=[
-                    Image(
-                        image_file=get_relative_path(f"../assets/icons/png/{name}.png"),
+                    Svg(
+                        svg_file=get_relative_path(f"../assets/icons/svg/{name}.svg"),
                         size=size,
                     ),
                     Label(
@@ -107,11 +108,14 @@ class PowerControlButtons(HoverButton):
             **kwargs,
         )
 
-    def on_button_press(
-        self,
-    ):
+    def on_button_press(self, *_):
         PowerMenuPopup.get_default(widget_config=self.config).toggle_popup()
-        self.dialog.toggle_popup()
+        Dialog().add_content(
+            title=f"{self.name.capitalize()} Confirmation",
+            body=f"Are you sure you want to {self.name}?",
+            command=self.command,
+        ).toggle_popup()
+
         return True
 
 
@@ -123,7 +127,7 @@ class PowerWidget(ButtonWidget):
 
         if self.config["show_icon"]:
             # Create a TextIcon with the specified icon and size
-            self.icon = text_icon(
+            self.icon = nerd_font_icon(
                 icon=self.config["icon"],
                 props={"style_classes": "panel-font-icon"},
             )

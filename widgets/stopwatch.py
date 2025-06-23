@@ -3,8 +3,8 @@ import time
 from fabric.widgets.label import Label
 from gi.repository import GLib
 
-from shared import ButtonWidget
-from utils.widget_utils import text_icon
+from shared.widget_container import ButtonWidget
+from utils.widget_utils import nerd_font_icon
 
 
 class StopWatchWidget(ButtonWidget):
@@ -20,7 +20,7 @@ class StopWatchWidget(ButtonWidget):
         self.elapsed_time = 0
         self.running = False
 
-        self.icon = text_icon(
+        self.icon = nerd_font_icon(
             icon=self.config["stopped_icon"],
             props={"style_classes": "panel-font-icon"},
         )

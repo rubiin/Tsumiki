@@ -6,9 +6,49 @@ from fabric.widgets.box import Box
 from fabric.widgets.centerbox import CenterBox
 from fabric.widgets.wayland import WaylandWindow as Window
 
-from shared import ToggleableWidget, WidgetGroup
-from utils.monitors import HyprlandWithMonitors
-from utils.widget_utils import lazy_load_widget
+from shared.widget_container import ToggleableWidget, WidgetGroup
+from widgets.battery import BatteryWidget
+from widgets.bluetooth import BlueToothWidget
+from widgets.brightness import BrightnessWidget
+from widgets.cava import CavaWidget
+from widgets.click_counter import ClickCounterWidget
+from widgets.cliphist import ClipHistoryWidget
+from widgets.datetime_menu import DateTimeWidget
+from widgets.emoji_picker import EmojiPickerWidget
+from widgets.hypridle import HyprIdleWidget
+from widgets.hyprpicker import HyprPickerWidget
+from widgets.hyprsunset import HyprSunsetWidget
+from widgets.kanban import KanbanWidget
+from widgets.keyboard_layout import KeyboardLayoutWidget
+from widgets.language import LanguageWidget
+from widgets.microphone import MicrophoneIndicatorWidget
+from widgets.mpris import MprisWidget
+from widgets.ocr import OCRWidget
+from widgets.overview import OverviewWidget
+from widgets.power_button import PowerWidget
+from widgets.quick_settings.quick_settings import QuickSettingsButtonWidget
+from widgets.recorder import RecorderWidget
+from widgets.screenshot import ScreenShotWidget
+from widgets.stats import (
+    CpuWidget,
+    GpuWidget,
+    MemoryWidget,
+    NetworkUsageWidget,
+    StorageWidget,
+)
+from widgets.stopwatch import StopWatchWidget
+from widgets.submap import SubMapWidget
+from widgets.system_tray import SystemTrayWidget
+from widgets.taskbar import TaskBarWidget
+from widgets.theme import ThemeSwitcherWidget
+from widgets.updates import UpdatesWidget
+from widgets.utility_widgets import DividerWidget, SpacingWidget
+from widgets.volume import VolumeWidget
+from widgets.weather import WeatherWidget
+from widgets.window_count import WindowCountWidget
+from widgets.window_title import WindowTitleWidget
+from widgets.workspaces import WorkSpacesWidget
+from widgets.world_clock import WorldClockWidget
 
 
 class StatusBar(Window, ToggleableWidget):
@@ -16,46 +56,47 @@ class StatusBar(Window, ToggleableWidget):
 
     def __init__(self, config, **kwargs):
         self.widgets_list = {
-            "battery": "widgets.BatteryWidget",
-            "bluetooth": "widgets.BlueToothWidget",
-            "world_clock": "widgets.WorldClockWidget",
-            "brightness": "widgets.BrightnessWidget",
-            "cava": "widgets.CavaWidget",
-            "cliphist": "widgets.ClipHistoryWidget",
-            "kanban": "widgets.KanbanWidget",
-            "emoji_picker": "widgets.EmojiPickerWidget",
-            "click_counter": "widgets.ClickCounterWidget",
-            "cpu": "widgets.CpuWidget",
-            "date_time": "widgets.DateTimeWidget",
-            "hypridle": "widgets.HyprIdleWidget",
-            "hyprpicker": "widgets.HyprPickerWidget",
-            "hyprsunset": "widgets.HyprSunsetWidget",
-            "keyboard": "widgets.KeyboardLayoutWidget",
-            "language": "widgets.LanguageWidget",
-            "memory": "widgets.MemoryWidget",
-            "microphone": "widgets.MicrophoneIndicatorWidget",
-            "mpris": "widgets.MprisWidget",
-            "network_usage": "widgets.NetworkUsageWidget",
-            "ocr": "widgets.OCRWidget",
-            "overview": "widgets.OverviewWidget",
-            "power": "widgets.PowerWidget",
-            "recorder": "widgets.RecorderWidget",
-            "screenshot": "widgets.ScreenShotWidget",
-            "storage": "widgets.StorageWidget",
-            "system_tray": "widgets.SystemTrayWidget",
-            "taskbar": "widgets.TaskBarWidget",
-            "theme_switcher": "widgets.ThemeSwitcherWidget",
-            "updates": "widgets.UpdatesWidget",
-            "volume": "widgets.VolumeWidget",
-            "submap": "widgets.SubMapWidget",
-            "weather": "widgets.WeatherWidget",
-            "window_title": "widgets.WindowTitleWidget",
-            "workspaces": "widgets.WorkSpacesWidget",
-            "spacing": "widgets.SpacingWidget",
-            "stopwatch": "widgets.StopWatchWidget",
-            "divider": "widgets.DividerWidget",
-            "quick_settings": "widgets.QuickSettingsButtonWidget",
-            "window_count": "widgets.WindowCountWidget",
+            "battery": BatteryWidget,
+            "bluetooth": BlueToothWidget,
+            "world_clock": WorldClockWidget,
+            "brightness": BrightnessWidget,
+            "cava": CavaWidget,
+            "cliphist": ClipHistoryWidget,
+            "gpu": GpuWidget,
+            "kanban": KanbanWidget,
+            "emoji_picker": EmojiPickerWidget,
+            "click_counter": ClickCounterWidget,
+            "cpu": CpuWidget,
+            "date_time": DateTimeWidget,
+            "hypridle": HyprIdleWidget,
+            "hyprpicker": HyprPickerWidget,
+            "hyprsunset": HyprSunsetWidget,
+            "keyboard": KeyboardLayoutWidget,
+            "language": LanguageWidget,
+            "memory": MemoryWidget,
+            "microphone": MicrophoneIndicatorWidget,
+            "mpris": MprisWidget,
+            "network_usage": NetworkUsageWidget,
+            "ocr": OCRWidget,
+            "overview": OverviewWidget,
+            "power": PowerWidget,
+            "recorder": RecorderWidget,
+            "screenshot": ScreenShotWidget,
+            "storage": StorageWidget,
+            "system_tray": SystemTrayWidget,
+            "taskbar": TaskBarWidget,
+            "theme_switcher": ThemeSwitcherWidget,
+            "updates": UpdatesWidget,
+            "volume": VolumeWidget,
+            "submap": SubMapWidget,
+            "weather": WeatherWidget,
+            "window_title": WindowTitleWidget,
+            "workspaces": WorkSpacesWidget,
+            "spacing": SpacingWidget,
+            "stopwatch": StopWatchWidget,
+            "divider": DividerWidget,
+            "quick_settings": QuickSettingsButtonWidget,
+            "window_count": WindowCountWidget,
         }
 
         options = config["general"]
@@ -88,7 +129,6 @@ class StatusBar(Window, ToggleableWidget):
             layer=bar_config["layer"],
             anchor=anchor,
             pass_through=False,
-            monitor=HyprlandWithMonitors().get_current_gdk_monitor_id(),
             exclusivity="auto",
             visible=True,
             all_visible=False,
@@ -129,7 +169,7 @@ class StatusBar(Window, ToggleableWidget):
                 else:
                     # Handle regular widgets
                     if widget_name in self.widgets_list:
-                        widget_class = lazy_load_widget(widget_name, self.widgets_list)
+                        widget_class = self.widgets_list[widget_name]
                         layout[key].append(widget_class())
 
         return layout

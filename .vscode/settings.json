@@ -9,5 +9,6 @@
 		"psutil",
 		"pycairo",
 		"rlottie"
-	]
+	],
+	"python-envs.pythonProjects": []
 }

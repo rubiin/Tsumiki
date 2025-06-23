@@ -7,14 +7,17 @@ from fabric.widgets.box import Box
 from fabric.widgets.button import Button
 from fabric.widgets.centerbox import CenterBox
 from fabric.widgets.eventbox import EventBox
+from fabric.widgets.grid import Grid
 from fabric.widgets.label import Label
 from fabric.widgets.scrolledwindow import ScrolledWindow
 from gi.repository import Gdk, GLib, GObject, Gtk
 from loguru import logger
 
-from shared import ButtonWidget, ListBox, Popover
-from shared.grid import Grid
-from utils.widget_utils import create_surface_from_widget, text_icon
+from shared.list import ListBox
+from shared.popover import Popover
+from shared.widget_container import ButtonWidget
+from utils.functions import write_json_file
+from utils.widget_utils import create_surface_from_widget, nerd_font_icon
 
 
 class InlineEditor(Box):
@@ -32,6 +35,7 @@ class InlineEditor(Box):
         self.text_view.set_wrap_mode(Gtk.WrapMode.WORD)
         buffer = self.text_view.get_buffer()
         buffer.set_text(initial_text)
+
         # Connect key press events to handle Return and SHIFT+Return.
         self.text_view.connect("key-press-event", self.on_key_press)
 
@@ -48,8 +52,10 @@ class InlineEditor(Box):
         cancel_btn.get_style_context().add_class("flat")
 
         # Pack the TextView inside a ScrolledWindow for better appearance.
-        sw = ScrolledWindow()
-        sw.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
+        sw = ScrolledWindow(
+            h_scrollbar_policy="never",
+            v_scrollbar_policy="automatic",
+        )
         sw.set_min_content_height(50)
         sw.add(self.text_view)
 
@@ -197,7 +203,7 @@ class KanbanColumn(Gtk.Frame):
         self.setup_dnd()
 
     def setup_ui(self):
-        self.box = Box(orientation=Gtk.Orientation.VERTICAL, spacing=4)
+        self.box = Box(orientation="vertical", spacing=4)
         self.listbox = ListBox()
         self.listbox.set_selection_mode(Gtk.SelectionMode.NONE)
 
@@ -214,8 +220,12 @@ class KanbanColumn(Gtk.Frame):
 
         self.add_btn.connect("clicked", self.on_add_clicked)
 
-        scrolled = ScrolledWindow(name="kanban-scroll", v_expand=True)
-        scrolled.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
+        scrolled = ScrolledWindow(
+            name="kanban-scroll",
+            v_expand=True,
+            v_scrollbar_policy="automatic",
+            h_scrollbar_policy="never",
+        )
         scrolled.add(self.listbox)
 
         self.box.pack_start(scrolled, True, True, 0)
@@ -338,11 +348,10 @@ class Kanban(Box):
                 {"title": col.title, "notes": col.get_notes()} for col in self.columns
             ]
         }
-        try:
-            with open(self.STATE_FILE, "w") as f:
-                json.dump(state, f, indent=2)
-        except Exception as e:
-            logger.exception(f"Error saving state: {e}")
+        write_json_file(
+            state,
+            self.STATE_FILE,
+        )
 
     def load_state(self):
         try:
@@ -374,7 +383,7 @@ class KanbanWidget(ButtonWidget):
         )
 
         self.box.add(
-            text_icon(
+            nerd_font_icon(
                 self.config["icon"],
                 props={"style_classes": "panel-font-icon"},
             )
@@ -386,12 +395,18 @@ class KanbanWidget(ButtonWidget):
         if self.config["tooltip"]:
             self.set_tooltip_text("Kanban Board")
 
-        popup = Popover(
-            content=Kanban(),
-            point_to=self,
-        )
+        self.popup = None
 
         self.connect(
             "clicked",
-            popup.open,
+            self.show_popover,
         )
+
+    def show_popover(self, *_):
+        """Show the popover."""
+        if self.popup is None:
+            self.popup = Popover(
+                content=Kanban(),
+                point_to=self,
+            )
+        self.popup.open()

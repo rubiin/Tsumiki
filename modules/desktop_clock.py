@@ -2,7 +2,7 @@ from fabric.widgets.box import Box
 from fabric.widgets.datetime import DateTime
 from fabric.widgets.wayland import WaylandWindow as Window
 
-from shared import ToggleableWidget
+from shared.widget_container import ToggleableWidget
 
 
 class DesktopClock(Window, ToggleableWidget):
@@ -21,10 +21,10 @@ class DesktopClock(Window, ToggleableWidget):
                 name="desktop-clock-box",
                 orientation="v",
                 children=[
-                    DateTime(formatters=["%I:%M"], name="clock"),
+                    DateTime(formatters=[self.config["time_format"]], name="clock"),
                     DateTime(
                         formatters=[self.config["date_format"]],
-                        interval=10000,
+                        interval=3600000,  # Update every hour
                         name="date",
                     ),
                 ],

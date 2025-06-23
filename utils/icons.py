@@ -1,24 +1,84 @@
 # ruff: noqa: E501
 
-common_text_icons = {
-    "playing": "",
-    "paused": "",
+
+text_icons = {
+    "ui": {
+        "window_close": "",
+        "question": "",
+        "headset": "󰋎",
+        "headphones": "󰋋",
+        "phone": "󰏲",
+        "watch": "",
+        "keyboard": "",
+        "mouse": "",
+        "tv": "",
+        "printer": "󰐪",
+        "camera": "",
+        "speakers": "󰓃",
+    },
+    "wifi": {
+        "connected": "󰤨",
+        "disconnected": "󰤩",
+        "connecting": "󰤪",
+        "disabled": "󰤭",
+        "generic": "󰤬",
+        "strength_0": "󰤯",
+        "strength_1": "󰤟",
+        "strength_2": "󰤢",
+        "strength_3": "󰤥",
+        "strength_4": "󰤨",
+    },
+    "mpris": {
+        "playing": "",
+        "paused": "",
+        "stopped": "",
+        "previous": "",
+        "next": "",
+        "shuffle": "",
+        "loop": "",
+    },
+    "trash": {
+        "full": "",
+        "empty": "",
+    },
+    "notifications": {
+        "noisy": "󰂜",
+        "full": "󰅸",
+        "silent": "󰪑",
+        "checked": "󱇥",
+    },
+    "chevron": {
+        "right": "",
+        "left": "",
+        "down": "",
+        "up": "",
+    },
+    "nightlight": {
+        "enabled": "󱩌",
+        "disabled": "󰛨",
+    },
+    "bluetooth": {"enabled": "󰂱", "disabled": "󰂲"},
     "power": "",
     "cpu": "",
     "memory": "",
     "storage": "󰋊",
     "updates": "󱧘",
     "thermometer": "",
-}
-
-
-text_icons = {
+    "recorder": "󰻂",
+    "fallback": "",
+    "powerprofiles": {"power-saver": "󰌪", "performance": "󰓅", "balanced": "󰒂"},
     "volume": {
         "overamplified": "󰕾",
         "high": "󰕾",
         "medium": "󰖀",
         "low": "󰕿",
         "muted": "󰝟",
+    },
+    "microphone": {
+        "muted": "",
+        "low": "󰖁",
+        "medium": "󰖂",
+        "high": "",
     },
     "brightness": {
         "off": "",  # lowest brightness

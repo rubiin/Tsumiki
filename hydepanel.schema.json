@@ -233,6 +233,10 @@
 						"date_format": {
 							"type": "string",
 							"description": "Specifies the format of the date displayed on the desktop clock."
+						},
+						"time_format": {
+							"type": "string",
+							"description": "Specifies the format of the time displayed on the desktop clock."
 						}
 					}
 				},
@@ -523,11 +527,6 @@
 				"tooltip": {
 					"type": "boolean",
 					"description": "Determines whether the widget has a tooltip."
-				},
-				"orientation": {
-					"type": "string",
-					"enum": ["horizontal", "vertical"],
-					"description": "Specifies the orientation of the battery widget."
 				},
 				"icon_size": {
 					"type": "integer",
@@ -1068,10 +1067,6 @@
 						"description": "Number of items to display per row in the power widget",
 						"minimum": 1
 					},
-					"icon_size": {
-						"type": "integer",
-						"description": "Number of items to display in the power widget"
-					},
 					"buttons": {
 						"type": "object",
 						"description": "Specifies the actions for the power widget buttons",
@@ -1142,10 +1137,6 @@
 					"hover_reveal": {
 						"type": "boolean",
 						"description": "Determines whether to reveal the calendar on hover"
-					},
-					"uptime": {
-						"type": "boolean",
-						"description": "Determines whether to show the uptime"
 					},
 					"clock_format": {
 						"type": "string",
@@ -1226,10 +1217,6 @@
 					"audio": {
 						"type": "boolean",
 						"description": "Determines whether to record audio"
-					},
-					"icon_size": {
-						"type": "integer",
-						"description": "Size of the recorder icon"
 					}
 				}
 			}

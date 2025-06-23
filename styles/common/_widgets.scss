@@ -119,6 +119,12 @@
   border-radius: variable.$bar-widgets-bluetooth-border-radius;
   border: if(variable.$bar-widgets-bluetooth-border-enabled, variable.$border, none);
   border-width: variable.$bar-widgets-bluetooth-border-width;
+
+
+  #nerd-icon.panel-font-icon {
+    font-size: variable.$bar-widgets-bluetooth-icon_size;
+    margin-right: variable.$bar-widgets-bluetooth-spacing;
+  }
 }
 
 
@@ -244,6 +250,12 @@
   border-width: variable.$bar-widgets-mpris-border-width;
 
 
+  #nerd-icon.panel-font-icon {
+    font-size: variable.$bar-widgets-mpris-icon_size;
+    margin-right: variable.$bar-widgets-mpris-spacing;
+  }
+
+
   .cover {
     min-height: .8em;
     min-width: 3em;
@@ -309,6 +321,10 @@
   border: if(variable.$bar-widgets-recorder-border-enabled, variable.$border, none);
   border-width: variable.$bar-widgets-recorder-border-width;
 
+  #nerd-icon.panel-font-icon {
+    font-size: variable.$bar-widgets-recorder-icon_size;
+    margin-right: variable.$bar-widgets-recorder-spacing;
+  }
 }
 
 

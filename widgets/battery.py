@@ -2,10 +2,9 @@ from datetime import datetime
 
 from fabric.widgets.image import Image
 from fabric.widgets.label import Label
-from gi.repository import GdkPixbuf, Gtk
 
-from services import BatteryService
-from shared import ButtonWidget
+from services.battery import BatteryService
+from shared.widget_container import ButtonWidget
 from utils.functions import format_time
 from utils.icons import symbolic_icons
 
@@ -73,17 +72,6 @@ class BatteryWidget(ButtonWidget):
         self.battery_icon.set_from_icon_name(
             self.client.get_property("IconName"), self.config["icon_size"]
         )
-
-        if self.config["orientation"] == "horizontal":
-            # Get the Pixbuf from the Gtk.Image
-            pixbuf = Gtk.IconTheme.get_default().load_icon(
-                self.client.get_property("IconName"),
-                14,
-                Gtk.IconLookupFlags.FORCE_SIZE,
-            )
-
-            rotated_pixbuf = pixbuf.rotate_simple(GdkPixbuf.PixbufRotation.CLOCKWISE)
-            self.battery_icon.set_from_pixbuf(rotated_pixbuf)
 
         # Update the label with the battery percentage if enabled
         if self.config["label"]:

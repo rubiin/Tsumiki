@@ -14,10 +14,13 @@ from fabric.widgets.scrolledwindow import ScrolledWindow
 from gi.repository import Gdk, GdkPixbuf, GLib
 from loguru import logger
 
-from shared import ButtonWidget, Popover
-from utils.widget_utils import text_icon
+from shared.list import ListBox
+from shared.popover import Popover
+from shared.widget_container import ButtonWidget
+from utils.widget_utils import nerd_font_icon
 
 
+# TODO: add scrolled pagination
 class ClipHistoryMenu(Box):
     """A widget to display and manage clipboard history."""
 
@@ -40,9 +43,15 @@ class ClipHistoryMenu(Box):
         self._loading = False
         self._pending_updates = False
 
+        # Pagination state, reset for new scan
+        self.items_loaded = 0
+        self.batch_size = 7
+        self.loading = False
+        self.max_items = 0  # ← LIMIT HERE
+
         self._search_timer_id = 0  # Timer ID for search text change
 
-        self.viewport = Box(name="viewport", spacing=4, orientation="v")
+        self.viewport = ListBox(name="viewport", spacing=4, orientation="v")
 
         self.search_entry = Entry(
             name="search-entry",
@@ -92,6 +101,28 @@ class ClipHistoryMenu(Box):
 
         self.add(self.history_box)
         self.open()  # Load items when the widget is created
+
+    def load_more_items(self, aps):
+        if self.loading or self.items_loaded >= self.max_items:
+            return
+        self.loading = True
+
+        items_to_add = min(self.batch_size, self.max_items - self.items_loaded)
+
+        for i in range(self.items_loaded, self.items_loaded + items_to_add):
+            notification_item = self.make_button_from_ap(aps[i])
+            self.viewport.add(notification_item)
+
+        self.items_loaded += items_to_add
+        self.loading = False
+
+    def on_scroll(self, adjustment):
+        value = adjustment.get_value()
+        upper = adjustment.get_upper()
+        page_size = adjustment.get_page_size()
+
+        if value + page_size >= upper - 50:
+            self.load_more_items(self.wifi_device.access_points)
 
     def _on_search_text_changed(self, entry, pspec):
         # Remove any existing pending filter operation
@@ -157,7 +188,7 @@ class ClipHistoryMenu(Box):
     def display_clipboard_items(self, filter_text=""):
         """Display clipboard items in the viewport"""
         remove_handler(self._arranger_handler) if self._arranger_handler else None
-        self.viewport.children = []
+        self.viewport.remove_all()
         self.selected_index = -1  # Reset selection
 
         # Filter items if search text is provided
@@ -581,7 +612,7 @@ class ClipHistoryWidget(ButtonWidget):
         )
 
         self.box.add(
-            text_icon(
+            nerd_font_icon(
                 self.config["icon"],
                 props={"style_classes": "panel-font-icon"},
             )
@@ -593,12 +624,18 @@ class ClipHistoryWidget(ButtonWidget):
         if self.config["tooltip"]:
             self.set_tooltip_text("Clipboard History")
 
-        popup = Popover(
-            content=ClipHistoryMenu(),
-            point_to=self,
-        )
+        self.popup = None
 
         self.connect(
             "clicked",
-            popup.open,
+            self.show_popover,
         )
+
+    def show_popover(self, *_):
+        """Show the popover."""
+        if self.popup is None:
+            self.popup = Popover(
+                content=ClipHistoryMenu(),
+                point_to=self,
+            )
+        self.popup.open()

@@ -4,10 +4,10 @@ from fabric.widgets.label import Label
 from fabric.widgets.overlay import Overlay
 
 import utils.functions as helpers
-from services import BrightnessService
-from shared import EventBoxWidget
+from services.brightness import BrightnessService
+from shared.widget_container import EventBoxWidget
 from utils.icons import text_icons
-from utils.widget_utils import get_brightness_icon_name, text_icon
+from utils.widget_utils import get_brightness_icon_name, nerd_font_icon
 
 
 class BrightnessWidget(EventBoxWidget):
@@ -36,7 +36,7 @@ class BrightnessWidget(EventBoxWidget):
             value=normalized_brightness / 100,
         )
 
-        self.icon = text_icon(
+        self.icon = nerd_font_icon(
             icon=text_icons["brightness"]["medium"],
             props={
                 "style_classes": "panel-font-icon overlay-icon",
@@ -63,7 +63,7 @@ class BrightnessWidget(EventBoxWidget):
             )
             self.box.add(self.brightness_label)
 
-    @cooldown(0.1)
+    @cooldown(1)
     def on_scroll(self, _, event):
         # Adjust the brightness based on the scroll direction
         val_y = event.delta_y
@@ -83,7 +83,7 @@ class BrightnessWidget(EventBoxWidget):
         if self.config["label"]:
             self.brightness_label.set_text(f"{normalized_brightness}%")
 
-        self.icon.set_text(get_brightness_icon_name(normalized_brightness)["text_icon"])
+        self.icon.set_text(get_brightness_icon_name(normalized_brightness)["icon_text"])
 
         if self.config["tooltip"]:
             self.set_tooltip_text(f"{normalized_brightness}%")

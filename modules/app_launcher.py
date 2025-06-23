@@ -13,7 +13,8 @@ from fabric.widgets.scrolledwindow import ScrolledWindow
 from fabric.widgets.wayland import WaylandWindow as Window
 from gi.repository import Gdk
 
-from shared import HoverButton, TagEntry
+from shared.buttons import HoverButton
+from shared.tagentry import TagEntry
 
 
 class LauncherCommandType(Enum):
@@ -96,7 +97,6 @@ class AppLauncher(Window):
                 ],
             )
         )
-        self.show_all()
 
         self.search_entry.grab_focus_without_selecting()
         self.hide()
@@ -175,7 +175,12 @@ class AppLauncher(Window):
         return False
 
     def bake_application_slot(self, app: DesktopApp, **kwargs) -> Button:
-        return HoverButton(
+        def on_clicked(*_):
+            app.launch()
+            self.hide()
+            self.search_entry.set_text("")
+
+        return Button(
             style_classes="launcher-button",
             child=Box(
                 orientation="h",
@@ -184,7 +189,6 @@ class AppLauncher(Window):
                     Image(
                         pixbuf=app.get_icon_pixbuf(self.config["icon_size"]),
                         h_align="start",
-                        size=self.config["icon_size"],
                     ),
                     Label(
                         label=app.display_name or "Unknown",
@@ -194,11 +198,7 @@ class AppLauncher(Window):
                 ],
             ),
             tooltip_text=app.description if self.config["tooltip"] else None,
-            on_clicked=lambda *_: (
-                app.launch(),
-                self.hide(),
-                self.search_entry.set_text(""),
-            ),
+            on_clicked=on_clicked,
             **kwargs,
         )
 

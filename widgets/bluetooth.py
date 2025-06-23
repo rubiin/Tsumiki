@@ -1,9 +1,9 @@
 from fabric.bluetooth import BluetoothClient
-from fabric.widgets.image import Image
 from fabric.widgets.label import Label
 
-from shared import ButtonWidget
-from utils.icons import symbolic_icons
+from shared.widget_container import ButtonWidget
+from utils.icons import text_icons
+from utils.widget_utils import nerd_font_icon
 
 
 class BlueToothWidget(ButtonWidget):
@@ -13,11 +13,11 @@ class BlueToothWidget(ButtonWidget):
         super().__init__(name="bluetooth", **kwargs)
         self.bluetooth_client = BluetoothClient()
 
-        self.icons = symbolic_icons["bluetooth"]
+        self.icons = text_icons["bluetooth"]
 
-        self.bluetooth_icon = Image(
-            icon_name=self.icons["enabled"],
-            icon_size=self.config["icon_size"],
+        self.bluetooth_icon = nerd_font_icon(
+            icon=self.icons["enabled"],
+            props={"style_classes": "panel-font-icon"},
         )
 
         self.box.add(
@@ -37,7 +37,7 @@ class BlueToothWidget(ButtonWidget):
 
         icon = self.icons["enabled"] if bt_status == "on" else self.icons["disabled"]
 
-        self.bluetooth_icon.set_from_icon_name(icon, icon_size=self.config["icon_size"])
+        self.bluetooth_icon.set_label(icon)
 
         if self.config["label"]:
             self.bt_label.set_text(bt_status.capitalize())

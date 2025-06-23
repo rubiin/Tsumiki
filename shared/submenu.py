@@ -1,9 +1,10 @@
 from fabric.widgets.box import Box
 from fabric.widgets.button import Button
-from fabric.widgets.image import Image
 from fabric.widgets.label import Label
 from fabric.widgets.revealer import Revealer
 from fabric.widgets.widget import Widget
+
+from utils.widget_utils import nerd_font_icon
 
 
 class QuickSubMenu(Box):
@@ -11,7 +12,7 @@ class QuickSubMenu(Box):
 
     def __init__(
         self,
-        scan_button: Button,
+        scan_button: Button | None,
         child: Widget | None,
         title: str | None = None,
         title_icon: str | None = None,
@@ -30,6 +31,7 @@ class QuickSubMenu(Box):
         self.revealer_child.add(
             self.submenu_title_box
         ) if self.submenu_title_box else None
+
         self.revealer_child.add(self.child) if child else None
 
         self.revealer = Revealer(
@@ -54,18 +56,26 @@ class QuickSubMenu(Box):
         if not self.title_icon and not self.title:
             return None
         if self.title_icon:
-            submenu_box.add(Image(icon_name=self.title_icon, icon_size=18))
+            submenu_box.add(
+                nerd_font_icon(
+                    icon=self.title_icon,
+                    props={
+                        "style_classes": ["panel-font-icon"],
+                    },
+                )
+            )
         if self.title:
             submenu_box.add(
                 Label(style_classes="submenu-title-label", label=self.title)
             )
 
-        submenu_box.pack_end(
-            self.scan_button,
-            False,
-            False,
-            0,
-        )
+        if self.scan_button is not None:
+            submenu_box.pack_end(
+                self.scan_button,
+                False,
+                False,
+                0,
+            )
 
         return submenu_box
 

@@ -4,7 +4,7 @@ from loguru import logger
 
 from utils.colors import Colors
 from utils.dbus_helper import GioDBusHelper
-from utils.icons import symbolic_icons
+from utils.icons import text_icons
 
 
 class PowerProfilesService(Service):
@@ -31,15 +31,15 @@ class PowerProfilesService(Service):
         self.power_profiles = {
             "power-saver": {
                 "name": "Power Saver",
-                "icon_name": symbolic_icons["powerprofiles"]["power-saver"],
+                "icon": text_icons["powerprofiles"]["power-saver"],
             },
             "balanced": {
                 "name": "Balanced",
-                "icon_name": symbolic_icons["powerprofiles"]["balanced"],
+                "icon": text_icons["powerprofiles"]["balanced"],
             },
             "performance": {
                 "name": "Performance",
-                "icon_name": symbolic_icons["powerprofiles"]["performance"],
+                "icon": text_icons["powerprofiles"]["performance"],
             },
         }
 
@@ -101,5 +101,5 @@ class PowerProfilesService(Service):
 
     def get_profile_icon(self, profile: str) -> str:
         return self.power_profiles.get(profile, self.power_profiles["balanced"]).get(
-            "icon_name"
+            "icon"
         )

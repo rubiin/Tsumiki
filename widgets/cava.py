@@ -4,7 +4,7 @@ from fabric.widgets.box import Box
 from fabric.widgets.label import Label
 
 import utils.functions as helpers
-from shared import ButtonWidget
+from shared.widget_container import ButtonWidget
 
 
 class CavaWidget(ButtonWidget):

@@ -17,10 +17,9 @@ from fabric.widgets.image import Image
 from fabric.widgets.wayland import WaylandWindow as Window
 from gi.repository import Gdk, GLib
 
-from shared import ToggleableWidget
+from shared.widget_container import ToggleableWidget
 from utils.icon_resolver import IconResolver
 from utils.icons import symbolic_icons
-from utils.monitors import HyprlandWithMonitors
 from utils.occlusion import check_occlusion
 
 
@@ -44,7 +43,6 @@ class Dock(Window, ToggleableWidget):
             name="dock-window",
             layer=self.config["layer"],
             anchor=self.config["anchor"],
-            monitor=HyprlandWithMonitors().get_current_gdk_monitor_id(),
             margin="-8px 0 -4px 0"
             if self.config["anchor"] == "bottom-center"
             else "0 -4px 0 -8px",

@@ -2,8 +2,8 @@ from fabric.widgets.label import Label
 
 import utils.functions as helpers
 from utils.widget_utils import (
-    text_icon,
-    util_fabricator,
+    nerd_font_icon,
+    reusable_fabricator,
 )
 
 from .widget_container import ButtonWidget
@@ -42,7 +42,7 @@ class CommandSwitcher(ButtonWidget):
         self.label = label
         self.tooltip = tooltip
 
-        self.icon = text_icon(
+        self.icon = nerd_font_icon(
             icon=enabled_icon,
             props={"style_classes": "panel-font-icon"},
         )
@@ -61,7 +61,7 @@ class CommandSwitcher(ButtonWidget):
         self.connect("clicked", self.handle_click)
 
         # reusing the fabricator to call specified intervals
-        util_fabricator.connect("changed", self.update_ui)
+        reusable_fabricator.connect("changed", self.update_ui)
 
     # toggle the command on click
     def handle_click(self, *_):

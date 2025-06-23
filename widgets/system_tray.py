@@ -5,11 +5,16 @@ from fabric.utils import (
     bulk_connect,
 )
 from fabric.widgets.box import Box
+from fabric.widgets.grid import Grid
 from fabric.widgets.image import Image
+from fabric.widgets.separator import Separator
 from gi.repository import Gdk, GdkPixbuf, GLib, Gray, Gtk
 
-from shared import ButtonWidget, Grid, HoverButton, Popover, Separator
-from utils.icons import symbolic_icons
+from shared.buttons import HoverButton
+from shared.popover import Popover
+from shared.widget_container import ButtonWidget
+from utils.icons import text_icons
+from utils.widget_utils import nerd_font_icon
 
 gi.require_version("Gray", "0.1")
 
@@ -103,7 +108,6 @@ class SystemTrayMenu(Box):
             },
         )
 
-        button.show_all()
         self.grid.attach(button, self.column, self.row, 1, 1)
         self.column += 1
         if self.column >= self.max_columns:
@@ -122,10 +126,8 @@ class SystemTrayMenu(Box):
         return button
 
     def do_update_item_button(self, item: Gray.Item, button: HoverButton):
-        pixbuf = resolve_icon(
-            item=item,
-        )
-        button.set_image(Image(pixbuf=pixbuf, pixel_size=self.config["icon_size"]))
+        pixbuf = resolve_icon(item=item, icon_size=self.config["icon_size"])
+        button.set_image(Image(pixbuf=pixbuf))
 
     def on_button_click(self, button, item: Gray.Item, event):
         if event.button in (1, 3):
@@ -149,10 +151,12 @@ class SystemTrayWidget(ButtonWidget):
 
         # Create main tray box and toggle icon
         self.tray_box = Box(name="system-tray-box", orientation="horizontal", spacing=2)
-        self.toggle_icon = Image(
-            icon_name=symbolic_icons["ui"]["arrow"]["down"],
-            icon_size=self.config["icon_size"],
-            style_classes=["panel-font-icon", "toggle-icon"],
+
+        self.toggle_icon = nerd_font_icon(
+            icon=text_icons["chevron"]["down"],
+            props={
+                "style_classes": ["panel-font-icon"],
+            },
         )
 
         # Set children directly in Box to avoid double styling
@@ -161,10 +165,7 @@ class SystemTrayWidget(ButtonWidget):
         # Create popup menu for hidden items
         self.popup_menu = SystemTrayMenu(config=self.config)
 
-        self.popup = Popover(
-            content=self.popup_menu,
-            point_to=self,
-        )
+        self.popup = None
 
         # Initialize watcher
         self.watcher = Gray.Watcher()
@@ -179,19 +180,21 @@ class SystemTrayWidget(ButtonWidget):
 
     # show or hide the popup menu
     def handle_click(self, *_):
+        if self.popup is None:
+            self.popup = Popover(
+                content=self.popup_menu,
+                point_to=self,
+            )
+
         visible = self.popup.get_visible()
         if visible:
             self.popup.hide()
-            self.toggle_icon.set_from_icon_name(
-                symbolic_icons["ui"]["arrow"]["down"], self.config["icon_size"]
-            )
-            self.toggle_icon.get_style_context().remove_class("active")
+            self.toggle_icon.set_label(text_icons["chevron"]["down"])
+            self.toggle_icon.remove_style_class("active")
         else:
             self.popup.open()
-            self.toggle_icon.set_from_icon_name(
-                symbolic_icons["ui"]["arrow"]["up"], self.config["icon_size"]
-            )
-            self.toggle_icon.get_style_context().add_class("active")
+            self.toggle_icon.set_label(text_icons["chevron"]["up"])
+            self.toggle_icon.add_style_class("active")
 
     def on_item_added(self, _, identifier: str):
         item = self.watcher.get_item_for_identifier(identifier)
@@ -227,8 +230,9 @@ class SystemTrayWidget(ButtonWidget):
 
             pixbuf = resolve_icon(
                 item=item,
+                icon_size=self.config["icon_size"],
             )
-            button.set_image(Image(pixbuf=pixbuf, pixel_size=self.config["icon_size"]))
+            button.set_image(Image(pixbuf=pixbuf))
 
             # Connect signals
             item.connect("removed", lambda *args: button.destroy())
@@ -239,5 +243,4 @@ class SystemTrayWidget(ButtonWidget):
                 ),
             )
 
-            button.show_all()
             self.tray_box.pack_start(button, False, False, 0)

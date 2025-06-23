@@ -2,9 +2,9 @@ from fabric.utils import exec_shell_command_async, get_relative_path
 from fabric.widgets.label import Label
 from gi.repository import Gdk
 
-from shared import ButtonWidget
+from shared.widget_container import ButtonWidget
 from utils.functions import check_executable_exists
-from utils.widget_utils import text_icon
+from utils.widget_utils import nerd_font_icon
 
 
 class HyprPickerWidget(ButtonWidget):
@@ -18,7 +18,7 @@ class HyprPickerWidget(ButtonWidget):
         if self.config["show_icon"]:
             # Create a TextIcon with the specified icon and size
             self.box.add(
-                text_icon(
+                nerd_font_icon(
                     icon=self.config["icon"],
                     props={"style_classes": "panel-font-icon"},
                 )

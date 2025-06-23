@@ -12,8 +12,9 @@ from fabric.widgets.stack import Stack
 from gi.repository import Gdk
 from loguru import logger
 
-from shared import ButtonWidget, Popover
-from utils.widget_utils import text_icon
+from shared.popover import Popover
+from shared.widget_container import ButtonWidget
+from utils.widget_utils import nerd_font_icon
 
 
 class EmojiPickerMenu(Box):
@@ -144,7 +145,6 @@ class EmojiPickerMenu(Box):
         page_box.add(grid_box)
         self.stack.add_named(page_box, f"page-{page_index}")
         self.stack.set_visible_child_name(f"page-{page_index}")
-        page_box.show_all()
 
         buttons = self.get_all_emoji_buttons()
         if buttons and self.selected_index != -1:
@@ -337,7 +337,7 @@ class EmojiPickerWidget(ButtonWidget):
         )
 
         self.box.add(
-            text_icon(
+            nerd_font_icon(
                 self.config["icon"],
                 props={"style_classes": "panel-font-icon"},
             )
@@ -349,12 +349,18 @@ class EmojiPickerWidget(ButtonWidget):
         if self.config["tooltip"]:
             self.set_tooltip_text("Emoji Picker")
 
-        popup = Popover(
-            content=EmojiPickerMenu(config=self.config),
-            point_to=self,
-        )
+        self.popup = None
 
         self.connect(
             "clicked",
-            popup.open,
+            self.show_popover,
         )
+
+    def show_popover(self, *_):
+        """Show the popover."""
+        if self.popup is None:
+            self.popup = Popover(
+                content=EmojiPickerMenu(config=self.config),
+                point_to=self,
+            )
+        self.popup.open()

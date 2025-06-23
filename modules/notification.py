@@ -7,7 +7,7 @@ from fabric.utils import bulk_connect, get_relative_path
 from fabric.widgets.box import Box
 from fabric.widgets.button import Button
 from fabric.widgets.eventbox import EventBox
-from fabric.widgets.image import Image
+from fabric.widgets.grid import Grid
 from fabric.widgets.label import Label
 from fabric.widgets.revealer import Revealer
 from fabric.widgets.wayland import WaylandWindow as Window
@@ -17,12 +17,12 @@ from loguru import logger
 import utils.constants as constants
 import utils.functions as helpers
 from services import notification_service
-from shared import CircleImage, Grid, HoverButton
+from shared.buttons import HoverButton
+from shared.circle_image import CircleImage
 from utils.colors import Colors
-from utils.icons import symbolic_icons
-from utils.monitors import HyprlandWithMonitors
+from utils.icons import text_icons
 from utils.widget_settings import BarConfig
-from utils.widget_utils import get_icon
+from utils.widget_utils import get_icon, nerd_font_icon
 
 
 class NotificationPopup(Window):
@@ -34,8 +34,6 @@ class NotificationPopup(Window):
         self.widget_config = widget_config
 
         self.config = widget_config["modules"]["notification"]
-
-        self.hyprland_monitor = HyprlandWithMonitors()
 
         self.ignored_apps = helpers.unique_list(self.config["ignored"])
 
@@ -52,7 +50,6 @@ class NotificationPopup(Window):
             anchor=self.config["anchor"],
             layer="overlay",
             all_visible=True,
-            monitor=HyprlandWithMonitors().get_current_gdk_monitor_id(),
             visible=True,
             exclusive=False,
             child=self.notifications,
@@ -141,25 +138,19 @@ class NotificationWidget(EventBox):
             ),
         )
 
-        header_container.pack_end(
-            Box(
-                v_align="start",
-                children=(
-                    Button(
-                        image=Image(
-                            icon_name=helpers.check_icon_exists(
-                                symbolic_icons["ui"]["close"],
-                                symbolic_icons["ui"]["window_close"],
-                            ),
-                            icon_size=16,
-                        ),
-                        style_classes="close-button",
-                        on_clicked=lambda *_: self._notification.close(
-                            "dismissed-by-user"
-                        ),
-                    ),
-                ),
+        close_button = Button(
+            style_classes="close-button",
+            child=nerd_font_icon(
+                icon=text_icons["ui"]["window_close"],
+                props={
+                    "style_classes": ["panel-font-icon", "close-icon"],
+                },
             ),
+            on_clicked=self.on_close_button_clicked,
+        )
+
+        header_container.pack_end(
+            close_button,
             False,
             False,
             0,
@@ -179,11 +170,11 @@ class NotificationWidget(EventBox):
                             constants.NOTIFICATION_IMAGE_SIZE,
                             GdkPixbuf.InterpType.BILINEAR,
                         ),
-                        size=constants.NOTIFICATION_IMAGE_SIZE,
                         h_expand=True,
                         v_expand=True,
                     ),
                 )
+                del image_pixbuf
         except GLib.GError:
             # If the image is not available, use the symbolic icon
             logger.warning(f"{Colors.WARNING}[Notification] Image not available.")
@@ -200,11 +191,8 @@ class NotificationWidget(EventBox):
             ),
         )
 
-        actions_count = (
-            len(self._notification.actions)
-            if len(self._notification.actions) <= self.config["max_actions"]
-            else self.config["max_actions"]
-        )
+        actions_len = len(self._notification.actions)
+        actions_count = min(actions_len, self.config["max_actions"])
 
         self.actions_container_grid = Grid(
             orientation="h",
@@ -215,9 +203,13 @@ class NotificationWidget(EventBox):
             column_spacing=4,
         )
 
-        for i, action in enumerate(notification.actions):
-            action_button = ActionButton(action, i, actions_count)
-            self.actions_container_grid.attach(action_button, i, 0, 1, 1)
+        self.actions_container_grid.attach_flow(
+            [
+                ActionButton(action, i, actions_count)
+                for i, action in enumerate(notification.actions)
+            ],
+            3,  # Number of columns for actions
+        )
 
         # Add the header, body, and actions to the notification box
         self.notification_box.children = (
@@ -241,6 +233,10 @@ class NotificationWidget(EventBox):
 
         if self.config["auto_dismiss"]:
             self.start_timeout()
+
+    def on_close_button_clicked(self, *_):
+        self._notification.close("dismissed-by-user")
+        self.stop_timeout()
 
     def start_timeout(self):
         self.stop_timeout()

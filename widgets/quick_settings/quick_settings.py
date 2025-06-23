@@ -1,8 +1,9 @@
 import os
 
-from fabric.utils import bulk_connect, get_relative_path
+from fabric.utils import bulk_connect, get_relative_path, invoke_repeater
 from fabric.widgets.box import Box
 from fabric.widgets.centerbox import CenterBox
+from fabric.widgets.grid import Grid
 from fabric.widgets.image import Image
 from fabric.widgets.label import Label
 from gi.repository import GLib, Gtk
@@ -10,26 +11,20 @@ from loguru import logger
 
 import utils.functions as helpers
 from services import (
-    BrightnessService,
-    MprisPlayerManager,
-    NetworkService,
-    Wifi,
     audio_service,
 )
-from shared import (
-    ButtonWidget,
-    CircleImage,
-    Dialog,
-    Grid,
-    HoverButton,
-    Popover,
-    QSChevronButton,
-)
+from services.brightness import BrightnessService
+from services.mpris import MprisPlayerManager
+from services.network import NetworkService, Wifi
+from shared.buttons import HoverButton, QSChevronButton
+from shared.circle_image import CircleImage
+from shared.dialog import Dialog
+from shared.popover import Popover
+from shared.widget_container import ButtonWidget
 from utils.icons import symbolic_icons
 from utils.widget_utils import (
     get_audio_icon_name,
     get_brightness_icon_name,
-    util_fabricator,
 )
 from widgets.quick_settings.submenu.hyprsunset import (
     HyprSunsetSubMenu,
@@ -38,17 +33,9 @@ from widgets.quick_settings.submenu.hyprsunset import (
 
 from ..media import PlayerBoxStack
 from .shortcuts import ShortcutsContainer
-from .sliders import AudioSlider, BrightnessSlider, MicrophoneSlider
-from .submenu import (
-    AudioSubMenu,
-    BluetoothSubMenu,
-    BluetoothToggle,
-    PowerProfileSubMenu,
-    PowerProfileToggle,
-    WifiSubMenu,
-    WifiToggle,
-)
-from .submenu.mic import MicroPhoneSubMenu
+from .submenu.bluetooth import BluetoothSubMenu, BluetoothToggle
+from .submenu.power import PowerProfileSubMenu, PowerProfileToggle
+from .submenu.wifi import WifiSubMenu, WifiToggle
 from .togglers import (
     HyprIdleQuickSetting,
     NotificationQuickSetting,
@@ -201,8 +188,6 @@ class QuickSettingsMenu(Box):
             v_expand=True,
         )
 
-        dialog = Dialog()
-
         button_box.pack_end(
             Box(
                 orientation="h",
@@ -213,13 +198,10 @@ class QuickSettingsMenu(Box):
                             icon_size=16,
                         ),
                         v_align="center",
-                        on_clicked=lambda *_: (
-                            self.get_parent().set_visible(False),
-                            dialog.add_content(
-                                title="restart",
-                                body="Do you really want to restart?",
-                                command="restart",
-                            ).toggle_popup(),
+                        on_clicked=lambda *_: self.show_dialog(
+                            title="reboot",
+                            body="Do you really want to reboot?",
+                            command="reboot",
                         ),
                     ),
                     HoverButton(
@@ -228,13 +210,10 @@ class QuickSettingsMenu(Box):
                             icon_size=16,
                         ),
                         v_align="center",
-                        on_clicked=lambda *_: (
-                            self.get_parent().set_visible(False),
-                            dialog.add_content(
-                                title="shutdown",
-                                body="Do you really want to shutdown?",
-                                command="shutdown",
-                            ).toggle_popup(),
+                        on_clicked=lambda *_: self.show_dialog(
+                            title="shutdown",
+                            body="Do you really want to shutdown?",
+                            command="shutdown",
                         ),
                     ),
                 ),
@@ -271,11 +250,9 @@ class QuickSettingsMenu(Box):
             v_expand=True,
         )
 
-        # Add audio submenu
-        self.audio_submenu = AudioSubMenu()
-        self.mic_submenu = MicroPhoneSubMenu()
-
         # TODO: check gtk_adjustment_set_value: assertion 'GTK_IS_ADJUSTMENT, microphone
+
+        # TODO: add the submenu on slider add
 
         # Create center box with sliders and shortcuts if configured
         center_box = Box(
@@ -303,12 +280,14 @@ class QuickSettingsMenu(Box):
             orientation="v",
             spacing=10,
             style_classes=[slider_class],
-            children=(sliders_grid, self.audio_submenu, self.mic_submenu),
+            children=(sliders_grid),
             h_expand=True,
         )
 
         for index, slider in enumerate(self.config["controls"]["sliders"]):
             if slider == "brightness":
+                from .sliders.brightness import BrightnessSlider
+
                 sliders_grid.attach(
                     BrightnessSlider(),
                     0,
@@ -317,16 +296,10 @@ class QuickSettingsMenu(Box):
                     1,
                 )
             elif slider == "volume":
+                from .sliders.audio import AudioSlider
+
                 sliders_grid.attach(
                     AudioSlider(),
-                    0,
-                    index,
-                    1,
-                    1,
-                )
-            else:
-                sliders_grid.attach(
-                    MicrophoneSlider(),
                     0,
                     index,
                     1,
@@ -385,10 +358,20 @@ class QuickSettingsMenu(Box):
 
         self.add(box)
 
-        util_fabricator.connect(
-            "changed",
-            lambda _, value: (uptime_label.set_label(f" {value.get('uptime')}"),),
+        invoke_repeater(
+            1000,
+            lambda *_: uptime_label.set_label(helpers.uptime()),
         )
+
+    def show_dialog(self, title, body, command):
+        """Show a dialog with the given title and body."""
+        self.get_parent().set_visible(False)
+
+        Dialog().add_content(
+            title=title,
+            body=body,
+            command=command,
+        ).toggle_popup()
 
 
 class QuickSettingsButtonWidget(ButtonWidget):
@@ -418,7 +401,7 @@ class QuickSettingsButtonWidget(ButtonWidget):
 
         self.network_service.connect("device-ready", self._get_network_icon)
 
-        popup = Popover(content=QuickSettingsMenu(config=self.config), point_to=self)
+        self.popup = None
 
         self.audio_icon = Image(style_classes="panel-font-icon")
 
@@ -442,8 +425,17 @@ class QuickSettingsButtonWidget(ButtonWidget):
 
         self.connect(
             "clicked",
-            popup.open,
+            self.show_popover,
         )
+
+    def show_popover(self, *_):
+        """Show the popover."""
+        if self.popup is None:
+            self.popup = Popover(
+                content=QuickSettingsMenu(config=self.config),
+                point_to=self,
+            )
+        self.popup.open()
 
     def _get_network_icon(self, *_):
         # Check if the network service is ready
@@ -499,10 +491,10 @@ class QuickSettingsButtonWidget(ButtonWidget):
         """Update the brightness icon."""
         try:
             normalized_brightness = self.brightness_service.screen_brightness_percentage
-            icon_info = get_brightness_icon_name(normalized_brightness)
+            icon_info = get_brightness_icon_name(normalized_brightness)["icon"]
             if icon_info:
                 self.brightness_icon.set_from_icon_name(
-                    icon_info["icon"],
+                    icon_info,
                     self.panel_icon_size,
                 )
             else:

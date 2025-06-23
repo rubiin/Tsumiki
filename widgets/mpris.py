@@ -1,12 +1,12 @@
 import re
 
-from fabric.utils import bulk_connect
 from fabric.widgets.box import Box
 from fabric.widgets.label import Label
 from loguru import logger
 
-from services import MprisPlayer, MprisPlayerManager
-from shared import ButtonWidget, Popover
+from services.mpris import MprisPlayer, MprisPlayerManager
+from shared.popover import Popover
+from shared.widget_container import ButtonWidget
 from utils.colors import Colors
 from widgets.media import PlayerBoxStack
 
@@ -43,7 +43,7 @@ class MprisWidget(ButtonWidget):
             self.get_current()
             break
 
-        config = {
+        self.config = {
             "enabled": True,
             "ignore": ["vlc"],
             "truncation_size": 30,
@@ -53,23 +53,9 @@ class MprisWidget(ButtonWidget):
             "show_time_tooltip": True,
         }
 
-        popup = Popover(
-            content=Box(
-                style_classes="mpris-box",
-                children=[
-                    PlayerBoxStack(self.mpris_manager, config=config),
-                ],
-            ),
-            point_to=self,
-        )
+        self.popup = None
 
-        # Connect the button press event to the play_pause method
-        bulk_connect(
-            self,
-            {
-                "button-press-event": popup.open,
-            },
-        )
+        self.connect("clicked", self.on_clicked)
 
     def get_current(self):
         bar_label = re.sub(r"\r?\n", " ", self.player.title)
@@ -93,3 +79,16 @@ class MprisWidget(ButtonWidget):
 
         if self.config["tooltip"]:
             self.set_tooltip_text(bar_label)
+
+    def on_clicked(self, *args):
+        if self.popup is None:
+            self.popup = Popover(
+                content=Box(
+                    style_classes="mpris-box",
+                    children=[
+                        PlayerBoxStack(self.mpris_manager, config=self.config),
+                    ],
+                ),
+                point_to=self,
+            )
+        self.popup.open()

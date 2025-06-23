@@ -3,7 +3,7 @@ from gi.repository import GLib
 # constants
 
 NOTIFICATION_WIDTH = 400
-NOTIFICATION_IMAGE_SIZE = 64
+NOTIFICATION_IMAGE_SIZE = 48
 HIGH_POLL_INTERVAL = 3600  # 1 hour in seconds
 
 APPLICATION_NAME = "hydepanel"
@@ -44,7 +44,6 @@ DEFAULT_CONFIG = {
             "hide_label_when_full": True,
             "label": True,
             "tooltip": True,
-            "orientation": "vertical",
             "icon_size": 14,
             "notifications": {
                 "enabled": True,
@@ -105,11 +104,17 @@ DEFAULT_CONFIG = {
             "mode": "circular",
             "graph_length": 4,
         },
+        "gpu": {
+            "show_icon": True,
+            "icon": "",
+            "tooltip": True,
+            "mode": "circular",
+            "graph_length": 4,
+        },
         "date_time": {
             "format": "%b %d %H:%M",
             "calendar": True,
             "clock_format": "12h",
-            "uptime": True,
             "hover_reveal": False,
             "notification": {
                 "enabled": True,
@@ -357,6 +362,7 @@ DEFAULT_CONFIG = {
             "layer": "bottom",
             "anchor": "center",
             "date_format": "%A, %d %B %Y",
+            "time_format": "%H:%M",
         },
     },
     "general": {

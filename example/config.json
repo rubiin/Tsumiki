@@ -84,14 +84,14 @@
 				"enabled": true,
 				"items": [
 					{
-						"icon": "terminal-symbolic",
+						"icon": "",
 						"label": "Terminal",
 						"command": "kitty",
 						"tooltip": "Open terminal",
 						"icon_size": 18
 					},
 					{
-						"icon": "firefox-symbolic",
+						"icon": "",
 						"label": "Browser",
 						"command": "firefox",
 						"tooltip": "Launch Firefox",
@@ -211,7 +211,6 @@
 			},
 			"calendar": true,
 			"clock_format": "24h",
-			"uptime": true,
 			"auto_hide": false,
 			"auto_hide_timeout": 2000
 		},
@@ -337,11 +336,6 @@
 		}
 	],
 	"modules": {
-		"bar": {
-			"layer": "top",
-			"auto_hide": false,
-			"location": "top"
-		},
 		"app_launcher": {
 			"enabled": true,
 			"tooltip": true,
@@ -358,7 +352,8 @@
 			"transition_duration": 350,
 			"play_sound": true,
 			"sound_file": "notification4",
-			"dismiss_on_hover": false // this is to dismiss the notification on hover
+			"display_actions_on_hover": false, // this is to display the actions on hover
+			"dismiss_on_hover": true // this is to dismiss the notification on hover
 		},
 		"osd": {
 			"enabled": true,
@@ -386,15 +381,20 @@
 			]
 		},
 		"desktop_clock": {
-			"enabled": true,
+			"enabled": false,
 			"anchor": "bottom-right",
 			"date_format": "%A, %d %B %Y",
+			"time_format": "%H:%M",
 			"layer": "bottom"
 		}
 	},
 	"general": {
 		"check_updates": false,
+		"layer": "top",
+		"auto_hide": false,
 		"debug": true,
-		"monitor_styles": true
+		"monitor_styles": true,
+		"location": "top"
 	}
+
 }

@@ -1,4 +1,3 @@
-# ruff: noqa: N802
 import os
 import re
 import tempfile
@@ -24,14 +23,23 @@ from fabric.widgets.stack import Stack
 from gi.repository import GLib, GObject
 from loguru import logger
 
-from services import MprisPlayer, MprisPlayerManager
-from shared import Animator, CircleImage, HoverButton
+from services.mpris import MprisPlayer, MprisPlayerManager
+from shared.animator import Animator
+from shared.buttons import HoverButton
+from shared.circle_image import CircleImage
 from utils.bezier import cubic_bezier
 from utils.constants import APP_CACHE_DIRECTORY
-from utils.functions import ensure_directory, grab_accent_color, rgb_to_css
-from utils.icons import symbolic_icons
+from utils.functions import (
+    ensure_directory,
+    get_simple_palette_threaded,
+    mix_colors,
+    rgb_to_css,
+    tint_color,
+)
+from utils.icons import text_icons
 from utils.widget_utils import (
     create_scale,
+    nerd_font_icon,
     setup_cursor_hover,
 )
 
@@ -182,7 +190,7 @@ class PlayerBox(Box):
         self.player: MprisPlayer = player
         self.fallback_cover_path = get_relative_path("../assets/images/disk.png")
 
-        self.image_size = 115
+        self.image_size = 120
 
         self.config = config
 
@@ -197,10 +205,8 @@ class PlayerBox(Box):
             size=self.image_size, image_file=self.fallback_cover_path
         )
 
-        self.image_box.set_size_request(self.image_size, self.image_size)
-
         self.image_stack = Box(
-            h_align="start", v_align="start", name="player-image-stack"
+            h_align="start", v_align="center", name="player-image-stack"
         )
         self.image_stack.children = [*self.image_stack.children, self.image_box]
 
@@ -210,7 +216,6 @@ class PlayerBox(Box):
             min_value=0,
             max_value=360,
             tick_widget=self,
-            repeat=True,
             notify_value=self._set_notify_value,
         )
 
@@ -249,14 +254,18 @@ class PlayerBox(Box):
             self.track_title,
             "label",
             GObject.BindingFlags.DEFAULT,
-            lambda _, x: re.sub(r"\r?\n", " ", x) if x != "" else "No Title",  # type: ignore
+            lambda _, x: re.sub(r"\r?\n", " ", x)
+            if x != "" and x is not None
+            else "No Title",  # type: ignore
         )
         self.player.bind_property(
             "artist",
             self.track_artist,
             "label",
             GObject.BindingFlags.DEFAULT,
-            lambda _, x: re.sub(r"\r?\n", " ", x) if x != "" else "No Artist",  # type: ignore
+            lambda _, x: re.sub(r"\r?\n", " ", x)
+            if x != "" and x is not None
+            else "No Artist",  # type: ignore
         )
 
         self.player.bind_property(
@@ -264,7 +273,9 @@ class PlayerBox(Box):
             self.track_album,
             "label",
             GObject.BindingFlags.DEFAULT,
-            lambda _, x: re.sub(r"\r?\n", " ", x) if x != "" else "No Album",  # type: ignore
+            lambda _, x: re.sub(r"\r?\n", " ", x)
+            if x != "" and x is not None
+            else "No Album",  # type: ignore
         )
 
         self.track_info = Box(
@@ -315,30 +326,25 @@ class PlayerBox(Box):
             end_children=self.length_label,
         )
 
-        self.skip_next_icon = Image(
-            icon_name=symbolic_icons["mpris"]["next"],
-            name="player-icon",
-            icon_size=self.icon_size,
+        self.skip_next_icon = nerd_font_icon(
+            icon=text_icons["mpris"]["next"],
+            props={"style_classes": ["panel-font-icon", "player-icon"]},
         )
-        self.skip_prev_icon = Image(
-            icon_name=symbolic_icons["mpris"]["prev"],
-            name="player-icon",
-            icon_size=self.icon_size,
+        self.skip_prev_icon = nerd_font_icon(
+            icon=text_icons["mpris"]["previous"],
+            props={"style_classes": ["panel-font-icon", "player-icon"]},
         )
-        self.loop_icon = Image(
-            icon_name=symbolic_icons["mpris"]["prev"],
-            name="player-icon",
-            icon_size=self.icon_size,
+        self.loop_icon = nerd_font_icon(
+            icon=text_icons["mpris"]["loop"],
+            props={"style_classes": ["panel-font-icon", "player-icon"]},
         )
-        self.shuffle_icon = Image(
-            icon_name=symbolic_icons["mpris"]["shuffle"]["enabled"],
-            name="player-icon",
-            icon_size=self.icon_size,
+        self.shuffle_icon = nerd_font_icon(
+            icon=text_icons["mpris"]["shuffle"],
+            props={"style_classes": ["panel-font-icon", "player-icon"]},
         )
-        self.play_pause_icon = Image(
-            icon_name=symbolic_icons["mpris"]["paused"],
-            name="player-icon",
-            icon_size=self.icon_size,
+        self.play_pause_icon = nerd_font_icon(
+            icon=text_icons["mpris"]["paused"],
+            props={"style_classes": ["panel-font-icon", "player-icon"]},
         )
 
         self.play_pause_button = HoverButton(
@@ -349,14 +355,20 @@ class PlayerBox(Box):
         self.play_pause_button.connect("clicked", self.player.play_pause)
         self.player.bind_property("can_pause", self.play_pause_button, "sensitive")
 
-        self.next_button = HoverButton(name="player-button", child=self.skip_next_icon)
+        self.next_button = HoverButton(
+            style_classes=["player-button"], child=self.skip_next_icon
+        )
         self.next_button.connect("clicked", self._on_player_next)
         self.player.bind_property("can_go_next", self.next_button, "sensitive")
 
-        self.prev_button = HoverButton(name="player-button", child=self.skip_prev_icon)
+        self.prev_button = HoverButton(
+            style_classes=["player-button"], child=self.skip_prev_icon
+        )
         self.prev_button.connect("clicked", self._on_player_prev)
 
-        self.shuffle_button = HoverButton(name="player-button", child=self.shuffle_icon)
+        self.shuffle_button = HoverButton(
+            style_classes=["player-button"], child=self.shuffle_icon
+        )
         self.shuffle_button.connect("clicked", self.player.toggle_shuffle)
         self.player.bind_property("can_shuffle", self.shuffle_button, "sensitive")
 
@@ -392,7 +404,7 @@ class PlayerBox(Box):
                 self.player_info_box,
                 self.image_stack,
                 Box(
-                    children=Image(icon_name=self.player.player_name, icon_size=20),
+                    children=Image(icon_name=self.player.player_name, icon_size=18),
                     h_align="end",
                     v_align="start",
                     style="margin-top: 5px; margin-right: 10px;",
@@ -425,7 +437,7 @@ class PlayerBox(Box):
         invoke_repeater(1000, self._move_seekbar)
 
     def _set_notify_value(self, p, *_):
-        self.image_box.set_angle(p.value)
+        self.image_box.angle = self.angle_direction * p.value
 
     def _on_player_exit(self, _, value):
         self.exit = value
@@ -433,12 +445,12 @@ class PlayerBox(Box):
 
     def _on_player_next(self, *_):
         self.angle_direction = 1
-        self.art_animator.pause()
+        self.art_animator.play()
         self.player.next()
 
     def _on_player_prev(self, *_):
         self.angle_direction = -1
-        self.art_animator.pause()
+        self.art_animator.play()
         self.player.previous()
 
     def _on_shuffle_update(self, _, __):
@@ -461,21 +473,15 @@ class PlayerBox(Box):
     def _on_playback_change(self, player, status):
         status = player.get_property("playback-status")
 
-        if status == "stopped":
-            self.art_animator.stop()
-
         if status == "paused":
-            self.play_pause_icon.set_from_icon_name(
-                symbolic_icons["mpris"]["paused"],
-                icon_size=self.icon_size,
+            self.play_pause_icon.set_label(
+                text_icons["mpris"]["playing"],
             )
-            self.art_animator.pause()
+
         if status == "playing":
-            self.play_pause_icon.set_from_icon_name(
-                symbolic_icons["mpris"]["playing"],
-                icon_size=self.icon_size,
+            self.play_pause_icon.set_label(
+                text_icons["mpris"]["paused"],
             )
-            self.art_animator.play()
 
     def _update_image(self, image_path):
         if image_path and os.path.isfile(image_path):
@@ -486,25 +492,34 @@ class PlayerBox(Box):
             self.update_colors(self.fallback_cover_path)
 
     def update_colors(self, image_path):
-        colors = (255, 255, 255)  # Default color if no accent is found
-
         def on_accent_color(palette):
-            color = palette[0] if palette else colors
-            color = f"mix(rgb{color}, #F7EFD1, 0.5)"
-            bg = f"background-color: {color};"
-            border = f"border-color: {color};"
-            self.seek_bar.set_style(
-                f" trough highlight{{ {bg} {border} }} slider {{ {bg} }}"
-            )
-            # Convert RGB tuples to CSS color strings
-            css_colors = [rgb_to_css(color) for color in palette]
+            default_color = (255, 0, 0)  # fallback color
 
-            # Join into linear-gradient syntax
-            gradient = f"linear-gradient(135deg, {', '.join(css_colors)});"
+            base_color = palette[0] if palette else default_color
+            mix_target = (247, 239, 209)  # #F7EFD1
+
+            # Mix base color with the target color
+            mixed_color = mix_colors(base_color, mix_target, 0.5)
+            # Then apply a tint to lighten it a bit more (e.g., 20%)
+            tinted_color = tint_color(mixed_color, 0.2)
+
+            mixed_css_color = rgb_to_css(tinted_color)
+
+            bg = f"background-color: {mixed_css_color};"
+            border = f"border-color: {mixed_css_color};"
+
+            self.seek_bar.set_style(
+                f"trough highlight {{ {bg} {border} }} slider {{ {bg} }}"
+            )
+
+            css_colors = [rgb_to_css(color) for color in palette]
+            gradient = f"linear-gradient(135deg, {', '.join(css_colors)})"
 
             self.inner_box.set_style(f"background: {gradient};")
 
-        grab_accent_color(image_path=image_path, quantity=5, callback=on_accent_color)
+        get_simple_palette_threaded(
+            image_path=image_path, color_count=5, callback=on_accent_color
+        )
 
     def _set_image(self, *_):
         art_url = self.player.arturl
@@ -545,7 +560,7 @@ class PlayerBox(Box):
 
         return True
 
-    @cooldown(0.1)
+    @cooldown(1)
     def _on_scale_move(self, scale: Scale, event, pos: int):
         self.player.position = pos
         self.position_label.set_label(self.length_str(pos))

@@ -1,9 +1,11 @@
+import json
 import os
 import re
 import shutil
 import subprocess
 import threading
 import time
+from collections import Counter
 from datetime import datetime
 from functools import lru_cache
 from io import BytesIO
@@ -11,7 +13,6 @@ from typing import Callable, Dict, List, Literal, Optional
 
 import psutil
 import qrcode
-from colorthief import ColorThief
 from fabric.utils import (
     cooldown,
     exec_shell_command,
@@ -20,6 +21,7 @@ from fabric.utils import (
 )
 from gi.repository import Gdk, GdkPixbuf, Gio, GLib, Gtk
 from loguru import logger
+from PIL import Image
 
 from .colors import Colors
 from .constants import NAMED_COLORS
@@ -36,31 +38,46 @@ def rgb_to_css(rgb):
     return f"rgb({rgb[0]}, {rgb[1]}, {rgb[2]})"
 
 
-def grab_accent_color(
-    image_path: str,
-    callback: Callable,
-    quantity: int = 4,
-    quality: int = 10,
-):
-    def thread_function():
-        try:
-            ct = ColorThief(file=image_path).get_palette(
-                quality=quality, color_count=quantity
-            )
-            GLib.idle_add(callback, ct)
-        except Exception:
-            logger.error("[COLORS] Failed to grab an accent color")
-            GLib.idle_add(callback, None)
-        finally:
-            GLib.idle_add(thread.join)
+def mix_colors(color1, color2, ratio=0.5):
+    r = int(color1[0] * (1 - ratio) + color2[0] * ratio)
+    g = int(color1[1] * (1 - ratio) + color2[1] * ratio)
+    b = int(color1[2] * (1 - ratio) + color2[2] * ratio)
+    return (r, g, b)
 
-    thread = threading.Thread(target=thread_function)
-    thread.start()
+
+def tint_color(color, tint_factor=1):
+    # tint_factor: 0 means original color, 1 means full white
+    white = (255, 255, 255)
+    return mix_colors(color, white, tint_factor)
+
+
+def get_simple_palette_threaded(
+    image_path: str,
+    callback: Callable[[Optional[list[tuple[int, int, int]]]], None],
+    color_count: int = 4,
+    resize: int = 64,
+):
+    def worker():
+        try:
+            with Image.open(image_path) as img:
+                img = img.convert("RGB")
+                img.thumbnail((resize, resize), Image.LANCZOS)  # Fast, in-place resize
+                pixels = img.getdata()
+
+                most_common = Counter(pixels).most_common(color_count)
+                palette = [color for color, _ in most_common]
+
+                GLib.idle_add(callback, palette)
+        except Exception as e:
+            print(f"[ColorExtractor] Failed: {e}")
+            GLib.idle_add(callback, None)
+
+    threading.Thread(target=worker, daemon=True).start()
 
 
 # Function to escape the markup
 def parse_markup(text):
-    return text
+    return text.replace("\n", " ")
 
 
 # support for multiple monitors
@@ -111,15 +128,18 @@ def celsius_to_fahrenheit(celsius):
 
 
 # Merge the parsed data with the default configuration
-def merge_defaults(data, defaults):
-    merged = defaults.copy()
+def deep_merge(data, target):
+    """
+    Recursively update a nested dictionary with values from another dictionary.
+    """
+    merged = target.copy()
     for key, user_value in data.items():
         if (
             key in merged
             and isinstance(merged[key], dict)
             and isinstance(user_value, dict)
         ):
-            merged[key] = merge_defaults(user_value, merged[key])
+            merged[key] = deep_merge(user_value, merged[key])
         else:
             merged[key] = user_value
     return merged
@@ -228,18 +248,24 @@ def validate_widgets(parsed_data, default_config):
                 )
 
 
-def make_qrcode(text: str, size: int = 200) -> bytes:
+@ttl_lru_cache(3600, 10)
+def make_qrcode(text: str, size: int = 200) -> GdkPixbuf.Pixbuf:
     # Generate QR Code image
     qr = qrcode.make(text)
     buffer = BytesIO()
     qr.save(buffer, format="PNG")
     buffer.seek(0)
 
-    # Load into GTK Image using GdkPixbuf
+    # Load into GTK Pixbuf
     loader = GdkPixbuf.PixbufLoader.new_with_type("png")
     loader.write(buffer.read())
     loader.close()
-    return loader.get_pixbuf()
+    pixbuf = loader.get_pixbuf()
+
+    # Scale Pixbuf to the desired size
+    scaled_pixbuf = pixbuf.scale_simple(size, size, GdkPixbuf.InterpType.BILINEAR)
+
+    return scaled_pixbuf
 
 
 # Function to exclude keys from a dictionary
@@ -279,9 +305,8 @@ def check_if_day(sunrise_time, sunset_time, current_time: str | None = None) -> 
     # Compare current time with sunrise and sunset
     return sunrise_time_obj <= current_time_obj < sunset_time_obj
 
-    # wttr.in time are in 300,400...2100 format , we need to convert it to 4:00...21:00
 
-
+# wttr.in time are in 300,400...2100 format , we need to convert it to 4:00...21:00
 def convert_to_12hr_format(time: str) -> str:
     time = int(time)
     hour = time // 100  # Get the hour (e.g., 1200 -> 12)
@@ -413,6 +438,15 @@ def convert_to_percent(
         return int((current / max) * 100)
     else:
         return (current / max) * 100
+
+
+@run_in_thread
+def write_json_file(data: Dict, path: str):
+    try:
+        with open(path, "w") as f:
+            json.dump(data, f, indent=4, ensure_ascii=False)
+    except Exception as e:
+        logger.warning(f"Failed to write json: {e}")
 
 
 # Function to ensure the file exists

@@ -12,9 +12,10 @@ from fabric.widgets.overlay import Overlay
 from gi.repository import Gdk, Gtk
 from loguru import logger
 
-from shared import ButtonWidget, PopupWindow
+from shared.popup import PopupWindow
+from shared.widget_container import ButtonWidget
 from utils.icon_resolver import IconResolver
-from utils.widget_utils import create_surface_from_widget, text_icon
+from utils.widget_utils import create_surface_from_widget, nerd_font_icon
 
 screen = Gdk.Screen.get_default()
 CURRENT_WIDTH = screen.get_width()
@@ -409,7 +410,7 @@ class OverviewWidget(ButtonWidget):
         if self.config["tooltip"]:
             self.set_tooltip_text("Overview")
 
-        self.box.children = text_icon(
+        self.box.children = nerd_font_icon(
             self.config["icon"],
             props={"style_classes": "panel-font-icon"},
         )

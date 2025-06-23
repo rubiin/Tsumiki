@@ -35,7 +35,7 @@ class MprisPlayer(Service):
         self._signal_connectors: dict = {}
         self._player: Playerctl.Player = player
         super().__init__(**kwargs)
-        for sn in ["playback-status", "loop-status", "shuffle", "volume", "seeked"]:
+        for sn in ["playback-status", "loop-status", "shuffle", "volume"]:
             self._signal_connectors[sn] = self._player.connect(
                 sn,
                 lambda *args, sn=sn: self.notifier(sn, args),

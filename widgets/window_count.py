@@ -6,8 +6,8 @@ from fabric.utils import bulk_connect
 from fabric.widgets.label import Label
 from loguru import logger
 
-from shared import ButtonWidget
-from utils.widget_utils import text_icon
+from shared.widget_container import ButtonWidget
+from utils.widget_utils import nerd_font_icon
 
 
 class WindowCountWidget(ButtonWidget):
@@ -22,7 +22,7 @@ class WindowCountWidget(ButtonWidget):
         self.box.add(self.count_label)
 
         if self.config["show_icon"]:
-            self.icon = text_icon(
+            self.icon = nerd_font_icon(
                 icon=self.config["icon"],
                 props={"style_classes": "panel-font-icon"},
             )
