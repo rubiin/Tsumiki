@@ -1,8 +1,8 @@
 from fabric.utils import get_relative_path
 from fabric.widgets.box import Box
 from fabric.widgets.grid import Grid
-from fabric.widgets.image import Image
 from fabric.widgets.label import Label
+from fabric.widgets.svg import Svg
 from fabric.widgets.widget import Widget
 
 from shared.buttons import HoverButton
@@ -94,8 +94,8 @@ class PowerControlButtons(HoverButton):
             child=Box(
                 orientation="v",
                 children=[
-                    Image(
-                        image_file=get_relative_path(f"../assets/icons/png/{name}.png"),
+                    Svg(
+                        svg_file=get_relative_path(f"../assets/icons/svg/{name}.svg"),
                         size=size,
                     ),
                     Label(
