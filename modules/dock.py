@@ -81,10 +81,8 @@ class Dock(Window, ToggleableWidget):
         bulk_connect(
             self.dock_eventbox,
             {
-                "enter-notify-event",
-                self._on_dock_enter,
-                "leave-notify-event",
-                self._on_dock_leave,
+                "enter-notify-event": self._on_dock_enter,
+                "leave-notify-event": self._on_dock_leave,
             },
         )
 
@@ -95,10 +93,8 @@ class Dock(Window, ToggleableWidget):
         bulk_connect(
             self.hover_activator,
             {
-                "enter-notify-event",
-                self._on_hover_enter,
-                "leave-notify-event",
-                self._on_hover_leave,
+                "enter-notify-event": self._on_hover_enter,
+                "leave-notify-event": self._on_hover_leave,
             },
         )
 
@@ -114,7 +110,7 @@ class Dock(Window, ToggleableWidget):
         else:
             bulk_connect(
                 self.conn,
-                {"event::ready", self.check_hide, "event::ready", self.check_hide},
+                {"event::ready": self.check_hide},
             )
 
         for ev in ("activewindow", "openwindow", "closewindow", "changefloatingmode"):
