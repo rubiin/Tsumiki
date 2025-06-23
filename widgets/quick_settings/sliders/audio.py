@@ -14,7 +14,7 @@ class AudioSlider(SettingSlider):
     Can be used for both device audio and application audio control.
     """
 
-    def __init__(self, audio_stream=None, show_chevron=True):
+    def __init__(self, audio_stream=None, show_chevron=False):
         """Initialize the audio slider.
 
         Args:
