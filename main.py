@@ -31,6 +31,8 @@ def take_snapshot():
     snapshot = tracemalloc.take_snapshot()
     top_stats = snapshot.statistics("lineno")
 
+    print("stats", tracemalloc.get_traced_memory())
+
     print("[Top 10 Memory Lines]")
     for stat in top_stats[:10]:
         print(stat)
