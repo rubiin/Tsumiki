@@ -14,7 +14,7 @@ class StopWatchWidget(ButtonWidget):
         self,
         **kwargs,
     ):
-        super().__init__(title="stopwatch", **kwargs)
+        super().__init__(name="stopwatch", **kwargs)
 
         self.start_time = 0
         self.elapsed_time = 0
