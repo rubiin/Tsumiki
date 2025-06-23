@@ -77,7 +77,7 @@ def get_simple_palette_threaded(
 
 # Function to escape the markup
 def parse_markup(text):
-    return text
+    return text.replace("\n", " ")
 
 
 # support for multiple monitors
