@@ -128,15 +128,18 @@ def celsius_to_fahrenheit(celsius):
 
 
 # Merge the parsed data with the default configuration
-def merge_defaults(data, defaults):
-    merged = defaults.copy()
+def deep_merge(data, target):
+    """
+    Recursively update a nested dictionary with values from another dictionary.
+    """
+    merged = target.copy()
     for key, user_value in data.items():
         if (
             key in merged
             and isinstance(merged[key], dict)
             and isinstance(user_value, dict)
         ):
-            merged[key] = merge_defaults(user_value, merged[key])
+            merged[key] = deep_merge(user_value, merged[key])
         else:
             merged[key] = user_value
     return merged

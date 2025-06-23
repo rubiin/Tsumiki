@@ -7,9 +7,9 @@ from loguru import logger
 
 from .constants import DEFAULT_CONFIG
 from .functions import (
+    deep_merge,
     exclude_keys,
     flatten_dict,
-    merge_defaults,
     run_in_thread,
     validate_widgets,
 )
@@ -73,7 +73,7 @@ class HydeConfig:
                 parsed_data[key] = parsed_data.get(key, DEFAULT_CONFIG[key])
             else:
                 # For dictionaries, merge with defaults
-                parsed_data[key] = merge_defaults(
+                parsed_data[key] = deep_merge(
                     parsed_data.get(key, {}), DEFAULT_CONFIG[key]
                 )
 
