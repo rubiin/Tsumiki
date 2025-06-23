@@ -2,11 +2,15 @@ import os
 import threading
 
 from fabric.utils import get_relative_path
-from loguru import logger
 
 from shared.widget_container import ButtonWidget
 from utils.config import theme_config
-from utils.functions import copy_theme, recompile_and_apply_css, send_notification, update_theme_config
+from utils.functions import (
+    copy_theme,
+    recompile_and_apply_css,
+    send_notification,
+    update_theme_config,
+)
 from utils.widget_utils import nerd_font_icon
 
 
