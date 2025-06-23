@@ -2,15 +2,11 @@ import os
 import threading
 
 from fabric.utils import get_relative_path
+from loguru import logger
 
 from shared.widget_container import ButtonWidget
 from utils.config import theme_config
-from utils.functions import (
-    copy_theme,
-    recompile_and_apply_css,
-    send_notification,
-    update_theme_config,
-)
+from utils.functions import copy_theme, recompile_and_apply_css, send_notification, update_theme_config
 from utils.widget_utils import nerd_font_icon
 
 
@@ -34,7 +30,9 @@ class ThemeSwitcherWidget(ButtonWidget):
 
         # Ensure current theme is in the themes list, fallback to first available theme
         if self.current_theme not in self.themes_list:
-            self.current_theme = self.themes_list[0] if self.themes_list else "catpuccin-mocha"
+            self.current_theme = (
+                self.themes_list[0] if self.themes_list else "catpuccin-mocha"
+            )
 
         self.children = nerd_font_icon(
             self.config["icon"],

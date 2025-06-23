@@ -159,7 +159,9 @@ def recompile_and_apply_css():
         try:
             check_executable_exists("sass")
             logger.info(f"{Colors.INFO}[Theme] Recompiling CSS")
-            output = exec_shell_command("sass styles/main.scss dist/main.css --no-source-map")
+            output = exec_shell_command(
+                "sass styles/main.scss dist/main.css --no-source-map"
+            )
 
             if output == "":
                 logger.info(f"{Colors.INFO}[Theme] CSS recompiled successfully")
