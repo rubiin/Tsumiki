@@ -124,6 +124,7 @@ class WeatherMenu(Box, BaseWeatherWidget):
         self.weather_icons_dir = get_relative_path("../assets/icons/svg/weather")
 
         self.current_weather_image = Image(
+            image_file=f"{self.weather_icons_dir}/clear-day.svg",
             v_align="start",
             h_align="start",
             size=100,
@@ -284,7 +285,10 @@ class WeatherMenu(Box, BaseWeatherWidget):
 
         if current_time > 1200:
             next_values = self.hourly_forecast[4:8]
-            # clear the forecast box grid here : TODO: fix this
+
+            # clear the forecast box
+            for child in self.forecast_box.get_children():
+                self.forecast_box.remove(child)
 
         # show next 4 hours forecast
         for col in range(4):
