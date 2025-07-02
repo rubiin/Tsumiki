@@ -116,14 +116,6 @@ class ClipHistoryMenu(Box):
         self.items_loaded += items_to_add
         self.loading = False
 
-    def on_scroll(self, adjustment):
-        value = adjustment.get_value()
-        upper = adjustment.get_upper()
-        page_size = adjustment.get_page_size()
-
-        if value + page_size >= upper - 50:
-            self.load_more_items(self.wifi_device.access_points)  # TODO: fix this
-
     def _on_search_text_changed(self, entry, pspec):
         # Remove any existing pending filter operation
         if self._search_timer_id > 0:

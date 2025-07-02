@@ -148,7 +148,6 @@ class QSChevronButton(QSToggleButton):
     ):
         self.submenu = submenu
 
-        # TODO: change to text_icons
         self.button_image = Image(
             icon_name=symbolic_icons["ui"]["arrow"]["right"], icon_size=20
         )

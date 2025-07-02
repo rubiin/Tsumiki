@@ -15,7 +15,6 @@ from utils.icons import text_icons
 from utils.widget_utils import nerd_font_icon
 
 
-# TODO: finalize the bluetooth submenu
 class BluetoothDeviceBox(CenterBox):
     """A widget to display a Bluetooth device in a box."""
 
@@ -40,6 +39,7 @@ class BluetoothDeviceBox(CenterBox):
             "printer": text_icons["ui"]["printer"],
             "tv": text_icons["ui"]["tv"],
             "watch": text_icons["ui"]["watch"],
+            "bluetooth": text_icons["bluetooth"]["enabled"],
         }
 
         self.connect_button = HoverButton(style_classes="submenu-button")
@@ -56,10 +56,12 @@ class BluetoothDeviceBox(CenterBox):
             },
         )
 
+        device_name = device.name or "Unknown Device"
+
         self.add_start(
             nerd_font_icon(
                 icon=self.icon_to_text_icon.get(
-                    device.icon_name, text_icons["ui"]["question"]
+                    device.icon_name, text_icons["bluetooth"]["enabled"]
                 ),
                 props={
                     "style_classes": ["panel-font-icon"],
@@ -67,9 +69,10 @@ class BluetoothDeviceBox(CenterBox):
                 },
             ),
         )
+
         self.add_start(
             Label(
-                label=device.name,
+                label=device_name,
                 style_classes="submenu-item-label",
                 ellipsization="end",
             )

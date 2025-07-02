@@ -2,7 +2,7 @@ from fabric.widgets.box import Box
 from fabric.widgets.button import Button
 from fabric.widgets.label import Label
 from fabric.widgets.scrolledwindow import ScrolledWindow
-from gi.repository import Gtk
+from gi.repository import GObject, Gtk
 from loguru import logger
 
 from services.network import NetworkService, Wifi
@@ -210,8 +210,16 @@ class WifiToggle(QSChevronButton):
                 ),
             )
 
-            # TODO: Fix this binding
-            # wifi.bind_property("icon-name", self.action_icon, "icon-name")
+            wifi.bind_property(
+                "icon-name",
+                self.action_icon,
+                "label",
+                GObject.BindingFlags.DEFAULT,
+                lambda _, x: icon_to_text_icons.get(
+                    x,
+                    text_icons["wifi"]["generic"],
+                ),
+            )
 
             self.action_label.set_label(wifi.get_property("ssid"))
             wifi.bind_property("ssid", self.action_label, "label")
