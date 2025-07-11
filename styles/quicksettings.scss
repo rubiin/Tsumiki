@@ -336,6 +336,10 @@ $slider-height: 12px;
       padding: common.toEm(3) 0;
       padding-left: common.toEm(10);
 
+      .panel-font-icon{
+        font-size: 16px;
+      }
+
       &.active {
         background-color: theme.$accent-blue;
 
