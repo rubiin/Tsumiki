@@ -83,17 +83,18 @@ class BrightnessOSDContainer(GenericOSDContainer):
         )
         self.brightness_service = BrightnessService()
         self.config = config
-        self.update_brightness()
 
+        self.update_brightness()
         self.brightness_service.connect(
             "brightness_changed", self.on_brightness_changed
         )
 
     @cooldown(0.1)
     def update_brightness(self):
-        brightness_percent = self.brightness_service.screen_brightness_percentage
-        self.update_values(brightness_percent)
-        self.update_icon(int(brightness_percent))
+        if self.brightness_service.screen_device != "":
+            brightness_percent = self.brightness_service.screen_brightness_percentage
+            self.update_values(brightness_percent)
+            self.update_icon(int(brightness_percent))
 
     def update_icon(self, current_brightness: int):
         icon_name = get_brightness_icon_name(current_brightness)["icon"]
