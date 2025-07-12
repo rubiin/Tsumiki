@@ -150,7 +150,7 @@ class AudioOSDContainer(GenericOSDContainer):
 
         is_over_amplified = volume > 100
 
-        self.set_has_class("overamplified", is_over_amplified)
+        self.scale.set_has_class("overamplified", is_over_amplified)
 
         if not self.audio_service.speaker:
             return

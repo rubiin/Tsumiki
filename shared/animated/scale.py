@@ -5,9 +5,10 @@ from fabric.widgets.scale import Scale
 from utils.bezier import cubic_bezier
 
 from ..animator import Animator
+from ..widget_container import BaseWidget
 
 
-class AnimatedScale(Scale):
+class AnimatedScale(Scale, BaseWidget):
     """A widget to display a scale with animated transitions."""
 
     def __init__(self, name, curve, duration=0.8, **kwargs):

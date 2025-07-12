@@ -6,8 +6,10 @@ from fabric.widgets.widget import Widget
 
 from utils.widget_utils import nerd_font_icon
 
+from .widget_container import BaseWidget
 
-class QuickSubMenu(Box):
+
+class QuickSubMenu(Box, BaseWidget):
     """A widget to display a submenu for quick settings."""
 
     def __init__(

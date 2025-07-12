@@ -5,8 +5,10 @@ from fabric.widgets.widget import Widget
 from gi.repository import GLib, Gtk
 from rlottie_python.rlottie_wrapper import LottieAnimation
 
+from .widget_container import BaseWidget
 
-class LottieAnimationWidget(Gtk.DrawingArea, Widget):
+
+class LottieAnimationWidget(Gtk.DrawingArea, BaseWidget):
     """A widget to display a Lottie animation."""
 
     def __init__(

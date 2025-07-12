@@ -5,9 +5,10 @@ from utils.icons import text_icons
 from utils.widget_utils import nerd_font_icon
 
 from .buttons import HoverButton
+from .widget_container import BaseWidget
 
 
-class SettingSlider(Box):
+class SettingSlider(Box, BaseWidget):
     """A widget to display a scale for quick settings."""
 
     def __init__(

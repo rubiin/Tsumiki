@@ -6,8 +6,10 @@ from fabric.core.service import Property
 from fabric.widgets.widget import Widget
 from gi.repository import Gdk, GdkPixbuf, Gtk
 
+from .widget_container import BaseWidget
 
-class CircleImage(Gtk.DrawingArea, Widget):
+
+class CircleImage(Gtk.DrawingArea, BaseWidget):
     """A widget that displays an image in a circle."""
 
     @Property(int, "read-write")

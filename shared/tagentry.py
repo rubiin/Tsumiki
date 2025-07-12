@@ -4,8 +4,10 @@ from fabric.widgets.eventbox import EventBox
 from fabric.widgets.label import Label
 from gi.repository import Gdk
 
+from .widget_container import BaseWidget
 
-class TagEntry(Box):
+
+class TagEntry(Box, BaseWidget):
     """A widget that allows the user to enter and manage tags."""
 
     def __init__(self, available_tags=None, **kwargs):
