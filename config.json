@@ -143,7 +143,9 @@
 			"show_icon": true,
 			"icon": "󱧘",
 			"os": "arch",
+			"auto_hide": true, // this is to auto hide the updates widget when there are no updates available
 			"interval": 3600,
+			"pad_zero": true, // this is to pad the number of updates with zero
 			"tooltip": true,
 			"label": true,
 			"flatpak": true,
@@ -414,7 +416,7 @@
 	},
 	"general": {
 		"check_updates": false,
-		"layer": "top",
+		"layer": "overlay",
 		"auto_hide": false,
 		"debug": false,
 		"monitor_styles": true,

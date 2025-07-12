@@ -31,7 +31,7 @@ class UpdatesWidget(ButtonWidget):
 
         script_file = get_relative_path("../assets/scripts/systemupdates.sh")
 
-        self.base_command = f"{script_file} --{self.config['os']}"
+        self.base_command = f"{script_file} os={self.config['os']}"
 
         if self.config.get("flatpak", True):
             self.base_command += " --flatpak"
@@ -81,11 +81,20 @@ class UpdatesWidget(ButtonWidget):
         if value["total"] > "0":
             # Update the label if enabled
             if self.config.get("label", True):
-                self.update_label.set_label(value["total"])
+                if self.config.get("pad_zero", True):
+                    self.update_label.set_label(value["total"].rjust(2, "0"))
+                else:
+                    self.update_label.set_label(value["total"])
             if self.config.get("show_icon", True):
                 self.icon.set_label("󱧘")
 
             self.set_tooltip_text(value["tooltip"])
+
+        if self.config.get("auto_hide", False):
+            if value["total"] == "0":
+                self.hide()
+            else:
+                self.show()
 
     def on_button_press(self, _, event):
         if event.button == 1:
@@ -99,6 +108,7 @@ class UpdatesWidget(ButtonWidget):
         # Execute the update script asynchronously and update values
 
         if update:
+            logger.info(f"{Colors.INFO}[Updates] Updating available updates...")
             exec_shell_command_async(
                 f"{self.base_command} up",
                 self.update_values,

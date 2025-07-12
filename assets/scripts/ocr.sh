@@ -1,5 +1,4 @@
 #!/bin/bash
-set -euo pipefail
 
 NOTIFY=true
 OCR_LANG="eng"

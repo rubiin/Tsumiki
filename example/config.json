@@ -414,7 +414,7 @@
 	},
 	"general": {
 		"check_updates": false,
-		"layer": "top",
+		"layer": "overlay",
 		"auto_hide": false,
 		"debug": false,
 		"monitor_styles": true,

@@ -1,5 +1,4 @@
 #!/bin/bash
-set -euo pipefail
 
 # --- Globals ---
 NOTIFY=true
