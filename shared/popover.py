@@ -78,7 +78,7 @@ class PopoverManager:
             visible=False,
             all_visible=False,
         )
-        GtkLayerShell.set_keyboard_interactivity(window, True)
+        GtkLayerShell.set_keyboard_mode(window, GtkLayerShell.KeyboardMode.ON_DEMAND)
         window.set_keep_above(True)
         return window
 
@@ -169,7 +169,6 @@ class Popover(Widget):
         else:
             self._manager.activate_popover(self)
             self._content_window.show()
-            self._content_window.steal_input()
             self._visible = True
 
         self.emit("popover-opened")
@@ -229,7 +228,6 @@ class Popover(Widget):
         self._content_window.connect("key-press-event", self._on_key_press)
         self._manager.activate_popover(self)
         self._content_window.show()
-        self._content_window.steal_input()
         self._visible = True
 
     def _on_popover_focus_out(self, widget, event):
