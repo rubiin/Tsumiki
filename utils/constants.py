@@ -343,6 +343,7 @@ DEFAULT_CONFIG = {
             "enabled": True,
             "anchor": "top-right",
             "auto_dismiss": True,
+            "dnd_on_screencast": False,  # Enable Do Not Disturb mode when screencasting
             "ignored": [],
             "timeout": 3000,
             "max_count": 200,
