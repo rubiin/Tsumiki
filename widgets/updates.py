@@ -88,6 +88,11 @@ class UpdatesWidget(ButtonWidget):
                     if self.config.get("pad_zero", True)
                     else str(total)
                 )
+
+                # dont show '0' if total is 0 and pad_zero is True
+                if total == 0:
+                    label_text = str(total)
+
                 self.update_label.set_label(label_text)
 
             # Update icon
