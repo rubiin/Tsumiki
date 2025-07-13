@@ -53,9 +53,7 @@ SystemTray = TypedDict(
     {
         "icon_size": int,
         "ignored": List[str],
-        "pinned": List[str],
-        "hidden": List[str],
-        "visible_count": int,
+        "hidden": List[str]
     },
 )
 
