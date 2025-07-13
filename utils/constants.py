@@ -255,8 +255,6 @@ DEFAULT_CONFIG = {
             "icon_size": 16,
             "ignored": [],
             "hidden": [],
-            "pinned": [],
-            "visible_count": 3,
         },
         "taskbar": {"icon_size": 22, "ignored": [], "tooltip": True},
         "theme_switcher": {
@@ -265,7 +263,8 @@ DEFAULT_CONFIG = {
         },
         "updates": {
             "show_icon": True,
-            "icon": "󱧘",
+            "available_icon": "󰏗",
+            "no_updates_icon": "󰏖",
             "os": "arch",
             "interval": HIGH_POLL_INTERVAL,
             "tooltip": True,
@@ -342,6 +341,7 @@ DEFAULT_CONFIG = {
             "enabled": True,
             "anchor": "top-right",
             "auto_dismiss": True,
+            "dnd_on_screencast": False,  # Enable Do Not Disturb mode when screencasting
             "ignored": [],
             "timeout": 3000,
             "max_count": 200,

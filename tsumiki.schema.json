@@ -838,6 +838,14 @@
 				{
 					"type": "object",
 					"properties": {
+						"available_icon": {
+							"type": "string",
+							"description": "Icon to display when updates are available"
+						},
+						"no_updates_icon": {
+							"type": "string",
+							"description": "Icon to display when there are no updates"
+						},
 						"os": {
 							"type": "string",
 							"enum": ["arch", "fedora", "opensuse", "ubuntu"],

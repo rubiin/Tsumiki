@@ -141,9 +141,10 @@
 		},
 		"updates": {
 			"show_icon": true,
-			"icon": "󱧘",
+			"available_icon": "󰏗",
+			"no_updates_icon": "󰏖",
 			"os": "arch",
-			"auto_hide": true, // this is to auto hide the updates widget when there are no updates available
+			"auto_hide": false, // this is to auto hide the updates widget when there are no updates available
 			"interval": 3600,
 			"pad_zero": true, // this is to pad the number of updates with zero
 			"tooltip": true,
@@ -370,6 +371,7 @@
 		},
 		"notification": {
 			"enabled": true,
+			"dnd_on_screencast": true, // this is to enable Do Not Disturb mode when screencasting
 			"anchor": "top-right",
 			"auto_dismiss": true,
 			"ignored": [],

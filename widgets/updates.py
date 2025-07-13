@@ -29,22 +29,11 @@ class UpdatesWidget(ButtonWidget):
 
         self.update_time = datetime.now()
 
-        script_file = get_relative_path("../assets/scripts/systemupdates.sh")
-
-        self.base_command = f"{script_file} os={self.config['os']}"
-
-        if self.config.get("flatpak", True):
-            self.base_command += " --flatpak"
-
-        if self.config.get("snap", True):
-            self.base_command += " --snap"
-
-        if self.config.get("brew", True):
-            self.base_command += " --brew"
+        self.base_command = self._build_base_command()
 
         if self.config.get("show_icon", True):
             self.icon = nerd_font_icon(
-                icon=self.config["icon"],
+                icon=self.config["no_updates_icon"],
                 props={"style_classes": "panel-font-icon"},
             )
             self.box.add(self.icon)
@@ -61,6 +50,19 @@ class UpdatesWidget(ButtonWidget):
         # reusing the fabricator to call specified intervals
         reusable_fabricator.connect("changed", self.should_update)
 
+    def _build_base_command(self) -> str:
+        script = get_relative_path("../assets/scripts/systemupdates.sh")
+        command = [f"{script} os={self.config['os']}"]
+
+        if self.config.get("flatpak", False):
+            command.append("--flatpak")
+        if self.config.get("snap", False):
+            command.append("--snap")
+        if self.config.get("brew", False):
+            command.append("--brew")
+
+        return " ".join(command)
+
     def should_update(self, *_):
         """
         Handles the 'changed' signal from the fabricator.
@@ -74,50 +76,63 @@ class UpdatesWidget(ButtonWidget):
         return True
 
     def update_values(self, value: str):
-        # Parse the JSON value
+        """Update the UI based on the returned update data."""
+        try:
+            data = json.loads(value)
+            total = int(data.get("total", "0"))
 
-        value = json.loads(value)
-
-        if value["total"] > "0":
-            # Update the label if enabled
+            # Update label
             if self.config.get("label", True):
-                if self.config.get("pad_zero", True):
-                    self.update_label.set_label(value["total"].rjust(2, "0"))
-                else:
-                    self.update_label.set_label(value["total"])
+                label_text = (
+                    str(total).rjust(2, "0")
+                    if self.config.get("pad_zero", True)
+                    else str(total)
+                )
+
+                # dont show '0' if total is 0 and pad_zero is True
+                if total == 0:
+                    label_text = str(total)
+
+                self.update_label.set_label(label_text)
+
+            # Update icon
             if self.config.get("show_icon", True):
-                self.icon.set_label("󱧘")
+                icon = (
+                    self.config["available_icon"]
+                    if total > 0
+                    else self.config["no_updates_icon"]
+                )
+                self.icon.set_label(icon)
 
-            self.set_tooltip_text(value["tooltip"])
+            # Tooltip
+            self.set_tooltip_text(data.get("tooltip", ""))
 
-        if self.config.get("auto_hide", False):
-            if value["total"] == "0":
-                self.hide()
-            else:
-                self.show()
+            # Auto-hide logic
+            if self.config.get("auto_hide", False):
+                self.set_visible(total > 0)
+
+        except (json.JSONDecodeError, ValueError) as e:
+            logger.error(
+                f"{Colors.ERROR}[UpdatesWidget] Failed to parse update data: {e}"
+            )
 
     def on_button_press(self, _, event):
-        if event.button == 1:
-            self.check_update(update=True)
-        else:
-            self.check_update()
+        """Trigger a manual update check on click."""
+        self.check_update(update=(event.button == 1))
         return True
 
     @cooldown(1)
     def check_update(self, update=False):
-        # Execute the update script asynchronously and update values
+        """Run the update check asynchronously."""
+        suffix = " up" if update else ""
+        log_msg = (
+            "Updating available updates..." if update else "Checking for updates..."
+        )
+        logger.info(f"{Colors.INFO}[Updates] {log_msg}")
 
-        if update:
-            logger.info(f"{Colors.INFO}[Updates] Updating available updates...")
-            exec_shell_command_async(
-                f"{self.base_command} up",
-                self.update_values,
-            )
-        else:
-            logger.info(f"{Colors.INFO}[Updates] Checking for updates...")
-            exec_shell_command_async(
-                self.base_command,
-                self.update_values,
-            )
+        exec_shell_command_async(
+            f"{self.base_command}{suffix}",
+            self.update_values,
+        )
 
         return True
