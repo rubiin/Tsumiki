@@ -114,6 +114,7 @@ Notification = TypedDict(
         "sound_file": str,
         "max_count": int,
         "dismiss_on_hover": bool,
+        "dnd_on_screencast": bool,
         "max_actions": int,
         "per_app_limits": Dict[str, int],
     },
