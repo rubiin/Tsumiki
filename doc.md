@@ -1,4 +1,4 @@
-# Default Configuration Documentation
+# Tsumiki Configuration Documentation
 
 - **`$schema`**: `str` (default: "./tsumiki.schema.json")
 
@@ -201,8 +201,6 @@
     - **`icon_size`**: `int` (default: 16)
     - **`ignored`**: `list` (default: [])
     - **`hidden`**: `list` (default: [])
-    - **`pinned`**: `list` (default: [])
-    - **`visible_count`**: `int` (default: 3)
   - **`taskbar`**: `object`
     - **`icon_size`**: `int` (default: 22)
     - **`ignored`**: `list` (default: [])
@@ -212,11 +210,14 @@
     - **`notify`**: `bool` (default: false)
   - **`updates`**: `object`
     - **`show_icon`**: `bool` (default: true)
-    - **`icon`**: `str` (default: "󱧘")
+    - **`available_icon`**: `str` (default: "󰏗")
+    - **`no_updates_icon`**: `str` (default: "󰏖")
     - **`os`**: `str` (default: "arch")
     - **`interval`**: `int` (default: 3600)
     - **`tooltip`**: `bool` (default: true)
+    - **`pad_zero`**: `bool` (default: true)
     - **`label`**: `bool` (default: true)
+    - **`auto_hide`**: `bool` (default: false)
     - **`flatpak`**: `bool` (default: false)
     - **`snap`**: `bool` (default: false)
     - **`brew`**: `bool` (default: false)
@@ -282,6 +283,7 @@
     - **`enabled`**: `bool` (default: true)
     - **`anchor`**: `str` (default: "top-right")
     - **`auto_dismiss`**: `bool` (default: true)
+    - **`dnd_on_screencast`**: `bool` (default: false)
     - **`ignored`**: `list` (default: [])
     - **`timeout`**: `int` (default: 3000)
     - **`max_count`**: `int` (default: 200)
