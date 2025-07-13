@@ -80,6 +80,15 @@
       "contributions": [
         "bug"
       ]
+    },
+    {
+      "login": "jhakonen",
+      "name": "Janne Hakonen",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1950698?v=4",
+      "profile": "https://github.com/jhakonen",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,
