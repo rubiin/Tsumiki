@@ -1,4 +1,3 @@
-
 :vars {
   --foreground: {{colors.on_background.default.hex}};
   --background: {{colors.background.default.hex}};

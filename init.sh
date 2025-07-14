@@ -132,6 +132,7 @@ install_packages() {
 		python-ijson
 		slurp
 		imagemagick
+		matugen-bin
 		tesseract
 		tesseract-data-eng
 		ttf-jetbrains-mono-nerd
