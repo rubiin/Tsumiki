@@ -1,6 +1,6 @@
 [project]
 name = "Tsumiki"
-version = "1.0.5"
+version = "1.1.0"
 description = "A semi-customizable bar written using the Fabric Widget System"
 readme = "README.md"
 requires-python = ">=3.12"

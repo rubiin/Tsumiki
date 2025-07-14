@@ -10,8 +10,16 @@ from services.network import NetworkService, Wifi
 from shared.buttons import QSChevronButton, ScanButton
 from shared.list import ListBox
 from shared.submenu import QuickSubMenu
+from utils.exceptions import NetworkManagerNotFoundError
 from utils.icons import text_icons
 from utils.widget_utils import nerd_font_icon
+
+try:
+    gi.require_version("NM", "1.0")
+    from gi.repository import NM
+except ValueError:
+    raise NetworkManagerNotFoundError()
+
 
 gi.require_versions({"Gtk": "3.0"})
 
@@ -130,8 +138,7 @@ class WifiSubMenu(QuickSubMenu):
 
         self.load_more_items(self.wifi_device.access_points)
 
-    # TODO: type ap
-    def make_button_from_ap(self, ap) -> Button:
+    def make_button_from_ap(self, ap: NM.AccessPoint) -> Button:
         security_label = ""
 
         ap_container = Box(
