@@ -299,8 +299,14 @@ class DateNotificationMenu(Box):
             },
         )
 
-        if self.on_dnd_switch:
-            self.dnd_switch.connect("notify::active", self.on_dnd_switch)
+        if self.dnd_switch:
+            self.dnd_switch.connect("notify::active", self.on_dnd_switch_toggled)
+
+    def on_dnd_switch_toggled(self, switch, state):
+        if switch.get_active():
+            notification_service.dont_disturb = True
+        else:
+            notification_service.dont_disturb = False
 
     def on_dnd_switch(self, _, value, *args):
         self.dnd_switch.set_active(value)
