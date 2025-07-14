@@ -1,7 +1,7 @@
 import json
 
 import gi
-from fabric.hyprland.service import Hyprland
+from fabric.hyprland.widgets import get_hyprland_connection
 from fabric.utils.helpers import bulk_connect, get_desktop_applications
 from fabric.widgets.box import Box
 from fabric.widgets.button import Button
@@ -20,14 +20,7 @@ from utils.widget_utils import create_surface_from_widget, nerd_font_icon
 gi.require_versions({"Gtk": "3.0"})
 
 
-# TODO: lazy load icons and widgets to improve performance
-
-screen = Gdk.Screen.get_default()
-CURRENT_WIDTH = screen.get_width()
-CURRENT_HEIGHT = screen.get_height()
-
-icon_resolver = IconResolver()
-connection = Hyprland()
+connection = get_hyprland_connection()
 SCALE = 0.1
 TARGET = [Gtk.TargetEntry.new("text/plain", Gtk.TargetFlags.SAME_APP, 0)]
 
@@ -50,6 +43,7 @@ class HyprlandWindowButton(Button):
         self.app_id = app_id
         self.title = title
         self.window: Box = window
+        self.icon_resolver = IconResolver()
 
         # Compute dynamic icon sizes based on the button size.
         # Using the minimum dimension of the button for scaling.
@@ -65,15 +59,15 @@ class HyprlandWindowButton(Button):
 
         if not icon_pixbuf:
             # Fallback to IconResolver
-            icon_pixbuf = icon_resolver.get_icon_pixbuf(app_id, icon_size_main)
+            icon_pixbuf = self.icon_resolver.get_icon_pixbuf(app_id, icon_size_main)
 
         if not icon_pixbuf:
             # Additional fallbacks for common apps
-            icon_pixbuf = icon_resolver.get_icon_pixbuf(
+            icon_pixbuf = self.icon_resolver.get_icon_pixbuf(
                 "application-x-executable-symbolic", icon_size_main
             )
             if not icon_pixbuf:
-                icon_pixbuf = icon_resolver.get_icon_pixbuf(
+                icon_pixbuf = self.icon_resolver.get_icon_pixbuf(
                     "image-missing", icon_size_main
                 )
 
@@ -138,14 +132,16 @@ class HyprlandWindowButton(Button):
             icon_pixbuf = self.desktop_app.get_icon_pixbuf(size=icon_size_overlay)
 
         if not icon_pixbuf:
-            icon_pixbuf = icon_resolver.get_icon_pixbuf(self.app_id, icon_size_overlay)
+            icon_pixbuf = self.icon_resolver.get_icon_pixbuf(
+                self.app_id, icon_size_overlay
+            )
 
         if not icon_pixbuf:
-            icon_pixbuf = icon_resolver.get_icon_pixbuf(
+            icon_pixbuf = self.icon_resolver.get_icon_pixbuf(
                 "application-x-executable-symbolic", icon_size_overlay
             )
             if not icon_pixbuf:
-                icon_pixbuf = icon_resolver.get_icon_pixbuf(
+                icon_pixbuf = self.icon_resolver.get_icon_pixbuf(
                     "image-missing", icon_size_overlay
                 )
 
@@ -182,11 +178,16 @@ class WorkspaceEventBox(EventBox):
 
     def __init__(self, workspace_id: int, fixed: Gtk.Fixed | None = None):
         self.fixed = fixed
+
+        screen = Gdk.Screen.get_default()
+        current_width = screen.get_width()
+        current_height = screen.get_height()
+
         super().__init__(
             name="overview-workspace-bg",
             h_expand=True,
             v_expand=True,
-            size=(int(CURRENT_WIDTH * SCALE), int(CURRENT_HEIGHT * SCALE)),
+            size=(int(current_width * SCALE), int(current_height * SCALE)),
             child=fixed
             if fixed
             else Label(
