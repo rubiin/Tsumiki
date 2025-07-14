@@ -3,6 +3,7 @@ import os
 import typing
 from pathlib import Path
 
+import gi
 from fabric.widgets.box import Box
 from fabric.widgets.button import Button
 from fabric.widgets.centerbox import CenterBox
@@ -18,6 +19,8 @@ from shared.popover import Popover
 from shared.widget_container import ButtonWidget
 from utils.functions import write_json_file
 from utils.widget_utils import create_surface_from_widget, nerd_font_icon
+
+gi.require_versions({"Gtk": "3.0"})
 
 
 class InlineEditor(Box):

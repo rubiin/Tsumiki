@@ -4,6 +4,7 @@ from time import sleep
 from typing import Literal
 
 import cairo  # For rendering the drag preview
+import gi
 import psutil
 from fabric import Fabricator
 from fabric.utils import bulk_connect
@@ -18,6 +19,9 @@ from .config import widget_config
 from .icons import symbolic_icons, text_icons
 
 storage_config = widget_config["widgets"]["storage"]
+
+
+gi.require_versions({"Gtk": "3.0"})
 
 
 # Function to get the system stats using psutil

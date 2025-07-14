@@ -17,6 +17,11 @@ from shared.widget_container import ButtonWidget
 from utils.icon_resolver import IconResolver
 from utils.widget_utils import create_surface_from_widget, nerd_font_icon
 
+gi.require_versions({"Gtk": "3.0"})
+
+
+# TODO: lazy load icons and widgets to improve performance
+
 screen = Gdk.Screen.get_default()
 CURRENT_WIDTH = screen.get_width()
 CURRENT_HEIGHT = screen.get_height()

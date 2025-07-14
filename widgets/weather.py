@@ -1,6 +1,7 @@
 import time
 from datetime import datetime
 
+import gi
 from fabric.utils import cooldown, get_relative_path
 from fabric.widgets.box import Box
 from fabric.widgets.grid import Grid
@@ -18,6 +19,8 @@ from utils.widget_utils import (
     nerd_font_icon,
     reusable_fabricator,
 )
+
+gi.require_versions({"Gtk": "3.0"})
 
 
 class BaseWeatherWidget:

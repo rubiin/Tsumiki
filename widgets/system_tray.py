@@ -17,7 +17,7 @@ from shared.widget_container import ButtonWidget
 from utils.icons import text_icons
 from utils.widget_utils import nerd_font_icon
 
-gi.require_version("Gray", "0.1")
+gi.require_versions({"Gtk": "3.0", "Gray": "0.1"})
 
 
 class BaseSystemTray:

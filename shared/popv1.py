@@ -4,7 +4,7 @@ import gi
 from fabric.widgets.wayland import WaylandWindow
 from gi.repository import Gdk, Gtk, GtkLayerShell
 
-gi.require_version("GtkLayerShell", "0.1")
+gi.require_versions({"Gtk": "3.0", "GtkLayerShell": "0.1"})
 
 
 class Popover(WaylandWindow):

@@ -1,5 +1,6 @@
 from typing import List
 
+import gi
 from fabric.notifications import Notification
 from fabric.utils import bulk_connect
 from fabric.widgets.box import Box
@@ -22,6 +23,8 @@ from shared.widget_container import ButtonWidget
 from utils.colors import Colors
 from utils.icons import text_icons
 from utils.widget_utils import get_icon, nerd_font_icon
+
+gi.require_versions({"Gtk": "3.0"})
 
 
 class DateMenuNotification(Box):

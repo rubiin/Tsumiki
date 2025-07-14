@@ -2,6 +2,7 @@ import json
 import os
 from typing import TypedDict
 
+import gi
 from fabric.hyprland.widgets import get_hyprland_connection
 from fabric.utils import exec_shell_command_async
 from fabric.widgets.image import Image
@@ -11,6 +12,8 @@ from loguru import logger
 from shared.buttons import HoverButton
 from shared.widget_container import ButtonWidget
 from utils.colors import Colors
+
+gi.require_versions({"Gtk": "3.0"})
 
 
 class PagerClient(TypedDict):

@@ -11,6 +11,7 @@ from functools import lru_cache
 from io import BytesIO
 from typing import Any, Callable, Dict, List, Literal, Optional
 
+import gi
 import psutil
 import qrcode
 from fabric import Application
@@ -30,6 +31,8 @@ from .constants import NAMED_COLORS
 from .exceptions import ExecutableNotFoundError
 from .icons import text_icons
 from .thread import run_in_thread, thread
+
+gi.require_versions({"Gtk": "3.0"})
 
 
 # Function to execute a shell command synchronously with formatted string

@@ -2,6 +2,7 @@ import json
 import os
 import re
 
+import gi
 from gi.repository import GdkPixbuf, GLib, Gtk
 from loguru import logger
 
@@ -10,6 +11,8 @@ from utils.thread import run_in_thread
 from .colors import Colors
 from .constants import ICON_CACHE_FILE
 from .icons import symbolic_icons
+
+gi.require_versions({"Gtk": "3.0"})
 
 
 class IconResolver:

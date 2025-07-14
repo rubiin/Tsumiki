@@ -1,3 +1,4 @@
+import gi
 from fabric.widgets.box import Box
 from fabric.widgets.button import Button
 from fabric.widgets.label import Label
@@ -11,6 +12,9 @@ from shared.list import ListBox
 from shared.submenu import QuickSubMenu
 from utils.icons import text_icons
 from utils.widget_utils import nerd_font_icon
+
+gi.require_versions({"Gtk": "3.0"})
+
 
 icon_to_text_icons = {
     "network-wireless-signal-excellent-symbolic": text_icons["wifi"]["strength_4"],

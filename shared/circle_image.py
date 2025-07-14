@@ -2,11 +2,14 @@ import math
 from typing import Iterable, Literal
 
 import cairo
+import gi
 from fabric.core.service import Property
 from fabric.widgets.widget import Widget
 from gi.repository import Gdk, GdkPixbuf, Gtk
 
 from .widget_container import BaseWidget
+
+gi.require_versions({"Gtk": "3.0"})
 
 
 class CircleImage(Gtk.DrawingArea, BaseWidget):

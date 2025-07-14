@@ -4,8 +4,6 @@ from gi.repository import Gio, GLib
 class GioDBusHelper:
     """A helper class for interacting with D-Bus using the Gio library."""
 
-    """A helper class for interacting with D-Bus using the Gio library."""
-
     def __init__(
         self,
         bus_name,

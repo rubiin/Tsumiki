@@ -1,6 +1,7 @@
 import os
 import subprocess
 
+import gi
 from fabric.utils import exec_shell_command_async, get_relative_path
 from fabric.widgets.label import Label
 from gi.repository import Gdk, Gtk
@@ -8,6 +9,8 @@ from gi.repository import Gdk, Gtk
 from shared.widget_container import ButtonWidget
 from utils.functions import ttl_lru_cache
 from utils.widget_utils import nerd_font_icon
+
+gi.require_versions({"Gtk": "3.0"})
 
 
 class OCRWidget(ButtonWidget):
