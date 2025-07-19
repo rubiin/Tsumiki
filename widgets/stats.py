@@ -218,7 +218,7 @@ class GpuWidget(ButtonWidget):
         if type(stats) is list:
             stats = stats[0]
 
-        frequency = stats.get("gpu_clock", "0MHz")
+        frequency = stats.get("gpu_clock", "0 MHz")
         usage = stats.get("mem_util", "0").strip("%")
         gpu_name = stats.get("device_name", "N/A")
 
