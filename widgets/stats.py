@@ -128,11 +128,16 @@ class CpuWidget(ButtonWidget):
                 else f"{helpers.celsius_to_fahrenheit(temp)} °F"
             )
 
+            if isinstance(frequency, (list, tuple)) and frequency:
+                freq_text = f"{round(frequency[0], 2)} MHz"
+            else:
+                freq_text = "Unknown"
+
             tooltip_text = (
                 f"{self.cpu_name}\n"
                 f" Temperature: {temp}\n"
                 f"󰾆 Utilization: {usage}\n"
-                f" Clock Speed: {round(frequency[0], 2)} MHz"
+                f" Clock Speed: {freq_text}"
             )
 
             self.set_tooltip_text(tooltip_text)
@@ -226,7 +231,7 @@ class GpuWidget(ButtonWidget):
             self.gpu_level_label.set_label("".join(self.graph_values))
 
         elif self.current_mode == "progress":
-            self.progress_bar.set_value(usage)
+            self.progress_bar.set_value(usage / 100.0)
 
         else:
             self.gpu_level_label.set_label(usage)
