@@ -48,6 +48,8 @@ class BatteryWidget(ButtonWidget):
         is_present = self.client.get_property("IsPresent") == 1
 
         if not is_present:
+            if self.config.get("hide_when_missing", True):
+                self.set_visible(False)
             self.set_tooltip_text("󰂎 No battery present")
             if self.config.get("label", True):
                 self.battery_label.set_text("N/A")

@@ -73,6 +73,7 @@ Battery = TypedDict(
         "tooltip": bool,
         "full_battery_level": int,
         "hide_label_when_full": bool,
+        "hide_when_missing": bool,
         "icon_size": int,
         "notifications": Dict,
     },
