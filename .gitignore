@@ -17,6 +17,7 @@ develop-eggs/
 dist/
 downloads/
 eggs/
+.vscode
 .eggs/
 lib/
 lib64/
