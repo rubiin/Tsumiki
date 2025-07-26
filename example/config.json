@@ -196,7 +196,7 @@
 		},
 		"workspaces": {
 			"count": 8, // this is the number of workspaces to show
-			"hide_unoccupied": true,
+			"hide_unoccupied": false,
 			"default_label_format": "{id}",
 			"ignored": [
 				-99

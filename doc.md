@@ -238,6 +238,7 @@
   - **`weather`**: `object`
     - **`location`**: `str` (default: "")
     - **`label`**: `bool` (default: true)
+    - **`label_format`**: `str` (default: "{condition} {temperature}")
     - **`tooltip`**: `bool` (default: true)
     - **`expanded`**: `bool` (default: true)
     - **`temperature_unit`**: `str` (default: "celsius")

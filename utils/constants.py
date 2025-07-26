@@ -294,6 +294,7 @@ DEFAULT_CONFIG = {
         "weather": {
             "location": "",
             "label": True,
+            "label_format": "{condition} {temperature}",
             "tooltip": True,
             "expanded": True,
             "temperature_unit": "celsius",

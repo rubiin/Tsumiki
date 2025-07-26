@@ -473,6 +473,10 @@
 					"type": "boolean",
 					"description": "Determines whether the widget has a label."
 				},
+				"label_format": {
+					"type": "string",
+					"description": "Format for the label. Valid placeholders are {location}, {temperature}, {condition}, {humidity}, and {wind_speed}."
+				},
 				"tooltip": {
 					"type": "boolean",
 					"description": "Determines whether the widget has a tooltip."
