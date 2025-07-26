@@ -153,6 +153,7 @@
 			"hover_reveal": true, // this is to display the updates on hover
 			"reveal_duration": 500, // this is the duration in milliseconds to reveal the updates
 			"os": "arch",
+			"terminal": "kitty", // terminal to use for updates: "kitty", "foot", "alacritty", "wezterm", etc.
 			"auto_hide": false, // this is to auto hide the updates widget when there are no updates available
 			"interval": 3600,
 			"pad_zero": false, // this is to pad the number of updates with zero

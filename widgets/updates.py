@@ -79,6 +79,10 @@ class UpdatesWidget(ButtonWidget):
         script = get_relative_path("../assets/scripts/systemupdates.sh")
         command = [f"{script} os={self.config['os']}"]
 
+        # Add terminal option
+        terminal = self.config.get("terminal", "kitty")
+        command.append(f"--terminal={terminal}")
+
         if self.config.get("flatpak", False):
             command.append("--flatpak")
         if self.config.get("snap", False):

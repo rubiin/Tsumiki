@@ -896,6 +896,11 @@
 							"enum": ["arch", "fedora", "opensuse", "ubuntu"],
 							"description": "Specifies the OS to check for updates"
 						},
+						"terminal": {
+							"type": "string",
+							"description": "Terminal to use for system updates",
+							"default": "kitty"
+						},
 						"interval": {
 							"type": "integer",
 							"description": "Interval in seconds to check for updates"
