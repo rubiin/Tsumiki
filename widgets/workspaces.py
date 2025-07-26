@@ -1,4 +1,5 @@
 from fabric.hyprland.widgets import WorkspaceButton, Workspaces
+from fabric.utils.helpers import bulk_connect
 
 from shared.widget_container import BoxWidget
 from utils.functions import unique_list
@@ -39,10 +40,15 @@ class WorkSpacesWidget(BoxWidget):
                         style_context.remove_class("unoccupied")
                         style_context.add_class("occupied")
 
-                button.connect("notify::empty", update_empty_state)
-                button.connect(
-                    "notify::active", update_empty_state
-                )  # Also update on active state changes
+                # Connect to state changes
+                bulk_connect(
+                    button,
+                    {
+                        "notify::empty": update_empty_state,
+                        "notify::active": update_empty_state,
+                    },
+                )
+
                 update_empty_state()
 
             return button

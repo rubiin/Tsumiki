@@ -78,6 +78,7 @@ When creating a pull request:
 
 - Ensure your branch is up-to-date with the main branch before submitting.
 - Provide a clear description of what your pull request does.
+- Add screenshots or examples if your changes include UI modifications.
 - Link to any relevant issues or discussions.
 - Follow the coding standards of the project.
 

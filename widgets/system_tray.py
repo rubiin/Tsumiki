@@ -197,8 +197,14 @@ class SystemTrayWidget(ButtonWidget, BaseSystemTray):
 
         # Initialize watcher
         self.watcher = Gray.Watcher()
-        self.watcher.connect("item-added", self.on_item_added)
-        self.watcher.connect("item-removed", self.on_item_removed)
+
+        bulk_connect(
+            self.watcher,
+            {
+                "item-added": self.on_item_added,
+                "item-removed": self.on_item_removed,
+            },
+        )
 
         # Load existing items
         for item_id in self.watcher.get_items():
