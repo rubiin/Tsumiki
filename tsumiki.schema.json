@@ -1320,6 +1320,14 @@
 					"download": {
 						"type": "boolean",
 						"description": "Determines whether to show download usage"
+					},
+					"upload_threshold": {
+						"type": "number",
+						"description": "Minimum upload speed (in bytes/ms) to display."
+					},
+					"download_threshold": {
+						"type": "number",
+						"description": "Minimum download speed (in bytes/ms) to display."
 					}
 				}
 			},
