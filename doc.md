@@ -262,6 +262,9 @@
     - **`show_icon`**: `bool` (default: true)
     - **`format`**: `str` (default: "%Y-%m-%d %H:%M:%S")
     - **`timezones`**: `list[str]` (default: ["America/New_York", "Europe/London", "Asia/Tokyo"])
+  - **`custom_button_group`**: `object`
+    - **`buttons`**: `list` (default: [])
+    - **`spacing`**: `int` (default: 4)
 
 - **`layout`**: `object`
   - **`left_section`**: `list[str]` (default: ["workspaces", "window_title"])

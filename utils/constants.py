@@ -322,6 +322,10 @@ DEFAULT_CONFIG = {
             "format": "%Y-%m-%d %H:%M:%S",
             "timezones": ["America/New_York", "Europe/London", "Asia/Tokyo"],
         },
+        "custom_button_group": {
+            "buttons": [],
+            "spacing": 4,
+        },
     },
     "layout": {
         "left_section": ["workspaces", "window_title"],

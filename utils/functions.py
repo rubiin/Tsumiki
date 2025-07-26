@@ -458,6 +458,29 @@ def validate_widgets(parsed_data, default_config):
                             f"Invalid widget '{group_widget}' found in "
                             f"widget group {idx}. Please check the widget name."
                         )
+            elif widget.startswith("@custom_button:"):
+                # Handle individual custom buttons
+                button_idx = widget.replace("@custom_button:", "", 1)
+                if not button_idx.isdigit():
+                    raise ValueError(
+                        "Invalid custom button index "
+                        f"'{button_idx}' in section {section}. Must be a number."
+                    )
+                idx = int(button_idx)
+                custom_button_config = parsed_data.get("widgets", {}).get(
+                    "custom_button_group", {}
+                )
+                buttons = custom_button_config.get("buttons", [])
+                if not isinstance(buttons, list):
+                    raise ValueError(
+                        "custom_button_group.buttons must be an array when "
+                        "using @custom_button references"
+                    )
+                if not (0 <= idx < len(buttons)):
+                    raise ValueError(
+                        f"Custom button index {idx} is out of range. "
+                        f"Available indices: 0-{len(buttons) - 1}"
+                    )
             elif widget not in default_config["widgets"]:
                 raise ValueError(
                     f"Invalid widget '{widget}' found in section {section}. "

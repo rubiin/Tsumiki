@@ -96,6 +96,11 @@
 						"type": "string",
 						"pattern": "^@group:\\d+$",
 						"description": "Specifies a group of widgets to display."
+					},
+					{
+						"type": "string",
+						"pattern": "^@custom_button:\\d+$",
+						"description": "Specifies an individual custom button by index (e.g., @custom_button:0, @custom_button:1)."
 					}
 				]
 			}
@@ -1222,6 +1227,23 @@
 					}
 				}
 			},
+			"custom_button_group": {
+				"type": "object",
+				"properties": {
+					"buttons": {
+						"type": "array",
+						"description": "Array of custom buttons to display in the group",
+						"items": {
+							"$ref": "#/properties/custom_button"
+						}
+					},
+					"spacing": {
+						"type": "number",
+						"description": "Spacing between buttons in the group",
+						"default": 4
+					}
+				}
+			},
 			"date_time": {
 				"type": "object",
 				"properties": {
@@ -1396,6 +1418,50 @@
 						"description": "Timeout in milliseconds for delayed recording"
 					}
 				}
+			},
+			"custom_button": {
+				"type": "object",
+				"properties": {
+					"command": {
+						"type": "string",
+						"description": "Bash command to execute when button is clicked"
+					},
+					"icon": {
+						"type": "string",
+						"description": "Icon to display on the button"
+					},
+					"label_text": {
+						"type": "string",
+						"description": "Text to display on the button"
+					},
+					"tooltip_text": {
+						"type": "string",
+						"description": "Tooltip text to show on hover"
+					},
+					"show_icon": {
+						"type": "boolean",
+						"description": "Whether to show the icon",
+						"default": true
+					},
+					"label": {
+						"type": "boolean",
+						"description": "Whether to show the label",
+						"default": true
+					},
+					"tooltip": {
+						"type": "boolean",
+						"description": "Whether to show the tooltip",
+						"default": true
+					},
+					"style_classes": {
+						"type": "array",
+						"items": {
+							"type": "string"
+						},
+						"description": "CSS style classes to apply to the button"
+					}
+				},
+				"required": ["command"]
 			}
 		}
 	}
