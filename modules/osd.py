@@ -67,7 +67,6 @@ class GenericOSDContainer(Box, BaseWidget):
     def update_values(self, value):
         """Update the value."""
         round_value = round(value)
-        self.scale.animate_value(round_value)
         self.scale.set_value(round_value)
 
         if self.show_level:

@@ -12,21 +12,8 @@ class AnimatedCircularProgressBar(CircularProgressBar):
 
     def __init__(self, duration=0.6, curve=(0.34, 1.56, 0.64, 1.0), **kwargs):
         super().__init__(**kwargs)
-
-        self.animator = (
-            Animator(
-                # edit the following parameters to customize the animation
-                timing_function=partial(cubic_bezier, *curve),
-                duration=duration,
-                min_value=self.min_value,
-                max_value=self.value,
-                tick_widget=self,
-                notify_value=self.set_notify_value,
-            )
-            .build()
-            .play()
-            .unwrap()
-        )
+        self.duration = duration
+        self.curve = curve
 
     def set_notify_value(self, p, *_):
         if p.value == self.value:
@@ -34,6 +21,17 @@ class AnimatedCircularProgressBar(CircularProgressBar):
         self.set_value(p.value)
 
     def animate_value(self, value: float):
+        if self.animator is None:
+            self.animator = Animator(
+                # edit the following parameters to customize the animation
+                timing_function=partial(cubic_bezier, *self.curve),
+                duration=self.duration,
+                min_value=self.min_value,
+                max_value=self.value,
+                tick_widget=self,
+                notify_value=self.set_notify_value,
+            )
+
         self.animator.pause()
         self.animator.min_value = self.value
         self.animator.max_value = value
