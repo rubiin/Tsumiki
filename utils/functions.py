@@ -458,6 +458,39 @@ def validate_widgets(parsed_data, default_config):
                             f"Invalid widget '{group_widget}' found in "
                             f"widget group {idx}. Please check the widget name."
                         )
+            elif widget.startswith("@collapsible:"):
+                # Handle collapsible groups
+                group_idx = widget.replace("@collapsible:", "", 1)
+                if not group_idx.isdigit():
+                    raise ValueError(
+                        "Invalid collapsible group index "
+                        f"'{group_idx}' in section {section}. Must be a number."
+                    )
+                idx = int(group_idx)
+                groups = parsed_data.get("collapsible_groups", [])
+                if not isinstance(groups, list):
+                    raise ValueError(
+                        "collapsible_groups must be an array when using "
+                        "@collapsible references"
+                    )
+                if not (0 <= idx < len(groups)):
+                    raise ValueError(
+                        "Collapsible group index "
+                        f"{idx} is out of range. Available indices: 0-{len(groups) - 1}"
+                    )
+                # Validate widgets inside the collapsible group
+                group = groups[idx]
+                if not isinstance(group, dict) or "widgets" not in group:
+                    raise ValueError(
+                        f"Invalid collapsible group at index {idx}. "
+                        "Must be an object with 'widgets' array."
+                    )
+                for group_widget in group["widgets"]:
+                    if group_widget not in default_config["widgets"]:
+                        raise ValueError(
+                            f"Invalid widget '{group_widget}' found in "
+                            f"collapsible group {idx}. Please check the widget name."
+                        )
             elif widget not in default_config["widgets"]:
                 raise ValueError(
                     f"Invalid widget '{widget}' found in section {section}. "

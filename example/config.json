@@ -341,7 +341,7 @@
 		], // this is the middle section of the panel
 		"right_section": [
 			"recorder",
-			"@group:1",
+			"@collapsible:0",
 			"@group:0",
 			"system_tray"
 		] // this is the right section of the panel
@@ -365,6 +365,23 @@
 			"spacing": 0,
 			"style_classes": [
 				"compact"
+			]
+		}
+	],
+	"collapsible_groups": [ // collapsible groups create popup menus with utility widgets, accessed as @collapsible:0, @collapsible:1, etc
+		{
+			"widgets": [
+				"cliphist",
+				"emoji_picker",
+				"ocr",
+				"screenshot",
+				"recorder"
+			],
+			"spacing": 4,
+			"icon": "󰒓", // icon for the collapsible group button
+			"tooltip": "Utility Tools", // tooltip for the collapsible group button
+			"style_classes": [
+				"utility-tools"
 			]
 		}
 	],

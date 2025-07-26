@@ -13,6 +13,7 @@ from widgets.brightness import BrightnessWidget
 from widgets.cava import CavaWidget
 from widgets.click_counter import ClickCounterWidget
 from widgets.cliphist import ClipHistoryWidget
+from widgets.collapsible_group import CollapsibleGroupWidget
 from widgets.datetime_menu import DateTimeWidget
 from widgets.emoji_picker import EmojiPickerWidget
 from widgets.hypridle import HyprIdleWidget
@@ -97,12 +98,14 @@ class StatusBar(Window, BaseWidget):
             "divider": DividerWidget,
             "quick_settings": QuickSettingsButtonWidget,
             "window_count": WindowCountWidget,
+            "collapsible_group": CollapsibleGroupWidget,
         }
 
         options = config["general"]
         bar_config = config["modules"]["bar"]
         layout = self.make_layout(config)
 
+        # Main bar content (back to original CenterBox layout)
         self.box = CenterBox(
             name="panel-inner",
             start_children=Box(
@@ -166,6 +169,30 @@ class StatusBar(Window, BaseWidget):
                             self.widgets_list,
                         )
                         layout[key].append(group)
+                elif widget_name.startswith("@collapsible:"):
+                    # Handle collapsible groups
+                    group_name = widget_name.replace("@collapsible:", "", 1)
+                    group_config = None
+
+                    if group_name.isdigit():
+                        idx = int(group_name)
+                        groups = config.get("collapsible_groups", [])
+                        if isinstance(groups, list) and 0 <= idx < len(groups):
+                            group_config = groups[idx]
+
+                    if group_config:
+                        collapsible_group = CollapsibleGroupWidget()
+
+                        # Configure the collapsible group
+                        collapsible_group.config.update(group_config)
+                        collapsible_group.widgets_config = group_config.get(
+                            "widgets", []
+                        )
+                        # Set widgets list for lazy initialization
+                        collapsible_group.set_widgets(self.widgets_list)
+
+                        # Add button to layout
+                        layout[key].append(collapsible_group)
                 else:
                     # Handle regular widgets
                     if widget_name in self.widgets_list:

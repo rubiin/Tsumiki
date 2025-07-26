@@ -96,6 +96,16 @@
 						"type": "string",
 						"pattern": "^@group:\\d+$",
 						"description": "Specifies a group of widgets to display."
+					},
+					{
+						"type": "string",
+						"pattern": "^@collapsible:\\d+$",
+						"description": "Specifies a collapsible group of widgets to display."
+					},
+					{
+						"type": "string",
+						"pattern": "^@collapsible:\\d+$",
+						"description": "Specifies a collapsible group of widgets to display."
 					}
 				]
 			}
@@ -432,6 +442,66 @@
 									"type": "string"
 								},
 								"description": "Style classes to apply to the group (e.g. 'bordered', 'compact')"
+							}
+						},
+						"required": ["widgets"]
+					}
+				},
+				"collapsible_groups": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"properties": {
+							"icon": {
+								"type": "string",
+								"description": "Icon for the collapsible group button"
+							},
+							"show_icon": {
+								"type": "boolean",
+								"default": true,
+								"description": "Whether to show the icon"
+							},
+							"show_label": {
+								"type": "boolean",
+								"default": false,
+								"description": "Whether to show the label"
+							},
+							"label": {
+								"type": "string",
+								"description": "Label text for the button"
+							},
+							"tooltip": {
+								"type": "string",
+								"description": "Tooltip text for the button"
+							},
+							"icon_size": {
+								"type": "integer",
+								"default": 16,
+								"description": "Size of the icon"
+							},
+							"widgets": {
+								"type": "array",
+								"items": {
+									"type": "string"
+								},
+								"description": "List of widget names to include in the collapsible group"
+							},
+							"group": {
+								"type": "object",
+								"properties": {
+									"spacing": {
+										"type": "integer",
+										"default": 4,
+										"description": "Spacing between widgets in the group"
+									},
+									"style_classes": {
+										"type": "array",
+										"items": {
+											"type": "string"
+										},
+										"description": "Style classes to apply to the group"
+									}
+								}
 							}
 						},
 						"required": ["widgets"]
@@ -1390,6 +1460,58 @@
 					"delayed_timeout": {
 						"type": "integer",
 						"description": "Timeout in milliseconds for delayed recording"
+					}
+				}
+			},
+			"collapsible_group": {
+				"type": "object",
+				"properties": {
+					"icon": {
+						"type": "string",
+						"description": "Icon for the collapsible group button"
+					},
+					"show_icon": {
+						"type": "boolean",
+						"description": "Whether to show the icon"
+					},
+					"show_label": {
+						"type": "boolean",
+						"description": "Whether to show the label"
+					},
+					"label": {
+						"type": "string",
+						"description": "Label text for the button"
+					},
+					"tooltip": {
+						"type": "string",
+						"description": "Tooltip text for the button"
+					},
+					"icon_size": {
+						"type": "integer",
+						"description": "Size of the icon"
+					},
+					"widgets": {
+						"type": "array",
+						"items": {
+							"type": "string"
+						},
+						"description": "List of widget names to include in the collapsible group"
+					},
+					"group": {
+						"type": "object",
+						"properties": {
+							"spacing": {
+								"type": "integer",
+								"description": "Spacing between widgets in the group"
+							},
+							"style_classes": {
+								"type": "array",
+								"items": {
+									"type": "string"
+								},
+								"description": "Style classes to apply to the group"
+							}
+						}
 					}
 				}
 			}

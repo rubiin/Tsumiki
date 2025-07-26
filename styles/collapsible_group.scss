@@ -1,0 +1,63 @@
+@use "variable";
+@use "theme";
+
+.panel-collapsible-group {
+  background-color: theme.$background-dark;
+  border-radius: variable.$radius-large;
+  padding: 0.1em 0.9em;
+  margin: 2px 8px;
+  box-shadow: 0 0 0 variable.$border-width theme.$shadow-color;
+}
+
+.collapsible_group.active {
+  background: theme.$accent-blue;
+  color: theme.$text-main;
+}
+
+.collapsible_group:hover {
+  background: theme.$surface-highlight;
+}
+
+.panel-collapsible-group .panel-button {
+  margin: 4px;
+  min-height: 32px;
+  min-width: 32px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+.panel-collapsible-group .panel-button:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.panel-collapsible-group .panel-button:active {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.panel-collapsible-group .panel-module-group {
+  border: none;
+  background: transparent;
+  box-shadow: none;
+  margin: 0;
+  padding: 0;
+}
+
+.panel-collapsible-group .panel-font-icon {
+  font-size: 22px;
+}
+
+.panel-collapsible-group.compact .panel-button {
+  margin: 3px;
+  min-height: 28px;
+  min-width: 28px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+.panel-collapsible-group.compact .panel-font-icon {
+  font-size: 20px;
+}
