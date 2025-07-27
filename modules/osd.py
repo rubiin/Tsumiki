@@ -122,6 +122,9 @@ class AudioOSDContainer(GenericOSDContainer):
         )
         self.audio_service = audio_service
 
+        self.previous_volume = None
+        self.previous_muted = None
+
         self.config = config
 
         bulk_connect(
@@ -133,14 +136,16 @@ class AudioOSDContainer(GenericOSDContainer):
         )
 
     @cooldown(0.1)
-    def check_mute(self, audio):
-        if not audio.speaker:
+    def check_mute(self, *_):
+        if not self.audio_service.speaker:
             return
-        if audio.speaker.muted:
+
+        current_muted = self.audio_service.speaker.muted
+        if self.previous_muted is None or current_muted != self.previous_muted:
+            self.previous_muted = current_muted
             self.update_icon()
+            self.scale.add_style_class("muted")
             self.emit("volume-changed")
-        else:
-            self.update_icon(round(self.audio_service.speaker.volume))
 
     def on_speaker_changed(self, *_):
         if speaker := self.audio_service.speaker:
@@ -148,20 +153,27 @@ class AudioOSDContainer(GenericOSDContainer):
 
     @cooldown(0.1)
     def update_volume(self, speaker, *_):
-        self.emit("volume-changed")
-        volume = round(self.audio_service.speaker.volume)
-
-        is_over_amplified = volume > 100
-
-        self.scale.set_has_class("overamplified", is_over_amplified)
-
         if not self.audio_service.speaker:
             return
-        if self.audio_service.speaker.muted:
-            self.update_icon()
-        else:
-            self.update_icon(volume)
-        self.update_values(volume)
+
+        speaker.handler_block_by_func(self.update_volume)
+        volume = round(self.audio_service.speaker.volume)
+
+        if self.previous_volume is None or volume != self.previous_volume:
+            is_over_amplified = volume > 100
+            self.previous_volume = volume
+
+            self.scale.set_has_class("overamplified", is_over_amplified)
+
+            if self.audio_service.speaker.muted or volume == 0:
+                self.update_icon()
+            else:
+                self.scale.remove_style_class("muted")
+                self.update_icon(volume)
+            self.update_values(volume)
+            self.emit("volume-changed")
+
+        speaker.handler_unblock_by_func(self.update_volume)
 
     def update_icon(self, volume=0):
         icon_name = get_audio_icon_name(volume, self.audio_service.speaker.muted)[
@@ -189,8 +201,9 @@ class OSDContainer(Window):
 
         self.revealer = Revealer(
             name="osd-revealer",
-            transition_type="slide-up",
+            transition_type="slide-right",
             transition_duration=transition_duration,
+            child_revealed=False,
         )
 
         super().__init__(
