@@ -11,7 +11,7 @@ from gi.repository import GLib, GObject
 from services import audio_service
 from services.brightness import BrightnessService
 from shared.widget_container import BaseWidget
-from utils.icons import symbolic_icons
+from utils.icons import symbolic_icons, text_icons
 from utils.types import Keyboard_Mode
 from utils.widget_utils import (
     create_scale,
@@ -51,7 +51,7 @@ class GenericOSDContainer(Box, BaseWidget):
             h_expand=is_vertical,
             v_expand=is_vertical,
             duration=0.8,
-            curve=(0.25, 0.1, 0.25, 1.0),
+            curve=(0.34, 1.56, 0.64, 1.0),
             inverted=is_vertical,
             style=scale_style,
         )
@@ -182,6 +182,77 @@ class AudioOSDContainer(GenericOSDContainer):
         self.icon.set_from_icon_name(icon_name, self.icon_size)
 
 
+class MicrophoneOSDContainer(GenericOSDContainer):
+    """A widget to display the OSD for microphone."""
+
+    __gsignals__: ClassVar = {"mic-changed": (GObject.SignalFlags.RUN_FIRST, None, ())}
+
+    def __init__(self, config, **kwargs):
+        super().__init__(
+            config=config,
+            **kwargs,
+        )
+        self.audio_service = audio_service
+
+        self.previous_volume = None
+        self.previous_muted = None
+
+        self.config = config
+
+        bulk_connect(
+            self.audio_service,
+            {
+                "notify::microphone": self.on_microphone_changed,
+                "changed": self.check_mute,
+            },
+        )
+
+    @cooldown(0.1)
+    def check_mute(self, *_):
+        if not self.audio_service.microphone:
+            return
+
+        current_muted = self.audio_service.microphone.muted
+        if self.previous_muted is None or current_muted != self.previous_muted:
+            self.previous_muted = current_muted
+            self.update_icon()
+            self.scale.add_style_class("muted")
+            self.emit("mic-changed")
+
+    def on_microphone_changed(self, *_):
+        if microphone := self.audio_service.microphone:
+            microphone.connect("notify::volume", self.update_volume)
+
+    @cooldown(0.1)
+    def update_volume(self, *_):
+        if not self.audio_service.microphone:
+            return
+
+        volume = round(self.audio_service.microphone.volume)
+
+        if self.previous_volume is None or volume != self.previous_volume:
+            is_over_amplified = volume > 100
+            self.previous_volume = volume
+
+            self.scale.set_has_class("overamplified", is_over_amplified)
+
+            if self.audio_service.microphone.muted or volume == 0:
+                self.update_icon()
+            else:
+                self.scale.remove_style_class("muted")
+                self.update_icon(volume)
+            self.update_values(volume)
+            self.emit("mic-changed")
+
+    def update_icon(self, volume=0):
+        icon_name = (
+            text_icons["microphone"]["muted"]
+            if volume == 0 or self.audio_service.microphone.muted
+            else text_icons["microphone"]["high"]
+        )
+        self.icon.set_from_icon_name(icon_name, self.icon_size)
+
+
 class OSDContainer(Window):
     """A widget to display the OSD for audio and brightness."""
 
@@ -196,6 +267,8 @@ class OSDContainer(Window):
 
         self.audio_container = AudioOSDContainer(config=self.config)
         self.brightness_container = BrightnessOSDContainer(config=self.config)
+        self.brightness_container = BrightnessOSDContainer(config=self.config)
+        self.microphone_container = MicrophoneOSDContainer(config=self.config)
 
         self.timeout = self.config.get("timeout", 3000)
 
@@ -229,15 +302,18 @@ class OSDContainer(Window):
     def show_brightness(self, *_):
         self.show_box(box_to_show="brightness")
 
-    def show_box(self, box_to_show: Literal["audio", "brightness"]):
+    def show_box(self, box_to_show: Literal["audio", "brightness", "microphone"]):
         if self.suppressed:
             return
 
-        child_to_show = (
-            self.audio_container
-            if box_to_show == "audio"
-            else self.brightness_container
-        )
+        child_to_show = None
+
+        if box_to_show == "audio":
+            child_to_show = self.audio_container
+        elif box_to_show == "brightness":
+            child_to_show = self.brightness_container
+        else:
+            child_to_show = self.microphone_container
 
         if self.revealer.get_child() != child_to_show:
             if self.revealer.get_child():
