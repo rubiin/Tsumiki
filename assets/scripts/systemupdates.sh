@@ -7,6 +7,7 @@ DO_UPDATE=0
 CHECK_FLATPAK=0
 CHECK_SNAP=0
 CHECK_BREW=0
+TERMINAL="kitty"  # Default terminal
 
 check_flatpak_updates() {
     local count=0
@@ -137,6 +138,26 @@ check_opensuse_updates() {
     echo "{\"total\":\"$total_updates\", \"tooltip\":\"$tooltip\"}"
 }
 
+# Function to execute command in terminal
+execute_in_terminal() {
+    local command="$1"
+    # Only allow safe terminal names (no spaces, no shell metacharacters)
+    if [[ ! "$TERMINAL" =~ ^[a-zA-Z0-9._-]+$ ]]; then
+        echo "Error: Terminal name contains invalid characters."
+        exit 1
+    fi
+    # Check if terminal exists in PATH
+    if ! command -v "$TERMINAL" >/dev/null 2>&1; then
+        echo "Error: Terminal '$TERMINAL' not found in PATH."
+        exit 1
+    fi
+    if [[ "$(basename "$TERMINAL")" == "kitty" ]]; then
+        $TERMINAL --title systemupdate sh -c "${command}"
+    else
+        "$TERMINAL" sh -c "${command}"
+    fi
+}
+
 update_arch() {
     if command -v paru &> /dev/null; then
 		aur_helper="paru"
@@ -162,7 +183,7 @@ command="
     read -n 1 -p 'Press any key to continue...'
 "
 
-    kitty --title systemupdate sh -c "${command}"
+    execute_in_terminal "${command}"
     echo "{\"total\":\"0\", \"tooltip\":\"0\"}"
 }
 
@@ -173,7 +194,7 @@ update_ubuntu() {
     flatpak update -y || true
     read -n 1 -p 'Press any key to continue...'
     "
-    kitty --title systemupdate sh -c "$command"
+    execute_in_terminal "$command"
     echo "{\"total\":\"0\", \"tooltip\":\"0\"}"
 }
 
@@ -183,7 +204,7 @@ update_fedora() {
     flatpak update -y || true
     read -n 1 -p 'Press any key to continue...'
     "
-    kitty --title systemupdate sh -c "$command"
+    execute_in_terminal "$command"
     echo "{\"total\":\"0\", \"tooltip\":\"0\"}"
 }
 
@@ -193,7 +214,7 @@ update_opensuse() {
     flatpak update -y || true
     read -n 1 -p 'Press any key to continue...'
     "
-    kitty --title systemupdate sh -c "$command"
+    execute_in_terminal "$command"
     echo "{\"total\":\"0\", \"tooltip\":\"0\"}"
 }
 
@@ -204,12 +225,22 @@ for arg in "$@"; do
         os=ubuntu) DISTRO="ubuntu" ;;
         os=fedora) DISTRO="fedora" ;;
         os=suse)   DISTRO="suse" ;;
+        --terminal=*)
+            # Extract terminal value and validate it contains only safe characters
+            terminal_value="${arg#*=}"
+            if [[ "$terminal_value" =~ ^[a-zA-Z0-9_-]+$ ]]; then
+                TERMINAL="$terminal_value"
+            else
+                echo "Error: Terminal name contains invalid characters. Only alphanumeric, underscore, and dash allowed."
+                exit 1
+            fi
+            ;;
         --flatpak) CHECK_FLATPAK=1 ;;
         --snap)    CHECK_SNAP=1 ;;
         --brew)    CHECK_BREW=1 ;;
         up)        DO_UPDATE=1 ;;
         *)
-            echo "Usage: $0 os=<arch|ubuntu|fedora|suse> [--flatpak] [--snap] [--brew] [up]"
+            echo "Usage: $0 os=<arch|ubuntu|fedora|suse> [--terminal=<terminal>] [--flatpak] [--snap] [--brew] [up]"
             exit 1
             ;;
     esac

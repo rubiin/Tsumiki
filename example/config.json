@@ -40,7 +40,9 @@
 			"path": "Videos/Screencasting",
 			"audio": true,
 			"icon_size": 16,
-			"tooltip": true
+			"tooltip": true,
+			"delayed": false, // this is to enable delayed recording, it will start recording after a delay of 5 seconds
+			"delayed_timeout": 5000
 		},
 		"screenshot": {
 			"path": "Pictures/Screenshots",
@@ -49,14 +51,18 @@
 			"label": false,
 			"annotation": true,
 			"capture_sound": true,
-			"icon": "󰄀"
+			"icon": "󰄀",
+			"delayed": false,
+			"delayed_timeout": 5000
 		},
 		"network_usage": {
 			"upload_icon": "",
 			"download_icon": "",
 			"tooltip": true,
 			"upload": true,
-			"download": false
+			"download": true,
+			"upload_threshold": 100,
+			"download_threshold": 1024
 		},
 		"quick_settings": {
 			"user": {
@@ -130,7 +136,8 @@
 		"system_tray": {
 			"icon_size": 16,
 			"ignored": [], // do not show these icons in the system tray
-			"hidden": []
+			"hidden": [],
+			"hide_when_empty": false // set to true to hide the system tray when no items are present
 		},
 		"taskbar": {
 			"icon_size": 22,
@@ -148,6 +155,7 @@
 			"hover_reveal": true, // this is to display the updates on hover
 			"reveal_duration": 500, // this is the duration in milliseconds to reveal the updates
 			"os": "arch",
+			"terminal": "kitty", // terminal to use for updates: "kitty", "foot", "alacritty", "wezterm", etc.
 			"auto_hide": false, // this is to auto hide the updates widget when there are no updates available
 			"interval": 3600,
 			"pad_zero": false, // this is to pad the number of updates with zero
@@ -328,12 +336,35 @@
 				"Europe/London",
 				"Asia/Tokyo"
 			]
+		},
+		"custom_button_group": {
+			"buttons": [
+				{
+					"command": "firefox",
+					"icon": "󰈹",
+					"label_text": "Firefox",
+					"tooltip_text": "Open Firefox Browser",
+					"show_icon": true,
+					"label": false,
+					"tooltip": true
+				},
+				{
+					"command": "spotify",
+					"icon": "",
+					"label_text": "Spotify",
+					"tooltip_text": "Open Spotify",
+					"show_icon": true,
+					"label": false,
+					"tooltip": true
+				}
+			],
+			"spacing": 4
 		}
 	},
 	"layout": {
 		"left_section": [
 			"workspaces",
-			"window_title"
+			"@custom_button:0"
 		], // this is the left section of the panel
 		"middle_section": [
 			"date_time",
@@ -341,7 +372,8 @@
 		], // this is the middle section of the panel
 		"right_section": [
 			"recorder",
-			"@collapsible:0",
+			"@custom_button:1",
+			"@group:1",
 			"@group:0",
 			"system_tray"
 		] // this is the right section of the panel

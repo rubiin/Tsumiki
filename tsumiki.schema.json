@@ -99,8 +99,8 @@
 					},
 					{
 						"type": "string",
-						"pattern": "^@collapsible:\\d+$",
-						"description": "Specifies a collapsible group of widgets to display."
+						"pattern": "^@custom_button:\\d+$",
+						"description": "Specifies an individual custom button by index (e.g., @custom_button:0, @custom_button:1)."
 					}
 				]
 			}
@@ -527,6 +527,10 @@
 				"label": {
 					"type": "boolean",
 					"description": "Determines whether the widget has a label."
+				},
+				"label_format": {
+					"type": "string",
+					"description": "Format for the label. Valid placeholders are {location}, {temperature}, {condition}, {humidity}, and {wind_speed}."
 				},
 				"tooltip": {
 					"type": "boolean",
@@ -956,6 +960,11 @@
 							"enum": ["arch", "fedora", "opensuse", "ubuntu"],
 							"description": "Specifies the OS to check for updates"
 						},
+						"terminal": {
+							"type": "string",
+							"description": "Terminal to use for system updates",
+							"default": "kitty"
+						},
 						"interval": {
 							"type": "integer",
 							"description": "Interval in seconds to check for updates"
@@ -1194,6 +1203,10 @@
 						"items": {
 							"type": "string"
 						}
+					},
+					"hide_when_empty": {
+						"type": "boolean",
+						"description": "Hide the system tray widget when there are no tray items to display"
 					}
 				}
 			},
@@ -1275,6 +1288,23 @@
 					"notify": {
 						"type": "boolean",
 						"description": "Determines whether to show a notification when the theme is changed"
+					}
+				}
+			},
+			"custom_button_group": {
+				"type": "object",
+				"properties": {
+					"buttons": {
+						"type": "array",
+						"description": "Array of custom buttons to display in the group",
+						"items": {
+							"$ref": "#/properties/custom_button"
+						}
+					},
+					"spacing": {
+						"type": "number",
+						"description": "Spacing between buttons in the group",
+						"default": 4
 					}
 				}
 			},
@@ -1376,6 +1406,14 @@
 					"download": {
 						"type": "boolean",
 						"description": "Determines whether to show download usage"
+					},
+					"upload_threshold": {
+						"type": "number",
+						"description": "Minimum upload speed (in bytes/ms) to display."
+					},
+					"download_threshold": {
+						"type": "number",
+						"description": "Minimum download speed (in bytes/ms) to display."
 					}
 				}
 			},
@@ -1452,6 +1490,50 @@
 						"description": "Timeout in milliseconds for delayed recording"
 					}
 				}
+			},
+			"custom_button": {
+				"type": "object",
+				"properties": {
+					"command": {
+						"type": "string",
+						"description": "Bash command to execute when button is clicked"
+					},
+					"icon": {
+						"type": "string",
+						"description": "Icon to display on the button"
+					},
+					"label_text": {
+						"type": "string",
+						"description": "Text to display on the button"
+					},
+					"tooltip_text": {
+						"type": "string",
+						"description": "Tooltip text to show on hover"
+					},
+					"show_icon": {
+						"type": "boolean",
+						"description": "Whether to show the icon",
+						"default": true
+					},
+					"label": {
+						"type": "boolean",
+						"description": "Whether to show the label",
+						"default": true
+					},
+					"tooltip": {
+						"type": "boolean",
+						"description": "Whether to show the tooltip",
+						"default": true
+					},
+					"style_classes": {
+						"type": "array",
+						"items": {
+							"type": "string"
+						},
+						"description": "CSS style classes to apply to the button"
+					}
+				},
+				"required": ["command"]
 			}
 		}
 	}

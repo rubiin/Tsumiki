@@ -109,7 +109,7 @@ class BaseSystemTray:
 class SystemTrayMenu(Box, BaseSystemTray):
     """A widget to display additional system tray items in a grid."""
 
-    def __init__(self, config, **kwargs):
+    def __init__(self, config, parent_widget=None, **kwargs):
         super().__init__(
             name="system-tray-menu",
             orientation="vertical",
@@ -118,6 +118,7 @@ class SystemTrayMenu(Box, BaseSystemTray):
         )
 
         self.config = config
+        self.parent_widget = parent_widget
 
         self.icon_size = config.get("icon_size", 16)
 
@@ -143,7 +144,7 @@ class SystemTrayMenu(Box, BaseSystemTray):
         bulk_connect(
             item,
             {
-                "removed": lambda *_: button.destroy(),
+                "removed": lambda *_: self.on_item_removed(button),
                 "icon-changed": lambda icon_item: self.do_update_item_button(
                     icon_item, button
                 ),
@@ -155,6 +156,17 @@ class SystemTrayMenu(Box, BaseSystemTray):
         if self.column >= self.max_columns:
             self.column = 0
             self.row += 1
+
+        # Update parent widget visibility if parent is available
+        if self.parent_widget:
+            self.parent_widget.update_visibility()
+
+    def on_item_removed(self, button):
+        """Handle when an item is removed from the menu."""
+        button.destroy()
+        # Update parent widget visibility if parent is available
+        if self.parent_widget:
+            self.parent_widget.update_visibility()
 
 
 class SystemTrayWidget(ButtonWidget, BaseSystemTray):
@@ -179,13 +191,20 @@ class SystemTrayWidget(ButtonWidget, BaseSystemTray):
         self.box.children = (self.tray_box, Separator(), self.toggle_icon)
 
         # Create popup menu for hidden items
-        self.popup_menu = SystemTrayMenu(config=self.config)
+        self.popup_menu = SystemTrayMenu(config=self.config, parent_widget=self)
 
         self.popup = None
 
         # Initialize watcher
         self.watcher = Gray.Watcher()
-        self.watcher.connect("item-added", self.on_item_added)
+
+        bulk_connect(
+            self.watcher,
+            {
+                "item-added": self.on_item_added,
+                "item-removed": self.on_item_removed,
+            },
+        )
 
         # Load existing items
         for item_id in self.watcher.get_items():
@@ -193,6 +212,9 @@ class SystemTrayWidget(ButtonWidget, BaseSystemTray):
 
         # Connect click handler
         self.connect("clicked", self.handle_click)
+
+        # Initial visibility check
+        self.update_visibility()
 
     # show or hide the popup menu
     def handle_click(self, *_):
@@ -213,6 +235,32 @@ class SystemTrayWidget(ButtonWidget, BaseSystemTray):
         else:
             self.popup.open()
             self.toggle_icon.set_label(text_icons["chevron"]["up"])
+
+    def update_visibility(self):
+        """Update widget visibility based on configuration and item count."""
+        hide_when_empty = self.config.get("hide_when_empty", False)
+
+        if not hide_when_empty:
+            self.set_visible(True)
+            return
+
+        # Check if there are any visible items in the tray
+        has_visible_items = len(self.tray_box.get_children()) > 0
+        # Check if there are items in the popup menu
+        has_hidden_items = len(self.popup_menu.grid.get_children()) > 0
+
+        # Widget is visible if there are any items (visible or hidden)
+        self.set_visible(has_visible_items or has_hidden_items)
+
+    def on_item_removed(self, _, identifier: str):
+        """Handle when an item is removed from the system tray."""
+        # Update visibility after an item is removed
+        self.update_visibility()
+
+    def on_item_button_removed(self, button):
+        """Handle when a button is removed from the main tray."""
+        button.destroy()
+        self.update_visibility()
 
     def on_item_added(self, _, identifier: str):
         item = self.watcher.get_item_for_identifier(identifier)
@@ -242,7 +290,7 @@ class SystemTrayWidget(ButtonWidget, BaseSystemTray):
             bulk_connect(
                 item,
                 {
-                    "removed": lambda *_: button.destroy(),
+                    "removed": lambda *_: self.on_item_button_removed(button),
                     "icon-changed": lambda icon_item: self.do_update_item_button(
                         icon_item, button
                     ),
@@ -250,3 +298,6 @@ class SystemTrayWidget(ButtonWidget, BaseSystemTray):
             )
 
             self.tray_box.pack_start(button, False, False, 0)
+
+        # Update visibility after adding an item
+        self.update_visibility()

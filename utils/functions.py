@@ -470,13 +470,60 @@ def validate_widgets(parsed_data, default_config):
     for section in layout:
         for widget in layout[section]:
             if widget.startswith("@group:"):
-                _validate_group_reference(
-                    widget, section, parsed_data, default_config, "group"
+                # Handle widget groups
+                group_idx = widget.replace("@group:", "", 1)
+                if not group_idx.isdigit():
+                    raise ValueError(
+                        "Invalid widget group index "
+                        f"'{group_idx}' in section {section}. Must be a number."
+                    )
+                idx = int(group_idx)
+                groups = parsed_data.get("widget_groups", [])
+                if not isinstance(groups, list):
+                    raise ValueError(
+                        "widget_groups must be an array when using @group references"
+                    )
+                if not (0 <= idx < len(groups)):
+                    raise ValueError(
+                        "Widget group index "
+                        f"{idx} is out of range. Available indices: 0-{len(groups) - 1}"
+                    )
+                # Validate widgets inside the group
+                group = groups[idx]
+                if not isinstance(group, dict) or "widgets" not in group:
+                    raise ValueError(
+                        f"Invalid widget group at index {idx}. "
+                        "Must be an object with 'widgets' array."
+                    )
+                for group_widget in group["widgets"]:
+                    if group_widget not in default_config["widgets"]:
+                        raise ValueError(
+                            f"Invalid widget '{group_widget}' found in "
+                            f"widget group {idx}. Please check the widget name."
+                        )
+            elif widget.startswith("@custom_button:"):
+                # Handle individual custom buttons
+                button_idx = widget.replace("@custom_button:", "", 1)
+                if not button_idx.isdigit():
+                    raise ValueError(
+                        "Invalid custom button index "
+                        f"'{button_idx}' in section {section}. Must be a number."
+                    )
+                idx = int(button_idx)
+                custom_button_config = parsed_data.get("widgets", {}).get(
+                    "custom_button_group", {}
                 )
-            elif widget.startswith("@collapsible:"):
-                _validate_group_reference(
-                    widget, section, parsed_data, default_config, "collapsible"
-                )
+                buttons = custom_button_config.get("buttons", [])
+                if not isinstance(buttons, list):
+                    raise ValueError(
+                        "custom_button_group.buttons must be an array when "
+                        "using @custom_button references"
+                    )
+                if not (0 <= idx < len(buttons)):
+                    raise ValueError(
+                        f"Custom button index {idx} is out of range. "
+                        f"Available indices: 0-{len(buttons) - 1}"
+                    )
             elif widget not in default_config["widgets"]:
                 raise ValueError(
                     f"Invalid widget '{widget}' found in section {section}. "

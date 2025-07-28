@@ -218,6 +218,8 @@ tooltip = true
 [system_tray]
 icon_size = 16
 ignored = [ ]
+hidden = [ ]
+hide_when_empty = false
 
 [taskbar]
 icon_size = 22

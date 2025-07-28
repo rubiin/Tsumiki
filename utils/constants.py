@@ -263,6 +263,7 @@ DEFAULT_CONFIG = {
             "icon_size": 16,
             "ignored": [],
             "hidden": [],
+            "hide_when_empty": False,
         },
         "taskbar": {"icon_size": 22, "ignored": [], "tooltip": True},
         "theme_switcher": {
@@ -293,6 +294,7 @@ DEFAULT_CONFIG = {
         "weather": {
             "location": "",
             "label": True,
+            "label_format": "{condition} {temperature}",
             "tooltip": True,
             "expanded": True,
             "temperature_unit": "celsius",
@@ -320,6 +322,10 @@ DEFAULT_CONFIG = {
             "show_icon": True,
             "format": "%Y-%m-%d %H:%M:%S",
             "timezones": ["America/New_York", "Europe/London", "Asia/Tokyo"],
+        },
+        "custom_button_group": {
+            "buttons": [],
+            "spacing": 4,
         },
     },
     "layout": {

@@ -13,7 +13,7 @@ from widgets.brightness import BrightnessWidget
 from widgets.cava import CavaWidget
 from widgets.click_counter import ClickCounterWidget
 from widgets.cliphist import ClipHistoryWidget
-from widgets.collapsible_group import CollapsibleGroupWidget
+from widgets.custom_button import CustomButtonWidget
 from widgets.datetime_menu import DateTimeWidget
 from widgets.emoji_picker import EmojiPickerWidget
 from widgets.hypridle import HyprIdleWidget
@@ -163,24 +163,26 @@ class StatusBar(Window, BaseWidget):
                             self.widgets_list,
                         )
                         layout[key].append(group)
-                elif widget_name.startswith("@collapsible:"):
-                    # Handle collapsible groups
-                    group_config = self._get_group_config(
-                        widget_name, "collapsible_groups", config
-                    )
-                    if group_config:
-                        collapsible_group = CollapsibleGroupWidget()
-
-                        # Configure the collapsible group using the new method
-                        collapsible_group.update_config(group_config)
-                        collapsible_group.widgets_config = group_config.get(
-                            "widgets", []
+                elif widget_name.startswith("@custom_button:"):
+                    # Handle individual custom buttons
+                    button_index_str = widget_name.replace("@custom_button:", "", 1)
+                    if button_index_str.isdigit():
+                        button_index = int(button_index_str)
+                        # Get buttons from custom_button_group config
+                        custom_button_config = config.get("widgets", {}).get(
+                            "custom_button_group", {}
                         )
-                        # Set widgets list for lazy initialization
-                        collapsible_group.set_widgets(self.widgets_list)
+                        buttons = custom_button_config.get("buttons", [])
 
-                        # Add button to layout
-                        layout[key].append(collapsible_group)
+                        if 0 <= button_index < len(buttons):
+                            button_config = buttons[button_index]
+
+                            # Create individual button
+                            button = CustomButtonWidget(
+                                widget_name=f"custom_button_{button_index}",
+                                config=button_config,
+                            )
+                            layout[key].append(button)
                 else:
                     # Handle regular widgets
                     if widget_name in self.widgets_list:

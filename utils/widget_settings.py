@@ -50,7 +50,12 @@ TaskBar = TypedDict(
 # SystemTray configuration
 SystemTray = TypedDict(
     "SystemTray",
-    {"icon_size": int, "ignored": List[str], "hidden": List[str]},
+    {
+        "icon_size": int,
+        "ignored": List[str],
+        "hidden": List[str],
+        "hide_when_empty": bool,
+    },
 )
 
 # HyprIdle configuration

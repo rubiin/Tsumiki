@@ -30,6 +30,9 @@ class BaseWeatherWidget:
     def get_description(self):
         return self.current_weather["weatherDesc"][0]["value"]
 
+    def get_humidity(self):
+        return self.current_weather["humidity"] + "%"
+
     def sunrise_sunset_time(self) -> str:
         return f" {self.sunrise_time}  {self.sunset_time}"
 
@@ -273,7 +276,7 @@ class WeatherMenu(Box, BaseWeatherWidget):
             self.location.set_label(self.data["location"])
             self.weather_description.set_label(self.get_description())
             self.sunset_sunrise.set_label(self.sunrise_sunset_time())
-            self.humidity.set_label(f"󰖎 {self.current_weather['humidity']}%")
+            self.humidity.set_label(f"󰖎 {self.get_humidity()}")
             self.temperature.set_label(f"  {self.get_temperature()}")
             self.wind_speed.set_label(f" {self.get_wind_speed()}")
 
@@ -354,7 +357,7 @@ class WeatherWidget(ButtonWidget, BaseWeatherWidget):
 
         if self.config.get("label", True):
             self.weather_label = Label(
-                label="Fetching weather...",
+                label="Fetching..",
                 style_classes="panel-text",
             )
 
@@ -413,7 +416,15 @@ class WeatherWidget(ButtonWidget, BaseWeatherWidget):
         self.weather_icon.set_label(text_icon)
 
         if self.config.get("label", True):
-            self.weather_label.set_label(self.get_temperature())
+            self.weather_label.set_label(
+                self.config.get("label_format", "{location}").format(
+                    location=self.data["location"],
+                    temperature=self.get_temperature(),
+                    condition=self.get_description(),
+                    humidity=self.get_humidity(),
+                    wind_speed=self.get_wind_speed(),
+                )
+            )
 
         # Update the tooltip with the city and weather condition if enabled
         if self.config.get("tooltip", False):

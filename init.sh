@@ -10,7 +10,9 @@ if ! grep -q "arch" /etc/os-release; then
 	exit 1
 fi
 
-INSTALL_DIR=$(dirname -- "$0")
+# Get the absolute path of the script's directory
+SCRIPT_PATH=$(readlink -f "$0")
+INSTALL_DIR=$(dirname "$SCRIPT_PATH")
 
 copy_config_files() {
 	# Navigate to the $INSTALL_DIR directory
@@ -241,33 +243,75 @@ install_packages() {
 
 }
 
-# Check the argument passed to the script and call the appropriate function
-case "$1" in
--start)
-	start_bar # Call the start_bar function
-	;;
--update)
-	git pull origin master # Placeholder for the update functionality
-	;;
--install)
-	install_packages # Call the install_packages function
-	;;
--setup)
-	setup_venv # Call the setup_venv function
-	;;
--install-setup)
-	install_packages # Install packages first
-	setup_venv # Then setup virtual environment
-	;;
-*)
-	{
-		printf "\033[31mUnknown command. Available options:\033[0m\n"
-		printf "\033[32m  -start\033[0m         Start the bar\n"
-		printf "\033[32m  -update\033[0m        Update from git\n"
-		printf "\033[32m  -install\033[0m       Install system packages only\n"
-		printf "\033[32m  -setup\033[0m         Setup virtual environment and Python dependencies only\n"
-		printf "\033[32m  -install-setup\033[0m Install packages and setup virtual environment\n"
-	} >&2
-	exit 1
-	;;
-esac
+# Function to display usage information
+usage() {
+	printf "\033[31mUsage: %s [OPTION]...\033[0m\n" "$0"
+	printf "Execute one or more operations in sequence.\n\n"
+	printf "\033[32mAvailable options:\033[0m\n"
+	printf "\033[32m  -start\033[0m         Start the bar\n"
+	printf "\033[32m  -update\033[0m        Update from git\n"
+	printf "\033[32m  -install\033[0m       Install system packages only\n"
+	printf "\033[32m  -setup\033[0m         Setup virtual environment and Python dependencies only\n"
+	printf "\033[32m  -install-setup\033[0m Install packages and setup virtual environment\n"
+	printf "\033[32m  -restart\033[0m       Kill existing instances and start the bar\n"
+	printf "\n\033[33mExamples:\033[0m\n"
+	printf "  %s -start                    # Just start the bar\n" "$0"
+	printf "  %s -update -start            # Update and then start\n" "$0"
+	printf "  %s -install -setup -start    # Full setup and start\n" "$0"
+	printf "  %s -restart                  # Restart the bar\n" "$0"
+}
+
+# Function to kill existing instances
+kill_existing() {
+	echo -e "\033[33m  Stopping existing Tsumiki instances...\033[0m"
+	pkill tsumiki || true
+	# Wait for the process to terminate completely
+	while pgrep -x "tsumiki" >/dev/null; do
+		sleep 0.1
+	done
+	echo -e "\033[32m  Existing instances stopped.\033[0m\n"
+}
+
+# Check if no arguments provided
+if [ $# -eq 0 ]; then
+  usage >&2
+  exit 1
+fi
+
+# Process each argument in sequence
+for arg in "$@"; do
+	case "$arg" in
+	-start)
+		echo -e "\033[34m=== Starting Bar ===\033[0m"
+		start_bar
+		;;
+	-update)
+		echo -e "\033[34m=== Updating from Git ===\033[0m"
+		cd $INSTALL_DIR && git pull
+		echo -e "\033[32m  Update completed.\033[0m\n"
+		;;
+	-install)
+		echo -e "\033[34m=== Installing System Packages ===\033[0m"
+		install_packages
+		;;
+	-setup)
+		echo -e "\033[34m=== Setting up Virtual Environment ===\033[0m"
+		setup_venv
+		;;
+	-install-setup)
+		echo -e "\033[34m=== Installing Packages and Setting up Environment ===\033[0m"
+		install_packages
+		setup_venv
+		;;
+	-restart)
+		echo -e "\033[34m=== Restarting Bar ===\033[0m"
+		kill_existing
+		start_bar
+		;;
+	*)
+		printf "\033[31mUnknown command: %s\033[0m\n" "$arg" >&2
+		usage >&2
+		exit 1
+		;;
+	esac
+done

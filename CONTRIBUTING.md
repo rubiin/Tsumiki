@@ -78,6 +78,7 @@ When creating a pull request:
 
 - Ensure your branch is up-to-date with the main branch before submitting.
 - Provide a clear description of what your pull request does.
+- Add screenshots or examples if your changes include UI modifications.
 - Link to any relevant issues or discussions.
 - Follow the coding standards of the project.
 
@@ -85,11 +86,14 @@ When creating a pull request:
 
 When creating a new widget:
 
-- Create a new file under widgets directory, and code on the file
-- The widget class name should have `Widget` label for sake of consistency. Ex. `XXXWidget`, `YYYWidget`
-- Export the widget in `__init__.py`
-- Create widget config options on `widget_config.py` and add default config on `config.py`
-- Also add the schema definitions on `tsumiki.schema.json` for autocompletions
+- Create a new file under `widgets/` directory, and implement your widget class
+- The widget class name should have `Widget` suffix for consistency. Ex. `CustomButtonWidget`, `WeatherWidget`
+- Add your widget to the imports and `widgets_list` dictionary in `modules/bar.py`
+- Add the widget name to the enum list in `tsumiki.schema.json` for validation
+- Add default configuration in `utils/constants.py` under `DEFAULT_CONFIG["widgets"]`
+- Also add the schema definitions in `tsumiki.schema.json` for autocompletions
+- Update example configuration in `example/config.json` to demonstrate usage
+- Add widget documentation to the README.md widgets table
 - Run `python doc_gen.py` to generate the documentation for the widgets
 
 ## Getting Started

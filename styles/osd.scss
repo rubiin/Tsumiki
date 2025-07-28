@@ -31,10 +31,16 @@
     background-color: theme.$accent-red;
   }
 
+  .muted trough highlight, .muted slider {
+    background-color: theme.$surface-disabled;
+  }
+
+
   @include common.slider($slider: variable.$modules-osd-sliders-slider, $min-length: 150px, $height: variable.$modules-osd-sliders-height);
 
 
 }
+
 
 
 #osd-container.vertical {

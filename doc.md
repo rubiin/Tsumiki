@@ -208,6 +208,7 @@
     - **`icon_size`**: `int` (default: 16)
     - **`ignored`**: `list` (default: [])
     - **`hidden`**: `list` (default: [])
+    - **`hide_when_empty`**: `bool` (default: false)
   - **`taskbar`**: `object`
     - **`icon_size`**: `int` (default: 22)
     - **`ignored`**: `list` (default: [])
@@ -237,6 +238,7 @@
   - **`weather`**: `object`
     - **`location`**: `str` (default: "")
     - **`label`**: `bool` (default: true)
+    - **`label_format`**: `str` (default: "{condition} {temperature}")
     - **`tooltip`**: `bool` (default: true)
     - **`expanded`**: `bool` (default: true)
     - **`temperature_unit`**: `str` (default: "celsius")
@@ -261,6 +263,9 @@
     - **`show_icon`**: `bool` (default: true)
     - **`format`**: `str` (default: "%Y-%m-%d %H:%M:%S")
     - **`timezones`**: `list[str]` (default: ["America/New_York", "Europe/London", "Asia/Tokyo"])
+  - **`custom_button_group`**: `object`
+    - **`buttons`**: `list` (default: [])
+    - **`spacing`**: `int` (default: 4)
 
 - **`layout`**: `object`
   - **`left_section`**: `list[str]` (default: ["workspaces", "window_title"])

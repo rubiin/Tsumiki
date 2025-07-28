@@ -34,20 +34,16 @@ class HyprSunsetSubMenu(QuickSubMenu):
             **kwargs,
         )
 
-        self.revealer.connect("notify::revealed", self.on_revealer_revealed)
-
-    def on_revealer_revealed(self, *_):
-        """Handle the revealer being revealed."""
-        self.update_scale()
+        # Connect the slider immediately
         self.scale.connect("value-changed", self.on_scale_move)
         reusable_fabricator.connect("changed", self.update_scale)
-        return True
 
     @cooldown(0.1)
-    def on_scale_move(self, _, __, moved_pos):
+    def on_scale_move(self, scale):
+        temperature = int(scale.get_value())
         exec_shell_command_async(
-            f"hyprctl hyprsunset temperature {int(moved_pos)}",
-            lambda *_: self.update_ui(int(moved_pos)),
+            f"hyprctl hyprsunset temperature {temperature}",
+            lambda *_: self.update_ui(temperature),
         )
         return True
 
@@ -92,13 +88,14 @@ class HyprSunsetToggle(QSChevronButton):
 
         # reusing the fabricator to call specified intervals
         reusable_fabricator.connect("changed", self.update_action_button)
+        reusable_fabricator.connect("changed", self.update_action_button)
+
 
     def on_action(self, *_):
         """Handle the action button click event."""
-        toggle_command(
-            "hyprsunset",
-            full_command="hyprsunset -t 2600",
-        )
+        # Get current slider value for dynamic command
+        current_temp = int(self.submenu.scale.get_value())
+        toggle_command("hyprsunset", f"hyprsunset -t {current_temp}")
         return True
 
     def update_action_button(self, *_):
