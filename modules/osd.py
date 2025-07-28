@@ -27,7 +27,7 @@ class GenericOSDContainer(Box, BaseWidget):
         is_vertical = config.get("orientation", "horizontal") == "vertical"
 
         super().__init__(
-            orientation=self.config.get("orientation", "horizontal"),
+            orientation=config.get("orientation", "horizontal"),
             spacing=10,
             name="osd-container",
             style_classes="vertical" if is_vertical else "",
