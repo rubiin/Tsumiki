@@ -267,7 +267,6 @@ class OSDContainer(Window):
 
         self.audio_container = AudioOSDContainer(config=self.config)
         self.brightness_container = BrightnessOSDContainer(config=self.config)
-        self.brightness_container = BrightnessOSDContainer(config=self.config)
         self.microphone_container = MicrophoneOSDContainer(config=self.config)
 
         self.timeout = self.config.get("timeout", 3000)
