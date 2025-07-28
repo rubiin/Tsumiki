@@ -168,7 +168,8 @@ class AudioOSDContainer(GenericOSDContainer):
             if self.audio_service.speaker.muted or volume == 0:
                 self.update_icon()
             else:
-                self.scale.remove_style_class("muted")
+                if self.scale.has_css_class("muted"):
+                    self.scale.remove_style_class("muted")
                 self.update_icon(volume)
             self.update_values(volume)
             self.emit("volume-changed")
