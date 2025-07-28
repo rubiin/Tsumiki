@@ -16,14 +16,14 @@ class ScreenShotWidget(ButtonWidget):
         self.recorder_service = None
 
         self.box.children = nerd_font_icon(
-            self.config["icon"],
+            icon=self.config.get("icon", "󰕸"),
             props={"style_classes": "panel-font-icon"},
         )
 
-        if self.config["label"]:
+        if self.config.get("label", True):
             self.box.add(Label(label="screenshot", style_classes="panel-text"))
 
-        if self.config["tooltip"]:
+        if self.config.get("tooltip", False):
             self.set_tooltip_text("Screen Shot")
 
         self.connect("clicked", self.handle_click)
@@ -41,6 +41,6 @@ class ScreenShotWidget(ButtonWidget):
             return  # Early exit if script not available
 
         self.recorder_service.screenshot(
-            path=self.config["path"],
+            path=self.config.get("path", ""),
             config=self.config,
         )

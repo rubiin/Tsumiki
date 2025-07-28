@@ -39,7 +39,7 @@ class ThemeSwitcherWidget(ButtonWidget):
             )
 
         self.children = nerd_font_icon(
-            self.config["icon"],
+            icon=self.config.get("icon", "󰕸"),
             props={"style_classes": "panel-font-icon"},
         )
         self.set_tooltip_text(self.current_theme)

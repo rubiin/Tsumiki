@@ -15,16 +15,16 @@ class ShortcutButton(HoverButton):
     def __init__(self, shortcut_config, **kwargs):
         super().__init__(name="shortcut-button", v_expand=True, **kwargs)
 
-        self.command = shortcut_config["command"]
+        self.command = shortcut_config.get("command", "")
 
         box = Box(orientation="v", spacing=4, v_expand=True)
 
         if "icon" in shortcut_config:
             icon = nerd_font_icon(
-                icon=shortcut_config["icon"],
+                icon=shortcut_config.get("icon", "󰒲"),
                 props={
                     "style_classes": ["panel-font-icon", "shortcut-icon"],
-                    "style": f"font-size: {shortcut_config['icon_size']}px;",
+                    "style": f"font-size: {shortcut_config.get('icon_size', 16)}px;",
                 },
             )
 
@@ -32,7 +32,7 @@ class ShortcutButton(HoverButton):
 
         if "label" in shortcut_config:
             label = Label(
-                label=shortcut_config["label"],
+                label=shortcut_config.get("label", ""),
                 v_align="center",
                 h_align="center",
                 style_classes="shortcut-label",
@@ -40,7 +40,7 @@ class ShortcutButton(HoverButton):
             box.add(label)
 
         if "tooltip" in shortcut_config:
-            self.set_tooltip_text(shortcut_config["tooltip"])
+            self.set_tooltip_text(shortcut_config.get("tooltip", ""))
 
         self.add(box)
         self.connect("clicked", self.on_clicked)

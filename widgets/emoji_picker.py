@@ -27,7 +27,7 @@ class EmojiPickerMenu(Box):
         )
 
         self.selected_index = -1
-        self.emojis_per_page = config["per_row"] * config["per_column"]
+        self.emojis_per_page = config.get("per_row", 5) * config.get("per_column", 5)
         self.current_page_index = 0
         self.filtered_emojis = []
         self.total_pages = 0
@@ -338,7 +338,7 @@ class EmojiPickerWidget(ButtonWidget):
 
         self.box.add(
             nerd_font_icon(
-                self.config["icon"],
+                icon=self.config.get("icon", "󰕸"),
                 props={"style_classes": "panel-font-icon"},
             )
         )

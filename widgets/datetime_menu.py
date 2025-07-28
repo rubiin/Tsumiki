@@ -152,7 +152,7 @@ class DateNotificationMenu(Box):
 
         self.pixel_size = 13
 
-        if config["notification"]:
+        if config.get("notification", True):
             notifications: List[Notification] = notification_service.get_deserialized()
 
             self.notifications_listbox = ListBox(
@@ -262,7 +262,7 @@ class DateNotificationMenu(Box):
 
         self.add(Separator())
 
-        if config["calendar"]:
+        if config.get("calendar", True):
             date_column = Box(
                 style_classes="date-column",
                 orientation="v",
@@ -391,13 +391,13 @@ class DateTimeWidget(ButtonWidget):
 
         self.children = outer_box
 
-        if notification_config["enabled"]:
+        if notification_config.get("enabled", True):
             self.notification_indicator = nerd_font_icon(
                 icon=text_icons["notifications"]["noisy"],
                 name="notification-indicator",
                 props={
                     "style_classes": ["panel-font-icon"],
-                    "visible": notification_config["enabled"],
+                    "visible": notification_config.get("enabled", True),
                 },
             )
 
@@ -405,11 +405,12 @@ class DateTimeWidget(ButtonWidget):
                 name="notification-count",
                 label=str(notification_service.count),
                 v_align="start",
-                visible=notification_config["enabled"] and notification_config["count"],
+                visible=notification_config.get("enabled", True)
+                and notification_config.get("count", True),
             )
 
             if (
-                notification_config["hide_count_on_zero"]
+                notification_config.get("hide_count_on_zero", False)
                 and notification_service.count == 0
             ):
                 self.count_label.set_visible(False)
@@ -428,7 +429,9 @@ class DateTimeWidget(ButtonWidget):
 
             outer_box.add(self.notification_indicator_box)
 
-        outer_box.add(DateTime(self.config["format"], name="date-time"))
+        outer_box.add(
+            DateTime(self.config.get("format", "%m-%d %H:%M"), name="date-time")
+        )
 
         self.connect(
             "clicked",

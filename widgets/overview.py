@@ -423,7 +423,7 @@ class OverviewWidget(ButtonWidget):
             self.set_tooltip_text("Overview")
 
         self.box.children = nerd_font_icon(
-            self.config["icon"],
+            icon=self.config.get("icon", "󰕸"),
             props={"style_classes": "panel-font-icon"},
         )
 

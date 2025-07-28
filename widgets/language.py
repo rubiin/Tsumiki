@@ -1,4 +1,4 @@
-from fabric.hyprland.widgets import Language
+from fabric.hyprland.widgets import HyprlandLanguage as Language
 from fabric.utils import FormattedString, truncate
 
 from shared.widget_container import ButtonWidget
@@ -15,7 +15,7 @@ class LanguageWidget(ButtonWidget):
             formatter=FormattedString(
                 "{truncate(language,length,suffix)}",
                 truncate=truncate,
-                length=self.config["truncation_size"],
+                length=self.config.get("truncation_size", 10),
                 suffix="",
             ),
             style_classes="panel-text",
@@ -23,7 +23,7 @@ class LanguageWidget(ButtonWidget):
 
         if self.config.get("show_icon", True):
             self.icon = nerd_font_icon(
-                icon=self.config["icon"],
+                icon=self.config.get("icon", "󰕸"),
                 props={
                     "style_classes": "panel-font-icon",
                 },

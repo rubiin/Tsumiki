@@ -29,7 +29,7 @@ class OCRWidget(ButtonWidget):
         if self.config.get("show_icon", True):
             # Create a TextIcon with the specified icon and size
             self.icon = nerd_font_icon(
-                icon=self.config["icon"],
+                icon=self.config.get("icon", "󰕸"),
                 props={"style_classes": "panel-font-icon"},
             )
             self.box.add(self.icon)

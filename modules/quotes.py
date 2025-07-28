@@ -36,8 +36,8 @@ class DesktopQuote(Window, BaseWidget):
 
         super().__init__(
             name="quotes",
-            layer=self.config["layer"],
-            anchor=self.config["anchor"],
+            layer=self.config.get("layer", "top"),
+            anchor=self.config.get("anchor", "center"),
             child=Box(
                 name="quotes-box",
                 orientation="v",
@@ -51,7 +51,7 @@ class DesktopQuote(Window, BaseWidget):
         self.update_quote()
 
         invoke_repeater(
-            convert_seconds_to_milliseconds(self.config["update_interval"]),
+            convert_seconds_to_milliseconds(self.config.get("update_interval", 600)),
             self.update_quote,
         )
 

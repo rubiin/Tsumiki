@@ -35,7 +35,7 @@ class NotificationPopup(Window):
 
         self.config = widget_config["modules"]["notification"]
 
-        self.ignored_apps = helpers.unique_list(self.config["ignored"])
+        self.ignored_apps = helpers.unique_list(self.config.get("ignored", []))
 
         self.notifications = Box(
             v_expand=True,
@@ -47,7 +47,7 @@ class NotificationPopup(Window):
         self._server.connect("notification-added", self.on_new_notification)
 
         super().__init__(
-            anchor=self.config["anchor"],
+            anchor=self.config.get("anchor", "center"),
             layer="overlay",
             all_visible=True,
             visible=True,
@@ -196,7 +196,7 @@ class NotificationWidget(EventBox):
         )
 
         actions_len = len(self._notification.actions)
-        actions_count = min(actions_len, self.config["max_actions"])
+        actions_count = min(actions_len, self.config.get("max_actions", 3))
 
         self.actions_container_grid = Grid(
             orientation="h",
@@ -265,7 +265,7 @@ class NotificationWidget(EventBox):
         return (
             self._notification.timeout
             if self._notification.timeout != -1
-            else self.config["timeout"]
+            else self.config.get("timeout", 3000)
         )
 
     def pause_timeout(self):
@@ -305,8 +305,8 @@ class NotificationRevealer(Revealer):
                 style="margin: 12px;",
                 children=[self.notification_box],
             ),
-            transition_duration=config["transition_duration"],
-            transition_type=config["transition_type"],
+            transition_duration=config.get("transition_duration", 200),
+            transition_type=config.get("transition_type", "slide-up"),
             **kwargs,
         )
 

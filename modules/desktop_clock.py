@@ -15,15 +15,18 @@ class DesktopClock(Window, BaseWidget):
 
         super().__init__(
             name="desktop_clock",
-            layer=self.config["layer"],
-            anchor=self.config["anchor"],
+            layer=self.config.get("layer", "overlay"),
+            anchor=self.config.get("anchor", "center"),
             child=Box(
                 name="desktop-clock-box",
                 orientation="v",
                 children=[
-                    DateTime(formatters=[self.config["time_format"]], name="clock"),
                     DateTime(
-                        formatters=[self.config["date_format"]],
+                        formatters=[self.config.get("time_format", "%H:%M:%S")],
+                        name="clock",
+                    ),
+                    DateTime(
+                        formatters=[self.config.get("date_format", "%Y-%m-%d")],
                         interval=3600000,  # Update every hour
                         name="date",
                     ),

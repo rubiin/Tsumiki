@@ -1,6 +1,6 @@
 import re
 
-from fabric.hyprland.widgets import ActiveWindow
+from fabric.hyprland.widgets import HyprlandActiveWindow as ActiveWindow
 from fabric.utils import FormattedString, truncate
 from loguru import logger
 

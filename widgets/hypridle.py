@@ -10,10 +10,10 @@ class HyprIdleWidget(CommandSwitcher):
 
         super().__init__(
             command=self.command,
-            enabled_icon=self.config["enabled_icon"],
-            disabled_icon=self.config["disabled_icon"],
-            label=self.config["label"],
-            tooltip=self.config["tooltip"],
+            enabled_icon=self.config.get("enabled_icon", "󰕸"),
+            disabled_icon=self.config.get("disabled_icon", "󰕸"),
+            label=self.config.get("label", "HyprIdle"),
+            tooltip=self.config.get("tooltip", "Control the hypridle command"),
             name="hypridle",
             **kwargs,
         )

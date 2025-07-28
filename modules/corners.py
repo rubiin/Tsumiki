@@ -27,7 +27,7 @@ class ScreenCorners(Window, BaseWidget):
     def __init__(self, config, **kwargs):
         self.config = config["modules"]["screen_corners"]
 
-        size = self.config["size"]
+        size = self.config.get("size", 20)
         super().__init__(
             name="corners",
             layer="top",

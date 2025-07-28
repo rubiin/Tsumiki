@@ -69,9 +69,9 @@ class BrightnessWidget(EventBoxWidget):
         val_y = event.delta_y
 
         if val_y > 0:
-            self.brightness_service.screen_brightness += self.config["step_size"]
+            self.brightness_service.screen_brightness += self.config.get("step_size", 5)
         else:
-            self.brightness_service.screen_brightness -= self.config["step_size"]
+            self.brightness_service.screen_brightness -= self.config.get("step_size", 5)
 
     def on_brightness_changed(self, *_):
         normalized_brightness = helpers.convert_to_percent(

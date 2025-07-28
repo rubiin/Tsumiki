@@ -111,7 +111,7 @@ class PlayerBoxStack(Box):
     def on_new_player(self, mpris_manager, player):
         player_name = player.props.player_name
 
-        if player_name in self.config["ignore"]:
+        if player_name in self.config.get("ignore", []):
             return
 
         self.set_visible(True)
@@ -224,7 +224,7 @@ class PlayerBox(Box):
             label="No Title",
             name="player-title",
             justfication="left",
-            max_chars_width=self.config["truncation_size"],
+            max_chars_width=self.config.get("truncation_size", 50),
             ellipsization="end",
             h_align="start",
         )
@@ -233,20 +233,20 @@ class PlayerBox(Box):
             label="No Artist",
             name="player-artist",
             justfication="left",
-            max_chars_width=self.config["truncation_size"],
+            max_chars_width=self.config.get("truncation_size", 50),
             ellipsization="end",
             h_align="start",
-            visible=self.config["show_artist"],
+            visible=self.config.get("show_artist", True),
         )
 
         self.track_album = Label(
             label="No Album",
             name="player-album",
             justfication="left",
-            max_chars_width=self.config["truncation_size"],
+            max_chars_width=self.config.get("truncation_size", 50),
             ellipsization="end",
             h_align="start",
-            visible=self.config["show_album"],
+            visible=self.config.get("show_album", True),
         )
 
         self.player.bind_property(
@@ -302,13 +302,13 @@ class PlayerBox(Box):
             "00:00",
             v_align="center",
             style_classes="time-label",
-            visible=self.config["show_time"],
+            visible=self.config.get("show_time", True),
         )
         self.length_label = Label(
             "00:00",
             v_align="center",
             style_classes="time-label",
-            visible=self.config["show_time"],
+            visible=self.config.get("show_time", True),
         )
 
         # Seek Bar

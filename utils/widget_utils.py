@@ -33,7 +33,7 @@ def stats_poll(fabricator):
             "temperature": psutil.sensors_temperatures(),
             "ram_usage": round(psutil.virtual_memory().percent, 1),
             "memory": psutil.virtual_memory(),
-            "disk": psutil.disk_usage(storage_config["path"]),
+            "disk": psutil.disk_usage(storage_config.get("path", "/")),
         }
         sleep(1)
 

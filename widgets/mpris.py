@@ -62,7 +62,7 @@ class MprisWidget(ButtonWidget):
 
         truncated_info = (
             bar_label
-            if len(bar_label) < self.config["truncation_size"]
+            if len(bar_label) < self.config.get("truncation_size", 30)
             else bar_label[:30]
         )
 

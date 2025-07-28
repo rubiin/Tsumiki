@@ -123,11 +123,11 @@ class StatusBar(Window, BaseWidget):
             ),
         )
 
-        anchor = f"left {bar_config['location']} right"
+        anchor = f"left {bar_config.get('location', 'center')} right"
 
         super().__init__(
             name="panel",
-            layer=bar_config["layer"],
+            layer=bar_config.get("layer", "overlay"),
             anchor=anchor,
             pass_through=False,
             exclusivity="auto",

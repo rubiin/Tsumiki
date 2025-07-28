@@ -21,7 +21,7 @@ class StopWatchWidget(ButtonWidget):
         self.running = False
 
         self.icon = nerd_font_icon(
-            icon=self.config["stopped_icon"],
+            icon=self.config.get("stopped_icon", "󰒲"),
             props={"style_classes": "panel-font-icon"},
         )
 
@@ -37,13 +37,13 @@ class StopWatchWidget(ButtonWidget):
         if self.running:
             self.running = False
             self.icon.set_label(
-                self.config["stopped_icon"],
+                self.config.get("stopped_icon", "󰒲"),
             )
         else:
             self.running = True
             self.start_time = time.time() - self.elapsed_time
             self.icon.set_label(
-                self.config["running_icon"],
+                self.config.get("running_icon", "󰕸"),
             )
 
     def update_time(self):

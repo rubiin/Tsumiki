@@ -187,7 +187,7 @@ class AppLauncher(Window):
                 spacing=12,
                 children=[
                     Image(
-                        pixbuf=app.get_icon_pixbuf(self.config["icon_size"]),
+                        pixbuf=app.get_icon_pixbuf(self.config.get("icon_size", 16)),
                         h_align="start",
                     ),
                     Label(
@@ -197,7 +197,7 @@ class AppLauncher(Window):
                     ),
                 ],
             ),
-            tooltip_text=app.description if self.config["tooltip"] else None,
+            tooltip_text=app.description if self.config.get("tooltip", False) else None,
             on_clicked=on_clicked,
             **kwargs,
         )

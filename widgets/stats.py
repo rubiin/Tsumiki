@@ -30,7 +30,7 @@ class CpuWidget(ButtonWidget):
         )
 
         # Set the CPU name and mode
-        self.current_mode = self.config["mode"]
+        self.current_mode = self.config.get("mode", "label")
 
         exec_shell_command_async(
             "bash -c \"lscpu | grep 'Model name' | awk -F: '{print $2}'\"",
@@ -57,7 +57,7 @@ class CpuWidget(ButtonWidget):
             )
 
             self.icon = nerd_font_icon(
-                icon=self.config["icon"],
+                icon=self.config.get("icon", "󰕸"),
                 props={
                     "style_classes": "panel-font-icon overlay-icon",
                 },
@@ -71,7 +71,7 @@ class CpuWidget(ButtonWidget):
         else:
             # Create a TextIcon with the specified icon and size
             self.icon = nerd_font_icon(
-                icon=self.config["icon"],
+                icon=self.config.get("icon", "󰕸"),
                 props={"style_classes": "panel-font-icon"},
             )
 
@@ -95,7 +95,7 @@ class CpuWidget(ButtonWidget):
         if self.current_mode == "graph":
             self.graph_values.append(get_bar_graph(usage))
 
-            if len(self.graph_values) > self.config["graph_length"]:
+            if len(self.graph_values) > self.config.get("graph_length", 4):
                 self.graph_values.pop(0)
 
             self.cpu_level_label.set_label("".join(self.graph_values))
@@ -110,7 +110,7 @@ class CpuWidget(ButtonWidget):
         if self.config.get("tooltip", False):
             temp = value.get("temperature")
 
-            temp = temp.get(self.config["sensor"])
+            temp = temp.get(self.config.get("sensor", ""))
 
             if temp is None:
                 return "N/A"
@@ -120,7 +120,7 @@ class CpuWidget(ButtonWidget):
 
             temp = round(temp) if self.config.get("round", True) else temp
 
-            is_celsius = self.config["temperature_unit"] == "celsius"
+            is_celsius = self.config.get("temperature_unit", "celsius") == "celsius"
 
             temp = (
                 f"{temp} °C"
@@ -159,7 +159,7 @@ class GpuWidget(ButtonWidget):
         )
 
         # Set the GPU name and mode
-        self.current_mode = self.config["mode"]
+        self.current_mode = self.config.get("mode", "label")
 
         if self.current_mode == "graph":
             self.graph_values = []
@@ -181,7 +181,7 @@ class GpuWidget(ButtonWidget):
             )
 
             self.icon = nerd_font_icon(
-                icon=self.config["icon"],
+                icon=self.config.get("icon", "󰕸"),
                 props={
                     "style_classes": "panel-font-icon overlay-icon",
                 },
@@ -195,7 +195,7 @@ class GpuWidget(ButtonWidget):
         else:
             # Create a TextIcon with the specified icon and size
             self.icon = nerd_font_icon(
-                icon=self.config["icon"],
+                icon=self.config.get("icon", "󰕸"),
                 props={"style_classes": "panel-font-icon"},
             )
 
@@ -225,7 +225,7 @@ class GpuWidget(ButtonWidget):
         if self.current_mode == "graph":
             self.graph_values.append(get_bar_graph(usage))
 
-            if len(self.graph_values) > self.config["graph_length"]:
+            if len(self.graph_values) > self.config.get("graph_length", 4):
                 self.graph_values.pop(0)
 
             self.gpu_level_label.set_label("".join(self.graph_values))
@@ -269,7 +269,7 @@ class MemoryWidget(ButtonWidget):
         )
 
         # Set the memory name and mode
-        self.current_mode = self.config["mode"]
+        self.current_mode = self.config.get("mode", "label")
 
         if self.current_mode == "graph":
             self.graph_values = []
@@ -291,7 +291,7 @@ class MemoryWidget(ButtonWidget):
             )
 
             self.icon = nerd_font_icon(
-                icon=self.config["icon"],
+                icon=self.config.get("icon", "󰕸"),
                 props={
                     "style_classes": "panel-font-icon overlay-icon",
                 },
@@ -305,7 +305,7 @@ class MemoryWidget(ButtonWidget):
         else:
             # Create a TextIcon with the specified icon and size
             self.icon = nerd_font_icon(
-                icon=self.config["icon"],
+                icon=self.config.get("icon", "󰕸"),
                 props={"style_classes": "panel-font-icon"},
             )
 
@@ -328,7 +328,7 @@ class MemoryWidget(ButtonWidget):
         if self.current_mode == "graph":
             self.graph_values.append(get_bar_graph(self.percent_used))
 
-            if len(self.graph_values) > self.config["graph_length"]:
+            if len(self.graph_values) > self.config.get("graph_length", 4):
                 self.graph_values.pop(0)
 
             self.memory_level_label.set_label("".join(self.graph_values))
@@ -348,10 +348,10 @@ class MemoryWidget(ButtonWidget):
         return True
 
     def get_used(self):
-        return helpers.convert_bytes(self.used_memory, self.config["unit"])
+        return helpers.convert_bytes(self.used_memory, self.config.get("unit", "MB"))
 
     def get_total(self):
-        return helpers.convert_bytes(self.total_memory, self.config["unit"])
+        return helpers.convert_bytes(self.total_memory, self.config.get("unit", "MB"))
 
     def ratio(self):
         return f"{self.get_used()}/{self.get_total()}"
@@ -371,7 +371,7 @@ class StorageWidget(ButtonWidget):
         )
 
         # Set the memory name and mode
-        self.current_mode = self.config["mode"]
+        self.current_mode = self.config.get("mode", "label")
 
         if self.current_mode == "graph":
             self.graph_values = []
@@ -395,7 +395,7 @@ class StorageWidget(ButtonWidget):
             )
 
             self.icon = nerd_font_icon(
-                icon=self.config["icon"],
+                icon=self.config.get("icon", "󰕸"),
                 props={
                     "style_classes": "panel-font-icon overlay-icon",
                 },
@@ -409,7 +409,7 @@ class StorageWidget(ButtonWidget):
         else:
             # Create a TextIcon with the specified icon and size
             self.icon = nerd_font_icon(
-                icon=self.config["icon"],
+                icon=self.config.get("icon", "󰕸"),
                 props={"style_classes": "panel-font-icon"},
             )
 
@@ -431,7 +431,7 @@ class StorageWidget(ButtonWidget):
         if self.current_mode == "graph":
             self.graph_values.append(get_bar_graph(percent))
 
-            if len(self.graph_values) > self.config["graph_length"]:
+            if len(self.graph_values) > self.config.get("graph_length", 4):
                 self.graph_values.pop(0)
 
             self.storage_level_label.set_label("".join(self.graph_values))
@@ -451,10 +451,10 @@ class StorageWidget(ButtonWidget):
         return True
 
     def get_used(self):
-        return helpers.convert_bytes(self.disk.used, self.config["unit"])
+        return helpers.convert_bytes(self.disk.used, self.config.get("unit", "MB"))
 
     def get_total(self):
-        return helpers.convert_bytes(self.disk.total, self.config["unit"])
+        return helpers.convert_bytes(self.disk.total, self.config.get("unit", "MB"))
 
     def ratio(self):
         return f"{self.get_used()}/{self.get_total()}"
@@ -472,15 +472,15 @@ class NetworkUsageWidget(ButtonWidget):
             **kwargs,
         )
 
-        show_download = self.config["download"]
-        show_upload = self.config["upload"]
+        show_download = self.config.get("download", True)
+        show_upload = self.config.get("upload", False)
         # Thresholds (in bytes/ms)
         self.download_threshold = self.config.get("download_threshold", 0)
         self.upload_threshold = self.config.get("upload_threshold", 0)
 
         # Create a TextIcon with the specified icon and size
         self.upload_icon = nerd_font_icon(
-            icon=self.config["upload_icon"],
+            icon=self.config.get("upload_icon", "󰕸"),
             props={"style_classes": "panel-font-icon", "visible": show_upload},
         )
 
@@ -493,7 +493,7 @@ class NetworkUsageWidget(ButtonWidget):
         )
 
         self.download_icon = nerd_font_icon(
-            icon=self.config["download_icon"],
+            icon=self.config.get("download_icon", "󰕸"),
             props={"style_classes": "panel-font-icon", "visible": show_download},
         )
 

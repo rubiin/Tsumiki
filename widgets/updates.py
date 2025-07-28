@@ -35,7 +35,7 @@ class UpdatesWidget(ButtonWidget):
 
         if self.config.get("show_icon", True):
             self.icon = nerd_font_icon(
-                icon=self.config["no_updates_icon"],
+                icon=self.config.get("no_updates_icon", "󰒲"),
                 props={"style_classes": "panel-font-icon"},
             )
             self.box.add(self.icon)
@@ -127,9 +127,9 @@ class UpdatesWidget(ButtonWidget):
             # Update icon
             if self.config.get("show_icon", True):
                 icon = (
-                    self.config["available_icon"]
+                    self.config.get("available_icon", "󰕸")
                     if total > 0
-                    else self.config["no_updates_icon"]
+                    else self.config.get("no_updates_icon", "󰒲")
                 )
                 self.icon.set_label(icon)
 

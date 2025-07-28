@@ -57,9 +57,9 @@ class VolumeWidget(EventBoxWidget):
         val_y = event.delta_y
 
         if val_y > 0:
-            self.audio.speaker.volume += self.config["step_size"]
+            self.audio.speaker.volume += self.config.get("step_size", 5)
         else:
-            self.audio.speaker.volume -= self.config["step_size"]
+            self.audio.speaker.volume -= self.config.get("step_size", 5)
 
     def on_speaker_changed(self, *_):
         # Update the progress bar value based on the speaker volume

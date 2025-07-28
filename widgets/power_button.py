@@ -29,10 +29,9 @@ class PowerMenuPopup(PopupWindow):
         config,
         **kwargs,
     ):
-        self.icon_size = config["icon_size"]
+        self.icon_size = config.get("icon_size", 16)
 
-        power_buttons_list = config["buttons"]
-
+        power_buttons_list = config.get("buttons", [])
         self.grid = Grid(
             column_homogeneous=True,
             row_homogeneous=True,
@@ -124,7 +123,7 @@ class PowerWidget(ButtonWidget):
         if self.config.get("show_icon", True):
             # Create a TextIcon with the specified icon and size
             self.icon = nerd_font_icon(
-                icon=self.config["icon"],
+                icon=self.config.get("icon", "󰕸"),
                 props={"style_classes": "panel-font-icon"},
             )
             self.box.add(self.icon)

@@ -41,10 +41,10 @@ class Dock(Window, BaseWidget):
 
         super().__init__(
             name="dock-window",
-            layer=self.config["layer"],
-            anchor=self.config["anchor"],
+            layer=self.config.get("layer", "overlay"),
+            anchor=self.config.get("anchor", "center"),
             margin="-8px 0 -4px 0"
-            if self.config["anchor"] == "bottom-center"
+            if self.config.get("anchor", "center") == "bottom-center"
             else "0 -4px 0 -8px",
             exclusivity="none",
             **kwargs,
@@ -69,7 +69,9 @@ class Dock(Window, BaseWidget):
         # Set up UI containers
         self.view = Box(
             name="viewport",
-            orientation="h" if self.config["anchor"] == "bottom-center" else "v",
+            orientation="h"
+            if self.config.get("anchor", "center") == "bottom-center"
+            else "v",
             spacing=4,
         )
         self.wrapper = Box(name="dock", orientation="v", children=[self.view])
@@ -205,7 +207,7 @@ class Dock(Window, BaseWidget):
 
         occlusion_region = (
             ("bottom", self.OCCLUSION)
-            if self.config["anchor"] == "bottom-center"
+            if self.config.get("anchor", "center") == "bottom-center"
             else ("right", self.OCCLUSION)
         )
         # Only add occlusion style if not dragging an icon.
@@ -299,18 +301,20 @@ class Dock(Window, BaseWidget):
         if not icon_img:
             # Fallback to IconResolver with the app command
             icon_img = self.icon.get_icon_pixbuf(
-                id_value, self.config["icon_size"]
+                id_value, self.config.get("icon_size", 16)
             )  # Use identifier for fallback
 
         if not icon_img:  # Double check after exec path try
             # Fallback icon if no DesktopApp is found
             icon_img = self.icon.get_icon_pixbuf(
-                symbolic_icons["fallback"]["executable"], self.config["icon_size"]
+                symbolic_icons["fallback"]["executable"],
+                self.config.get("icon_size", 16),
             )
             # Final fallback
             if not icon_img:
                 icon_img = self.icon.get_icon_pixbuf(
-                    symbolic_icons["fallback"]["image"], self.config["icon_size"]
+                    symbolic_icons["fallback"]["image"],
+                    self.config.get("icon_size", 16),
                 )
 
         items = [Image(pixbuf=icon_img)]
@@ -644,10 +648,10 @@ class Dock(Window, BaseWidget):
             children += [
                 Box(
                     orientation="v"
-                    if self.config["anchor"] == "bottom-center"
+                    if self.config.get("anchor", "center") == "bottom-center"
                     else "h",
-                    v_expand=self.config["anchor"] != "bottom-center",
-                    h_expand=self.config["anchor"] == "bottom-center",
+                    v_expand=self.config.get("anchor", "center") != "bottom-center",
+                    h_expand=self.config.get("anchor", "center") == "bottom-center",
                     name="dock-separator",
                 )
             ]
@@ -696,7 +700,7 @@ class Dock(Window, BaseWidget):
             return True
         occlusion_region = (
             ("bottom", self.OCCLUSION)
-            if self.config["anchor"] == "bottom-center"
+            if self.config.get("anchor", "center") == "bottom-center"
             else ("right", self.OCCLUSION)
         )
         if check_occlusion(occlusion_region) or not self.view.get_children():

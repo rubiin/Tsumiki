@@ -236,14 +236,14 @@ class WeatherMenu(Box, BaseWeatherWidget):
             name="weather-expander",
             visible=True,
             child=self.forecast_box,
-            expanded=self.config["expanded"],
+            expanded=self.config.get("expanded", True),
         )
 
         self.children = (self.title_box, expander)
 
         WeatherService().get_weather_async(
-            location=self.config["location"],
-            ttl=self.config["interval"],
+            location=self.config.get("location", ""),
+            ttl=self.config.get("interval", 3600),
             callback=self.update_data,
         )
 
@@ -474,7 +474,7 @@ class WeatherWidget(ButtonWidget, BaseWeatherWidget):
             return
 
         WeatherService().get_weather_async(
-            location=self.config["location"],
-            ttl=self.config["interval"],
+            location=self.config.get("location", ""),
+            ttl=self.config.get("interval", 3600),
             callback=self.update_data,
         )

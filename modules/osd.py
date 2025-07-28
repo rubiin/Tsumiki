@@ -24,10 +24,10 @@ class GenericOSDContainer(Box, BaseWidget):
     """A generic OSD container to display the OSD for brightness and audio."""
 
     def __init__(self, config, **kwargs):
-        is_vertical = config["orientation"] == "vertical"
+        is_vertical = config.get("orientation", "horizontal") == "vertical"
 
         super().__init__(
-            orientation=config["orientation"],
+            orientation=self.config.get("orientation", "horizontal"),
             spacing=10,
             name="osd-container",
             style_classes="vertical" if is_vertical else "",
@@ -47,7 +47,7 @@ class GenericOSDContainer(Box, BaseWidget):
 
         self.scale = create_scale(
             name="osd-scale",
-            orientation=config["orientation"],
+            orientation=config.get("orientation", "horizontal"),
             h_expand=is_vertical,
             v_expand=is_vertical,
             duration=0.8,
@@ -58,7 +58,7 @@ class GenericOSDContainer(Box, BaseWidget):
 
         self.children = (self.icon, self.scale)
 
-        self.show_level = config["percentage"]
+        self.show_level = config.get("percentage", True)
 
         if self.show_level:
             self.level = Label(name="osd-level", h_align="center", h_expand=True)
@@ -197,7 +197,7 @@ class OSDContainer(Window):
         self.audio_container = AudioOSDContainer(config=self.config)
         self.brightness_container = BrightnessOSDContainer(config=self.config)
 
-        self.timeout = self.config["timeout"]
+        self.timeout = self.config.get("timeout", 3000)
 
         self.revealer = Revealer(
             name="osd-revealer",
@@ -208,7 +208,7 @@ class OSDContainer(Window):
 
         super().__init__(
             layer="overlay",
-            anchor=self.config["anchor"],
+            anchor=self.config.get("anchor", "center"),
             child=self.revealer,
             visible=False,
             pass_through=True,
