@@ -296,11 +296,16 @@ class OSDContainer(Window):
 
         self.brightness_container.connect("brightness-changed", self.show_brightness)
 
+        self.microphone_container.connect("mic-changed", self.show_microphone)
+
     def show_audio(self, *_):
         self.show_box(box_to_show="audio")
 
     def show_brightness(self, *_):
         self.show_box(box_to_show="brightness")
+
+    def show_microphone(self, *_):
+        self.show_box(box_to_show="microphone")
 
     def show_box(self, box_to_show: Literal["audio", "brightness", "microphone"]):
         if self.suppressed:
