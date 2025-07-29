@@ -13,6 +13,7 @@ from widgets.brightness import BrightnessWidget
 from widgets.cava import CavaWidget
 from widgets.click_counter import ClickCounterWidget
 from widgets.cliphist import ClipHistoryWidget
+from widgets.collapsible_group import CollapsibleGroupWidget
 from widgets.custom_button import CustomButtonWidget
 from widgets.datetime_menu import DateTimeWidget
 from widgets.emoji_picker import EmojiPickerWidget
