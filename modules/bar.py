@@ -13,6 +13,7 @@ from widgets.brightness import BrightnessWidget
 from widgets.cava import CavaWidget
 from widgets.click_counter import ClickCounterWidget
 from widgets.cliphist import ClipHistoryWidget
+from widgets.collapsible_group import CollapsibleGroupWidget
 from widgets.custom_button import CustomButtonWidget
 from widgets.datetime_menu import DateTimeWidget
 from widgets.emoji_picker import EmojiPickerWidget
@@ -98,12 +99,14 @@ class StatusBar(Window, BaseWidget):
             "divider": DividerWidget,
             "quick_settings": QuickSettingsButtonWidget,
             "window_count": WindowCountWidget,
+            "collapsible_group": CollapsibleGroupWidget,
         }
 
         options = config["general"]
         bar_config = config["modules"]["bar"]
         layout = self.make_layout(config)
 
+        # Main bar content (back to original CenterBox layout)
         self.box = CenterBox(
             name="panel-inner",
             start_children=Box(
@@ -152,15 +155,9 @@ class StatusBar(Window, BaseWidget):
             for widget_name in config["layout"][key]:
                 if widget_name.startswith("@group:"):
                     # Handle widget groups - using index-based lookup
-                    group_name = widget_name.replace("@group:", "", 1)
-                    group_config = None
-
-                    if group_name.isdigit():
-                        idx = int(group_name)
-                        groups = config.get("widget_groups", [])
-                        if isinstance(groups, list) and 0 <= idx < len(groups):
-                            group_config = groups[idx]
-
+                    group_config = self._get_group_config(
+                        widget_name, "widget_groups", config
+                    )
                     if group_config:
                         group = WidgetGroup.from_config(
                             group_config,
@@ -194,3 +191,32 @@ class StatusBar(Window, BaseWidget):
                         layout[key].append(widget_class())
 
         return layout
+
+    def _get_group_config(self, widget_name, config_key, config):
+        """Helper method to extract group configuration by index.
+
+        Args:
+            widget_name: The full widget name (e.g., "@group:0" or "@collapsible:1")
+            config_key: The config key to look up ("widget_groups" or
+                        "collapsible_groups")
+            config: The configuration dictionary to look up groups from
+
+        Returns:
+            The group configuration dict if found, None otherwise
+        """
+        # Extract group index from widget name
+        if config_key == "widget_groups":
+            group_idx = widget_name.replace("@group:", "", 1)
+        else:  # collapsible_groups
+            group_idx = widget_name.replace("@collapsible:", "", 1)
+
+        if not group_idx.isdigit():
+            return None
+
+        idx = int(group_idx)
+        groups = config.get(config_key, [])
+
+        if isinstance(groups, list) and 0 <= idx < len(groups):
+            return groups[idx]
+
+        return None

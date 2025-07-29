@@ -412,6 +412,49 @@ def kill_process(process_name: str):
     return True
 
 
+def _validate_group_reference(widget, section, parsed_data, default_config, group_type):
+    """Helper function to validate group references (@group: or @collapsible:)."""
+    group_prefix = f"@{group_type}:"
+    group_idx = widget.replace(group_prefix, "", 1)
+
+    if not group_idx.isdigit():
+        raise ValueError(
+            f"Invalid {group_type} group index "
+            f"'{group_idx}' in section {section}. Must be a number."
+        )
+
+    idx = int(group_idx)
+    groups_key = "widget_groups" if group_type == "group" else "collapsible_groups"
+
+    groups = parsed_data.get(groups_key, [])
+    if not isinstance(groups, list):
+        raise ValueError(
+            f"{groups_key} must be an array when using {group_prefix} references"
+        )
+
+    if not (0 <= idx < len(groups)):
+        group_name = "Widget" if group_type == "group" else "Collapsible"
+        raise ValueError(
+            f"{group_name} group index "
+            f"{idx} is out of range. Available indices: 0-{len(groups) - 1}"
+        )
+
+    # Validate widgets inside the group
+    group = groups[idx]
+    if not isinstance(group, dict) or "widgets" not in group:
+        raise ValueError(
+            f"Invalid {group_type} group at index {idx}. "
+            "Must be an object with 'widgets' array."
+        )
+
+    for group_widget in group["widgets"]:
+        if group_widget not in default_config["widgets"]:
+            raise ValueError(
+                f"Invalid widget '{group_widget}' found in "
+                f"{group_type} group {idx}. Please check the widget name."
+            )
+
+
 # Validate the widgets
 def validate_widgets(parsed_data, default_config):
     """Validates the widgets defined in the layout configuration.

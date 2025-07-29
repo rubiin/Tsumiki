@@ -62,7 +62,9 @@
 			"upload": true,
 			"download": true,
 			"upload_threshold": 100,
-			"download_threshold": 1024
+			"download_threshold": 1024,
+			"kb_digits": 0,
+			"mb_digits": 2
 		},
 		"quick_settings": {
 			"user": {
@@ -397,6 +399,23 @@
 			"spacing": 0,
 			"style_classes": [
 				"compact"
+			]
+		}
+	],
+	"collapsible_groups": [ // collapsible groups create popup menus with utility widgets, accessed as @collapsible:0, @collapsible:1, etc
+		{
+			"widgets": [
+				"cliphist",
+				"emoji_picker",
+				"ocr",
+				"screenshot",
+				"recorder"
+			],
+			"spacing": 4,
+			"icon": "󰒓", // icon for the collapsible group button
+			"tooltip": "Utility Tools", // tooltip for the collapsible group button
+			"style_classes": [
+				"utility-tools"
 			]
 		}
 	],

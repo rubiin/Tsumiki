@@ -151,13 +151,8 @@ execute_in_terminal() {
         echo "Error: Terminal '$TERMINAL' not found in PATH."
         exit 1
     fi
-
     if [[ "$(basename "$TERMINAL")" == "kitty" ]]; then
-        "$TERMINAL" --title systemupdate sh -c "${command}"
-    elif [[ "$(basename "$TERMINAL")" == "alacritty" ]]; then
-        "$TERMINAL" --title systemupdate -e sh -c "${command}"
-    elif [[ "$(basename "$TERMINAL")" == "wezterm" ]]; then
-        "$TERMINAL" start --title systemupdate -- sh -c "${command}"
+        $TERMINAL --title systemupdate sh -c "${command}"
     else
         "$TERMINAL" sh -c "${command}"
     fi
