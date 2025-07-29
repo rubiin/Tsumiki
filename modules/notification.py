@@ -21,6 +21,7 @@ from shared.buttons import HoverButton
 from shared.circle_image import CircleImage
 from utils.colors import Colors
 from utils.icons import text_icons
+from utils.monitors import HyprlandWithMonitors
 from utils.widget_settings import BarConfig
 from utils.widget_utils import get_icon, nerd_font_icon
 
@@ -33,6 +34,7 @@ class NotificationPopup(Window):
 
         self.widget_config = widget_config
 
+        self._hyprland = HyprlandWithMonitors()
         self.config = widget_config["modules"]["notification"]
 
         self.ignored_apps = helpers.unique_list(self.config.get("ignored", []))
@@ -52,6 +54,7 @@ class NotificationPopup(Window):
             all_visible=True,
             visible=True,
             exclusive=False,
+            monitor=self._hyprland.get_current_gdk_monitor_id(),
             child=self.notifications,
             **kwargs,
         )

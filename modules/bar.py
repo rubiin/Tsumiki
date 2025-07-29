@@ -7,6 +7,7 @@ from fabric.widgets.centerbox import CenterBox
 from fabric.widgets.wayland import WaylandWindow as Window
 
 from shared.widget_container import BaseWidget, WidgetGroup
+from utils.monitors import HyprlandWithMonitors
 from widgets.battery import BatteryWidget
 from widgets.bluetooth import BlueToothWidget
 from widgets.brightness import BrightnessWidget
@@ -127,6 +128,7 @@ class StatusBar(Window, BaseWidget):
         )
 
         anchor = f"left {bar_config.get('location', 'center')} right"
+        self._hyprland = HyprlandWithMonitors()
 
         super().__init__(
             name="panel",
@@ -136,6 +138,7 @@ class StatusBar(Window, BaseWidget):
             exclusivity="auto",
             visible=True,
             all_visible=False,
+            monitor=self._hyprland.get_current_gdk_monitor_id(),
             child=self.box,
             **kwargs,
         )

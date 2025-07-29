@@ -12,6 +12,7 @@ from services import audio_service
 from services.brightness import BrightnessService
 from shared.widget_container import BaseWidget
 from utils.icons import symbolic_icons
+from utils.monitors import HyprlandWithMonitors
 from utils.types import Keyboard_Mode
 from utils.widget_utils import (
     create_scale,
@@ -278,6 +279,8 @@ class OSDContainer(Window):
             child_revealed=False,
         )
 
+        self._hyprland = HyprlandWithMonitors()
+
         super().__init__(
             layer="overlay",
             anchor=self.config.get("anchor", "center"),
@@ -285,6 +288,7 @@ class OSDContainer(Window):
             visible=False,
             pass_through=True,
             keyboard_mode=keyboard_mode,
+            monitor=self._hyprland.get_current_gdk_monitor_id(),
             **kwargs,
         )
 
