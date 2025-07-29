@@ -27,11 +27,6 @@ class HoverButton(Button, BaseWidget):
 
         setup_cursor_hover(self)
 
-    def set_has_class(self, class_name, condition):
-        if condition:
-            self.add_style_class(class_name)
-        else:
-            self.remove_style_class(class_name)
 
 
 class ScanButton(HoverButton):

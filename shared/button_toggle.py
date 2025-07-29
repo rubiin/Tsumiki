@@ -80,11 +80,6 @@ class CommandSwitcher(ButtonWidget):
 
         label = "Enabled" if is_running else "Disabled"
 
-        self.set_has_class(
-            "active",
-            is_running,
-        )
-
         if self.label:
             self.label_text.set_label(label)
 
