@@ -28,7 +28,6 @@ class HoverButton(Button, BaseWidget):
         setup_cursor_hover(self)
 
 
-
 class ScanButton(HoverButton):
     """A button to start a scan action."""
 
