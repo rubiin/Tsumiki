@@ -88,7 +88,6 @@ class HyprSunsetToggle(QSChevronButton):
 
         # reusing the fabricator to call specified intervals
         reusable_fabricator.connect("changed", self.update_action_button)
-        reusable_fabricator.connect("changed", self.update_action_button)
 
     def on_action(self, *_):
         """Handle the action button click event."""

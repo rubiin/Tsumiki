@@ -1359,6 +1359,14 @@
 					"download_threshold": {
 						"type": "number",
 						"description": "Minimum download speed (in bytes/ms) to display."
+					},
+					"kb_digits": {
+						"type": "integer",
+						"description": "Number of digits to show for KB/s values."
+					},
+					"mb_digits": {
+						"type": "integer",
+						"description": "Number of digits to show for MB/s values."
 					}
 				}
 			},

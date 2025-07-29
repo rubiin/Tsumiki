@@ -62,7 +62,9 @@
 			"upload": true,
 			"download": true,
 			"upload_threshold": 100,
-			"download_threshold": 1024
+			"download_threshold": 1024,
+			"kb_digits": 0,
+			"mb_digits": 2
 		},
 		"quick_settings": {
 			"user": {
