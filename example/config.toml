@@ -74,7 +74,7 @@ icon = ""
 [layout]
 left_section = [ "workspaces", "window_title" ]
 middle_section = [ "date_time" ]
-right_section = [ "recorder", "@group:1", "@group:0", "system_tray" ]
+right_section = [ "recorder", "@collapsible:0", "@group:0", "system_tray" ]
 
 [[widget_groups]]
 widgets = [ "updates", "ocr", "battery" ]
@@ -85,6 +85,20 @@ style_classes = [ "compact" ]
 widgets = [ "quick_settings", "cpu" ]
 spacing = 0
 style_classes = [ "compact" ]
+
+# Collapsible groups create popup menus with utility widgets, accessed as @collapsible:0, @collapsible:1, etc
+[[collapsible_groups]]
+widgets = [
+    "cliphist",
+    "emoji_picker",
+    "ocr",
+    "screenshot",
+    "recorder"
+]
+spacing = 4
+icon = "󰒓"  # icon for the collapsible group button
+tooltip = "Utility Tools"  # tooltip for the collapsible group button
+style_classes = [ "utility-tools" ]
 
 [memory]
 icon = ""
@@ -252,3 +266,33 @@ ignored = [ -99 ]
 reverse_scroll = false
 empty_scroll = false
 icon_map = { }
+
+[cliphist]
+icon = ""
+label = false
+tooltip = true
+
+[emoji_picker]
+icon = ""
+label = false
+tooltip = true
+
+[screenshot]
+path = "Pictures/Screenshots"
+icon_size = 16
+tooltip = true
+label = false
+annotation = true
+capture_sound = true
+icon = "󰄀"
+
+[hyprpicker]
+icon = ""
+tooltip = true
+label = false
+show_icon = true
+
+[kanban]
+icon = "󱞁"
+label = false
+tooltip = true

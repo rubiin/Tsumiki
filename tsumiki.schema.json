@@ -441,6 +441,61 @@
 						},
 						"required": ["widgets"]
 					}
+				},
+				"collapsible_groups": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"properties": {
+							"icon": {
+								"type": "string",
+								"description": "Icon for the collapsible group button"
+							},
+							"show_icon": {
+								"type": "boolean",
+								"default": true,
+								"description": "Whether to show the icon"
+							},
+							"show_label": {
+								"type": "boolean",
+								"default": false,
+								"description": "Whether to show the label"
+							},
+							"label": {
+								"type": "string",
+								"description": "Label text for the button"
+							},
+							"tooltip": {
+								"type": "string",
+								"description": "Tooltip text for the button"
+							},
+							"icon_size": {
+								"type": "integer",
+								"default": 16,
+								"description": "Size of the icon"
+							},
+							"widgets": {
+								"type": "array",
+								"items": {
+									"type": "string"
+								},
+								"description": "List of widget names to include in the collapsible group"
+							},
+							"spacing": {
+								"type": "integer",
+								"default": 4,
+								"description": "Spacing between widgets in the group"
+							},
+							"style_classes": {
+								"type": "array",
+								"items": {
+									"type": "string"
+								},
+								"description": "Style classes to apply to the group"
+							}
+						},
+						"required": ["widgets"]
+					}
 				}
 			}
 		},
