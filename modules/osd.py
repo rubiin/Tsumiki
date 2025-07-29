@@ -250,7 +250,7 @@ class MicrophoneOSDContainer(GenericOSDContainer):
             if volume == 0 or self.audio_service.microphone.muted
             else symbolic_icons["audio"]["mic"]["high"]
         )
-        self.icon.set_from_icon_name(icon_name, self.icon_size)
+        self.icon.set_from_icon_name(icon_name, self.icon_size) # TODO: fix this
 
 
 class OSDContainer(Window):
