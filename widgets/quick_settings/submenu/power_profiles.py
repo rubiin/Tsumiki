@@ -54,8 +54,11 @@ class PowerProfileItem(Button):
         self.set_active(active)
 
     def set_active(self, active: str):
-        self.box.set_has_class("active", self.key == active)
-
+        style_context = self.box.get_style_context()
+        if self.key == active:
+            style_context.add_class("active")
+        else:
+            style_context.remove_class("active")
 
 class PowerProfileSubMenu(QuickSubMenu):
     """A submenu to display power profile options."""
