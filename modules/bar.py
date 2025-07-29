@@ -164,6 +164,23 @@ class StatusBar(Window, BaseWidget):
                             self.widgets_list,
                         )
                         layout[key].append(group)
+                elif widget_name.startswith("@collapsible:"):
+                    # Handle collapsible groups
+                    group_config = self._get_group_config(
+                        widget_name, "collapsible_groups", config
+                    )
+                    if group_config:
+                        collapsible_group = CollapsibleGroupWidget()
+
+                        # Configure the collapsible group using the new method
+                        collapsible_group.update_config(group_config)
+                        collapsible_group.widgets_config = group_config.get(
+                            "widgets", []
+                        )
+                        # Set widgets list for lazy initialization
+                        collapsible_group.set_widgets(self.widgets_list)
+                        # Add button to layout
+                        layout[key].append(collapsible_group)
                 elif widget_name.startswith("@custom_button:"):
                     # Handle individual custom buttons
                     button_index_str = widget_name.replace("@custom_button:", "", 1)

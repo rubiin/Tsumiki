@@ -373,7 +373,7 @@
 		"right_section": [
 			"recorder",
 			"@custom_button:1",
-			"@group:1",
+			"@collapsible:0",
 			"@group:0",
 			"system_tray"
 		] // this is the right section of the panel
