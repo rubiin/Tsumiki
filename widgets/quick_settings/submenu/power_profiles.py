@@ -60,6 +60,7 @@ class PowerProfileItem(Button):
         else:
             style_context.remove_class("active")
 
+
 class PowerProfileSubMenu(QuickSubMenu):
     """A submenu to display power profile options."""
 

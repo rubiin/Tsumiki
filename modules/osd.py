@@ -11,7 +11,7 @@ from gi.repository import GLib, GObject
 from services import audio_service
 from services.brightness import BrightnessService
 from shared.widget_container import BaseWidget
-from utils.icons import symbolic_icons, text_icons
+from utils.icons import symbolic_icons
 from utils.types import Keyboard_Mode
 from utils.widget_utils import (
     create_scale,
@@ -246,11 +246,11 @@ class MicrophoneOSDContainer(GenericOSDContainer):
 
     def update_icon(self, volume=0):
         icon_name = (
-            text_icons["microphone"]["muted"]
+            symbolic_icons["audio"]["mic"]["muted"]
             if volume == 0 or self.audio_service.microphone.muted
-            else text_icons["microphone"]["high"]
+            else symbolic_icons["audio"]["mic"]["high"]
         )
-        self.icon.set_from_icon_name(icon_name, self.icon_size) # TODO: fix this
+        self.icon.set_from_icon_name(icon_name, self.icon_size)
 
 
 class OSDContainer(Window):
