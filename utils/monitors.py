@@ -13,14 +13,12 @@ warnings.filterwarnings("ignore", category=DeprecationWarning)
 class HyprlandWithMonitors(Hyprland):
     """A Hyprland class with additional monitor common."""
 
-    instance = None
+    _instance = None
 
-    @staticmethod
-    def get_default():
-        if HyprlandWithMonitors.instance is None:
-            HyprlandWithMonitors.instance = HyprlandWithMonitors()
-
-        return HyprlandWithMonitors.instance
+    def __new__(cls):
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+        return cls._instance
 
     def __init__(self, commands_only: bool = False, **kwargs):
         self.display: Gdk.Display = Gdk.Display.get_default()
