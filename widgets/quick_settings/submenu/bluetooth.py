@@ -100,6 +100,7 @@ class BluetoothDeviceBox(CenterBox):
 class BluetoothSubMenu(QuickSubMenu):
     """A submenu to display the Bluetooth settings."""
 
+
     def __init__(self, **kwargs):
         self.client = bluetooth_service
         self.client.connect("device-added", self.populate_new_device)
@@ -107,7 +108,6 @@ class BluetoothSubMenu(QuickSubMenu):
         self.paired_devices_listbox = ListBox(
             visible=True, name="paired-devices-listbox"
         )
-
         self.paired_devices_container = Box(
             orientation="v",
             spacing=10,
@@ -125,7 +125,6 @@ class BluetoothSubMenu(QuickSubMenu):
         self.available_devices_listbox = ListBox(
             visible=True, name="available-devices-listbox"
         )
-
         self.available_devices_container = Box(
             orientation="v",
             spacing=4,
@@ -166,24 +165,43 @@ class BluetoothSubMenu(QuickSubMenu):
             **kwargs,
         )
 
+        # Track device rows for easy update
+        self.device_rows = {}
+
+        # Populate initial devices
+        for device in self.client.devices:
+            self.add_device_row(device)
+            device.connect("notify::paired", self.on_device_paired_changed)
+
     def on_scan_toggle(self, btn: Button):
         self.client.toggle_scan()
         btn.set_style_classes(
             ["active"]
         ) if self.client.scanning else btn.set_style_classes([""])
-
         self.scan_button.play_animation()
 
     def populate_new_device(self, client: BluetoothClient, address: str):
         device: BluetoothDevice = client.get_device(address)
-        bt_item = Gtk.ListBoxRow(visible=True, name="bluetooth-device-row")
+        self.add_device_row(device)
+        device.connect("notify::paired", self.on_device_paired_changed)
 
+    def add_device_row(self, device: BluetoothDevice):
+        # Remove existing row if present
+        if device.address in self.device_rows:
+            row, listbox = self.device_rows[device.address]
+            listbox.remove(row)
+        bt_item = Gtk.ListBoxRow(visible=True, name="bluetooth-device-row")
+        bt_item.add(BluetoothDeviceBox(device))
         if device.paired:
-            bt_item.add(BluetoothDeviceBox(device))
             self.paired_devices_listbox.add(bt_item)
+            self.device_rows[device.address] = (bt_item, self.paired_devices_listbox)
         else:
-            bt_item.add(BluetoothDeviceBox(device))
             self.available_devices_listbox.add(bt_item)
+            self.device_rows[device.address] = (bt_item, self.available_devices_listbox)
+
+    def on_device_paired_changed(self, device, *_):
+        # Move device row between listboxes when paired status changes
+        self.add_device_row(device)
 
 
 class BluetoothToggle(QSChevronButton):
