@@ -12,17 +12,10 @@ from gi.repository import GLib
 
 from shared.popup import PopupWindow
 
-WALLPAPER_DIR = f"/home/{GLib.get_user_name()}/Pictures/Wallpapers"
-WALLPAPER_THUMBS_DIR = f"/home/{GLib.get_user_name()}/wallpapers/.thumbs"
+USER = GLib.get_user_name()
 
-
-print(WALLPAPER_DIR)
-
-if not os.path.exists(WALLPAPER_DIR):
-    os.makedirs(WALLPAPER_DIR)
-
-if not os.path.exists(WALLPAPER_THUMBS_DIR):
-    os.makedirs(WALLPAPER_THUMBS_DIR)
+WALLPAPER_DIR = f"/home/{USER}/Pictures/Wallpapers"
+WALLPAPER_THUMBS_DIR = f"/home/{USER}/Wallpapers/.thumbs"
 
 
 class ImageButton(Button):
