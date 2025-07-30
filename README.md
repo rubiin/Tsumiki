@@ -287,7 +287,10 @@ Be sure to kill other notifications daemon that you may be running. You can kill
 
 Kill the app with `pkill tsumiki`. Run `init.sh -start`. This should show some logs. If it shows like `ModuleNotFoundError`, run `pip install -r requirements.txt`. If this does not solve the issue, do report a bug with screenshot of the log.
 
-### 4. **No Blur?**
+### 4. **Sass compilation error or UI not rendering?**
+Your `theme.json` may be incorrect or outdated. You can copy the latest `theme.json` from the `example/` directory. Be aware that this will overwrite any custom changes you've made.
+
+### 5. **No Blur?**
 
 Add this to your `hyprland.conf`
 
@@ -299,8 +302,16 @@ layerrule = ignorezero ,gtk-layer-shell
 
 ```
 
-### 5. **No Icons?**
+### 6. **No Icons?**
 Make sure your icon theme has the required icons. One of the recommended icon theme is  `Tela Circle`
+
+### 7. **Hide bar on keypress?**
+
+Add this to your `hyprland.conf`
+
+```conf
+bind = SUPER, Q, exec,  fabric-cli ia tsumiki toggle bar
+```
 
 
 ## Contributing
