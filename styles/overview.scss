@@ -7,6 +7,7 @@
 #overview-menu {
   @include common.floating-widget;
   @include common.spacing;
+  padding: 5px;
 }
 
 #overview {
@@ -45,28 +46,25 @@
 }
 
 #overview-client-box {
-  background-color: color.mix(theme.$text-main, transparent, 100%);
+  background-color: color.mix(theme.$surface-disabled, transparent, 40%);
 
   &:hover {
-    background-color: color.mix(theme.$text-main, transparent, 70%);
+    background-color: color.mix(theme.$surface-disabled, transparent, 70%);
   }
 
   &:active {
-    background-color: color.mix(theme.$text-main, transparent, 100%);
+    background-color: color.mix(theme.$surface-disabled, transparent, 100%);
   }
 }
 
 #overview-workspace-bg {
-  background-color: #2a2a2a;
+  background-color: color.mix(theme.$surface-disabled, transparent, 40%);
 }
 
-#overview-workspace-box {
-  padding: common.toEm(15);
 
-  label {
-    margin-top: 15px;
-    font-size: 23px;
-    font-weight: 700;
-    font-family: league spartan;
+  .ws_id_label {
+    background-color: theme.$background-alt;
+    border-radius: 5px;
+    font-size: 10px;
+    padding: 4px 8px;
   }
-}
