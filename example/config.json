@@ -368,10 +368,10 @@
 		], // this is the left section of the panel
 		"middle_section": [
 			"date_time",
-			"weather"
+			"weather",
+			"screenshot"
 		], // this is the middle section of the panel
 		"right_section": [
-			"@custom_button:1",
 			"@collapsible:0",
 			"@group:0",
 			"system_tray"
@@ -380,11 +380,11 @@
 	"widget_groups": [ // widget groups are used to group multiple modules together, you can create multiple groups and access as @group:0, @group:1, etc
 		{
 			"widgets": [
+				"quick_settings",
 				"updates",
-				"cliphist",
 				"battery"
 			],
-			"spacing": 4,
+			"spacing": 2,
 			"style_classes": [
 				"compact"
 			]
