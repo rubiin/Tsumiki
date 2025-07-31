@@ -100,7 +100,7 @@
   &:hover {
     @extend %widget_hover;
     opacity: variable.$bar-buttons-hover-opacity * .01;
-    color: color.mix(theme.$text-main,#000000,  96%);
+    color: color.mix(theme.$text-main, #000000, 96%);
   }
 }
 
@@ -364,6 +364,21 @@ scrolledwindow {
     min-width: 6px;
     min-height: 30px;
     background-color: theme.$background;
+
+  }
+}
+
+
+.wallpaper-picker-box {
+  @include mixins.floating-widget;
+  @include mixins.spacing;
+}
+
+#wallpaper-button {
+  border-radius: 10px;
+
+  &:hover {
+    background-color: theme.$background-alt;
 
   }
 }

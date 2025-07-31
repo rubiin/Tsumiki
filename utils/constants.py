@@ -2,6 +2,8 @@ from gi.repository import GLib
 
 # constants
 
+USERNAME = GLib.get_user_name()
+
 NOTIFICATION_WIDTH = 400
 NOTIFICATION_IMAGE_SIZE = 48
 HIGH_POLL_INTERVAL = 3600  # 1 hour in seconds
@@ -16,8 +18,11 @@ WEATHER_CACHE_FILE = f"{APP_CACHE_DIRECTORY}/weather.json"
 QUOTES_CACHE_FILE = f"{APP_CACHE_DIRECTORY}/quotes.json"
 ICON_CACHE_FILE = f"{APP_CACHE_DIRECTORY}/icons.json"
 
+WALLPAPER_DIR = f"/home/{USERNAME}/Pictures/Wallpapers"
+WALLPAPER_THUMBS_DIR = f"/{WALLPAPER_DIR}/.thumbs"
 
-LOG_DIR = f"{GLib.get_user_state_dir()}/{APPLICATION_NAME}"
+
+LOG_DIR = f"{GLib.get_user_state_dir()}/{APPLICATION_NAME}/logs"
 LOG_FILE = f"{LOG_DIR}/{APPLICATION_NAME}.log"
 LOG_FORMAT = "{time:YYYY-MM-DD HH:mm:ss} [<level>{level}</level>] {message}"
 

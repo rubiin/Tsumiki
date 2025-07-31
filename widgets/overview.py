@@ -1,6 +1,6 @@
 from fabric.widgets.label import Label
 
-from modules.overview import OverViewOverlay
+from modules.wallpaper import WallPaperPickerOverlay
 from shared.widget_container import ButtonWidget
 from utils.widget_utils import nerd_font_icon
 
@@ -24,5 +24,5 @@ class OverviewWidget(ButtonWidget):
             self.box.add(Label(label="overview", style_classes="panel-text"))
 
         # Create the overview widget
-        overview_popup = OverViewOverlay()
+        overview_popup = WallPaperPickerOverlay()
         self.connect("clicked", lambda *_: overview_popup.toggle_popup())

@@ -100,7 +100,6 @@ class BluetoothDeviceBox(CenterBox):
 class BluetoothSubMenu(QuickSubMenu):
     """A submenu to display the Bluetooth settings."""
 
-
     def __init__(self, **kwargs):
         self.client = bluetooth_service
         self.client.connect("device-added", self.populate_new_device)

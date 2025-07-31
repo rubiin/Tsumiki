@@ -49,12 +49,7 @@ def main():
     helpers.check_executable_exists("sass")
 
     # Initialize the application with the status bar
-    app = Application(APPLICATION_NAME)
-
-    # Create the status bar
-    bar = StatusBar(widget_config)
-
-    app.add_window(bar)
+    app = Application(APPLICATION_NAME, StatusBar(widget_config))
 
     if module_options["notification"]["enabled"]:
         from modules.notification import NotificationPopup
