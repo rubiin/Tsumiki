@@ -108,18 +108,20 @@ class WifiSubMenu(QuickSubMenu):
 
     def on_scan(self, _, value, *args):
         """Called when the scan is complete."""
-
         if value:
             logger.info("[WifiService]Scan complete, updating available networks...")
-
-            # Pagination state, reset for new scan
-            self.items_loaded = 0
-            self.batch_size = 7
-            self.loading = False
-            self.max_items = 0  # ← LIMIT HERE
-
-            self.build_wifi_options()
+            self.refresh_wifi_list()
             self.scan_button.set_sensitive(True)
+
+    def refresh_wifi_list(self):
+        # Always clear and rebuild the list
+        self.items_loaded = 0
+        self.batch_size = 7
+        self.loading = False
+        self.max_items = len(self.wifi_device.access_points) if self.wifi_device else 0
+        self.available_networks_listbox.remove_all()
+        if self.wifi_device:
+            self.load_more_items(self.wifi_device.access_points)
 
     def start_new_scan(self, *_):
         self.wifi_device.scan()
@@ -127,54 +129,67 @@ class WifiSubMenu(QuickSubMenu):
 
     def on_device_ready(self, client: NetworkService):
         self.wifi_device = client.wifi_device
-
         if self.wifi_device:
             self.wifi_device.connect("scanning", self.on_scan)
+            self.wifi_device.connect("changed", lambda *_: self.refresh_wifi_list())
 
     def build_wifi_options(self):
-        self.available_networks_listbox.remove_all()
-
-        self.max_items = len(self.wifi_device.access_points)
-
-        self.load_more_items(self.wifi_device.access_points)
+        self.refresh_wifi_list()
 
     def make_button_from_ap(self, ap: NM.AccessPoint) -> Button:
         security_label = ""
+        ssid = ap.get("ssid")
+        icon_name = ap.get("icon-name")
 
         ap_container = Box(
             style="padding: 5px;",
             orientation="h",
             spacing=4,
-            tooltip_markup=ap.get("ssid"),
-            children=[
-                nerd_font_icon(
-                    icon=icon_to_text_icons.get(
-                        ap.get("icon-name"),
-                        text_icons["wifi"]["generic"],
-                    ),
-                    props={
-                        "style_classes": ["panel-font-icon"],
-                        "style": "font-size: 16px;",
-                    },
-                ),
-                Label(
-                    label=ap.get("ssid"),
-                    style_classes="submenu-item-label",
-                    ellipsization="end",
-                    v_align="center",
-                    h_align="start",
-                    h_expand=True,
-                ),
-            ],
+            tooltip_markup=ssid,
         )
+        ap_container.add(
+            nerd_font_icon(
+                icon=icon_to_text_icons.get(
+                    icon_name,
+                    text_icons["wifi"]["generic"],
+                ),
+                props={
+                    "style_classes": ["panel-font-icon"],
+                    "style": "font-size: 16px;",
+                },
+            )
+        )
+        ssid_button = Button(
+            label=ssid,
+            style_classes=["submenu-item-label", "wifi-ssid-button"],
+            v_align="center",
+            h_align="start",
+            h_expand=True,
+            on_clicked=lambda btn: self.on_connect_clicked(ap),
+        )
+        ap_container.add(ssid_button)
+
+        # Use BSSID for active AP check, fallback to SSID if needed
+        ap_bssid = ap.get("bssid")
+        is_active = (
+            self.wifi_device.state == "activated"
+            and self.wifi_device.is_active_ap(ap_bssid)
+        )
+        if is_active:
+            ap_container.add(
+                Button(
+                    label="-",
+                    style_classes=["wifi-disconnect-button"],
+                    v_align="center",
+                    h_align="end",
+                    on_clicked=lambda btn: self.on_disconnect_clicked(ap),
+                )
+            )
 
         wifi_item = Gtk.ListBoxRow(visible=True)
 
-        if self.wifi_device.state == "activated" and self.wifi_device.is_active_ap(
-            ap.get("ssid")
-        ):
+        if is_active:
             security_label = " " + security_label
-
             if self.wifi_device.get_ap_security(ap.get("active-ap")) != "unsecured":
                 security_label = security_label + ""
 
@@ -188,6 +203,18 @@ class WifiSubMenu(QuickSubMenu):
 
         wifi_item.add(ap_container)
         return wifi_item
+
+    def on_disconnect_clicked(self, ap: NM.AccessPoint):
+        ssid = ap.get("ssid")
+        if self.wifi_device:
+            self.wifi_device.disconnect_network(ssid)
+
+    def on_connect_clicked(self, ap: NM.AccessPoint):
+        ssid = ap.get("ssid")
+        # Optionally, prompt for password if needed (not implemented here)
+        # For now, try to connect without password
+        if self.wifi_device:
+            self.wifi_device.connect_network(ssid)
 
 
 class WifiToggle(QSChevronButton):
