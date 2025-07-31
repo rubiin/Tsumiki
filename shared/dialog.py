@@ -4,10 +4,9 @@ from fabric.widgets.button import Button
 from fabric.widgets.label import Label
 
 from .popup import PopupWindow
-from .widget_container import BaseWidget
 
 
-class Dialog(PopupWindow, BaseWidget):
+class Dialog(PopupWindow):
     """A dialog box to display a message."""
 
     _instance = None
