@@ -447,19 +447,19 @@ class QuickSettingsButtonWidget(ButtonWidget):
         # Check if the network service is ready
         if self.network_service.primary_device == "wifi":
             wifi = self.network_service.wifi_device
-
-            self.network_icon.set_from_icon_name(
-                wifi.icon_name,
-                self.panel_icon_size,
-            )
-            wifi.connect("changed", self.update_wifi_status)
-
+            if wifi:
+                self.network_icon.set_from_icon_name(
+                    wifi.icon_name,
+                    self.panel_icon_size,
+                )
+                wifi.connect("changed", self.update_wifi_status)
         else:
             ethernet = self.network_service.ethernet_device
-            self.network_icon.set_from_icon_name(
-                ethernet.icon_name,
-                self.panel_icon_size,
-            )
+            if ethernet:
+                self.network_icon.set_from_icon_name(
+                    ethernet.icon_name,
+                    self.panel_icon_size,
+                )
 
     def update_wifi_status(self, wifi: Wifi):
         self.network_icon.set_from_icon_name(
