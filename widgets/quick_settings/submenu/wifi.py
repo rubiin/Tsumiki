@@ -164,6 +164,7 @@ class WifiSubMenu(QuickSubMenu):
             style_classes=["submenu-item-label", "wifi-ssid-button"],
             v_align="center",
             h_align="start",
+            ellipsization="end",
             h_expand=True,
             on_clicked=lambda btn: self.on_connect_clicked(ap),
         )
