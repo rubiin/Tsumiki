@@ -11,11 +11,8 @@ from fabric.widgets.scrolledwindow import ScrolledWindow
 
 from shared.buttons import HoverButton
 from shared.popup import PopupWindow
-
-USER = GLib.get_user_name()
-
-WALLPAPER_DIR = f"/home/{USER}/Pictures/Wallpapers"
-WALLPAPER_THUMBS_DIR = f"/home/{USER}/Wallpapers/.thumbs"
+from utils.constants import WALLPAPER_DIR, WALLPAPER_THUMBS_DIR
+from utils.functions import ensure_directory
 
 
 class ImageButton(HoverButton):
@@ -48,16 +45,12 @@ class ImageButton(HoverButton):
 
     def _generate_wp_thumbnail(self):
         if os.path.exists(self.wp_thumb_path):
-            self.set_image(
-                Image(image_file=self.wp_thumb_path)
-            )
+            self.set_image(Image(image_file=self.wp_thumb_path))
             return
 
         exec_shell_command_async(
             f"ffmpegthumbnailer -i {self.wp_path} -s {self.thumb_size} -o {self.wp_thumb_path}",  # noqa: E501
-            lambda *_: self.set_image(
-                Image(image_file=self.wp_thumb_path)
-            ),
+            lambda *_: self.set_image(Image(image_file=self.wp_thumb_path)),
         )
 
 
@@ -70,7 +63,7 @@ class WallpaperPickerBox(ScrolledWindow):
     def __init__(self):
         super().__init__(
             orientation="h",
-            max_content_size=(-1, 600),
+            max_content_size=(-1, 500),
         )
         self._buttons = self._grab_wallpaper_images()
         column_size = 3
