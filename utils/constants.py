@@ -2,7 +2,7 @@ from gi.repository import GLib
 
 # constants
 
-USERNAME = GLib.get_user_name()
+HOME_DIR = GLib.get_home_dir()
 
 NOTIFICATION_WIDTH = 400
 NOTIFICATION_IMAGE_SIZE = 48
@@ -18,8 +18,8 @@ WEATHER_CACHE_FILE = f"{APP_CACHE_DIRECTORY}/weather.json"
 QUOTES_CACHE_FILE = f"{APP_CACHE_DIRECTORY}/quotes.json"
 ICON_CACHE_FILE = f"{APP_CACHE_DIRECTORY}/icons.json"
 
-WALLPAPER_DIR = f"/home/{USERNAME}/Pictures/Wallpapers"
-WALLPAPER_THUMBS_DIR = f"/{WALLPAPER_DIR}/.thumbs"
+WALLPAPER_DIR = f"{HOME_DIR}/Pictures/Wallpapers"
+WALLPAPER_THUMBS_DIR = f"{WALLPAPER_DIR}/.thumbs"
 
 
 LOG_DIR = f"{GLib.get_user_state_dir()}/{APPLICATION_NAME}/logs"

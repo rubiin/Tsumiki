@@ -45,7 +45,9 @@ class ImageButton(HoverButton):
 
     def _generate_wp_thumbnail(self):
         if os.path.exists(self.wp_thumb_path):
-            self.set_image(Image(image_file=self.wp_thumb_path))
+            self.set_image(
+                Image(image_file=self.wp_thumb_path, tooltip_text=self.wallpaper_name)
+            )
             return
 
         exec_shell_command_async(
@@ -55,7 +57,7 @@ class ImageButton(HoverButton):
 
 
 class WallpaperPickerBox(ScrolledWindow):
-    """A box that contains wallpaper buttons."""
+    """A box that contains wallpaper buttons with infinite scroll."""
 
     @Signal
     def wallpaper_change(self, wp_path: str) -> str: ...
@@ -65,8 +67,11 @@ class WallpaperPickerBox(ScrolledWindow):
             orientation="h",
             max_content_size=(-1, 500),
         )
-        self._buttons = self._grab_wallpaper_images()
-        column_size = 3
+
+        self.column_size = 3
+        self.batch_size = 6
+        self._wallpapers = self._fetch_wallpaper_list()
+        self._loaded_count = 0
 
         self._main_box = Grid(
             row_spacing=7,
@@ -75,28 +80,67 @@ class WallpaperPickerBox(ScrolledWindow):
             row_homogeneous=True,
         )
 
-        self._main_box.attach_flow(
-            self._buttons,
-            column_size,
-        )
-
         self.children = self._main_box
 
-    def _grab_wallpaper_images(self) -> list[ImageButton]:
-        images = []
-        for wp in os.listdir(WALLPAPER_DIR):
-            file_type = mimetypes.guess_type(wp)[0]
+        # Initial load
+        self._load_next_batch()
 
-            if file_type and "image" in file_type:
-                images.append(
-                    ImageButton(
-                        wp,
-                        on_wallpaper_change=lambda _, wp_path: self.wallpaper_change(
-                            wp_path
-                        ),
-                    )
-                )
-        return images
+        # Connect scroll event
+        adjustment = self.get_vadjustment()
+
+        adjustment.connect("value-changed", self._on_scroll)
+
+    def _fetch_wallpaper_list(self) -> list[str]:
+        """Fetch all wallpapers (sorted for consistency)."""
+        wallpapers = [
+            wp
+            for wp in sorted(os.listdir(WALLPAPER_DIR))
+            if (mimetypes.guess_type(wp)[0] or "").startswith("image")
+        ]
+        return wallpapers
+
+    def _load_next_batch(self):
+        """Load the next batch of wallpaper buttons."""
+        if self._loaded_count >= len(self._wallpapers):
+            return  # No more wallpapers
+
+        print(
+            f"Loading wallpapers {self._loaded_count} to "
+            f"{self._loaded_count + self.batch_size}"
+        )
+
+        end = min(self._loaded_count + self.batch_size, len(self._wallpapers))
+        new_wallpapers = self._wallpapers[self._loaded_count : end]
+
+        buttons = [
+            ImageButton(
+                wp,
+                on_wallpaper_change=lambda _, wp_path: self.wallpaper_change(wp_path),
+            )
+            for wp in new_wallpapers
+        ]
+
+        # ✅ Calculate the correct starting row based on already loaded items
+        start_row = self._loaded_count // self.column_size
+
+        self._main_box.attach_flow(
+            buttons,
+            self.column_size,
+            start_row=start_row,  # ✅ Start at the next available row
+        )
+
+        self._loaded_count = end
+
+    def _on_scroll(self, adjustment):
+        """Trigger loading more wallpapers when scrolling near the bottom."""
+
+        value = adjustment.get_value()
+        upper = adjustment.get_upper()
+        page_size = adjustment.get_page_size()
+
+        if value + page_size >= upper - 50:
+            # Near bottom
+            self._load_next_batch()
 
 
 class WallPaperPickerOverlay(PopupWindow):
