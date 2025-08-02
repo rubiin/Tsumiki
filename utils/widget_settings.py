@@ -11,6 +11,16 @@ Layout = TypedDict(
 )
 
 
+# WallPaper configuration
+WallPaper = TypedDict(
+    "WallPaper",
+    {
+        "icon": str,
+        "label": bool,
+        "tooltip": bool,
+    },
+)
+
 # Power button configuration
 PowerButton = TypedDict(
     "PowerButton",
@@ -57,6 +67,7 @@ SystemTray = TypedDict(
         "hide_when_empty": bool,
     },
 )
+
 
 # HyprIdle configuration
 HyprIdle = TypedDict(
@@ -519,6 +530,7 @@ class Widgets(TypedDict):
     network_usage: NetworkUsage
     ocr: OCR
     overview: Overview
+    wallpaper: WallPaper
     power: PowerButton
     quick_settings: QuickSettings
     recorder: Recording

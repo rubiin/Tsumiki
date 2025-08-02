@@ -18,7 +18,8 @@
 		"overview": {
 			"icon": "󰡃",
 			"tooltip": true,
-			"label": false
+			"label": false,
+			"show_occupied": true
 		},
 		"power": {
 			"icon": "󰐥",
@@ -296,6 +297,11 @@
 			"label": false,
 			"tooltip": true
 		},
+		"wallpaper": {
+			"icon": "󰸉",
+			"label": false,
+			"tooltip": true
+		},
 		"kanban": {
 			"icon": "󱞁",
 			"label": false,
@@ -368,8 +374,7 @@
 		], // this is the left section of the panel
 		"middle_section": [
 			"date_time",
-			"weather",
-			"screenshot"
+			"weather"
 		], // this is the middle section of the panel
 		"right_section": [
 			"@collapsible:0",

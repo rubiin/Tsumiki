@@ -94,6 +94,7 @@ DEFAULT_CONFIG = {
             "tooltip": True,
             "step_size": 5,
         },
+        "wallpaper": {"icon": "󰸉", "label": False, "tooltip": True},
         "cava": {"bars": 10, "color": "#89b4fa"},
         "overview": {
             "icon": "󰡃",

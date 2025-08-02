@@ -46,6 +46,7 @@ from widgets.theme import ThemeSwitcherWidget
 from widgets.updates import UpdatesWidget
 from widgets.utility_widgets import DividerWidget, SpacingWidget
 from widgets.volume import VolumeWidget
+from widgets.wallpaper import WallpaperWidget
 from widgets.weather import WeatherWidget
 from widgets.window_count import WindowCountWidget
 from widgets.window_title import WindowTitleWidget
@@ -99,6 +100,7 @@ class StatusBar(Window):
             "divider": DividerWidget,
             "quick_settings": QuickSettingsButtonWidget,
             "window_count": WindowCountWidget,
+            "wallpaper": WallpaperWidget,
             "collapsible_group": CollapsibleGroupWidget,
         }
 

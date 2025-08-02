@@ -57,6 +57,10 @@
     - **`label`**: `bool` (default: true)
     - **`tooltip`**: `bool` (default: true)
     - **`step_size`**: `int` (default: 5)
+  - **`wallpaper`**: `object`
+    - **`icon`**: `str` (default: "󰸉")
+    - **`label`**: `bool` (default: false)
+    - **`tooltip`**: `bool` (default: true)
   - **`cava`**: `object`
     - **`bars`**: `int` (default: 10)
     - **`color`**: `str` (default: "#89b4fa")
