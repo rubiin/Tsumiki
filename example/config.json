@@ -18,7 +18,8 @@
 		"overview": {
 			"icon": "󰡃",
 			"tooltip": true,
-			"label": false
+			"label": false,
+			"show_occupied": true
 		},
 		"power": {
 			"icon": "󰐥",
@@ -293,6 +294,11 @@
 		},
 		"cliphist": {
 			"icon": "",
+			"label": false,
+			"tooltip": true
+		},
+		"wallpaper": {
+			"icon": "󰸉",
 			"label": false,
 			"tooltip": true
 		},

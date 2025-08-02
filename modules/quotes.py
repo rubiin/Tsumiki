@@ -4,11 +4,10 @@ from fabric.widgets.label import Label
 from fabric.widgets.wayland import WaylandWindow as Window
 
 from services.quotes import QuotesService
-from shared.widget_container import BaseWidget
 from utils.functions import convert_seconds_to_milliseconds
 
 
-class DesktopQuote(Window, BaseWidget):
+class DesktopQuote(Window):
     """
     A simple desktop quote widget.
     """

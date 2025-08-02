@@ -23,6 +23,11 @@ class OverviewWidget(ButtonWidget):
         if self.config.get("label", True):
             self.box.add(Label(label="overview", style_classes="panel-text"))
 
-        # Create the overview widget
-        overview_popup = OverViewOverlay()
-        self.connect("clicked", lambda *_: overview_popup.toggle_popup())
+        # Lazy-init overview popup
+        self._overview_popup = None
+        self.connect("clicked", self._on_click)
+
+    def _on_click(self, *_):
+        if self._overview_popup is None:
+            self._overview_popup = OverViewOverlay()
+        self._overview_popup.toggle_popup()

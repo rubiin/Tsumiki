@@ -88,7 +88,8 @@
 							"window_count",
 							"quick_settings",
 							"world_clock",
-							"theme_switcher"
+							"theme_switcher",
+							"wallpaper"
 						],
 						"description": "Specifies the widget to display."
 					},
@@ -1187,6 +1188,22 @@
 						"description": "Format for the media title"
 					}
 				}
+			},
+			"wallpaper":{
+					"properties": {
+						"icon": {
+							"type": "string",
+							"description": "Icon name from icon theme"
+						},
+						"label": {
+							"type": "string",
+							"description": "Name of the wallpaper"
+						},
+				"tooltip": {
+					"type": "boolean",
+					"description": "Determines whether the wallpaper has a tooltip"
+				}
+			}
 			},
 			"system_tray": {
 				"type": "object",

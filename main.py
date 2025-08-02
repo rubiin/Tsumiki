@@ -48,51 +48,38 @@ def main():
     helpers.copy_theme(theme_config["name"])
     helpers.check_executable_exists("sass")
 
-    # Create the status bar
-    bar = StatusBar(widget_config)
-
-    windows = [bar]
+    # Initialize the application with the status bar
+    app = Application(APPLICATION_NAME, StatusBar(widget_config))
 
     if module_options["notification"]["enabled"]:
         from modules.notification import NotificationPopup
 
-        windows.append(NotificationPopup(widget_config))
+        app.add_window(NotificationPopup(widget_config))
 
     if module_options["screen_corners"]["enabled"]:
         from modules.corners import ScreenCorners
 
-        screen_corners = ScreenCorners(widget_config)
-
-        windows.append(screen_corners)
+        app.add_window(ScreenCorners(widget_config))
 
     if module_options["quotes"]["enabled"]:
         from modules.quotes import DesktopQuote
 
-        quotes = DesktopQuote(widget_config)
-
-        windows.append(quotes)
+        app.add_window(DesktopQuote(widget_config))
 
     if module_options["dock"]["enabled"]:
         from modules.dock import Dock
 
-        dock = Dock(widget_config)
-
-        windows.append(dock)
+        app.add_window(Dock(widget_config))
 
     if module_options["desktop_clock"]["enabled"]:
         from modules.desktop_clock import DesktopClock
 
-        desktop_clock = DesktopClock(widget_config)
-
-        windows.append(desktop_clock)
+        app.add_window(DesktopClock(widget_config))
 
     if module_options["osd"]["enabled"]:
         from modules.osd import OSDContainer
 
-        windows.append(OSDContainer(widget_config))
-
-    # Initialize the application with the status bar
-    app = Application(APPLICATION_NAME, windows=windows)
+        app.add_window(OSDContainer(widget_config))
 
     setproctitle.setproctitle(APPLICATION_NAME)
 

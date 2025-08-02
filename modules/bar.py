@@ -6,7 +6,7 @@ from fabric.widgets.box import Box
 from fabric.widgets.centerbox import CenterBox
 from fabric.widgets.wayland import WaylandWindow as Window
 
-from shared.widget_container import BaseWidget, WidgetGroup
+from shared.widget_container import WidgetGroup
 from widgets.battery import BatteryWidget
 from widgets.bluetooth import BlueToothWidget
 from widgets.brightness import BrightnessWidget
@@ -46,6 +46,7 @@ from widgets.theme import ThemeSwitcherWidget
 from widgets.updates import UpdatesWidget
 from widgets.utility_widgets import DividerWidget, SpacingWidget
 from widgets.volume import VolumeWidget
+from widgets.wallpaper import WallpaperWidget
 from widgets.weather import WeatherWidget
 from widgets.window_count import WindowCountWidget
 from widgets.window_title import WindowTitleWidget
@@ -53,7 +54,7 @@ from widgets.workspaces import WorkSpacesWidget
 from widgets.world_clock import WorldClockWidget
 
 
-class StatusBar(Window, BaseWidget):
+class StatusBar(Window):
     """A widget to display the status bar panel."""
 
     def __init__(self, config, **kwargs):
@@ -99,6 +100,7 @@ class StatusBar(Window, BaseWidget):
             "divider": DividerWidget,
             "quick_settings": QuickSettingsButtonWidget,
             "window_count": WindowCountWidget,
+            "wallpaper": WallpaperWidget,
             "collapsible_group": CollapsibleGroupWidget,
         }
 

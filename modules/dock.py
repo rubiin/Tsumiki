@@ -17,13 +17,12 @@ from fabric.widgets.image import Image
 from fabric.widgets.wayland import WaylandWindow as Window
 from gi.repository import Gdk, GLib
 
-from shared.widget_container import BaseWidget
 from utils.icon_resolver import IconResolver
 from utils.icons import symbolic_icons
 from utils.occlusion import check_occlusion
 
 
-class Dock(Window, BaseWidget):
+class Dock(Window):
     """Dock class for managing application buttons and interactions."""
 
     _instances: ClassVar[list] = []

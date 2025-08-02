@@ -305,14 +305,6 @@ layerrule = ignorezero ,gtk-layer-shell
 ### 6. **No Icons?**
 Make sure your icon theme has the required icons. One of the recommended icon theme is  `Tela Circle`
 
-### 7. **Hide bar on keypress?**
-
-Add this to your `hyprland.conf`
-
-```conf
-bind = SUPER, Q, exec,  fabric-cli ia tsumiki toggle bar
-```
-
 
 ## Contributing
 

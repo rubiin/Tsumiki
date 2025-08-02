@@ -4,28 +4,18 @@ import os
 from fabric.core.service import Signal
 from fabric.utils import exec_shell_command_async
 from fabric.widgets.box import Box
-from fabric.widgets.button import Button
+from fabric.widgets.grid import Grid
 from fabric.widgets.image import Image
 from fabric.widgets.label import Label
 from fabric.widgets.scrolledwindow import ScrolledWindow
-from gi.repository import GLib
 
+from shared.buttons import HoverButton
 from shared.popup import PopupWindow
-
-WALLPAPER_DIR = f"/home/{GLib.get_user_name()}/Pictures/Wallpapers"
-WALLPAPER_THUMBS_DIR = f"/home/{GLib.get_user_name()}/wallpapers/.thumbs"
-
-
-print(WALLPAPER_DIR)
-
-if not os.path.exists(WALLPAPER_DIR):
-    os.makedirs(WALLPAPER_DIR)
-
-if not os.path.exists(WALLPAPER_THUMBS_DIR):
-    os.makedirs(WALLPAPER_THUMBS_DIR)
+from utils.constants import WALLPAPER_DIR, WALLPAPER_THUMBS_DIR
+from utils.functions import ensure_directory
 
 
-class ImageButton(Button):
+class ImageButton(HoverButton):
     """A button that sets the wallpaper when clicked."""
 
     @Signal
@@ -39,12 +29,8 @@ class ImageButton(Button):
             WALLPAPER_THUMBS_DIR, f"{self.thumb_size}_{self.wallpaper_name}"
         )
         super().__init__(
-            style_classes=[
-                "button-basic",
-                "button-basic-props",
-                "cool-border",
-            ],  # TODO: change these css
             on_clicked=lambda *_: self._set_wallpaper_from_image(),
+            name="wallpaper-button",
             **kwargs,
         )
         self._generate_wp_thumbnail()
@@ -60,20 +46,18 @@ class ImageButton(Button):
     def _generate_wp_thumbnail(self):
         if os.path.exists(self.wp_thumb_path):
             self.set_image(
-                Image(image_file=self.wp_thumb_path, style="border-radius: 20px")
+                Image(image_file=self.wp_thumb_path, tooltip_text=self.wallpaper_name)
             )
             return
 
         exec_shell_command_async(
             f"ffmpegthumbnailer -i {self.wp_path} -s {self.thumb_size} -o {self.wp_thumb_path}",  # noqa: E501
-            lambda *_: self.set_image(
-                Image(image_file=self.wp_thumb_path, style="border-radius: 20px")
-            ),
+            lambda *_: self.set_image(Image(image_file=self.wp_thumb_path)),
         )
 
 
 class WallpaperPickerBox(ScrolledWindow):
-    """A box that contains wallpaper buttons."""
+    """A box that contains wallpaper buttons with infinite scroll."""
 
     @Signal
     def wallpaper_change(self, wp_path: str) -> str: ...
@@ -81,37 +65,82 @@ class WallpaperPickerBox(ScrolledWindow):
     def __init__(self):
         super().__init__(
             orientation="h",
-            max_content_size=(-1, 800),
+            max_content_size=(-1, 500),
         )
-        self._buttons = self._grab_wallpaper_images()
-        row_size = 3
-        rows = [
-            self._buttons[i : i + row_size]
-            for i in range(0, len(self._buttons), row_size)
-        ]
-        self._main_box = Box(
-            orientation="v",
-            children=[Box(children=row, orientation="h", spacing=10) for row in rows],
-            spacing=10,
+
+        self.column_size = 3
+        self.batch_size = 6
+        self._wallpapers = self._fetch_wallpaper_list()
+        self._loaded_count = 0
+
+        self._main_box = Grid(
+            row_spacing=7,
+            column_spacing=7,
+            column_homogeneous=True,
+            row_homogeneous=True,
         )
+
         self.children = self._main_box
 
-    def _grab_wallpaper_images(self) -> list[ImageButton]:
-        images = []
-        print(os.listdir(WALLPAPER_DIR))
-        for wp in os.listdir(WALLPAPER_DIR):
-            file_type = mimetypes.guess_type(wp)[0]
+        # Initial load
+        self._load_next_batch()
 
-            if file_type and "image" in file_type:
-                images.append(
-                    ImageButton(
-                        wp,
-                        on_wallpaper_change=lambda _, wp_path: self.wallpaper_change(
-                            wp_path
-                        ),
-                    )
-                )
-        return images
+        # Connect scroll event
+        adjustment = self.get_vadjustment()
+
+        adjustment.connect("value-changed", self._on_scroll)
+
+    def _fetch_wallpaper_list(self) -> list[str]:
+        """Fetch all wallpapers (sorted for consistency)."""
+        wallpapers = [
+            wp
+            for wp in sorted(os.listdir(WALLPAPER_DIR))
+            if (mimetypes.guess_type(wp)[0] or "").startswith("image")
+        ]
+        return wallpapers
+
+    def _load_next_batch(self):
+        """Load the next batch of wallpaper buttons."""
+        if self._loaded_count >= len(self._wallpapers):
+            return  # No more wallpapers
+
+        print(
+            f"Loading wallpapers {self._loaded_count} to "
+            f"{self._loaded_count + self.batch_size}"
+        )
+
+        end = min(self._loaded_count + self.batch_size, len(self._wallpapers))
+        new_wallpapers = self._wallpapers[self._loaded_count : end]
+
+        buttons = [
+            ImageButton(
+                wp,
+                on_wallpaper_change=lambda _, wp_path: self.wallpaper_change(wp_path),
+            )
+            for wp in new_wallpapers
+        ]
+
+        # ✅ Calculate the correct starting row based on already loaded items
+        start_row = self._loaded_count // self.column_size
+
+        self._main_box.attach_flow(
+            buttons,
+            self.column_size,
+            start_row=start_row,  # ✅ Start at the next available row
+        )
+
+        self._loaded_count = end
+
+    def _on_scroll(self, adjustment):
+        """Trigger loading more wallpapers when scrolling near the bottom."""
+
+        value = adjustment.get_value()
+        upper = adjustment.get_upper()
+        page_size = adjustment.get_page_size()
+
+        if value + page_size >= upper - 50:
+            # Near bottom
+            self._load_next_batch()
 
 
 class WallPaperPickerOverlay(PopupWindow):
@@ -128,17 +157,16 @@ class WallPaperPickerOverlay(PopupWindow):
                     Label("Wallpaper Picker", style_classes=["label-title"]),
                     self.wallpaper_box,
                 ],
-                style_classes=["cool-border", "window-basic"],
+                style_classes=["wallpaper-picker-box"],
             ),
             transition_duration=300,
             transition_type="slide-down",
             anchor="center",
             enable_inhibitor=True,
         )
+
+        ensure_directory(WALLPAPER_THUMBS_DIR)
         self.wallpaper_box.connect("wallpaper-change", lambda *_: self.toggle_popup())
 
     def toggle_popup(self, monitor: bool = False):
         super().toggle_popup(monitor)
-
-
-wallpaper_picker = WallPaperPickerOverlay()
