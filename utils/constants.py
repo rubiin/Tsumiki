@@ -382,7 +382,7 @@ DEFAULT_CONFIG = {
             "ignored_apps": [],  # Todo: implement ignored apps functionality
             "icon_size": 30,
             "anchor": "bottom-center",
-            "tooltip": True,
+            "tooltip": False,
             "layer": "top",
             "preview_size": [
                 200,

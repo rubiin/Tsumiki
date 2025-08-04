@@ -204,6 +204,7 @@ class AppBar(Box):
                             client.get_app_id(), self.icon_size
                         )
                     ),
+                    print(client.get_app_id()),  ## TODO: use this for adding ignored apps
                     client_button.set_tooltip_text(
                         client.get_title() if self.config.get("tooltip", True) else None
                     ),
