@@ -30,7 +30,9 @@ class TsumikiConfig:
         if getattr(self, "_initialized", False):
             return
 
-        self.json_config_file = get_relative_path("../config.json") # TODO: always read from .config/tsumuki/config.json
+        self.json_config_file = get_relative_path(
+            "../config.json"
+        )  # TODO: always read from .config/tsumuki/config.json
         self.toml_config_file = get_relative_path("../config.toml")
         self.theme_config_file = get_relative_path("../theme.json")
 
