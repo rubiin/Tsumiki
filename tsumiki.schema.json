@@ -1202,21 +1202,21 @@
 					}
 				}
 			},
-			"wallpaper":{
-					"properties": {
-						"icon": {
-							"type": "string",
-							"description": "Icon name from icon theme"
-						},
-						"label": {
-							"type": "string",
-							"description": "Name of the wallpaper"
-						},
-				"tooltip": {
-					"type": "boolean",
-					"description": "Determines whether the wallpaper has a tooltip"
+			"wallpaper": {
+				"properties": {
+					"icon": {
+						"type": "string",
+						"description": "Icon name from icon theme"
+					},
+					"label": {
+						"type": "string",
+						"description": "Name of the wallpaper"
+					},
+					"tooltip": {
+						"type": "boolean",
+						"description": "Determines whether the wallpaper has a tooltip"
+					}
 				}
-			}
 			},
 			"system_tray": {
 				"type": "object",
