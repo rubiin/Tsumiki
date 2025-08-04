@@ -20,11 +20,15 @@ from utils.widget_utils import nerd_font_icon
 class EmojiPickerMenu(Box):
     """A widget to display an emoji picker."""
 
-    def __init__(self, config, **kwargs):
+    def __init__(self, parent, **kwargs):
         super().__init__(
             name="emoji-menu",
             **kwargs,
         )
+
+        config = parent.config
+
+        self._parent = parent
 
         self.selected_index = -1
         self.emojis_per_page = config.get("per_row", 5) * config.get("per_column", 5)
@@ -84,15 +88,10 @@ class EmojiPickerMenu(Box):
         return emoji_data
 
     def close_picker(self):
-        self.stack.children = []
         self.selected_index = -1
-        self.get_parent().hide_popover()
-
-    def open_picker(self):
         self.search_entry.set_text("")
         self.current_page_index = 0
-        self.arrange_viewport()
-        self.search_entry.grab_focus()
+        self._parent.popup.hide_popover()
 
     def arrange_viewport(self, query: str = ""):
         remove_handler(self._arranger_handler) if self._arranger_handler else None
@@ -360,7 +359,7 @@ class EmojiPickerWidget(ButtonWidget):
         """Show the popover."""
         if self.popup is None:
             self.popup = Popover(
-                content=EmojiPickerMenu(config=self.config),
+                content=EmojiPickerMenu(parent=self),
                 point_to=self,
             )
         self.popup.open()

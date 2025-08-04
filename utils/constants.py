@@ -379,7 +379,7 @@ DEFAULT_CONFIG = {
         "dock": {
             "enabled": False,
             "pinned_apps": [],
-            "ignored_apps": [],  # Todo: implement ignored apps functionality
+            "ignored_apps": [],
             "icon_size": 30,
             "anchor": "bottom-center",
             "tooltip": False,
