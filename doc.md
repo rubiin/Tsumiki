@@ -251,7 +251,7 @@
     - **`truncation_size`**: `int` (default: 30)
     - **`title_map`**: `list` (default: [])
   - **`workspaces`**: `object`
-    - **`count`**: `int` (default: 8)
+    - **`count`**: `int` (default: 10)
     - **`hide_unoccupied`**: `bool` (default: true)
     - **`ignored`**: `list[int]` (default: [-99])
     - **`reverse_scroll`**: `bool` (default: false)
@@ -316,7 +316,7 @@
     - **`enabled`**: `bool` (default: false)
     - **`pinned_apps`**: `list` (default: [])
     - **`ignored_apps`**: `list` (default: [])
-    - **`icon_size`**: `int` (default: 30)
+    - **`icon_size`**: `int` (default: 40)
     - **`anchor`**: `str` (default: "bottom-center")
     - **`tooltip`**: `bool` (default: false)
     - **`layer`**: `str` (default: "top")
