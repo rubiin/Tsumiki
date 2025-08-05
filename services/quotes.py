@@ -1,4 +1,3 @@
-import json
 import os
 import random
 import threading
@@ -10,7 +9,7 @@ from fabric.core.service import Service
 from gi.repository import GLib
 
 from utils.constants import QUOTES_CACHE_FILE
-from utils.functions import write_json_file
+from utils.functions import read_json_file, write_json_file
 
 
 class QuotesService(Service):
@@ -73,11 +72,7 @@ class QuotesService(Service):
         quotes = None
 
         if os.path.exists(self.cache_file):
-            try:
-                with open(self.cache_file, "r") as f:
-                    quotes = json.load(f)
-            except Exception:
-                quotes = None
+            quotes = read_json_file(self.cache_file)
             return random.choice(quotes) if quotes else None
 
         quotes = self.simple_quotes_info()

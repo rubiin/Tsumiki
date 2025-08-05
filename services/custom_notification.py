@@ -1,4 +1,3 @@
-import json
 import os
 import threading
 from typing import List
@@ -11,7 +10,7 @@ from utils.colors import Colors
 from utils.constants import (
     NOTIFICATION_CACHE_FILE,
 )
-from utils.functions import write_json_file
+from utils.functions import read_json_file, write_json_file
 
 
 class CustomNotifications(Notifications):
@@ -63,8 +62,11 @@ class CustomNotifications(Notifications):
             return
 
         try:
-            with open(NOTIFICATION_CACHE_FILE, "r") as file:
-                original_data = json.load(file)
+            original_data = read_json_file(NOTIFICATION_CACHE_FILE)
+
+            if original_data is None:
+                logger.info(f"{Colors.INFO}[Notification] Cache file is empty.")
+                return
 
             original_data.reverse()
 
@@ -93,7 +95,7 @@ class CustomNotifications(Notifications):
             del valid_notifications
             del original_data
 
-        except (json.JSONDecodeError, KeyError, ValueError, IndexError) as e:
+        except (KeyError, ValueError, IndexError) as e:
             logger.exception(f"{Colors.INFO}[Notification] {e}")
 
     def remove_notification(self, id: int):
@@ -196,7 +198,7 @@ class CustomNotifications(Notifications):
         # Clear notifications but preserve the highest ID we've seen
         highest_id = self._count
 
-        self.all_notifications.clear()
+        self.all_notifications = []
 
         self._persist_and_emit()
 

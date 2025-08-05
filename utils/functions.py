@@ -104,6 +104,19 @@ def parse_markup(text):
     return text.replace("\n", " ")
 
 
+def read_json_file(file_path: str) -> Optional[Dict | List]:
+    if not os.path.exists(file_path):
+        logger.error(f"JSON file {file_path} does not exist.")
+        return None
+
+    with open(file_path, "r") as file:
+        try:
+            return json.load(file)
+        except json.JSONDecodeError as e:
+            logger.error(f"Failed to read JSON file {file_path}: {e}")
+            return None
+
+
 # support for multiple monitors
 def for_monitors(widget):
     n = Gdk.Display.get_default().get_n_monitors() if Gdk.Display.get_default() else 1
@@ -153,15 +166,17 @@ def update_theme_config(theme_name: str):
         theme_config_file = get_relative_path("../theme.json")
 
         # Read current theme config
-        with open(theme_config_file, "r") as f:
-            config = json.load(f)
+        config = read_json_file(theme_config_file)
+
+        if config is None:
+            return
 
         # Update the theme name
         config["name"] = theme_name
 
         # Write back to file
-        with open(theme_config_file, "w") as f:
-            json.dump(config, f, indent=2)
+
+        write_json_file(config, theme_config_file)
 
         logger.info(f"{Colors.INFO}[Theme] Updated theme config to {theme_name}")
     except Exception as e:

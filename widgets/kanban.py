@@ -1,4 +1,3 @@
-import json
 import os
 import typing
 from pathlib import Path
@@ -18,7 +17,7 @@ from loguru import logger
 from shared.list import ListBox
 from shared.popover import Popover
 from shared.widget_container import ButtonWidget
-from utils.functions import write_json_file
+from utils.functions import read_json_file, write_json_file
 from utils.widget_utils import create_surface_from_widget, nerd_font_icon
 
 gi.require_versions({"Gtk": "3.0", "GObject": "2.0", "Gdk": "3.0"})
@@ -378,20 +377,19 @@ class Kanban(Box):
         )
 
     def load_state(self):
-        try:
-            with open(self.STATE_FILE, "r") as f:
-                state = json.load(f)
-                for col_data in state["columns"]:
-                    for column in self.columns:
-                        if column.title == col_data["title"]:
-                            column.clear_notes(suppress_signal=True)
-                            for note_text in col_data["notes"]:
-                                column.add_note(note_text, suppress_signal=True)
-                            break
-        except FileNotFoundError:
-            pass
-        except Exception as e:
-            logger.exception(f"Error loading state: {e}")
+        state = read_json_file(self.STATE_FILE)
+        if state:
+            for col_data in state["columns"]:
+                for column in self.columns:
+                    if column.title == col_data["title"]:
+                        column.clear_notes(suppress_signal=True)
+                        for note_text in col_data["notes"]:
+                            column.add_note(note_text, suppress_signal=True)
+                        break
+        else:
+            logger.info(
+                f"[Kanban] No saved state found at {self.STATE_FILE}, starting fresh."
+            )
 
 
 class KanbanWidget(ButtonWidget):

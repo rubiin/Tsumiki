@@ -1,4 +1,3 @@
-import json
 import os
 import re
 
@@ -6,9 +5,8 @@ import gi
 from gi.repository import GdkPixbuf, GLib, Gtk
 from loguru import logger
 
-from utils.thread import run_in_thread
+from utils.functions import read_json_file, write_json_file
 
-from .colors import Colors
 from .constants import ICON_CACHE_FILE
 from .icons import symbolic_icons
 
@@ -27,13 +25,8 @@ class IconResolver:
 
     def __init__(self):
         if os.path.exists(ICON_CACHE_FILE):
-            with open(ICON_CACHE_FILE, "r") as file:
-                try:
-                    self._icon_dict = json.load(file)
-                except json.JSONDecodeError:
-                    logger.info(
-                        f"{Colors.INFO}[ICONS] Cache file does not exist or corrupted."
-                    )
+            self._icon_dict = read_json_file(ICON_CACHE_FILE) or {}
+
         else:
             self._icon_dict = {}
 
@@ -82,12 +75,9 @@ class IconResolver:
                 )
             )
 
-    @run_in_thread
     def _store_new_icon(self, app_id: str, icon: str):
         self._icon_dict[app_id] = icon
-        with open(ICON_CACHE_FILE, "w") as f:
-            json.dump(self._icon_dict, f, indent=4, ensure_ascii=False)
-            f.close()
+        write_json_file(self._icon_dict, ICON_CACHE_FILE)
 
     def _get_icon_from_desktop_file(self, desktop_file_path: str):
         with open(desktop_file_path, "r") as f:

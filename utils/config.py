@@ -48,24 +48,20 @@ class TsumikiConfig:
         try:
             with open(file, "r") as file:
                 # Load JSON data into a Python dictionary
-                data = json.load(file)
+                return json.load(file)
         except Exception as e:
             logger.error(f"[Config] Failed to read json config from {file}: {e}")
-            return {}
-        return data
 
     def read_config_toml(self) -> dict:
         logger.info(f"[Config] Reading toml config from {self.toml_config_file}")
         try:
             with open(self.toml_config_file, "r") as file:
                 # Load JSON data into a Python dictionary
-                data = toml.load(file)
+                return toml.load(file)
         except Exception as e:
             logger.error(
                 f"[Config] Failed to read toml config from {self.toml_config_file}: {e}"
             )
-            return {}
-        return data
 
     def default_config(self) -> BarConfig:
         # Read the configuration from the JSON file
