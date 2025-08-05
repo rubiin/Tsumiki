@@ -21,11 +21,11 @@ The name Tsumiki (pronounced as su-me-ki) comes from the Japanese word "tsumiki"
     <td colspan="4"><img src="assets/screenshots/main.png"></td>
   </tr>
     <tr>
-    <td colspan="4"><img src="assets/screenshots/main2.png"></td>
+    <td colspan="4"><img src="assets/screenshots/notification_menu.png"></td>
   </tr>
   <tr>
     <td colspan="1"><img src="assets/screenshots/quick_settings.png"></td>
-    <td colspan="1"><img src="assets/screenshots/noti.png"></td>
+    <td colspan="1"><img src="assets/screenshots/notifications.png"></td>
     <td colspan="1" align="center"><img src="assets/screenshots/logout.png"></td>
     <td colspan="1" align="center"><img src="assets/screenshots/weather.png"></td>
   </tr>
