@@ -12,7 +12,7 @@ from .colors import Colors
 from .constants import ICON_CACHE_FILE
 from .icons import symbolic_icons
 
-gi.require_versions({"Gtk": "3.0"})
+gi.require_versions({"Gtk": "3.0", "GdkPixbuf": "2.0"})
 
 
 class IconResolver:

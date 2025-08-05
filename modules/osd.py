@@ -1,5 +1,6 @@
 from typing import ClassVar, Literal
 
+import gi
 from fabric.utils import bulk_connect, cooldown
 from fabric.widgets.box import Box
 from fabric.widgets.image import Image
@@ -18,6 +19,8 @@ from utils.widget_utils import (
     get_audio_icon_name,
     get_brightness_icon_name,
 )
+
+gi.require_versions({"GObject": "2.0"})
 
 
 class GenericOSDContainer(Box, BaseWidget):

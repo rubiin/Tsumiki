@@ -9,7 +9,7 @@ from gi.repository import Gdk, GdkPixbuf, Gtk
 
 from .widget_container import BaseWidget
 
-gi.require_versions({"Gtk": "3.0"})
+gi.require_versions({"Gtk": "3.0", "Gdk": "3.0", "GdkPixbuf": "2.0"})
 
 
 class CircleImage(Gtk.DrawingArea, BaseWidget):

@@ -32,7 +32,7 @@ from .exceptions import ExecutableNotFoundError
 from .icons import text_icons
 from .thread import run_in_thread, thread
 
-gi.require_versions({"Gtk": "3.0"})
+gi.require_versions({"Gtk": "3.0", "Gdk": "3.0", "GdkPixbuf": "2.0"})
 
 
 # Function to execute a shell command synchronously with formatted string

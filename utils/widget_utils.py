@@ -21,7 +21,7 @@ from .icons import symbolic_icons, text_icons
 storage_config = widget_config["widgets"]["storage"]
 
 
-gi.require_versions({"Gtk": "3.0"})
+gi.require_versions({"Gtk": "3.0", "Gdk": "3.0", "GdkPixbuf": "2.0"})
 
 
 # Function to get the system stats using psutil

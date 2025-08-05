@@ -6,6 +6,7 @@ import urllib.request
 from functools import partial
 from typing import List
 
+import gi
 from fabric.utils import (
     bulk_connect,
     cooldown,
@@ -42,6 +43,8 @@ from utils.widget_utils import (
     nerd_font_icon,
     setup_cursor_hover,
 )
+
+gi.require_versions({"GObject": "2.0"})
 
 
 class PlayerBoxStack(Box):

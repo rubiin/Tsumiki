@@ -21,7 +21,7 @@ from shared.widget_container import ButtonWidget
 from utils.functions import write_json_file
 from utils.widget_utils import create_surface_from_widget, nerd_font_icon
 
-gi.require_versions({"Gtk": "3.0"})
+gi.require_versions({"Gtk": "3.0", "GObject": "2.0", "Gdk": "3.0"})
 
 
 class InlineEditor(Box):

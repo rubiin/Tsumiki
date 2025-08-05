@@ -10,14 +10,14 @@ from fabric.widgets.grid import Grid
 from fabric.widgets.image import Image
 from fabric.widgets.label import Label
 from fabric.widgets.overlay import Overlay
-from gi.repository import Gdk, Gtk
+from gi.repository import Gdk, GdkPixbuf, Gtk
 from loguru import logger
 
 from shared.popup import PopupWindow
 from utils.icon_resolver import IconResolver
 from utils.widget_utils import create_surface_from_widget
 
-gi.require_versions({"Gtk": "3.0"})
+gi.require_versions({"Gtk": "3.0", "Gdk": "3.0", "GdkPixbuf": "2.0"})
 
 
 SCALE = 0.1
@@ -79,7 +79,7 @@ class HyprlandWindowButton(Button):
             icon_pixbuf = icon_pixbuf.scale_simple(
                 icon_size_main,
                 icon_size_main,
-                gi.repository.GdkPixbuf.InterpType.BILINEAR,
+                GdkPixbuf.InterpType.BILINEAR,
             )
 
         super().__init__(
@@ -155,7 +155,7 @@ class HyprlandWindowButton(Button):
             icon_pixbuf = icon_pixbuf.scale_simple(
                 icon_size_overlay,
                 icon_size_overlay,
-                gi.repository.GdkPixbuf.InterpType.BILINEAR,
+                GdkPixbuf.InterpType.BILINEAR,
             )
 
         self.set_image(

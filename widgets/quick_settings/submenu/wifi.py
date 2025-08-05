@@ -21,7 +21,7 @@ except ValueError:
     raise NetworkManagerNotFoundError()
 
 
-gi.require_versions({"Gtk": "3.0"})
+gi.require_versions({"Gtk": "3.0", "GObject": "2.0"})
 
 
 icon_to_text_icons = {

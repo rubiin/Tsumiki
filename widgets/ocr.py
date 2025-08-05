@@ -10,7 +10,7 @@ from shared.widget_container import ButtonWidget
 from utils.functions import ttl_lru_cache
 from utils.widget_utils import nerd_font_icon
 
-gi.require_versions({"Gtk": "3.0"})
+gi.require_versions({"Gtk": "3.0", "Gdk": "3.0"})
 
 
 class OCRWidget(ButtonWidget):

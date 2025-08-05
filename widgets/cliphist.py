@@ -4,6 +4,7 @@ import subprocess
 import tempfile
 from urllib.parse import unquote, urlparse
 
+import gi
 from fabric.utils import remove_handler
 from fabric.widgets.box import Box
 from fabric.widgets.button import Button
@@ -18,6 +19,8 @@ from shared.list import ListBox
 from shared.popover import Popover
 from shared.widget_container import ButtonWidget
 from utils.widget_utils import nerd_font_icon
+
+gi.require_versions({"Gdk": "3.0", "GdkPixbuf": "2.0"})
 
 
 # TODO: add scrolled pagination

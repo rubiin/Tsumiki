@@ -13,7 +13,7 @@ from shared.buttons import HoverButton
 from shared.widget_container import ButtonWidget
 from utils.colors import Colors
 
-gi.require_versions({"Gtk": "3.0"})
+gi.require_versions({"Gtk": "3.0", "GdkPixbuf": "2.0"})
 
 
 class PagerClient(TypedDict):
