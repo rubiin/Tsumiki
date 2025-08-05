@@ -311,7 +311,7 @@ DEFAULT_CONFIG = {
             "title_map": [],
         },
         "workspaces": {
-            "count": 8,
+            "count": 10,
             "hide_unoccupied": True,
             "ignored": [-99],
             "reverse_scroll": False,
@@ -380,7 +380,7 @@ DEFAULT_CONFIG = {
             "enabled": False,
             "pinned_apps": [],
             "ignored_apps": [],
-            "icon_size": 30,
+            "icon_size": 40,
             "anchor": "bottom-center",
             "tooltip": False,
             "layer": "top",

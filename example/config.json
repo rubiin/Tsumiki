@@ -196,7 +196,7 @@
 			"title_map": []
 		},
 		"workspaces": {
-			"count": 8, // this is the number of workspaces to show
+			"count": 10, // this is the number of workspaces to show
 			"hide_unoccupied": true,
 			"default_label_format": "{id}",
 			"ignored": [
@@ -370,7 +370,6 @@
 		"middle_section": [
 			"date_time",
 			"weather",
-			"overview"
 		], // this is the middle section of the panel
 		"right_section": [
 			"@collapsible:0",
@@ -455,7 +454,8 @@
 		},
 		"dock": {
 			"enabled": true,
-			"icon_size": 30,
+			"tooltip": false,
+			"icon_size": 40,
 			"anchor": "bottom-center",
 			"ignored_apps": [],
 			"layer": "top",
