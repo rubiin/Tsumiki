@@ -59,28 +59,29 @@ class AppBar(Box):
 
         self.add(Separator())
 
-        self.popup_revealer = Revealer(
-            child=Box(
-                children=self._preview_image,
-                style_classes=["window-basic", "sleek-border"],
-            ),
-            transition_type="crossfade",
-            transition_duration=400,
-        )
+        if self.config.get("preview_apps", True):
+            self.popup_revealer = Revealer(
+                child=Box(
+                    children=self._preview_image,
+                    style_classes=["window-basic", "sleek-border"],
+                ),
+                transition_type="crossfade",
+                transition_duration=400,
+            )
 
-        self.popup = PopupWindow(
-            parent,
-            child=self.popup_revealer,
-            margin="0px 0px 80px 0px",
-            visible=False,
-        )
+            self.popup = PopupWindow(
+                parent,
+                child=self.popup_revealer,
+                margin="0px 0px 80px 0px",
+                visible=False,
+            )
 
-        self.popup_revealer.connect(
-            "notify::child-revealed",
-            lambda *_: self.popup.set_visible(False)
-            if not self.popup_revealer.child_revealed
-            else None,
-        )
+            self.popup_revealer.connect(
+                "notify::child-revealed",
+                lambda *_: self.popup.set_visible(False)
+                if not self.popup_revealer.child_revealed
+                else None,
+            )
 
     def update_preview_image(self, client, client_button: Button):
         self.popup.set_pointing_to(client_button)
@@ -124,17 +125,15 @@ class AppBar(Box):
             on_button_press_event=lambda _, event: client.activate()
             if event.button == 1
             else None,
-            on_enter_notify_event=lambda *_: self.update_preview_image(
-                client, client_button
-            ),
-            on_leave_notify_event=lambda *_: self.popup_revealer.unreveal(),
+            on_enter_notify_event=lambda *_: self.config.get("preview_apps", True)
+            and self.update_preview_image(client, client_button),
+            on_leave_notify_event=lambda *_: self.config.get("preview_apps", True)
+            and self.popup_revealer.unreveal(),
         )
         self.client_buttons[client.get_id()] = client_button
 
         def on_app_id(*_):
-            if client.get_app_id() in self.config.get(
-                "ignored_apps", []
-            ):  # TODO: this still needs work
+            if client.get_app_id() in self.config.get("ignored_apps", []):
                 client_button.destroy()
                 client_image.destroy()
                 return

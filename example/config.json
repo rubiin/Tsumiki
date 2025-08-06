@@ -370,6 +370,7 @@
 		"middle_section": [
 			"date_time",
 			"weather",
+			"taskbar"
 		], // this is the middle section of the panel
 		"right_section": [
 			"@collapsible:0",
@@ -421,7 +422,7 @@
 			"enabled": true,
 			"tooltip": true,
 			"icon_size": 30,
-			"ignored_apps": []
+			"ignored": []
 		},
 		"notification": {
 			"enabled": true,
@@ -457,14 +458,14 @@
 			"tooltip": false,
 			"icon_size": 40,
 			"anchor": "bottom-center",
-			"ignored_apps": [],
+			"ignored": [],
 			"layer": "top",
-			"pinned_apps": [
-				"zen",
-				"wezterm",
-				"persepolis",
-				"code"
-			]
+			"preview_apps": true, // this is to enable the preview of apps in the dock
+			"preview_size": [
+				200,
+				130
+			], // this is the size of the preview, width and height in pixels
+			"pinned_apps": []
 		},
 		"desktop_clock": {
 			"enabled": false,

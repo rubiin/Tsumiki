@@ -383,6 +383,7 @@ DEFAULT_CONFIG = {
             "anchor": "bottom-center",
             "tooltip": False,
             "layer": "top",
+            "preview_apps": True,  # this is to enable the preview of apps in the dock
             "preview_size": [
                 200,
                 130,

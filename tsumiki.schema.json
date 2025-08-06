@@ -213,6 +213,11 @@
 							"type": "integer",
 							"description": "Specifies the size of the dock icons."
 						},
+						"preview_apps": {
+							"type": "boolean",
+							"default": true,
+							"description": "Determines whether app previews are enabled in the dock."
+						},
 						"preview_size": {
 							"type": "array",
 							"items": {

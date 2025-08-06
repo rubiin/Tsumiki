@@ -293,7 +293,6 @@
     - **`enabled`**: `bool` (default: false)
     - **`tooltip`**: `bool` (default: true)
     - **`icon_size`**: `int` (default: 16)
-    - **`ignored_apps`**: `list` (default: [])
   - **`notification`**: `object`
     - **`enabled`**: `bool` (default: true)
     - **`anchor`**: `str` (default: "top-right")
@@ -320,6 +319,7 @@
     - **`anchor`**: `str` (default: "bottom-center")
     - **`tooltip`**: `bool` (default: false)
     - **`layer`**: `str` (default: "top")
+    - **`preview_apps`**: `bool` (default: true)
     - **`preview_size`**: `list[int]` (default: [200, 130])
   - **`desktop_clock`**: `object`
     - **`enabled`**: `bool` (default: false)
