@@ -5,10 +5,13 @@ from fabric.hyprland.service import HyprlandEvent
 from fabric.hyprland.widgets import get_hyprland_connection
 from fabric.utils import bulk_connect
 from fabric.widgets.box import Box
+from fabric.widgets.revealer import Revealer
 from fabric.widgets.wayland import WaylandWindow
 from fabric.widgets.widget import Widget
 from gi.repository import Gdk, GLib, GObject, GtkLayerShell
 from loguru import logger
+
+from utils.types import Reveal_Animations
 
 gi.require_versions(
     {"Gtk": "3.0", "Gdk": "3.0", "GtkLayerShell": "0.1", "GObject": "2.0"}
@@ -120,7 +123,7 @@ def popover_closed(widget: Widget): ...
 
 @GObject.type_register
 class Popover(Widget):
-    """Memory-efficient popover implementation."""
+    """Memory-efficient popover implementation with animation support."""
 
     __gsignals__: ClassVar = {
         "popover-opened": (GObject.SignalFlags.RUN_LAST, GObject.TYPE_NONE, ()),
@@ -132,22 +135,32 @@ class Popover(Widget):
         point_to,
         content_factory=None,
         content=None,
+        animation: Reveal_Animations = "slide-down",
+        animation_duration: int = 700,
     ):
         super().__init__()
         """
         Initialize a popover.
 
         Args:
-            content_factory: Function that returns content widget when called
             point_to: Widget to position the popover next to
+            content_factory: Function that returns content widget when called
+            content: Predefined widget for popover content
+            animation: Animation style ('slide-down', 'slide-up', 'fade',
+            'slide-left', 'slide-right')
+            animation_duration: Animation duration in milliseconds
         """
         self._content_factory = content_factory
         self._point_to = point_to
         self._content_window = None
         self._content = content
         self._visible = False
-        # Use weak reference to avoid circular reference issues
         self._manager = PopoverManager.get_instance()
+
+        # Animation settings
+        self._animation = animation
+        self._animation_duration = animation_duration
+        self._revealer = None
 
     def set_content_factory(self, content_factory):
         """Set the content factory for the popover."""
@@ -171,9 +184,12 @@ class Popover(Widget):
                 self._create_popover()
             except Exception as e:
                 logger.exception(f"Could not create popover! Error: {e}")
+                return
         else:
             self._manager.activate_popover(self)
             self._content_window.show()
+            if self._revealer:
+                self._revealer.set_reveal_child(True)
             self._visible = True
 
         self.emit("popover-opened")
@@ -205,7 +221,6 @@ class Popover(Widget):
         if position is None:
             self._content_window.set_margin(self._calculate_margins())
             return False
-
         self._content_window.set_margin(position)
         return False
 
@@ -219,14 +234,18 @@ class Popover(Widget):
         # Get a window from the pool
         self._content_window = self._manager.get_popover_window()
 
-        # This is a hack to fix wrong positioning for widgets that are not rendered
-        # immediately (e.g., Gtk.Calendar())
+        # Wrap content in Gtk.Revealer
+        self._revealer = Revealer(
+            transition_duration=self._animation_duration,
+            transition_type=self._animation,
+            child_revealed=False,
+            child=Box(style_classes="popover-content", children=self._content),
+        )
+
+        # Connect draw event to fix positioning
         self._content.connect("draw", self._on_content_ready)
 
-        # Add content to window
-        self._content_window.add(
-            Box(style_classes="popover-content", children=self._content)
-        )
+        self._content_window.add(self._revealer)
 
         bulk_connect(
             self._content_window,
@@ -237,11 +256,19 @@ class Popover(Widget):
         )
 
         self._manager.activate_popover(self)
+
+        # Step 1: Show window hidden (no animation yet)
         self._content_window.show()
+
+        # Step 2: Set position BEFORE animating
+        self.set_position()
+
+        # Step 3: Reveal after GTK draws (animation starts in correct position)
+        GLib.idle_add(self._revealer.set_reveal_child, True)
+
         self._visible = True
 
     def _on_popover_focus_out(self, widget, event):
-        # This helps with keyboard focus issues
         GLib.timeout_add(100, self.hide_popover)
         return False
 
@@ -249,10 +276,19 @@ class Popover(Widget):
         if not self._visible or not self._content_window:
             return False
 
+        if self._revealer:
+            self._revealer.set_reveal_child(False)
+            # Wait for animation to finish before hiding window
+            GLib.timeout_add(
+                self._revealer.get_transition_duration(), self._finalize_hide
+            )
+        else:
+            self._finalize_hide()
+        return False
+
+    def _finalize_hide(self):
         self._content_window.hide()
         self._manager.overlay.hide()
         self._visible = False
-
         self.emit("popover-closed")
-
         return False
