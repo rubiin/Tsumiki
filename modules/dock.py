@@ -25,8 +25,8 @@ class AppBar(Box):
         self._parent = parent
 
         self.app_util = AppUtils()
-        self._all_apps = self.app_util.all_applications()
-        self.app_identifiers = self._build_app_identifiers_map()
+        self._all_apps = self.app_util.all_applications
+        self.app_identifiers = self.app_util.app_identifiers
 
         self.config = parent.config
 
@@ -102,7 +102,7 @@ class AppBar(Box):
     def _add_pinned_apps(self):
         """Add user-configured pinned apps."""
         for item in self.config.get("pinned_apps", []):
-            app = self.find_app(item)
+            app = self.app_util.find_app(item)
             if app:
                 self.add(
                     Button(
@@ -114,72 +114,6 @@ class AppBar(Box):
                         on_clicked=lambda *_, app=app: app.launch(),
                     )
                 )
-
-    # -------------------------
-    # App Lookup Helpers
-    # -------------------------
-
-    def _build_app_identifiers_map(self):
-        """Create a fast lookup dictionary for app identifiers."""
-        identifiers = {}
-        for app in self._all_apps:
-            for key in [
-                app.name,
-                app.display_name,
-                app.window_class,
-                getattr(app, "executable", None) and app.executable.split("/")[-1],
-                getattr(app, "command_line", None)
-                and app.command_line.split()[0].split("/")[-1],
-            ]:
-                if key:
-                    identifiers[key.lower()] = app
-        return identifiers
-
-    def find_app(self, app_identifier):
-        """Find an app by dict or direct identifier."""
-        if not app_identifier:
-            return None
-        if isinstance(app_identifier, dict):
-            for key in [
-                "window_class",
-                "executable",
-                "command_line",
-                "name",
-                "display_name",
-            ]:
-                if app_identifier.get(key):
-                    app = self.find_app_by_key(app_identifier[key])
-                    if app:
-                        return app
-            return None
-        return self.find_app_by_key(app_identifier)
-
-    def find_app_by_key(self, key_value):
-        """Find app by identifier or partial match."""
-        if not key_value:
-            return None
-        normalized_id = str(key_value).lower()
-        if normalized_id in self.app_identifiers:
-            return self.app_identifiers[normalized_id]
-
-        # Fallback partial matching
-        return next(
-            (
-                app
-                for app in self._all_apps
-                if any(
-                    normalized_id in (getattr(app, attr) or "").lower()
-                    for attr in [
-                        "name",
-                        "display_name",
-                        "window_class",
-                        "executable",
-                        "command_line",
-                    ]
-                )
-            ),
-            None,
-        )
 
     def on_client_added(self, _, client: Glace.Client):
         client_image = Image()
@@ -198,7 +132,7 @@ class AppBar(Box):
         self.client_buttons[client.get_id()] = client_button
 
         def on_app_id(*_):
-            if client.get_app_id() in self.config.get("ignored_apps", []):
+            if client.get_app_id() in self.config.get("ignored_apps", []): # TODO: this still needs work
                 client_button.destroy()
                 client_image.destroy()
                 return

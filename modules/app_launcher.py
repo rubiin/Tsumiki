@@ -47,7 +47,7 @@ class AppLauncher(Window):
         self._arranger_handler: int = 0
 
         self.app_util = AppUtils()
-        self._all_apps = self.app_util.all_applications()
+        self._all_apps = self.app_util.all_applications
 
         self.connect("key-press-event", self._on_key_press)
 
@@ -214,7 +214,7 @@ class AppLauncher(Window):
     def toggle(self):
         if self.is_visible():
             return self.set_visible(False)
-        self._all_apps = self.app_util.all_applications()
+        self._all_apps = self.app_util.all_applications
         (self.search_entry.set_text(""),)
         self.search_entry.grab_focus_without_selecting()
         return self.set_visible(True)
