@@ -38,22 +38,26 @@ class AppBar(Box):
             name="app-bar",
             style_classes=["window-basic", "sleek-border"],
             children=[
-                Button(
-                    image=Image(
-                        icon_name="view-app-grid-symbolic",
-                        icon_size=self.icon_size,
-                    ),
-                    on_button_press_event=lambda *_: print(
-                        self._parent.get_application().actions["toggle-appmenu"][0]()
-                    ),
-                )
+                # Button(
+                #     image=Image(
+                #         icon_name="view-app-grid-symbolic",
+                #         icon_size=self.icon_size,
+                #     ),
+                #     on_button_press_event=lambda *_: print(
+                #         self._parent.get_application().actions["toggle-appmenu"][0]()
+                #     ),
+                # )
             ],
         )
         self.icon_resolver = IconResolver()
         self._manager = Glace.Manager()
-        self._manager.connect("client-added", self.on_client_added)
+        self._manager.connect("client-added", self._on_client_added)
         self._preview_image = Image()
         self._hyp = HyprlandWithMonitors()
+
+        self.pinned_apps = Box()
+
+        self.add(self.pinned_apps)
 
         self._add_pinned_apps()
 
@@ -105,7 +109,7 @@ class AppBar(Box):
         for item in self.config.get("pinned_apps", []):
             app = self.app_util.find_app(item)
             if app:
-                self.add(
+                self.pinned_apps.add(
                     Button(
                         style_classes=["buttons-basic"],
                         image=Image(pixbuf=app.get_icon_pixbuf(self.icon_size)),
@@ -116,21 +120,20 @@ class AppBar(Box):
                     )
                 )
 
-    def on_client_added(self, _, client: Glace.Client):
+    def _pin_app(self, client: Glace.Client):
+        # TODO: add logic to pin app
+        return True
+
+    def _on_client_added(self, _, client: Glace.Client):
         client_image = Image()
 
-        client_button = Button(
-            style_classes=["buttons-basic", "buttons-transition"],
-            image=client_image,
-            on_button_press_event=lambda _, event: client.activate()
-            if event.button == 1
-            else None,
-            on_enter_notify_event=lambda *_: self.config.get("preview_apps", True)
-            and self.update_preview_image(client, client_button),
-            on_leave_notify_event=lambda *_: self.config.get("preview_apps", True)
-            and self.popup_revealer.unreveal(),
-        )
-        self.client_buttons[client.get_id()] = client_button
+        def on_button_press_event(event, client):
+            print(f"Button pressed on client: {client.get_title()}")
+            print(f"Event details: {event}")
+            if event.button == 1:
+                client.activate()
+            else:
+                self.pin_app(client)
 
         def on_app_id(*_):
             if client.get_app_id() in self.config.get("ignored_apps", []):
@@ -143,6 +146,17 @@ class AppBar(Box):
             client_button.set_tooltip_text(
                 client.get_title() if self.config.get("tooltip", True) else None
             )
+
+        client_button = Button(
+            style_classes=["buttons-basic", "buttons-transition"],
+            image=client_image,
+            on_button_press_event=lambda _, event: on_button_press_event(event, client),
+            on_enter_notify_event=lambda *_: self.config.get("preview_apps", True)
+            and self.update_preview_image(client, client_button),
+            on_leave_notify_event=lambda *_: self.config.get("preview_apps", True)
+            and self.popup_revealer.unreveal(),
+        )
+        self.client_buttons[client.get_id()] = client_button
 
         bulk_connect(
             client,
