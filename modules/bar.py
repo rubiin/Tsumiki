@@ -6,6 +6,8 @@ from fabric.widgets.box import Box
 from fabric.widgets.centerbox import CenterBox
 from fabric.widgets.wayland import WaylandWindow as Window
 
+from shared.collapsible_group import CollapsibleGroupWidget
+from shared.custom_button import CustomButtonWidget
 from shared.widget_container import WidgetGroup
 from widgets.battery import BatteryWidget
 from widgets.bluetooth import BlueToothWidget
@@ -13,8 +15,6 @@ from widgets.brightness import BrightnessWidget
 from widgets.cava import CavaWidget
 from widgets.click_counter import ClickCounterWidget
 from widgets.cliphist import ClipHistoryWidget
-from widgets.collapsible_group import CollapsibleGroupWidget
-from widgets.custom_button import CustomButtonWidget
 from widgets.datetime_menu import DateTimeWidget
 from widgets.emoji_picker import EmojiPickerWidget
 from widgets.hypridle import HyprIdleWidget

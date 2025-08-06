@@ -3,8 +3,9 @@
 from fabric.utils import exec_shell_command_async
 from fabric.widgets.label import Label
 
-from shared.widget_container import ButtonWidget
 from utils.widget_utils import nerd_font_icon
+
+from .widget_container import ButtonWidget
 
 
 class CustomButtonWidget(ButtonWidget):

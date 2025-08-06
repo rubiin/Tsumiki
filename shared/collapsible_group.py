@@ -1,9 +1,10 @@
 from fabric.widgets.box import Box
 from fabric.widgets.label import Label
 
-from shared.popover import Popover
-from shared.widget_container import ButtonWidget
 from utils.widget_utils import nerd_font_icon
+
+from .popover import Popover
+from .widget_container import ButtonWidget
 
 
 class CollapsibleGroupWidget(ButtonWidget):
