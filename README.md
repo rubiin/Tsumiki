@@ -82,7 +82,7 @@ The name Tsumiki (pronounced as su-me-ki) comes from the Japanese word "tsumiki"
 > [!NOTE]
 > You need a functioning Hyprland installation.
 
-## **Installation**
+## **Getting Started**
 
 ### Required
 
@@ -305,6 +305,13 @@ layerrule = ignorezero ,gtk-layer-shell
 ### 6. **No Icons?**
 Make sure your icon theme has the required icons. One of the recommended icon theme is  `Tela Circle`
 
+
+### 7. **ImportError: cannot import XX**
+This error usually occurs when the required module/package is not installed or cannot be found. Make sure you have all the necessary dependencies installed. You can run
+```sh
+./init.sh -install
+```
+to install all the required packages and dependencies. Additionally, you can also manually install the package. Follow the instructions in the [Installation](#installation) section.
 
 ## Contributing
 
