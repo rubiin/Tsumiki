@@ -5,7 +5,7 @@ import gi
 from fabric.hyprland.widgets import get_hyprland_connection
 from fabric.utils import exec_shell_command_async
 from fabric.widgets.image import Image
-from gi.repository import GLib, Gtk
+from gi.repository import GLib
 
 from shared.buttons import HoverButton
 from shared.widget_container import ButtonWidget
@@ -34,8 +34,6 @@ class TaskBarWidget(ButtonWidget):
             **kwargs,
         )
         self.connection = get_hyprland_connection()
-
-        self.icon_theme = Gtk.IconTheme.get_default()
 
         self.icon_resolver = IconResolver()
 
