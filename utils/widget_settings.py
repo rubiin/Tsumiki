@@ -193,11 +193,7 @@ Dock = TypedDict(
 # Dock configuration
 AppLauncher = TypedDict(
     "AppLauncher",
-    {
-        "enabled": bool,
-        "icon_size": int,
-        "ignored_apps": List[str],
-    },
+    {"enabled": bool, "tooltip": bool, "icon_size": int},
 )
 
 

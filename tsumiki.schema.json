@@ -393,13 +393,6 @@
 						"icon_size": {
 							"type": "integer",
 							"description": "Size of the app launcher icon"
-						},
-						"ignored_apps": {
-							"type": "array",
-							"items": {
-								"type": "string",
-								"description": "List of apps to ignore"
-							}
 						}
 					}
 				}

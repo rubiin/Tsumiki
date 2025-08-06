@@ -354,7 +354,6 @@ DEFAULT_CONFIG = {
             "enabled": False,
             "tooltip": True,
             "icon_size": 16,
-            "ignored_apps": [],
         },
         "notification": {
             "enabled": True,

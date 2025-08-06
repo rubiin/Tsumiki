@@ -132,7 +132,9 @@ class AppBar(Box):
         self.client_buttons[client.get_id()] = client_button
 
         def on_app_id(*_):
-            if client.get_app_id() in self.config.get("ignored_apps", []): # TODO: this still needs work
+            if client.get_app_id() in self.config.get(
+                "ignored_apps", []
+            ):  # TODO: this still needs work
                 client_button.destroy()
                 client_image.destroy()
                 return
