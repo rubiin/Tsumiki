@@ -182,7 +182,6 @@ Dock = TypedDict(
         "icon_size": int,
         "preview_apps": bool,
         "preview_size": Tuple[int, int],
-        "pinned_apps": List[str],
         "ignored_apps": List[str],
         "layer": Layer,
         "anchor": Anchor,

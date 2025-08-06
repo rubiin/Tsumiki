@@ -29,7 +29,7 @@ from shared.animator import Animator
 from shared.buttons import HoverButton
 from shared.circle_image import CircleImage
 from utils.bezier import cubic_bezier
-from utils.constants import APP_CACHE_DIRECTORY
+from utils.constants import APP_DATA_DIRECTORY
 from utils.functions import (
     ensure_directory,
     get_simple_palette_threaded,
@@ -53,7 +53,7 @@ class PlayerBoxStack(Box):
     def __init__(self, mpris_manager: MprisPlayerManager, config, **kwargs):
         self.config = config
 
-        ensure_directory(f"{APP_CACHE_DIRECTORY}/media")
+        ensure_directory(f"{APP_DATA_DIRECTORY}/media")
 
         # The player stack
         self.player_stack = Stack(

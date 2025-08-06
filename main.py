@@ -9,7 +9,7 @@ import utils.functions as helpers
 from modules.bar import StatusBar
 from utils.colors import Colors
 from utils.config import theme_config, widget_config
-from utils.constants import APP_CACHE_DIRECTORY, APPLICATION_NAME
+from utils.constants import APP_DATA_DIRECTORY, APPLICATION_NAME
 
 
 @helpers.run_in_thread
@@ -44,7 +44,7 @@ if not general_options["debug"]:
 def main():
     """Main function to run the application."""
 
-    helpers.ensure_directory(APP_CACHE_DIRECTORY)
+    helpers.ensure_directory(APP_DATA_DIRECTORY)
     helpers.copy_theme(theme_config["name"])
     helpers.check_executable_exists("sass")
 

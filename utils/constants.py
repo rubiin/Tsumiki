@@ -9,14 +9,15 @@ NOTIFICATION_IMAGE_SIZE = 48
 HIGH_POLL_INTERVAL = 3600  # 1 hour in seconds
 
 APPLICATION_NAME = "tsumiki"
-SYSTEM_CACHE_DIR = GLib.get_user_cache_dir()
-APP_CACHE_DIRECTORY = f"{SYSTEM_CACHE_DIR}/{APPLICATION_NAME}"
+SYSTEM_CACHE_DIR = GLib.get_user_data_dir()
+APP_DATA_DIRECTORY = f"{SYSTEM_CACHE_DIR}/{APPLICATION_NAME}"
 
 
-NOTIFICATION_CACHE_FILE = f"{APP_CACHE_DIRECTORY}/notifications.json"
-WEATHER_CACHE_FILE = f"{APP_CACHE_DIRECTORY}/weather.json"
-QUOTES_CACHE_FILE = f"{APP_CACHE_DIRECTORY}/quotes.json"
-ICON_CACHE_FILE = f"{APP_CACHE_DIRECTORY}/icons.json"
+NOTIFICATION_CACHE_FILE = f"{APP_DATA_DIRECTORY}/notifications.json"
+WEATHER_CACHE_FILE = f"{APP_DATA_DIRECTORY}/weather.json"
+QUOTES_CACHE_FILE = f"{APP_DATA_DIRECTORY}/quotes.json"
+ICON_CACHE_FILE = f"{APP_DATA_DIRECTORY}/icons.json"
+PINNED_APPS_FILE = f"{APP_DATA_DIRECTORY}/pinned_apps.json"
 
 WALLPAPER_DIR = f"{HOME_DIR}/Pictures/Wallpapers"
 WALLPAPER_THUMBS_DIR = f"{WALLPAPER_DIR}/.thumbs"
@@ -377,7 +378,6 @@ DEFAULT_CONFIG = {
         },
         "dock": {
             "enabled": False,
-            "pinned_apps": [],
             "ignored_apps": [],
             "icon_size": 40,
             "anchor": "bottom-center",

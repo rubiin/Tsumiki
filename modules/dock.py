@@ -7,14 +7,16 @@ from fabric.widgets.image import Image
 from fabric.widgets.revealer import Revealer
 from fabric.widgets.separator import Separator
 from fabric.widgets.wayland import WaylandWindow as Window
-from gi.repository import Glace
+from gi.repository import Glace, Gtk
 
 from shared.popoverv1 import PopupWindow
 from utils.app import AppUtils
+from utils.constants import PINNED_APPS_FILE
+from utils.functions import read_json_file, write_json_file
 from utils.icon_resolver import IconResolver
 from utils.monitors import HyprlandWithMonitors
 
-gi.require_version("Glace", "0.1")
+gi.require_versions({"Glace": "0.1", "Gtk": "3.0"})
 
 
 class AppBar(Box):
@@ -29,6 +31,8 @@ class AppBar(Box):
         self.app_identifiers = self.app_util.app_identifiers
 
         self.config = parent.config
+
+        self.menu = Gtk.Menu()
 
         self.icon_size = self.config.get("icon_size", 30)
         self.preview_size = self.config.get("preview_size", [40, 50])
@@ -55,11 +59,16 @@ class AppBar(Box):
         self._preview_image = Image()
         self._hyp = HyprlandWithMonitors()
 
-        self.pinned_apps = Box()
+        self.pinned_apps_container = Box()
 
-        self.add(self.pinned_apps)
+        self.add(self.pinned_apps_container)
 
-        self._add_pinned_apps()
+        self.pinned_apps = read_json_file(PINNED_APPS_FILE)
+
+        if self.pinned_apps is None:
+            self.pinned_apps = []
+
+        self._populate_pinned_apps(self.pinned_apps)
 
         self.add(Separator())
 
@@ -104,12 +113,14 @@ class AppBar(Box):
             user_data=None,
         )
 
-    def _add_pinned_apps(self):
+    def _populate_pinned_apps(self, apps):
+        self.pinned_apps_container.children = []
+
         """Add user-configured pinned apps."""
-        for item in self.config.get("pinned_apps", []):
+        for item in apps:
             app = self.app_util.find_app(item)
             if app:
-                self.pinned_apps.add(
+                self.pinned_apps_container.add(
                     Button(
                         style_classes=["buttons-basic"],
                         image=Image(pixbuf=app.get_icon_pixbuf(self.icon_size)),
@@ -120,20 +131,47 @@ class AppBar(Box):
                     )
                 )
 
+    def check_if_pinned(self, client: Glace.Client) -> bool:
+        """Check if a client is pinned."""
+        return client.get_app_id() in self.pinned_apps
+
+    def show_menu(self):
+        """Show the context menu for a client."""
+
+        self.menu.children = []
+
+        pin_item = Gtk.MenuItem(label="Pin")
+        close = Gtk.MenuItem(label="close")
+        self.menu.append(pin_item)
+        self.menu.append(close)
+        self.menu.show_all()
+
     def _pin_app(self, client: Glace.Client):
-        # TODO: add logic to pin app
+        """Pin an application to the dock."""
+        if self.check_if_pinned(client):
+            return False
+
+        self.pinned_apps.append(client.get_app_id())
+
+        write_json_file(
+            self.pinned_apps,
+            PINNED_APPS_FILE,
+        )
+
+        self._populate_pinned_apps(self.pinned_apps)
+
         return True
 
     def _on_client_added(self, _, client: Glace.Client):
         client_image = Image()
 
         def on_button_press_event(event, client):
-            print(f"Button pressed on client: {client.get_title()}")
-            print(f"Event details: {event}")
             if event.button == 1:
                 client.activate()
             else:
-                self.pin_app(client)
+                # self._pin_app(client)
+                self.show_menu(client)
+                self.menu.popup_at_pointer(event)
 
         def on_app_id(*_):
             if client.get_app_id() in self.config.get("ignored_apps", []):
