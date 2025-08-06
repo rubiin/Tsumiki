@@ -2,7 +2,7 @@ import json
 
 import gi
 from fabric.hyprland.widgets import get_hyprland_connection
-from fabric.utils.helpers import bulk_connect, get_desktop_applications
+from fabric.utils.helpers import bulk_connect
 from fabric.widgets.box import Box
 from fabric.widgets.button import Button
 from fabric.widgets.eventbox import EventBox
@@ -14,6 +14,7 @@ from gi.repository import Gdk, GdkPixbuf, Gtk
 from loguru import logger
 
 from shared.popup import PopupWindow
+from utils.app import AppUtils
 from utils.icon_resolver import IconResolver
 from utils.widget_utils import create_surface_from_widget
 
@@ -231,7 +232,8 @@ class OverviewMenu(Box):
         self.connection = get_hyprland_connection()
 
         # Initialize app registry for better icon resolution
-        self._all_apps = get_desktop_applications()
+        self.app_util = AppUtils()
+        self._all_apps = self.app_util.all_applications()
         self.app_identifiers = self._build_app_identifiers_map()
 
         # Remove the window_class_aliases dictionary completely
@@ -346,7 +348,7 @@ class OverviewMenu(Box):
 
     def update(self, signal_update=False):
         # Refresh app registry when updating to ensure latest data
-        self._all_apps = get_desktop_applications()
+        self._all_apps = self.app_util.all_applications(refresh=True)
         self.app_identifiers = self._build_app_identifiers_map()
 
         # Remove old clients and workspaces.

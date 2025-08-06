@@ -1,5 +1,5 @@
 import gi
-from fabric.utils import bulk_connect, get_desktop_applications
+from fabric.utils import bulk_connect
 from fabric.widgets.box import Box
 from fabric.widgets.button import Button
 from fabric.widgets.eventbox import EventBox
@@ -10,6 +10,7 @@ from fabric.widgets.wayland import WaylandWindow as Window
 from gi.repository import Glace
 
 from shared.popoverv1 import PopupWindow
+from utils.app import AppUtils
 from utils.icon_resolver import IconResolver
 from utils.monitors import HyprlandWithMonitors
 
@@ -23,7 +24,8 @@ class AppBar(Box):
         self.client_buttons = {}
         self._parent = parent
 
-        self._all_apps = get_desktop_applications()
+        self.app_util = AppUtils()
+        self._all_apps = self.app_util.all_applications()
         self.app_identifiers = self._build_app_identifiers_map()
 
         self.config = parent.config

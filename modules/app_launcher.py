@@ -3,7 +3,7 @@ from collections.abc import Iterator
 from enum import Enum
 from typing import Callable, Dict, Tuple
 
-from fabric.utils import DesktopApp, get_desktop_applications, idle_add, remove_handler
+from fabric.utils import DesktopApp, idle_add, remove_handler
 from fabric.widgets.box import Box
 from fabric.widgets.button import Button
 from fabric.widgets.entry import Entry
@@ -15,6 +15,7 @@ from gi.repository import Gdk
 
 from shared.buttons import HoverButton
 from shared.tagentry import TagEntry
+from utils.app import AppUtils
 
 
 class LauncherCommandType(Enum):
@@ -44,7 +45,9 @@ class AppLauncher(Window):
             **kwargs,
         )
         self._arranger_handler: int = 0
-        self._all_apps = get_desktop_applications()
+
+        self.app_util = AppUtils()
+        self._all_apps = self.app_util.all_applications()
 
         self.connect("key-press-event", self._on_key_press)
 
@@ -211,7 +214,7 @@ class AppLauncher(Window):
     def toggle(self):
         if self.is_visible():
             return self.set_visible(False)
-        self._all_apps = get_desktop_applications()
+        self._all_apps = self.app_util.all_applications()
         (self.search_entry.set_text(""),)
         self.search_entry.grab_focus_without_selecting()
         return self.set_visible(True)
