@@ -135,16 +135,40 @@ class AppBar(Box):
         """Check if a client is pinned."""
         return client.get_app_id() in self.pinned_apps
 
-    def show_menu(self):
+    def show_menu(self, client: Glace.Client):
         """Show the context menu for a client."""
 
-        self.menu.children = []
+        for item in self.menu.get_children():
+            self.menu.remove(item)
+            item.destroy()
 
         pin_item = Gtk.MenuItem(label="Pin")
-        close = Gtk.MenuItem(label="close")
-        self.menu.append(pin_item)
-        self.menu.append(close)
+
+        if self.check_if_pinned(client):
+            pin_item.set_label("Unpin")
+            pin_item.connect("activate", lambda *_: self._unpin_app(client))
+
+        else:
+            pin_item.connect("activate", lambda *_: self._pin_app(client))
+
+        self.menu.add(pin_item)
         self.menu.show_all()
+
+    def _unpin_app(self, client: Glace.Client):
+        """Unpin an application from the dock."""
+        if not self.check_if_pinned(client):
+            return False
+
+        self.pinned_apps.remove(client.get_app_id())
+
+        write_json_file(
+            self.pinned_apps,
+            PINNED_APPS_FILE,
+        )
+
+        self._populate_pinned_apps(self.pinned_apps)
+
+        return True
 
     def _pin_app(self, client: Glace.Client):
         """Pin an application to the dock."""
