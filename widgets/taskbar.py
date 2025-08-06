@@ -1,17 +1,15 @@
 import json
-import os
 from typing import TypedDict
 
 import gi
 from fabric.hyprland.widgets import get_hyprland_connection
 from fabric.utils import exec_shell_command_async
 from fabric.widgets.image import Image
-from gi.repository import GdkPixbuf, GLib, Gtk
-from loguru import logger
+from gi.repository import GLib, Gtk
 
 from shared.buttons import HoverButton
 from shared.widget_container import ButtonWidget
-from utils.colors import Colors
+from utils.icon_resolver import IconResolver
 
 gi.require_versions({"Gtk": "3.0", "GdkPixbuf": "2.0"})
 
@@ -38,6 +36,8 @@ class TaskBarWidget(ButtonWidget):
         self.connection = get_hyprland_connection()
 
         self.icon_theme = Gtk.IconTheme.get_default()
+
+        self.icon_resolver = IconResolver()
 
         if self.connection.ready:
             self.render_with_delay()
@@ -108,58 +108,9 @@ class TaskBarWidget(ButtonWidget):
     def bake_window_icon(
         self,
         window_class: str,
-        fallback_icon: str = "image-missing",
     ) -> Image:
-        icon_name = self.get_icon_from_desktop_entry(window_class)
-
-        if icon_name:
-            pixbuf = self.load_icon(icon_name)
-        else:
-            pixbuf = self.load_icon(window_class, fallback_icon)
+        pixbuf = self.icon_resolver.get_icon_pixbuf(
+            window_class, size=self.config.get("icon_size", 22)
+        )
 
         return Image(pixbuf=pixbuf)
-
-    def get_icon_from_desktop_entry(self, window_class: str) -> str:
-        for data_dir in GLib.get_system_data_dirs():
-            applications_dir = os.path.join(data_dir, "applications")
-
-            if os.path.isdir(applications_dir):
-                for desktop_file in os.listdir(applications_dir):
-                    if desktop_file.endswith(".desktop"):
-                        file_path = os.path.join(applications_dir, desktop_file)
-                        try:
-                            with open(file_path) as f:
-                                app_name = None
-                                icon_name = None
-                                for line in f:
-                                    if line.startswith("Name="):
-                                        app_name = line.split("=", 2)[1].strip().lower()
-                                    elif line.startswith("Icon=") and app_name:
-                                        icon_name = line.split("=", 2)[1].strip()
-                                        if window_class in app_name:
-                                            return icon_name
-                        except Exception as e:
-                            logger.exception(
-                                f"{Colors.ERROR}Error reading {file_path}: {e}"
-                            )
-        return None
-
-    def load_icon(
-        self,
-        icon_name: str,
-        fallback_icon: str = "image-missing",
-    ) -> GdkPixbuf.Pixbuf:
-        icon_size = self.config.get("icon_size", 22)
-        try:
-            pixbuf = self.icon_theme.load_icon(
-                icon_name,
-                icon_size,
-                Gtk.IconLookupFlags.FORCE_SIZE,
-            )
-        except Exception:
-            pixbuf = self.icon_theme.load_icon(
-                fallback_icon,
-                icon_size,
-                Gtk.IconLookupFlags.FORCE_SIZE,
-            )
-        return pixbuf
