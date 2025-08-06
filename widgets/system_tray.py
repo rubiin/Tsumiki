@@ -89,7 +89,7 @@ class BaseSystemTray:
                 Gtk.IconLookupFlags.FORCE_SIZE,
             )
 
-    def do_bake_item_button(self, item: Gray.Item) -> HoverButton:
+    def _bake_item_button(self, item: Gray.Item) -> HoverButton:
         button = HoverButton(
             style_classes="flat", tooltip_text=item.get_property("title")
         )
@@ -97,10 +97,10 @@ class BaseSystemTray:
             "button-press-event",
             lambda button, event: self.on_button_click(button, item, event),
         )
-        self.do_update_item_button(item, button)
+        self._update_item_button(item, button)
         return button
 
-    def do_update_item_button(self, item: Gray.Item, button: HoverButton):
+    def _update_item_button(self, item: Gray.Item, button: HoverButton):
         button.set_image(
             Image(pixbuf=self.resolve_icon(item=item, icon_size=self.icon_size))
         )
@@ -138,14 +138,14 @@ class SystemTrayMenu(Box, BaseSystemTray):
         self.max_columns = 3
 
     def add_item(self, item):
-        button = self.do_bake_item_button(item)
+        button = self._bake_item_button(item)
 
         # Connect signals
         bulk_connect(
             item,
             {
                 "removed": lambda *_: self.on_item_removed(button),
-                "icon-changed": lambda icon_item: self.do_update_item_button(
+                "icon-changed": lambda icon_item: self._update_item_button(
                     icon_item, button
                 ),
             },
@@ -284,14 +284,14 @@ class SystemTrayWidget(ButtonWidget, BaseSystemTray):
         if is_hidden:
             self.popup_menu.add_item(item)
         else:
-            button = self.do_bake_item_button(item)
+            button = self._bake_item_button(item)
 
             # Connect signals
             bulk_connect(
                 item,
                 {
                     "removed": lambda *_: self.on_item_button_removed(button),
-                    "icon-changed": lambda icon_item: self.do_update_item_button(
+                    "icon-changed": lambda icon_item: self._update_item_button(
                         icon_item, button
                     ),
                 },

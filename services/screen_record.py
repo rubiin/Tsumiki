@@ -97,7 +97,7 @@ class ScreenRecorderService(Service):
 
         proc: Gio.Subprocess = Gio.Subprocess.new(cmd, Gio.SubprocessFlags.STDOUT_PIPE)
 
-        def do_callback(process: Gio.Subprocess, task: Gio.Task):
+        def _callback(process: Gio.Subprocess, task: Gio.Task):
             try:
                 _, stdout, stderr = process.communicate_utf8_finish(task)
             except Exception:
@@ -114,7 +114,7 @@ class ScreenRecorderService(Service):
                 case "edit":
                     exec_shell_command_async(f"swappy -f {file_path}")
 
-        proc.communicate_utf8_async(None, None, do_callback)
+        proc.communicate_utf8_async(None, None, _callback)
 
     def screenshot(
         self,
@@ -208,7 +208,7 @@ class ScreenRecorderService(Service):
 
         proc: Gio.Subprocess = Gio.Subprocess.new(cmd, Gio.SubprocessFlags.STDOUT_PIPE)
 
-        def do_callback(process: Gio.Subprocess, task: Gio.Task):
+        def _callback(process: Gio.Subprocess, task: Gio.Task):
             try:
                 _, stdout, stderr = process.communicate_utf8_finish(task)
             except Exception:
@@ -226,7 +226,7 @@ class ScreenRecorderService(Service):
                 case "view":
                     exec_shell_command_async(f"xdg-open {file_path}", lambda *_: None)
 
-        proc.communicate_utf8_async(None, None, do_callback)
+        proc.communicate_utf8_async(None, None, _callback)
 
     @Property(bool, "readable", default_value=False)
     def is_recording(self):

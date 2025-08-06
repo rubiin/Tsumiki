@@ -87,7 +87,7 @@ class HyprlandWindowButton(Button):
             image=Image(pixbuf=icon_pixbuf),
             tooltip_text=title,
             size=size,
-            on_clicked=self.on_button_click,
+            on_clicked=self._on_click,
             on_button_press_event=lambda _, event: self.connection.send_command(
                 f"/dispatch closewindow address:{address}"
             )
@@ -171,7 +171,7 @@ class HyprlandWindowButton(Button):
             )
         )
 
-    def on_button_click(self, *_):
+    def _on_click(self, *_):
         self.connection.send_command(f"/dispatch focuswindow address:{self.address}")
 
 
@@ -239,9 +239,9 @@ class OverviewMenu(Box):
         bulk_connect(
             self.connection,
             {
-                "event::openwindow": self.do_update,
-                "event::closewindow": self.do_update,
-                "event::movewindow": self.do_update,
+                "event::openwindow": self._update,
+                "event::closewindow": self._update,
+                "event::movewindow": self._update,
             },
         )
 
@@ -417,7 +417,7 @@ class OverviewMenu(Box):
         # Lay out workspaces into fluid rows.
         self.grid.attach_flow(children=overviews, columns=5)
 
-    def do_update(self, *_):
+    def _update(self, *_):
         logger.info(f"[Overview] Updating for :{_[1].name}")
         self.update(signal_update=True)
 

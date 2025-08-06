@@ -79,7 +79,7 @@ class TaskBarWidget(ButtonWidget):
                 if client["address"] != active_window_address:
                     button.connect(
                         "button-press-event",
-                        self.on_icon_click,
+                        self._on_icon_click,
                         client["address"],
                     )
 
@@ -97,7 +97,7 @@ class TaskBarWidget(ButtonWidget):
         )
         return active_window_info.get("address", "")
 
-    def on_icon_click(self, widget, event, address):
+    def _on_icon_click(self, widget, event, address):
         exec_shell_command_async(
             f"hyprctl dispatch focuswindow address:{address}", lambda *_: None
         )

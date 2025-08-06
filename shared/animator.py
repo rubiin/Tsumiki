@@ -130,10 +130,10 @@ class Animator(Service):
         self._tick_handler = None
         self._timeline_pos = 0.0
 
-    def do_get_time_now(self):
+    def _get_time_now(self):
         return GLib.get_monotonic_time() / 1_000_000
 
-    def do_update_value(self, delta_time: float):
+    def _update_value(self, delta_time: float):
         if not self._playing:
             return
 
@@ -161,12 +161,12 @@ class Animator(Service):
         self._timeline_pos = 0.0
         return
 
-    def do_handle_tick(self, *_):
-        current_time = self.do_get_time_now()
-        self.do_update_value(current_time)
+    def _handle_tick(self, *_):
+        current_time = self._get_time_now()
+        self._update_value(current_time)
         return True
 
-    def do_remove_tick_handlers(self):
+    def _remove_tick_handlers(self):
         if not self._tick_handler:
             return
 
@@ -182,30 +182,28 @@ class Animator(Service):
             return
 
         self.playing = True
-        self._start_time = self.do_get_time_now()
+        self._start_time = self._get_time_now()
 
         if self._tick_handler:
             return
 
         if self._tick_widget:
-            self._tick_handler = self._tick_widget.add_tick_callback(
-                self.do_handle_tick
-            )
+            self._tick_handler = self._tick_widget.add_tick_callback(self._handle_tick)
             return
 
-        self._tick_handler = GLib.timeout_add(self._tick_interval, self.do_handle_tick)
+        self._tick_handler = GLib.timeout_add(self._tick_interval, self._handle_tick)
         return
 
     def pause(self):
         self.playing = False
-        return self.do_remove_tick_handlers()
+        return self._remove_tick_handlers()
 
     def stop(self):
         if not self._tick_handler:
             self._timeline_pos = 0
             self.playing = False
             return
-        return self.do_remove_tick_handlers()
+        return self._remove_tick_handlers()
 
     def play_pause(self):
         if self._playing:

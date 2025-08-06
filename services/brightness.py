@@ -47,7 +47,7 @@ class BrightnessService(Service):
             self.screen_monitor = None
         else:
             self.screen_backlight_path = f"/sys/class/backlight/{self.screen_device}"
-            self.max_screen = self.do_read_max_brightness(self.screen_backlight_path)
+            self.max_screen = self._read_max_brightness(self.screen_backlight_path)
 
             self.screen_monitor = monitor_file(
                 f"{self.screen_backlight_path}/brightness", initial_call=True
@@ -76,9 +76,9 @@ class BrightnessService(Service):
             self.kbd = ""
 
         self.kbd_backlight_path = f"/sys/class/leds/{self.kbd}" if self.kbd else ""
-        self.max_kbd = self.do_read_max_brightness(self.kbd_backlight_path)
+        self.max_kbd = self._read_max_brightness(self.kbd_backlight_path)
 
-    def do_read_max_brightness(self, path: str) -> int:
+    def _read_max_brightness(self, path: str) -> int:
         max_brightness_path = os.path.join(path, "max_brightness")
         if os.path.exists(max_brightness_path):
             with open(max_brightness_path, "r") as f:

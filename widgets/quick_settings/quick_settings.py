@@ -119,7 +119,7 @@ class QuickSettingsButtonBox(Box):
 
     def set_active_submenu(self, btn: QSChevronButton):
         if btn.submenu != self.active_submenu and self.active_submenu is not None:
-            self.active_submenu.do_reveal(False)
+            self.active_submenu._reveal(False)
 
         self.active_submenu = btn.submenu
         self.active_submenu.toggle_reveal() if self.active_submenu else None

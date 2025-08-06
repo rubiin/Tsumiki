@@ -81,7 +81,7 @@ class QuickSubMenu(Box, BaseWidget):
 
         return submenu_box
 
-    def do_reveal(self, visible: bool):
+    def _reveal(self, visible: bool):
         self.set_visible(True)
         self.revealer.set_reveal_child(visible)
 

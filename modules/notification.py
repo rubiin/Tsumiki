@@ -151,7 +151,7 @@ class NotificationWidget(EventBox):
                     "style_classes": ["panel-font-icon", "close-icon"],
                 },
             ),
-            on_clicked=self.on_close_button_clicked,
+            on_clicked=self._on_close_button_clicked,
         )
 
         header_container.pack_end(
@@ -241,7 +241,7 @@ class NotificationWidget(EventBox):
         if self.config.get("auto_dismiss", False):
             self.start_timeout()
 
-    def on_close_button_clicked(self, *_):
+    def _on_close_button_clicked(self, *_):
         self._notification.close("dismissed-by-user")
         self.stop_timeout()
 
@@ -342,7 +342,7 @@ class ActionButton(HoverButton):
         super().__init__(
             label=action.label,
             h_expand=True,
-            on_clicked=self.on_clicked,
+            on_clicked=self._on_click,
             style_classes="notification-action",
             **kwargs,
         )
@@ -356,6 +356,6 @@ class ActionButton(HoverButton):
         else:
             self.add_style_class("middle-action")
 
-    def on_clicked(self, *_):
+    def _on_click(self, *_):
         self.action.invoke()
         self.action.parent.close("dismissed-by-user")

@@ -55,7 +55,7 @@ class MprisWidget(ButtonWidget):
 
         self.popup = None
 
-        self.connect("clicked", self.on_clicked)
+        self.connect("clicked", self._on_click)
 
     def get_current(self):
         bar_label = re.sub(r"\r?\n", " ", self.player.title)
@@ -80,7 +80,7 @@ class MprisWidget(ButtonWidget):
         if self.config.get("tooltip", False):
             self.set_tooltip_text(bar_label)
 
-    def on_clicked(self, *_):
+    def _on_click(self, *_):
         if self.popup is None:
             self.popup = Popover(
                 content=Box(

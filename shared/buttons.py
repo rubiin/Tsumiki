@@ -97,7 +97,7 @@ class QSToggleButton(Box, BaseWidget):
 
         self.action_button = HoverButton(
             style_classes="quicksettings-toggle-action",
-            on_clicked=self.do_action,
+            on_clicked=self._action,
         )
 
         self.action_button.set_size_request(170, 20)
@@ -121,7 +121,7 @@ class QSToggleButton(Box, BaseWidget):
             **kwargs,
         )
 
-    def do_action(self, *_):
+    def _action(self, *_):
         self.emit("action-clicked")
 
     def set_active_style(self, action: bool, *_) -> None:
@@ -158,7 +158,7 @@ class QSChevronButton(QSToggleButton):
             style_classes="toggle-revealer",
             image=self.button_image,
             h_expand=True,
-            on_clicked=self.do_reveal_toggle,
+            on_clicked=self._reveal_toggle,
         )
 
         super().__init__(
@@ -182,5 +182,5 @@ class QSChevronButton(QSToggleButton):
         )
         self.button_image.set_from_icon_name(icon_name, 20)
 
-    def do_reveal_toggle(self, *_):
+    def _reveal_toggle(self, *_):
         self.emit("reveal-clicked")

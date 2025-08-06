@@ -31,7 +31,7 @@ class MicrophoneSlider(SettingSlider):
                 child=Box(
                     children=(self.chevron_icon,),
                 ),
-                on_clicked=self.on_button_click,
+                on_clicked=self._on_click,
             )
             self.children = (*self.children, self.chevron_btn)
 
@@ -81,7 +81,7 @@ class MicrophoneSlider(SettingSlider):
             return text_icons["microphone"]["high"]
         return text_icons["microphone"]["muted" if self.audio_stream.muted else "high"]
 
-    def on_button_click(self, *_):
+    def _on_click(self, *_):
         parent = self.get_parent()
         while parent and not hasattr(parent, "mic_submenu"):
             parent = parent.get_parent()
