@@ -235,6 +235,11 @@
 							"default": true,
 							"description": "Determines whether app previews are enabled in the dock."
 						},
+						"show_when_no_windows": {
+							"type": "boolean",
+							"default": false,
+							"description": "Determines whether the dock is shown when there are no windows."
+						},
 						"preview_size": {
 							"type": "array",
 							"items": {

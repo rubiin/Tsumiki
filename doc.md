@@ -321,6 +321,7 @@
     - **`anchor`**: `str` (default: "bottom-center")
     - **`tooltip`**: `bool` (default: false)
     - **`layer`**: `str` (default: "top")
+    - **`show_when_no_windows`**: `bool` (default: false)
     - **`preview_apps`**: `bool` (default: true)
     - **`preview_size`**: `list[int]` (default: [200, 130])
   - **`desktop_clock`**: `object`

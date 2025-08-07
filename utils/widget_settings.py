@@ -197,6 +197,7 @@ Dock = TypedDict(
         "ignored_apps": List[str],
         "layer": Layer,
         "anchor": Anchor,
+        "show_when_no_windows": bool,
         "tooltip": bool,
     },
 )
