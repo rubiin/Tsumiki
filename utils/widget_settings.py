@@ -1,6 +1,13 @@
 from typing import Dict, List, Literal, Tuple, TypedDict
 
-from .types import Anchor, Layer, Temperature_Unit, Widget_Mode, Wind_Speed_Unit
+from .types import (
+    Anchor,
+    Layer,
+    Reveal_Animations,
+    Temperature_Unit,
+    Widget_Mode,
+    Wind_Speed_Unit,
+)
 
 # Common configuration fields that will be reused
 BaseConfig = TypedDict("BaseConfig", {"label": bool, "tooltip": bool})
@@ -128,6 +135,8 @@ Notification = TypedDict(
         "dnd_on_screencast": bool,
         "max_actions": int,
         "per_app_limits": Dict[str, int],
+        "transition_type": Reveal_Animations,
+        "transition_duration": int,
     },
 )
 
@@ -170,6 +179,9 @@ OSD = TypedDict(
         "percentage": bool,
         "icon_size": int,
         "play_sound": bool,
+        "transition_type": Reveal_Animations,
+        "transition_duration": int,
+        "osds": List[Literal["brightness", "volume", "microphone"]],
     },
 )
 

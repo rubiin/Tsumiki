@@ -289,6 +289,9 @@
     - **`percentage`**: `bool` (default: true)
     - **`icon_size`**: `int` (default: 28)
     - **`play_sound`**: `bool` (default: false)
+    - **`transition_type`**: `str` (default: "slide-up")
+    - **`transition_duration`**: `int` (default: 500)
+    - **`osds`**: `list[str]` (default: ["brightness", "volume"])
   - **`app_launcher`**: `object`
     - **`enabled`**: `bool` (default: false)
     - **`tooltip`**: `bool` (default: true)
@@ -313,7 +316,6 @@
     - **`size`**: `int` (default: 20)
   - **`dock`**: `object`
     - **`enabled`**: `bool` (default: false)
-    - **`pinned_apps`**: `list` (default: [])
     - **`ignored_apps`**: `list` (default: [])
     - **`icon_size`**: `int` (default: 40)
     - **`anchor`**: `str` (default: "bottom-center")

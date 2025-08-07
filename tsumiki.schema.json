@@ -11,6 +11,23 @@
 			"enum": ["label", "graph", "progress"],
 			"description": "Specifies the mode of the widget."
 		},
+		"transition_type": {
+			"type": "string",
+			"enum": [
+				"crossfade",
+				"slide-left",
+				"slide-right",
+				"slide-up",
+				"slide-down",
+				"none"
+			],
+			"description": "Specifies the type of transition effect for notifications."
+		},
+		"transition_duration": {
+			"type": "integer",
+			"minimum": 0,
+			"description": "Specifies the duration of the transition effect in milliseconds."
+		},
 		"anchor": {
 			"type": "string",
 			"enum": [
@@ -285,20 +302,10 @@
 							}
 						},
 						"transition_type": {
-							"type": "string",
-							"description": "Type of transition effect for notifications",
-							"enum": [
-								"crossfade",
-								"slide-left",
-								"slide-right",
-								"slide-up",
-								"slide-down",
-								"none"
-							]
+							"$ref": "#/definitions/transition_type"
 						},
 						"transition_duration": {
-							"type": "integer",
-							"description": "Duration of the transition effect in milliseconds"
+							"$ref": "#/definitions/transition_duration"
 						},
 						"anchor": {
 							"$ref": "#/definitions/anchor"
@@ -358,9 +365,24 @@
 							"$ref": "#/definitions/anchor",
 							"description": "Specifies the anchor position of the OSD"
 						},
+						"transition_duration": {
+							"$ref": "#/definitions/transition_duration"
+						},
+						"transition_type": {
+							"$ref": "#/definitions/transition_type"
+						},
 						"enabled": {
 							"type": "boolean",
 							"description": "Determines whether the OSD is enabled"
+						},
+						"osds": {
+							"type": "array",
+							"minItems": 1,
+							"items": {
+								"type": "string",
+								"enum": ["brightness", "volume", "microphone"]
+							},
+							"description": "List of OSDs to enable"
 						},
 						"orientation": {
 							"type": "string",

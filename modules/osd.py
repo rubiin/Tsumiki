@@ -262,22 +262,32 @@ class OSDContainer(Window):
     def __init__(
         self,
         config,
-        transition_duration=200,
         keyboard_mode: Keyboard_Mode = "none",
         **kwargs,
     ):
+        self.hide_timer_id = None
         self.config = config["modules"]["osd"]
 
-        self.audio_container = AudioOSDContainer(config=self.config)
-        self.brightness_container = BrightnessOSDContainer(config=self.config)
-        self.microphone_container = MicrophoneOSDContainer(config=self.config)
+        osds = self.config.get("osds", ["brightness", "volume"])
+
+        if "volume" in osds:
+            self.audio_container = AudioOSDContainer(config=self.config)
+            self.audio_container.connect("volume-changed", self.show_audio)
+        if "brightness" in osds:
+            self.brightness_container = BrightnessOSDContainer(config=self.config)
+            self.brightness_container.connect(
+                "brightness-changed", self.show_brightness
+            )
+        if "microphone" in osds:
+            self.microphone_container = MicrophoneOSDContainer(config=self.config)
+            self.microphone_container.connect("mic-changed", self.show_microphone)
 
         self.timeout = self.config.get("timeout", 3000)
 
         self.revealer = Revealer(
             name="osd-revealer",
-            transition_type="slide-right",
-            transition_duration=transition_duration,
+            transition_type=self.config.get("transition_type", "slide-up"),
+            transition_duration=self.config.get("transition_duration", 500),
             child_revealed=False,
         )
 
@@ -291,15 +301,6 @@ class OSDContainer(Window):
             **kwargs,
         )
 
-        self.hide_timer_id = None
-        self.suppressed: bool = False
-
-        self.audio_container.connect("volume-changed", self.show_audio)
-
-        self.brightness_container.connect("brightness-changed", self.show_brightness)
-
-        self.microphone_container.connect("mic-changed", self.show_microphone)
-
     def show_audio(self, *_):
         self.show_box(box_to_show="audio")
 
@@ -310,11 +311,6 @@ class OSDContainer(Window):
         self.show_box(box_to_show="microphone")
 
     def show_box(self, box_to_show: Literal["audio", "brightness", "microphone"]):
-        if self.suppressed:
-            return
-
-        child_to_show = None
-
         if box_to_show == "audio":
             child_to_show = self.audio_container
         elif box_to_show == "brightness":
@@ -327,17 +323,28 @@ class OSDContainer(Window):
                 self.revealer.remove(self.revealer.get_child())
             self.revealer.add(child_to_show)
 
-        self.revealer.set_reveal_child(True)
-
+        # First make the window visible
         self.set_visible(True)
 
+        # Reset hide timer
         if self.hide_timer_id is not None:
             GLib.source_remove(self.hide_timer_id)
             self.hide_timer_id = None
 
+        # Delay reveal to ensure animation plays
+        self.revealer.set_reveal_child(False)
+        GLib.idle_add(lambda: self.revealer.set_reveal_child(True))
+
         self.hide_timer_id = GLib.timeout_add(self.timeout, self._hide)
 
     def _hide(self):
+        self.revealer.set_reveal_child(False)  # Trigger hide animation
+
+        # Wait for the animation to finish before hiding the window completely
+        GLib.timeout_add(self.revealer.get_transition_duration(), self._finalize_hide)
+        return False
+
+    def _finalize_hide(self):
         self.set_visible(False)
         self.hide_timer_id = None
         return False

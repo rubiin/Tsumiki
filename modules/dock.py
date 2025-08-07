@@ -59,7 +59,7 @@ class AppBar(Box):
         self._preview_image = Image()
         self._hyp = HyprlandWithMonitors()
 
-        self.pinned_apps_container = Box()
+        self.pinned_apps_container = Box(spacing=7)
 
         self.add(self.pinned_apps_container)
 
