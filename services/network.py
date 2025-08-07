@@ -1,4 +1,5 @@
 import subprocess
+import time
 from typing import Any, List, Literal
 
 import gi
@@ -7,6 +8,7 @@ from fabric.utils import bulk_connect
 from gi.repository import Gio
 from loguru import logger
 
+from utils.constants import NETWORK_RECENCY_THRESHOLD_SECONDS
 from utils.exceptions import NetworkManagerNotFoundError
 
 try:
@@ -255,15 +257,70 @@ class Wifi(Service):
     def access_points(self) -> List[object]:
         points: list[NM.AccessPoint] = self._device.get_access_points()
 
-        def make_ap_dict(ap: NM.AccessPoint):
+        # Filter and deduplicate access points
+        unique_networks = {}
+        current_time = time.time()
+
+        for ap in points:
+            # Skip if no SSID data
+            if not ap.get_ssid():
+                continue
+
+            ssid_data = ap.get_ssid().get_data()
+            if not ssid_data:
+                continue
+
+            ssid = NM.utils_ssid_to_utf8(ssid_data)
+            if not ssid or ssid.strip() == "":
+                continue
+
+            # Skip hidden networks (empty SSID)
+            if ssid == "Unknown":
+                continue
+
+            strength = ap.get_strength()
+            bssid = ap.get_bssid()
+            last_seen = ap.get_last_seen()
+
+            # Add network info for filtering
+            network_info = {
+                "ap": ap,
+                "strength": strength,
+                "bssid": bssid,
+                "ssid": ssid,
+                "last_seen": last_seen,
+                "is_recent": last_seen == 0
+                or (current_time - last_seen) <= NETWORK_RECENCY_THRESHOLD_SECONDS,
+            }
+
+            # For duplicate SSIDs, keep the one with the strongest signal
+            # But prioritize recent networks over old ones
+            if ssid in unique_networks:
+                existing = unique_networks[ssid]
+                # Prefer recent networks, then strength
+                new_is_more_recent = (
+                    network_info["is_recent"] and not existing["is_recent"]
+                )
+                is_stronger_with_same_recency = (
+                    network_info["is_recent"] == existing["is_recent"]
+                    and strength > existing["strength"]
+                )
+                if new_is_more_recent or is_stronger_with_same_recency:
+                    unique_networks[ssid] = network_info
+            else:
+                unique_networks[ssid] = network_info
+
+        def make_ap_dict(network_data):
+            ap = network_data["ap"]
+            ssid = network_data["ssid"]
+            strength = network_data["strength"]
+
             return {
                 "bssid": ap.get_bssid(),
                 "last_seen": ap.get_last_seen(),
-                "ssid": NM.utils_ssid_to_utf8(ap.get_ssid().get_data())
-                if ap.get_ssid()
-                else "Unknown",
+                "ssid": ssid,
                 "active-ap": self._ap,
-                "strength": ap.get_strength(),
+                "strength": strength,
                 "frequency": ap.get_frequency(),
                 "icon-name": {
                     80: "network-wireless-signal-excellent-symbolic",
@@ -272,12 +329,17 @@ class Wifi(Service):
                     20: "network-wireless-signal-weak-symbolic",
                     00: "network-wireless-signal-none-symbolic",
                 }.get(
-                    min(80, 20 * round(ap.get_strength() / 20)),
+                    min(80, 20 * round(strength / 20)),
                     "network-wireless-no-route-symbolic",
                 ),
             }
 
-        return list(map(make_ap_dict, points))
+        # Sort by signal strength (strongest first)
+        sorted_networks = sorted(
+            unique_networks.values(), key=lambda x: x["strength"], reverse=True
+        )
+
+        return list(map(make_ap_dict, sorted_networks))
 
     @Property(str, "readable")
     def ssid(self):

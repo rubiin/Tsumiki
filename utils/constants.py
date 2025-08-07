@@ -8,6 +8,9 @@ NOTIFICATION_WIDTH = 400
 NOTIFICATION_IMAGE_SIZE = 48
 HIGH_POLL_INTERVAL = 3600  # 1 hour in seconds
 
+# Network service constants
+NETWORK_RECENCY_THRESHOLD_SECONDS = 300  # 5 minutes for WiFi network freshness
+
 APPLICATION_NAME = "tsumiki"
 SYSTEM_CACHE_DIR = GLib.get_user_data_dir()
 APP_DATA_DIRECTORY = f"{SYSTEM_CACHE_DIR}/{APPLICATION_NAME}"
