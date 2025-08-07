@@ -1,4 +1,7 @@
+import json
+
 import gi
+from fabric.hyprland.widgets import get_hyprland_connection
 from fabric.utils import bulk_connect
 from fabric.widgets.box import Box
 from fabric.widgets.button import Button
@@ -8,6 +11,7 @@ from fabric.widgets.revealer import Revealer
 from fabric.widgets.separator import Separator
 from fabric.widgets.wayland import WaylandWindow as Window
 from gi.repository import Glace, Gtk
+from loguru import logger
 
 from shared.popoverv1 import PopupWindow
 from utils.app import AppUtils
@@ -239,6 +243,9 @@ class Dock(Window):
 
     def __init__(self, config):
         self.config = config["modules"]["dock"]
+
+        self._hypr = get_hyprland_connection()
+
         super().__init__(
             layer=self.config.get("layer", "top"),
             anchor=self.config.get("anchor", "bottom-center"),
@@ -254,3 +261,26 @@ class Dock(Window):
             on_enter_notify_event=lambda *_: self.revealer.set_reveal_child(True),
             on_leave_notify_event=lambda *_: self.revealer.set_reveal_child(False),
         )
+
+        bulk_connect(
+            self._hypr,
+            {
+                "event::workspace": self.check_for_windows,
+                "event::closewindow": self.check_for_windows,
+                "event::openwindow": self.check_for_windows,
+                "event::movewindow": self.check_for_windows,
+            },
+        )
+
+    def check_for_windows(self):
+        try:
+            response = self._hypr.send_command("j/activeworkspace").reply.decode()
+            data = json.loads(response)
+        except Exception as e:
+            logger.error(f"[Dock] Failed to get active workspace: {e}")
+            return
+
+        if data.get("windows", 0) == 0:
+            self.revealer.set_reveal_child(True)
+        else:
+            self.revealer.set_reveal_child(False)
