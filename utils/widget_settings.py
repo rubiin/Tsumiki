@@ -198,6 +198,7 @@ Dock = TypedDict(
         "layer": Layer,
         "anchor": Anchor,
         "tooltip": bool,
+        "show_when_no_windows": bool,
     },
 )
 

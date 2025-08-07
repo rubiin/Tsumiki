@@ -319,6 +319,7 @@
     - **`ignored_apps`**: `list` (default: [])
     - **`icon_size`**: `int` (default: 40)
     - **`anchor`**: `str` (default: "bottom-center")
+    - **`show_when_no_windows`**: `bool` (default: false)
     - **`tooltip`**: `bool` (default: false)
     - **`layer`**: `str` (default: "top")
     - **`preview_apps`**: `bool` (default: true)

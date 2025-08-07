@@ -244,8 +244,6 @@ class Dock(Window):
     def __init__(self, config):
         self.config = config["modules"]["dock"]
 
-        self._hypr = get_hyprland_connection()
-
         super().__init__(
             layer=self.config.get("layer", "top"),
             anchor=self.config.get("anchor", "bottom-center"),
@@ -262,15 +260,18 @@ class Dock(Window):
             on_leave_notify_event=lambda *_: self.revealer.set_reveal_child(False),
         )
 
-        bulk_connect(
-            self._hypr,
-            {
-                "event::workspace": self.check_for_windows,
-                "event::closewindow": self.check_for_windows,
-                "event::openwindow": self.check_for_windows,
-                "event::movewindow": self.check_for_windows,
-            },
-        )
+        if self.config.get("show_when_no_windows", False):
+            self._hypr = get_hyprland_connection()
+
+            bulk_connect(
+                self._hypr,
+                {
+                    "event::workspace": self.check_for_windows,
+                    "event::closewindow": self.check_for_windows,
+                    "event::openwindow": self.check_for_windows,
+                    "event::movewindow": self.check_for_windows,
+                },
+            )
 
     def check_for_windows(self):
         try:

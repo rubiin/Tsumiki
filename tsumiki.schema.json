@@ -230,6 +230,11 @@
 							"type": "integer",
 							"description": "Specifies the size of the dock icons."
 						},
+						"show_when_no_windows": {
+							"type": "boolean",
+							"default": false,
+							"description": "Determines whether the dock is shown when there are no windows in the workspace."
+						},
 						"preview_apps": {
 							"type": "boolean",
 							"default": true,

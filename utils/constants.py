@@ -387,6 +387,7 @@ DEFAULT_CONFIG = {
             "ignored_apps": [],
             "icon_size": 40,
             "anchor": "bottom-center",
+            "show_when_no_windows": False,
             "tooltip": False,
             "layer": "top",
             "preview_apps": True,  # this is to enable the preview of apps in the dock
