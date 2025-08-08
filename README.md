@@ -378,6 +378,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
       <td align="center" valign="top" width="14.28%"><a href="https://dimflix-official.github.io/"><img src="https://avatars.githubusercontent.com/u/112165977?v=4?s=100" width="100px;" alt="DIMFLIX"/><br /><sub><b>DIMFLIX</b></sub></a><br /><a href="https://github.com/rubiin/Tsumiki/issues?q=author%3ADIMFLIX-OFFICIAL" title="Bug reports">🐛</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/jhakonen"><img src="https://avatars.githubusercontent.com/u/1950698?v=4?s=100" width="100px;" alt="Janne Hakonen"/><br /><sub><b>Janne Hakonen</b></sub></a><br /><a href="https://github.com/rubiin/Tsumiki/issues?q=author%3Ajhakonen" title="Bug reports">🐛</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/fdev31"><img src="https://avatars.githubusercontent.com/u/238622?v=4?s=100" width="100px;" alt="Fabien Devaux"/><br /><sub><b>Fabien Devaux</b></sub></a><br /><a href="https://github.com/rubiin/Tsumiki/issues?q=author%3Afdev31" title="Bug reports">🐛</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/sudo-Tiz"><img src="https://avatars.githubusercontent.com/u/72883092?v=4?s=100" width="100px;" alt="Tiz"/><br /><sub><b>Tiz</b></sub></a><br /><a href="https://github.com/rubiin/Tsumiki/issues?q=author%3Asudo-Tiz" title="Bug reports">🐛</a></td>
     </tr>
   </tbody>
 </table>
