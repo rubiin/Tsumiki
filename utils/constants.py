@@ -59,15 +59,10 @@ DEFAULT_CONFIG = {
             "tooltip": True,
             "icon_size": 14,
             "notifications": {
-                "enabled": True,
-                "discharging": {
-                    "title": "Charger Unplugged!",
-                    "body": "Battery is at _LEVEL_%",
-                },
-                "charging": {
-                    "title": "Charger Plugged In",
-                    "body": "Battery is at _LEVEL_%",
-                },
+                "low_threshold": 10,
+                "full_battery": False,
+                "low_battery": False,
+                "charging": False
             },
         },
         "quick_settings": {

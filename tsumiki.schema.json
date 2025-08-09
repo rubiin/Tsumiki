@@ -682,6 +682,41 @@
 				"hide_when_missing": {
 					"type": "boolean",
 					"description": "Determines whether to hide the widget when no battery is detected."
+				},
+				"full_battery_level": {
+					"type": "integer",
+					"description": "The battery percentage considered as full charge.",
+					"minimum": 80,
+					"maximum": 100,
+					"default": 100
+				},
+				"notifications": {
+					"type": "object",
+					"description": "Battery notification settings.",
+					"properties": {
+						"low_threshold": {
+							"type": "integer",
+							"description": "Battery percentage threshold for low battery notification.",
+							"minimum": 1,
+							"maximum": 50,
+							"default": 10
+						},
+						"full_battery": {
+							"type": "boolean",
+							"description": "Enable notification when battery is fully charged.",
+							"default": false
+						},
+						"low_battery": {
+							"type": "boolean",
+							"description": "Enable notification when battery is low.",
+							"default": false
+						},
+						"charging": {
+							"type": "boolean",
+							"description": "Enable notifications when charger is connected/disconnected.",
+							"default": false
+						}
+					}
 				}
 			}
 		},

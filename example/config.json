@@ -12,7 +12,8 @@
 			"notifications": {
 				"low_threshold": 10,
 				"full_battery": false,
-				"low_battery": false
+				"low_battery": false,
+				"charging": false
 			}
 		},
 		"overview": {
