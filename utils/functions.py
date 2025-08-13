@@ -1,3 +1,4 @@
+import html
 import json
 import os
 import re
@@ -100,8 +101,22 @@ def get_simple_palette_threaded(
 
 
 # Function to escape the markup
-def parse_markup(text):
-    return text.replace("\n", " ")
+def parse_markup(text: str):
+    return html.escape(text.replace("\n", " "))
+
+
+def is_special_workspace_id(ws_id) -> bool:
+    try:
+        # Convert to int if it's a string
+        workspace_id = int(ws_id)
+
+        # Special workspaces have negative IDs
+        return workspace_id < 0
+
+    except (ValueError, TypeError):
+        # If it's a string, check if it starts with "special:"
+
+        return bool(isinstance(ws_id, str) and ws_id.startswith("special:"))
 
 
 def read_json_file(file_path: str) -> Optional[Dict | List]:
