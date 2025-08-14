@@ -144,7 +144,7 @@ def create_surface_from_widget(
 
 
 # Function to get the bar graph representation
-def get_bar_graph(usage: Number | str):
+def get_bar_graph(usage: Number | str) -> str:
     if isinstance(usage, str):
         usage = int(usage)
 

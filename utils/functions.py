@@ -10,7 +10,7 @@ from collections import Counter
 from datetime import datetime
 from functools import lru_cache
 from io import BytesIO
-from typing import Any, Callable, Dict, List, Literal, Optional
+from typing import Callable, Dict, List, Literal, Optional
 
 import gi
 import psutil
@@ -149,7 +149,7 @@ def read_toml_file(file_path: str) -> dict:
 
 
 # support for multiple monitors
-def for_monitors(widget):
+def for_monitors(widget: Gtk.Widget) -> List[Gtk.Widget]:
     n = Gdk.Display.get_default().get_n_monitors() if Gdk.Display.get_default() else 1
     return [widget(i) for i in range(n)]
 
@@ -255,7 +255,7 @@ def celsius_to_fahrenheit(celsius):
 
 
 # Merge the parsed data with the default configuration
-def deep_merge(data, target):
+def deep_merge(data, target) -> Dict:
     """
     Recursively update a nested dictionary with values from another dictionary.
     """
@@ -273,7 +273,7 @@ def deep_merge(data, target):
 
 
 # Function to flatten a dictionary
-def flatten_dict(d, parent_key="", sep="-"):
+def flatten_dict(d, parent_key="", sep="-") -> Dict:
     """Flatten a nested dictionary into a single level."""
     items = []
     for k, v in d.items():
@@ -291,7 +291,7 @@ def exclude_keys(d: Dict, keys_to_exclude: List[str]) -> Dict:
 
 
 # Function to format time in hours and minutes
-def format_seconds_to_hours_minutes(secs: int):
+def format_seconds_to_hours_minutes(secs: int) -> str:
     mm, _ = divmod(secs, 60)
     hh, mm = divmod(mm, 60)
     return "%d h %02d min" % (hh, mm)
@@ -304,7 +304,7 @@ def convert_bytes(bytes: int, to: Literal["kb", "mb", "gb", "tb"], format_spec="
 
 
 # Function to check if the current time is between sunrise and sunset
-def check_if_day(sunrise_time, sunset_time, current_time: str | None = None) -> str:
+def check_if_day(sunrise_time, sunset_time, current_time: str | None = None) -> bool:
     time_format = "%I:%M %p"
 
     if current_time is None:
@@ -341,7 +341,7 @@ def convert_to_12hr_format(time: str) -> str:
 
 
 # Function to unique list
-def unique_list(lst: List[Any]) -> List[Any]:
+def unique_list(lst: List) -> List:
     """Return a list with unique elements."""
     return list(set(lst))
 
@@ -396,7 +396,7 @@ def is_valid_gjs_color(color: str) -> bool:
 
 
 # Function to get the system uptime
-def uptime():
+def uptime() -> str:
     boot_time = psutil.boot_time()
     now = datetime.now()
 
@@ -410,7 +410,7 @@ def uptime():
 
 
 # Function to convert seconds to milliseconds
-def convert_seconds_to_milliseconds(seconds: int):
+def convert_seconds_to_milliseconds(seconds: int) -> int:
     return seconds * 1000
 
 
@@ -455,7 +455,6 @@ def toggle_command(command: str, full_command: str):
 ## Function to execute a shell command asynchronously
 def kill_process(process_name: str):
     exec_shell_command_async(f"pkill {process_name}", lambda *_: None)
-    return True
 
 
 def _get_config_collection(parsed_data: dict, widget_type: str) -> list:
@@ -628,7 +627,6 @@ def make_qrcode(text: str, size: int = 200) -> GdkPixbuf.Pixbuf:
 @cooldown(1)
 def play_sound(file: str):
     exec_shell_command_async(f"pw-play {file}", lambda *_: None)
-    return True
 
 
 # Function to get the distro icon
@@ -693,7 +691,7 @@ def write_json_file(data: Dict, path: str):
 
 # Function to ensure the file exists
 @run_in_thread
-def ensure_file(path: str) -> None:
+def ensure_file(path: str):
     file = Gio.File.new_for_path(path)
     parent = file.get_parent()
 
@@ -709,7 +707,7 @@ def ensure_file(path: str) -> None:
 
 # Function to ensure the directory exists
 @run_in_thread
-def ensure_directory(path: str) -> None:
+def ensure_directory(path: str):
     if not GLib.file_test(path, GLib.FileTest.EXISTS):
         try:
             Gio.File.new_for_path(path).make_directory_with_parents(None)
