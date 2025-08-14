@@ -1,18 +1,18 @@
 {
     "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-    "rangeStrategy": "bump",
     "labels": [
         "dependencies"
     ],
+    "pin": false,
+    "rangeStrategy": "bump",
     "extends": [
-        "config:recommended",
-        "schedule:weekly"
+        "config:recommended"
+    ],
+    "enabledManagers": [
+        "pip_requirements"
     ],
     "packageRules": [
         {
-            "matchDatasources": [
-                "pypi"
-            ],
             "matchManagers": [
                 "pip_requirements"
             ],
@@ -20,8 +20,21 @@
                 "minor",
                 "patch"
             ],
-            "groupName": "Python dependencies",
-            "enabled": true
+            "groupName": "all non-major dependencies",
+            "groupSlug": "all-minor-patch"
+        },
+        {
+            "matchManagers": [
+                "pip_requirements"
+            ],
+            "matchUpdateTypes": [
+                "major"
+            ],
+            "groupName": "all major dependencies",
+            "groupSlug": "all-major-patch"
         }
+    ],
+    "schedule": [
+        "before 2am on Monday"
     ]
 }
