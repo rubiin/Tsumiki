@@ -396,7 +396,9 @@ class WeatherWidget(ButtonWidget, BaseWeatherWidget):
             self.weather_label.set_label("")
             self.weather_icon.set_label("")
             if self.config.get("tooltip", False):
-                self.set_tooltip_text("Error fetching weather data, try again later.")
+                self.set_tooltip_text(
+                    "Error fetching weather data,\nright click to refetch."
+                )
             return
 
         # Get the current weather
@@ -450,6 +452,10 @@ class WeatherWidget(ButtonWidget, BaseWeatherWidget):
             self.popover.open() if self.popover else None
             return
         else:
+            if self.config.get("label", True):
+                self.weather_label.set_label("Fetching..")
+
+            self.weather_icon.set_label("󱣶")
             self.update_ui(forced=True)
 
     def update_ui(self, *args, **kwargs):
