@@ -94,7 +94,9 @@ class AppBar(Box):
 
     def get_client_data(self, class_name):
         try:
-            clients = json.loads(self._hyprland_connection.send_command("j/clients").reply.decode())
+            clients = json.loads(
+                self._hyprland_connection.send_command("j/clients").reply.decode()
+            )
 
             matches = list(filter(lambda app: app.get("class") == class_name, clients))
             return matches[0] if matches else clients
@@ -299,7 +301,9 @@ class Dock(Window):
 
     def check_for_windows(self, *_):
         try:
-            response = self._hyprland_connection.send_command("j/activeworkspace").reply.decode()
+            response = self._hyprland_connection.send_command(
+                "j/activeworkspace"
+            ).reply.decode()
             data = json.loads(response)
         except Exception as e:
             logger.error(f"[Dock] Failed to get active workspace: {e}")

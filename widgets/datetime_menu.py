@@ -1,5 +1,3 @@
-from typing import List
-
 import gi
 from fabric.notifications import Notification
 from fabric.utils import bulk_connect
@@ -152,7 +150,7 @@ class DateNotificationMenu(Box):
         self.pixel_size = 13
 
         if config.get("notification", True):
-            notifications: List[Notification] = notification_service.get_deserialized()
+            notifications: list[Notification] = notification_service.get_deserialized()
 
             self.notifications_listbox = ListBox(
                 name="notification-list",

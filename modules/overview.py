@@ -89,7 +89,8 @@ class HyprlandWindowButton(Button):
             tooltip_text=title,
             size=size,
             on_clicked=self._on_click,
-            on_button_press_event=lambda _, event: self._hyprland_connection.send_command(
+            on_button_press_event=lambda _,
+            event: self._hyprland_connection.send_command(
                 f"/dispatch closewindow address:{address}"
             )
             if event.button == 3
@@ -173,7 +174,9 @@ class HyprlandWindowButton(Button):
         )
 
     def _on_click(self, *_):
-        self._hyprland_connection.send_command(f"/dispatch focuswindow address:{self.address}")
+        self._hyprland_connection.send_command(
+            f"/dispatch focuswindow address:{self.address}"
+        )
 
 
 class WorkspaceEventBox(EventBox):

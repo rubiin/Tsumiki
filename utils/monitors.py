@@ -1,6 +1,5 @@
 import json
 import warnings
-from typing import Dict
 
 from fabric.hyprland import Hyprland
 from gi.repository import Gdk
@@ -26,7 +25,7 @@ class HyprlandWithMonitors(Hyprland):
         self.display: Gdk.Display = Gdk.Display.get_default()
 
     @ttl_lru_cache(100, 5)
-    def get_all_monitors(self) -> Dict | None:
+    def get_all_monitors(self) -> dict | None:
         try:
             monitors = json.loads(self.send_command("j/monitors").reply)
             return {monitor["id"]: monitor["name"] for monitor in monitors}

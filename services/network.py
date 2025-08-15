@@ -1,6 +1,6 @@
 import subprocess
 import time
-from typing import Any, List, Literal
+from typing import Any, Literal
 
 import gi
 from fabric.core.service import Property, Service, Signal
@@ -254,7 +254,7 @@ class Wifi(Service):
         )
 
     @Property(object, "readable")
-    def access_points(self) -> List[object]:
+    def access_points(self) -> list[object]:
         points: list[NM.AccessPoint] = self._device.get_access_points()
 
         # Filter and deduplicate access points
@@ -468,7 +468,7 @@ class NetworkService(Service):
         self.notify("primary-device")
 
     def _get_device(self, device_type) -> Any:
-        devices: List[NM.Device] = self._client.get_devices()  # type: ignore
+        devices: list[NM.Device] = self._client.get_devices()  # type: ignore
         return next(
             (
                 x

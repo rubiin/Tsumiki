@@ -1,6 +1,5 @@
 import os
 import threading
-from typing import List
 
 from fabric import Signal
 from fabric.notifications import Notification, Notifications, NotificationSerializedData
@@ -209,7 +208,7 @@ class CustomNotifications(Notifications):
         # Restore the ID counter so new notifications get unique IDs
         self._count = highest_id
 
-    def get_deserialized(self) -> List[Notification]:
+    def get_deserialized(self) -> list[Notification]:
         """Return the notifications."""
 
         def deserialize_with_id(notification):

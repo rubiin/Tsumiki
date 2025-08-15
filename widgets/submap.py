@@ -41,9 +41,9 @@ class SubMapWidget(ButtonWidget):
 
     def get_submap(self, *_):
         try:
-            submap = str(self._hyprland_connection.send_command("submap").reply.decode()).strip(
-                "\n"
-            )
+            submap = str(
+                self._hyprland_connection.send_command("submap").reply.decode()
+            ).strip("\n")
 
             if submap == "unknown request":
                 submap = "default"

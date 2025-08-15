@@ -10,7 +10,7 @@ from collections import Counter
 from datetime import datetime
 from functools import lru_cache
 from io import BytesIO
-from typing import Callable, Dict, List, Literal, Optional
+from typing import Any, Callable, Literal, Optional
 
 import gi
 import psutil
@@ -51,17 +51,17 @@ def formatted_exec_shell_command_async(
 
 
 # Function to convert RGB to hex format
-def rgb_to_hex(rgb):
+def rgb_to_hex(rgb) -> str:
     return "#{:02x}{:02x}{:02x}".format(*rgb)
 
 
 # Function to convert RGB to CSS rgb format
-def rgb_to_css(rgb):
+def rgb_to_css(rgb) -> str:
     return f"rgb({rgb[0]}, {rgb[1]}, {rgb[2]})"
 
 
 # Function to mix two RGB colors, with a ratio of 0.5 by default.
-def mix_colors(color1, color2, ratio=0.5):
+def mix_colors(color1, color2, ratio=0.5) -> tuple[int, int, int]:
     r = int(color1[0] * (1 - ratio) + color2[0] * ratio)
     g = int(color1[1] * (1 - ratio) + color2[1] * ratio)
     b = int(color1[2] * (1 - ratio) + color2[2] * ratio)
@@ -69,7 +69,7 @@ def mix_colors(color1, color2, ratio=0.5):
 
 
 # Function to tint a color by mixing it with white
-def tint_color(color, tint_factor=1):
+def tint_color(color, tint_factor=1) -> tuple[int, int, int]:
     # tint_factor: 0 means original color, 1 means full white
     white = (255, 255, 255)
     return mix_colors(color, white, tint_factor)
@@ -101,25 +101,11 @@ def get_simple_palette_threaded(
 
 
 # Function to escape the markup
-def parse_markup(text: str):
+def parse_markup(text: str) -> str:
     return html.escape(text.replace("\n", " "))
 
 
-def is_special_workspace_id(ws_id) -> bool:
-    try:
-        # Convert to int if it's a string
-        workspace_id = int(ws_id)
-
-        # Special workspaces have negative IDs
-        return workspace_id < 0
-
-    except (ValueError, TypeError):
-        # If it's a string, check if it starts with "special:"
-
-        return bool(isinstance(ws_id, str) and ws_id.startswith("special:"))
-
-
-def read_json_file(file_path: str) -> Optional[Dict | List]:
+def read_json_file(file_path: str) -> Optional[dict | list]:
     if not os.path.exists(file_path):
         logger.error(f"JSON file {file_path} does not exist.")
         return None
@@ -149,7 +135,7 @@ def read_toml_file(file_path: str) -> dict:
 
 
 # support for multiple monitors
-def for_monitors(widget: Gtk.Widget) -> List[Gtk.Widget]:
+def for_monitors(widget: Gtk.Widget) -> list[Gtk.Widget]:
     n = Gdk.Display.get_default().get_n_monitors() if Gdk.Display.get_default() else 1
     return [widget(i) for i in range(n)]
 
@@ -250,12 +236,12 @@ def recompile_and_apply_css():
 
 
 # Function to convert celsius to fahrenheit
-def celsius_to_fahrenheit(celsius):
+def celsius_to_fahrenheit(celsius: float) -> float:
     return (celsius * 9 / 5) + 32
 
 
 # Merge the parsed data with the default configuration
-def deep_merge(data, target) -> Dict:
+def deep_merge(data: dict, target: dict) -> dict:
     """
     Recursively update a nested dictionary with values from another dictionary.
     """
@@ -273,7 +259,7 @@ def deep_merge(data, target) -> Dict:
 
 
 # Function to flatten a dictionary
-def flatten_dict(d, parent_key="", sep="-") -> Dict:
+def flatten_dict(d: dict, parent_key: str = "", sep: str = "-") -> dict:
     """Flatten a nested dictionary into a single level."""
     items = []
     for k, v in d.items():
@@ -286,7 +272,7 @@ def flatten_dict(d, parent_key="", sep="-") -> Dict:
 
 
 # Function to exclude keys from a dictionary
-def exclude_keys(d: Dict, keys_to_exclude: List[str]) -> Dict:
+def exclude_keys(d: dict, keys_to_exclude: list[str]) -> dict:
     return {k: v for k, v in d.items() if k not in keys_to_exclude}
 
 
@@ -298,13 +284,15 @@ def format_seconds_to_hours_minutes(secs: int) -> str:
 
 
 # Function to convert bytes to kilobytes, megabytes, or gigabytes
-def convert_bytes(bytes: int, to: Literal["kb", "mb", "gb", "tb"], format_spec=".1f"):
+def convert_bytes(
+    bytes: int, to: Literal["kb", "mb", "gb", "tb"], format_spec=".1f"
+) -> str:
     factor = {"kb": 1, "mb": 2, "gb": 3, "tb": 4}.get(to, 1)
     return f"{format(bytes / (1024**factor), format_spec)}{to.upper()}"
 
 
 # Function to check if the current time is between sunrise and sunset
-def check_if_day(sunrise_time, sunset_time, current_time: str | None = None) -> bool:
+def check_if_day(sunrise_time, sunset_time, current_time: str | None = None) -> str:
     time_format = "%I:%M %p"
 
     if current_time is None:
@@ -341,7 +329,7 @@ def convert_to_12hr_format(time: str) -> str:
 
 
 # Function to unique list
-def unique_list(lst: List) -> List:
+def unique_list(lst: list[Any]) -> list[Any]:
     """Return a list with unique elements."""
     return list(set(lst))
 
@@ -631,7 +619,7 @@ def play_sound(file: str):
 
 # Function to get the distro icon
 @ttl_lru_cache(600, 10)
-def get_distro_icon():
+def get_distro_icon() -> str:
     distro_id = GLib.get_os_info("ID")
 
     # Search for the icon in the list
@@ -681,7 +669,7 @@ def send_notification(
 
 # Function to write a JSON file
 @run_in_thread
-def write_json_file(data: Dict, path: str):
+def write_json_file(data: dict, path: str):
     try:
         with open(path, "w") as f:
             json.dump(data, f, indent=4, ensure_ascii=False)

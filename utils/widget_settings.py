@@ -1,4 +1,4 @@
-from typing import Dict, List, Literal, Tuple, TypedDict
+from typing import Literal, TypedDict
 
 from .types import (
     Anchor,
@@ -14,7 +14,7 @@ BaseConfig = TypedDict("BaseConfig", {"label": bool, "tooltip": bool})
 
 # Layout configuration
 Layout = TypedDict(
-    "Layout", {"left": List[str], "middle": List[str], "right": List[str]}
+    "Layout", {"left": list[str], "middle": list[str], "right": list[str]}
 )
 
 
@@ -38,8 +38,8 @@ PowerButton = TypedDict(
         "items_per_row": int,
         "label": bool,
         "show_icon": bool,
-        "buttons": Dict[
-            Dict[
+        "buttons": dict[
+            dict[
                 Literal["shutdown", "reboot", "hibernate", "suspend", "lock", "logout"],
                 str,
             ],
@@ -61,7 +61,7 @@ HyprSunset = TypedDict(
 
 # TaskBar configuration
 TaskBar = TypedDict(
-    "TaskBar", {"icon_size": int, "ignored": List[str], "tooltip": bool}
+    "TaskBar", {"icon_size": int, "ignored": list[str], "tooltip": bool}
 )
 
 # SystemTray configuration
@@ -69,8 +69,8 @@ SystemTray = TypedDict(
     "SystemTray",
     {
         "icon_size": int,
-        "ignored": List[str],
-        "hidden": List[str],
+        "ignored": list[str],
+        "hidden": list[str],
         "hide_when_empty": bool,
     },
 )
@@ -98,7 +98,7 @@ Battery = TypedDict(
         "hide_label_when_full": bool,
         "hide_when_missing": bool,
         "icon_size": int,
-        "notifications": Dict,
+        "notifications": dict,
     },
 )
 
@@ -123,7 +123,7 @@ Notification = TypedDict(
     "Notification",
     {
         "enabled": bool,
-        "ignored": List[str],
+        "ignored": list[str],
         "timeout": int,
         "anchor": Anchor,
         "auto_dismiss": bool,
@@ -134,7 +134,7 @@ Notification = TypedDict(
         "dismiss_on_hover": bool,
         "dnd_on_screencast": bool,
         "max_actions": int,
-        "per_app_limits": Dict[str, int],
+        "per_app_limits": dict[str, int],
         "transition_type": Reveal_Animations,
         "transition_duration": int,
     },
@@ -181,7 +181,7 @@ OSD = TypedDict(
         "play_sound": bool,
         "transition_type": Reveal_Animations,
         "transition_duration": int,
-        "osds": List[Literal["brightness", "volume", "microphone"]],
+        "osds": list[Literal["brightness", "volume", "microphone"]],
     },
 )
 
@@ -193,8 +193,8 @@ Dock = TypedDict(
         "enabled": bool,
         "icon_size": int,
         "preview_apps": bool,
-        "preview_size": Tuple[int, int],
-        "ignored_apps": List[str],
+        "preview_size": tuple[int, int],
+        "ignored_apps": list[str],
         "layer": Layer,
         "anchor": Anchor,
         "show_when_no_windows": bool,
@@ -308,7 +308,7 @@ Storage = TypedDict(
 # Workspaces configuration
 Workspaces = TypedDict(
     "Workspaces",
-    {"count": int, "occupied": bool, "ignored": List[int], "icon_map": dict},
+    {"count": int, "occupied": bool, "ignored": list[int], "icon_map": dict},
 )
 
 # WindowTitle configuration
@@ -319,7 +319,7 @@ WindowTitle = TypedDict(
         "truncation": bool,
         "truncation_size": int,
         "hide_when_zero": bool,
-        "title_map": List[Dict[str, str]],
+        "title_map": list[dict[str, str]],
     },
 )
 
@@ -411,7 +411,7 @@ DateTimeMenu = TypedDict(
 WorldClock = TypedDict(
     "WorldClock",
     {
-        "timezones": List[str],
+        "timezones": list[str],
         "show_icon": bool,
         "use_24hr": bool,
         "icon": str,
@@ -434,7 +434,7 @@ OCR = TypedDict("OCR", {**BaseConfig.__annotations__, "icon": str, "quiet": bool
 Media = TypedDict(
     "Media",
     {
-        "ignore": List[str],
+        "ignore": list[str],
         "truncation_size": int,
         "show_active_only": bool,
         "truncation_size": int,
@@ -457,13 +457,13 @@ UserConfig = TypedDict(
 
 
 ShortcutsConfig = TypedDict(
-    "Shortcuts", {"enabled": bool, "items": List[Dict[str, str]]}
+    "Shortcuts", {"enabled": bool, "items": list[dict[str, str]]}
 )
 
 ControlsConfig = TypedDict(
     "Controls",
     {
-        "sliders": List[Literal["brightness", "volume", "microphone"]],
+        "sliders": list[Literal["brightness", "volume", "microphone"]],
     },
 )
 

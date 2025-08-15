@@ -4,7 +4,6 @@ Simple configuration file watcher for auto-reloading Tsumiki when config files c
 
 import os
 import subprocess
-from typing import List
 
 from fabric.utils import get_relative_path
 from gi.repository import Gio, GLib
@@ -25,7 +24,7 @@ class ConfigWatcher:
         return cls._instance
 
     def __init__(self):
-        self.monitors: List[Gio.FileMonitor] = []
+        self.monitors: list[Gio.FileMonitor] = []
         self.restart_pending = False
 
         # Files to monitor

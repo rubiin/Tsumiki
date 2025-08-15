@@ -101,7 +101,9 @@ class TaskBarWidget(ButtonWidget):
         )
 
     def fetch_clients(self) -> list[PagerClient]:
-        return json.loads(self._hyprland_connection.send_command("j/clients").reply.decode())
+        return json.loads(
+            self._hyprland_connection.send_command("j/clients").reply.decode()
+        )
 
     def bake_window_icon(
         self,

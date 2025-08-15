@@ -1,7 +1,7 @@
 import operator
 from collections.abc import Iterator
 from enum import Enum
-from typing import Callable, Dict, Tuple
+from typing import Callable
 
 from fabric.utils import DesktopApp, idle_add, remove_handler
 from fabric.widgets.box import Box
@@ -125,7 +125,7 @@ class AppLauncher(Window):
             command = query
 
         if len(command) > 0 and self._command_handler:
-            command_data: Tuple[LauncherCommandType, Callable] | None = None
+            command_data: tuple[LauncherCommandType, Callable] | None = None
             if (command_data := self._command_handler(command)) is not None:
                 command_type, command_factory = command_data
                 result = command_factory(prompt)
@@ -205,7 +205,7 @@ class AppLauncher(Window):
             **kwargs,
         )
 
-    def set_commands(self, commands: Dict):
+    def set_commands(self, commands: dict):
         self._commands = commands
 
     def set_command_handler(self, command_handler: Callable):

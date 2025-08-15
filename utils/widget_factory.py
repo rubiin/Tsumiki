@@ -1,6 +1,6 @@
 """Widget factory system for creating widgets in a type-safe and extensible manner."""
 
-from typing import Any, Dict, Optional
+from typing import Any, Optional
 
 from loguru import logger
 
@@ -44,7 +44,7 @@ class IndexedWidgetHelper:
 class WidgetResolver:
     """Universal widget resolver with unified handling for all widget types."""
 
-    def __init__(self, widgets_list: Dict[str, type]):
+    def __init__(self, widgets_list: dict[str, type]):
         """Initialize the widget resolver.
 
         Args:
@@ -54,7 +54,7 @@ class WidgetResolver:
         self.helper = IndexedWidgetHelper()
 
     def resolve_widget(
-        self, widget_spec: str, context: Dict[str, Any]
+        self, widget_spec: str, context: dict[str, Any]
     ) -> Optional[Any]:
         """Unified method to resolve ALL widget types.
 
@@ -84,7 +84,7 @@ class WidgetResolver:
         return parts[0], parts[1] if len(parts) > 1 else ""
 
     def _resolve_by_type(
-        self, widget_type: str, identifier: str, context: Dict[str, Any]
+        self, widget_type: str, identifier: str, context: dict[str, Any]
     ) -> Optional[Any]:
         """Unified resolution by type - all widgets follow the same pattern."""
         resolvers = {
@@ -123,7 +123,7 @@ class WidgetResolver:
     def _create_indexed_widget(
         self,
         identifier: str,
-        context: Dict[str, Any],
+        context: dict[str, Any],
         widget_type: str,
         config_path: list,
         instantiator_func,
@@ -171,7 +171,7 @@ class WidgetResolver:
         return collapsible_group
 
     def batch_resolve(
-        self, widget_specs: list[str], context: Dict[str, Any]
+        self, widget_specs: list[str], context: dict[str, Any]
     ) -> list[Any]:
         """Resolve multiple widgets efficiently.
 
