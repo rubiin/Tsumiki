@@ -12,7 +12,6 @@ from fabric.widgets.stack import Stack
 from gi.repository import Gdk
 from loguru import logger
 
-from shared.popover import Popover
 from shared.widget_container import ButtonWidget
 from utils.widget_utils import nerd_font_icon
 
@@ -358,6 +357,8 @@ class EmojiPickerWidget(ButtonWidget):
     def show_popover(self, *_):
         """Show the popover."""
         if self.popup is None:
+            from shared.popover import Popover
+
             self.popup = Popover(
                 content=EmojiPickerMenu(parent=self),
                 point_to=self,

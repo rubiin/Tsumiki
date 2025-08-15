@@ -12,7 +12,6 @@ from gi.repository import Gtk
 from loguru import logger
 
 from services.weather import WeatherService
-from shared.popover import Popover
 from shared.widget_container import ButtonWidget
 from utils.functions import check_if_day
 from utils.icons import weather_icons
@@ -436,6 +435,8 @@ class WeatherWidget(ButtonWidget, BaseWeatherWidget):
         # Create popover only once
 
         if self.popover is None:
+            from shared.popover import Popover
+
             self.popover = Popover(
                 content=WeatherMenu(config=self.config),
                 point_to=self,

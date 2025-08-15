@@ -15,7 +15,6 @@ from gi.repository import Gdk, GLib, GObject, Gtk
 from loguru import logger
 
 from shared.list import ListBox
-from shared.popover import Popover
 from shared.widget_container import ButtonWidget
 from utils.functions import read_json_file, write_json_file
 from utils.widget_utils import create_surface_from_widget, nerd_font_icon
@@ -427,6 +426,8 @@ class KanbanWidget(ButtonWidget):
     def show_popover(self, *_):
         """Show the popover."""
         if self.popup is None:
+            from shared.popover import Popover
+
             self.popup = Popover(
                 content=Kanban(),
                 point_to=self,

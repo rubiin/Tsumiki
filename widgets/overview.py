@@ -1,6 +1,5 @@
 from fabric.widgets.label import Label
 
-from modules.overview import OverViewOverlay
 from shared.widget_container import ButtonWidget
 from utils.widget_utils import nerd_font_icon
 
@@ -27,6 +26,8 @@ class OverviewWidget(ButtonWidget):
         self.connect("clicked", self._on_click)
 
     def _on_click(self, *_):
+        from modules.overview import OverViewOverlay
+
         if self._overview_popup is None:
             self._overview_popup = OverViewOverlay()
         self._overview_popup.toggle_popup()

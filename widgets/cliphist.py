@@ -16,7 +16,6 @@ from gi.repository import Gdk, GdkPixbuf, GLib
 from loguru import logger
 
 from shared.list import ListBox
-from shared.popover import Popover
 from shared.widget_container import ButtonWidget
 from utils.widget_utils import nerd_font_icon
 
@@ -631,6 +630,8 @@ class ClipHistoryWidget(ButtonWidget):
     def show_popover(self, *_):
         """Show the popover."""
         if self.popup is None:
+            from shared.popover import Popover
+
             self.popup = Popover(
                 content=ClipHistoryMenu(),
                 point_to=self,

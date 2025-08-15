@@ -21,7 +21,6 @@ from shared.buttons import HoverButton, QSChevronButton
 from shared.circle_image import CircleImage
 from shared.dialog import Dialog
 from shared.media import PlayerBoxStack
-from shared.popover import Popover
 from shared.widget_container import ButtonWidget
 from utils.icons import symbolic_icons
 from utils.widget_utils import (
@@ -437,6 +436,8 @@ class QuickSettingsButtonWidget(ButtonWidget):
     def show_popover(self, *_):
         """Show the popover."""
         if self.popup is None:
+            from shared.popover import Popover
+
             self.popup = Popover(
                 content=QuickSettingsMenu(config=self.config),
                 point_to=self,

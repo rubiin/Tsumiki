@@ -12,7 +12,6 @@ from gi.repository import Gdk, GdkPixbuf, GLib, Gray, Gtk
 from loguru import logger
 
 from shared.buttons import HoverButton
-from shared.popover import Popover
 from shared.widget_container import ButtonWidget
 from utils.icons import text_icons
 from utils.widget_utils import nerd_font_icon
@@ -219,6 +218,8 @@ class SystemTrayWidget(ButtonWidget, BaseSystemTray):
     # show or hide the popup menu
     def handle_click(self, *_):
         if self.popup is None:
+            from shared.popover import Popover
+
             self.popup = Popover(
                 content=self.popup_menu,
                 point_to=self,

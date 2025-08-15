@@ -18,7 +18,6 @@ from services import notification_service
 from shared.buttons import HoverButton
 from shared.circle_image import CircleImage
 from shared.list import ListBox
-from shared.popover import Popover
 from shared.widget_container import ButtonWidget
 from utils.colors import Colors
 from utils.icons import text_icons
@@ -459,6 +458,8 @@ class DateTimeWidget(ButtonWidget):
     def show_popover(self, *_):
         """Show the popover."""
         if self.popup is None:
+            from shared.popover import Popover
+
             self.popup = Popover(
                 content=DateNotificationMenu(config=self.config),
                 point_to=self,

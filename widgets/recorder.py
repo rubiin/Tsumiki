@@ -1,7 +1,6 @@
 from fabric.utils import get_relative_path
 
 from services.screen_record import ScreenRecorderService
-from shared.lottie import LottieAnimation, LottieAnimationWidget
 from shared.widget_container import ButtonWidget
 from utils.icons import text_icons
 from utils.widget_utils import nerd_font_icon
@@ -40,6 +39,8 @@ class RecorderWidget(ButtonWidget):
 
     @property
     def recording_ongoing_lottie(self):
+        from shared.lottie import LottieAnimation, LottieAnimationWidget
+
         if self._recording_lottie is None:
             self._recording_lottie = LottieAnimationWidget(
                 LottieAnimation.from_file(
