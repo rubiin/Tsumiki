@@ -313,7 +313,7 @@ def date_diff(
 
 
 # Function to check if the current time is between sunrise and sunset
-def check_if_day(sunrise_time, sunset_time, current_time: str | None = None) -> bool:
+def check_if_day(sunrise_time, sunset_time, current_time: str | None = None) -> str:
     time_format = "%I:%M %p"
 
     if current_time is None:
