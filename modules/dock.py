@@ -61,12 +61,16 @@ class AppBar(Box):
         self._preview_image = Image()
         self._hyprland_connection = get_hyprland_connection()
 
+        self.separator = Separator(visible=False)
+
         self.pinned_apps_container = Box(spacing=7)
         self.add(self.pinned_apps_container)
 
         self.pinned_apps = read_json_file(PINNED_APPS_FILE) or []
 
         self._populate_pinned_apps(self.pinned_apps)
+
+        self.add(self.separator)
 
         if self.config.get("preview_apps", True):
             self.popup_revealer = Revealer(
@@ -126,7 +130,9 @@ class AppBar(Box):
         )
 
     def _populate_pinned_apps(self, apps):
-        self.pinned_apps_container.children = []
+        for app in self.pinned_apps_container.get_children():
+            self.pinned_apps_container.remove(app)
+            app.destroy()
 
         """Add user-configured pinned apps."""
         for item in apps:
@@ -142,7 +148,6 @@ class AppBar(Box):
                         on_clicked=lambda *_, app=app: app.launch(),
                     )
                 )
-        self.add(Separator())
 
     def check_if_pinned(self, client: Glace.Client) -> bool:
         """Check if a client is pinned."""
@@ -261,6 +266,8 @@ class AppBar(Box):
         )
 
         self.add(client_button)
+
+        self.separator.set_visible(True)
 
 
 class Dock(Window):
