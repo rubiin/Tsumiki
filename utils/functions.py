@@ -291,6 +291,27 @@ def convert_bytes(
     return f"{format(bytes / (1024**factor), format_spec)}{to.upper()}"
 
 
+# Function to get time difference
+def date_diff(
+    date1: datetime,
+    date2: datetime,
+    unit: Literal["days", "hours", "minutes", "seconds"] = "seconds",
+) -> int:
+    """Calculate the difference between two dates in specified units."""
+    delta = date2 - date1
+
+    if unit == "days":
+        return delta.days
+    elif unit == "hours":
+        return delta.total_seconds() // 3600
+    elif unit == "minutes":
+        return delta.total_seconds() // 60
+    elif unit == "seconds":
+        return int(delta.total_seconds())
+    else:
+        raise ValueError("Invalid unit. Use 'days', 'hours', or 'minutes'.")
+
+
 # Function to check if the current time is between sunrise and sunset
 def check_if_day(sunrise_time, sunset_time, current_time: str | None = None) -> str:
     time_format = "%I:%M %p"

@@ -13,7 +13,7 @@ from loguru import logger
 
 from services.weather import WeatherService
 from shared.widget_container import ButtonWidget
-from utils.functions import check_if_day
+from utils.functions import check_if_day, date_diff
 from utils.icons import weather_icons
 from utils.widget_utils import (
     nerd_font_icon,
@@ -258,7 +258,7 @@ class WeatherMenu(Box, BaseWeatherWidget):
         forced = kwargs.get("forced", False)
 
         # Check if the update time is more than 4 minute ago
-        if (datetime.now() - self.update_time).total_seconds() < 60 and not forced:
+        if date_diff(datetime.now(), self.update_time) < 60 and not forced:
             return
 
         logger.debug("[Weather] Updating weather widget")
@@ -460,9 +460,10 @@ class WeatherWidget(ButtonWidget, BaseWeatherWidget):
 
     def update_ui(self, *args, **kwargs):
         forced = kwargs.get("forced", False)
+        time_diff = date_diff(datetime.now(), self.update_time)
 
         # Check if the update time is more than 5 minutes ago, update the icon
-        if (datetime.now() - self.update_time).total_seconds() > 300:
+        if time_diff > 300:
             text_icon = (
                 weather_icons[self.current_weather["weatherCode"]]["icon"]
                 if check_if_day(
@@ -474,9 +475,7 @@ class WeatherWidget(ButtonWidget, BaseWeatherWidget):
 
             self.weather_icon.set_label(text_icon)
 
-        if (datetime.now() - self.update_time).total_seconds() < self.config[
-            "interval"
-        ] and not forced:
+        if time_diff < self.config["interval"] and not forced:
             # Check if the update time is more than interval seconds ago
             return
 

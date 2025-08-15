@@ -13,6 +13,7 @@ from loguru import logger
 
 from shared.widget_container import ButtonWidget
 from utils.colors import Colors
+from utils.functions import date_diff
 from utils.widget_utils import (
     nerd_font_icon,
     reusable_fabricator,
@@ -97,9 +98,7 @@ class UpdatesWidget(ButtonWidget):
         Handles the 'changed' signal from the fabricator.
         Checks if the update interval has elapsed and triggers an update if necessary.
         """
-        if (datetime.now() - self.update_time).total_seconds() >= self.config[
-            "interval"
-        ]:
+        if date_diff(datetime.now(), self.update_time) >= self.config["interval"]:
             self.check_update()
             self.update_time = datetime.now()
         return True
