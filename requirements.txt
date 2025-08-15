@@ -3,7 +3,7 @@ fabric @ git+https://github.com/Fabric-Development/fabric.git
 ijson==3.4.0
 loguru==0.7.3
 pillow==11.3.0
-psutil==6.1.1
+psutil==7.0.0
 pycairo==1.28.0
 PyGObject==3.52.3
 PyGObject-stubs==2.13.0
