@@ -8,7 +8,6 @@ from fabric.widgets.button import Button
 from fabric.widgets.eventbox import EventBox
 from fabric.widgets.image import Image
 from fabric.widgets.revealer import Revealer
-from fabric.widgets.separator import Separator
 from fabric.widgets.wayland import WaylandWindow as Window
 from gi.repository import Glace, GLib, Gtk
 from loguru import logger
