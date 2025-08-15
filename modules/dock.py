@@ -64,6 +64,10 @@ class AppBar(Box):
         self.pinned_apps_container = Box(spacing=7)
         self.add(self.pinned_apps_container)
 
+        self.separator = Separator(
+            visible=False,
+        )
+
         self.pinned_apps = read_json_file(PINNED_APPS_FILE) or []
 
         self._populate_pinned_apps(self.pinned_apps)

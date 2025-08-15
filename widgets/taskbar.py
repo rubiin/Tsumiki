@@ -18,88 +18,40 @@ class TaskBarWidget(BoxWidget):
             name="taskbar",
             **kwargs,
         )
-        self._hyprland_connection = get_hyprland_connection()
+        self._manager = Glace.Manager()
 
         self.icon_resolver = IconResolver()
         self._manager = Glace.Manager()
         self._manager.connect("client-added", self._on_client_added)
 
-        if self._hyprland_connection.ready:
-            self.render_with_delay()
-        else:
-            self._hyprland_connection.connect("event::ready", self.render_with_delay)
+    def _on_client_added(self, _, client: Glace.Client):
+        client_image = Image()
 
-        for event in (
-            "activewindow",
-            "openwindow",
-            "closewindow",
-            "changefloatingmode",
-        ):
-            self._hyprland_connection.connect("event::" + event, self.render)
-
-    def render_with_delay(self, *_):
-        GLib.timeout_add(100, self.render)
-
-    def render(self, *_):
-        self.box.children = []
-
-        clients = self.fetch_clients()
-        active_window_address = self.get_active_window_address()
-
-        visible_clients = [
-            client for client in clients if client["mapped"] and not client["hidden"]
-        ]
-
-        if visible_clients:
-            for client in visible_clients:
-                window_class = client["initialClass"].lower()
-                icon = self.bake_window_icon(window_class)
-
-                button = HoverButton(
-                    image=icon,
+        def on_app_id(*_):
+            client_image.set_from_pixbuf(
+                self.icon_resolver.get_icon_pixbuf(
+                    client.get_app_id(), self.config.get("icon_size", 22)
                 )
             )
             client_button.set_tooltip_text(
                 client.get_title() if self.config.get("tooltip", True) else None
             )
 
-                if client["address"] != active_window_address:
-                    button.connect(
-                        "button-press-event",
-                        self._on_icon_click,
-                        client["address"],
-                    )
-
-                self.box.add(button)
-
-            self.set_visible(True)
-            self.show_all()
-        else:
-            self.set_visible(False)
-
-    def get_active_window_address(self) -> str:
-        # Fetch the address of the currently active window
-        active_window_info = json.loads(
-            self._hyprland_connection.send_command("j/activewindow").reply.decode(),
-        )
-        return active_window_info.get("address", "")
-
-    def _on_icon_click(self, widget, event, address):
-        exec_shell_command_async(
-            f"hyprctl dispatch focuswindow address:{address}", lambda *_: None
+        client_button = Button(
+            style_classes=["buttons-basic", "buttons-transition"],
+            image=client_image,
+            on_button_press_event=lambda *_: client.activate(),
         )
 
-    def fetch_clients(self) -> list[PagerClient]:
-        return json.loads(
-            self._hyprland_connection.send_command("j/clients").reply.decode()
-        )
-
-    def bake_window_icon(
-        self,
-        window_class: str,
-    ) -> Image:
-        pixbuf = self.icon_resolver.get_icon_pixbuf(
-            window_class, size=self.config.get("icon_size", 22)
+        bulk_connect(
+            client,
+            {
+                "notify::app-id": on_app_id,
+                "notify::activated": lambda *_: client_button.add_style_class("active")
+                if client.get_activated()
+                else client_button.remove_style_class("active"),
+                "close": lambda *_: self.remove(client_button),
+            },
         )
 
         self.add(client_button)
