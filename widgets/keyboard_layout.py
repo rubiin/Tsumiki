@@ -28,13 +28,13 @@ class KeyboardLayoutWidget(ButtonWidget):
 
         self.box.add(self.kb_label)
 
-        self.connection = get_hyprland_connection()
+        self._hyprland_connection = get_hyprland_connection()
 
         # all aboard...
-        if self.connection.ready:
+        if self._hyprland_connection.ready:
             self.on_ready(None)
         else:
-            self.connection.connect("event::ready", self.on_ready)
+            self._hyprland_connection.connect("event::ready", self.on_ready)
 
     def on_ready(self, _):
         return self.get_keyboard(), logger.info(
@@ -57,7 +57,7 @@ class KeyboardLayoutWidget(ButtonWidget):
     def get_keyboard(self):
         try:
             data = json.loads(
-                str(self.connection.send_command("j/devices").reply.decode())
+                str(self._hyprland_connection.send_command("j/devices").reply.decode())
             )
 
             keyboards = data.get("keyboards", [])

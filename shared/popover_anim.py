@@ -23,10 +23,9 @@ class PopoverManager:
 
     _instance = None
 
-    @classmethod
-    def get_instance(cls):
+    def __new__(cls):
         if cls._instance is None:
-            cls._instance = cls()
+            cls._instance = super().__new__(cls)
         return cls._instance
 
     def __init__(self):
@@ -155,7 +154,7 @@ class Popover(Widget):
         self._content_window = None
         self._content = content
         self._visible = False
-        self._manager = PopoverManager.get_instance()
+        self._manager = PopoverManager()
 
         # Animation settings
         self._animation = animation

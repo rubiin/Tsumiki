@@ -20,10 +20,10 @@ class PopoverManager:
 
     _instance = None
 
-    @classmethod
-    def get_instance(cls):
+
+    def __new__(cls):
         if cls._instance is None:
-            cls._instance = cls()
+            cls._instance = super().__new__(cls)
         return cls._instance
 
     def __init__(self):
@@ -146,8 +146,9 @@ class Popover(Widget):
         self._content_window = None
         self._content = content
         self._visible = False
+
         # Use weak reference to avoid circular reference issues
-        self._manager = PopoverManager.get_instance()
+        self._manager = PopoverManager()
 
     def set_content_factory(self, content_factory):
         """Set the content factory for the popover."""

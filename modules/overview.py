@@ -44,7 +44,7 @@ class HyprlandWindowButton(Button):
         self.title = title
         self.window: Box = window
         self.icon_resolver = IconResolver()
-        self.connection = get_hyprland_connection()
+        self._hyprland_connection = get_hyprland_connection()
 
         # Compute dynamic icon sizes based on the button size.
         # Using the minimum dimension of the button for scaling.
@@ -89,7 +89,7 @@ class HyprlandWindowButton(Button):
             tooltip_text=title,
             size=size,
             on_clicked=self._on_click,
-            on_button_press_event=lambda _, event: self.connection.send_command(
+            on_button_press_event=lambda _, event: self._hyprland_connection.send_command(
                 f"/dispatch closewindow address:{address}"
             )
             if event.button == 3
@@ -119,7 +119,7 @@ class HyprlandWindowButton(Button):
             Gdk.KEY_KP_Enter,
             Gdk.KEY_space,
         ):
-            self.connection.send_command(
+            self._hyprland_connection.send_command(
                 f"/dispatch closewindow address:{self.address}"
             )
             return True
@@ -173,7 +173,7 @@ class HyprlandWindowButton(Button):
         )
 
     def _on_click(self, *_):
-        self.connection.send_command(f"/dispatch focuswindow address:{self.address}")
+        self._hyprland_connection.send_command(f"/dispatch focuswindow address:{self.address}")
 
 
 class WorkspaceEventBox(EventBox):
@@ -186,7 +186,7 @@ class WorkspaceEventBox(EventBox):
         current_width = screen.get_width()
         current_height = screen.get_height()
 
-        self.connection = get_hyprland_connection()
+        self._hyprland_connection = get_hyprland_connection()
 
         super().__init__(
             name="overview-workspace-bg",
@@ -207,7 +207,7 @@ class WorkspaceEventBox(EventBox):
             _x,
             _y,
             data,
-            *_: self.connection.send_command(
+            *_: self._hyprland_connection.send_command(
                 f"/dispatch movetoworkspacesilent {workspace_id},address:{data.get_data().decode()}"  # noqa: E501
             ),
         )
@@ -229,7 +229,7 @@ class OverviewMenu(Box):
         self.workspace_boxes: dict[int, Box] = {}
         self.clients: dict[str, HyprlandWindowButton] = {}
 
-        self.connection = get_hyprland_connection()
+        self._hyprland_connection = get_hyprland_connection()
 
         # Initialize app registry for better icon resolution
         self.app_util = AppUtils()
@@ -239,7 +239,7 @@ class OverviewMenu(Box):
         # Remove the window_class_aliases dictionary completely
 
         bulk_connect(
-            self.connection,
+            self._hyprland_connection,
             {
                 "event::openwindow": self._update,
                 "event::closewindow": self._update,
@@ -278,12 +278,12 @@ class OverviewMenu(Box):
         monitors = {
             monitor["id"]: (monitor["x"], monitor["y"], monitor["transform"])
             for monitor in json.loads(
-                self.connection.send_command("j/monitors").reply.decode()
+                self._hyprland_connection.send_command("j/monitors").reply.decode()
             )
         }
 
         for client in json.loads(
-            str(self.connection.send_command("j/clients").reply.decode())
+            str(self._hyprland_connection.send_command("j/clients").reply.decode())
         ):
             # Exclude special workspaces.
             if client["workspace"]["id"] > 0:

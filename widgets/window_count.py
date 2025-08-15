@@ -15,7 +15,7 @@ class WindowCountWidget(ButtonWidget):
     def __init__(self, **kwargs):
         super().__init__(name="window_count", **kwargs)
 
-        self.connection = get_hyprland_connection()
+        self._hyprland_connection = get_hyprland_connection()
 
         self.count_label = Label(label="0", style_classes="panel-text")
         self.box.add(self.count_label)

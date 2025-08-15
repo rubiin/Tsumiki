@@ -33,14 +33,14 @@ class TaskBarWidget(ButtonWidget):
             visible=False,
             **kwargs,
         )
-        self.connection = get_hyprland_connection()
+        self._hyprland_connection = get_hyprland_connection()
 
         self.icon_resolver = IconResolver()
 
-        if self.connection.ready:
+        if self._hyprland_connection.ready:
             self.render_with_delay()
         else:
-            self.connection.connect("event::ready", self.render_with_delay)
+            self._hyprland_connection.connect("event::ready", self.render_with_delay)
 
         for event in (
             "activewindow",
@@ -48,7 +48,7 @@ class TaskBarWidget(ButtonWidget):
             "closewindow",
             "changefloatingmode",
         ):
-            self.connection.connect("event::" + event, self.render)
+            self._hyprland_connection.connect("event::" + event, self.render)
 
     def render_with_delay(self, *_):
         GLib.timeout_add(100, self.render)
@@ -91,7 +91,7 @@ class TaskBarWidget(ButtonWidget):
     def get_active_window_address(self) -> str:
         # Fetch the address of the currently active window
         active_window_info = json.loads(
-            self.connection.send_command("j/activewindow").reply.decode(),
+            self._hyprland_connection.send_command("j/activewindow").reply.decode(),
         )
         return active_window_info.get("address", "")
 
@@ -101,7 +101,7 @@ class TaskBarWidget(ButtonWidget):
         )
 
     def fetch_clients(self) -> list[PagerClient]:
-        return json.loads(self.connection.send_command("j/clients").reply.decode())
+        return json.loads(self._hyprland_connection.send_command("j/clients").reply.decode())
 
     def bake_window_icon(
         self,

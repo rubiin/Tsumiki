@@ -59,7 +59,7 @@ class AppBar(Box):
         self._manager = Glace.Manager()
         self._manager.connect("client-added", self._on_client_added)
         self._preview_image = Image()
-        self._hyp = get_hyprland_connection()
+        self._hyprland_connection = get_hyprland_connection()
 
         self.pinned_apps_container = Box(spacing=7)
         self.add(self.pinned_apps_container)
@@ -94,7 +94,7 @@ class AppBar(Box):
 
     def get_client_data(self, class_name):
         try:
-            clients = json.loads(self._hyp.send_command("j/clients").reply.decode())
+            clients = json.loads(self._hyprland_connection.send_command("j/clients").reply.decode())
 
             matches = list(filter(lambda app: app.get("class") == class_name, clients))
             return matches[0] if matches else clients
@@ -283,10 +283,10 @@ class Dock(Window):
         )
 
         if self.config.get("show_when_no_windows", False):
-            self._hypr = get_hyprland_connection()
+            self._hyprland_connection = get_hyprland_connection()
 
             bulk_connect(
-                self._hypr,
+                self._hyprland_connection,
                 {
                     "event::workspace": self.check_for_windows,
                     "event::closewindow": self.check_for_windows,
@@ -299,7 +299,7 @@ class Dock(Window):
 
     def check_for_windows(self, *_):
         try:
-            response = self._hypr.send_command("j/activeworkspace").reply.decode()
+            response = self._hyprland_connection.send_command("j/activeworkspace").reply.decode()
             data = json.loads(response)
         except Exception as e:
             logger.error(f"[Dock] Failed to get active workspace: {e}")
