@@ -11,7 +11,6 @@ from utils.bezier import cubic_bezier
 from utils.icons import symbolic_icons, text_icons
 from utils.widget_utils import nerd_font_icon, setup_cursor_hover
 
-from .animator import Animator
 from .circle_image import CircleImage
 from .submenu import QuickSubMenu
 from .widget_container import BaseWidget
@@ -38,15 +37,7 @@ class ScanButton(HoverButton):
             image_file=get_relative_path("../assets/icons/svg/refresh2.svg"),
             size=20,
         )
-
-        self.scan_animator = Animator(
-            timing_function=partial(cubic_bezier, 0, 0, 1, 1),
-            duration=4,
-            min_value=0,
-            max_value=360,
-            tick_widget=self,
-            notify_value=self.set_notify_value,
-        )
+        self.scan_animator = None
 
         self.set_image(self.scan_image)
 
@@ -54,6 +45,17 @@ class ScanButton(HoverButton):
         self.scan_image.set_angle(p.value)
 
     def play_animation(self):
+        from .animator import Animator
+
+        if self.scan_animator is None:
+            self.scan_animator = Animator(
+                timing_function=partial(cubic_bezier, 0, 0, 1, 1),
+                duration=4,
+                min_value=0,
+                max_value=360,
+                tick_widget=self,
+                notify_value=self.set_notify_value,
+            )
         self.scan_animator.play()
 
     def stop_animation(self):

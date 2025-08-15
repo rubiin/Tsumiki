@@ -25,7 +25,6 @@ from gi.repository import GLib, GObject
 from loguru import logger
 
 from services.mpris import MprisPlayer, MprisPlayerManager
-from shared.animator import Animator
 from shared.buttons import HoverButton
 from shared.circle_image import CircleImage
 from utils.bezier import cubic_bezier
@@ -213,15 +212,7 @@ class PlayerBox(Box):
         )
         self.image_stack.children = [*self.image_stack.children, self.image_box]
 
-        self.art_animator = Animator(
-            timing_function=partial(cubic_bezier, 0, 0, 1, 1),
-            duration=8,
-            min_value=0,
-            max_value=360,
-            tick_widget=self,
-            notify_value=self._set_notify_value,
-        )
-
+        self.art_animator = None
         # Track Info
         self.track_title = Label(
             label="No Title",
@@ -450,6 +441,19 @@ class PlayerBox(Box):
 
     def _on_player_next(self, *_):
         self.angle_direction = 1
+
+        from shared.animator import Animator
+
+        if self.art_animator is None:
+            self.art_animator = Animator(
+                timing_function=partial(cubic_bezier, 0, 0, 1, 1),
+                duration=4,
+                min_value=0,
+                max_value=360,
+                tick_widget=self.image_box,
+                notify_value=self._set_notify_value,
+            )
+
         self.art_animator.play()
         self.player.next()
 
