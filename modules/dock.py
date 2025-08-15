@@ -13,7 +13,7 @@ from fabric.widgets.wayland import WaylandWindow as Window
 from gi.repository import Glace, GLib, Gtk
 from loguru import logger
 
-from shared.popoverv1 import PopupWindow
+from shared.popoverv1 import PopOverWindow
 from utils.app import AppUtils
 from utils.constants import PINNED_APPS_FILE
 from utils.functions import read_json_file, write_json_file
@@ -78,7 +78,7 @@ class AppBar(Box):
                 transition_duration=400,
             )
 
-            self.popup = PopupWindow(
+            self.popup = PopOverWindow(
                 parent,
                 child=self.popup_revealer,
                 margin="0px 0px 80px 0px",

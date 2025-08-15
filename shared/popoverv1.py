@@ -6,7 +6,7 @@ from gi.repository import Gtk, GtkLayerShell
 from utils.monitors import HyprlandWithMonitors
 
 
-class PopupWindow(WaylandWindow):
+class PopOverWindow(WaylandWindow):
     """A simple popover window that can point to a widget."""
 
     def __init__(
