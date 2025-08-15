@@ -1,5 +1,27 @@
 # Changelog
 
+## [2.0.3](https://github.com/rubiin/Tsumiki/compare/v2.0.2...v2.0.3) (2025-08-15)
+
+
+### 🐛 Bug Fixes
+
+* enhance config auto-reload functionality and improve logger messages ([e6b37de](https://github.com/rubiin/Tsumiki/commit/e6b37def8b4106a14367c4165bf6252c2cd253d6))
+
+
+### ♻️ Code Refactoring
+
+* add separator to AppBar and streamline TaskBarWidget client handling ([6dc66b4](https://github.com/rubiin/Tsumiki/commit/6dc66b4d59cfc4f5c51917682162ae9da230ae12))
+* add separator to AppBar for improved layout and visibility of pinned apps ([82ee301](https://github.com/rubiin/Tsumiki/commit/82ee30132989c153e28bda483277a41f715d49ad))
+* add type hints to function signatures for improved clarity ([9f39319](https://github.com/rubiin/Tsumiki/commit/9f39319366344247f606c37a975e8a8391382884))
+* implement date_diff function for improved date calculations in widgets ([6e19e60](https://github.com/rubiin/Tsumiki/commit/6e19e606257339f542bd030ffe5583f07c5516c5))
+* improve tooltip message and update fetching status in WeatherWidget ([9249a63](https://github.com/rubiin/Tsumiki/commit/9249a633237455679ddf56edac7a5d33f0bce42c))
+* move Animator import statements inside relevant methods for better encapsulation ([efc66e7](https://github.com/rubiin/Tsumiki/commit/efc66e7607c7692bf8d743ee300b9388e91b1995))
+* move Popover import statements inside show_popover methods for better encapsulation ([aae5e6b](https://github.com/rubiin/Tsumiki/commit/aae5e6b10907df933c9d30917e5e1e82e0f7a455))
+* rename get_hyprland_connection variable for clarity and consistency ([d9108c0](https://github.com/rubiin/Tsumiki/commit/d9108c08f228f148ab89291498d5dd365702b397))
+* rename PopupWindow to PopOverWindow for consistency ([4589e0c](https://github.com/rubiin/Tsumiki/commit/4589e0c1bff86961ae037e13c7743b1b7e58e559))
+* replace List with built-in list for type hints consistency ([21cd7b4](https://github.com/rubiin/Tsumiki/commit/21cd7b4153c1bcd3d6397880a1d3dc36a91ef79f))
+* simplify TaskBarWidget by removing unused code and integrating Glace client management ([3ae514e](https://github.com/rubiin/Tsumiki/commit/3ae514e60e6fbdfa60bf3bf2594b2865c008c651))
+
 ## [2.0.2](https://github.com/rubiin/Tsumiki/compare/v2.0.1...v2.0.2) (2025-08-15)
 
 
