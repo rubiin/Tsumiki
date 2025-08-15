@@ -502,6 +502,7 @@
 		"check_updates": false,
 		"debug": false,
 		"monitor_styles": true,
+		"location": "top",
 		"auto_reload": true
 	}
 }

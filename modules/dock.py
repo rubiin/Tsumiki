@@ -61,8 +61,6 @@ class AppBar(Box):
         self._preview_image = Image()
         self._hyprland_connection = get_hyprland_connection()
 
-        self.separator = Separator(visible=False)
-
         self.pinned_apps_container = Box(spacing=7)
         self.add(self.pinned_apps_container)
 
