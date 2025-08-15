@@ -10,7 +10,6 @@
 
 ### ♻️ Code Refactoring
 
-* add separator to AppBar and streamline TaskBarWidget client handling ([6dc66b4](https://github.com/rubiin/Tsumiki/commit/6dc66b4d59cfc4f5c51917682162ae9da230ae12))
 * add separator to AppBar for improved layout and visibility of pinned apps ([82ee301](https://github.com/rubiin/Tsumiki/commit/82ee30132989c153e28bda483277a41f715d49ad))
 * add type hints to function signatures for improved clarity ([9f39319](https://github.com/rubiin/Tsumiki/commit/9f39319366344247f606c37a975e8a8391382884))
 * implement date_diff function for improved date calculations in widgets ([6e19e60](https://github.com/rubiin/Tsumiki/commit/6e19e606257339f542bd030ffe5583f07c5516c5))
