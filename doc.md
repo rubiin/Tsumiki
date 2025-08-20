@@ -256,6 +256,7 @@
     - **`truncation`**: `bool` (default: true)
     - **`truncation_size`**: `int` (default: 30)
     - **`tooltip`**: `bool` (default: true)
+    - **`mappings`**: `bool` (default: true)
     - **`title_map`**: `list` (default: [])
   - **`workspaces`**: `object`
     - **`count`**: `int` (default: 10)

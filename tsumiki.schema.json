@@ -1025,6 +1025,11 @@
 							"default": 50,
 							"description": "Maximum number of characters before truncation is applied."
 						},
+						"mappings": {
+							"type": "boolean",
+							"default": true,
+							"description": "Whether to enable custom mappings for window titles."
+						},
 						"title_map": {
 							"type": "array",
 							"items": {},

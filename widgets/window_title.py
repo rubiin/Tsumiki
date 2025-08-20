@@ -27,8 +27,13 @@ class WindowTitleWidget(ButtonWidget):
         self.box.children = self.active_window
 
     def get_title(self, win_title: str, win_class: str):
+        mappings_enabled = self.config.get("mappings", True)
         trunc = self.config.get("truncation", True)
         trunc_size = self.config.get("truncation_size", 50)
+
+        if not mappings_enabled:
+            return truncate(win_title, trunc_size)
+
         custom_map = self.config.get("title_map", [])
         icon_enabled = self.config.get("icon", True)
 

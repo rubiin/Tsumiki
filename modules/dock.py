@@ -274,10 +274,7 @@ class Dock(Window):
 
     def __init__(self, config):
         self.config = config["modules"]["dock"]
-        super().__init__(
-            layer=self.config.get("layer", "top"),
-            anchor="bottom-center"
-        )
+        super().__init__(layer=self.config.get("layer", "top"), anchor="bottom-center")
         self.revealer = Revealer(
             child=Box(children=[AppBar(self)], style="padding: 20px 50px 5px 50px;"),
             transition_duration=500,

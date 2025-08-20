@@ -318,7 +318,7 @@ WindowTitle = TypedDict(
         "icon": bool,
         "truncation": bool,
         "truncation_size": int,
-        "hide_when_zero": bool,
+        "mappings": bool,
         "title_map": list[dict[str, str]],
     },
 )

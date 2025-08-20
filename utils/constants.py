@@ -266,7 +266,7 @@ DEFAULT_CONFIG = {
             "label": True,
             "tooltip": True,
             "show_icon": True,
-            "hide_on_default": False
+            "hide_on_default": False,
         },
         "system_tray": {
             "icon_size": 16,
@@ -317,6 +317,7 @@ DEFAULT_CONFIG = {
             "truncation": True,
             "truncation_size": 30,
             "tooltip": True,
+            "mappings": True,
             "title_map": [],
         },
         "workspaces": {
