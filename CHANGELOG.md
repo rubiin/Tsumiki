@@ -1,5 +1,48 @@
 # Changelog
 
+## [2.1.0](https://github.com/rubiin/Tsumiki/compare/v2.0.2...v2.1.0) (2025-08-24)
+
+
+### 🚀 New Features
+
+* add BaseWindow class for custom window extensions ([cdd2c20](https://github.com/rubiin/Tsumiki/commit/cdd2c201fc33f18ebc0294ce606c1f1b71504693))
+* add custom button schema with properties for command, icon, label, and tooltip ([b8cfecd](https://github.com/rubiin/Tsumiki/commit/b8cfecd7c43279d007fe057b5cc286f1aab6a3fd))
+* add exclusive keyboard mode to OverViewOverlay popup ([dc3d05e](https://github.com/rubiin/Tsumiki/commit/dc3d05e4501734e2ce0afe70693408c1ad7fc100))
+* add hide_on_default option to widgets and update submap behavior ([8d33143](https://github.com/rubiin/Tsumiki/commit/8d33143e05c8830d27ab1bcaaf4707fe27e4419c))
+* add mappings option to window title configuration and update related components ([#186](https://github.com/rubiin/Tsumiki/issues/186)) ([74b3e6d](https://github.com/rubiin/Tsumiki/commit/74b3e6dded52390ce85560d33d08372b16d22206))
+* add TeamSpeak to the window title map ([43dcb48](https://github.com/rubiin/Tsumiki/commit/43dcb48894ec917ac843640c78a5526880b12f31))
+
+
+### 🐛 Bug Fixes
+
+* adjust truncation size and disable mappings in window title configuration ([e5f1de4](https://github.com/rubiin/Tsumiki/commit/e5f1de49d1b573f803ec0e590b6a8871b84d3686))
+* ensure truncation behavior respects configuration in WindowTitleWidget ([30533af](https://github.com/rubiin/Tsumiki/commit/30533af94a2424a36fa7bb83cab885078e0f83cc))
+* update method name for finding desktop applications ([a59e96b](https://github.com/rubiin/Tsumiki/commit/a59e96b32ef4d7e6416750c2112f222291153da5))
+* update schedule time to 2pm on Monday in renovate configuration ([b0f559a](https://github.com/rubiin/Tsumiki/commit/b0f559a7a7752642cce2b0b77db107b274170bae))
+* update stubs generation command to use fabric-cli instead of gengir ([95aa767](https://github.com/rubiin/Tsumiki/commit/95aa767ea1ebbb7058244828d5ca7fe65bfedc55))
+
+
+### ⚙️ Chores
+
+* **deps:** update all non-major dependencies ([#187](https://github.com/rubiin/Tsumiki/issues/187)) ([75ce690](https://github.com/rubiin/Tsumiki/commit/75ce690fe35f929c4da746745f66757c90950c6f))
+* **deps:** update dependency rlottie-python to v1.3.8 ([#188](https://github.com/rubiin/Tsumiki/issues/188)) ([51a826e](https://github.com/rubiin/Tsumiki/commit/51a826e48a4f1257d662cac5186045653fd7e57f))
+
+
+### ♻️ Code Refactoring
+
+* add anchor property to Dock initialization for improved positioning ([1213a09](https://github.com/rubiin/Tsumiki/commit/1213a0945d9cdbd331c019eb107387cf1013ce5e))
+* disable annotation for screenshot widget and remove location property from general settings ([b6df5df](https://github.com/rubiin/Tsumiki/commit/b6df5df6321982b0aee68e35aa7cbdc14e275f00))
+* enhance Arch-based distro check and improve Python detection logic ([a046798](https://github.com/rubiin/Tsumiki/commit/a046798c9622000cb1d3b64b0aa8f466f3d791d0))
+* enhance logging messages with emojis for better user feedback ([4572961](https://github.com/rubiin/Tsumiki/commit/457296169014bd8aa853b73be1f7b45de9b5263c))
+* expand Arch-based distro check to include additional distributions ([f5defcd](https://github.com/rubiin/Tsumiki/commit/f5defcd74cdc5138d2067b4457a03a1843ffc480))
+* initialize menu as None and create it on demand in show_menu method ([f532a04](https://github.com/rubiin/Tsumiki/commit/f532a046d0f69fa0f7cc5aba376e463504ad10e1))
+* manage pinned apps with a dedicated separator and cleanup logic ([89430aa](https://github.com/rubiin/Tsumiki/commit/89430aa1ff5275e69b3846b961db3f45a1a1e09f))
+* remove anchor property from dock configuration and schema ([f955c09](https://github.com/rubiin/Tsumiki/commit/f955c094a9c26808d8154dbb703760450ac0250a))
+* remove redundant docstring from BaseWidget class ([a1a3f1c](https://github.com/rubiin/Tsumiki/commit/a1a3f1c33f450b0b44ae84543405d0535d8965a0))
+* replace set_has_class with toggle_css_class for consistency in widget state management ([7ae0bed](https://github.com/rubiin/Tsumiki/commit/7ae0beded1e6162b8483dc9fbbe64dfacecf73d4))
+* simplify TaskBarWidget by removing Hyprland integration and unused code ([cd3fb36](https://github.com/rubiin/Tsumiki/commit/cd3fb36a265997e5ac6e961021da396117cc65ed))
+* update Python checks and fix PyGObject version in requirements ([6802725](https://github.com/rubiin/Tsumiki/commit/6802725a449e9d09a20e5cd81dfa4a6386cedb9f))
+
 ## [2.0.2](https://github.com/rubiin/Tsumiki/compare/v2.0.1...v2.0.2) (2025-08-15)
 
 
