@@ -10,5 +10,5 @@ PyGObject-stubs==2.13.0
 pytomlpp==1.0.13
 qrcode==8.2
 requests==2.32.5
-rlottie-python==1.3.7
+rlottie-python==1.3.8
 setproctitle==1.3.6
