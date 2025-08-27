@@ -112,6 +112,15 @@
         "bug",
         "doc"
       ]
+    },
+    {
+      "login": "N1xev",
+      "name": "Alaa Elsamouly",
+      "avatar_url": "https://avatars.githubusercontent.com/u/104609053?v=4",
+      "profile": "https://github.com/N1xev",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
