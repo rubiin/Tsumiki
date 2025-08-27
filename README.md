@@ -157,12 +157,12 @@ cd bar
 
 You can choose one of two installation methods: **Automated Setup** or **Manual Setup**.
 
-### Option 1: Automated Setup Using `init.sh -install`
+### Option 1: Automated Setup Using `init.sh -setup`
 
-1.  **Run the `init.sh -install` script** to automatically install all the required packages and dependencies (both `pacman` and AUR packages):
+1.  **Run the `init.sh -setup` script** to automatically setup the virtual environment and install all the required packages and dependencies (both `pacman` and AUR packages):
 
 ```sh
-./init.sh -install
+./init.sh -setup
 ```
 
 This script will:
