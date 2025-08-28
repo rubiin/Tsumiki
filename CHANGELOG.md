@@ -1,5 +1,31 @@
 # Changelog
 
+## [2.2.0](https://github.com/rubiin/Tsumiki/compare/v2.1.0...v2.2.0) (2025-08-28)
+
+
+### 🚀 New Features
+
+* add hover_reveal and reveal_duration options to DateTimeMenu and update transition_duration in widgets ([662df5d](https://github.com/rubiin/Tsumiki/commit/662df5ddcb431620e289e55fe0c63dafdda69fe3))
+* add reveal_duration option on date_time ([b9aee3f](https://github.com/rubiin/Tsumiki/commit/b9aee3f889859707aeaf2d3a952cbb4a55b8e62c))
+
+
+### 🐛 Bug Fixes
+
+* install packages command ([af74941](https://github.com/rubiin/Tsumiki/commit/af749410a3c2f92365f79d12b80bd5f18c3c6a03))
+* update user avatar path handling in QuickSettingsMenu ([#193](https://github.com/rubiin/Tsumiki/issues/193)) ([5556f03](https://github.com/rubiin/Tsumiki/commit/5556f0356066a0c8d862ac169fe4fa83e08799d6))
+
+
+### 📚 Documentation
+
+* add N1xev as a contributor for doc ([#192](https://github.com/rubiin/Tsumiki/issues/192)) ([07cf6fe](https://github.com/rubiin/Tsumiki/commit/07cf6fe842fd96cbf132d5b45bb803af479d625b))
+
+
+### ♻️ Code Refactoring
+
+* move hover logic to base class ([a64f041](https://github.com/rubiin/Tsumiki/commit/a64f04174586ddc60c813e47b977410e6105ebcb))
+* replace 'box' with 'container_box' in widget classes for consistency ([53aece5](https://github.com/rubiin/Tsumiki/commit/53aece5a9450261609a40676ad925488b58f66f5))
+* replace set_reveal_child with reveal/unreveal methods in various modules for consistency ([67975c0](https://github.com/rubiin/Tsumiki/commit/67975c06483a737c3569cdc77c594a8422302675))
+
 ## [2.1.0](https://github.com/rubiin/Tsumiki/compare/v2.0.2...v2.1.0) (2025-08-24)
 
 
