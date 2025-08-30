@@ -91,6 +91,7 @@ class WallpaperPickerBox(ScrolledWindow):
 
         self.column_size = 4
         self.batch_size = 6
+        self.loading = False
         self._wallpapers = self._fetch_wallpaper_list()
         self._loaded_count = 0
 
@@ -122,13 +123,10 @@ class WallpaperPickerBox(ScrolledWindow):
 
     def _load_next_batch(self):
         """Load the next batch of wallpaper buttons."""
-        if self._loaded_count >= len(self._wallpapers):
+        if self.loading or self._loaded_count >= len(self._wallpapers):
             return  # No more wallpapers
 
-        print(
-            f"Loading wallpapers {self._loaded_count} to "
-            f"{self._loaded_count + self.batch_size}"
-        )
+        self.loading = True
 
         end = min(self._loaded_count + self.batch_size, len(self._wallpapers))
         new_wallpapers = self._wallpapers[self._loaded_count : end]
@@ -151,6 +149,8 @@ class WallpaperPickerBox(ScrolledWindow):
         )
 
         self._loaded_count = end
+        self.loading = False
+
 
     def _on_scroll(self, adjustment):
         """Trigger loading more wallpapers when scrolling near the bottom."""

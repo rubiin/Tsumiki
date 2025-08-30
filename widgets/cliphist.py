@@ -104,7 +104,7 @@ class ClipHistoryMenu(Box):
         self.add(self.history_box)
         self.open()  # Load items when the widget is created
 
-    def load_more_items(self, aps):
+    def _load_next_batch(self, aps):
         if self.loading or self.items_loaded >= self.max_items:
             return
         self.loading = True
