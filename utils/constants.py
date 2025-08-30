@@ -7,6 +7,7 @@ HOME_DIR = GLib.get_home_dir()
 NOTIFICATION_WIDTH = 400
 NOTIFICATION_IMAGE_SIZE = 48
 HIGH_POLL_INTERVAL = 3600  # 1 hour in seconds
+MONITOR_HOTPLUG_DELAY_MS = 500  # Delay for monitor hotplug recreation
 
 # Network service constants
 NETWORK_RECENCY_THRESHOLD_SECONDS = 300  # 5 minutes for WiFi network freshness
@@ -414,6 +415,7 @@ DEFAULT_CONFIG = {
         "monitor_styles": True,
         "location": "top",
         "auto_reload": True,
+        "multi_monitor": False
     },
 }
 
