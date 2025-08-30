@@ -63,6 +63,9 @@ class HyprlandWithMonitors(Hyprland):
         try:
             monitors = json.loads(self.send_command("j/monitors").reply)
             return [monitor["name"] for monitor in monitors]
+        except json.JSONDecodeError as e:
+            logger.error(f"[Monitors] Error parsing monitor data: {e}")
+            return []
         except Exception as e:
             logger.error(f"[Monitors] Error getting monitor names: {e}")
             return []
