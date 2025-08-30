@@ -1,5 +1,31 @@
 # Changelog
 
+## [2.3.0](https://github.com/rubiin/Tsumiki/compare/v2.2.0...v2.3.0) (2025-08-30)
+
+
+### 🚀 New Features
+
+* Add multi-monitor support ([#195](https://github.com/rubiin/Tsumiki/issues/195)) ([8804a73](https://github.com/rubiin/Tsumiki/commit/8804a733682c1c8a6586dd445beb3ef58c498dc3))
+
+
+### 🐛 Bug Fixes
+
+* close active submenus when QuickSettingsButtonBox is unmapped ([174dd67](https://github.com/rubiin/Tsumiki/commit/174dd672bc15aa6ebbf77acf7a79738f6ed8c9f4))
+* correct formatting of dotfiles link in README ([8299fc7](https://github.com/rubiin/Tsumiki/commit/8299fc790e91fe1e366b7acbc80e55a16c3156b1))
+* prevent multiple simultaneous wallpaper loads in WallpaperPickerBox ([b89cff4](https://github.com/rubiin/Tsumiki/commit/b89cff41680d87ef4edccf4175e637d4b2e8dac1))
+* refactor submenu handling in QuickSettingsButtonBox ([27443ec](https://github.com/rubiin/Tsumiki/commit/27443ecb2e6c65491eed234cfd7c2ab443cc82bd))
+* remove debug print statement from on_scroll method in DateNotificationMenu ([f6d6457](https://github.com/rubiin/Tsumiki/commit/f6d645791f1fbd9230c140f6f3d3c57920c36924))
+
+
+### ⚡️ Performance Improvements
+
+* simplify DND switch handling and improve notification removal logic ([58905ab](https://github.com/rubiin/Tsumiki/commit/58905abc9f3de7f2d249a4857bdf08a4ace470e1))
+
+
+### ♻️ Code Refactoring
+
+* rename load_more_items to _load_next_batch for consistency ([cd5e87c](https://github.com/rubiin/Tsumiki/commit/cd5e87cbe30ed7927a0f5f912d8fa70e73f31b25))
+
 ## [2.2.0](https://github.com/rubiin/Tsumiki/compare/v2.1.0...v2.2.0) (2025-08-28)
 
 
