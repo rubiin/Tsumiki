@@ -335,7 +335,6 @@ class DateNotificationMenu(Box):
         page_size = adjustment.get_page_size()
 
         if value + page_size >= upper - 50:
-            print("Loading next batch of notifications...")
             self._load_next_batch()
 
     def on_dnd_switch_toggled(self, switch, state):
