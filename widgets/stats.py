@@ -116,7 +116,7 @@ class CpuWidget(ButtonWidget):
                 return "N/A"
 
             # current temperature
-            temp = temp.pop()[1]
+            temp = temp[-1][1] if temp else 0
 
             temp = round(temp) if self.config.get("round", True) else temp
 

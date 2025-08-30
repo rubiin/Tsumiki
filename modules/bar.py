@@ -164,3 +164,61 @@ class StatusBar(Window):
                     layout[key].append(widget)
 
         return layout
+
+    @staticmethod
+    def create_bars(app, config):
+        multi_monitor = config["general"].get("multi_monitor", False)
+        bars = (StatusBar._create_multi_monitor_bars(config)
+                if multi_monitor else [StatusBar(config)])
+
+        for bar in bars:
+            app.add_window(bar)
+
+        if multi_monitor:
+            StatusBar._setup_hotplug(app, config, bars)
+
+        return bars
+
+    @staticmethod
+    def _create_multi_monitor_bars(config):
+        from utils.monitors import HyprlandWithMonitors
+
+        monitor_util = HyprlandWithMonitors()
+        monitor_names = monitor_util.get_monitor_names()
+
+        if not monitor_names:
+            return [StatusBar(config)]
+
+        bars = []
+        for monitor_name in monitor_names:
+            monitor_id = monitor_util.get_gdk_monitor_id_from_name(monitor_name)
+            if monitor_id is not None:
+                bars.append(StatusBar(config, monitor=monitor_id))
+
+        return bars if bars else [StatusBar(config)]
+
+    @staticmethod
+    def _setup_hotplug(app, config, bars):
+        from utils.monitors import MonitorWatcher
+
+        watcher = MonitorWatcher()
+
+        def recreate():
+            # Remove old
+            for bar in bars:
+                try:
+                    app.remove_window(bar)
+                    bar.destroy()
+                except Exception:
+                    pass
+
+            # Create new
+            bars.clear()
+            new_bars = StatusBar._create_multi_monitor_bars(config)
+            bars.extend(new_bars)
+
+            for bar in bars:
+                app.add_window(bar)
+
+        watcher.add_callback(recreate)
+        watcher.start_watching()
