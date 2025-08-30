@@ -151,7 +151,9 @@ class DateNotificationMenu(Box):
         self.pixel_size = 13
 
         if config.get("notification", True):
-            notifications: list[Notification] = notification_service.get_deserialized()
+            self.all_notifications: list[Notification] = (
+                notification_service.get_deserialized()
+            )
 
             self.notifications_listbox = ListBox(
                 name="notification-list",
@@ -159,12 +161,15 @@ class DateNotificationMenu(Box):
                 h_align="center",
                 spacing=8,
                 h_expand=True,
-                visible=len(notifications) > 0,
+                visible=len(self.all_notifications) > 0,
             )
 
-            for value in notifications:
-                notification_item = self.bake_notification(value)
-                self.notifications_listbox.add(notification_item)
+            self.loaded_count = 0
+
+            self.loading = False
+            self.batch_size = 8  # how many to load per scroll
+
+            self._load_next_batch()
 
             # Placeholder for when there are no notifications
             self.placeholder = Box(
@@ -174,7 +179,7 @@ class DateNotificationMenu(Box):
                 v_align="center",
                 v_expand=True,
                 h_expand=True,
-                visible=len(notifications) == 0,  # visible if no notifications
+                visible=len(self.all_notifications) == 0,  # visible if no notifications
                 children=(
                     nerd_font_icon(
                         icon=text_icons["notifications"]["checked"],
@@ -208,7 +213,7 @@ class DateNotificationMenu(Box):
             self.clear_icon = nerd_font_icon(
                 name="clear-icon",
                 icon=text_icons["trash"]["empty"]
-                if len(notifications) == 0
+                if len(self.all_notifications) == 0
                 else text_icons["trash"]["full"],
                 props={
                     "style_classes": ["panel-font-icon"],
@@ -240,6 +245,18 @@ class DateNotificationMenu(Box):
             False,
             0,
         )
+        self.scrolled_window = ScrolledWindow(
+            v_expand=True,
+            style_classes="notification-scrollable",
+            v_scrollbar_policy="automatic",
+            h_scrollbar_policy="never",
+            child=Box(children=(self.placeholder, self.notifications_listbox)),
+        )
+
+        # Attach scroll listener
+        if self.scrolled_window:
+            vadj = self.scrolled_window.get_vadjustment()
+            vadj.connect("value-changed", self._on_scroll)
 
         # Notification body column
         notification_column = Box(
@@ -247,13 +264,7 @@ class DateNotificationMenu(Box):
             orientation="v",
             children=(
                 notification_column_header,
-                ScrolledWindow(
-                    v_expand=True,
-                    style_classes="notification-scrollable",
-                    v_scrollbar_policy="automatic",
-                    h_scrollbar_policy="never",
-                    child=Box(children=(self.placeholder, self.notifications_listbox)),
-                ),
+                self.scrolled_window,
             ),
         )
         self.add(notification_column)
@@ -300,9 +311,35 @@ class DateNotificationMenu(Box):
         if self.dnd_switch:
             self.dnd_switch.connect("notify::active", self.on_dnd_switch_toggled)
 
+    def _load_next_batch(self):
+        """Load the next batch of notifications into the listbox."""
+        if self.loading or self.loaded_count >= len(self.all_notifications):
+            return
+
+        self.loading = True
+
+        items_to_add = min(
+            self.batch_size, len(self.all_notifications) - self.loaded_count
+        )
+        for i in range(self.loaded_count, self.loaded_count + items_to_add):
+            notification_item = self.bake_notification(self.all_notifications[i])
+            self.notifications_listbox.add(notification_item)
+
+        self.loaded_count += items_to_add
+        self.loading = False
+
+    def _on_scroll(self, adjustment):
+        """Load more notifications when user scrolls near the bottom."""
+        value = adjustment.get_value()
+        upper = adjustment.get_upper()
+        page_size = adjustment.get_page_size()
+
+        if value + page_size >= upper - 50:
+            print("Loading next batch of notifications...")
+            self._load_next_batch()
+
     def on_dnd_switch_toggled(self, switch, state):
         notification_service.dont_disturb = switch.get_active()
-
 
     def on_dnd_switch(self, _, value, *args):
         self.dnd_switch.set_active(value)
