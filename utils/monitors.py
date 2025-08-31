@@ -2,9 +2,12 @@ import json
 import warnings
 
 from fabric.hyprland import Hyprland
-from gi.repository import Gdk
+from fabric.hyprland.widgets import get_hyprland_connection
+from fabric.utils import bulk_connect
+from gi.repository import Gdk, GLib
 from loguru import logger
 
+from .constants import MONITOR_HOTPLUG_DELAY_MS
 from .functions import ttl_lru_cache
 
 warnings.filterwarnings("ignore", category=DeprecationWarning)
@@ -54,3 +57,50 @@ class HyprlandWithMonitors(Hyprland):
         except Exception as e:
             logger.error(f"[Monitors] Error getting current GDK monitor ID: {e}")
             return None
+
+    def get_monitor_names(self) -> list[str]:
+        """Get list of all connected monitor names."""
+        try:
+            monitors = json.loads(self.send_command("j/monitors").reply)
+            return [monitor["name"] for monitor in monitors]
+        except json.JSONDecodeError as e:
+            logger.error(f"[Monitors] Error parsing monitor data: {e}")
+            return []
+        except Exception as e:
+            logger.error(f"[Monitors] Error getting monitor names: {e}")
+            return []
+
+
+class MonitorWatcher:
+    """Watches for monitor add/remove events and notifies registered callbacks."""
+
+    def __init__(self):
+        self.callbacks = []
+        self._hyprland_connection = None
+
+    def add_callback(self, callback):
+        self.callbacks.append(callback)
+
+    def start_watching(self):
+        if self._hyprland_connection:
+            return
+
+        self._hyprland_connection = get_hyprland_connection()
+        bulk_connect(
+            self._hyprland_connection,
+            {
+                "event::monitoradded": self._on_monitor_changed,
+                "event::monitorremoved": self._on_monitor_changed,
+            },
+        )
+
+    def _on_monitor_changed(self, *_):
+        GLib.timeout_add(MONITOR_HOTPLUG_DELAY_MS, self._notify_callbacks)
+
+    def _notify_callbacks(self):
+        for callback in self.callbacks:
+            try:
+                callback()
+            except Exception as e:
+                logger.error(f"Monitor callback error: {e}")
+        return False

@@ -1,6 +1,5 @@
 import os
 
-import setproctitle
 from fabric import Application
 from fabric.utils import exec_shell_command, get_relative_path
 from loguru import logger
@@ -48,8 +47,13 @@ def main():
     helpers.copy_theme(theme_config["name"])
     helpers.check_executable_exists("sass")
 
-    # Initialize the application with the status bar
-    app = Application(APPLICATION_NAME, StatusBar(widget_config))
+    helpers.set_process_name(APPLICATION_NAME)
+
+    # Initialize the application
+    app = Application(APPLICATION_NAME)
+
+    # Create status bars
+    StatusBar.create_bars(app, widget_config)
 
     if module_options["notification"]["enabled"]:
         from modules.notification import NotificationPopup
@@ -80,8 +84,6 @@ def main():
         from modules.osd import OSDContainer
 
         app.add_window(OSDContainer(widget_config))
-
-    setproctitle.setproctitle(APPLICATION_NAME)
 
     if general_options["debug"]:
         helpers.set_debug_logger()

@@ -71,7 +71,7 @@ class WifiSubMenu(QuickSubMenu):
         if self.child:
             adjustment = self.child.get_vadjustment()
 
-            adjustment.connect("value-changed", self.on_scroll)
+            adjustment.connect("value-changed", self._on_scroll)
 
         self.revealer.connect(
             "notify::child-revealed",
@@ -83,7 +83,7 @@ class WifiSubMenu(QuickSubMenu):
         self.start_new_scan()
         self.scan_button.set_sensitive(True)
 
-    def load_more_items(self, aps):
+    def _load_next_batch(self, aps):
         if self.loading or self.items_loaded >= self.max_items:
             return
 
@@ -98,13 +98,13 @@ class WifiSubMenu(QuickSubMenu):
         self.items_loaded += items_to_add
         self.loading = False
 
-    def on_scroll(self, adjustment):
+    def _on_scroll(self, adjustment):
         value = adjustment.get_value()
         upper = adjustment.get_upper()
         page_size = adjustment.get_page_size()
 
         if value + page_size >= upper - 50:
-            self.load_more_items(self.wifi_device.access_points)
+            self._load_next_batch(self.wifi_device.access_points)
 
     def on_scan(self, _, value, *args):
         """Called when the scan is complete."""
@@ -121,7 +121,7 @@ class WifiSubMenu(QuickSubMenu):
         self.max_items = len(self.wifi_device.access_points) if self.wifi_device else 0
         self.available_networks_listbox.remove_all()
         if self.wifi_device:
-            self.load_more_items(self.wifi_device.access_points)
+            self._load_next_batch(self.wifi_device.access_points)
 
     def start_new_scan(self, *_):
         self.wifi_device.scan()

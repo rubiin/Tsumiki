@@ -210,7 +210,6 @@ install_packages() {
 		python-psutil
 		python-cairo
 		python-loguru
-		python-setproctitle
 		libnotify
 		cliphist
 		python-requests

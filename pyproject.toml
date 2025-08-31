@@ -1,6 +1,6 @@
 [project]
 name = "Tsumiki"
-version = "2.2.0"
+version = "2.3.0"
 description = "A semi-customizable bar written using the Fabric Widget System"
 readme = "README.md"
 requires-python = ">=3.13"
@@ -22,7 +22,6 @@ keywords = [
 dependencies = [
     "click>=8.2.1",
     "fabric",
-    "setproctitle>=1.3.6",
     "ijson>=3.4.0",
     "loguru>=0.7.3",
     "pillow>=11.3.0",
@@ -33,8 +32,7 @@ dependencies = [
     "pytomlpp>=1.0.13",
     "qrcode>=8.2",
     "requests>=2.32.4",
-    "rlottie-python>=1.3.7",
-    "setproctitle>=1.3.6"
+    "rlottie-python>=1.3.7"
 
 ]
 

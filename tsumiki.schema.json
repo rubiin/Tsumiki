@@ -2237,6 +2237,11 @@
 				"auto_reload": {
 					"type": "boolean",
 					"description": "Determines whether to automatically reload the application when configuration files change."
+				},
+				"multi_monitor": {
+					"type": "boolean",
+					"description": "Enables multi-monitor support. When true, creates a status bar on all available monitors.",
+					"default": false
 				}
 			}
 		}
