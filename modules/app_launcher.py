@@ -178,6 +178,7 @@ class AppLauncher(Window):
         return False
 
     def bake_application_slot(self, app: DesktopApp, **kwargs) -> Button:
+        # TODO: remove nest
         def on_clicked(*_):
             app.launch()
             self.hide()

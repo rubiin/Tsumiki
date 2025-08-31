@@ -60,6 +60,7 @@ class ScreenRecorderService(Service):
             f"wf-recorder {audio} --file={file_path} --pixel-format yuv420p {area}"
         )
 
+        # TODO: remove nest
         def start_recording():
             exec_shell_command_async(command, lambda *_: None)
             self.emit("recording", True)

@@ -310,6 +310,7 @@ class Wifi(Service):
             else:
                 unique_networks[ssid] = network_info
 
+        # TODO: remove nest
         def make_ap_dict(network_data):
             ap = network_data["ap"]
             ssid = network_data["ssid"]

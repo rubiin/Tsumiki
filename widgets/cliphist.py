@@ -338,6 +338,7 @@ class ClipHistoryMenu(Box):
     def _load_image_preview_async(self, item_id, button):
         """Load image preview using GLib.idle_add instead of threads"""
 
+        # TODO: remove nest
         def load_image():
             try:
                 if item_id in self.image_cache:
@@ -421,6 +422,7 @@ class ClipHistoryMenu(Box):
     def paste_item(self, item_id):
         """Copy the selected item to the clipboard and close (GLib.idle_add)"""
 
+        # TODO: remove nest
         def paste():
             try:
                 result = subprocess.run(
@@ -437,6 +439,7 @@ class ClipHistoryMenu(Box):
     def delete_item(self, item_id):
         """Delete the selected clipboard item (GLib.idle_add)"""
 
+        # TODO: remove nest
         def delete():
             try:
                 subprocess.run(["cliphist", "delete", item_id], check=True)
@@ -452,6 +455,7 @@ class ClipHistoryMenu(Box):
     def clear_history(self, *_):
         """Clear all clipboard history (GLib.idle_add)"""
 
+        # TODO: remove nest
         def clear():
             try:
                 subprocess.run(["cliphist", "wipe"], check=True)
@@ -523,6 +527,7 @@ class ClipHistoryMenu(Box):
     def scroll_to_selected(self, button):
         """Scroll to ensure the selected item is visible"""
 
+        # TODO: remove nest
         def scroll():
             adj = self.scrolled_window.get_vadjustment()
             alloc = button.get_allocation()

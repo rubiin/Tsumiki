@@ -110,6 +110,7 @@ class WeatherService(Service):
         ttl: int = 3600,
         refresh: bool = False,
     ):
+        # TODO: remove nest
         def worker():
             result = self.get_weather(location, ttl=ttl, refresh=refresh)
             GLib.idle_add(callback, result)

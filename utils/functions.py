@@ -89,6 +89,7 @@ def get_simple_palette_threaded(
     color_count: int = 4,
     resize: int = 64,
 ):
+    # TODO: remove nest
     def worker():
         try:
             with Image.open(image_path) as img:
@@ -149,6 +150,7 @@ def for_monitors(widget: Gtk.Widget) -> list[Gtk.Widget]:
 
 # Function to ttl lru cache
 def ttl_lru_cache(seconds_to_live: int, maxsize: int = 128):
+    # TODO: remove nest
     def wrapper(func):
         @lru_cache(maxsize)
         def inner(__ttl, *args, **kwargs):
@@ -211,6 +213,7 @@ def update_theme_config(theme_name: str):
 def recompile_and_apply_css():
     """Recompile SCSS and apply the new CSS to the application."""
 
+    # TODO: remove nest
     def _apply_css_to_app():
         try:
             app = Application.get_default()
@@ -220,6 +223,7 @@ def recompile_and_apply_css():
         except Exception as e:
             logger.exception(f"{Colors.ERROR}[Theme] Error applying CSS to app: {e}")
 
+    # TODO: remove nest
     def _compile_css():
         """Compile SCSS in background thread."""
         try:

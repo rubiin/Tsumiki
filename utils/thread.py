@@ -18,6 +18,7 @@ def run_in_thread(func: Callable) -> Callable:
     Decorator to run the decorated function in the thread pool.
     """
 
+    # TODO: remove nest
     def wrapper(*args, **kwargs):
         return thread(func, *args, **kwargs)
 

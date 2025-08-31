@@ -112,6 +112,7 @@ class AppBar(Box):
     def update_preview_image(self, client, client_button: Button):
         self.popup.set_pointing_to(client_button)
 
+        # TODO: remove nest
         def capture_callback(pbuf, _):
             self._preview_image.set_from_pixbuf(
                 pbuf.scale_simple(self.preview_size[0], self.preview_size[1], 2)
@@ -225,6 +226,7 @@ class AppBar(Box):
     def _on_client_added(self, _, client: Glace.Client):
         client_image = Image()
 
+        # TODO: remove nest
         def on_button_press_event(event, client):
             if event.button == 1:
                 client.activate()
@@ -232,6 +234,7 @@ class AppBar(Box):
                 self.show_menu(client)
                 self.menu.popup_at_pointer(event)
 
+        # TODO: remove nest
         def on_app_id(*_):
             if client.get_app_id() in self.config.get("ignored_apps", []):
                 client_button.destroy()

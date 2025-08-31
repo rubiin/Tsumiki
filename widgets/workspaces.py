@@ -31,7 +31,7 @@ class WorkSpacesWidget(BoxWidget):
 
             # Only add empty state styling when showing all workspaces
             if not hide_unoccupied:
-
+                # TODO: remove nest
                 def update_empty_state(*_):
                     style_context = button.get_style_context()
                     if button.empty:

@@ -211,6 +211,7 @@ class CustomNotifications(Notifications):
     def get_deserialized(self) -> list[Notification]:
         """Return the notifications."""
 
+        # TODO: remove nest
         def deserialize_with_id(notification):
             """Helper to deserialize and return result with ID."""
             try:

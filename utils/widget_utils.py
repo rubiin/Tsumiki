@@ -45,9 +45,11 @@ def setup_cursor_hover(
     display = Gdk.Display.get_default()
     cursor = Gdk.Cursor.new_from_name(display, cursor_name)
 
+    # TODO: remove nest
     def on_enter_notify_event(widget, _):
         widget.get_window().set_cursor(cursor)
 
+    # TODO: remove nest
     def on_leave_notify_event(widget, _):
         widget.get_window().set_cursor(cursor)
 

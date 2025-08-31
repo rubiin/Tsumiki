@@ -226,6 +226,7 @@ class DateNotificationMenu(Box):
                 child=Box(children=(self.clear_icon,)),
             )
 
+            # TODO: remove nest
             def handle_clear_click(*_):
                 """Handle clear button click."""
 

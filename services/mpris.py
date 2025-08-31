@@ -53,6 +53,7 @@ class MprisPlayer(Service):
 
     def update_status(self):
         # schedule each notifier asynchronously.
+        # TODO: remove nest
         def notify_property(prop):
             if self.get_property(prop) is not None:
                 self.notifier(prop)
@@ -76,6 +77,7 @@ class MprisPlayer(Service):
 
     def update_status_once(self):
         # schedule notifier calls for each property
+        # TODO: remove nest
         def notify_all():
             for prop in self.list_properties():  # type: ignore
                 self.notifier(prop.name)
@@ -84,6 +86,7 @@ class MprisPlayer(Service):
         GLib.idle_add(notify_all, priority=GLib.PRIORITY_DEFAULT_IDLE)
 
     def notifier(self, name: str, args=None):
+        # TODO: remove nest
         def notify_and_emit():
             self.notify(name)
             self.emit("changed")

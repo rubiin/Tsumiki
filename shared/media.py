@@ -500,6 +500,7 @@ class PlayerBox(Box):
             self.update_colors(self.fallback_cover_path)
 
     def update_colors(self, image_path):
+        # TODO: remove nest
         def on_accent_color(palette):
             default_color = (255, 0, 0)  # fallback color
 

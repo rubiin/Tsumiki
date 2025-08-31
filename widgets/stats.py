@@ -522,6 +522,7 @@ class NetworkUsageWidget(ButtonWidget):
     def update_ui(self, *_):
         """Update the network usage label with the current network usage."""
 
+        # TODO: remove nest
         def format_speed(speed):
             # speed is in bytes/ms, so *1000 = bytes/s
             speed_bps = speed * 1000

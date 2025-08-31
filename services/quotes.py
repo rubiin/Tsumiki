@@ -85,6 +85,7 @@ class QuotesService(Service):
         self,
         callback: Callable[[Optional[dict]], None],
     ):
+        # TODO: remove nest
         def worker():
             result = self.get_quotes()
             GLib.idle_add(callback, result)

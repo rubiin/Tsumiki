@@ -47,7 +47,7 @@ class AudioSlider(SettingSlider):
             self.children = (*self.children, self.chevron_btn)
 
         if not audio_stream:
-
+            # TODO: remove nest
             def init_device_audio(*_):
                 if not self.client.speaker:
                     return

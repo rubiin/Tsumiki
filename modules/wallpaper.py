@@ -38,6 +38,7 @@ class ImageButton(HoverButton):
         self._load_thumbnail()
 
     def _set_wallpaper_from_image(self):
+        # TODO: remove nest
         def on_wallpaper_change(*_):
             self.wallpaper_change(self.wp_path)
 

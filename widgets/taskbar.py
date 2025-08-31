@@ -27,6 +27,7 @@ class TaskBarWidget(BoxWidget):
     def _on_client_added(self, _, client: Glace.Client):
         client_image = Image()
 
+        # TODO: remove nest
         def on_app_id(*_):
             client_image.set_from_pixbuf(
                 self.icon_resolver.get_icon_pixbuf(
