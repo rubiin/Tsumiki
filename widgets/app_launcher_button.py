@@ -38,16 +38,6 @@ class AppLauncherButton(ButtonWidget):
 
             self.app_launcher = AppLauncher(widget_config)
 
-            # Add it to the current application's windows
-            import gi
-            gi.require_version('Gtk', '3.0')
-            from gi.repository import Gtk
-
-            # Get the current application
-            app = Gtk.Application.get_default()
-            if app and hasattr(app, 'add_window'):
-                app.add_window(self.app_launcher)
-
         return self.app_launcher
 
     def _on_clicked(self, *_):
