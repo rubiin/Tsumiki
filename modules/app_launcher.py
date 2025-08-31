@@ -1,5 +1,6 @@
 import operator
 from collections.abc import Iterator
+from contextlib import suppress
 from enum import Enum
 from typing import Callable
 
@@ -71,6 +72,10 @@ class AppLauncher(Window):
             max_content_size=(280 * 2, 320),
             child=self.viewport,
         )
+
+        # Enable kinetic scrolling
+        with suppress(AttributeError):
+            self.scrolled_window.set_kinetic_scrolling(True)
 
         self.add(
             Box(
