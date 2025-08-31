@@ -10,7 +10,7 @@ from fabric.widgets.grid import Grid
 from fabric.widgets.image import Image
 from fabric.widgets.label import Label
 from fabric.widgets.scrolledwindow import ScrolledWindow
-from gi.repository import Gdk
+from gi.repository import Gdk, GLib
 
 from shared.buttons import HoverButton
 from shared.popup import PopupWindow
@@ -123,10 +123,19 @@ class HandlerManager:
         self.old_handler = None
 
     def __enter__(self):
-        # Remove old handler if exists
-        if self.launcher._arranger_handler:
-            remove_handler(self.launcher._arranger_handler)
-            self.old_handler = self.launcher._arranger_handler
+        # Remove old handler if exists and is valid
+        if (self.launcher._arranger_handler and
+            self.launcher._arranger_handler > 0):
+            # Check if the source still exists before removing
+            main_context = GLib.MainContext.default()
+            handler_id = self.launcher._arranger_handler
+            if main_context.find_source_by_id(handler_id):
+                try:
+                    remove_handler(handler_id)
+                    self.old_handler = handler_id
+                except (GLib.Error, Exception):
+                    # Handler removal failed, just continue silently
+                    pass
         self.launcher._arranger_handler = 0
         return self
 
@@ -240,13 +249,9 @@ class AppLauncher(PopupWindow):
         """Clear viewport widgets with proper error handling."""
         if self.config.layout_mode == "grid":
             try:
-                if hasattr(self.viewport, 'get_children'):
-                    children = list(self.viewport.get_children())
-                    for child in children:
-                        self.viewport.remove(child)
-                else:
-                    # Fallback: no children to remove
-                    pass
+                children = [child for child in self.viewport]
+                for child in children:
+                    self.viewport.remove(child)
             except (AttributeError, TypeError) as e:
                 # Log error and recreate grid as fallback
                 print(f"Warning: Grid clear failed ({e}), recreating viewport")
@@ -317,7 +322,10 @@ class AppLauncher(PopupWindow):
         """Resize viewport to fit content."""
         try:
             allocation_width = self.viewport.get_allocation().width
-            self.scrolled_window.set_min_content_width(allocation_width)
+            if allocation_width > 0:
+                # Clear max_content_width constraint to avoid conflicts
+                self.scrolled_window.set_max_content_width(-1)
+                self.scrolled_window.set_min_content_width(allocation_width)
         except (AttributeError, TypeError):
             # Ignore resize errors
             pass
