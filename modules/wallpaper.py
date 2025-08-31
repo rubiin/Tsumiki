@@ -37,13 +37,12 @@ class ImageButton(HoverButton):
         )
         self._load_thumbnail()
 
-    def _set_wallpaper_from_image(self):
-        # TODO: remove nest
-        def on_wallpaper_change(*_):
-            self.wallpaper_change(self.wp_path)
+    def _on_wallpaper_change(self, *_):
+        self.wallpaper_change(self.wp_path)
 
+    def _set_wallpaper_from_image(self):
         exec_shell_command_async(
-            f"hyprctl hyprpaper reload ,'{self.wp_path}'", on_wallpaper_change
+            f"hyprctl hyprpaper reload ,'{self.wp_path}'", self._on_wallpaper_change
         )
 
     @run_in_thread

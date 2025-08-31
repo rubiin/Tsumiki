@@ -81,13 +81,14 @@ class QuotesService(Service):
 
         return random.choice(quotes) if quotes else None
 
+    def _quotes_worker(self, callback: Callable[[Optional[dict]], None]):
+        result = self.get_quotes()
+        GLib.idle_add(callback, result)
+
     def get_quotes_async(
         self,
         callback: Callable[[Optional[dict]], None],
     ):
-        # TODO: remove nest
-        def worker():
-            result = self.get_quotes()
-            GLib.idle_add(callback, result)
-
-        threading.Thread(target=worker, daemon=True).start()
+        threading.Thread(
+            target=self._quotes_worker, args=(callback,), daemon=True
+        ).start()

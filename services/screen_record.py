@@ -31,6 +31,11 @@ class ScreenRecorderService(Service):
         self.home_dir = GLib.get_home_dir()
         self.shutter_sound = get_relative_path("../assets/sounds/camera-shutter.mp3")
 
+    def record_and_emit(self, command):
+        exec_shell_command_async(command, lambda *_: None)
+        self.emit("recording", True)
+        return False  # Only run once
+
     def screenrecord_start(
         self,
         config: dict,
@@ -60,17 +65,11 @@ class ScreenRecorderService(Service):
             f"wf-recorder {audio} --file={file_path} --pixel-format yuv420p {area}"
         )
 
-        # TODO: remove nest
-        def start_recording():
-            exec_shell_command_async(command, lambda *_: None)
-            self.emit("recording", True)
-            return False  # Only run once
-
         if config.get("delayed", False):
             timeout = config.get("delayed_timeout", 5000)
-            GLib.timeout_add(timeout, start_recording)
+            GLib.timeout_add(timeout, self.record_and_emit, command)
         else:
-            start_recording()
+            self.record_and_emit(command)
 
     def send_screenshot_notification(self, file_path=None):
         cmd = ["notify-send"]

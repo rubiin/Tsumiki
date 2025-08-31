@@ -499,35 +499,34 @@ class PlayerBox(Box):
             self.image_box.set_image_from_file(self.fallback_cover_path)
             self.update_colors(self.fallback_cover_path)
 
+    def _on_accent_color(self, palette):
+        default_color = (255, 0, 0)  # fallback color
+
+        base_color = palette[0] if palette else default_color
+        mix_target = (247, 239, 209)  # #F7EFD1
+
+        # Mix base color with the target color
+        mixed_color = mix_colors(base_color, mix_target, 0.5)
+        # Then apply a tint to lighten it a bit more (e.g., 20%)
+        tinted_color = tint_color(mixed_color, 0.2)
+
+        mixed_css_color = rgb_to_css(tinted_color)
+
+        bg = f"background-color: {mixed_css_color};"
+        border = f"border-color: {mixed_css_color};"
+
+        self.seek_bar.set_style(
+            f"trough highlight {{ {bg} {border} }} slider {{ {bg} }}"
+        )
+
+        css_colors = [rgb_to_css(color) for color in palette]
+        gradient = f"linear-gradient(135deg, {', '.join(css_colors)})"
+
+        self.inner_box.set_style(f"background: {gradient};")
+
     def update_colors(self, image_path):
-        # TODO: remove nest
-        def on_accent_color(palette):
-            default_color = (255, 0, 0)  # fallback color
-
-            base_color = palette[0] if palette else default_color
-            mix_target = (247, 239, 209)  # #F7EFD1
-
-            # Mix base color with the target color
-            mixed_color = mix_colors(base_color, mix_target, 0.5)
-            # Then apply a tint to lighten it a bit more (e.g., 20%)
-            tinted_color = tint_color(mixed_color, 0.2)
-
-            mixed_css_color = rgb_to_css(tinted_color)
-
-            bg = f"background-color: {mixed_css_color};"
-            border = f"border-color: {mixed_css_color};"
-
-            self.seek_bar.set_style(
-                f"trough highlight {{ {bg} {border} }} slider {{ {bg} }}"
-            )
-
-            css_colors = [rgb_to_css(color) for color in palette]
-            gradient = f"linear-gradient(135deg, {', '.join(css_colors)})"
-
-            self.inner_box.set_style(f"background: {gradient};")
-
         get_simple_palette_threaded(
-            image_path=image_path, color_count=5, callback=on_accent_color
+            image_path=image_path, color_count=5, callback=self._on_accent_color
         )
 
     def _set_image(self, *_):

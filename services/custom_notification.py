@@ -208,22 +208,22 @@ class CustomNotifications(Notifications):
         # Restore the ID counter so new notifications get unique IDs
         self._count = highest_id
 
+    def deserialize_with_id(self, notification):
+        """Helper to deserialize and return result with ID."""
+        try:
+            return (self._deserialize_notification(notification), None)
+        except Exception as e:
+            msg = f"[Notification] Deserialize failed: {str(e)[:50]}"
+            logger.exception(f"{Colors.INFO}{msg}")
+            return (None, notification.get("id"))
+
     def get_deserialized(self) -> list[Notification]:
         """Return the notifications."""
 
-        # TODO: remove nest
-        def deserialize_with_id(notification):
-            """Helper to deserialize and return result with ID."""
-            try:
-                return (self._deserialize_notification(notification), None)
-            except Exception as e:
-                msg = f"[Notification] Deserialize failed: {str(e)[:50]}"
-                logger.exception(f"{Colors.INFO}{msg}")
-                return (None, notification.get("id"))
-
         # Process all notifications at once
         results = [
-            deserialize_with_id(notification) for notification in self.all_notifications
+            self.deserialize_with_id(notification)
+            for notification in self.all_notifications
         ]
 
         # Split into successful and failed

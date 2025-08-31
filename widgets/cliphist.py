@@ -335,40 +335,39 @@ class ClipHistoryMenu(Box):
 
         return button
 
+    def _load_image(self, item_id, button):
+        try:
+            if item_id in self.image_cache:
+                pixbuf = self.image_cache[item_id]
+            else:
+                result = subprocess.run(
+                    ["cliphist", "decode", item_id], capture_output=True, check=True
+                )
+                loader = GdkPixbuf.PixbufLoader()
+                loader.write(result.stdout)
+                loader.close()
+                pixbuf = loader.get_pixbuf()
+                width, height = pixbuf.get_width(), pixbuf.get_height()
+                max_size = 72
+                if width > height:
+                    new_width = max_size
+                    new_height = int(height * (max_size / width))
+                else:
+                    new_height = max_size
+                    new_width = int(width * (max_size / height))
+                pixbuf = pixbuf.scale_simple(
+                    new_width, new_height, GdkPixbuf.InterpType.BILINEAR
+                )
+                self.image_cache[item_id] = pixbuf
+            self._update_image_button(button, pixbuf)
+        except Exception as e:
+            logger.exception(f"Error loading image preview: {e}")
+        return False
+
     def _load_image_preview_async(self, item_id, button):
         """Load image preview using GLib.idle_add instead of threads"""
 
-        # TODO: remove nest
-        def load_image():
-            try:
-                if item_id in self.image_cache:
-                    pixbuf = self.image_cache[item_id]
-                else:
-                    result = subprocess.run(
-                        ["cliphist", "decode", item_id], capture_output=True, check=True
-                    )
-                    loader = GdkPixbuf.PixbufLoader()
-                    loader.write(result.stdout)
-                    loader.close()
-                    pixbuf = loader.get_pixbuf()
-                    width, height = pixbuf.get_width(), pixbuf.get_height()
-                    max_size = 72
-                    if width > height:
-                        new_width = max_size
-                        new_height = int(height * (max_size / width))
-                    else:
-                        new_height = max_size
-                        new_width = int(width * (max_size / height))
-                    pixbuf = pixbuf.scale_simple(
-                        new_width, new_height, GdkPixbuf.InterpType.BILINEAR
-                    )
-                    self.image_cache[item_id] = pixbuf
-                self._update_image_button(button, pixbuf)
-            except Exception as e:
-                logger.exception(f"Error loading image preview: {e}")
-            return False
-
-        GLib.idle_add(load_image)
+        GLib.idle_add(self._load_image, item_id, button)
 
     def _update_image_button(self, button, pixbuf):
         """Update the button with the loaded image preview"""
@@ -419,54 +418,51 @@ class ClipHistoryMenu(Box):
             )
         )
 
+    def _paste(self, item_id):
+        try:
+            result = subprocess.run(
+                ["cliphist", "decode", item_id], capture_output=True, check=True
+            )
+            subprocess.run(["wl-copy"], input=result.stdout, check=True)
+            GLib.idle_add(self.close)
+        except subprocess.CalledProcessError as e:
+            logger.exception(f"Error pasting clipboard item: {e}")
+        return False
+
     def paste_item(self, item_id):
         """Copy the selected item to the clipboard and close (GLib.idle_add)"""
 
-        # TODO: remove nest
-        def paste():
-            try:
-                result = subprocess.run(
-                    ["cliphist", "decode", item_id], capture_output=True, check=True
-                )
-                subprocess.run(["wl-copy"], input=result.stdout, check=True)
-                GLib.idle_add(self.close)
-            except subprocess.CalledProcessError as e:
-                logger.exception(f"Error pasting clipboard item: {e}")
-            return False
+        GLib.idle_add(self._paste, item_id)
 
-        GLib.idle_add(paste)
+    def _delete(self, item_id):
+        try:
+            subprocess.run(["cliphist", "delete", item_id], check=True)
+            self._pending_updates = True
+            if not self._loading:
+                GLib.idle_add(self._load_clipboard_items_thread)
+        except subprocess.CalledProcessError as e:
+            logger.exception(f"Error deleting clipboard item: {e}")
+        return False
 
     def delete_item(self, item_id):
         """Delete the selected clipboard item (GLib.idle_add)"""
 
-        # TODO: remove nest
-        def delete():
-            try:
-                subprocess.run(["cliphist", "delete", item_id], check=True)
-                self._pending_updates = True
-                if not self._loading:
-                    GLib.idle_add(self._load_clipboard_items_thread)
-            except subprocess.CalledProcessError as e:
-                logger.exception(f"Error deleting clipboard item: {e}")
-            return False
+        GLib.idle_add(self._delete, item_id)
 
-        GLib.idle_add(delete)
+    def _clear(self):
+        try:
+            subprocess.run(["cliphist", "wipe"], check=True)
+            self._pending_updates = True
+            if not self._loading:
+                GLib.idle_add(self._load_clipboard_items_thread)
+        except subprocess.CalledProcessError as e:
+            logger.exception(f"Error clearing clipboard history: {e}")
+        return False
 
     def clear_history(self, *_):
         """Clear all clipboard history (GLib.idle_add)"""
 
-        # TODO: remove nest
-        def clear():
-            try:
-                subprocess.run(["cliphist", "wipe"], check=True)
-                self._pending_updates = True
-                if not self._loading:
-                    GLib.idle_add(self._load_clipboard_items_thread)
-            except subprocess.CalledProcessError as e:
-                logger.exception(f"Error clearing clipboard history: {e}")
-            return False
-
-        GLib.idle_add(clear)
+        GLib.idle_add(self._clear)
 
     def filter_items(self, entry, *_):
         """Filter clipboard items based on search text"""
@@ -524,35 +520,34 @@ class ClipHistoryMenu(Box):
         new_index = max(0, min(new_index, len(children) - 1))
         self.update_selection(new_index)
 
+    def _scroll(self, button):
+        adj = self.scrolled_window.get_vadjustment()
+        alloc = button.get_allocation()
+        if alloc.height == 0:
+            return False  # Retry if allocation isn't ready
+
+        y = alloc.y
+        height = alloc.height
+        page_size = adj.get_page_size()
+        current_value = adj.get_value()
+
+        # Calculate visible boundaries
+        visible_top = current_value
+        visible_bottom = current_value + page_size
+
+        if y < visible_top:
+            # Item above viewport - align to top
+            adj.set_value(y)
+        elif y + height > visible_bottom:
+            # Item below viewport - align to bottom
+            new_value = y + height - page_size
+            adj.set_value(new_value)
+        return False
+
     def scroll_to_selected(self, button):
         """Scroll to ensure the selected item is visible"""
 
-        # TODO: remove nest
-        def scroll():
-            adj = self.scrolled_window.get_vadjustment()
-            alloc = button.get_allocation()
-            if alloc.height == 0:
-                return False  # Retry if allocation isn't ready
-
-            y = alloc.y
-            height = alloc.height
-            page_size = adj.get_page_size()
-            current_value = adj.get_value()
-
-            # Calculate visible boundaries
-            visible_top = current_value
-            visible_bottom = current_value + page_size
-
-            if y < visible_top:
-                # Item above viewport - align to top
-                adj.set_value(y)
-            elif y + height > visible_bottom:
-                # Item below viewport - align to bottom
-                new_value = y + height - page_size
-                adj.set_value(new_value)
-            return False
-
-        GLib.idle_add(scroll)
+        GLib.idle_add(self._scroll, button)
 
     def use_selected_item(self, *_):
         """Use (paste) the selected clipboard item"""

@@ -109,21 +109,20 @@ class AppBar(Box):
         self.popup_revealer.unreveal()
         return False
 
+    def _capture_callback(self, pbuf, _):
+        self._preview_image.set_from_pixbuf(
+            pbuf.scale_simple(self.preview_size[0], self.preview_size[1], 2)
+        )
+        self.popup.set_visible(True)
+        self.popup_revealer.reveal()
+
     def update_preview_image(self, client, client_button: Button):
         self.popup.set_pointing_to(client_button)
-
-        # TODO: remove nest
-        def capture_callback(pbuf, _):
-            self._preview_image.set_from_pixbuf(
-                pbuf.scale_simple(self.preview_size[0], self.preview_size[1], 2)
-            )
-            self.popup.set_visible(True)
-            self.popup_revealer.reveal()
 
         self._manager.capture_client(
             client=client,
             overlay_cursor=False,
-            callback=capture_callback,
+            callback=self._capture_callback,
             user_data=None,
         )
 
@@ -223,34 +222,34 @@ class AppBar(Box):
 
         return True
 
+    def _on_button_press_event(self, event, client):
+        if event.button == 1:
+            client.activate()
+        else:
+            self.show_menu(client)
+            self.menu.popup_at_pointer(event)
+
+    def _on_app_id(self, client, client_button: Button, client_image: Image, *_):
+        if client.get_app_id() in self.config.get("ignored_apps", []):
+            client_button.destroy()
+            client_image.destroy()
+            return
+        client_image.set_from_pixbuf(
+            self.icon_resolver.get_icon_pixbuf(client.get_app_id(), self.icon_size)
+        )
+        client_button.set_tooltip_text(
+            client.get_title() if self.config.get("tooltip", True) else None
+        )
+
     def _on_client_added(self, _, client: Glace.Client):
         client_image = Image()
-
-        # TODO: remove nest
-        def on_button_press_event(event, client):
-            if event.button == 1:
-                client.activate()
-            else:
-                self.show_menu(client)
-                self.menu.popup_at_pointer(event)
-
-        # TODO: remove nest
-        def on_app_id(*_):
-            if client.get_app_id() in self.config.get("ignored_apps", []):
-                client_button.destroy()
-                client_image.destroy()
-                return
-            client_image.set_from_pixbuf(
-                self.icon_resolver.get_icon_pixbuf(client.get_app_id(), self.icon_size)
-            )
-            client_button.set_tooltip_text(
-                client.get_title() if self.config.get("tooltip", True) else None
-            )
 
         client_button = Button(
             style_classes=["buttons-basic", "buttons-transition"],
             image=client_image,
-            on_button_press_event=lambda _, event: on_button_press_event(event, client),
+            on_button_press_event=lambda _, event: self._on_button_press_event(
+                event, client
+            ),
             on_enter_notify_event=lambda *_: self.config.get("preview_apps", True)
             and self.update_preview_image(client, client_button),
             on_leave_notify_event=lambda *_: self.config.get("preview_apps", True)
@@ -260,7 +259,9 @@ class AppBar(Box):
         bulk_connect(
             client,
             {
-                "notify::app-id": on_app_id,
+                "notify::app-id": lambda *_: self._on_app_id(
+                    client, client_button, client_image
+                ),
                 "notify::activated": lambda *_: client_button.add_style_class("active")
                 if client.get_activated()
                 else client_button.remove_style_class("active"),

@@ -82,6 +82,22 @@ def tint_color(color, tint_factor=1) -> tuple[int, int, int]:
     return mix_colors(color, white, tint_factor)
 
 
+def _pillow_worker(image_path, callback, color_count, resize):
+    try:
+        with Image.open(image_path) as img:
+            img = img.convert("RGB")
+            img.thumbnail((resize, resize), Image.LANCZOS)  # Fast, in-place resize
+            pixels = img.getdata()
+
+            most_common = Counter(pixels).most_common(color_count)
+            palette = [color for color, _ in most_common]
+
+            GLib.idle_add(callback, palette)
+    except Exception as e:
+        print(f"[ColorExtractor] Failed: {e}")
+        GLib.idle_add(callback, None)
+
+
 # Function to get a simple color palette from an image using threading
 def get_simple_palette_threaded(
     image_path: str,
@@ -89,23 +105,11 @@ def get_simple_palette_threaded(
     color_count: int = 4,
     resize: int = 64,
 ):
-    # TODO: remove nest
-    def worker():
-        try:
-            with Image.open(image_path) as img:
-                img = img.convert("RGB")
-                img.thumbnail((resize, resize), Image.LANCZOS)  # Fast, in-place resize
-                pixels = img.getdata()
-
-                most_common = Counter(pixels).most_common(color_count)
-                palette = [color for color, _ in most_common]
-
-                GLib.idle_add(callback, palette)
-        except Exception as e:
-            print(f"[ColorExtractor] Failed: {e}")
-            GLib.idle_add(callback, None)
-
-    threading.Thread(target=worker, daemon=True).start()
+    threading.Thread(
+        target=_pillow_worker,
+        args=(image_path, callback, color_count, resize),
+        daemon=True,
+    ).start()
 
 
 # Function to escape the markup
@@ -150,7 +154,6 @@ def for_monitors(widget: Gtk.Widget) -> list[Gtk.Widget]:
 
 # Function to ttl lru cache
 def ttl_lru_cache(seconds_to_live: int, maxsize: int = 128):
-    # TODO: remove nest
     def wrapper(func):
         @lru_cache(maxsize)
         def inner(__ttl, *args, **kwargs):
@@ -209,38 +212,38 @@ def update_theme_config(theme_name: str):
         logger.exception(f"{Colors.ERROR}[Theme] Error updating theme config: {e}")
 
 
+def _apply_css_to_app():
+    try:
+        app = Application.get_default()
+        if app:
+            app.set_stylesheet_from_file(get_relative_path("../dist/main.css"))
+            logger.info(f"{Colors.INFO}[Theme] CSS applied to application")
+    except Exception as e:
+        logger.exception(f"{Colors.ERROR}[Theme] Error applying CSS to app: {e}")
+
+
+def _compile_css():
+    """Compile SCSS in background thread."""
+    try:
+        check_executable_exists("sass")
+        logger.info(f"{Colors.INFO}[Theme] Recompiling CSS")
+        output = exec_shell_command(
+            "sass styles/main.scss dist/main.css --no-source-map"
+        )
+
+        if output == "":
+            logger.info(f"{Colors.INFO}[Theme] CSS recompiled successfully")
+            GLib.idle_add(_apply_css_to_app)
+        else:
+            logger.exception(f"{Colors.ERROR}[Theme] Failed to compile sass!")
+            logger.exception(f"{Colors.ERROR}[Theme] {output}")
+    except Exception as e:
+        logger.exception(f"{Colors.ERROR}[Theme] Error recompiling CSS: {e}")
+
+
 # Function to recompile SCSS and apply the new CSS
 def recompile_and_apply_css():
     """Recompile SCSS and apply the new CSS to the application."""
-
-    # TODO: remove nest
-    def _apply_css_to_app():
-        try:
-            app = Application.get_default()
-            if app:
-                app.set_stylesheet_from_file(get_relative_path("../dist/main.css"))
-                logger.info(f"{Colors.INFO}[Theme] CSS applied to application")
-        except Exception as e:
-            logger.exception(f"{Colors.ERROR}[Theme] Error applying CSS to app: {e}")
-
-    # TODO: remove nest
-    def _compile_css():
-        """Compile SCSS in background thread."""
-        try:
-            check_executable_exists("sass")
-            logger.info(f"{Colors.INFO}[Theme] Recompiling CSS")
-            output = exec_shell_command(
-                "sass styles/main.scss dist/main.css --no-source-map"
-            )
-
-            if output == "":
-                logger.info(f"{Colors.INFO}[Theme] CSS recompiled successfully")
-                GLib.idle_add(_apply_css_to_app)
-            else:
-                logger.exception(f"{Colors.ERROR}[Theme] Failed to compile sass!")
-                logger.exception(f"{Colors.ERROR}[Theme] {output}")
-        except Exception as e:
-            logger.exception(f"{Colors.ERROR}[Theme] Error recompiling CSS: {e}")
 
     # Run compilation in background thread
     thread(_compile_css)

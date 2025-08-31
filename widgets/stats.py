@@ -519,19 +519,18 @@ class NetworkUsageWidget(ButtonWidget):
         # Set up a fabricator to call the update_label method at specified intervals
         util_fabricator.connect("changed", self.update_ui)
 
+    def format_speed(self, speed):
+        # speed is in bytes/ms, so *1000 = bytes/s
+        speed_bps = speed * 1000
+        if speed_bps < 1024:
+            return f"{speed_bps:.0f} B/s"
+        elif speed_bps < 1024 * 1024:
+            return f"{speed_bps / 1024:.{self.kb_digits}f} KB/s"
+        else:
+            return f"{speed_bps / (1024 * 1024):.{self.mb_digits}f} MB/s"
+
     def update_ui(self, *_):
         """Update the network usage label with the current network usage."""
-
-        # TODO: remove nest
-        def format_speed(speed):
-            # speed is in bytes/ms, so *1000 = bytes/s
-            speed_bps = speed * 1000
-            if speed_bps < 1024:
-                return f"{speed_bps:.0f} B/s"
-            elif speed_bps < 1024 * 1024:
-                return f"{speed_bps / 1024:.{self.kb_digits}f} KB/s"
-            else:
-                return f"{speed_bps / (1024 * 1024):.{self.mb_digits}f} MB/s"
 
         network_speed = self.client.get_network_speed()
 
@@ -539,19 +538,19 @@ class NetworkUsageWidget(ButtonWidget):
         upload_speed = network_speed.get("upload", 0)
 
         if upload_speed >= self.upload_threshold:
-            self.upload_label.set_label(format_speed(upload_speed))
+            self.upload_label.set_label(self.format_speed(upload_speed))
         else:
             self.upload_label.set_label("")
 
         if download_speed >= self.download_threshold:
-            self.download_label.set_label(format_speed(download_speed))
+            self.download_label.set_label(self.format_speed(download_speed))
         else:
             self.download_label.set_label("")
 
         if self.config.get("tooltip", False):
             tooltip_text = (
-                f"Download: {format_speed(download_speed)}\n"
-                f"Upload: {format_speed(upload_speed)}"
+                f"Download: {self.format_speed(download_speed)}\n"
+                f"Upload: {self.format_speed(upload_speed)}"
             )
             self.set_tooltip_text(tooltip_text)
 

@@ -103,6 +103,16 @@ class WeatherService(Service):
 
         return weather
 
+    def _weather_worker(
+        self,
+        location: str,
+        ttl: int,
+        refresh: bool,
+        callback: Callable[[Optional[dict]], None],
+    ):
+        result = self.get_weather(location, ttl=ttl, refresh=refresh)
+        GLib.idle_add(callback, result)
+
     def get_weather_async(
         self,
         location: str,
@@ -110,9 +120,8 @@ class WeatherService(Service):
         ttl: int = 3600,
         refresh: bool = False,
     ):
-        # TODO: remove nest
-        def worker():
-            result = self.get_weather(location, ttl=ttl, refresh=refresh)
-            GLib.idle_add(callback, result)
-
-        threading.Thread(target=worker, daemon=True).start()
+        threading.Thread(
+            target=self._weather_worker,
+            args=(location, ttl, refresh, callback),
+            daemon=True,
+        ).start()

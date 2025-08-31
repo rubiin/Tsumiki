@@ -22,6 +22,15 @@ class WorkSpacesWidget(BoxWidget):
         def create_workspace_label(ws_id: int) -> str:
             return icon_map.get(str(ws_id), default_format.format(id=ws_id))
 
+        def _update_empty_state(button, *_):
+            style_context = button.get_style_context()
+            if button.empty:
+                style_context.add_class("unoccupied")
+                style_context.remove_class("occupied")
+            else:
+                style_context.remove_class("unoccupied")
+                style_context.add_class("occupied")
+
         def setup_button(ws_id: int) -> WorkspaceButton:
             button = WorkspaceButton(
                 id=ws_id,
@@ -31,27 +40,19 @@ class WorkSpacesWidget(BoxWidget):
 
             # Only add empty state styling when showing all workspaces
             if not hide_unoccupied:
-                # TODO: remove nest
-                def update_empty_state(*_):
-                    style_context = button.get_style_context()
-                    if button.empty:
-                        style_context.add_class("unoccupied")
-                        style_context.remove_class("occupied")
-                    else:
-                        style_context.remove_class("unoccupied")
-                        style_context.add_class("occupied")
-
                 # Connect to state changes
                 bulk_connect(
                     button,
                     {
-                        "notify::empty": update_empty_state,
-                        "notify::active": update_empty_state,
+                        "notify::empty": lambda *args: _update_empty_state(
+                            button, *args
+                        ),
+                        "notify::active": lambda *args: _update_empty_state(
+                            button, *args
+                        ),
                     },
                 )
-
-                update_empty_state()
-
+                _update_empty_state(button)
             return button
 
         # Create a HyperlandWorkspace widget to manage workspace buttons

@@ -38,6 +38,14 @@ def stats_poll(fabricator):
         sleep(1)
 
 
+def _on_enter_notify_event(cursor, widget):
+    widget.get_window().set_cursor(cursor)
+
+
+def _on_leave_notify_event(cursor, widget):
+    widget.get_window().set_cursor(cursor)
+
+
 # Function to setup cursor hover
 def setup_cursor_hover(
     widget, cursor_name: Literal["pointer", "crosshair", "grab"] = "pointer"
@@ -45,19 +53,11 @@ def setup_cursor_hover(
     display = Gdk.Display.get_default()
     cursor = Gdk.Cursor.new_from_name(display, cursor_name)
 
-    # TODO: remove nest
-    def on_enter_notify_event(widget, _):
-        widget.get_window().set_cursor(cursor)
-
-    # TODO: remove nest
-    def on_leave_notify_event(widget, _):
-        widget.get_window().set_cursor(cursor)
-
     bulk_connect(
         widget,
         {
-            "enter-notify-event": on_enter_notify_event,
-            "leave-notify-event": on_leave_notify_event,
+            "enter-notify-event": lambda *_: _on_enter_notify_event(cursor, widget),
+            "leave-notify-event": lambda *_: _on_leave_notify_event(cursor, widget),
         },
     )
 

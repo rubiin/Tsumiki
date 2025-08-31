@@ -206,7 +206,6 @@ class StatusBar(Window):
 
         watcher = MonitorWatcher()
 
-        # TODO: remove nest
         def recreate():
             # Remove old
             for bar in bars:

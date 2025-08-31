@@ -226,18 +226,9 @@ class DateNotificationMenu(Box):
                 child=Box(children=(self.clear_icon,)),
             )
 
-            # TODO: remove nest
-            def handle_clear_click(*_):
-                """Handle clear button click."""
-
-                self.notifications_listbox.remove_all()
-
-                notification_service.clear_all_notifications()
-                self.clear_icon.set_label(text_icons["trash"]["empty"])
-
             self.clear_button.connect(
                 "clicked",
-                handle_clear_click,
+                self._handle_clear_click,
             )
 
         notification_column_header.pack_end(
@@ -311,6 +302,14 @@ class DateNotificationMenu(Box):
 
         if self.dnd_switch:
             self.dnd_switch.connect("notify::active", self.on_dnd_switch_toggled)
+
+    def _handle_clear_click(self, *_):
+        """Handle clear button click."""
+
+        self.notifications_listbox.remove_all()
+
+        notification_service.clear_all_notifications()
+        self.clear_icon.set_label(text_icons["trash"]["empty"])
 
     def _load_next_batch(self):
         """Load the next batch of notifications into the listbox."""

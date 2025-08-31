@@ -177,13 +177,12 @@ class AppLauncher(Window):
         )
         return False
 
-    def bake_application_slot(self, app: DesktopApp, **kwargs) -> Button:
-        # TODO: remove nest
-        def on_clicked(*_):
-            app.launch()
-            self.hide()
-            self.search_entry.set_text("")
+    def _on_clicked(self, app: DesktopApp, *_):
+        app.launch()
+        self.hide()
+        self.search_entry.set_text("")
 
+    def bake_application_slot(self, app: DesktopApp, **kwargs) -> Button:
         return Button(
             style_classes="launcher-button",
             child=Box(
@@ -202,7 +201,7 @@ class AppLauncher(Window):
                 ],
             ),
             tooltip_text=app.description if self.config.get("tooltip", False) else None,
-            on_clicked=on_clicked,
+            on_clicked=lambda *_: self._on_clicked(app, *_),
             **kwargs,
         )
 

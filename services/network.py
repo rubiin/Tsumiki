@@ -253,6 +253,30 @@ class Wifi(Service):
             "unknown",
         )
 
+    def make_ap_dict(self, network_data):
+        ap = network_data["ap"]
+        ssid = network_data["ssid"]
+        strength = network_data["strength"]
+
+        return {
+            "bssid": ap.get_bssid(),
+            "last_seen": ap.get_last_seen(),
+            "ssid": ssid,
+            "active-ap": self._ap,
+            "strength": strength,
+            "frequency": ap.get_frequency(),
+            "icon-name": {
+                80: "network-wireless-signal-excellent-symbolic",
+                60: "network-wireless-signal-good-symbolic",
+                40: "network-wireless-signal-ok-symbolic",
+                20: "network-wireless-signal-weak-symbolic",
+                00: "network-wireless-signal-none-symbolic",
+            }.get(
+                min(80, 20 * round(strength / 20)),
+                "network-wireless-no-route-symbolic",
+            ),
+        }
+
     @Property(object, "readable")
     def access_points(self) -> list[object]:
         points: list[NM.AccessPoint] = self._device.get_access_points()
@@ -310,37 +334,12 @@ class Wifi(Service):
             else:
                 unique_networks[ssid] = network_info
 
-        # TODO: remove nest
-        def make_ap_dict(network_data):
-            ap = network_data["ap"]
-            ssid = network_data["ssid"]
-            strength = network_data["strength"]
-
-            return {
-                "bssid": ap.get_bssid(),
-                "last_seen": ap.get_last_seen(),
-                "ssid": ssid,
-                "active-ap": self._ap,
-                "strength": strength,
-                "frequency": ap.get_frequency(),
-                "icon-name": {
-                    80: "network-wireless-signal-excellent-symbolic",
-                    60: "network-wireless-signal-good-symbolic",
-                    40: "network-wireless-signal-ok-symbolic",
-                    20: "network-wireless-signal-weak-symbolic",
-                    00: "network-wireless-signal-none-symbolic",
-                }.get(
-                    min(80, 20 * round(strength / 20)),
-                    "network-wireless-no-route-symbolic",
-                ),
-            }
-
         # Sort by signal strength (strongest first)
         sorted_networks = sorted(
             unique_networks.values(), key=lambda x: x["strength"], reverse=True
         )
 
-        return list(map(make_ap_dict, sorted_networks))
+        return list(map(self.make_ap_dict, sorted_networks))
 
     @Property(str, "readable")
     def ssid(self):

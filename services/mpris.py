@@ -51,12 +51,12 @@ class MprisPlayer(Service):
         )
         GLib.idle_add(self.update_status_once)
 
+    def _notify_property(self, prop):
+        if self.get_property(prop) is not None:
+            self.notifier(prop)
+
     def update_status(self):
         # schedule each notifier asynchronously.
-        # TODO: remove nest
-        def notify_property(prop):
-            if self.get_property(prop) is not None:
-                self.notifier(prop)
 
         for prop in [
             "metadata",
@@ -65,7 +65,7 @@ class MprisPlayer(Service):
             "arturl",
             "length",
         ]:
-            GLib.idle_add(lambda p=prop: (notify_property(p), False))
+            GLib.idle_add(lambda p=prop: (self._notify_property(p), False))
         for prop in [
             "can-seek",
             "can-pause",
@@ -75,24 +75,23 @@ class MprisPlayer(Service):
         ]:
             GLib.idle_add(lambda p=prop: (self.notifier(p), False))
 
+    def _notify_all(self):
+        for prop in self.list_properties():  # type: ignore
+            self.notifier(prop.name)
+        return False
+
     def update_status_once(self):
         # schedule notifier calls for each property
-        # TODO: remove nest
-        def notify_all():
-            for prop in self.list_properties():  # type: ignore
-                self.notifier(prop.name)
-            return False
 
-        GLib.idle_add(notify_all, priority=GLib.PRIORITY_DEFAULT_IDLE)
+        GLib.idle_add(self._notify_all, priority=GLib.PRIORITY_DEFAULT_IDLE)
+
+    def _notify_and_emit(self, name):
+        self.notify(name)
+        self.emit("changed")
+        return False
 
     def notifier(self, name: str, args=None):
-        # TODO: remove nest
-        def notify_and_emit():
-            self.notify(name)
-            self.emit("changed")
-            return False
-
-        GLib.idle_add(notify_and_emit, priority=GLib.PRIORITY_DEFAULT_IDLE)
+        GLib.idle_add(self._notify_and_emit, name, priority=GLib.PRIORITY_DEFAULT_IDLE)
 
     def on_player_exit(self, player):
         for id in list(self._signal_connectors.values()):
