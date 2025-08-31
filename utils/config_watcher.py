@@ -27,6 +27,8 @@ class ConfigWatcher:
         self.monitors: list[Gio.FileMonitor] = []
         self.restart_pending = False
 
+        self.init_script = get_relative_path("../init.sh")
+
         # Files to monitor
         config_files = [
             get_relative_path("../config.json"),
@@ -76,16 +78,14 @@ class ConfigWatcher:
     def _restart_tsumiki(self):
         """Restart Tsumiki using the init script."""
         try:
-            init_script = get_relative_path("../init.sh")
-
             logger.info(
                 f"{Colors.INFO}[ConfigWatcher] Restarting {APPLICATION_NAME.title()}..."
             )
 
             # Run restart in background to avoid blocking
             subprocess.Popen(
-                [init_script, "-restart"],
-                cwd=os.path.dirname(init_script),
+                [self.init_script, "-restart"],
+                cwd=os.path.dirname(self.init_script),
                 stdout=subprocess.DEVNULL,
                 stderr=subprocess.DEVNULL,
                 start_new_session=True,

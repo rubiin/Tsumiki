@@ -151,7 +151,6 @@ class WallpaperPickerBox(ScrolledWindow):
         self._loaded_count = end
         self.loading = False
 
-
     def _on_scroll(self, adjustment):
         """Trigger loading more wallpapers when scrolling near the bottom."""
 

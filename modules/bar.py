@@ -168,8 +168,11 @@ class StatusBar(Window):
     @staticmethod
     def create_bars(app, config):
         multi_monitor = config["general"].get("multi_monitor", False)
-        bars = (StatusBar._create_multi_monitor_bars(config)
-                if multi_monitor else [StatusBar(config)])
+        bars = (
+            StatusBar._create_multi_monitor_bars(config)
+            if multi_monitor
+            else [StatusBar(config)]
+        )
 
         for bar in bars:
             app.add_window(bar)

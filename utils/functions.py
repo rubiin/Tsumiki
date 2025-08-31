@@ -1,3 +1,4 @@
+import ctypes
 import html
 import json
 import os
@@ -53,6 +54,12 @@ def formatted_exec_shell_command_async(
 # Function to convert RGB to hex format
 def rgb_to_hex(rgb) -> str:
     return "#{:02x}{:02x}{:02x}".format(*rgb)
+
+
+# Function to set the process name
+def set_process_name(name: str):
+    libc = ctypes.CDLL("libc.so.6")
+    libc.prctl(15, name.encode("utf-8"), 0, 0, 0)  # 15 = PR_SET_NAME
 
 
 # Function to convert RGB to CSS rgb format

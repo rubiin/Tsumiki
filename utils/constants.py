@@ -415,7 +415,7 @@ DEFAULT_CONFIG = {
         "monitor_styles": True,
         "location": "top",
         "auto_reload": True,
-        "multi_monitor": False
+        "multi_monitor": False,
     },
 }
 

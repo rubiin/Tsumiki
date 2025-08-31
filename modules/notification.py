@@ -40,6 +40,11 @@ class NotificationPopup(Window):
 
         self.ignored_apps = helpers.unique_list(self.config.get("ignored", []))
 
+        if self.config.get("play_sound", False):
+            self.sound_file = get_relative_path(
+                f"../assets/sounds/{self.config['sound_file']}.mp3"
+            )
+
         self.notifications = Box(
             v_expand=True,
             h_expand=True,
@@ -80,9 +85,7 @@ class NotificationPopup(Window):
             )
 
         if self.config.get("play_sound", False):
-            helpers.play_sound(
-                get_relative_path(f"../assets/sounds/{self.config['sound_file']}.mp3")
-            )
+            helpers.play_sound(self.sound_file)
 
 
 class NotificationWidget(EventBox):
