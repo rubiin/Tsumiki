@@ -7,6 +7,7 @@ from fabric.widgets.centerbox import CenterBox
 from fabric.widgets.wayland import WaylandWindow as Window
 
 from shared.collapsible_group import CollapsibleGroupWidget
+from widgets.app_launcher_button import AppLauncherButton
 from widgets.battery import BatteryWidget
 from widgets.bluetooth import BlueToothWidget
 from widgets.brightness import BrightnessWidget
@@ -57,6 +58,7 @@ class StatusBar(Window):
 
     def __init__(self, config, **kwargs):
         self.widgets_list = {
+            "app_launcher_button": AppLauncherButton,
             "battery": BatteryWidget,
             "bluetooth": BlueToothWidget,
             "world_clock": WorldClockWidget,

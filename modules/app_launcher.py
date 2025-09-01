@@ -1,60 +1,177 @@
 import operator
 from collections.abc import Iterator
-from enum import Enum
-from typing import Callable
+from contextlib import suppress
 
 from fabric.utils import DesktopApp, idle_add, remove_handler
 from fabric.widgets.box import Box
 from fabric.widgets.button import Button
 from fabric.widgets.entry import Entry
+from fabric.widgets.grid import Grid
 from fabric.widgets.image import Image
 from fabric.widgets.label import Label
 from fabric.widgets.scrolledwindow import ScrolledWindow
-from fabric.widgets.wayland import WaylandWindow as Window
-from gi.repository import Gdk
+from gi.repository import Gdk, GLib
 
 from shared.buttons import HoverButton
-from shared.tagentry import TagEntry
+from shared.popup import PopupWindow
 from utils.app import AppUtils
 
 
-class LauncherCommandType(Enum):
-    """Types of commands that can be executed by the launcher."""
+class LauncherConfig:
+    """Configuration validator and defaults for AppLauncher."""
 
-    SINGLE_ENTRY = 0
-    SINGLE_ENTRY_WITH_CONFIRMATION = 1
-    LIST = 2
-    LIST_WITH_CONFIRMATION = 3
-    WIDGET = 4
-    WIDGET_WITH_CONFIRMATION = 5
+    # Only essential constants
+    DEFAULT_WIDTH = 280
+    DEFAULT_HEIGHT = 320
+    DEFAULT_ICON_SIZE = 30
+    DEFAULT_GRID_COLUMNS = 3
+    DEFAULT_ANCHOR = "center"
+    DEFAULT_LAYOUT = "list"
+
+    def __init__(self, config: dict):
+        self.raw_config = config.get("modules", {}).get("app_launcher", {})
+        self._validate_and_set_defaults()
+
+    def _validate_and_set_defaults(self):
+        """Validate configuration and set defaults."""
+        self.width = max(200, self.raw_config.get("width", self.DEFAULT_WIDTH))
+        self.height = max(200, self.raw_config.get("height", self.DEFAULT_HEIGHT))
+
+        icon_size = self.raw_config.get("icon_size", self.DEFAULT_ICON_SIZE)
+        self.icon_size = max(16, min(128, icon_size))
+
+        layout = self.raw_config.get("layout", self.DEFAULT_LAYOUT)
+        self.layout_mode = layout if layout in ["list", "grid"] else self.DEFAULT_LAYOUT
+
+        grid_cols = self.raw_config.get("grid_columns", self.DEFAULT_GRID_COLUMNS)
+        self.grid_columns = max(1, min(10, grid_cols))
+
+        self.anchor = self.raw_config.get("anchor", self.DEFAULT_ANCHOR)
+        self.show_tooltips = bool(self.raw_config.get("tooltip", False))
 
 
-class AppLauncher(Window):
+class AppWidgetFactory:
+    """Factory for creating application widgets in different layouts."""
+
+    @staticmethod
+    def create_widget(app: DesktopApp, layout_mode: str, icon_size: int,
+                     config: LauncherConfig) -> Button:
+        """Create an application widget based on layout mode."""
+        if layout_mode == "grid":
+            child_widget = AppWidgetFactory._create_grid_layout(
+                app, icon_size, config
+            )
+        else:
+            child_widget = AppWidgetFactory._create_list_layout(
+                app, icon_size, config
+            )
+
+        return Button(
+            style_classes="launcher-button",
+            child=child_widget,
+            tooltip_text=(app.description if config.show_tooltips else None),
+        )
+
+    @staticmethod
+    def _create_grid_layout(app: DesktopApp, icon_size: int,
+                           config: LauncherConfig) -> Box:
+        """Create vertical layout for grid mode."""
+        return Box(
+            orientation="v",
+            spacing=4,
+            children=[
+                Image(
+                    pixbuf=app.get_icon_pixbuf(icon_size),
+                    h_align="center",
+                ),
+                Label(
+                    label=app.display_name or "Unknown",
+                    v_align="center",
+                    h_align="center",
+                    ellipsize="end",
+                    max_width_chars=10,
+                ),
+            ],
+        )
+
+    @staticmethod
+    def _create_list_layout(app: DesktopApp, icon_size: int,
+                           config: LauncherConfig) -> Box:
+        """Create horizontal layout for list mode."""
+        return Box(
+            orientation="h",
+            spacing=12,
+            children=[
+                Image(
+                    pixbuf=app.get_icon_pixbuf(icon_size),
+                    h_align="start",
+                ),
+                Label(
+                    label=app.display_name or "Unknown",
+                    v_align="center",
+                    h_align="center",
+                ),
+            ],
+        )
+
+
+class HandlerManager:
+    """Context manager for handling GTK handlers safely."""
+
+    def __init__(self, launcher):
+        self.launcher = launcher
+        self.old_handler = None
+
+    def __enter__(self):
+        # Remove old handler if exists and is valid
+        if (self.launcher._arranger_handler and
+            self.launcher._arranger_handler > 0):
+            # Check if the source still exists before removing
+            main_context = GLib.MainContext.default()
+            handler_id = self.launcher._arranger_handler
+            if main_context.find_source_by_id(handler_id):
+                try:
+                    remove_handler(handler_id)
+                    self.old_handler = handler_id
+                except (GLib.Error, Exception):
+                    # Handler removal failed, just continue silently
+                    pass
+        self.launcher._arranger_handler = 0
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        # Cleanup is automatic, nothing to do
+        pass
+
+    def set_new_handler(self, handler_id):
+        """Set the new handler ID."""
+        self.launcher._arranger_handler = handler_id
+
+
+class AppLauncher(PopupWindow):
     """Launcher widget for launching applications and commands."""
 
     def __init__(self, config, **kwargs):
-        self.config = config["modules"]["app_launcher"]
-        super().__init__(
-            name="launcher",
-            layer="top",
-            anchor="center",
-            exclusivity="none",
-            keyboard_mode="on-demand",
-            visible=False,
-            all_visible=False,
-            **kwargs,
-        )
-        self._arranger_handler: int = 0
+        # Initialize configuration with validation
+        self.config = LauncherConfig(config)
 
+        # Initialize remaining instance variables
+        self._arranger_handler: int = 0
         self.app_util = AppUtils()
         self._all_apps = self.app_util.all_applications
+        self._grid_position = 0  # Track current position in grid
 
-        self.connect("key-press-event", self._on_key_press)
-
-        self._commands = {}
-        self._command_handler = None
-
-        self.viewport = Box(spacing=2, orientation="v")
+        # Create widgets - viewport depends on layout mode
+        if self.config.layout_mode == "grid":
+            self.viewport = Grid(
+                column_homogeneous=True,
+                row_homogeneous=True,
+            )
+        else:  # list mode
+            self.viewport = Box(
+                spacing=2,
+                orientation="v"
+            )
         self.search_entry = Entry(
             name="launcher-prompt",
             placeholder="Search Applications...",
@@ -62,162 +179,172 @@ class AppLauncher(Window):
             notify_text=lambda entry, *_: self.arrange_viewport(entry.get_text()),
         )
 
-        self.tag_entry = TagEntry(
-            h_expand=True, placeholder="Tags", available_tags=["tag1", "tag2", "tag3"]
-        )
-
         self.scrolled_window = ScrolledWindow(
-            min_content_size=(280, 320),
-            max_content_size=(280 * 2, 320),
+            min_content_size=(self.config.width, self.config.height),
+            max_content_size=(self.config.width, self.config.height),
             child=self.viewport,
         )
 
-        self.add(
-            Box(
-                name="launcher-contents",
-                spacing=2,
-                orientation="v",
-                children=[
-                    # the header with the search entry
-                    Box(
-                        spacing=2,
-                        orientation="h",
-                        children=[
-                            self.search_entry,
-                            HoverButton(
-                                name="launcher-close-button",
-                                image=Image(icon_name="window-close"),
-                                tooltip_text="Exit",
-                                on_clicked=lambda *_: self.hide(),
-                                v_align="center",
-                                h_align="center",
-                            ),
-                        ],
-                    ),
-                    # self.tag_entry,
-                    # the actual slots holder
-                    self.scrolled_window,
-                ],
-            )
+        # Enable kinetic scrolling
+        with suppress(AttributeError):
+            self.scrolled_window.set_kinetic_scrolling(True)
+
+        # Create the main content
+        launcher_content = Box(
+            name="launcher-contents",
+            spacing=2,
+            orientation="v",
+            size_request=(self.config.width, self.config.height),
+            children=[
+                # Header with search
+                Box(
+                    spacing=2,
+                    orientation="h",
+                    children=[
+                        self.search_entry,
+                        HoverButton(
+                            name="launcher-close-button",
+                            image=Image(icon_name="window-close"),
+                            tooltip_text="Exit",
+                            on_clicked=lambda *_: self.close_launcher(),
+                            v_align="center",
+                            h_align="center",
+                        ),
+                    ],
+                    visible=True,  # Always show search bar
+                ),
+                # Apps list
+                self.scrolled_window,
+            ],
         )
 
-        self.search_entry.grab_focus_without_selecting()
-        self.hide()
+        # Choose transition based on anchor
+        transition = ("slide-up" if self.config.anchor.startswith("bottom")
+                     else "slide-down")
+
+        super().__init__(
+            name="launcher-popup",
+            anchor=self.config.anchor,
+            transition_type=transition,
+            transition_duration=300,
+            enable_inhibitor=True,
+            child=launcher_content,
+            **kwargs,
+        )
+
+        # Set up key handling
+        self.connect("key-press-event", self._on_key_press)
+
+    def close_launcher(self):
+        """Close the launcher."""
+        self.popup_visible = False
+        self.reveal_child.revealer.set_reveal_child(self.popup_visible)
+        self.search_entry.set_text("")
 
     def _on_key_press(self, _, event):
         if event.keyval == Gdk.KEY_Escape:
-            self.destroy()
+            self.close_launcher()
+
+    def _clear_viewport_safely(self):
+        """Clear viewport widgets with proper error handling."""
+        if self.config.layout_mode == "grid":
+            try:
+                children = [child for child in self.viewport]
+                for child in children:
+                    self.viewport.remove(child)
+            except (AttributeError, TypeError) as e:
+                # Log error and recreate grid as fallback
+                print(f"Warning: Grid clear failed ({e}), recreating viewport")
+                try:
+                    self.viewport = Grid(
+                        column_homogeneous=True,
+                        row_homogeneous=True,
+                    )
+                    self.scrolled_window.set_child(self.viewport)
+                except Exception as fallback_error:
+                    print(f"Error: Failed to recreate grid: {fallback_error}")
+        else:
+            # For list layout, simple clear
+            self.viewport.children = []
 
     def arrange_viewport(self, query: str = ""):
-        # reset everything so we can filter current viewport's slots...
-        # remove the old handler so we can avoid race conditions
-        remove_handler(self._arranger_handler) if self._arranger_handler else None
+        """Arrange viewport with filtered applications."""
+        with HandlerManager(self) as handler_mgr:
+            # Clear viewport safely
+            self._clear_viewport_safely()
+            self._grid_position = 0
 
-        # remove all children from the viewport
-        self.viewport.children = []
-
-        # make a new iterator containing the filtered apps
-        command = None
-        prompt = ""
-        try:
-            command, prompt = query.split(" ", 1)
-        except Exception:
-            command = query
-
-        if len(command) > 0 and self._command_handler:
-            command_data: tuple[LauncherCommandType, Callable] | None = None
-            if (command_data := self._command_handler(command)) is not None:
-                command_type, command_factory = command_data
-                result = command_factory(prompt)
-
-                if command_type == LauncherCommandType.SINGLE_ENTRY:
-                    print(result.title, result.label)
-                elif command_type == LauncherCommandType.LIST:
-                    ...
-                else:
-                    ...
-                return False
-        filtered_apps_iter = iter(
-            [
-                app
-                for app in self._all_apps
-                if query.casefold()
-                in (
+            # Simple and efficient app filtering
+            query_lower = query.casefold()
+            filtered_apps_iter = iter([
+                app for app in self._all_apps
+                if query_lower in (
                     (app.display_name or "")
-                    + (" " + app.name + " ")
-                    + (app.generic_name or "")
+                    + " " + (app.name or "")
+                    + " " + (app.generic_name or "")
                 ).casefold()
-            ]
-        )
-        should_resize = operator.length_hint(filtered_apps_iter) == len(self._all_apps)
+            ])
+            should_resize = (operator.length_hint(filtered_apps_iter)
+                           == len(self._all_apps))
 
-        # all aboard...
-        # start the process of adding slots with a lazy executor
-        # using this method makes the process of adding slots way more less
-        # resource expensive without blocking the main thread and resulting in a lock
-        self._arranger_handler = idle_add(
-            lambda *args: self.add_next_application(*args)
-            or (self.resize_viewport() if should_resize else False),
-            filtered_apps_iter,
-            pin=True,
-        )
+            # Start lazy loading process
+            handler_id = idle_add(
+                lambda *args: self.add_next_application(*args)
+                or (self.resize_viewport() if should_resize else False),
+                filtered_apps_iter,
+                pin=True,
+            )
+            handler_mgr.set_new_handler(handler_id)
 
         return False
 
     def add_next_application(self, apps_iter: Iterator[DesktopApp]):
+        """Add the next application widget to the viewport."""
         if not (app := next(apps_iter, None)):
             return False
 
-        self.viewport.add(self.bake_application_slot(app))
+        app_widget = AppWidgetFactory.create_widget(
+            app, self.config.layout_mode, self.config.icon_size, self.config
+        )
+        app_widget.on_clicked = lambda *_: (app.launch(), self.close_launcher())
+
+        if self.config.layout_mode == "grid":
+            row = self._grid_position // self.config.grid_columns
+            col = self._grid_position % self.config.grid_columns
+            self.viewport.attach(app_widget, col, row, 1, 1)
+            self._grid_position += 1
+        else:  # list mode
+            self.viewport.add(app_widget)
+
         return True
 
     def resize_viewport(self):
-        self.scrolled_window.set_min_content_width(
-            self.viewport.get_allocation().width  # type: ignore
-        )
+        """Resize viewport to fit content."""
+        try:
+            allocation_width = self.viewport.get_allocation().width
+            if allocation_width > 0:
+                # Clear max_content_width constraint to avoid conflicts
+                self.scrolled_window.set_max_content_width(-1)
+                self.scrolled_window.set_min_content_width(allocation_width)
+        except (AttributeError, TypeError):
+            # Ignore resize errors
+            pass
         return False
 
-    def bake_application_slot(self, app: DesktopApp, **kwargs) -> Button:
-        def on_clicked(*_):
-            app.launch()
-            self.hide()
+    def toggle(self):
+        """Toggle launcher visibility."""
+        if self.popup_visible:
+            self.close_launcher()
+        else:
+            # Refresh apps list
+            self._all_apps = self.app_util.all_applications
             self.search_entry.set_text("")
 
-        return Button(
-            style_classes="launcher-button",
-            child=Box(
-                orientation="h",
-                spacing=12,
-                children=[
-                    Image(
-                        pixbuf=app.get_icon_pixbuf(self.config.get("icon_size", 16)),
-                        h_align="start",
-                    ),
-                    Label(
-                        label=app.display_name or "Unknown",
-                        v_align="center",
-                        h_align="center",
-                    ),
-                ],
-            ),
-            tooltip_text=app.description if self.config.get("tooltip", False) else None,
-            on_clicked=on_clicked,
-            **kwargs,
-        )
+            # Focus search entry for filtering
+            self.search_entry.grab_focus_without_selecting()
 
-    def set_commands(self, commands: dict):
-        self._commands = commands
-
-    def set_command_handler(self, command_handler: Callable):
-        self._command_handler = command_handler
-
-    def toggle(self):
-        if self.is_visible():
-            return self.set_visible(False)
-        self._all_apps = self.app_util.all_applications
-        (self.search_entry.set_text(""),)
-        self.search_entry.grab_focus_without_selecting()
-        return self.set_visible(True)
+            # Show the popup using PopupWindow's method
+            self.toggle_popup()
 
     def launch(self, command: str):
         self.search_entry.set_text(command)
