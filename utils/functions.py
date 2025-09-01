@@ -58,6 +58,8 @@ def rgb_to_hex(rgb) -> str:
 
 # Function to set the process name
 def set_process_name(name: str):
+    GLib.set_prgname(name)
+    GLib.set_application_name(name)
     libc = ctypes.CDLL("libc.so.6")
     libc.prctl(15, name.encode("utf-8"), 0, 0, 0)  # 15 = PR_SET_NAME
 

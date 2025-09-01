@@ -34,6 +34,11 @@ LOG_FORMAT = "{time:YYYY-MM-DD HH:mm:ss} [<level>{level}</level>] {message}"
 DEFAULT_CONFIG = {
     "$schema": f"./{APPLICATION_NAME}.schema.json",
     "widgets": {
+        "app_launcher_button": {
+            "icon": "view-app-grid-symbolic",
+            "icon_size": 16,
+            "tooltip": True,
+        },
         "cliphist": {
             "icon": "",
             "label": False,
