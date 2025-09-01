@@ -12,7 +12,6 @@ from fabric.widgets.label import Label
 from fabric.widgets.scrolledwindow import ScrolledWindow
 from gi.repository import Gdk, GLib
 
-from shared.buttons import HoverButton
 from shared.popup import PopupWindow
 from utils.app import AppUtils
 
@@ -81,6 +80,7 @@ class AppWidgetFactory:
                 Image(
                     pixbuf=app.get_icon_pixbuf(icon_size),
                     h_align="center",
+                    name="icon",
                 ),
                 Label(
                     label=app.display_name or "Unknown",
@@ -104,6 +104,7 @@ class AppWidgetFactory:
                 Image(
                     pixbuf=app.get_icon_pixbuf(icon_size),
                     h_align="start",
+                    name="icon",
                 ),
                 Label(
                     label=app.display_name or "Unknown",
@@ -197,14 +198,6 @@ class AppLauncher(PopupWindow):
                     orientation="h",
                     children=[
                         self.search_entry,
-                        HoverButton(
-                            name="launcher-close-button",
-                            image=Image(icon_name="window-close"),
-                            tooltip_text="Exit",
-                            on_clicked=lambda *_: self.close_launcher(),
-                            v_align="center",
-                            h_align="center",
-                        ),
                     ],
                     visible=True,  # Always show search bar
                 ),

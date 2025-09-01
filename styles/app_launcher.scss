@@ -3,6 +3,29 @@
 @use "variable";
 
 
+button.launcher-button {
+  border-radius: variable.$radius-large;
+
+  #icon{
+    -gtk-icon-effect: highlight;
+  }
+
+  &:hover,
+  &:focus {
+    background-color: theme.$background;
+  }
+
+  &:focus {
+    label {
+      color: theme.$text-main;
+    }
+  }
+}
+
+#launcher-prompt {
+  font-size: 12px;
+}
+
 #launcher {
 
   border: if(variable.$modules-app_launcher-border-enabled, variable.$border, none);

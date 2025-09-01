@@ -426,16 +426,3 @@
     margin-right: variable.$bar-widgets-window_title-spacing;
   }
 }
-
-
-button.launcher-button:focus {
-  background-color: theme.$background;
-}
-
-button.launcher-button:focus label {
-  color: theme.$text-main;
-}
-
-#launcher-prompt {
-  font-size: 12px;
-}
