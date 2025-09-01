@@ -54,17 +54,14 @@ class AppWidgetFactory:
     """Factory for creating application widgets in different layouts."""
 
     @staticmethod
-    def create_widget(app: DesktopApp, layout_mode: str, icon_size: int,
-                     config: LauncherConfig) -> Button:
+    def create_widget(
+        app: DesktopApp, layout_mode: str, icon_size: int, config: LauncherConfig
+    ) -> Button:
         """Create an application widget based on layout mode."""
         if layout_mode == "grid":
-            child_widget = AppWidgetFactory._create_grid_layout(
-                app, icon_size, config
-            )
+            child_widget = AppWidgetFactory._create_grid_layout(app, icon_size, config)
         else:
-            child_widget = AppWidgetFactory._create_list_layout(
-                app, icon_size, config
-            )
+            child_widget = AppWidgetFactory._create_list_layout(app, icon_size, config)
 
         return Button(
             style_classes="launcher-button",
@@ -73,8 +70,9 @@ class AppWidgetFactory:
         )
 
     @staticmethod
-    def _create_grid_layout(app: DesktopApp, icon_size: int,
-                           config: LauncherConfig) -> Box:
+    def _create_grid_layout(
+        app: DesktopApp, icon_size: int, config: LauncherConfig
+    ) -> Box:
         """Create vertical layout for grid mode."""
         return Box(
             orientation="v",
@@ -95,8 +93,9 @@ class AppWidgetFactory:
         )
 
     @staticmethod
-    def _create_list_layout(app: DesktopApp, icon_size: int,
-                           config: LauncherConfig) -> Box:
+    def _create_list_layout(
+        app: DesktopApp, icon_size: int, config: LauncherConfig
+    ) -> Box:
         """Create horizontal layout for list mode."""
         return Box(
             orientation="h",
@@ -124,8 +123,7 @@ class HandlerManager:
 
     def __enter__(self):
         # Remove old handler if exists and is valid
-        if (self.launcher._arranger_handler and
-            self.launcher._arranger_handler > 0):
+        if self.launcher._arranger_handler and self.launcher._arranger_handler > 0:
             # Check if the source still exists before removing
             main_context = GLib.MainContext.default()
             handler_id = self.launcher._arranger_handler
@@ -168,10 +166,7 @@ class AppLauncher(PopupWindow):
                 row_homogeneous=True,
             )
         else:  # list mode
-            self.viewport = Box(
-                spacing=2,
-                orientation="v"
-            )
+            self.viewport = Box(spacing=2, orientation="v")
         self.search_entry = Entry(
             name="launcher-prompt",
             placeholder="Search Applications...",
@@ -219,8 +214,9 @@ class AppLauncher(PopupWindow):
         )
 
         # Choose transition based on anchor
-        transition = ("slide-up" if self.config.anchor.startswith("bottom")
-                     else "slide-down")
+        transition = (
+            "slide-up" if self.config.anchor.startswith("bottom") else "slide-down"
+        )
 
         super().__init__(
             name="launcher-popup",
@@ -276,16 +272,23 @@ class AppLauncher(PopupWindow):
 
             # Simple and efficient app filtering
             query_lower = query.casefold()
-            filtered_apps_iter = iter([
-                app for app in self._all_apps
-                if query_lower in (
-                    (app.display_name or "")
-                    + " " + (app.name or "")
-                    + " " + (app.generic_name or "")
-                ).casefold()
-            ])
-            should_resize = (operator.length_hint(filtered_apps_iter)
-                           == len(self._all_apps))
+            filtered_apps_iter = iter(
+                [
+                    app
+                    for app in self._all_apps
+                    if query_lower
+                    in (
+                        (app.display_name or "")
+                        + " "
+                        + (app.name or "")
+                        + " "
+                        + (app.generic_name or "")
+                    ).casefold()
+                ]
+            )
+            should_resize = operator.length_hint(filtered_apps_iter) == len(
+                self._all_apps
+            )
 
             # Start lazy loading process
             handler_id = idle_add(

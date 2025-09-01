@@ -1,6 +1,10 @@
 {
 	"$schema": "./tsumiki.schema.json",
 	"widgets": {
+		"app_launcher_button": {
+			"tooltip": true,
+			"icon": "view-app-grid-symbolic"
+		},
 		"battery": {
 			"hide_label_when_full": true,
 			"hide_when_missing": true,
@@ -433,7 +437,7 @@
 		"app_launcher": {
 			"enabled": false,
 			"tooltip": false,
-			"icon_size": 30,
+			"icon_size": 40,
 			"ignored": [],
 			"anchor": "center",
 			"width": 280,
