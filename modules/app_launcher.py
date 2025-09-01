@@ -10,7 +10,7 @@ from fabric.widgets.grid import Grid
 from fabric.widgets.image import Image
 from fabric.widgets.label import Label
 from fabric.widgets.scrolledwindow import ScrolledWindow
-from gi.repository import Gdk, GLib
+from gi.repository import Gdk, GLib, Gtk
 
 from shared.popup import PopupWindow
 from utils.app import AppUtils
@@ -175,6 +175,19 @@ class AppLauncher(PopupWindow):
             notify_text=lambda entry, *_: self.arrange_viewport(entry.get_text()),
         )
 
+        # Add magnifying glass icon to the left (primary position)
+        self.search_entry.set_icon_from_icon_name(
+            Gtk.EntryIconPosition.PRIMARY, "system-search"
+        )
+
+        # Right icon (cross/clear)
+        self.search_entry.set_icon_from_icon_name(
+            Gtk.EntryIconPosition.SECONDARY, "edit-clear"
+        )
+
+        # Connect handler for icon clicks
+        self.search_entry.connect("icon-press", self.on_icon_press)
+
         self.scrolled_window = ScrolledWindow(
             min_content_size=(self.config.width, self.config.height),
             max_content_size=(self.config.width, self.config.height),
@@ -223,6 +236,10 @@ class AppLauncher(PopupWindow):
 
         # Set up key handling
         self.connect("key-press-event", self._on_key_press)
+
+    def on_icon_press(self, entry, icon_pos, event):
+        if icon_pos == Gtk.EntryIconPosition.SECONDARY:
+            self.search_entry.set_text("")
 
     def close_launcher(self):
         """Close the launcher."""

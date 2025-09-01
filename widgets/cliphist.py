@@ -12,7 +12,7 @@ from fabric.widgets.entry import Entry
 from fabric.widgets.image import Image
 from fabric.widgets.label import Label
 from fabric.widgets.scrolledwindow import ScrolledWindow
-from gi.repository import Gdk, GdkPixbuf, GLib
+from gi.repository import Gdk, GdkPixbuf, GLib, Gtk
 from loguru import logger
 
 from shared.list import ListBox
@@ -63,7 +63,20 @@ class ClipHistoryMenu(Box):
             on_key_press_event=self.on_search_entry_key_press,
         )
 
+        # Add magnifying glass icon to the left (primary position)
+        self.search_entry.set_icon_from_icon_name(
+            Gtk.EntryIconPosition.PRIMARY, "system-search"
+        )
+
+        # Right icon (cross/clear)
+        self.search_entry.set_icon_from_icon_name(
+            Gtk.EntryIconPosition.SECONDARY, "edit-clear"
+        )
+
         self.search_entry.connect("notify::text", self._on_search_text_changed)
+
+        # Connect handler for icon clicks
+        self.search_entry.connect("icon-press", self.on_icon_press)
 
         self.search_entry.props.xalign = 0.1
 
@@ -103,6 +116,10 @@ class ClipHistoryMenu(Box):
 
         self.add(self.history_box)
         self.open()  # Load items when the widget is created
+
+    def on_icon_press(self, entry, icon_pos, event):
+        if icon_pos == Gtk.EntryIconPosition.SECONDARY:
+            self.search_entry.set_text("")
 
     def _load_next_batch(self, aps):
         if self.loading or self.items_loaded >= self.max_items:
