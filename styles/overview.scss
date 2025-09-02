@@ -59,12 +59,10 @@
 
 #overview-workspace-bg {
   background-color: color.mix(theme.$surface-disabled, transparent, 40%);
-}
 
-
-  .ws_id_label {
-    background-color: theme.$background-alt;
-    border-radius: 5px;
-    font-size: 10px;
-    padding: 4px 8px;
+  #overview-add-label{
+    font-size: 2rem;
+    font-weight: 400;
+    color: color.mix(theme.$text-main, black, 30%);
   }
+}

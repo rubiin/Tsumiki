@@ -21,7 +21,7 @@ from utils.widget_utils import create_surface_from_widget
 gi.require_versions({"Gtk": "3.0", "Gdk": "3.0", "GdkPixbuf": "2.0"})
 
 
-SCALE = 0.1
+SCALE = 0.14
 TARGET = [Gtk.TargetEntry.new("text/plain", Gtk.TargetFlags.SAME_APP, 0)]
 
 
@@ -200,10 +200,9 @@ class WorkspaceEventBox(EventBox):
             if fixed
             else Label(
                 name="overview-add-label",
-                style_classes=["panel-text"],
                 h_expand=True,
                 v_expand=True,
-                markup="+",
+                label=f"{workspace_id}",
             ),
             on_drag_data_received=lambda _w,
             _c,
@@ -240,6 +239,7 @@ class OverviewMenu(Box):
         self.app_identifiers = self.app_util.app_identifiers
 
         # Remove the window_class_aliases dictionary completely
+        # TODO: replace with glace
 
         bulk_connect(
             self._hyprland_connection,
@@ -309,17 +309,9 @@ class OverviewMenu(Box):
         overviews = []
 
         for w_id in range(1, 11):
-            overlay = Overlay(
-                child=WorkspaceEventBox(
-                    w_id,
-                    self.workspace_boxes.get(w_id, None),
-                ),
-                overlays=Label(
-                    label=f"{w_id}",
-                    style_classes=["panel-text", "ws_id_label"],
-                    v_align="end",
-                    h_align="end",
-                ),
+            overlay = WorkspaceEventBox(
+                w_id,
+                self.workspace_boxes.get(w_id, None),
             )
             overviews.append(overlay)
 
