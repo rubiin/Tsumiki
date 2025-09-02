@@ -1,5 +1,33 @@
 # Changelog
 
+## [2.4.0](https://github.com/rubiin/Tsumiki/compare/v2.3.0...v2.4.0) (2025-09-02)
+
+
+### 🚀 New Features
+
+* add search entry icons and clear functionality in app launcher and clip history menu ([681c4a9](https://github.com/rubiin/Tsumiki/commit/681c4a9477f59a20d64801abcfff80aaeac7c9dd))
+* App launcher button and usable menu ([#197](https://github.com/rubiin/Tsumiki/issues/197)) ([d7f74eb](https://github.com/rubiin/Tsumiki/commit/d7f74eb8615f2e00dda81a757744480863801087))
+* enhance app launcher with tooltip and icon size adjustments; set process name in GLib ([72128c4](https://github.com/rubiin/Tsumiki/commit/72128c4ecab1ae2df14f2be4016b3b0d26f184e6))
+* implement process name setting and improve notification sound handling ([0d09bb6](https://github.com/rubiin/Tsumiki/commit/0d09bb64d40939d6516f07b3e138800f3da8c5a5))
+
+
+### 🐛 Bug Fixes
+
+* downgrade pygobject ([d5b8c3d](https://github.com/rubiin/Tsumiki/commit/d5b8c3d4323f88f349d7056939bc0779ef9e9b4f))
+* nested ([bd86a51](https://github.com/rubiin/Tsumiki/commit/bd86a5168f3b8d22458387b798dad6825ed14ab7))
+
+
+### ♻️ Code Refactoring
+
+* clean up app launcher styles and remove unused focus styles ([b46fc61](https://github.com/rubiin/Tsumiki/commit/b46fc61bb4432460a10e598ad6639cfce92fbd44))
+* eliminate nested functions for improved readability ([88d346c](https://github.com/rubiin/Tsumiki/commit/88d346c7686d3e26d2c450b2ca2923846a7d9cbb))
+* streamline StatusBar bar recreation logic and remove unused process name setting ([2e23419](https://github.com/rubiin/Tsumiki/commit/2e23419cbf42f9e68a997b0ee4a1dd26b68fc851))
+
+
+### 🚀 CI Improvements
+
+* Update checkout action version from v5 to v4 ([d66a6ee](https://github.com/rubiin/Tsumiki/commit/d66a6ee7d5e06a21903f332df2c61e9ad84212ad))
+
 ## [2.3.0](https://github.com/rubiin/Tsumiki/compare/v2.2.0...v2.3.0) (2025-08-30)
 
 
