@@ -33,6 +33,7 @@
             "groupSlug": "all-major-patch"
         }
     ],
+    "rebaseWhen": "conflicted",
     "schedule": [
         "before 2pm on Monday"
     ]
