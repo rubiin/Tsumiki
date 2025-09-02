@@ -3,7 +3,8 @@
 	"widgets": {
 		"app_launcher_button": {
 			"tooltip": true,
-			"icon": "view-app-grid-symbolic"
+			"icon": "view-app-grid-symbolic",
+			"icon_size": 20
 		},
 		"battery": {
 			"hide_label_when_full": true,
@@ -376,6 +377,7 @@
 	},
 	"layout": {
 		"left_section": [
+			"app_launcher_button",
 			"workspaces",
 			"window_title"
 		],
@@ -386,7 +388,8 @@
 		"right_section": [
 			"@collapsible:0",
 			"@group:0",
-			"system_tray"
+			"system_tray",
+			"power"
 		]
 	},
 	"widget_groups": [
