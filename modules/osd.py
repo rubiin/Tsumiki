@@ -298,6 +298,7 @@ class OSDContainer(Window):
             visible=False,
             pass_through=True,
             keyboard_mode=keyboard_mode,
+            name="osd",
             **kwargs,
         )
 

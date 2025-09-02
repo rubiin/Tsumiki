@@ -100,6 +100,8 @@ def main():
     # Run the application
     app.run()
 
+    print(app.get_windows())
+
     logger.info(f"{Colors.INFO}[Main] Starting {APPLICATION_NAME}...")
     logger.info(f"Starting shell... pid:{os.getpid()}")
 
