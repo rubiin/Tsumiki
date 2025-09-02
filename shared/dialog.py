@@ -46,10 +46,12 @@ class Dialog(PopupWindow):
 
         super().__init__(
             name="dialog",
-            transition_type="crossfade",
             child=self.wrapper,
+            transition_duration=300,
+            transition_type="crossfade",
             anchor="center",
-            keyboard_mode="on-demand",
+            enable_inhibitor=True,
+            keyboard_mode="exclusive",
             **kwargs,
         )
 

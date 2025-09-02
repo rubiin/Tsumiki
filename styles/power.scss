@@ -25,7 +25,7 @@
   border-color: theme.$surface-disabled;
   text-decoration-color: theme.$text-main;
   color: theme.$text-main;
-  background-color: theme.$background;
+  background-color: #1E1E1E;
   border-style: solid;
   border-width: 1px;
   background-repeat: no-repeat;
@@ -39,7 +39,7 @@
   &:focus,
   &:active,
   &:hover {
-    background-color: theme.$accent-purple;
+    background-color: #3700B3;
     outline-style: none;
   }
 }

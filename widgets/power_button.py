@@ -15,15 +15,6 @@ from utils.widget_utils import nerd_font_icon
 class PowerMenuPopup(PopupWindow):
     """A popup window to show power options."""
 
-    instance = None
-
-    @staticmethod
-    def get_default(config):
-        if PowerMenuPopup.instance is None:
-            PowerMenuPopup.instance = PowerMenuPopup(config)
-
-        return PowerMenuPopup.instance
-
     def __init__(
         self,
         config,
@@ -44,6 +35,7 @@ class PowerMenuPopup(PopupWindow):
                     name=key,
                     command=value,
                     size=self.icon_size,
+                    parent=self,
                 )
                 for key, value in power_buttons_list.items()
             ],
@@ -53,10 +45,12 @@ class PowerMenuPopup(PopupWindow):
         self.menu = Box(name="power-button-menu", orientation="v", children=self.grid)
 
         super().__init__(
-            transition_type="crossfade",
             child=self.menu,
+            transition_duration=300,
+            transition_type="crossfade",
             anchor="center",
-            keyboard_mode="on-demand",
+            enable_inhibitor=True,
+            keyboard_mode="exclusive",
             **kwargs,
         )
 
@@ -74,12 +68,20 @@ class PowerControlButtons(HoverButton):
     """A widget to show power options."""
 
     def __init__(
-        self, config, name: str, command: str, size: int, show_label=True, **kwargs
+        self,
+        config,
+        parent: PopupWindow,
+        name: str,
+        command: str,
+        size: int,
+        show_label=True,
+        **kwargs,
     ):
         self.config = config
         self.name = name
         self.command = command
         self.size = size
+        self.parent = parent
 
         super().__init__(
             config=config,
@@ -104,7 +106,7 @@ class PowerControlButtons(HoverButton):
         )
 
     def on_button_press(self, *_):
-        PowerMenuPopup.get_default(widget_config=self.config).toggle_popup()
+        self.parent.toggle_popup()
         Dialog().add_content(
             title=f"{self.name.capitalize()} Confirmation",
             body=f"Are you sure you want to {self.name}?",
@@ -136,5 +138,5 @@ class PowerWidget(ButtonWidget):
 
         self.connect(
             "clicked",
-            lambda *_: PowerMenuPopup.get_default(self.config).toggle_popup(),
+            lambda *_: PowerMenuPopup(self.config).toggle_popup(),
         )
