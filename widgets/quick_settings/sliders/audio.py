@@ -14,6 +14,14 @@ class AudioSlider(SettingSlider):
     Can be used for both device audio and application audio control.
     """
 
+    def init_device_audio(self, *_):
+        if not self.client.speaker:
+            return
+        self.audio_stream = self.client.speaker
+        self.update_state()
+        self.client.disconnect_by_func(self.init_device_audio)
+        self.client.connect("speaker-changed", self.update_state)
+
     def __init__(self, audio_stream=None, show_chevron=False):
         """Initialize the audio slider.
 
@@ -47,18 +55,9 @@ class AudioSlider(SettingSlider):
             self.children = (*self.children, self.chevron_btn)
 
         if not audio_stream:
-            # TODO: remove nest
-            def init_device_audio(*_):
-                if not self.client.speaker:
-                    return
-                self.audio_stream = self.client.speaker
-                self.update_state()
-                self.client.disconnect_by_func(init_device_audio)
-                self.client.connect("speaker-changed", self.update_state)
-
-            self.client.connect("changed", init_device_audio)
+            self.client.connect("changed", self.init_device_audio)
             if self.client.speaker:
-                init_device_audio()
+                self.init_device_audio()
         else:
             self.update_state()
             self.audio_stream.connect("changed", self.update_state)
