@@ -64,8 +64,10 @@ class Dialog(PopupWindow):
         self.title.set_label(title.upper())
         self.body.set_label(body)
         self.ok_btn.connect(
-            "clicked", lambda *_: exec_shell_command_async(command, lambda *_: None)
+            "clicked",
+            lambda *_: exec_shell_command_async(
+                command, lambda *_: self.toggle_popup()
+            ),
         )
-        self.toggle_popup()
 
         return self
