@@ -2,7 +2,7 @@
 @use "variable";
 @use "sass:color";
 
-#dock {
+#dock-bar {
   $modules-dock-opacity-ratio: variable.$modules-dock-opacity * .01;
   $transparency-value: (
     1 - $modules-dock-opacity-ratio) * 100%;

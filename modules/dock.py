@@ -13,8 +13,10 @@ from fabric.widgets.wayland import WaylandWindow as Window
 from gi.repository import Glace, GLib, Gtk
 from loguru import logger
 
+from modules.app_launcher import AppLauncher
 from shared.popoverv1 import PopOverWindow
 from utils.app import AppUtils
+from utils.config import widget_config
 from utils.constants import PINNED_APPS_FILE
 from utils.functions import read_json_file, write_json_file
 from utils.icon_resolver import IconResolver
@@ -24,6 +26,13 @@ gi.require_versions({"Glace": "0.1", "Gtk": "3.0"})
 
 class AppBar(Box):
     """A simple app bar widget for the dock."""
+
+    def _on_launcher_clicked(self, *_):
+        """Toggle the app launcher visibility."""
+        if self.app_launcher is None:
+            self.app_launcher = AppLauncher(widget_config)
+        if self.app_launcher:
+            self.app_launcher.toggle()
 
     def __init__(self, parent):
         self._parent = parent
@@ -36,23 +45,23 @@ class AppBar(Box):
 
         self.menu = None
 
+        self.app_launcher = None
+
         self.icon_size = self.config.get("icon_size", 30)
         self.preview_size = self.config.get("preview_size", [40, 50])
 
         super().__init__(
             spacing=10,
-            name="dock",
+            name="dock-bar",
             style_classes=["window-basic", "sleek-border"],
             children=[
-                # Button(
-                #     image=Image(
-                #         icon_name="view-app-grid-symbolic",
-                #         icon_size=self.icon_size,
-                #     ),
-                #     on_button_press_event=lambda *_: print(
-                #         self._parent.get_application().actions["toggle-appmenu"][0]()
-                #     ),
-                # )
+                Button(
+                    image=Image(
+                        icon_name="view-app-grid-symbolic",
+                        icon_size=self.icon_size,
+                    ),
+                    on_button_press_event=lambda *_: (self._on_launcher_clicked()),
+                )
             ],
         )
         self.icon_resolver = IconResolver()
