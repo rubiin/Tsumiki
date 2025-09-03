@@ -63,7 +63,7 @@ class AppWidgetFactory:
             child_widget = AppWidgetFactory._create_list_layout(app, icon_size, config)
 
         return Button(
-            style_classes="launcher-button",
+            style_classes=["launcher-button"],
             child=child_widget,
             tooltip_text=(app.description if config.show_tooltips else None),
         )
@@ -100,6 +100,7 @@ class AppWidgetFactory:
         return Box(
             orientation="h",
             spacing=12,
+            style="padding: 8px 20px",
             children=[
                 Image(
                     pixbuf=app.get_icon_pixbuf(icon_size),
@@ -165,6 +166,7 @@ class AppLauncher(PopupWindow):
             self.viewport = Grid(
                 column_homogeneous=True,
                 row_homogeneous=True,
+                row_spacing=20
             )
         else:  # list mode
             self.viewport = Box(spacing=2, orientation="v")
@@ -206,14 +208,7 @@ class AppLauncher(PopupWindow):
             size_request=(self.config.width, self.config.height),
             children=[
                 # Header with search
-                Box(
-                    spacing=2,
-                    orientation="h",
-                    children=[
-                        self.search_entry,
-                    ],
-                    visible=True,  # Always show search bar
-                ),
+                self.search_entry,
                 # Apps list
                 self.scrolled_window,
             ],
