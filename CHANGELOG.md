@@ -1,5 +1,43 @@
 # Changelog
 
+## [2.4.0](https://github.com/rubiin/Tsumiki/compare/v2.3.0...v2.4.0) (2025-09-03)
+
+
+### 🚀 New Features
+
+* add confirmation option to power button actions and update related configurations ([c3baab6](https://github.com/rubiin/Tsumiki/commit/c3baab6a008f5c445b48abea8932d197ff5438b6))
+* add search entry icons and clear functionality in app launcher and clip history menu ([681c4a9](https://github.com/rubiin/Tsumiki/commit/681c4a9477f59a20d64801abcfff80aaeac7c9dd))
+* App launcher button and usable menu ([#197](https://github.com/rubiin/Tsumiki/issues/197)) ([d7f74eb](https://github.com/rubiin/Tsumiki/commit/d7f74eb8615f2e00dda81a757744480863801087))
+* enhance app launcher with tooltip and icon size adjustments; set process name in GLib ([72128c4](https://github.com/rubiin/Tsumiki/commit/72128c4ecab1ae2df14f2be4016b3b0d26f184e6))
+* implement process name setting and improve notification sound handling ([0d09bb6](https://github.com/rubiin/Tsumiki/commit/0d09bb64d40939d6516f07b3e138800f3da8c5a5))
+
+
+### 🐛 Bug Fixes
+
+* add icon size to app launcher button and update layout sections ([a59d183](https://github.com/rubiin/Tsumiki/commit/a59d18391215df21ddfea08efbcda54a14fdfeef))
+* add name attribute to dock and osd modules for better identification ([3ff5ddb](https://github.com/rubiin/Tsumiki/commit/3ff5ddb6927604479632ca9680b77913b3fddb58))
+* change transition type to slide-down for dialog and power menu popups ([b9972bf](https://github.com/rubiin/Tsumiki/commit/b9972bf7ca631a7744521851d483f48b3d1c55b8))
+* downgrade pygobject ([d5b8c3d](https://github.com/rubiin/Tsumiki/commit/d5b8c3d4323f88f349d7056939bc0779ef9e9b4f))
+* ensure dialog popup toggles after executing command ([90f43c5](https://github.com/rubiin/Tsumiki/commit/90f43c52bb48739cb000ca3ff44960228a5e072a))
+* ensure rebase occurs when conflicts are detected ([c3b0950](https://github.com/rubiin/Tsumiki/commit/c3b095054d5eb485dac83a715de79b306a6b7fb6))
+* nested ([bd86a51](https://github.com/rubiin/Tsumiki/commit/bd86a5168f3b8d22458387b798dad6825ed14ab7))
+* refactor init_device_audio method for clarity and remove nested function ([b1ad892](https://github.com/rubiin/Tsumiki/commit/b1ad8929c89884063871b431f61a135cf6204579))
+* toggle dialog popup after executing command in the dialog class ([1c806dd](https://github.com/rubiin/Tsumiki/commit/1c806dd3a94d320c5bc1e9f9211136d280a09a9b))
+* update scale value and improve workspace label styling in overview ([60d5d86](https://github.com/rubiin/Tsumiki/commit/60d5d861a0169d385af6e52e2a22375ce32f6854))
+
+
+### ♻️ Code Refactoring
+
+* clean up app launcher styles and remove unused focus styles ([b46fc61](https://github.com/rubiin/Tsumiki/commit/b46fc61bb4432460a10e598ad6639cfce92fbd44))
+* eliminate nested functions for improved readability ([88d346c](https://github.com/rubiin/Tsumiki/commit/88d346c7686d3e26d2c450b2ca2923846a7d9cbb))
+* improve dialog and power menu popup initialization and transition handling ([14dd13a](https://github.com/rubiin/Tsumiki/commit/14dd13a011a8af81a8c3ec32f139365746447bd7))
+* streamline StatusBar bar recreation logic and remove unused process name setting ([2e23419](https://github.com/rubiin/Tsumiki/commit/2e23419cbf42f9e68a997b0ee4a1dd26b68fc851))
+
+
+### 🚀 CI Improvements
+
+* Update checkout action version from v5 to v4 ([d66a6ee](https://github.com/rubiin/Tsumiki/commit/d66a6ee7d5e06a21903f332df2c61e9ad84212ad))
+
 ## [2.3.0](https://github.com/rubiin/Tsumiki/compare/v2.2.0...v2.3.0) (2025-08-30)
 
 
