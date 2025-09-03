@@ -1774,7 +1774,7 @@
 							"type": "array",
 							"description": "Array of custom buttons to display in the group",
 							"items": {
-								"$ref": "#/properties/custom_button"
+								"$ref": "#/properties/widgets/properties/custom_button"
 							}
 						},
 						"spacing": {
