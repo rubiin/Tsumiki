@@ -4,12 +4,14 @@ from fabric.notifications import (
     NotificationAction,
     NotificationCloseReason,
 )
-from fabric.utils import bulk_connect, get_relative_path, truncate
+from fabric.utils import bulk_connect, get_relative_path, invoke_repeater, truncate
 from fabric.widgets.box import Box
 from fabric.widgets.button import Button
+from fabric.widgets.circularprogressbar import CircularProgressBar
 from fabric.widgets.eventbox import EventBox
 from fabric.widgets.grid import Grid
 from fabric.widgets.label import Label
+from fabric.widgets.overlay import Overlay
 from fabric.widgets.revealer import Revealer
 from fabric.widgets.wayland import WaylandWindow as Window
 from gi.repository import Gdk, GdkPixbuf, GLib
@@ -109,6 +111,14 @@ class NotificationWidget(EventBox):
 
         self._timeout_id = None
 
+        self.progress_timeout = CircularProgressBar(
+            name="notification-circular-progress-bar",
+            size=27,
+            min_value=0,
+            max_value=1,
+            radius_color=True,
+        )
+
         self.notification_box = Box(
             spacing=8,
             name="notification",
@@ -146,19 +156,22 @@ class NotificationWidget(EventBox):
             ),
         )
 
-        close_button = Button(
-            style_classes="close-button",
-            child=nerd_font_icon(
-                icon=text_icons["ui"]["window_close"],
-                props={
-                    "style_classes": ["panel-font-icon", "close-icon"],
-                },
+        overlay = Overlay(
+            child=self.progress_timeout,
+            overlays=Button(
+                style_classes="close-button",
+                child=nerd_font_icon(
+                    icon=text_icons["ui"]["window_close"],
+                    props={
+                        "style_classes": ["panel-font-icon", "close-icon"],
+                    },
+                ),
+                on_clicked=self._on_close_button_clicked,
             ),
-            on_clicked=self._on_close_button_clicked,
         )
 
         header_container.pack_end(
-            close_button,
+            overlay,
             False,
             False,
             0,
@@ -304,6 +317,8 @@ class NotificationRevealer(Revealer):
 
     def __init__(self, config, notification: Notification, **kwargs):
         self.notification_box = NotificationWidget(config, notification)
+        self.timeout = config.get("timeout", 3000)
+        self.notification_box.progress_timeout.max_value = self.timeout
         self._notification = notification
 
         super().__init__(
@@ -317,11 +332,30 @@ class NotificationRevealer(Revealer):
         )
 
         self.connect("notify::child-revealed", self.on_child_revealed)
+
         self._notification.connect("closed", self.on_resolved)
+
+    def animate_popup_timeout(self):
+        time = self.timeout
+
+        def do_animate():
+            nonlocal time
+            self.notification_box.progress_timeout.value = time
+            if not self.child_revealed:
+                return False
+            if time <= 0:
+                return False
+            time -= 10
+            return True
+
+        invoke_repeater(10, do_animate)
 
     def on_child_revealed(self, *_):
         if not self.get_child_revealed():
             self.destroy()
+        else:
+            if self.timeout > 0:
+                self.animate_popup_timeout()
 
     def on_resolved(
         self,
