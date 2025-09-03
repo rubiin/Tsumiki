@@ -3,6 +3,10 @@
 - **`$schema`**: `str` (default: "./tsumiki.schema.json")
 
 - **`widgets`**: `object`
+  - **`app_launcher_button`**: `object`
+    - **`icon`**: `str` (default: "view-app-grid-symbolic")
+    - **`icon_size`**: `int` (default: 16)
+    - **`tooltip`**: `bool` (default: true)
   - **`cliphist`**: `object`
     - **`icon`**: `str` (default: "")
     - **`label`**: `bool` (default: false)
@@ -171,6 +175,7 @@
     - **`icon_size`**: `int` (default: 100)
     - **`show_icon`**: `bool` (default: true)
     - **`label`**: `bool` (default: false)
+    - **`confirm`**: `bool` (default: true)
     - **`buttons`**: `object`
       - **`shutdown`**: `str` (default: "systemctl poweroff")
       - **`reboot`**: `str` (default: "systemctl reboot")
@@ -346,3 +351,4 @@
   - **`monitor_styles`**: `bool` (default: true)
   - **`location`**: `str` (default: "top")
   - **`auto_reload`**: `bool` (default: true)
+  - **`multi_monitor`**: `bool` (default: false)

@@ -292,6 +292,11 @@
 							"default": false,
 							"description": "Determines whether to show the label."
 						},
+						"confirm": {
+							"type": "boolean",
+							"default": true,
+							"description": "Determines whether to show the confirmation dialog."
+						},
 						"buttons": {
 							"type": "object",
 							"properties": {

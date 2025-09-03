@@ -232,6 +232,7 @@ DEFAULT_CONFIG = {
             "icon_size": 100,
             "show_icon": True,
             "label": False,
+            "confirm": True,
             "buttons": {
                 "shutdown": "systemctl poweroff",
                 "reboot": "systemctl reboot",

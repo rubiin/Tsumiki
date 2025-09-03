@@ -1,4 +1,4 @@
-from fabric.utils import get_relative_path
+from fabric.utils import exec_shell_command_async, get_relative_path
 from fabric.widgets.box import Box
 from fabric.widgets.grid import Grid
 from fabric.widgets.label import Label
@@ -107,11 +107,14 @@ class PowerControlButtons(HoverButton):
 
     def on_button_press(self, *_):
         self.parent.toggle_popup()
-        Dialog().add_content(
-            title=f"{self.name.capitalize()} Confirmation",
-            body=f"Are you sure you want to {self.name}?",
-            command=self.command,
-        ).toggle_popup()
+        if self.config.get("confirm", True):
+            Dialog().add_content(
+                title=f"{self.name.capitalize()} Confirmation",
+                body=f"Are you sure you want to {self.name}?",
+                command=self.command,
+            ).toggle_popup()
+        else:
+            exec_shell_command_async(self.command, lambda *_: None)
 
         return True
 

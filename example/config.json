@@ -32,6 +32,7 @@
 			"icon_size": 100,
 			"show_icon": true,
 			"label": false,
+			"confirm": true,
 			"buttons": {
 				"shutdown": "systemctl poweroff",
 				"reboot": "systemctl reboot",
@@ -383,7 +384,8 @@
 		],
 		"middle_section": [
 			"date_time",
-			"weather"
+			"weather",
+			"overview"
 		],
 		"right_section": [
 			"@collapsible:0",

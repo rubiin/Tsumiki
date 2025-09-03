@@ -38,6 +38,7 @@ PowerButton = TypedDict(
         "items_per_row": int,
         "label": bool,
         "show_icon": bool,
+        "confirm": bool,
         "buttons": dict[
             dict[
                 Literal["shutdown", "reboot", "hibernate", "suspend", "lock", "logout"],
