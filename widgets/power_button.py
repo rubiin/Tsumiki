@@ -47,7 +47,7 @@ class PowerMenuPopup(PopupWindow):
         super().__init__(
             child=self.menu,
             transition_duration=300,
-            transition_type="crossfade",
+            transition_type="slide-down",
             anchor="center",
             enable_inhibitor=True,
             keyboard_mode="exclusive",

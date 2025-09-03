@@ -48,7 +48,7 @@ class Dialog(PopupWindow):
             name="dialog",
             child=self.wrapper,
             transition_duration=300,
-            transition_type="crossfade",
+            transition_type="slide-down",
             anchor="center",
             enable_inhibitor=True,
             keyboard_mode="exclusive",
