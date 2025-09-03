@@ -6,7 +6,11 @@
 button.launcher-button {
   border-radius: variable.$radius-large;
 
-  #icon{
+  .launcher-list-item {
+    padding: 8px 20px;
+  }
+
+  #icon {
     -gtk-icon-effect: highlight;
   }
 

@@ -188,6 +188,11 @@ menu>menuitem:hover {
   background-color: theme.$surface-highlight;
 }
 
+entry image.left {
+  margin-right: 10px;
+  /* space between icon and text */
+}
+
 
 menu>arrow {
   min-height: 16px;

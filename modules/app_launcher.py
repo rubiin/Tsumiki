@@ -100,7 +100,7 @@ class AppWidgetFactory:
         return Box(
             orientation="h",
             spacing=12,
-            style="padding: 8px 20px",
+            style_classes=["launcher-list-item"],
             children=[
                 Image(
                     pixbuf=app.get_icon_pixbuf(icon_size),
