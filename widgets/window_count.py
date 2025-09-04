@@ -28,7 +28,7 @@ class WindowCountWidget(ButtonWidget):
             self.container_box.add(self.icon)
 
         bulk_connect(
-            self.connection,
+            self._hyprland_connection,
             {
                 "event::workspace": self.get_window_count,
                 "event::focusedmon": self.get_window_count,
@@ -39,10 +39,10 @@ class WindowCountWidget(ButtonWidget):
         )
 
         # all aboard...
-        if self.connection.ready:
+        if self._hyprland_connection.ready:
             self.on_ready(None)
         else:
-            self.connection.connect("event::ready", self.on_ready)
+            self._hyprland_connection.connect("event::ready", self.on_ready)
 
     def on_ready(self, _):
         return self.get_window_count(None, None), logger.info(
@@ -52,7 +52,9 @@ class WindowCountWidget(ButtonWidget):
     def get_window_count(self, *_):
         """Get the number of windows in the active workspace."""
         try:
-            response = self.connection.send_command("j/activeworkspace").reply.decode()
+            response = self._hyprland_connection.send_command(
+                "j/activeworkspace"
+            ).reply.decode()
             data = json.loads(response)
         except Exception as e:
             logger.error(f"[WindowCount] Failed to get active workspace: {e}")

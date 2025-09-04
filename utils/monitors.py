@@ -86,6 +86,7 @@ class MonitorWatcher:
             return
 
         self._hyprland_connection = get_hyprland_connection()
+
         bulk_connect(
             self._hyprland_connection,
             {
