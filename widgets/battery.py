@@ -44,11 +44,11 @@ class BatteryWidget(ButtonWidget):
         self.discharging_notified = False
         self.initialized = False
 
-        self.client.connect("changed", self.update_ui)
+        self.client.connect("changed", self._update_ui)
 
-        self.update_ui()
+        self._update_ui()
 
-    def update_ui(self, *_):
+    def _update_ui(self, *_):
         """Update the battery status by fetching the current battery information
         and updating the widget accordingly.
         """

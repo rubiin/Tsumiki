@@ -29,9 +29,9 @@ class WallpaperWidget(ButtonWidget):
 
         # Lazy-init wallpaper popup
         self._wallpaper_popup = None
-        self.connect("clicked", self._on_click)
+        self.connect("clicked", self.on_click)
 
-    def _on_click(self, *_):
+    def on_click(self, *_):
         if self._wallpaper_popup is None:
             self._wallpaper_popup = WallPaperPickerOverlay()
         self._wallpaper_popup.toggle_popup()

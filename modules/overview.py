@@ -88,7 +88,7 @@ class HyprlandWindowButton(Button):
             image=Image(pixbuf=icon_pixbuf),
             tooltip_text=title,
             size=size,
-            on_clicked=self._on_click,
+            on_clicked=self.on_click,
             on_button_press_event=lambda _,
             event: self._hyprland_connection.send_command(
                 f"/dispatch closewindow address:{address}"
@@ -173,7 +173,7 @@ class HyprlandWindowButton(Button):
             )
         )
 
-    def _on_click(self, *_):
+    def on_click(self, *_):
         self._hyprland_connection.send_command(
             f"/dispatch focuswindow address:{self.address}"
         )

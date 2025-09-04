@@ -30,11 +30,11 @@ class WindowCountWidget(ButtonWidget):
         bulk_connect(
             self._hyprland_connection,
             {
-                "event::workspace": self.get_window_count,
-                "event::focusedmon": self.get_window_count,
-                "event::openwindow": self.get_window_count,
-                "event::closewindow": self.get_window_count,
-                "event::movewindow": self.get_window_count,
+                "event::workspace": self._get_window_count,
+                "event::focusedmon": self._get_window_count,
+                "event::openwindow": self._get_window_count,
+                "event::closewindow": self._get_window_count,
+                "event::movewindow": self._get_window_count,
             },
         )
 
@@ -45,11 +45,11 @@ class WindowCountWidget(ButtonWidget):
             self._hyprland_connection.connect("event::ready", self.on_ready)
 
     def on_ready(self, _):
-        return self.get_window_count(None, None), logger.info(
+        return self._get_window_count(None, None), logger.info(
             "[WindowCount] Connected to the hyprland socket"
         )
 
-    def get_window_count(self, *_):
+    def _get_window_count(self, *_):
         """Get the number of windows in the active workspace."""
         try:
             response = self._hyprland_connection.send_command(

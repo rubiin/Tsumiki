@@ -52,14 +52,14 @@ class CustomButtonWidget(ButtonWidget):
             self.container_box.add(self.label)
 
         # Connect click handler
-        self.connect("clicked", self._on_click)
+        self.connect("clicked", self.on_click)
 
         # Setup tooltip
         if self.config.get("tooltip", True):
             tooltip_text = self.config.get("tooltip_text", f"Execute: {self.command}")
             self.set_tooltip_text(tooltip_text)
 
-    def _on_click(self, *_):
+    def on_click(self, *_):
         """Execute the custom command when button is clicked."""
         if self.command:
             exec_shell_command_async(

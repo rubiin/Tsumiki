@@ -32,7 +32,7 @@ class InlineEditor(Box):
 
     def __init__(self, initial_text=""):
         super().__init__(name="inline-editor", spacing=4)
-        # Replace Gtk.Entry with a Gtk.TextView for multiline editing.
+
         self.text_view = Gtk.TextView()
         self.text_view.set_wrap_mode(Gtk.WrapMode.WORD)
         buffer = self.text_view.get_buffer()

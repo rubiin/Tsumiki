@@ -44,6 +44,3 @@ class BlueToothWidget(ButtonWidget):
 
         if self.config.get("tooltip", False):
             self.set_tooltip_text(f"Bluetooth is {bt_status}")
-
-    def on_destroy(self):
-        self.bluetooth_client.disconnect("changed", self.update_bluetooth_status)

@@ -58,22 +58,22 @@ class CommandSwitcher(ButtonWidget):
             )
             self.container_box.add(self.label_text)
 
-        self.connect("clicked", self.handle_click)
+        self.connect("clicked", self.on_click)
 
         # reusing the fabricator to call specified intervals
-        reusable_fabricator.connect("changed", self.update_ui)
-        self.update_ui()  # Initial update
+        reusable_fabricator.connect("changed", self._update_ui)
+        self._update_ui()  # Initial update
 
     # toggle the command on click
-    def handle_click(self, *_):
+    def on_click(self, *_):
         helpers.toggle_command(
             self.command,
             full_command=self.full_command,
         )
-        self.update_ui()
+        self._update_ui()
         return True
 
-    def update_ui(self, *_):
+    def _update_ui(self, *_):
         is_running = helpers.is_app_running(self.command)
 
         self.toggle_css_class("active", is_running)

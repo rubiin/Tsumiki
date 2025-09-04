@@ -23,9 +23,9 @@ class OverviewWidget(ButtonWidget):
 
         # Lazy-init overview popup
         self._overview_popup = None
-        self.connect("clicked", self._on_click)
+        self.connect("clicked", self.on_click)
 
-    def _on_click(self, *_):
+    def on_click(self, *_):
         from modules.overview import OverViewOverlay
 
         if self._overview_popup is None:

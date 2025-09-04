@@ -42,9 +42,9 @@ class WorldClockWidget(ButtonWidget):
                 logger.info(f"[world_clock] Skipping invalid timezone: {tz_name}")
 
         # reusing the fabricator to call specified intervals
-        reusable_fabricator.connect("changed", self.update_ui)
+        reusable_fabricator.connect("changed", self._update_ui)
 
-    def update_ui(self, *_):
+    def _update_ui(self, *_):
         try:
             utc_now = datetime.now(timezone.utc)
             for label, tz in self.clocks:

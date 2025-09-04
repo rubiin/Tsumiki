@@ -43,7 +43,7 @@ class HyprSunsetSubMenu(QuickSubMenu):
         temperature = int(scale.get_value())
         exec_shell_command_async(
             f"hyprctl hyprsunset temperature {temperature}",
-            lambda *_: self.update_ui(temperature),
+            lambda *_: self._update_ui(temperature),
         )
         return True
 
@@ -52,12 +52,12 @@ class HyprSunsetSubMenu(QuickSubMenu):
             self.scale.set_sensitive(True)
             exec_shell_command_async(
                 "hyprctl hyprsunset temperature",
-                self.update_ui,
+                self._update_ui,
             )
         else:
             self.scale.set_sensitive(False)
 
-    def update_ui(self, moved_pos):
+    def _update_ui(self, moved_pos):
         # Update the scale value based on the current temperature
         sanitized_value = int(
             moved_pos.strip("\n").strip("") if isinstance(moved_pos, str) else moved_pos

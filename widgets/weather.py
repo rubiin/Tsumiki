@@ -370,10 +370,10 @@ class WeatherWidget(ButtonWidget, BaseWeatherWidget):
             else:
                 self.container_box.add(self.weather_label)
 
-        self.update_ui(forced=True)
+        self._update_ui(forced=True)
 
         # Set up a fabricator to call the update_label method at specified intervals
-        reusable_fabricator.connect("changed", self.update_ui)
+        reusable_fabricator.connect("changed", self._update_ui)
 
     def update_data(self, data):
         self.update_time = datetime.now()
@@ -436,9 +436,9 @@ class WeatherWidget(ButtonWidget, BaseWeatherWidget):
             self.popover.open() if self.popover else None
             return
         else:
-            self.update_ui(forced=True)
+            self._update_ui(forced=True)
 
-    def update_ui(self, *args, **kwargs):
+    def _update_ui(self, *args, **kwargs):
         forced = kwargs.get("forced", False)
 
         # Check if the update time is more than 5 minutes ago, update the icon

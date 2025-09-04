@@ -196,9 +196,9 @@ class ClipHistoryMenu(Box):
     def _update_items(self, new_items):
         """Update the items list from main thread"""
         self.clipboard_items = new_items
-        self.display_clipboard_items()
+        self._display_clipboard_items()
 
-    def display_clipboard_items(self, filter_text=""):
+    def _display_clipboard_items(self, filter_text=""):
         """Display clipboard items in the viewport"""
         remove_handler(self._arranger_handler) if self._arranger_handler else None
         self.viewport.remove_all()
@@ -483,7 +483,7 @@ class ClipHistoryMenu(Box):
 
     def filter_items(self, entry, *_):
         """Filter clipboard items based on search text"""
-        self.display_clipboard_items(entry.get_text())
+        self._display_clipboard_items(entry.get_text())
 
     def on_search_entry_key_press(self, widget, event):
         """Handle key presses in the search entry"""

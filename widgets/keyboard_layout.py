@@ -37,7 +37,7 @@ class KeyboardLayoutWidget(ButtonWidget):
             self._hyprland_connection.connect("event::ready", self.on_ready)
 
     def on_ready(self, _):
-        return self.get_keyboard(), logger.info(
+        return self._get_keyboard(), logger.info(
             "[Keyboard] Connected to the hyprland socket"
         )
 
@@ -54,7 +54,7 @@ class KeyboardLayoutWidget(ButtonWidget):
             f"[Keyboard] Keyboard: {keyboard}, Language: {language}, Match: {matched}"
         )
 
-    def get_keyboard(self):
+    def _get_keyboard(self):
         try:
             data = json.loads(
                 str(self._hyprland_connection.send_command("j/devices").reply.decode())

@@ -30,7 +30,7 @@ class AppLauncherButton(ButtonWidget):
         ]
 
         # Connect click event
-        self.connect("clicked", self._on_clicked)
+        self.connect("clicked", self.on_click)
 
     def _get_or_create_launcher(self):
         """Get or create the app launcher instance."""
@@ -39,7 +39,7 @@ class AppLauncherButton(ButtonWidget):
 
         return self.app_launcher
 
-    def _on_clicked(self, *_):
+    def on_click(self, *_):
         """Toggle the app launcher visibility."""
         launcher = self._get_or_create_launcher()
         if launcher:

@@ -24,7 +24,7 @@ class RecorderWidget(ButtonWidget):
 
         self.recorder_service = None
 
-        self.connect("clicked", self.handle_click)
+        self.connect("clicked", self.on_click)
 
         # Internal state
         self._recording_lottie = None
@@ -34,7 +34,7 @@ class RecorderWidget(ButtonWidget):
         """Initialize the recorder service if not already initialized."""
         if not self.initialized:
             self.recorder_service = ScreenRecorderService()
-            self.recorder_service.connect("recording", self.update_ui)
+            self.recorder_service.connect("recording", self._update_ui)
             self.initialized = True
 
     @property
@@ -52,7 +52,7 @@ class RecorderWidget(ButtonWidget):
             )
         return self._recording_lottie
 
-    def handle_click(self, *_):
+    def on_click(self, *_):
         """Start or stop recording the screen."""
         self.lazy_init()
 
@@ -64,7 +64,7 @@ class RecorderWidget(ButtonWidget):
         else:
             self.recorder_service.screenrecord_start(config=self.config)
 
-    def update_ui(self, _, is_recording: bool):
+    def _update_ui(self, _, is_recording: bool):
         current_children = self.container_box.get_children()
 
         if is_recording:

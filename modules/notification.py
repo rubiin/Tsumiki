@@ -379,7 +379,7 @@ class ActionButton(HoverButton):
         super().__init__(
             label=truncate(action.label, 20, "..."),
             h_expand=True,
-            on_clicked=self._on_click,
+            on_clicked=self.on_click,
             style_classes="notification-action",
             **kwargs,
         )
@@ -393,6 +393,6 @@ class ActionButton(HoverButton):
         else:
             self.add_style_class("middle-action")
 
-    def _on_click(self, *_):
+    def on_click(self, *_):
         self.action.invoke()
         self.action.parent.close("dismissed-by-user")

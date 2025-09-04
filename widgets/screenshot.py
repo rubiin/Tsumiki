@@ -28,14 +28,14 @@ class ScreenShotWidget(ButtonWidget):
         if self.config.get("tooltip", False):
             self.set_tooltip_text("Screen Shot")
 
-        self.connect("clicked", self.handle_click)
+        self.connect("clicked", self.on_click)
 
     def lazy_init(self, *_):
         if not self.initialized:
             self.recorder_service = ScreenRecorderService()
             self.initialized = True
 
-    def handle_click(self, *_):
+    def on_click(self, *_):
         """Start recording the screen."""
         self.lazy_init()
 

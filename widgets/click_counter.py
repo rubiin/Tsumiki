@@ -15,16 +15,16 @@ class ClickCounterWidget(ButtonWidget):
         if self.config.get("tooltip", True):
             self.set_tooltip_text("Left-click to increment, right-click to reset")
 
-    def increment(self, *_):
+    def _increment(self, *_):
         self.count = self.count + 1
         self.set_label(f"{self.count}")
 
-    def reset(self, *_):
+    def _reset(self, *_):
         self.count = 0
         self.set_label(f"{self.count}")
 
     def on_button_press(self, _, event):
         if event.button == 1:
-            self.increment()
+            self._increment()
         else:
-            self.reset()
+            self._reset()

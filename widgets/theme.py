@@ -43,10 +43,10 @@ class ThemeSwitcherWidget(ButtonWidget):
             props={"style_classes": "panel-font-icon"},
         )
         self.set_tooltip_text(self.current_theme)
-        self.connect("clicked", self.handle_click)
+        self.connect("clicked", self.on_click)
 
     ## Cycle through the themes on click
-    def handle_click(self, *_):
+    def on_click(self, *_):
         """Cycle through the themes."""
         if not self.themes_list:
             return  # No themes available

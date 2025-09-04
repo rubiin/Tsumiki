@@ -210,13 +210,13 @@ class SystemTrayWidget(ButtonWidget, BaseSystemTray):
             self.on_item_added(self.watcher, item_id)
 
         # Connect click handler
-        self.connect("clicked", self.handle_click)
+        self.connect("clicked", self.on_click)
 
         # Initial visibility check
         self.update_visibility()
 
     # show or hide the popup menu
-    def handle_click(self, *_):
+    def on_click(self, *_):
         if self.popup is None:
             from shared.popover import Popover
 

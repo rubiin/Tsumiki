@@ -19,7 +19,7 @@ class WorkSpacesWidget(BoxWidget):
         workspace_count = config.get("count", 8)
         hide_unoccupied = config.get("hide_unoccupied", False)
 
-        def create_workspace_label(ws_id: int) -> str:
+        def _create_workspace_label(ws_id: int) -> str:
             return icon_map.get(str(ws_id), default_format.format(id=ws_id))
 
         def _update_empty_state(button, *_):
@@ -34,7 +34,7 @@ class WorkSpacesWidget(BoxWidget):
         def setup_button(ws_id: int) -> WorkspaceButton:
             button = WorkspaceButton(
                 id=ws_id,
-                label=create_workspace_label(ws_id),
+                label=_create_workspace_label(ws_id),
                 visible=ws_id not in ignored_ws,
             )
 

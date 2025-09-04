@@ -64,16 +64,16 @@ class OCRWidget(ButtonWidget):
             base_command += " --no-notify"
 
         if event.button == 3:  # Right click
-            self.show_language_menu()
+            self._show_language_menu()
         else:  # Left click
             exec_shell_command_async(base_command, lambda *_: None)
 
-    def show_language_menu(self):
+    def _show_language_menu(self):
         menu = Gtk.Menu(visible=True)
         menu.set_name("ocr-menu")  # For CSS targeting
 
         # Get available languages
-        langs = self.get_available_languages()
+        langs = self._get_available_languages()
 
         for lang in langs:
             if lang != "osd":  # Skip the OSD option
@@ -88,7 +88,7 @@ class OCRWidget(ButtonWidget):
         menu.popup_at_widget(self, Gdk.Gravity.SOUTH, Gdk.Gravity.NORTH, None)
 
     @ttl_lru_cache(600, 10)
-    def get_available_languages(self):
+    def _get_available_languages(self):
         # Run the command synchronously to get output
         try:
             result = subprocess.check_output(["tesseract", "--list-langs"], text=True)

@@ -52,13 +52,13 @@ class UpdatesWidget(ButtonWidget):
             else:
                 self.container_box.add(self.update_label)
 
-        self.connect("button-press-event", self.on_button_press)
+        self.connect("button-press-event", self.on_click)
 
         # Set up a repeater to call the update method at specified intervals
-        self.check_update()
+        self._check_update()
 
         # reusing the fabricator to call specified intervals
-        reusable_fabricator.connect("changed", self.should_update)
+        reusable_fabricator.connect("changed", self._should_update)
 
     def _build_base_command(self) -> str:
         script = get_relative_path("../assets/scripts/systemupdates.sh")
@@ -77,7 +77,7 @@ class UpdatesWidget(ButtonWidget):
 
         return " ".join(command)
 
-    def should_update(self, *_):
+    def _should_update(self, *_):
         """
         Handles the 'changed' signal from the fabricator.
         Checks if the update interval has elapsed and triggers an update if necessary.
@@ -85,11 +85,11 @@ class UpdatesWidget(ButtonWidget):
         if (datetime.now() - self.update_time).total_seconds() >= self.config[
             "interval"
         ]:
-            self.check_update()
+            self._check_update()
             self.update_time = datetime.now()
         return True
 
-    def update_values(self, value: str):
+    def _update_values(self, value: str):
         """Update the UI based on the returned update data."""
         try:
             data = json.loads(value)
@@ -139,13 +139,13 @@ class UpdatesWidget(ButtonWidget):
                 f"{Colors.ERROR}[UpdatesWidget] Failed to parse update data: {e}"
             )
 
-    def on_button_press(self, _, event):
+    def on_click(self, _, event):
         """Trigger a manual update check on click."""
-        self.check_update(update=(event.button == 1))
+        self._check_update(update=(event.button == 1))
         return True
 
     @cooldown(1)
-    def check_update(self, update=False):
+    def _check_update(self, update=False):
         """Run the update check asynchronously."""
         suffix = " up" if update else ""
         log_msg = (
@@ -155,7 +155,7 @@ class UpdatesWidget(ButtonWidget):
 
         exec_shell_command_async(
             f"{self.base_command}{suffix}",
-            self.update_values,
+            self._update_values,
         )
 
         return True

@@ -248,7 +248,7 @@ class DateNotificationMenu(Box):
         # Attach scroll listener
         if self.scrolled_window:
             vadj = self.scrolled_window.get_vadjustment()
-            vadj.connect("value-changed", self._on_scroll)
+            vadj.connect("value-changed", self.on_scroll)
 
         # Notification body column
         notification_column = Box(
@@ -322,13 +322,13 @@ class DateNotificationMenu(Box):
             self.batch_size, len(self.all_notifications) - self.loaded_count
         )
         for i in range(self.loaded_count, self.loaded_count + items_to_add):
-            notification_item = self.bake_notification(self.all_notifications[i])
+            notification_item = self._bake_notification(self.all_notifications[i])
             self.notifications_listbox.add(notification_item)
 
         self.loaded_count += items_to_add
         self.loading = False
 
-    def _on_scroll(self, adjustment):
+    def on_scroll(self, adjustment):
         """Load more notifications when user scrolls near the bottom."""
         value = adjustment.get_value()
         upper = adjustment.get_upper()
@@ -349,7 +349,7 @@ class DateNotificationMenu(Box):
         self.placeholder.set_visible(True)
         self.notifications_listbox.set_visible(False)
 
-    def bake_notification(self, notification):
+    def _bake_notification(self, notification):
         """Create a notification widget from a Notification object."""
 
         def on_child_destroyed(widget, row):
@@ -393,7 +393,7 @@ class DateNotificationMenu(Box):
             text_icons["trash"]["full"],
         )
 
-        notification_item = self.bake_notification(
+        notification_item = self._bake_notification(
             fabric_notification,
         )
 

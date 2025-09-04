@@ -43,9 +43,9 @@ class ShortcutButton(HoverButton):
             self.set_tooltip_text(shortcut_config.get("tooltip", ""))
 
         self.add(box)
-        self.connect("clicked", self._on_click)
+        self.connect("clicked", self.on_click)
 
-    def _on_click(self, *_):
+    def on_click(self, *_):
         """Execute the command when clicked."""
         try:
             subprocess.Popen(["hyprctl", "dispatch", "exec", self.command])

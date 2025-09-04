@@ -19,14 +19,14 @@ class WindowTitleWidget(ButtonWidget):
             name="window",
             formatter=FormattedString(
                 "{ get_title(win_title, win_class) }",
-                get_title=self.get_title,
+                get_title=self._get_title,
             ),
         )
 
         # Add the ActiveWindow widget as a child
         self.container_box.children = self.active_window
 
-    def get_title(self, win_title: str, win_class: str):
+    def _get_title(self, win_title: str, win_class: str):
         mappings_enabled = self.config.get("mappings", True)
         trunc = self.config.get("truncation", True)
         trunc_size = self.config.get("truncation_size", 50)

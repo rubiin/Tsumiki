@@ -113,16 +113,16 @@ class EmojiPickerMenu(Box):
             else 0
         )
 
-        self.load_page(self.current_page_index)
+        self._load_page(self.current_page_index)
 
         should_resize = not query
 
         if should_resize:
             self.resize_viewport()
-        if query.strip() != "" and self.get_all_emoji_buttons():
+        if query.strip() != "" and self._get_all_emoji_buttons():
             self.update_selection(0)
 
-    def load_page(self, page_index):
+    def _load_page(self, page_index):
         self.update_selection(-1)
         page_box = Box(name=f"page-box-{page_index}", orientation="v", spacing=4)
         start_index = page_index * self.emojis_per_page
@@ -139,12 +139,12 @@ class EmojiPickerMenu(Box):
                 row_box = Box(name="emoji-row-box", orientation="h", spacing=2)
                 grid_box.add(row_box)
             if row_box is not None:
-                row_box.add(self.bake_emoji_slot(emoji_char, emoji_info))
+                row_box.add(self._bake_emoji_slot(emoji_char, emoji_info))
         page_box.add(grid_box)
         self.stack.add_named(page_box, f"page-{page_index}")
         self.stack.set_visible_child_name(f"page-{page_index}")
 
-        buttons = self.get_all_emoji_buttons()
+        buttons = self._get_all_emoji_buttons()
         if buttons and self.selected_index != -1:
             page_relative_index = self.selected_index % self.emojis_per_page
             if page_relative_index < len(buttons):
@@ -155,7 +155,7 @@ class EmojiPickerMenu(Box):
     def resize_viewport(self):
         return False
 
-    def bake_emoji_slot(self, emoji_char: str, emoji_info: dict, **kwargs) -> Button:
+    def _bake_emoji_slot(self, emoji_char: str, emoji_info: dict, **kwargs) -> Button:
         button = Button(
             name="emoji-slot-button",
             child=Box(
@@ -176,7 +176,7 @@ class EmojiPickerMenu(Box):
             ),
             tooltip_text=emoji_info.get("name", "Unknown"),
             on_clicked=lambda *_: (
-                self.copy_emoji_to_clipboard(emoji_char),
+                self._copy_emoji_to_clipboard(emoji_char),
                 self.close_picker(),
             ),
             **kwargs,
@@ -184,7 +184,7 @@ class EmojiPickerMenu(Box):
         return button
 
     def update_selection(self, new_index: int):
-        buttons = self.get_all_emoji_buttons()
+        buttons = self._get_all_emoji_buttons()
         if not buttons:
             self.selected_index = -1
             return
@@ -202,7 +202,7 @@ class EmojiPickerMenu(Box):
         else:
             self.selected_index = -1
 
-    def get_all_emoji_buttons(self):
+    def _get_all_emoji_buttons(self):
         buttons = []
         current_page = self.stack.get_visible_child()
         if (
@@ -215,7 +215,7 @@ class EmojiPickerMenu(Box):
         return buttons
 
     def on_search_entry_activate(self, text):
-        buttons = self.get_all_emoji_buttons()
+        buttons = self._get_all_emoji_buttons()
         if buttons:
             if self.selected_index != -1:
                 buttons[self.selected_index].clicked()
@@ -224,15 +224,15 @@ class EmojiPickerMenu(Box):
 
     def on_search_entry_key_press(self, widget, event):
         if event.keyval in (Gdk.KEY_Up, Gdk.KEY_Down, Gdk.KEY_Left, Gdk.KEY_Right):
-            self.move_selection_2d(event.keyval)
+            self._move_selection_2d(event.keyval)
             return True
         elif event.keyval == Gdk.KEY_Escape:
             self.close_picker()
             return True
         return False
 
-    def move_selection_2d(self, keyval):
-        buttons = self.get_all_emoji_buttons()
+    def _move_selection_2d(self, keyval):
+        buttons = self._get_all_emoji_buttons()
         total_items_current_page = len(buttons)
         if total_items_current_page == 0:
             return
@@ -275,7 +275,7 @@ class EmojiPickerMenu(Box):
                 if self.current_page_index < self.total_pages - 1:
                     current_col = col  # Keep track of current column
                     self.current_page_index += 1
-                    self.load_page(self.current_page_index)
+                    self._load_page(self.current_page_index)
                     new_index = current_col  # Try to keep the same column
                     if (
                         new_index >= total_items_current_page
@@ -290,7 +290,7 @@ class EmojiPickerMenu(Box):
                 if self.current_page_index > 0:
                     current_col = col  # Keep track of current column
                     self.current_page_index -= 1
-                    self.load_page(self.current_page_index)
+                    self._load_page(self.current_page_index)
                     new_index = (
                         rows - 1
                     ) * columns + current_col  # Select last row, same column
@@ -315,7 +315,7 @@ class EmojiPickerMenu(Box):
 
         self.update_selection(new_index)
 
-    def copy_emoji_to_clipboard(self, emoji_char: str):
+    def _copy_emoji_to_clipboard(self, emoji_char: str):
         try:
             subprocess.run(["wl-copy"], input=emoji_char.encode("utf-8"), check=True)
         except subprocess.CalledProcessError as e:

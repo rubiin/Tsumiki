@@ -26,7 +26,7 @@ class SubMapWidget(ButtonWidget):
 
         self._hyprland_connection = get_hyprland_connection()
 
-        self._hyprland_connection.connect("event::submap", self.get_submap)
+        self._hyprland_connection.connect("event::submap", self._get_submap)
 
         # all aboard...
         if self._hyprland_connection.ready:
@@ -35,11 +35,11 @@ class SubMapWidget(ButtonWidget):
             self._hyprland_connection.connect("event::ready", self.on_ready)
 
     def on_ready(self, _):
-        return self.get_submap(), logger.info(
+        return self._get_submap(), logger.info(
             "[Submap] Connected to the hyprland socket"
         )
 
-    def get_submap(self, *_):
+    def _get_submap(self, *_):
         try:
             submap = str(
                 self._hyprland_connection.send_command("submap").reply.decode()
