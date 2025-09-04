@@ -164,9 +164,7 @@ class AppLauncher(PopupWindow):
         # Create widgets - viewport depends on layout mode
         if self.config.layout_mode == "grid":
             self.viewport = Grid(
-                column_homogeneous=True,
-                row_homogeneous=True,
-                row_spacing=20
+                column_homogeneous=True, row_homogeneous=True, row_spacing=20
             )
         else:  # list mode
             self.viewport = Box(spacing=2, orientation="v")
