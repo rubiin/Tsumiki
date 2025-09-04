@@ -25,7 +25,7 @@ from loguru import logger
 
 from services.mpris import MprisPlayer, MprisPlayerManager
 from shared.buttons import HoverButton
-from shared.circle_image import CircleImage
+from shared.circle_image import CircularImage
 from utils.bezier import cubic_bezier
 from utils.constants import APP_DATA_DIRECTORY
 from utils.functions import (
@@ -202,7 +202,7 @@ class PlayerBox(Box):
         self.angle_direction = 1
         self.skipped = False
 
-        self.image_box = CircleImage(
+        self.image_box = CircularImage(
             size=self.image_size, image_file=self.fallback_cover_path
         )
 

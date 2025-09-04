@@ -15,7 +15,7 @@ import utils.constants as constants
 import utils.functions as helpers
 from services import notification_service
 from shared.buttons import HoverButton
-from shared.circle_image import CircleImage
+from shared.circle_image import CircularImage
 from shared.list import ListBox
 from shared.widget_container import ButtonWidget
 from utils.colors import Colors
@@ -92,7 +92,7 @@ class DateMenuNotification(Box):
         try:
             if image_pixbuf := self._notification.image_pixbuf:
                 body_container.add(
-                    CircleImage(
+                    CircularImage(
                         pixbuf=image_pixbuf.scale_simple(
                             constants.NOTIFICATION_IMAGE_SIZE,
                             constants.NOTIFICATION_IMAGE_SIZE,

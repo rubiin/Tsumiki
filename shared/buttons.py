@@ -11,7 +11,7 @@ from utils.bezier import cubic_bezier
 from utils.icons import symbolic_icons, text_icons
 from utils.widget_utils import nerd_font_icon, setup_cursor_hover
 
-from .circle_image import CircleImage
+from .circle_image import CircularImage
 from .submenu import QuickSubMenu
 from .widget_container import BaseWidget
 
@@ -33,7 +33,7 @@ class ScanButton(HoverButton):
     def __init__(self, **kwargs):
         super().__init__(name="scan-button", style_classes="submenu-button", **kwargs)
 
-        self.scan_image = CircleImage(
+        self.scan_image = CircularImage(
             image_file=get_relative_path("../assets/icons/svg/refresh2.svg"),
             size=20,
         )

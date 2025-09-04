@@ -21,7 +21,7 @@ import utils.constants as constants
 import utils.functions as helpers
 from services import notification_service
 from shared.buttons import HoverButton
-from shared.circle_image import CircleImage
+from shared.circle_image import CircularImage
 from utils.colors import Colors
 from utils.icons import text_icons
 from utils.widget_settings import BarConfig
@@ -185,7 +185,7 @@ class NotificationWidget(EventBox):
         try:
             if image_pixbuf := self._notification.image_pixbuf:
                 body_container.add(
-                    CircleImage(
+                    CircularImage(
                         pixbuf=image_pixbuf.scale_simple(
                             constants.NOTIFICATION_IMAGE_SIZE,
                             constants.NOTIFICATION_IMAGE_SIZE,

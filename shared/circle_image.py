@@ -12,7 +12,7 @@ from .widget_container import BaseWidget
 gi.require_versions({"Gtk": "3.0", "Gdk": "3.0", "GdkPixbuf": "2.0"})
 
 
-class CircleImage(Gtk.DrawingArea, BaseWidget):
+class CircularImage(Gtk.DrawingArea, BaseWidget):
     """A widget that displays an image in a circle."""
 
     @Property(int, "read-write")
@@ -73,7 +73,7 @@ class CircleImage(Gtk.DrawingArea, BaseWidget):
         )
         self.connect("draw", self.on_draw)
 
-    def on_draw(self, widget: "CircleImage", ctx: cairo.Context):
+    def on_draw(self, widget: "CircularImage", ctx: cairo.Context):
         if self._image:
             ctx.save()
             ctx.arc(self.size / 2, self.size / 2, self.size / 2, 0, 2 * math.pi)

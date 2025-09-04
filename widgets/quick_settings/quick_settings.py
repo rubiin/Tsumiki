@@ -18,7 +18,7 @@ from services.brightness import BrightnessService
 from services.mpris import MprisPlayerManager
 from services.network import NetworkService, Wifi
 from shared.buttons import HoverButton, QSChevronButton
-from shared.circle_image import CircleImage
+from shared.circle_image import CircularImage
 from shared.dialog import Dialog
 from shared.media import PlayerBoxStack
 from shared.widget_container import ButtonWidget
@@ -177,7 +177,7 @@ class QuickSettingsMenu(Box):
             h_expand=True,
         )
 
-        avatar = CircleImage(
+        avatar = CircularImage(
             image_file=user_image,
             size=65,
         )
