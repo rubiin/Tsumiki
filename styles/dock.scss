@@ -21,14 +21,4 @@ $shadow: 0 0 0 variable.$bar-border-width theme.$shadow-color,
 
 box-shadow: if(variable.$modules-dock-shadow-enabled, $shadow, none);
 
-
-
-
-
-button.dock-button:hover {
-  box-shadow: 0 0 5px -3px theme.$shadow-color;
-    -gtk-icon-effect: highlight;
-}
-
-
 }

@@ -418,10 +418,10 @@ scrolledwindow {
     }
 
   }
+  &-transition{
+    transition-property: background-color, color, box-shadow;
+    transition-duration: 0.15s;
+    transition-timing-function: ease-in-out;
+  }
 }
 
-.buttons-transition {
-  transition-property: background-color, color, box-shadow;
-  transition-duration: 0.15s;
-  transition-timing-function: ease-in-out;
-}
