@@ -410,6 +410,7 @@ scrolledwindow {
     color: theme.$text-main;
     font-weight: 700;
     border: none;
+    box-shadow: none;
 
     &:hover {
       background-color: theme.$surface-highlight;

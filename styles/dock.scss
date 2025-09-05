@@ -22,8 +22,13 @@ $shadow: 0 0 0 variable.$bar-border-width theme.$shadow-color,
 box-shadow: if(variable.$modules-dock-shadow-enabled, $shadow, none);
 
 
-  button.active {
-      background-color: theme.$accent-blue;
-      box-shadow: 0 0 5px -3px transparentize(theme.$text-main, 0.5);
-    }
+
+
+
+button.dock-button:hover {
+  box-shadow: 0 0 5px -3px theme.$shadow-color;
+    -gtk-icon-effect: highlight;
+}
+
+
 }

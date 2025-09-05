@@ -14,6 +14,7 @@ from gi.repository import Glace, GLib, Gtk
 from loguru import logger
 
 from modules.app_launcher import AppLauncher
+from shared.circle_image import CircularImage
 from shared.popoverv1 import PopOverWindow
 from utils.app import AppUtils
 from utils.config import widget_config
@@ -146,8 +147,15 @@ class AppBar(Box):
             if app:
                 self.pinned_apps_container.add(
                     Button(
-                        style_classes=["buttons-basic"],
-                        image=Image(pixbuf=app.get_icon_pixbuf(self.icon_size)),
+                        style_classes=[
+                            "buttons-basic",
+                            "buttons-transition",
+                            "dock-button",
+                        ],
+                        image=CircularImage(
+                            pixbuf=app.get_icon_pixbuf(self.icon_size),
+                            size=self.icon_size,
+                        ),
                         tooltip_text=app.display_name
                         if self.config.get("tooltip", True)
                         else None,
@@ -238,12 +246,14 @@ class AppBar(Box):
             self.show_menu(client)
             self.menu.popup_at_pointer(event)
 
-    def _on_app_id(self, client, client_button: Button, client_image: Image, *_):
+    def _on_app_id(
+        self, client, client_button: Button, client_image: CircularImage, *_
+    ):
         if client.get_app_id() in self.config.get("ignored_apps", []):
             client_button.destroy()
             client_image.destroy()
             return
-        client_image.set_from_pixbuf(
+        client_image.set_image_from_pixbuf(
             self.icon_resolver.get_icon_pixbuf(client.get_app_id(), self.icon_size)
         )
         client_button.set_tooltip_text(
@@ -251,10 +261,10 @@ class AppBar(Box):
         )
 
     def _on_client_added(self, _, client: Glace.Client):
-        client_image = Image()
+        client_image = CircularImage(size=self.icon_size)
 
         client_button = Button(
-            style_classes=["buttons-basic", "buttons-transition"],
+            style_classes=["buttons-basic", "buttons-transition", "dock-button"],
             image=client_image,
             on_button_press_event=lambda _, event: self._on_button_press_event(
                 event, client
