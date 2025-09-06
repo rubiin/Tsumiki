@@ -156,7 +156,7 @@ class Wifi(Service):
             return False
 
         except subprocess.CalledProcessError as e:
-            logger.error(f"[NetworkService] Error forgetting connection: {e}")
+            logger.exception(f"[NetworkService] Error forgetting connection: {e}")
             return False
 
     def connect_network(
@@ -164,7 +164,7 @@ class Wifi(Service):
     ) -> bool:
         """Connect to a WiFi network"""
         if not ssid:
-            logger.error("[NetworkService] SSID cannot be empty")
+            logger.exception("[NetworkService] SSID cannot be empty")
             return False
         try:
             # First try to connect using saved connection
@@ -189,19 +189,19 @@ class Wifi(Service):
                     return True
                 return False
         except subprocess.CalledProcessError as e:
-            logger.error(f"[NetworkService] Failed connecting to network: {e}")
+            logger.exception(f"[NetworkService] Failed connecting to network: {e}")
             return False
 
     def disconnect_network(self, ssid: str) -> bool:
         """Disconnect from a WiFi network"""
         if not ssid:
-            logger.error("[NetworkService] SSID cannot be empty")
+            logger.exception("[NetworkService] SSID cannot be empty")
             return False
         try:
             subprocess.run(["nmcli", "con", "down", ssid], check=True)
             return True
         except subprocess.CalledProcessError as e:
-            logger.error(f"[NetworkService] Failed disconnecting from network: {e}")
+            logger.exception(f"[NetworkService] Failed disconnecting from network: {e}")
             return False
 
     @Property(bool, "read-write", default_value=False)

@@ -22,14 +22,14 @@ class IndexedWidgetHelper:
         try:
             index = int(identifier)
             if not isinstance(collection, list) or not (0 <= index < len(collection)):
-                logger.error(
+                logger.exception(
                     f"{collection_name} index {index} out of range "
                     f"(0-{len(collection) - 1})"
                 )
                 return None
             return index
         except (ValueError, TypeError):
-            logger.error(f"Invalid {collection_name} index: {identifier}")
+            logger.exception(f"Invalid {collection_name} index: {identifier}")
             return None
 
     @staticmethod

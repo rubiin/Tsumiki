@@ -79,4 +79,4 @@ class KeyboardLayoutWidget(ButtonWidget):
 
             self.kb_label.set_label(label)
         except Exception as e:
-            logger.error(f"[Keyboard] Error getting keyboard layout: {e}")
+            logger.exception(f"[Keyboard] Error getting keyboard layout: {e}")

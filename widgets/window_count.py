@@ -57,7 +57,7 @@ class WindowCountWidget(ButtonWidget):
             ).reply.decode()
             data = json.loads(response)
         except Exception as e:
-            logger.error(f"[WindowCount] Failed to get active workspace: {e}")
+            logger.exception(f"[WindowCount] Failed to get active workspace: {e}")
             return
 
         count = data.get("windows", 0)

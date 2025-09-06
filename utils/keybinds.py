@@ -2,6 +2,7 @@ import json
 from typing import Iterator
 
 from fabric.hyprland.widgets import get_hyprland_connection
+from loguru import logger
 
 MODMASK_MAP = {
     64: "SUPER",
@@ -32,7 +33,7 @@ class KeybindLoader:
             output = self._hyprland_connection.send_command("j/binds").reply.decode()
             binds = json.loads(output)
         except Exception as e:
-            print(f"ERROR: Failed to load keybinds from hyprctl: {e}")
+            logger.exception(f"ERROR: Failed to load keybinds from hyprctl: {e}")
             self.keybinds = []
             return
 

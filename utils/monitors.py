@@ -33,7 +33,7 @@ class HyprlandWithMonitors(Hyprland):
             monitors = json.loads(self.send_command("j/monitors").reply)
             return {monitor["id"]: monitor["name"] for monitor in monitors}
         except Exception as e:
-            logger.error(f"[Monitors] Error getting all monitors: {e}")
+            logger.exception(f"[Monitors] Error getting all monitors: {e}")
             return None
 
     def get_gdk_monitor_id_from_name(self, plug_name: str) -> int | None:
@@ -55,7 +55,7 @@ class HyprlandWithMonitors(Hyprland):
             active_workspace = json.loads(self.send_command("j/activeworkspace").reply)
             return self.get_gdk_monitor_id_from_name(active_workspace["monitor"])
         except Exception as e:
-            logger.error(f"[Monitors] Error getting current GDK monitor ID: {e}")
+            logger.exception(f"[Monitors] Error getting current GDK monitor ID: {e}")
             return None
 
     def get_monitor_names(self) -> list[str]:
@@ -64,10 +64,10 @@ class HyprlandWithMonitors(Hyprland):
             monitors = json.loads(self.send_command("j/monitors").reply)
             return [monitor["name"] for monitor in monitors]
         except json.JSONDecodeError as e:
-            logger.error(f"[Monitors] Error parsing monitor data: {e}")
+            logger.exception(f"[Monitors] Error parsing monitor data: {e}")
             return []
         except Exception as e:
-            logger.error(f"[Monitors] Error getting monitor names: {e}")
+            logger.exception(f"[Monitors] Error getting monitor names: {e}")
             return []
 
 
@@ -103,5 +103,5 @@ class MonitorWatcher:
             try:
                 callback()
             except Exception as e:
-                logger.error(f"Monitor callback error: {e}")
+                logger.exception(f"Monitor callback error: {e}")
         return False

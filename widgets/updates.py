@@ -126,7 +126,7 @@ class UpdatesWidget(ButtonWidget):
                 self.set_visible(total > 0)
 
         except (json.JSONDecodeError, ValueError) as e:
-            logger.error(
+            logger.exception(
                 f"{Colors.ERROR}[UpdatesWidget] Failed to parse update data: {e}"
             )
 
@@ -135,7 +135,7 @@ class UpdatesWidget(ButtonWidget):
                 self.set_visible(total > 0)
 
         except (json.JSONDecodeError, ValueError) as e:
-            logger.error(
+            logger.exception(
                 f"{Colors.ERROR}[UpdatesWidget] Failed to parse update data: {e}"
             )
 

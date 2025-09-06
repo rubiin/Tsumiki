@@ -1,6 +1,7 @@
 import operator
 from collections.abc import Iterator
 from contextlib import suppress
+from loguru import logger
 
 from fabric.utils import DesktopApp, idle_add, remove_handler
 from fabric.widgets.box import Box
@@ -253,7 +254,7 @@ class AppLauncher(PopupWindow):
                     self.viewport.remove(child)
             except (AttributeError, TypeError) as e:
                 # Log error and recreate grid as fallback
-                print(f"Warning: Grid clear failed ({e}), recreating viewport")
+                logger.warning(f"Warning: Grid clear failed ({e}), recreating viewport")
                 try:
                     self.viewport = Grid(
                         column_homogeneous=True,
@@ -261,7 +262,7 @@ class AppLauncher(PopupWindow):
                     )
                     self.scrolled_window.set_child(self.viewport)
                 except Exception as fallback_error:
-                    print(f"Error: Failed to recreate grid: {fallback_error}")
+                    logger.exception(f"Error: Failed to recreate grid: {fallback_error}")
         else:
             # For list layout, simple clear
             self.viewport.children = []

@@ -119,14 +119,14 @@ def parse_markup(text: str) -> str:
 
 def read_json_file(file_path: str) -> Optional[dict | list]:
     if not os.path.exists(file_path):
-        logger.error(f"JSON file {file_path} does not exist.")
+        logger.exception(f"JSON file {file_path} does not exist.")
         return None
 
     with open(file_path, "r") as file:
         try:
             return json.load(file)
         except json.JSONDecodeError as e:
-            logger.error(f"Failed to read JSON file {file_path}: {e}")
+            logger.exception(f"Failed to read JSON file {file_path}: {e}")
             return None
 
 
@@ -134,7 +134,7 @@ def read_toml_file(file_path: str) -> dict:
     import pytomlpp as toml
 
     if not os.path.exists(file_path):
-        logger.error(f"TOML file {file_path} does not exist.")
+        logger.exception(f"TOML file {file_path} does not exist.")
         return None
 
     logger.info(f"[Config] Reading TOML config from {file_path}")
@@ -142,7 +142,7 @@ def read_toml_file(file_path: str) -> dict:
         with open(file_path, "r") as file:
             return toml.load(file)
     except Exception as e:
-        logger.error(f"Failed to read TOML file {file_path}: {e}")
+        logger.exception(f"Failed to read TOML file {file_path}: {e}")
         return None
 
 

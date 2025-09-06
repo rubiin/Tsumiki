@@ -53,5 +53,5 @@ class WorldClockWidget(ButtonWidget):
                 formatted = local_time.strftime(self.time_format)
                 label.set_text(f"{abbrev}: {formatted}")
         except Exception as e:
-            logger.error(f"[world_clock] Failed to update UI: {e}")
+            logger.exception(f"[world_clock] Failed to update UI: {e}")
         return True

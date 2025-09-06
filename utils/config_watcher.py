@@ -54,7 +54,7 @@ class ConfigWatcher:
                 f"{Colors.INFO}[ConfigWatcher] Monitoring {os.path.basename(file_path)}"
             )
         except Exception as e:
-            logger.error(
+            logger.exception(
                 f"{Colors.ERROR}[ConfigWatcher] Failed to monitor {file_path}: {e}"
             )
 
@@ -91,7 +91,7 @@ class ConfigWatcher:
                 start_new_session=True,
             )
         except Exception as e:
-            logger.error(f"{Colors.ERROR}[ConfigWatcher] Failed to restart: {e}")
+            logger.exception(f"{Colors.ERROR}[ConfigWatcher] Failed to restart: {e}")
 
         return False  # Don't repeat
 

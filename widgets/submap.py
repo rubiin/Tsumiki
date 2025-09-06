@@ -58,4 +58,4 @@ class SubMapWidget(ButtonWidget):
                     f"Current submap: {submap}",
                 )
         except Exception as e:
-            logger.error(f"[Submap] Error getting submap: {e}")
+            logger.exception(f"[Submap] Error getting submap: {e}")

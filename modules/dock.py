@@ -113,7 +113,7 @@ class AppBar(Box):
             matches = list(filter(lambda app: app.get("class") == class_name, clients))
             return matches[0] if matches else clients
         except Exception as e:
-            logger.error(f"[Dock] Failed to get active workspace: {e}")
+            logger.exception(f"[Dock] Failed to get active workspace: {e}")
             return None
 
     def _close_popup(self, *_):
@@ -180,7 +180,7 @@ class AppBar(Box):
                     # Use hyprctl to kill windows of this application class
                     exec_shell_command(f"hyprctl dispatch closewindow class:{app_id}")
             except Exception:
-                logger.error(f"[Dock] Failed to close client {client.get_app_id()}")
+                logger.exception(f"[Dock] Failed to close client {client.get_app_id()}")
 
     def show_menu(self, client: Glace.Client):
         """Show the context menu for a client."""
@@ -291,8 +291,6 @@ class AppBar(Box):
 
         self.add(client_button)
 
-        print()
-
         if len(self.pinned_apps) > 0 and not self.separator.get_visible():
             self.separator.set_visible(True)
 
@@ -341,7 +339,7 @@ class Dock(Window):
             ).reply.decode()
             data = json.loads(response)
         except Exception as e:
-            logger.error(f"[Dock] Failed to get active workspace: {e}")
+            logger.exception(f"[Dock] Failed to get active workspace: {e}")
             return
 
         if data.get("windows", 0) == 0:

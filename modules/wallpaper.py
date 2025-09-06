@@ -8,6 +8,7 @@ from fabric.widgets.grid import Grid
 from fabric.widgets.image import Image
 from fabric.widgets.label import Label
 from fabric.widgets.scrolledwindow import ScrolledWindow
+from loguru import logger
 from PIL import Image as PILImage
 
 from shared.buttons import HoverButton
@@ -66,7 +67,7 @@ class ImageButton(HoverButton):
                 Image(image_file=self.wp_thumb_path, tooltip_text=self.wallpaper_name)
             )
         except Exception as e:
-            print(f"Error creating thumbnail: {e}")
+            logger.exception(f"Error creating thumbnail: {e}")
 
     def _load_thumbnail(self):
         if os.path.exists(self.wp_thumb_path):
