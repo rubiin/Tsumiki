@@ -1,0 +1,34 @@
+name: Update Wiki
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - doc.md
+
+jobs:
+  sync-wiki:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Checkout wiki repo
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ github.repository }}.wiki
+          token: ${{ secrets.TOKEN_GITHUB }}
+          path: ./wiki
+
+      - name: Copy doc.md to wiki Home
+        run: |
+          cp doc.md wiki/Home.md
+          cd wiki
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add Home.md
+          git commit -m "Auto-update Wiki from doc.md" || echo "No changes"
+          git push
