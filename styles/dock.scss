@@ -21,4 +21,11 @@ $shadow: 0 0 0 variable.$bar-border-width theme.$shadow-color,
 
 box-shadow: if(variable.$modules-dock-shadow-enabled, $shadow, none);
 
+separator {
+  background-color: variable.$border-color;
+  border-radius: variable.$radius;
+  margin: 8px 4px;
+  min-width: 1.2px;
+}
+
 }

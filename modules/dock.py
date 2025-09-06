@@ -74,6 +74,7 @@ class AppBar(Box):
         self.pinned_apps_container = Box(spacing=7)
         self.add(self.pinned_apps_container)
         self.separator = Separator(visible=False)
+        self.add(self.separator)
 
         self.pinned_apps = read_json_file(PINNED_APPS_FILE) or []
 
@@ -289,7 +290,9 @@ class AppBar(Box):
         )
 
         self.add(client_button)
-        self.separator.set_visible(True)
+
+        if self.pinned_apps.get_children() > 0 and not self.separator.get_visible():
+            self.separator.set_visible(True)
 
 
 class Dock(Window):
