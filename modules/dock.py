@@ -319,7 +319,7 @@ class AppBar(Box):
                 "notify::activated": lambda *_: client_button.add_style_class("active")
                 if client.get_activated()
                 else client_button.remove_style_class("active"),
-                "close": lambda *_: self.remove(box),
+                "close": lambda *_: (self.remove(box), box.destroy()),
             },
         )
 
