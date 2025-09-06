@@ -65,6 +65,7 @@ class AppBar(Box):
                 )
             ],
         )
+        self.pinned_apps = read_json_file(PINNED_APPS_FILE) or []
         self.icon_resolver = IconResolver()
         self._manager = Glace.Manager()
         self._manager.connect("client-added", self._on_client_added)
@@ -76,7 +77,6 @@ class AppBar(Box):
         self.separator = Separator(visible=False)
         self.add(self.separator)
 
-        self.pinned_apps = read_json_file(PINNED_APPS_FILE) or []
 
         self._populate_pinned_apps(self.pinned_apps)
 
@@ -291,7 +291,9 @@ class AppBar(Box):
 
         self.add(client_button)
 
-        if self.pinned_apps.get_children() > 0 and not self.separator.get_visible():
+        print()
+
+        if len(self.pinned_apps) > 0 and not self.separator.get_visible():
             self.separator.set_visible(True)
 
 
