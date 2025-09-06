@@ -290,6 +290,14 @@ class AppBar(Box):
             client.get_title() if self.config.get("tooltip", True) else None
         )
 
+    def on_enter_notify_event(self, client: Glace.Client, client_button: Button):
+        if self.config.get("preview_apps", False):
+            self.update_preview_image(client, client_button)
+
+    def on_leave_notify_event(self, client: Glace.Client, client_button: Button):
+        if self.config.get("preview_apps", True):
+            GLib.timeout_add(100, self._close_popup)
+
     def _on_client_added(self, _, client: Glace.Client):
         client_image = Image(size=self.icon_size)
 
@@ -298,10 +306,12 @@ class AppBar(Box):
             on_button_press_event=lambda _, event: self._on_button_press_event(
                 event, client
             ),
-            on_enter_notify_event=lambda *_: self.config.get("preview_apps", True)
-            and self.update_preview_image(client, client_button),
-            on_leave_notify_event=lambda *_: self.config.get("preview_apps", True)
-            and GLib.timeout_add(100, self._close_popup),
+            on_enter_notify_event=lambda *_: self.on_enter_notify_event(
+                client, client_button
+            ),
+            on_leave_notify_event=lambda *_: self.on_leave_notify_event(
+                client, client_button
+            ),
         )
 
         box = Box(
