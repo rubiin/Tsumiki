@@ -287,6 +287,7 @@ class WeatherMenu(Box, BaseWeatherWidget):
             # clear the forecast box
             for child in self.forecast_box.get_children():
                 self.forecast_box.remove(child)
+                child.destroy()
 
         # show next 4 hours forecast, run this once on boot and after 1200
 

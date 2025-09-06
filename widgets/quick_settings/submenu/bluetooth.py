@@ -189,6 +189,7 @@ class BluetoothSubMenu(QuickSubMenu):
         if device.address in self.device_rows:
             row, listbox = self.device_rows[device.address]
             listbox.remove(row)
+            row.destroy()
         bt_item = Gtk.ListBoxRow(visible=True, name="bluetooth-device-row")
         bt_item.add(BluetoothDeviceBox(device))
         if device.paired:
