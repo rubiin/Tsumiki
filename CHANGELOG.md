@@ -1,5 +1,32 @@
 # Changelog
 
+## [2.4.1](https://github.com/rubiin/Tsumiki/compare/v2.4.0...v2.4.1) (2025-09-06)
+
+
+### 🐛 Bug Fixes
+
+* add circular progress bar to notification widget and implement timeout animation ([3b81fca](https://github.com/rubiin/Tsumiki/commit/3b81fca7ff6703d5136b4a34bc662aa12592940a))
+* add separator to AppBar and update visibility logic based on pinned apps ([5ae6623](https://github.com/rubiin/Tsumiki/commit/5ae66231e94b65e89b25bca69bb6fc36a3e29362))
+* consolidate transition styles into scrolledwindow and remove redundant button hover styles ([aaa5ecf](https://github.com/rubiin/Tsumiki/commit/aaa5ecf07d541c989c919e24992cd91fee284b0b))
+* enhance forecast box cleanup by destroying child widgets when removed ([5488bd0](https://github.com/rubiin/Tsumiki/commit/5488bd079e4fc88f0858e6c0b934e8a8bbd67494))
+* ensure proper cleanup of app bar items by destroying the box on close ([c40c9dd](https://github.com/rubiin/Tsumiki/commit/c40c9dd1fbaf72f361d474791f4601f8ae70bcd3))
+* ensure proper cleanup of Bluetooth device rows by destroying the row on removal ([5488bd0](https://github.com/rubiin/Tsumiki/commit/5488bd079e4fc88f0858e6c0b934e8a8bbd67494))
+* format JSON schema for better readability and update enum values in definitions ([3029405](https://github.com/rubiin/Tsumiki/commit/302940532c57a7b0e38f4aaa201edd95e81747fc))
+* implement app launcher toggle functionality in AppBar and update dock style reference ([7a9e854](https://github.com/rubiin/Tsumiki/commit/7a9e854d5692fb39b3298beb8218dc4fdbd71aad))
+* integrate CircularImage into AppBar and update related styles and schema ([d908d66](https://github.com/rubiin/Tsumiki/commit/d908d66c056cb2346e540081a24845ad8baf434b))
+* pin PyGObject version to 3.50.0 for compatibility ([65f4382](https://github.com/rubiin/Tsumiki/commit/65f438208dfe3553bad0a10927f94393b5640eb1))
+* reduce vertical padding in dock and app launcher settings for improved layout consistency ([150333d](https://github.com/rubiin/Tsumiki/commit/150333d8f6e148a15cd5c3e5e68b4fc623ee5eed))
+* refactor AppLauncher viewport initialization and add CheatSheet and KeybindLoader classes ([ccaf9cf](https://github.com/rubiin/Tsumiki/commit/ccaf9cfbeb1e295b52aa7ac75f7ce9a315a1c7e7))
+* rename CircleImage to CircularImage across multiple modules ([d6ba3a3](https://github.com/rubiin/Tsumiki/commit/d6ba3a37ef8ce05d1cf5eb1f8f15938d0c7a9b52))
+* rename update methods to use a consistent naming convention across multiple widgets ([10c4864](https://github.com/rubiin/Tsumiki/commit/10c486407154c0e3b5fe83c513c53e3b10cd69e1))
+* replace print statements with logger.exception for improved error handling across multiple modules ([52f79fd](https://github.com/rubiin/Tsumiki/commit/52f79fdbff7c064e4da4d82ade73cdfcce0acd0c))
+* update AppWidgetFactory style to use style classes and adjust icon margin in common styles ([a575206](https://github.com/rubiin/Tsumiki/commit/a575206ff5d634282ea3c7b89b2c1b5a0206d104))
+* update connection handling in WindowCountWidget and MonitorWatcher classes ([e37f232](https://github.com/rubiin/Tsumiki/commit/e37f2329050afc532d0c03dd710981f5ffaf4bc6))
+* update layout configuration by removing app_launcher_button from left_section and cleaning up middle_section ([45d1799](https://github.com/rubiin/Tsumiki/commit/45d1799d8170186eba16d9e6103ceb54d313e9b6))
+* update pinned apps handling and improve separator visibility logic ([902ee92](https://github.com/rubiin/Tsumiki/commit/902ee9253eb0a26458ef734246f6768d35773133))
+* update reference for custom_button in schema to correct path ([6f7c4f3](https://github.com/rubiin/Tsumiki/commit/6f7c4f367a188ddc40f8d163766809607a669ff0))
+* update style classes and layout properties in AppWidgetFactory and AppLauncher ([aca9be1](https://github.com/rubiin/Tsumiki/commit/aca9be14b361f024631a8ca7a48324a371eaa564))
+
 ## [2.4.0](https://github.com/rubiin/Tsumiki/compare/v2.3.0...v2.4.0) (2025-09-03)
 
 
