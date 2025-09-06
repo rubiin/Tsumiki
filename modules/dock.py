@@ -10,7 +10,7 @@ from fabric.widgets.image import Image
 from fabric.widgets.revealer import Revealer
 from fabric.widgets.separator import Separator
 from fabric.widgets.wayland import WaylandWindow as Window
-from gi.repository import Glace, GLib, Gtk
+from gi.repository import Gdk, Glace, GLib, Gtk
 from loguru import logger
 
 from modules.app_launcher import AppLauncher
@@ -20,6 +20,7 @@ from utils.config import widget_config
 from utils.constants import PINNED_APPS_FILE
 from utils.functions import read_json_file, write_json_file
 from utils.icon_resolver import IconResolver
+from utils.widget_utils import create_surface_from_widget
 
 gi.require_versions({"Glace": "0.1", "Gtk": "3.0"})
 
@@ -58,17 +59,22 @@ class AppBar(Box):
             style_classes=["buttons-basic", "buttons-transition", "dock-button"],
             **kwargs,
         )
-        # button.drag_source_set(
-        #     Gdk.ModifierType.BUTTON1_MASK,
-        #     [Gtk.TargetEntry.new("text/plain", Gtk.TargetFlags.SAME_APP, 0)],
-        #     Gdk.DragAction.MOVE,
-        # )
+        button.drag_source_set(
+            Gdk.ModifierType.BUTTON1_MASK,
+            [Gtk.TargetEntry.new("text/plain", Gtk.TargetFlags.SAME_APP, 0)],
+            Gdk.DragAction.MOVE,
+        )
 
-        # button.drag_dest_set(
-        #     Gtk.DestDefaults.ALL,
-        #     [Gtk.TargetEntry.new("text/plain", Gtk.TargetFlags.SAME_APP, 0)],
-        #     Gdk.DragAction.MOVE,
-        # )
+        button.drag_dest_set(
+            Gtk.DestDefaults.ALL,
+            [Gtk.TargetEntry.new("text/plain", Gtk.TargetFlags.SAME_APP, 0)],
+            Gdk.DragAction.MOVE,
+        )
+
+        button.connect("drag-begin", self.on_drag_begin)
+        button.connect("drag-data-get", self.on_drag_data_get)
+        button.connect("drag-data-received", self.on_drag_data_received)
+        button.connect("drag-end", self.on_drag_end)
 
         return button
 
@@ -78,6 +84,7 @@ class AppBar(Box):
         self.app_util = AppUtils()
         self._all_apps = self.app_util.all_applications
         self.app_identifiers = self.app_util.app_identifiers
+        self._drag_in_progress = False
 
         self.config = parent.config
 
@@ -156,6 +163,91 @@ class AppBar(Box):
     def _close_popup(self, *_):
         self.popup_revealer.unreveal()
         return False
+
+    def on_drag_data_received(self, widget, drag_context, x, y, data_obj, info, time):
+        try:
+            source_index = int(data_obj.get_text())
+        except (TypeError, ValueError):
+            return
+
+        children = self.get_children()
+        target_index = children.index(widget)
+
+        if source_index != target_index:
+            separator_index = -1
+            for i, child in enumerate(children):
+                if child.get_name() == "dock-separator":
+                    separator_index = i
+                    break
+
+            cross_section_drag_to_pin = separator_index != -1 and (
+                source_index > separator_index and target_index < separator_index
+            )
+
+            cross_section_drag_to_unpin = separator_index != -1 and (
+                source_index < separator_index and target_index > separator_index
+            )
+
+            if cross_section_drag_to_pin:
+                source_widget = children[source_index]
+                app_identifier = source_widget.app_identifier
+
+                if hasattr(source_widget, "desktop_app") and source_widget.desktop_app:
+                    app = source_widget.desktop_app
+                    app_data_obj = {
+                        "name": app.name,
+                        "display_name": app.display_name,
+                        "window_class": app.window_class,
+                        "executable": app.executable,
+                        "command_line": app.command_line,
+                    }
+                    self.pinned.insert(target_index, app_data_obj)
+                else:
+                    self.pinned.insert(target_index, app_identifier)
+
+                self.config["pinned_apps"] = self.pinned
+                self.update_pinned_apps_file()
+                self.update_applications()
+            elif cross_section_drag_to_unpin:
+                if source_index < len(self.pinned):
+                    self.pinned.pop(source_index)
+                    self.config["pinned_apps"] = self.pinned
+                    self.update_pinned_apps_file()
+                    self.update_applications()
+            else:
+                if source_index < separator_index and target_index < separator_index:
+                    item = self.pinned.pop(source_index)
+                    self.pinned.insert(target_index, item)
+                    self.config["pinned_apps"] = self.pinned
+                    self.update_pinned_apps_file()
+                    self.update_applications()
+                elif source_index > separator_index and target_index > separator_index:
+                    child_to_move = children.pop(source_index)
+                    children.insert(target_index, child_to_move)
+
+                    for child in self.get_children():
+                        self.remove(child)
+                    for child in children:
+                        self.add(child)
+                    self.show_all()
+
+    def on_drag_begin(self, widget, drag_context):
+        self._drag_in_progress = True
+        Gtk.drag_set_icon_surface(
+            drag_context, create_surface_from_widget(widget, (255, 255, 255, 0))
+        )
+
+        # Prevent dock from hiding during drag
+        if self.dock_instance:
+            self.dock_instance.prevent_hiding(True)
+
+        # Store the source widget for later use
+        self._dragged_widget = widget
+
+    def on_drag_data_get(self, widget, drag_context, data_obj, info, time):
+        children = self.get_children()
+        index = children.index(widget)
+        data_obj.set_text(str(index), -1)
 
     def _capture_callback(self, pbuf, _):
         self._preview_image.set_from_pixbuf(
