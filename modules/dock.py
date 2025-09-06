@@ -14,7 +14,6 @@ from gi.repository import Glace, GLib, Gtk
 from loguru import logger
 
 from modules.app_launcher import AppLauncher
-from shared.circle_image import CircularImage
 from shared.popoverv1 import PopOverWindow
 from utils.app import AppUtils
 from utils.config import widget_config
@@ -23,6 +22,25 @@ from utils.functions import read_json_file, write_json_file
 from utils.icon_resolver import IconResolver
 
 gi.require_versions({"Glace": "0.1", "Gtk": "3.0"})
+
+
+class DotIndicator(Gtk.DrawingArea):
+    """A simple dot indicator widget."""
+
+    def __init__(self):
+        super().__init__(
+            visible=True,
+        )
+        self.set_size_request(5, 5)
+        self.connect("draw", self.on_draw)
+
+    def on_draw(self, area, cr):
+        alloc = self.get_allocation()
+        radius = min(alloc.width, alloc.height) / 2 - 1
+        cr.arc(alloc.width / 2, alloc.height / 2, radius, 0, 2 * 3.14)
+
+        cr.set_source_rgb(1.0, 1.0, 1.0)  # white dot
+        cr.fill()
 
 
 class AppBar(Box):
@@ -34,6 +52,25 @@ class AppBar(Box):
             self.app_launcher = AppLauncher(widget_config)
         if self.app_launcher:
             self.app_launcher.toggle()
+
+    def _bake_button(self, **kwargs) -> Button:
+        button = Button(
+            style_classes=["buttons-basic", "buttons-transition", "dock-button"],
+            **kwargs,
+        )
+        # button.drag_source_set(
+        #     Gdk.ModifierType.BUTTON1_MASK,
+        #     [Gtk.TargetEntry.new("text/plain", Gtk.TargetFlags.SAME_APP, 0)],
+        #     Gdk.DragAction.MOVE,
+        # )
+
+        # button.drag_dest_set(
+        #     Gtk.DestDefaults.ALL,
+        #     [Gtk.TargetEntry.new("text/plain", Gtk.TargetFlags.SAME_APP, 0)],
+        #     Gdk.DragAction.MOVE,
+        # )
+
+        return button
 
     def __init__(self, parent):
         self._parent = parent
@@ -57,6 +94,7 @@ class AppBar(Box):
             style_classes=["window-basic", "sleek-border"],
             children=[
                 Button(
+                    style="margin-bottom: 8px;",
                     image=Image(
                         icon_name="view-app-grid-symbolic",
                         icon_size=self.icon_size,
@@ -72,11 +110,10 @@ class AppBar(Box):
         self._preview_image = Image()
         self._hyprland_connection = get_hyprland_connection()
 
-        self.pinned_apps_container = Box(spacing=7)
+        self.pinned_apps_container = Box(spacing=7, v_align="start")
         self.add(self.pinned_apps_container)
         self.separator = Separator(visible=False)
         self.add(self.separator)
-
 
         self._populate_pinned_apps(self.pinned_apps)
 
@@ -104,7 +141,7 @@ class AppBar(Box):
                 else None,
             )
 
-    def get_client_data(self, class_name):
+    def _get_client_data(self, class_name):
         try:
             clients = json.loads(
                 self._hyprland_connection.send_command("j/clients").reply.decode()
@@ -145,24 +182,18 @@ class AppBar(Box):
         """Add user-configured pinned apps."""
         for item in apps:
             app = self.app_util.find_app(item)
+            btn = self._bake_button(
+                name="pinned_app",
+                tooltip_markup=app.display_name if app else "Unknown",
+                image=Image(
+                    pixbuf=app.get_icon_pixbuf(self.icon_size),
+                    size=self.icon_size,
+                ),
+                on_clicked=lambda *_, app=app: app.launch(),
+            )
+
             if app:
-                self.pinned_apps_container.add(
-                    Button(
-                        style_classes=[
-                            "buttons-basic",
-                            "buttons-transition",
-                            "dock-button",
-                        ],
-                        image=CircularImage(
-                            pixbuf=app.get_icon_pixbuf(self.icon_size),
-                            size=self.icon_size,
-                        ),
-                        tooltip_text=app.display_name
-                        if self.config.get("tooltip", True)
-                        else None,
-                        on_clicked=lambda *_, app=app: app.launch(),
-                    )
-                )
+                self.pinned_apps_container.add(btn)
 
     def check_if_pinned(self, client: Glace.Client) -> bool:
         """Check if a client is pinned."""
@@ -247,14 +278,12 @@ class AppBar(Box):
             self.show_menu(client)
             self.menu.popup_at_pointer(event)
 
-    def _on_app_id(
-        self, client, client_button: Button, client_image: CircularImage, *_
-    ):
+    def _on_app_id(self, client, client_button: Button, client_image: Image, *_):
         if client.get_app_id() in self.config.get("ignored_apps", []):
             client_button.destroy()
             client_image.destroy()
             return
-        client_image.set_image_from_pixbuf(
+        client_image.set_from_pixbuf(
             self.icon_resolver.get_icon_pixbuf(client.get_app_id(), self.icon_size)
         )
         client_button.set_tooltip_text(
@@ -262,10 +291,9 @@ class AppBar(Box):
         )
 
     def _on_client_added(self, _, client: Glace.Client):
-        client_image = CircularImage(size=self.icon_size)
+        client_image = Image(size=self.icon_size)
 
-        client_button = Button(
-            style_classes=["buttons-basic", "buttons-transition", "dock-button"],
+        client_button = self._bake_button(
             image=client_image,
             on_button_press_event=lambda _, event: self._on_button_press_event(
                 event, client
@@ -274,6 +302,12 @@ class AppBar(Box):
             and self.update_preview_image(client, client_button),
             on_leave_notify_event=lambda *_: self.config.get("preview_apps", True)
             and GLib.timeout_add(100, self._close_popup),
+        )
+
+        box = Box(
+            orientation="vertical",
+            spacing=4,
+            children=[client_button, DotIndicator()],
         )
 
         bulk_connect(
@@ -285,11 +319,11 @@ class AppBar(Box):
                 "notify::activated": lambda *_: client_button.add_style_class("active")
                 if client.get_activated()
                 else client_button.remove_style_class("active"),
-                "close": lambda *_: self.remove(client_button),
+                "close": lambda *_: self.remove(box),
             },
         )
 
-        self.add(client_button)
+        self.add(box)
 
         if len(self.pinned_apps) > 0 and not self.separator.get_visible():
             self.separator.set_visible(True)

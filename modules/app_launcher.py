@@ -1,7 +1,6 @@
 import operator
 from collections.abc import Iterator
 from contextlib import suppress
-from loguru import logger
 
 from fabric.utils import DesktopApp, idle_add, remove_handler
 from fabric.widgets.box import Box
@@ -12,6 +11,7 @@ from fabric.widgets.image import Image
 from fabric.widgets.label import Label
 from fabric.widgets.scrolledwindow import ScrolledWindow
 from gi.repository import Gdk, GLib, Gtk
+from loguru import logger
 
 from shared.popup import PopupWindow
 from utils.app import AppUtils
@@ -262,7 +262,9 @@ class AppLauncher(PopupWindow):
                     )
                     self.scrolled_window.set_child(self.viewport)
                 except Exception as fallback_error:
-                    logger.exception(f"Error: Failed to recreate grid: {fallback_error}")
+                    logger.exception(
+                        f"Error: Failed to recreate grid: {fallback_error}"
+                    )
         else:
             # For list layout, simple clear
             self.viewport.children = []

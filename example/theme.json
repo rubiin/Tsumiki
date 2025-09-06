@@ -42,7 +42,7 @@
 				"opacity": 100
 			},
 			"padding_x": "8px",
-			"padding_y": "8px",
+			"padding_y": "4px",
 			"margin_x": "8px",
 			"margin_y": "8px",
 			"border": {
