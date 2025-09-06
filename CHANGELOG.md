@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.4.2](https://github.com/rubiin/Tsumiki/compare/v2.4.1...v2.4.2) (2025-09-06)
+
+
+### 🐛 Bug Fixes
+
+* improve app preview handling on mouse enter and leave events ([39ab33b](https://github.com/rubiin/Tsumiki/commit/39ab33b84d76b48fbcc4af522fec8c921e6e0cd4))
+
+
+### 🚀 CI Improvements
+
+* add GitHub Actions workflow to auto-update Wiki from doc.md on push ([e641c10](https://github.com/rubiin/Tsumiki/commit/e641c104ad73bd710c7a67fc3e5cacca26544bbb))
+
 ## [2.4.1](https://github.com/rubiin/Tsumiki/compare/v2.4.0...v2.4.1) (2025-09-06)
 
 
