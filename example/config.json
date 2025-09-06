@@ -378,14 +378,12 @@
 	},
 	"layout": {
 		"left_section": [
-			"app_launcher_button",
 			"workspaces",
 			"window_title"
 		],
 		"middle_section": [
 			"date_time",
-			"weather",
-			"overview"
+			"weather"
 		],
 		"right_section": [
 			"@collapsible:0",
