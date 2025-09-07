@@ -54,12 +54,9 @@ class KeyboardLayoutWidget(ButtonWidget):
             f"[Keyboard] Keyboard: {keyboard}, Language: {language}, Match: {matched}"
         )
 
-    def _get_keyboard(self):
+    def _handle_reply(self, reply: str):
         try:
-            data = json.loads(
-                str(self._hyprland_connection.send_command("j/devices").reply.decode())
-            )
-
+            data = json.loads(reply)
             keyboards = data.get("keyboards", [])
             if not keyboards:
                 return "Unknown"
@@ -78,5 +75,15 @@ class KeyboardLayoutWidget(ButtonWidget):
                 )
 
             self.kb_label.set_label(label)
+        except Exception as e:
+            logger.exception(f"[Keyboard] Failed to parse keyboard data: {e}")
+            return
+
+    def _get_keyboard(self):
+        try:
+            self._hyprland_connection.send_command_async(
+                "j/devices", lambda res, *_: self._handle_reply(res.reply.decode())
+            )
+
         except Exception as e:
             logger.exception(f"[Keyboard] Error getting keyboard layout: {e}")

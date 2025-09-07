@@ -1,3 +1,5 @@
+import json
+
 from fabric.hyprland.widgets import get_hyprland_connection
 from fabric.widgets.label import Label
 from loguru import logger
@@ -39,12 +41,10 @@ class SubMapWidget(ButtonWidget):
             "[Submap] Connected to the hyprland socket"
         )
 
-    def _get_submap(self, *_):
+    def _handle_reply(self, reply: str):
         try:
-            submap = str(
-                self._hyprland_connection.send_command("submap").reply.decode()
-            ).strip("\n")
-
+            data = json.loads(reply)
+            submap = data.get("submap", "default")
             if submap == "unknown request":
                 submap = "default"
 
@@ -57,5 +57,16 @@ class SubMapWidget(ButtonWidget):
                 self.set_tooltip_text(
                     f"Current submap: {submap}",
                 )
+        except Exception as e:
+            logger.exception(f"[Submap] Failed to parse submap data: {e}")
+            return
+
+    def _get_submap(self, *_):
+        try:
+            self._hyprland_connection.send_command_async(
+                "submap",
+                lambda res, *_: self._handle_reply(res.reply.decode().strip("\n")),
+            )
+
         except Exception as e:
             logger.exception(f"[Submap] Error getting submap: {e}")
