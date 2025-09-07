@@ -1,5 +1,3 @@
-import json
-
 import gi
 from fabric.hyprland.widgets import get_hyprland_connection
 from fabric.utils import bulk_connect, exec_shell_command_async
@@ -129,18 +127,6 @@ class AppBar(Box):
                 else None,
             )
 
-    def _get_client_data(self, class_name):
-        try:
-            clients = json.loads(
-                self._hyprland_connection.send_command("j/clients").reply.decode()
-            )
-
-            matches = list(filter(lambda app: app.get("class") == class_name, clients))
-            return matches[0] if matches else clients
-        except Exception as e:
-            logger.exception(f"[Dock] Failed to get active workspace: {e}")
-            return None
-
     def _close_popup(self, *_):
         self.popup_revealer.unreveal()
         return False
@@ -211,10 +197,6 @@ class AppBar(Box):
 
     def _move_to_workspace(self, client: Glace.Client, workspace: int):
         print(client.get_app_id(), client.get_hyprland_address(), workspace)
-        exec_shell_command_async(
-            f"hyprctl dispatch movetoworkspace {workspace} address:{client.get_hyprland_address()}",
-            lambda _: None,
-        )
 
     def _close_running_app(self, client: Glace.Client):
         try:
@@ -417,26 +399,27 @@ class Dock(Window):
             bulk_connect(
                 self._hyprland_connection,
                 {
-                    "event::workspace": self.check_for_windows,
-                    "event::closewindow": self.check_for_windows,
-                    "event::openwindow": self.check_for_windows,
-                    "event::movewindow": self.check_for_windows,
+                    "event::workspace": self._check_for_windows,
+                    "event::closewindow": self._check_for_windows,
+                    "event::openwindow": self._check_for_windows,
+                    "event::movewindow": self._check_for_windows,
                 },
             )
 
-            self.check_for_windows()
+            self._check_for_windows()
 
-    def check_for_windows(self, *_):
-        try:
-            response = self._hyprland_connection.send_command(
-                "j/activeworkspace"
-            ).reply.decode()
-            data = json.loads(response)
-        except Exception as e:
-            logger.exception(f"[Dock] Failed to get active workspace: {e}")
-            return
-
-        if data.get("windows", 0) == 0:
+    def _handle_workspace_response(self, reply):
+        if reply.get("windows", 0) == 0:
             self.revealer.set_reveal_child(True)
         else:
             self.revealer.set_reveal_child(False)
+
+    def _check_for_windows(self, *_):
+        try:
+            self._hyprland_connection.send_command_async(
+                "j/activeworkspace",
+                lambda res, *_: self._handle_workspace_response(res.reply.decode()),
+            )
+        except Exception as e:
+            logger.exception(f"[Dock] Failed to get active workspace: {e}")
+            return
