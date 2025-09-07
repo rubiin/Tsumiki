@@ -1,5 +1,4 @@
-from fabric.hyprland.widgets import get_hyprland_connection
-from fabric.utils import cooldown
+from fabric.utils import cooldown, exec_shell_command_async
 
 from shared.buttons import QSChevronButton
 from shared.submenu import QuickSubMenu
@@ -26,8 +25,6 @@ class HyprSunsetSubMenu(QuickSubMenu):
             value=2600,
         )
 
-        self._hyprland_connection = get_hyprland_connection()
-
         super().__init__(
             title="HyprSunset",
             title_icon=text_icons["nightlight"]["enabled"],
@@ -44,8 +41,8 @@ class HyprSunsetSubMenu(QuickSubMenu):
     @cooldown(0.1)
     def on_scale_move(self, scale):
         temperature = int(scale.get_value())
-        self._hyprland_connection.send_command_async(
-            f"hyprsunset temperature {temperature}",
+        exec_shell_command_async(
+            f"hyprctl hyprsunset temperature {temperature}",
             lambda *_: self._update_ui(temperature),
         )
         return True
@@ -53,8 +50,8 @@ class HyprSunsetSubMenu(QuickSubMenu):
     def update_scale(self, *_):
         if is_app_running("hyprsunset"):
             self.scale.set_sensitive(True)
-            self._hyprland_connection.send_command_async(
-                "hyprsunset temperature",
+            exec_shell_command_async(
+                "hyprctl hyprsunset temperature",
                 self._update_ui,
             )
         else:
