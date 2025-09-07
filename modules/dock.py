@@ -246,7 +246,6 @@ class AppBar(Box):
         new_window = self._make_item(
             "New Window", lambda: self._open_new_window(client)
         )
-        close_item = self._make_item("Close", lambda: self._close_running_app(client))
         toggle_full_screen = self._make_item(
             "Toggle Full Screen", lambda: self._toggle_fullscreen(client)
         )
@@ -290,7 +289,7 @@ class AppBar(Box):
         close_all_item.connect("activate", lambda *_: self._toggle_floating(client))
 
         # Add items to menu
-        for title_item in [
+        for item in [
             title_item,
             pin_item,
             new_window,
@@ -299,41 +298,23 @@ class AppBar(Box):
             close_item,
             close_all_item,
         ]:
-            self.menu.add(title_item)
+            self.menu.add(item)
 
         self.menu.show_all()
 
-    def _unpin_app(self, client: Glace.Client):
-        """Unpin an application from the dock."""
-        if not self.check_if_pinned(client):
-            return False
-
-        self.pinned_apps.remove(client.get_app_id())
-
-        write_json_file(
-            self.pinned_apps,
-            PINNED_APPS_FILE,
-        )
-
+    def _update_pins(self):
+        write_json_file(self.pinned_apps, PINNED_APPS_FILE)
         self._populate_pinned_apps(self.pinned_apps)
-
-        return True
 
     def _pin_running_app(self, client: Glace.Client):
-        """Pin an application to the dock."""
+        if not self.check_if_pinned(client):
+            self.pinned_apps.append(client.get_app_id())
+            self._update_pins()
+
+    def _unpin_app(self, client: Glace.Client):
         if self.check_if_pinned(client):
-            return False
-
-        self.pinned_apps.append(client.get_app_id())
-
-        write_json_file(
-            self.pinned_apps,
-            PINNED_APPS_FILE,
-        )
-
-        self._populate_pinned_apps(self.pinned_apps)
-
-        return True
+            self.pinned_apps.remove(client.get_app_id())
+            self._update_pins()
 
     def _on_button_press_event(self, event, client):
         if event.button == 1:
