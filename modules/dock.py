@@ -220,6 +220,11 @@ class AppBar(Box):
             except Exception:
                 logger.exception(f"[Dock] Failed to close client {client.get_app_id()}")
 
+    def _make_item(self, label: str, callback):
+        mi = Gtk.MenuItem(label=label)
+        mi.connect("activate", lambda *_: callback())
+        return mi
+
     def _show_menu(self, client: Glace.Client):
         """Show the context menu for a client."""
 
@@ -227,23 +232,30 @@ class AppBar(Box):
 
         if not self.menu:
             self.menu = Gtk.Menu()
+        else:
+            for title_item in self.menu.get_children():
+                self.menu.remove(title_item)
+                title_item.destroy()
 
-        for item in self.menu.get_children():
-            self.menu.remove(item)
-            item.destroy()
+        new_window = self._make_item(
+            "New Window", lambda: self._open_new_window(client)
+        )
+        close_item = self._make_item("Close", lambda: self._close_running_app(client))
+        toggle_full_screen = self._make_item(
+            "Toggle Full Screen", lambda: self._toggle_fullscreen(client)
+        )
+        toggle_floating = self._make_item(
+            "Toggle Floating", lambda: self._toggle_floating(client)
+        )
+        close_item = self._make_item("Close", lambda: self._close_running_app(client))
+        close_all_item = self._make_item(
+            "Close All", lambda: self._close_running_app(client)
+        )
 
-        pin_item = Gtk.MenuItem(label="Pin")
-        new_window = Gtk.MenuItem(label="New Window")
-        close_item = Gtk.MenuItem(label="Close")
-        toggle_full_screen = Gtk.MenuItem(label="Full Screen")
-        toggle_floating = Gtk.MenuItem(label="Toggle Floating")
-        close_item = Gtk.MenuItem(label="Close")
-        close_all_item = Gtk.MenuItem(label="Close All")
-
-        item = Gtk.MenuItem(label=truncate(client.get_title(), 20))
+        title_item = Gtk.MenuItem(label=truncate(client.get_title(), 20))
 
         item_menu = Gtk.Menu()
-        item.set_submenu(item_menu)
+        title_item.set_submenu(item_menu)
 
         if client.get_fullscreen():
             toggle_full_screen.set_label("Exit Full Screen")
@@ -256,27 +268,33 @@ class AppBar(Box):
 
             item_menu.add(ws_item)
 
+        # Pin / Unpin
         if self.check_if_pinned(client):
-            pin_item.set_label("Unpin")
-            pin_item.connect("activate", lambda *_: self._unpin_app(client))
-
+            pin_item = self._make_item("Unpin", lambda: self._unpin_app(client))
         else:
-            pin_item.connect("activate", lambda *_: self._pin_running_app(client))
+            pin_item = self._make_item("Pin", lambda: self._pin_running_app(client))
 
         close_item.connect("activate", lambda *_: self._close_running_app(client))
         new_window.connect("activate", lambda *_: self._open_new_window(client))
+
         toggle_full_screen.connect(
             "activate", lambda *_: self._toggle_fullscreen(client)
         )
         toggle_floating.connect("activate", lambda *_: self._toggle_floating(client))
         close_all_item.connect("activate", lambda *_: self._toggle_floating(client))
 
-        self.menu.add(item)
-        self.menu.add(pin_item)
-        self.menu.add(new_window)
-        self.menu.add(toggle_full_screen)
-        self.menu.add(toggle_floating)
-        self.menu.add(close_item)
+        # Add items to menu
+        for title_item in [
+            title_item,
+            pin_item,
+            new_window,
+            toggle_full_screen,
+            toggle_floating,
+            close_item,
+            close_all_item,
+        ]:
+            self.menu.add(title_item)
+
         self.menu.show_all()
 
     def _unpin_app(self, client: Glace.Client):
