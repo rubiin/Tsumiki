@@ -2,7 +2,7 @@ import json
 
 import gi
 from fabric.hyprland.widgets import get_hyprland_connection
-from fabric.utils import bulk_connect, exec_shell_command
+from fabric.utils import bulk_connect, exec_shell_command_async
 from fabric.widgets.box import Box
 from fabric.widgets.button import Button
 from fabric.widgets.eventbox import EventBox
@@ -199,7 +199,36 @@ class AppBar(Box):
         """Check if a client is pinned."""
         return client.get_app_id() in self.pinned_apps
 
-    def _close_running_app(self, client):
+    def _open_new_window(self, client: Glace.Client):
+        app = self.app_util.find_app(client.get_app_id())
+        if app:
+            app.launch()
+        else:
+            logger.warning(f"[Dock] No application found for {client.get_app_id()}")
+
+    def _toggle_floating(self, client: Glace.Client):
+        exec_shell_command_async(
+            f"hyprctl dispatch togglefloating address:{client.get_hyprland_address()}",
+            lambda _: None,
+        )
+
+    def _toggle_fullscreen(self, client: Glace.Client):
+        try:
+            if client.get_fullscreen():
+                client.unfullscreen()
+            else:
+                client.fullscreen()
+        except Exception as e:
+            logger.exception(f"[Dock] Failed to toggle fullscreen: {e}")
+
+    def _move_to_workspace(self, client: Glace.Client, workspace: int):
+        print(client.get_app_id(), client.get_hyprland_address(), workspace)
+        exec_shell_command_async(
+            f"hyprctl dispatch movetoworkspace {workspace} address:{client.get_hyprland_address()}",
+            lambda _: None,
+        )
+
+    def _close_running_app(self, client: Glace.Client):
         try:
             # Try to close the client gracefully first
             client.close()
@@ -209,7 +238,9 @@ class AppBar(Box):
                 app_id = client.get_app_id()
                 if app_id:
                     # Use hyprctl to kill windows of this application class
-                    exec_shell_command(f"hyprctl dispatch closewindow class:{app_id}")
+                    self._hyprland_connection.send_command_async(
+                        f"closewindow class:{app_id}", lambda _: None
+                    )
             except Exception:
                 logger.exception(f"[Dock] Failed to close client {client.get_app_id()}")
 
@@ -224,7 +255,28 @@ class AppBar(Box):
             item.destroy()
 
         pin_item = Gtk.MenuItem(label="Pin")
+        new_window = Gtk.MenuItem(label="New Window")
         close_item = Gtk.MenuItem(label="Close")
+        toggle_full_screen = Gtk.MenuItem(label="Full Screen")
+        toggle_floating = Gtk.MenuItem(label="Toggle Floating")
+        close_item = Gtk.MenuItem(label="Close")
+        close_all_item = Gtk.MenuItem(label="Close All")
+
+        item = Gtk.MenuItem(label=client.get_title())
+
+        item_menu = Gtk.Menu()
+        item.set_submenu(item_menu)
+
+        if client.get_fullscreen():
+            toggle_full_screen.set_label("Exit Full Screen")
+
+        for i in range(1, 10):
+            ws_item = Gtk.MenuItem(label=f"Move to Workspace {i}")
+            ws_item.connect(
+                "activate", lambda *_, i=i: self._move_to_workspace(client, i)
+            )
+
+            item_menu.add(ws_item)
 
         if self.check_if_pinned(client):
             pin_item.set_label("Unpin")
@@ -234,8 +286,18 @@ class AppBar(Box):
             pin_item.connect("activate", lambda *_: self._pin_running_app(client))
 
         close_item.connect("activate", lambda *_: self._close_running_app(client))
+        new_window.connect("activate", lambda *_: self._open_new_window(client))
+        toggle_full_screen.connect(
+            "activate", lambda *_: self._toggle_fullscreen(client)
+        )
+        toggle_floating.connect("activate", lambda *_: self._toggle_floating(client))
+        close_all_item.connect("activate", lambda *_: self._toggle_floating(client))
 
+        self.menu.add(item)
         self.menu.add(pin_item)
+        self.menu.add(new_window)
+        self.menu.add(toggle_full_screen)
+        self.menu.add(toggle_floating)
         self.menu.add(close_item)
         self.menu.show_all()
 
