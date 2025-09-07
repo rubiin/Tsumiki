@@ -49,15 +49,11 @@ class WindowCountWidget(ButtonWidget):
             "[WindowCount] Connected to the hyprland socket"
         )
 
-    def _get_window_count(self, *_):
-        """Get the number of windows in the active workspace."""
+    def _handle_workspace_response(self, reply):
         try:
-            response = self._hyprland_connection.send_command(
-                "j/activeworkspace"
-            ).reply.decode()
-            data = json.loads(response)
+            data = json.loads(reply)
         except Exception as e:
-            logger.exception(f"[WindowCount] Failed to get active workspace: {e}")
+            logger.exception(f"[WindowCount] Failed to parse workspace data: {e}")
             return
 
         count = data.get("windows", 0)
@@ -71,3 +67,14 @@ class WindowCountWidget(ButtonWidget):
             self.set_visible(count != 0)
 
         logger.info(f"[WindowCount] Workspace: {data.get('id')} | Windows: {count}")
+
+    def _get_window_count(self, *_):
+        """Get the number of windows in the active workspace."""
+        try:
+            self._hyprland_connection.send_command_async(
+                "j/activeworkspace",
+                lambda res, *_: self._handle_workspace_response(res.reply.decode()),
+            )
+        except Exception as e:
+            logger.exception(f"[WindowCount] Failed to get active workspace: {e}")
+            return
