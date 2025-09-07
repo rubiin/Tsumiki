@@ -2,7 +2,7 @@ import json
 
 import gi
 from fabric.hyprland.widgets import get_hyprland_connection
-from fabric.utils import bulk_connect, exec_shell_command_async
+from fabric.utils import bulk_connect
 from fabric.widgets.box import Box
 from fabric.widgets.button import Button
 from fabric.widgets.eventbox import EventBox
@@ -183,8 +183,8 @@ class AppBar(Box):
             logger.warning(f"[Dock] No application found for {client.get_app_id()}")
 
     def _toggle_floating(self, client: Glace.Client):
-        exec_shell_command_async(
-            f"hyprctl dispatch togglefloating address:{client.get_hyprland_address()}",
+        self._hyprland_connection.send_command_async(
+            f"dispatch togglefloating address:{client.get_hyprland_address()}",
             lambda _: None,
         )
 

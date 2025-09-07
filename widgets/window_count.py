@@ -1,5 +1,3 @@
-import json
-
 from fabric.hyprland.widgets import get_hyprland_connection
 from fabric.utils import bulk_connect
 from fabric.widgets.label import Label
@@ -49,10 +47,8 @@ class WindowCountWidget(ButtonWidget):
             "[WindowCount] Connected to the hyprland socket"
         )
 
-    def _handle_workspace_response(self, reply):
+    def _handle_workspace_response(self, data):
         try:
-            data = json.loads(reply)
-
             count = data.get("windows", 0)
             label_format = self.config.get("label_format", "[{count}]")
             self.count_label.set_label(label_format.format(count=count))

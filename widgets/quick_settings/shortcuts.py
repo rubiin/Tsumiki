@@ -1,5 +1,4 @@
-import subprocess
-
+from fabric.hyprland.widgets import get_hyprland_connection
 from fabric.widgets.box import Box
 from fabric.widgets.grid import Grid
 from fabric.widgets.label import Label
@@ -18,6 +17,8 @@ class ShortcutButton(HoverButton):
         self.command = shortcut_config.get("command", "")
 
         box = Box(orientation="v", spacing=4, v_expand=True)
+
+        self._hyprland_connection = get_hyprland_connection()
 
         if "icon" in shortcut_config:
             icon = nerd_font_icon(
@@ -48,7 +49,9 @@ class ShortcutButton(HoverButton):
     def on_click(self, *_):
         """Execute the command when clicked."""
         try:
-            subprocess.Popen(["hyprctl", "dispatch", "exec", self.command])
+            self._hyprland_connection.send_command_async(
+                f"dispatch exec {self.command}", lambda _: None
+            )
         except Exception as e:
             logger.exception(f"Error executing shortcut command: {e}")
 

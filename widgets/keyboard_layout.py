@@ -1,4 +1,3 @@
-import json
 import re
 
 from fabric.hyprland.widgets import HyprlandEvent, get_hyprland_connection
@@ -54,9 +53,8 @@ class KeyboardLayoutWidget(ButtonWidget):
             f"[Keyboard] Keyboard: {keyboard}, Language: {language}, Match: {matched}"
         )
 
-    def _handle_reply(self, reply: str):
+    def _handle_reply(self, data: str):
         try:
-            data = json.loads(reply)
             keyboards = data.get("keyboards", [])
             if not keyboards:
                 return "Unknown"

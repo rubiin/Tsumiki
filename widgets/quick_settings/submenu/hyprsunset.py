@@ -8,7 +8,7 @@ from utils.widget_utils import (
     create_scale,
     reusable_fabricator,
 )
-
+from fabric.hyprland.widgets import HyprlandEvent, get_hyprland_connection
 
 class HyprSunsetSubMenu(QuickSubMenu):
     """A submenu to display application-specific audio controls."""
@@ -24,6 +24,8 @@ class HyprSunsetSubMenu(QuickSubMenu):
             min_value=1000,
             value=2600,
         )
+
+        self._hyprland_connection = get_hyprland_connection()
 
         super().__init__(
             title="HyprSunset",
@@ -41,8 +43,8 @@ class HyprSunsetSubMenu(QuickSubMenu):
     @cooldown(0.1)
     def on_scale_move(self, scale):
         temperature = int(scale.get_value())
-        exec_shell_command_async(
-            f"hyprctl hyprsunset temperature {temperature}",
+        self._hyprland_connection.send_command_async(
+            f"hyprsunset temperature {temperature}",
             lambda *_: self._update_ui(temperature),
         )
         return True
@@ -50,8 +52,8 @@ class HyprSunsetSubMenu(QuickSubMenu):
     def update_scale(self, *_):
         if is_app_running("hyprsunset"):
             self.scale.set_sensitive(True)
-            exec_shell_command_async(
-                "hyprctl hyprsunset temperature",
+            self._hyprland_connection.send_command_async(
+                "hyprsunset temperature",
                 self._update_ui,
             )
         else:
