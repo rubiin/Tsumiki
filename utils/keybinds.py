@@ -52,6 +52,6 @@ class KeybindLoader:
                 {"combo": key_combo.strip(), "description": description, "cmd": cmd}
             )
 
-    def filter_keybinds(self, query: str = "") -> Iterator[tuple]:
+    def _filter_keybinds(self, query: str = "") -> Iterator[tuple]:
         query_cf = query.casefold()
         return (kb for kb in self.keybinds if query_cf in " ".join(kb).casefold())

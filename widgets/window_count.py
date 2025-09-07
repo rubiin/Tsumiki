@@ -52,21 +52,21 @@ class WindowCountWidget(ButtonWidget):
     def _handle_workspace_response(self, reply):
         try:
             data = json.loads(reply)
+
+            count = data.get("windows", 0)
+            label_format = self.config.get("label_format", "[{count}]")
+            self.count_label.set_label(label_format.format(count=count))
+
+            if self.config.get("tooltip", False):
+                self.set_tooltip_text(f"Workspace: {data.get('id')}, Windows: {count}")
+
+            if self.config.get("hide_when_zero", False):
+                self.set_visible(count != 0)
+
+            logger.info(f"[WindowCount] Workspace: {data.get('id')} | Windows: {count}")
         except Exception as e:
             logger.exception(f"[WindowCount] Failed to parse workspace data: {e}")
             return
-
-        count = data.get("windows", 0)
-        label_format = self.config.get("label_format", "[{count}]")
-        self.count_label.set_label(label_format.format(count=count))
-
-        if self.config.get("tooltip", False):
-            self.set_tooltip_text(f"Workspace: {data.get('id')}, Windows: {count}")
-
-        if self.config.get("hide_when_zero", False):
-            self.set_visible(count != 0)
-
-        logger.info(f"[WindowCount] Workspace: {data.get('id')} | Windows: {count}")
 
     def _get_window_count(self, *_):
         """Get the number of windows in the active workspace."""

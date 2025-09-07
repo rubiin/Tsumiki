@@ -1,3 +1,5 @@
+import json
+
 import gi
 from fabric.hyprland.widgets import get_hyprland_connection
 from fabric.utils import bulk_connect, exec_shell_command_async
@@ -408,11 +410,17 @@ class Dock(Window):
 
             self._check_for_windows()
 
-    def _handle_workspace_response(self, reply):
-        if reply.get("windows", 0) == 0:
-            self.revealer.set_reveal_child(True)
-        else:
-            self.revealer.set_reveal_child(False)
+    def _handle_workspace_response(self, reply: str):
+        try:
+            data = json.loads(reply)
+
+            if data.get("windows", 0) == 0:
+                self.revealer.set_reveal_child(True)
+            else:
+                self.revealer.set_reveal_child(False)
+        except json.JSONDecodeError as e:
+            logger.exception(f"[Dock] Failed to parse workspace response: {e}")
+            return
 
     def _check_for_windows(self, *_):
         try:
