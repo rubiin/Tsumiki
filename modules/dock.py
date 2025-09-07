@@ -27,11 +27,11 @@ gi.require_versions({"Glace": "0.1", "Gtk": "3.0"})
 class DotIndicator(Gtk.DrawingArea):
     """A simple dot indicator widget."""
 
-    def __init__(self):
+    def __init__(self, size=5):
         super().__init__(
             visible=True,
         )
-        self.set_size_request(5, 5)
+        self.set_size_request(size, size)
         self.connect("draw", self.on_draw)
 
     def on_draw(self, area, cr):
@@ -50,25 +50,13 @@ class AppBar(Box):
         """Toggle the app launcher visibility."""
         if self.app_launcher is None:
             self.app_launcher = AppLauncher(widget_config)
-        if self.app_launcher:
-            self.app_launcher.toggle()
+        self.app_launcher.toggle()
 
     def _bake_button(self, **kwargs) -> Button:
         button = Button(
             style_classes=["buttons-basic", "buttons-transition", "dock-button"],
             **kwargs,
         )
-        # button.drag_source_set(
-        #     Gdk.ModifierType.BUTTON1_MASK,
-        #     [Gtk.TargetEntry.new("text/plain", Gtk.TargetFlags.SAME_APP, 0)],
-        #     Gdk.DragAction.MOVE,
-        # )
-
-        # button.drag_dest_set(
-        #     Gtk.DestDefaults.ALL,
-        #     [Gtk.TargetEntry.new("text/plain", Gtk.TargetFlags.SAME_APP, 0)],
-        #     Gdk.DragAction.MOVE,
-        # )
 
         return button
 
