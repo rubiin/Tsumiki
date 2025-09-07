@@ -202,7 +202,13 @@ class AppBar(Box):
             logger.exception(f"[Dock] Failed to toggle fullscreen: {e}")
 
     def _move_to_workspace(self, client: Glace.Client, workspace: int):
-        print(client.get_app_id(), client.get_hyprland_address(), workspace)
+        client_address = client.get_hyprland_address()
+        hex_address = hex(client_address)
+        if hex_address:
+            self._hyprland_connection.send_command_async(
+                f"dispatch movetoworkspace address:{hex_address} {workspace}",
+                lambda _: None,
+            )
 
     def _close_running_app(self, client: Glace.Client):
         try:
