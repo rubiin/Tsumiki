@@ -1,4 +1,4 @@
-<p align="center"><img src="assets/images/tsumiki.png" align="centre" width="100" height="130"/></p>
+<p align="center"><img src="assets/images/tsumiki.png" align="centre" width="420" height="290"/></p>
 <h1 align="center"><img src="https://raw.githubusercontent.com/JaKooLit/Telegram-Animated-Emojis/refs/heads/main/Activity/Sparkles.webp"/ height=35> Tsumiki <img src="https://raw.githubusercontent.com/JaKooLit/Telegram-Animated-Emojis/refs/heads/main/Activity/Sparkles.webp"/ height=35></h1>
 <p align="center">
  <a href="https://github.com/rubiin/Tsumiki/blob/master/LICENSE"><img alt="GitHub" src="https://img.shields.io/github/license/rubiin/Tsumiki"></a>
