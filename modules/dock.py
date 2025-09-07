@@ -2,7 +2,7 @@ import json
 
 import gi
 from fabric.hyprland.widgets import get_hyprland_connection
-from fabric.utils import bulk_connect
+from fabric.utils import bulk_connect, truncate
 from fabric.widgets.box import Box
 from fabric.widgets.button import Button
 from fabric.widgets.eventbox import EventBox
@@ -183,10 +183,14 @@ class AppBar(Box):
             logger.warning(f"[Dock] No application found for {client.get_app_id()}")
 
     def _toggle_floating(self, client: Glace.Client):
-        self._hyprland_connection.send_command_async(
-            f"dispatch togglefloating address:{client.get_hyprland_address()}",
-            lambda _: None,
-        )
+        addr = client.get_hyprland_address()
+
+        hex_address = hex(addr)
+        if hex_address:
+            self._hyprland_connection.send_command_async(
+                f"dispatch togglefloating address:{hex_address}",
+                lambda _: None,
+            )
 
     def _toggle_fullscreen(self, client: Glace.Client):
         try:
@@ -216,8 +220,10 @@ class AppBar(Box):
             except Exception:
                 logger.exception(f"[Dock] Failed to close client {client.get_app_id()}")
 
-    def show_menu(self, client: Glace.Client):
+    def _show_menu(self, client: Glace.Client):
         """Show the context menu for a client."""
+
+        self._close_popup()
 
         if not self.menu:
             self.menu = Gtk.Menu()
@@ -234,7 +240,7 @@ class AppBar(Box):
         close_item = Gtk.MenuItem(label="Close")
         close_all_item = Gtk.MenuItem(label="Close All")
 
-        item = Gtk.MenuItem(label=client.get_title())
+        item = Gtk.MenuItem(label=truncate(client.get_title(), 20))
 
         item_menu = Gtk.Menu()
         item.set_submenu(item_menu)
@@ -309,7 +315,7 @@ class AppBar(Box):
         if event.button == 1:
             client.activate()
         else:
-            self.show_menu(client)
+            self._show_menu(client)
             self.menu.popup_at_pointer(event)
 
     def _on_app_id(self, client, client_button: Button, client_image: Image, *_):

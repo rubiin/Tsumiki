@@ -1,4 +1,5 @@
-from fabric.utils import cooldown, exec_shell_command_async
+from fabric.hyprland.widgets import get_hyprland_connection
+from fabric.utils import cooldown
 
 from shared.buttons import QSChevronButton
 from shared.submenu import QuickSubMenu
@@ -8,7 +9,7 @@ from utils.widget_utils import (
     create_scale,
     reusable_fabricator,
 )
-from fabric.hyprland.widgets import HyprlandEvent, get_hyprland_connection
+
 
 class HyprSunsetSubMenu(QuickSubMenu):
     """A submenu to display application-specific audio controls."""
