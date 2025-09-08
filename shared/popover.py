@@ -49,18 +49,18 @@ class PopoverManager:
         self.available_windows = []
 
         # Close popover when clicking overlay
-        self.overlay.connect("button-press-event", self._on_overlay_clicked)
+        self.overlay.connect("button-press-event", self.on_overlay_clicked)
         self._hyprland_connection = get_hyprland_connection()
         self._hyprland_connection.connect(
-            "event::focusedmonv2", self._on_monitor_change
+            "event::focusedmonv2", self.on_monitor_change
         )
 
-    def _on_monitor_change(self, _, event: HyprlandEvent):
+    def on_monitor_change(self, _, event: HyprlandEvent):
         if self.active_popover:
             self.active_popover.hide_popover()
         return True
 
-    def _on_overlay_clicked(self, widget, event):
+    def on_overlay_clicked(self, widget, event):
         if self.active_popover:
             self.active_popover.hide_popover()
         return True
@@ -161,7 +161,7 @@ class Popover(Widget):
         """Set the widget to point the popover at."""
         self._point_to = widget
 
-    def _on_key_press(self, widget, event):
+    def on_key_press(self, widget, event):
         if event.keyval == Gdk.KEY_Escape and self._manager.active_popover:
             self._manager.active_popover.hide_popover()
 
@@ -209,7 +209,7 @@ class Popover(Widget):
         self._content_window.set_margin(position)
         return False
 
-    def _on_content_ready(self, widget, event):
+    def on_content_ready(self, widget, event):
         self.set_position()
 
     def _create_popover(self):
@@ -221,7 +221,7 @@ class Popover(Widget):
 
         # This is a hack to fix wrong positioning for widgets that are not rendered
         # immediately (e.g., Gtk.Calendar())
-        self._content.connect("draw", self._on_content_ready)
+        self._content.connect("draw", self.on_content_ready)
 
         # Add content to window
         self._content_window.add(
@@ -231,8 +231,8 @@ class Popover(Widget):
         bulk_connect(
             self._content_window,
             {
-                "focus-out-event": self._on_popover_focus_out,
-                "key-press-event": self._on_key_press,
+                "focus-out-event": self.on_popover_focus_out,
+                "key-press-event": self.on_key_press,
             },
         )
 
@@ -240,7 +240,7 @@ class Popover(Widget):
         self._content_window.show()
         self._visible = True
 
-    def _on_popover_focus_out(self, widget, event):
+    def on_popover_focus_out(self, widget, event):
         # This helps with keyboard focus issues
         GLib.timeout_add(100, self.hide_popover)
         return False

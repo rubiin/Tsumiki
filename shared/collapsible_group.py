@@ -32,7 +32,7 @@ class CollapsibleGroupWidget(ButtonWidget):
         # Read configuration and setup the widget
         self._read_config()
         self._setup_button_content()
-        self.connect("clicked", self._on_toggle_clicked)
+        self.connect("clicked", self.on_toggle_clicked)
 
         if self.tooltip_text:
             self.set_tooltip_text(self.tooltip_text)
@@ -91,7 +91,7 @@ class CollapsibleGroupWidget(ButtonWidget):
         self.is_expanded = expanded
         self.toggle_css_class("active", self.is_expanded)
 
-    def _on_toggle_clicked(self, button):
+    def on_toggle_clicked(self, button):
         """Handle the toggle button click."""
         self._set_expanded(not self.is_expanded)
 

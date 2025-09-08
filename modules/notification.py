@@ -166,7 +166,7 @@ class NotificationWidget(EventBox):
                         "style_classes": ["panel-font-icon", "close-icon"],
                     },
                 ),
-                on_clicked=self._on_close_button_clicked,
+                on_clicked=self.on_close_button_clicked,
             ),
         )
 
@@ -257,7 +257,7 @@ class NotificationWidget(EventBox):
         if self.config.get("auto_dismiss", False):
             self.start_timeout()
 
-    def _on_close_button_clicked(self, *_):
+    def on_close_button_clicked(self, *_):
         self._notification.close("dismissed-by-user")
         self.stop_timeout()
 

@@ -46,7 +46,7 @@ class DotIndicator(Gtk.DrawingArea):
 class AppBar(Box):
     """A simple app bar widget for the dock."""
 
-    def _on_launcher_clicked(self, *_):
+    def on_launcher_clicked(self, *_):
         """Toggle the app launcher visibility."""
         if self.app_launcher is None:
             self.app_launcher = AppLauncher(widget_config)
@@ -94,7 +94,7 @@ class AppBar(Box):
         self.pinned_apps = read_json_file(PINNED_APPS_FILE) or []
         self.icon_resolver = IconResolver()
         self._manager = Glace.Manager()
-        self._manager.connect("client-added", self._on_client_added)
+        self._manager.connect("client-added", self.on_client_added)
         self._preview_image = Image()
         self._hyprland_connection = get_hyprland_connection()
 
@@ -140,7 +140,7 @@ class AppBar(Box):
         self.popup.set_visible(True)
         self.popup_revealer.reveal()
 
-    def update_preview_image(self, client, client_button: Button):
+    def _update_preview_image(self, client, client_button: Button):
         self.popup.set_pointing_to(client_button)
 
         self._manager.capture_client(
@@ -171,7 +171,7 @@ class AppBar(Box):
             if app:
                 self.pinned_apps_container.add(btn)
 
-    def check_if_pinned(self, client: Glace.Client) -> bool:
+    def _check_if_pinned(self, client: Glace.Client) -> bool:
         """Check if a client is pinned."""
         return client.get_app_id() in self.pinned_apps
 
@@ -274,7 +274,7 @@ class AppBar(Box):
             item_menu.add(ws_item)
 
         # Pin / Unpin
-        if self.check_if_pinned(client):
+        if self._check_if_pinned(client):
             pin_item = self._make_item("Unpin", lambda: self._unpin_app(client))
         else:
             pin_item = self._make_item("Pin", lambda: self._pin_running_app(client))
@@ -307,23 +307,23 @@ class AppBar(Box):
         self._populate_pinned_apps(self.pinned_apps)
 
     def _pin_running_app(self, client: Glace.Client):
-        if not self.check_if_pinned(client):
+        if not self._check_if_pinned(client):
             self.pinned_apps.append(client.get_app_id())
             self._update_pins()
 
     def _unpin_app(self, client: Glace.Client):
-        if self.check_if_pinned(client):
+        if self._check_if_pinned(client):
             self.pinned_apps.remove(client.get_app_id())
             self._update_pins()
 
-    def _on_button_press_event(self, event, client):
+    def on_button_press_event(self, event, client):
         if event.button == 1:
             client.activate()
         else:
             self._show_menu(client)
             self.menu.popup_at_pointer(event)
 
-    def _on_app_id(self, client, client_button: Button, client_image: Image, *_):
+    def on_app_id(self, client, client_button: Button, client_image: Image, *_):
         if client.get_app_id() in self.config.get("ignored_apps", []):
             client_button.destroy()
             client_image.destroy()
@@ -337,18 +337,18 @@ class AppBar(Box):
 
     def on_enter_notify_event(self, client: Glace.Client, client_button: Button):
         if self.config.get("preview_apps", False):
-            self.update_preview_image(client, client_button)
+            self._update_preview_image(client, client_button)
 
     def on_leave_notify_event(self, client: Glace.Client, client_button: Button):
         if self.config.get("preview_apps", True):
             GLib.timeout_add(100, self._close_popup)
 
-    def _on_client_added(self, _, client: Glace.Client):
+    def on_client_added(self, _, client: Glace.Client):
         client_image = Image(size=self.icon_size)
 
         client_button = self._bake_button(
             image=client_image,
-            on_button_press_event=lambda _, event: self._on_button_press_event(
+            on_button_press_event=lambda _, event: self.on_button_press_event(
                 event, client
             ),
             on_enter_notify_event=lambda *_: self.on_enter_notify_event(
@@ -368,7 +368,7 @@ class AppBar(Box):
         bulk_connect(
             client,
             {
-                "notify::app-id": lambda *_: self._on_app_id(
+                "notify::app-id": lambda *_: self.on_app_id(
                     client, client_button, client_image
                 ),
                 "notify::activated": lambda *_: client_button.add_style_class("active")

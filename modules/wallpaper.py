@@ -38,12 +38,12 @@ class ImageButton(HoverButton):
         )
         self._load_thumbnail()
 
-    def _on_wallpaper_change(self, *_):
+    def on_wallpaper_change(self, *_):
         self.wallpaper_change(self.wp_path)
 
     def _set_wallpaper_from_image(self):
         exec_shell_command_async(
-            f"hyprctl hyprpaper reload ,'{self.wp_path}'", self._on_wallpaper_change
+            f"hyprctl hyprpaper reload ,'{self.wp_path}'", self.on_wallpaper_change
         )
 
     @run_in_thread
@@ -111,7 +111,7 @@ class WallpaperPickerBox(ScrolledWindow):
         # Connect scroll event
         adjustment = self.get_vadjustment()
 
-        adjustment.connect("value-changed", self._on_scroll)
+        adjustment.connect("value-changed", self.on_scroll)
 
     def _fetch_wallpaper_list(self) -> list[str]:
         """Fetch all wallpapers (sorted for consistency)."""
@@ -152,7 +152,7 @@ class WallpaperPickerBox(ScrolledWindow):
         self._loaded_count = end
         self.loading = False
 
-    def _on_scroll(self, adjustment):
+    def on_scroll(self, adjustment):
         """Trigger loading more wallpapers when scrolling near the bottom."""
 
         value = adjustment.get_value()

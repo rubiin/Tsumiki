@@ -48,7 +48,7 @@ class ConfigWatcher:
         try:
             file_obj = Gio.File.new_for_path(file_path)
             monitor = file_obj.monitor_file(Gio.FileMonitorFlags.NONE, None)
-            monitor.connect("changed", self._on_file_changed, file_path)
+            monitor.connect("changed", self.on_file_changed, file_path)
             self.monitors.append(monitor)
             logger.info(
                 f"{Colors.INFO}[ConfigWatcher] Monitoring {os.path.basename(file_path)}"
@@ -58,7 +58,7 @@ class ConfigWatcher:
                 f"{Colors.ERROR}[ConfigWatcher] Failed to monitor {file_path}: {e}"
             )
 
-    def _on_file_changed(self, monitor, file, other_file, event_type, file_path: str):
+    def on_file_changed(self, monitor, file, other_file, event_type, file_path: str):
         """Handle file change events."""
         if (
             event_type == Gio.FileMonitorEvent.CHANGES_DONE_HINT

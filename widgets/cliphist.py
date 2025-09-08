@@ -73,7 +73,7 @@ class ClipHistoryMenu(Box):
             Gtk.EntryIconPosition.SECONDARY, "edit-clear"
         )
 
-        self.search_entry.connect("notify::text", self._on_search_text_changed)
+        self.search_entry.connect("notify::text", self.on_search_text_changed)
 
         # Connect handler for icon clicks
         self.search_entry.connect("icon-press", self.on_icon_press)
@@ -135,7 +135,7 @@ class ClipHistoryMenu(Box):
         self.items_loaded += items_to_add
         self.loading = False
 
-    def _on_search_text_changed(self, entry, pspec):
+    def on_search_text_changed(self, entry, pspec):
         # Remove any existing pending filter operation
         if self._search_timer_id > 0:
             GLib.source_remove(self._search_timer_id)
