@@ -349,11 +349,11 @@ class DateNotificationMenu(Box):
         self.placeholder.set_visible(True)
         self.notifications_listbox.set_visible(False)
 
+    def on_child_destroyed(self, widget, row: Gtk.ListBoxRow):
+        row.destroy()
+
     def _bake_notification(self, notification):
         """Create a notification widget from a Notification object."""
-
-        def on_child_destroyed(widget, row):
-            row.destroy()
 
         item = DateMenuNotification(
             notification=notification,
@@ -361,7 +361,7 @@ class DateNotificationMenu(Box):
         )
 
         row = Gtk.ListBoxRow(visible=True, name="notification-list-item", child=item)
-        item.connect("destroy", on_child_destroyed, row)
+        item.connect("destroy", self.on_child_destroyed, row)
 
         return row
 

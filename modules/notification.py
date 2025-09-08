@@ -14,6 +14,7 @@ from fabric.widgets.label import Label
 from fabric.widgets.overlay import Overlay
 from fabric.widgets.revealer import Revealer
 from fabric.widgets.wayland import WaylandWindow as Window
+from fabric.widgets.widget import Widget
 from gi.repository import Gdk, GdkPixbuf, GLib
 from loguru import logger
 
@@ -305,7 +306,7 @@ class NotificationWidget(EventBox):
         self.set_pointer_cursor(self, "arrow")
 
     @staticmethod
-    def set_pointer_cursor(widget, cursor_name: str):
+    def set_pointer_cursor(widget: Widget, cursor_name: str):
         window = widget.get_window()
         if window:
             cursor = Gdk.Cursor.new_from_name(widget.get_display(), cursor_name)
