@@ -80,7 +80,7 @@ class InlineEditor(Box):
     def on_cancel(self, widget):
         self.emit("canceled")
 
-    def on_key_press(self, widget, event):
+    def on_key_press(self, widget: Gtk.Widget, event):
         # Check for Escape to cancel.
         if event.keyval == Gdk.KEY_Escape:
             self.emit("canceled")

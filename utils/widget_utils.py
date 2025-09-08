@@ -11,7 +11,8 @@ from fabric.utils import bulk_connect
 from fabric.widgets.image import Image
 from fabric.widgets.label import Label
 from fabric.widgets.scale import ScaleMark
-from gi.repository import Gdk, GdkPixbuf, GLib, Gtk
+from fabric.widgets.widget import Widget
+from gi.repository import Gdk, GdkPixbuf, GLib
 
 from shared.animated.scale import AnimatedScale
 
@@ -38,11 +39,11 @@ def stats_poll(fabricator):
         sleep(1)
 
 
-def on_enter_notify_event(cursor, widget: Gtk.Widget):
+def on_enter_notify_event(cursor, widget: Widget):
     widget.get_window().set_cursor(cursor)
 
 
-def on_leave_notify_event(cursor, widget: Gtk.Widget):
+def on_leave_notify_event(cursor, widget: Widget):
     widget.get_window().set_cursor(cursor)
 
 
@@ -132,7 +133,7 @@ def nerd_font_icon(icon: str, props=None, name="nerd-icon") -> Label:
 
 # Function to create a surface from a widget
 def create_surface_from_widget(
-    widget: Gtk.Widget, color=(0, 0, 0, 0)
+    widget: Widget, color=(0, 0, 0, 0)
 ) -> cairo.ImageSurface:
     alloc = widget.get_allocation()
     surface = cairo.ImageSurface(cairo.Format.ARGB32, alloc.width, alloc.height)

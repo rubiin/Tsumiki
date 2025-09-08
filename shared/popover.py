@@ -51,9 +51,7 @@ class PopoverManager:
         # Close popover when clicking overlay
         self.overlay.connect("button-press-event", self.on_overlay_clicked)
         self._hyprland_connection = get_hyprland_connection()
-        self._hyprland_connection.connect(
-            "event::focusedmonv2", self.on_monitor_change
-        )
+        self._hyprland_connection.connect("event::focusedmonv2", self.on_monitor_change)
 
     def on_monitor_change(self, _, event: HyprlandEvent):
         if self.active_popover:
