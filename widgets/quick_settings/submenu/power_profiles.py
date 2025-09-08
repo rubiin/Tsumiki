@@ -9,6 +9,12 @@ from utils.icons import text_icons
 from utils.widget_utils import nerd_font_icon
 
 
+def icon_name_to_icon(icon_name: str) -> str:
+    """Convert icon name to actual icon."""
+    icon_map = {"power-saver": "󰌪", "performance": "󰓅", "balanced": "󰒂"}
+    return icon_map.get(icon_name, "󰌪")
+
+
 class PowerProfileItem(Button):
     """A button to display the power profile."""
 
@@ -30,7 +36,7 @@ class PowerProfileItem(Button):
             spacing=10,
             children=(
                 nerd_font_icon(
-                    icon=profile["icon"],
+                    icon=icon_name_to_icon(profile),
                     props={
                         "style_classes": [
                             "panel-font-icon",
@@ -38,7 +44,7 @@ class PowerProfileItem(Button):
                     },
                 ),
                 Label(
-                    label=profile["name"],
+                    label=profile,
                     style_classes="submenu-item-label",
                 ),
             ),
@@ -48,12 +54,12 @@ class PowerProfileItem(Button):
 
         self.connect(
             "button-press-event",
-            lambda *_: power_pfl_service.set_power_profile(key),
+            self._handle_click,
         )
         self.set_active(active)
 
     def _handle_click(self, *_):
-        power_pfl_service.active_profile =self.key
+        power_pfl_service.active_profile = self.key
         return True
 
     def set_active(self, active: str):
@@ -68,7 +74,7 @@ class PowerProfileSubMenu(QuickSubMenu):
     """A submenu to display power profile options."""
 
     def __init__(self, **kwargs):
-        self.profiles = power_pfl_service.profiles
+        self.profiles = [profile["Profile"] for profile in power_pfl_service.profiles]
 
         self.profile_items = None
         self.scan_button = HoverButton()
@@ -100,7 +106,7 @@ class PowerProfileSubMenu(QuickSubMenu):
                 PowerProfileItem(
                     key=key, profile=profile, active=power_pfl_service.active_profile
                 )
-                for key, profile in self.profiles
+                for key, profile in enumerate(self.profiles)
             ]
 
             self.profile_box.children = self.profile_items
@@ -137,5 +143,5 @@ class PowerProfileToggle(QSChevronButton):
         return " ".join(word.capitalize() for word in text.split("-"))
 
     def update_action_button(self, *_):
-        self.action_icon.set_label(power_pfl_service.icon_name)
+        self.action_icon.set_label(icon_name_to_icon(power_pfl_service.active_profile))
         self.set_action_label(self.unslug(power_pfl_service.active_profile))
