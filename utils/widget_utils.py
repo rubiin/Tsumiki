@@ -38,11 +38,11 @@ def stats_poll(fabricator):
         sleep(1)
 
 
-def _on_enter_notify_event(cursor, widget):
+def on_enter_notify_event(cursor, widget: Gtk.Widget):
     widget.get_window().set_cursor(cursor)
 
 
-def _on_leave_notify_event(cursor, widget):
+def on_leave_notify_event(cursor, widget: Gtk.Widget):
     widget.get_window().set_cursor(cursor)
 
 
@@ -56,8 +56,8 @@ def setup_cursor_hover(
     bulk_connect(
         widget,
         {
-            "enter-notify-event": lambda *_: _on_enter_notify_event(cursor, widget),
-            "leave-notify-event": lambda *_: _on_leave_notify_event(cursor, widget),
+            "enter-notify-event": lambda *_: on_enter_notify_event(cursor, widget),
+            "leave-notify-event": lambda *_: on_leave_notify_event(cursor, widget),
         },
     )
 

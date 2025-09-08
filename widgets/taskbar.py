@@ -22,9 +22,9 @@ class TaskBarWidget(BoxWidget):
 
         self.icon_resolver = IconResolver()
         self._manager = Glace.Manager()
-        self._manager.connect("client-added", self._on_client_added)
+        self._manager.connect("client-added", self.on_client_added)
 
-    def _on_app_id(self, client, client_image: Image, client_button: Button, *_):
+    def on_app_id(self, client, client_image: Image, client_button: Button, *_):
         client_image.set_from_pixbuf(
             self.icon_resolver.get_icon_pixbuf(
                 client.get_app_id(), self.config.get("icon_size", 22)
@@ -34,7 +34,7 @@ class TaskBarWidget(BoxWidget):
             client.get_title() if self.config.get("tooltip", True) else None
         )
 
-    def _on_client_added(self, _, client: Glace.Client):
+    def on_client_added(self, _, client: Glace.Client):
         client_image = Image()
 
         client_button = Button(
@@ -46,7 +46,7 @@ class TaskBarWidget(BoxWidget):
         bulk_connect(
             client,
             {
-                "notify::app-id": lambda *_: self._on_app_id(
+                "notify::app-id": lambda *_: self.on_app_id(
                     client, client_image, client_button
                 ),
                 "notify::activated": lambda *_: client_button.add_style_class("active")

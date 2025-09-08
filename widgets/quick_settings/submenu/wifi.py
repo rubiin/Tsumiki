@@ -71,7 +71,7 @@ class WifiSubMenu(QuickSubMenu):
         if self.child:
             adjustment = self.child.get_vadjustment()
 
-            adjustment.connect("value-changed", self._on_scroll)
+            adjustment.connect("value-changed", self.on_scroll)
 
         self.revealer.connect(
             "notify::child-revealed",
@@ -98,7 +98,7 @@ class WifiSubMenu(QuickSubMenu):
         self.items_loaded += items_to_add
         self.loading = False
 
-    def _on_scroll(self, adjustment):
+    def on_scroll(self, adjustment):
         value = adjustment.get_value()
         upper = adjustment.get_upper()
         page_size = adjustment.get_page_size()

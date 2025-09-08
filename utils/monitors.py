@@ -91,12 +91,12 @@ class MonitorWatcher:
         bulk_connect(
             self._hyprland_connection,
             {
-                "event::monitoradded": self._on_monitor_changed,
-                "event::monitorremoved": self._on_monitor_changed,
+                "event::monitoradded": self.on_monitor_changed,
+                "event::monitorremoved": self.on_monitor_changed,
             },
         )
 
-    def _on_monitor_changed(self, *_):
+    def on_monitor_changed(self, *_):
         GLib.timeout_add(MONITOR_HOTPLUG_DELAY_MS, self._notify_callbacks)
 
     def _notify_callbacks(self):

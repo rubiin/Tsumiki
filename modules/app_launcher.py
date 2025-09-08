@@ -229,7 +229,7 @@ class AppLauncher(PopupWindow):
         )
 
         # Set up key handling
-        self.connect("key-press-event", self._on_key_press)
+        self.connect("key-press-event", self.on_key_press)
 
     def on_icon_press(self, entry, icon_pos, event):
         if icon_pos == Gtk.EntryIconPosition.SECONDARY:
@@ -241,7 +241,7 @@ class AppLauncher(PopupWindow):
         self.reveal_child.revealer.set_reveal_child(self.popup_visible)
         self.search_entry.set_text("")
 
-    def _on_key_press(self, _, event):
+    def on_key_press(self, _, event):
         if event.keyval == Gdk.KEY_Escape:
             self.close_launcher()
 

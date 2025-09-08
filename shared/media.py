@@ -307,7 +307,7 @@ class PlayerBox(Box):
         # Seek Bar
         self.seek_bar = create_scale(name="seek-bar")
 
-        self.seek_bar.connect("change-value", self._on_scale_move)
+        self.seek_bar.connect("change-value", self.on_scale_move)
         self.player.bind("can-seek", "sensitive", self.seek_bar)
 
         setup_cursor_hover(self.seek_bar)
@@ -351,14 +351,14 @@ class PlayerBox(Box):
         self.next_button = HoverButton(
             style_classes=["player-button"],
             child=self.skip_next_icon,
-            on_clicked=self._on_player_next,
+            on_clicked=self.on_player_next,
         )
         self.player.bind_property("can_go_next", self.next_button, "sensitive")
 
         self.prev_button = HoverButton(
             style_classes=["player-button"],
             child=self.skip_prev_icon,
-            on_clicked=self._on_player_prev,
+            on_clicked=self.on_player_prev,
         )
         self.shuffle_button = HoverButton(
             style_classes=["player-button"],
@@ -413,14 +413,14 @@ class PlayerBox(Box):
         bulk_connect(
             self.player,
             {
-                "exit": self._on_player_exit,
-                "notify::playback-status": self._on_playback_change,
-                "notify::shuffle": self._on_shuffle_update,
-                "notify::metadata": self._on_metadata,
+                "exit": self.on_player_exit,
+                "notify::playback-status": self.on_playback_change,
+                "notify::shuffle": self.on_shuffle_update,
+                "notify::metadata": self.on_metadata,
             },
         )
 
-    def _on_metadata(self, *_):
+    def on_metadata(self, *_):
         self._set_image()
 
         duration = self.player.length
@@ -434,11 +434,11 @@ class PlayerBox(Box):
     def _set_notify_value(self, p, *_):
         self.image_box.angle = self.angle_direction * p.value
 
-    def _on_player_exit(self, _, value):
+    def on_player_exit(self, _, value):
         self.exit = value
         self.destroy()
 
-    def _on_player_next(self, *_):
+    def on_player_next(self, *_):
         self.angle_direction = 1
 
         from shared.animator import Animator
@@ -456,12 +456,12 @@ class PlayerBox(Box):
         self.art_animator.play()
         self.player.next()
 
-    def _on_player_prev(self, *_):
+    def on_player_prev(self, *_):
         self.angle_direction = -1
         self.art_animator.play()
         self.player.previous()
 
-    def _on_shuffle_update(self, _, __):
+    def on_shuffle_update`(self, _, __):
         if self.player.shuffle is None:
             return
         if self.player.shuffle is True:
@@ -478,7 +478,7 @@ class PlayerBox(Box):
         remaining_seconds = seconds % 60
         return f"{minutes:02}:{remaining_seconds:02}"
 
-    def _on_playback_change(self, player, status):
+    def on_playback_change(self, player, status):
         status = player.get_property("playback-status")
 
         if status == "paused":
@@ -499,7 +499,7 @@ class PlayerBox(Box):
             self.image_box.set_image_from_file(self.fallback_cover_path)
             self.update_colors(self.fallback_cover_path)
 
-    def _on_accent_color(self, palette):
+    def on_accent_color(self, palette):
         default_color = (255, 0, 0)  # fallback color
 
         base_color = palette[0] if palette else default_color
@@ -526,7 +526,7 @@ class PlayerBox(Box):
 
     def update_colors(self, image_path):
         get_simple_palette_threaded(
-            image_path=image_path, color_count=5, callback=self._on_accent_color
+            image_path=image_path, color_count=5, callback=self.on_accent_color
         )
 
     def _set_image(self, *_):
@@ -569,7 +569,7 @@ class PlayerBox(Box):
         return True
 
     @cooldown(0.1)
-    def _on_scale_move(self, scale: Scale, event, pos: int):
+    def on_scale_move(self, scale: Scale, event, pos: int):
         self.player.position = pos
         self.position_label.set_label(self.length_str(pos))
         self.seek_bar.set_value(pos)
