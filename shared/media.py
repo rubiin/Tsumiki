@@ -461,7 +461,7 @@ class PlayerBox(Box):
         self.art_animator.play()
         self.player.previous()
 
-    def on_shuffle_update`(self, _, __):
+    def on_shuffle_update(self, *_):
         if self.player.shuffle is None:
             return
         if self.player.shuffle is True:
