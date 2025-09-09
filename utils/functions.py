@@ -11,7 +11,7 @@ from collections import Counter
 from datetime import datetime
 from functools import lru_cache
 from io import BytesIO
-from typing import Any, Callable, Literal, Optional
+from typing import Any, Callable, Iterable, Literal, Optional
 
 import gi
 import psutil
@@ -23,6 +23,7 @@ from fabric.utils import (
     exec_shell_command,
     exec_shell_command_async,
     get_relative_path,
+    invoke_repeater,
 )
 from gi.repository import Gdk, GdkPixbuf, Gio, GLib, Gtk
 from loguru import logger
@@ -457,6 +458,12 @@ def toggle_command(command: str, full_command: str):
 ## Function to execute a shell command asynchronously
 def kill_process(process_name: str):
     exec_shell_command_async(f"pkill {process_name}", lambda *_: None)
+
+
+def add_style_class_lazy(widget: Gtk.Widget, class_name: str | Iterable[str]) -> int:
+    return invoke_repeater(
+        50, lambda: widget.add_style_class(class_name), initial_call=False
+    )
 
 
 def _get_config_collection(parsed_data: dict, widget_type: str) -> list:
