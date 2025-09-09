@@ -1,25 +1,23 @@
-import json
-
-import gi
-from fabric.hyprland.widgets import get_hyprland_connection
-from fabric.utils.helpers import bulk_connect
-from fabric.widgets.box import Box
-from fabric.widgets.button import Button
-from fabric.widgets.eventbox import EventBox
-from fabric.widgets.grid import Grid
-from fabric.widgets.image import Image
-from fabric.widgets.label import Label
-from fabric.widgets.overlay import Overlay
-from gi.repository import Gdk, GdkPixbuf, Gtk
-from loguru import logger
-
 from shared.popup import PopupWindow
 from utils.app import AppUtils
 from utils.icon_resolver import IconResolver
+from utils.imports import (
+    Box,
+    Button,
+    EventBox,
+    Gdk,
+    GdkPixbuf,
+    Grid,
+    Gtk,
+    Image,
+    Label,
+    Overlay,
+    bulk_connect,
+    get_hyprland_connection,
+    json,
+    logger,
+)
 from utils.widget_utils import create_surface_from_widget
-
-gi.require_versions({"Gtk": "3.0", "Gdk": "3.0", "GdkPixbuf": "2.0"})
-
 
 SCALE = 0.14
 TARGET = [Gtk.TargetEntry.new("text/plain", Gtk.TargetFlags.SAME_APP, 0)]

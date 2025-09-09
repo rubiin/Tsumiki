@@ -1,16 +1,22 @@
-import os
-import subprocess
 import tempfile
-from datetime import datetime
-
-from fabric.core.service import Property, Service, Signal
-from fabric.utils import exec_shell_command, exec_shell_command_async, get_relative_path
-from gi.repository import Gio, GLib
-from loguru import logger
 
 import utils.functions as helpers
 from utils.constants import APPLICATION_NAME
 from utils.icons import symbolic_icons
+from utils.imports import (
+    Gio,
+    GLib,
+    Property,
+    Service,
+    Signal,
+    datetime,
+    exec_shell_command,
+    exec_shell_command_async,
+    get_relative_path,
+    logger,
+    os,
+    subprocess,
+)
 
 
 class ScreenRecorderService(Service):

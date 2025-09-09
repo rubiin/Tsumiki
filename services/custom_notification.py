@@ -1,15 +1,16 @@
-import os
-import threading
-
-from fabric import Signal
 from fabric.notifications import Notification, Notifications, NotificationSerializedData
-from loguru import logger
 
 from utils.colors import Colors
 from utils.constants import (
     NOTIFICATION_CACHE_FILE,
 )
 from utils.functions import read_json_file, write_json_file
+from utils.imports import (
+    Signal,
+    logger,
+    os,
+    threading,
+)
 
 
 class CustomNotifications(Notifications):

@@ -1,10 +1,6 @@
-from fabric.utils import invoke_repeater
-from fabric.widgets.box import Box
-from fabric.widgets.label import Label
-from fabric.widgets.wayland import WaylandWindow as Window
-
 from services.quotes import QuotesService
 from utils.functions import convert_seconds_to_milliseconds
+from utils.imports import Box, Label, Window, invoke_repeater
 
 
 class DesktopQuote(Window):

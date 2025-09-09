@@ -1,21 +1,17 @@
-import subprocess
-import time
 from typing import Any, Literal
 
-import gi
-from fabric.core.service import Property, Service, Signal
-from fabric.utils import bulk_connect
-from gi.repository import Gio
-from loguru import logger
-
 from utils.constants import NETWORK_RECENCY_THRESHOLD_SECONDS
-from utils.exceptions import NetworkManagerNotFoundError
-
-try:
-    gi.require_version("NM", "1.0")
-    from gi.repository import NM
-except ValueError:
-    raise NetworkManagerNotFoundError()
+from utils.imports import (
+    NM,
+    Gio,
+    Property,
+    Service,
+    Signal,
+    bulk_connect,
+    logger,
+    subprocess,
+    time,
+)
 
 
 class Wifi(Service):

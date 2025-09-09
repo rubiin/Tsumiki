@@ -1,22 +1,8 @@
-import gi
 from fabric.notifications import (
     Notification,
     NotificationAction,
     NotificationCloseReason,
 )
-from fabric.utils import bulk_connect, get_relative_path, invoke_repeater, truncate
-from fabric.widgets.box import Box
-from fabric.widgets.button import Button
-from fabric.widgets.circularprogressbar import CircularProgressBar
-from fabric.widgets.eventbox import EventBox
-from fabric.widgets.grid import Grid
-from fabric.widgets.label import Label
-from fabric.widgets.overlay import Overlay
-from fabric.widgets.revealer import Revealer
-from fabric.widgets.wayland import WaylandWindow as Window
-from fabric.widgets.widget import Widget
-from gi.repository import Gdk, GdkPixbuf, GLib
-from loguru import logger
 
 import utils.constants as constants
 import utils.functions as helpers
@@ -25,10 +11,28 @@ from shared.buttons import HoverButton
 from shared.circle_image import CircularImage
 from utils.colors import Colors
 from utils.icons import text_icons
+from utils.imports import (
+    Box,
+    Button,
+    CircularProgressBar,
+    EventBox,
+    Gdk,
+    GdkPixbuf,
+    GLib,
+    Grid,
+    Label,
+    Overlay,
+    Revealer,
+    Widget,
+    Window,
+    bulk_connect,
+    get_relative_path,
+    invoke_repeater,
+    logger,
+    truncate,
+)
 from utils.widget_settings import BarConfig
 from utils.widget_utils import get_icon, nerd_font_icon
-
-gi.require_versions({"Gdk": "3.0", "GdkPixbuf": "2.0"})
 
 
 class NotificationPopup(Window):

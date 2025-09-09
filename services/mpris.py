@@ -1,21 +1,15 @@
 # Standard library imports
 import contextlib
 
-import gi
-
-# Fabric imports
-from fabric.core.service import Property, Service, Signal
-from fabric.utils import bulk_connect
-from gi.repository import GLib
-from loguru import logger
-
-from utils.exceptions import PlayerctlImportError
-
-try:
-    gi.require_version("Playerctl", "2.0")
-    from gi.repository import Playerctl
-except ValueError:
-    raise PlayerctlImportError()
+from utils.imports import (
+    GLib,
+    Playerctl,
+    Property,
+    Service,
+    Signal,
+    bulk_connect,
+    logger,
+)
 
 
 class MprisPlayer(Service):

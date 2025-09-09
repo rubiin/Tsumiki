@@ -2,19 +2,24 @@ import operator
 from collections.abc import Iterator
 from contextlib import suppress
 
-from fabric.utils import DesktopApp, idle_add, remove_handler
-from fabric.widgets.box import Box
-from fabric.widgets.button import Button
-from fabric.widgets.entry import Entry
-from fabric.widgets.grid import Grid
-from fabric.widgets.image import Image
-from fabric.widgets.label import Label
-from fabric.widgets.scrolledwindow import ScrolledWindow
-from gi.repository import Gdk, GLib, Gtk
-from loguru import logger
-
 from shared.popup import PopupWindow
 from utils.app import AppUtils
+from utils.imports import (
+    Box,
+    Button,
+    DesktopApp,
+    Entry,
+    Gdk,
+    GLib,
+    Grid,
+    Gtk,
+    Image,
+    Label,
+    ScrolledWindow,
+    idle_add,
+    logger,
+    remove_handler,
+)
 
 
 class LauncherConfig:

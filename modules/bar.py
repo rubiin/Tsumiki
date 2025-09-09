@@ -1,12 +1,11 @@
-from fabric.utils import (
+from shared.collapsible_group import CollapsibleGroupWidget
+from utils.imports import (
+    Box,
+    CenterBox,
+    Window,
     exec_shell_command_async,
     get_relative_path,
 )
-from fabric.widgets.box import Box
-from fabric.widgets.centerbox import CenterBox
-from fabric.widgets.wayland import WaylandWindow as Window
-
-from shared.collapsible_group import CollapsibleGroupWidget
 from widgets.app_launcher_button import AppLauncherButton
 from widgets.battery import BatteryWidget
 from widgets.bluetooth import BlueToothWidget

@@ -1,15 +1,10 @@
-import json
-import os
-import threading
-import time
 from typing import Callable, Optional
 
 import requests
-from fabric.core.service import Service
-from gi.repository import GLib
 
 from utils.constants import WEATHER_CACHE_FILE
 from utils.functions import write_json_file
+from utils.imports import GLib, Service, json, os, threading, time
 
 
 class WeatherService(Service):
