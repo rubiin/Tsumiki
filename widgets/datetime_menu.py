@@ -1,16 +1,3 @@
-import gi
-from fabric.notifications import Notification
-from fabric.utils import bulk_connect
-from fabric.widgets.box import Box
-from fabric.widgets.button import Button
-from fabric.widgets.datetime import DateTime
-from fabric.widgets.label import Label
-from fabric.widgets.revealer import Revealer
-from fabric.widgets.scrolledwindow import ScrolledWindow
-from fabric.widgets.separator import Separator
-from gi.repository import GdkPixbuf, GLib, Gtk
-from loguru import logger
-
 import utils.constants as constants
 import utils.functions as helpers
 from services import notification_service
@@ -20,9 +7,22 @@ from shared.list import ListBox
 from shared.widget_container import ButtonWidget
 from utils.colors import Colors
 from utils.icons import text_icons
+from utils.imports import (
+    Box,
+    Button,
+    DateTime,
+    GdkPixbuf,
+    GLib,
+    Gtk,
+    Label,
+    Notification,
+    Revealer,
+    ScrolledWindow,
+    Separator,
+    bulk_connect,
+    logger,
+)
 from utils.widget_utils import get_icon, nerd_font_icon
-
-gi.require_versions({"Gtk": "3.0", "GdkPixbuf": "2.0"})
 
 
 class DateMenuNotification(Box):

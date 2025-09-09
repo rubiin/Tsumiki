@@ -1,8 +1,6 @@
-from fabric.bluetooth import BluetoothClient
-from fabric.widgets.label import Label
-
 from shared.widget_container import ButtonWidget
 from utils.icons import text_icons
+from utils.imports import BluetoothClient, Label
 from utils.widget_utils import nerd_font_icon
 
 

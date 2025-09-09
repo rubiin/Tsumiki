@@ -1,18 +1,19 @@
-import os
-import subprocess
-
 import ijson
-from fabric.utils import remove_handler
-from fabric.utils.helpers import get_relative_path
-from fabric.widgets.box import Box
-from fabric.widgets.button import Button
-from fabric.widgets.entry import Entry
-from fabric.widgets.label import Label
-from fabric.widgets.stack import Stack
-from gi.repository import Gdk
-from loguru import logger
 
 from shared.widget_container import ButtonWidget
+from utils.imports import (
+    Box,
+    Button,
+    Entry,
+    Gdk,
+    Label,
+    Stack,
+    get_relative_path,
+    logger,
+    os,
+    remove_handler,
+    subprocess,
+)
 from utils.widget_utils import nerd_font_icon
 
 

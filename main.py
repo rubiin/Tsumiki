@@ -1,14 +1,13 @@
 import os
 
 from fabric import Application
-from fabric.utils import exec_shell_command, get_relative_path
-from loguru import logger
 
 import utils.functions as helpers
 from modules.bar import StatusBar
 from utils.colors import Colors
 from utils.config import theme_config, widget_config
 from utils.constants import APP_DATA_DIRECTORY, APPLICATION_NAME
+from utils.imports import exec_shell_command, get_relative_path, logger
 
 
 @helpers.run_in_thread

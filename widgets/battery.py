@@ -1,10 +1,8 @@
-from fabric.widgets.image import Image
-from fabric.widgets.label import Label
-
 from services.battery import BatteryService
 from shared.widget_container import ButtonWidget
 from utils.functions import format_seconds_to_hours_minutes, send_notification
 from utils.icons import symbolic_icons
+from utils.imports import Image, Label
 
 
 class BatteryWidget(ButtonWidget):

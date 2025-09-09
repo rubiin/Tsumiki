@@ -1,10 +1,11 @@
-import os
-
-from fabric.utils import exec_shell_command_async, get_relative_path
-from fabric.widgets.label import Label
-from gi.repository import Gdk
-
 from shared.widget_container import ButtonWidget
+from utils.imports import (
+    Gdk,
+    Label,
+    exec_shell_command_async,
+    get_relative_path,
+    os,
+)
 from utils.widget_utils import nerd_font_icon
 
 

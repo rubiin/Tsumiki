@@ -1,10 +1,12 @@
-from fabric import Fabricator
-from fabric.utils import exec_shell_command_async, get_relative_path
-from fabric.widgets.box import Box
-from fabric.widgets.label import Label
-
 import utils.functions as helpers
 from shared.widget_container import ButtonWidget
+from utils.imports import (
+    Box,
+    Fabricator,
+    Label,
+    exec_shell_command_async,
+    get_relative_path,
+)
 
 
 class CavaWidget(ButtonWidget):

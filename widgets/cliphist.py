@@ -1,25 +1,26 @@
-import os
-import re
-import subprocess
 import tempfile
 from urllib.parse import unquote, urlparse
 
-import gi
-from fabric.utils import remove_handler
-from fabric.widgets.box import Box
-from fabric.widgets.button import Button
-from fabric.widgets.entry import Entry
-from fabric.widgets.image import Image
-from fabric.widgets.label import Label
-from fabric.widgets.scrolledwindow import ScrolledWindow
-from gi.repository import Gdk, GdkPixbuf, GLib, Gtk
-from loguru import logger
-
 from shared.list import ListBox
 from shared.widget_container import ButtonWidget
+from utils.imports import (
+    Box,
+    Button,
+    Entry,
+    Gdk,
+    GdkPixbuf,
+    GLib,
+    Gtk,
+    Image,
+    Label,
+    ScrolledWindow,
+    logger,
+    os,
+    re,
+    remove_handler,
+    subprocess,
+)
 from utils.widget_utils import nerd_font_icon
-
-gi.require_versions({"Gdk": "3.0", "GdkPixbuf": "2.0"})
 
 
 # TODO: add scrolled pagination

@@ -1,14 +1,8 @@
 from functools import partial
 
-from fabric.core.service import Signal
-from fabric.utils import get_relative_path
-from fabric.widgets.box import Box
-from fabric.widgets.button import Button
-from fabric.widgets.image import Image
-from fabric.widgets.label import Label
-
 from utils.bezier import cubic_bezier
 from utils.icons import symbolic_icons, text_icons
+from utils.imports import Box, Button, Image, Label, Signal, get_relative_path
 from utils.widget_utils import nerd_font_icon, setup_cursor_hover
 
 from .circle_image import CircularImage

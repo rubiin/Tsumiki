@@ -1,10 +1,8 @@
 from datetime import datetime, timezone
 from zoneinfo import ZoneInfo, available_timezones
 
-from fabric.widgets.label import Label
-from loguru import logger
-
 from shared.widget_container import ButtonWidget
+from utils.imports import Label, logger
 from utils.widget_utils import nerd_font_icon, reusable_fabricator
 
 

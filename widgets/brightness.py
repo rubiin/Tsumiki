@@ -1,12 +1,10 @@
 from fabric.utils import cooldown
-from fabric.widgets.circularprogressbar import CircularProgressBar
-from fabric.widgets.label import Label
-from fabric.widgets.overlay import Overlay
 
 import utils.functions as helpers
 from services.brightness import BrightnessService
 from shared.widget_container import EventBoxWidget
 from utils.icons import text_icons
+from utils.imports import CircularProgressBar, Label, Overlay
 from utils.widget_utils import get_brightness_icon_name, nerd_font_icon
 
 
