@@ -1,10 +1,11 @@
-from fabric.hyprland.widgets import get_hyprland_connection
-from fabric.widgets.box import Box
-from fabric.widgets.grid import Grid
-from fabric.widgets.label import Label
-from loguru import logger
-
 from shared.buttons import HoverButton
+from utils.imports import (
+    Box,
+    Grid,
+    Label,
+    get_hyprland_connection,
+    logger,
+)
 from utils.widget_utils import nerd_font_icon
 
 

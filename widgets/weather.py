@@ -1,26 +1,24 @@
-import time
-from datetime import datetime
-
-import gi
-from fabric.utils import cooldown, get_relative_path
-from fabric.widgets.box import Box
-from fabric.widgets.grid import Grid
-from fabric.widgets.label import Label
-from fabric.widgets.revealer import Revealer
-from fabric.widgets.svg import Svg
-from gi.repository import Gtk
-from loguru import logger
-
 from services.weather import WeatherService
 from shared.widget_container import ButtonWidget
 from utils.functions import check_if_day
 from utils.icons import weather_icons
+from utils.imports import (
+    Box,
+    Grid,
+    Gtk,
+    Label,
+    Revealer,
+    Svg,
+    cooldown,
+    datetime,
+    get_relative_path,
+    logger,
+    time,
+)
 from utils.widget_utils import (
     nerd_font_icon,
     reusable_fabricator,
 )
-
-gi.require_versions({"Gtk": "3.0"})
 
 
 class BaseWeatherWidget:

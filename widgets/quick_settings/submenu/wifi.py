@@ -1,28 +1,10 @@
-import gi
-from fabric.widgets.box import Box
-from fabric.widgets.button import Button
-from fabric.widgets.label import Label
-from fabric.widgets.scrolledwindow import ScrolledWindow
-from gi.repository import GObject, Gtk
-from loguru import logger
-
 from services.network import NetworkService, Wifi
 from shared.buttons import QSChevronButton, ScanButton
 from shared.list import ListBox
 from shared.submenu import QuickSubMenu
-from utils.exceptions import NetworkManagerNotFoundError
 from utils.icons import text_icons
+from utils.imports import NM, Box, Button, GObject, Gtk, Label, ScrolledWindow, logger
 from utils.widget_utils import nerd_font_icon
-
-try:
-    gi.require_version("NM", "1.0")
-    from gi.repository import NM
-except ValueError:
-    raise NetworkManagerNotFoundError()
-
-
-gi.require_versions({"Gtk": "3.0", "GObject": "2.0"})
-
 
 icon_to_text_icons = {
     "network-wireless-signal-excellent-symbolic": text_icons["wifi"]["strength_4"],

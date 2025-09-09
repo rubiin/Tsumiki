@@ -1,8 +1,6 @@
 from typing import Iterable
 
-from fabric.widgets.box import Box
-from fabric.widgets.shapes import Corner
-from fabric.widgets.wayland import WaylandWindow as Window
+from utils.imports import Box, Corner, Window
 
 
 class SideCorner(Box):

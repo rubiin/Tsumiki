@@ -1,6 +1,4 @@
-from fabric.audio import Audio
-from fabric.bluetooth import BluetoothClient
-from fabric.power_profiles import PowerProfiles
+from utils.imports import Audio, BluetoothClient, PowerProfiles
 
 from .custom_notification import CustomNotifications
 

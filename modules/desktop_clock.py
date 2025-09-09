@@ -1,6 +1,4 @@
-from fabric.widgets.box import Box
-from fabric.widgets.datetime import DateTime
-from fabric.widgets.wayland import WaylandWindow as Window
+from utils.imports import Box, DateTime, Window
 
 
 class DesktopClock(Window):

@@ -1,10 +1,11 @@
-from fabric.utils import cooldown
-from fabric.widgets.box import Box
-
 from services import audio_service
 from shared.buttons import HoverButton
 from shared.setting_scale import SettingSlider
 from utils.icons import text_icons
+from utils.imports import (
+    Box,
+    cooldown,
+)
 from utils.widget_utils import nerd_font_icon
 
 

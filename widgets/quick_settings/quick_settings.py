@@ -1,15 +1,3 @@
-import os
-
-import gi
-from fabric.utils import bulk_connect, get_relative_path, invoke_repeater
-from fabric.widgets.box import Box
-from fabric.widgets.centerbox import CenterBox
-from fabric.widgets.grid import Grid
-from fabric.widgets.image import Image
-from fabric.widgets.label import Label
-from gi.repository import GLib, Gtk
-from loguru import logger
-
 import utils.functions as helpers
 from services import (
     audio_service,
@@ -23,6 +11,20 @@ from shared.dialog import Dialog
 from shared.media import PlayerBoxStack
 from shared.widget_container import ButtonWidget
 from utils.icons import symbolic_icons
+from utils.imports import (
+    Box,
+    CenterBox,
+    GLib,
+    Grid,
+    Gtk,
+    Image,
+    Label,
+    bulk_connect,
+    get_relative_path,
+    invoke_repeater,
+    logger,
+    os,
+)
 from utils.widget_utils import (
     get_audio_icon_name,
     get_brightness_icon_name,
@@ -40,8 +42,6 @@ from .togglers import (
     HyprIdleQuickSetting,
     NotificationQuickSetting,
 )
-
-gi.require_versions({"Gtk": "3.0"})
 
 
 class QuickSettingsButtonBox(Box):

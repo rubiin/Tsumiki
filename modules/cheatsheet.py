@@ -1,7 +1,8 @@
-from fabric.widgets.box import Box
-from fabric.widgets.grid import Grid
-from fabric.widgets.label import Label
-
+from utils.imports import (
+    Box,
+    Grid,
+    Label,
+)
 from utils.keybinds import KeybindLoader
 
 

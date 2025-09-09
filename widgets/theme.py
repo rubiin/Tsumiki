@@ -1,8 +1,3 @@
-import os
-import threading
-
-from fabric.utils import get_relative_path
-
 from shared.widget_container import ButtonWidget
 from utils.config import theme_config
 from utils.functions import (
@@ -11,6 +6,7 @@ from utils.functions import (
     send_notification,
     update_theme_config,
 )
+from utils.imports import get_relative_path, os, threading
 from utils.widget_utils import nerd_font_icon
 
 

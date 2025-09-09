@@ -1,11 +1,6 @@
-import re
-
-from fabric.hyprland.widgets import HyprlandEvent, get_hyprland_connection
-from fabric.widgets.label import Label
-from loguru import logger
-
 from shared.widget_container import ButtonWidget
 from utils.constants import KBLAYOUT_MAP
+from utils.imports import HyprlandEvent, Label, get_hyprland_connection, logger, re
 from utils.widget_utils import nerd_font_icon
 
 

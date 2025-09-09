@@ -1,10 +1,11 @@
-from fabric.widgets.box import Box
-from fabric.widgets.label import Label
-
 from services import notification_service
 from shared.button_toggle import CommandSwitcher
 from shared.buttons import HoverButton
 from utils.icons import text_icons
+from utils.imports import (
+    Box,
+    Label,
+)
 from utils.widget_utils import nerd_font_icon
 
 

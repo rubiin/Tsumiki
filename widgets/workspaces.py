@@ -1,9 +1,8 @@
 from fabric.core.widgets import WorkspaceButton
-from fabric.hyprland.widgets import HyprlandWorkspaces as Workspaces
-from fabric.utils.helpers import bulk_connect
 
 from shared.widget_container import BoxWidget
 from utils.functions import unique_list
+from utils.imports import Workspaces, bulk_connect
 
 
 class WorkSpacesWidget(BoxWidget):

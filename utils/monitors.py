@@ -1,11 +1,13 @@
-import json
 import warnings
 
-from fabric.hyprland import Hyprland
-from fabric.hyprland.widgets import get_hyprland_connection
-from fabric.utils import bulk_connect
-from gi.repository import Gdk, GLib
-from loguru import logger
+from utils.imports import (
+    Gdk,
+    GLib,
+    bulk_connect,
+    get_hyprland_connection,
+    json,
+    logger,
+)
 
 from .constants import MONITOR_HOTPLUG_DELAY_MS
 from .functions import ttl_lru_cache
@@ -13,7 +15,7 @@ from .functions import ttl_lru_cache
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 
-class HyprlandWithMonitors(Hyprland):
+class HyprlandWithMonitors:
     """A Hyprland class with additional monitor common."""
 
     _instance = None
@@ -26,11 +28,14 @@ class HyprlandWithMonitors(Hyprland):
     def __init__(self, commands_only: bool = False, **kwargs):
         super().__init__(commands_only, **kwargs)
         self.display: Gdk.Display = Gdk.Display.get_default()
+        self._hyprland_connection = get_hyprland_connection()
 
     @ttl_lru_cache(100, 5)
     def get_all_monitors(self) -> dict | None:
         try:
-            monitors = json.loads(self.send_command("j/monitors").reply.decode())
+            monitors = json.loads(
+                self._hyprland_connection.send_command("j/monitors").reply.decode()
+            )
             return {monitor["id"]: monitor["name"] for monitor in monitors}
         except Exception as e:
             logger.exception(f"[Monitors] Error getting all monitors: {e}")
@@ -52,7 +57,7 @@ class HyprlandWithMonitors(Hyprland):
 
     def get_current_gdk_monitor_id(self) -> int | None:
         try:
-            cmd = self.send_command("j/activeworkspace")
+            cmd = self._hyprland_connection.send_command("j/activeworkspace")
             active_workspace = json.loads(cmd.reply.decode())
             return self.get_gdk_monitor_id_from_name(active_workspace["monitor"])
         except Exception as e:
@@ -62,7 +67,9 @@ class HyprlandWithMonitors(Hyprland):
     def get_monitor_names(self) -> list[str]:
         """Get list of all connected monitor names."""
         try:
-            monitors = json.loads(self.send_command("j/monitors").reply.decode())
+            monitors = json.loads(
+                self._hyprland_connection.send_command("j/monitors").reply.decode()
+            )
             return [monitor["name"] for monitor in monitors]
         except json.JSONDecodeError as e:
             logger.exception(f"[Monitors] Error parsing monitor data: {e}")

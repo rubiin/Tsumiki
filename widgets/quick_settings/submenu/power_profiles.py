@@ -1,11 +1,12 @@
-from fabric.widgets.box import Box
-from fabric.widgets.button import Button
-from fabric.widgets.label import Label
-
 from services import power_pfl_service
 from shared.buttons import HoverButton, QSChevronButton
 from shared.submenu import QuickSubMenu
 from utils.icons import text_icons
+from utils.imports import (
+    Box,
+    Button,
+    Label,
+)
 from utils.widget_utils import nerd_font_icon
 
 

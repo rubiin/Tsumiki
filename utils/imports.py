@@ -20,6 +20,8 @@ import gi
 from fabric import Builder, Fabricator, Property, Service, Signal
 from fabric.audio.service import Audio
 from fabric.bluetooth.service import BluetoothClient, BluetoothDevice
+from fabric.hyprland.service import HyprlandEvent
+from fabric.hyprland.widgets import Hy, get_hyprland_connection
 from fabric.hyprland.widgets import (
     HyprlandActiveWindow as ActiveWindow,
 )
@@ -29,8 +31,8 @@ from fabric.hyprland.widgets import (
 from fabric.hyprland.widgets import (
     HyprlandWorkspaces as Workspaces,
 )
-from fabric.hyprland.widgets import get_hyprland_connection
 from fabric.notifications import Notification, Notifications
+from fabric.power_profiles import PowerProfiles
 from fabric.system_tray.widgets import SystemTray
 from fabric.utils import (
     DesktopApp,
