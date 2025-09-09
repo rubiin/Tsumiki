@@ -25,8 +25,8 @@ class HyprlandWithMonitors:
             cls._instance = super().__new__(cls)
         return cls._instance
 
-    def __init__(self, commands_only: bool = False, **kwargs):
-        super().__init__(commands_only, **kwargs)
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
         self.display: Gdk.Display = Gdk.Display.get_default()
         self._hyprland_connection = get_hyprland_connection()
 
