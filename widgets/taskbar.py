@@ -18,7 +18,6 @@ class TaskBarWidget(BoxWidget):
             name="taskbar",
             **kwargs,
         )
-        self._manager = Glace.Manager()
 
         self.icon_resolver = IconResolver()
         self._manager = Glace.Manager()
