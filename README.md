@@ -283,7 +283,7 @@ Be sure to kill any bars that you may be running. You can kill other bar with `p
 
 ### 2. **Cannot see notifications?**
 
-Be sure to kill other notifications daemon that you may be running. You can kill other daemons with `pkill dunst; pkill mako;`
+Be sure to kill other notifications daemon that you may be running. You can kill other daemons with `pkill -f "mako|dunst|waybar"`
 
 ### 3. **Cannot see bar?**
 
