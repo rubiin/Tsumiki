@@ -1,9 +1,10 @@
-from fabric.hyprland.widgets import get_hyprland_connection
-from fabric.utils import bulk_connect
-from fabric.widgets.label import Label
-from loguru import logger
-
 from shared.widget_container import ButtonWidget
+from utils.imports import (
+    Label,
+    bulk_connect,
+    get_hyprland_connection,
+    logger,
+)
 from utils.widget_utils import nerd_font_icon
 
 

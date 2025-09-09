@@ -1,28 +1,28 @@
 import importlib
 from numbers import Number
-from time import sleep
 from typing import Literal
 
 import cairo  # For rendering the drag preview
-import gi
 import psutil
-from fabric import Fabricator
-from fabric.utils import bulk_connect
-from fabric.widgets.image import Image
-from fabric.widgets.label import Label
 from fabric.widgets.scale import ScaleMark
-from fabric.widgets.widget import Widget
-from gi.repository import Gdk, GdkPixbuf, GLib
 
 from shared.animated.scale import AnimatedScale
 
 from .config import widget_config
 from .icons import symbolic_icons, text_icons
+from .imports import (
+    Fabricator,
+    Gdk,
+    GdkPixbuf,
+    GLib,
+    Image,
+    Label,
+    Widget,
+    bulk_connect,
+    time,
+)
 
 storage_config = widget_config["widgets"]["storage"]
-
-
-gi.require_versions({"Gtk": "3.0", "Gdk": "3.0", "GdkPixbuf": "2.0"})
 
 
 # Function to get the system stats using psutil
@@ -36,7 +36,7 @@ def stats_poll(fabricator):
             "memory": psutil.virtual_memory(),
             "disk": psutil.disk_usage(storage_config.get("path", "/")),
         }
-        sleep(1)
+        time.sleep(1)
 
 
 def on_enter_notify_event(cursor, widget: Widget):

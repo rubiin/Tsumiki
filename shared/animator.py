@@ -1,13 +1,7 @@
 from typing import Protocol, cast
 
-import gi
-from fabric import Property, Service, Signal
-from fabric.utils import clamp
-from gi.repository import GLib, Gtk
-
 from utils.bezier import ease_linear, lerp
-
-gi.require_versions({"Gtk": "3.0"})
+from utils.imports import GLib, Gtk, Property, Service, Signal, clamp
 
 
 class TimingFunctionCallback(Protocol):

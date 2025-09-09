@@ -1,11 +1,16 @@
 # ruff: noqa: F401, E402
 
+import json
 import math
 import mimetypes
 import os
 import re
+import shutil
 import subprocess
+import threading
+import time
 from collections.abc import Iterable
+from datetime import datetime
 from functools import partial, reduce
 from typing import Literal, cast
 
@@ -24,6 +29,7 @@ from fabric.hyprland.widgets import (
 from fabric.hyprland.widgets import (
     HyprlandWorkspaces as Workspaces,
 )
+from fabric.hyprland.widgets import get_hyprland_connection
 from fabric.notifications import Notification, Notifications
 from fabric.system_tray.widgets import SystemTray
 from fabric.utils import (
@@ -31,6 +37,8 @@ from fabric.utils import (
     FormattedString,
     bulk_connect,
     bulk_replace,
+    clamp,
+    cooldown,
     exec_shell_command,
     exec_shell_command_async,
     get_desktop_applications,
@@ -48,7 +56,6 @@ from fabric.widgets.circularprogressbar import CircularProgressBar
 from fabric.widgets.datetime import DateTime
 from fabric.widgets.entry import Entry
 from fabric.widgets.eventbox import EventBox
-from fabric.widgets.fixed import Fixed
 from fabric.widgets.grid import Grid
 from fabric.widgets.image import Image
 from fabric.widgets.label import Label
@@ -59,6 +66,7 @@ from fabric.widgets.scrolledwindow import ScrolledWindow
 from fabric.widgets.separator import Separator
 from fabric.widgets.shapes import Corner
 from fabric.widgets.stack import Stack
+from fabric.widgets.svg import Svg
 from fabric.widgets.wayland import WaylandWindow as Window
 from fabric.widgets.widget import Widget
 from loguru import logger

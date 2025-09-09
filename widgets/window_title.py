@@ -1,11 +1,13 @@
 import re
 
-from fabric.hyprland.widgets import HyprlandActiveWindow as ActiveWindow
-from fabric.utils import FormattedString, truncate
-from loguru import logger
-
 from shared.widget_container import ButtonWidget
 from utils.constants import WINDOW_TITLE_MAP
+from utils.imports import (
+    ActiveWindow,
+    FormattedString,
+    logger,
+    truncate,
+)
 
 
 class WindowTitleWidget(ButtonWidget):

@@ -1,14 +1,16 @@
-from fabric.utils import exec_shell_command_async, get_relative_path
-from fabric.widgets.box import Box
-from fabric.widgets.grid import Grid
-from fabric.widgets.label import Label
-from fabric.widgets.svg import Svg
-from fabric.widgets.widget import Widget
-
 from shared.buttons import HoverButton
 from shared.dialog import Dialog
 from shared.popup import PopupWindow
 from shared.widget_container import ButtonWidget
+from utils.imports import (
+    Box,
+    Grid,
+    Label,
+    Svg,
+    Widget,
+    exec_shell_command_async,
+    get_relative_path,
+)
 from utils.widget_utils import nerd_font_icon
 
 

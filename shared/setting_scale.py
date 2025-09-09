@@ -1,7 +1,5 @@
-from fabric.widgets.box import Box
-from fabric.widgets.scale import Scale
-
 from utils.icons import text_icons
+from utils.imports import Box, Scale
 from utils.widget_utils import nerd_font_icon
 
 from .buttons import HoverButton

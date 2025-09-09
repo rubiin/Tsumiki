@@ -1,4 +1,6 @@
-from gi.repository import GLib
+from .imports import (
+    GLib,
+)
 
 # constants
 

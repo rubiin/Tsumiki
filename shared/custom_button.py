@@ -1,8 +1,9 @@
 """Custom button widgets for executing shell commands."""
 
-from fabric.utils import exec_shell_command_async
-from fabric.widgets.label import Label
-
+from utils.imports import (
+    Label,
+    exec_shell_command_async,
+)
 from utils.widget_utils import nerd_font_icon
 
 from .widget_container import ButtonWidget

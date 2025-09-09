@@ -1,12 +1,14 @@
 from typing import Literal
 
-from fabric.widgets.box import Box
-from fabric.widgets.eventbox import EventBox
-from fabric.widgets.revealer import Revealer
-from fabric.widgets.wayland import WaylandWindow as Window
-from fabric.widgets.widget import Widget
-from gi.repository import Gdk, GLib
-
+from utils.imports import (
+    Box,
+    EventBox,
+    Gdk,
+    GLib,
+    Revealer,
+    Widget,
+    Window,
+)
 from utils.monitors import HyprlandWithMonitors
 from utils.types import Anchor, Keyboard_Mode, Layer
 

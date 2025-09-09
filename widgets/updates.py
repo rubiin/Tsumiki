@@ -1,17 +1,16 @@
-import json
-from datetime import datetime
-
-from fabric.utils import (
-    cooldown,
-    exec_shell_command_async,
-    get_relative_path,
-)
-from fabric.widgets.label import Label
-from fabric.widgets.revealer import Revealer
-from loguru import logger
+import datetime
 
 from shared.widget_container import ButtonWidget
 from utils.colors import Colors
+from utils.imports import (
+    Label,
+    Revealer,
+    cooldown,
+    exec_shell_command_async,
+    get_relative_path,
+    json,
+    logger,
+)
 from utils.widget_utils import (
     nerd_font_icon,
     reusable_fabricator,

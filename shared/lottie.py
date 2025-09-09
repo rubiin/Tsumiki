@@ -1,14 +1,15 @@
 from typing import Literal
 
 import cairo
-import gi
-from fabric.widgets.widget import Widget
-from gi.repository import GLib, Gtk
 from rlottie_python.rlottie_wrapper import LottieAnimation
 
-from .widget_container import BaseWidget
+from utils.imports import (
+    GLib,
+    Gtk,
+    Widget,
+)
 
-gi.require_versions({"Gtk": "3.0"})
+from .widget_container import BaseWidget
 
 
 class LottieAnimationWidget(Gtk.DrawingArea, BaseWidget):

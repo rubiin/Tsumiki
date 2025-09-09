@@ -1,8 +1,10 @@
-import json
 from typing import Iterator
 
-from fabric.hyprland.widgets import get_hyprland_connection
-from loguru import logger
+from .imports import (
+    get_hyprland_connection,
+    json,
+    logger,
+)
 
 MODMASK_MAP = {
     64: "SUPER",

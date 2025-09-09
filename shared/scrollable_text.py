@@ -1,7 +1,4 @@
-from fabric.utils import bulk_connect
-from fabric.widgets.eventbox import EventBox
-from fabric.widgets.label import Label
-from gi.repository import GLib
+from utils.imports import EventBox, GLib, Label, bulk_connect
 
 
 class ScrollableText(EventBox):

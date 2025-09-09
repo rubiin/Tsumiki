@@ -1,14 +1,15 @@
-import json
-
-from fabric.utils import exec_shell_command, exec_shell_command_async
-from fabric.widgets.circularprogressbar import CircularProgressBar
-from fabric.widgets.label import Label
-from fabric.widgets.overlay import Overlay
-
 import utils.functions as helpers
 from services.networkspeed import NetworkSpeed
 from shared.widget_container import ButtonWidget
 from utils.icons import text_icons
+from utils.imports import (
+    CircularProgressBar,
+    Label,
+    Overlay,
+    exec_shell_command,
+    exec_shell_command_async,
+    json,
+)
 from utils.widget_utils import (
     get_bar_graph,
     nerd_font_icon,

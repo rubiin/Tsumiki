@@ -1,22 +1,21 @@
-import os
-
-import gi
-from fabric.utils import (
-    bulk_connect,
-)
-from fabric.widgets.box import Box
-from fabric.widgets.grid import Grid
-from fabric.widgets.image import Image
-from fabric.widgets.separator import Separator
-from gi.repository import Gdk, GdkPixbuf, GLib, Gray, Gtk
-from loguru import logger
-
 from shared.buttons import HoverButton
 from shared.widget_container import ButtonWidget
 from utils.icons import text_icons
+from utils.imports import (
+    Box,
+    Gdk,
+    GdkPixbuf,
+    GLib,
+    Gray,
+    Grid,
+    Gtk,
+    Image,
+    Separator,
+    bulk_connect,
+    logger,
+    os,
+)
 from utils.widget_utils import nerd_font_icon
-
-gi.require_versions({"Gtk": "3.0", "Gray": "0.1", "GdkPixbuf": "2.0", "Gdk": "3.0"})
 
 
 class BaseSystemTray:

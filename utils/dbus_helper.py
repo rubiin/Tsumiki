@@ -1,4 +1,4 @@
-from gi.repository import Gio, GLib
+from .imports import Gio, GLib
 
 
 class GioDBusHelper:

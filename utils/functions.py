@@ -1,41 +1,42 @@
 import ctypes
 import html
-import json
-import os
-import re
-import shutil
-import subprocess
-import threading
-import time
 from collections import Counter
-from datetime import datetime
 from functools import lru_cache
 from io import BytesIO
 from typing import Any, Callable, Iterable, Literal, Optional
 
-import gi
 import psutil
 import qrcode
 from fabric import Application
-from fabric.utils import (
-    FormattedString,
-    cooldown,
-    exec_shell_command,
-    exec_shell_command_async,
-    get_relative_path,
-    invoke_repeater,
-)
-from gi.repository import Gdk, GdkPixbuf, Gio, GLib, Gtk
-from loguru import logger
 from PIL import Image
 
 from .colors import Colors
 from .constants import NAMED_COLORS
 from .exceptions import ExecutableNotFoundError
 from .icons import text_icons
+from .imports import (
+    FormattedString,
+    Gdk,
+    GdkPixbuf,
+    Gio,
+    GLib,
+    Gtk,
+    cooldown,
+    datetime,
+    exec_shell_command,
+    exec_shell_command_async,
+    get_relative_path,
+    invoke_repeater,
+    json,
+    logger,
+    os,
+    re,
+    shutil,
+    subprocess,
+    threading,
+    time,
+)
 from .thread import run_in_thread, thread
-
-gi.require_versions({"Gtk": "3.0", "Gdk": "3.0", "GdkPixbuf": "2.0"})
 
 
 # Function to execute a shell command synchronously with formatted string

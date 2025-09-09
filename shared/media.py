@@ -1,27 +1,7 @@
-import os
-import re
 import tempfile
 import urllib.parse
 import urllib.request
 from functools import partial
-
-import gi
-from fabric.utils import (
-    bulk_connect,
-    cooldown,
-    get_relative_path,
-    invoke_repeater,
-)
-from fabric.widgets.box import Box
-from fabric.widgets.button import Button
-from fabric.widgets.centerbox import CenterBox
-from fabric.widgets.image import Image
-from fabric.widgets.label import Label
-from fabric.widgets.overlay import Overlay
-from fabric.widgets.scale import Scale
-from fabric.widgets.stack import Stack
-from gi.repository import GLib, GObject
-from loguru import logger
 
 from services.mpris import MprisPlayer, MprisPlayerManager
 from shared.buttons import HoverButton
@@ -36,13 +16,30 @@ from utils.functions import (
     tint_color,
 )
 from utils.icons import text_icons
+from utils.imports import (
+    Box,
+    Button,
+    CenterBox,
+    GLib,
+    GObject,
+    Image,
+    Label,
+    Overlay,
+    Scale,
+    Stack,
+    bulk_connect,
+    cooldown,
+    get_relative_path,
+    invoke_repeater,
+    logger,
+    os,
+    re,
+)
 from utils.widget_utils import (
     create_scale,
     nerd_font_icon,
     setup_cursor_hover,
 )
-
-gi.require_versions({"GObject": "2.0"})
 
 
 class PlayerBoxStack(Box):

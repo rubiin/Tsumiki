@@ -1,11 +1,10 @@
 from collections.abc import Iterable
 from typing import Literal
 
-import gi
-from fabric.widgets.widget import Widget
-from gi.repository import Gtk
-
-gi.require_version("Gtk", "3.0")
+from utils.imports import (
+    Gtk,
+    Widget,
+)
 
 
 class ListBox(Gtk.ListBox, Widget):

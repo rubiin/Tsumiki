@@ -1,7 +1,5 @@
-from fabric.hyprland.widgets import HyprlandLanguage as Language
-from fabric.utils import FormattedString, truncate
-
 from shared.widget_container import ButtonWidget
+from utils.imports import FormattedString, Language, truncate
 from utils.widget_utils import nerd_font_icon
 
 

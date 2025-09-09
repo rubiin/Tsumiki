@@ -1,9 +1,3 @@
-import json
-import os
-
-from fabric.utils import get_relative_path
-from loguru import logger
-
 from .constants import DEFAULT_CONFIG
 from .functions import (
     deep_merge,
@@ -13,6 +7,12 @@ from .functions import (
     read_toml_file,
     run_in_thread,
     validate_widgets,
+)
+from .imports import (
+    get_relative_path,
+    json,
+    logger,
+    os,
 )
 from .widget_settings import BarConfig
 

@@ -1,9 +1,4 @@
-from fabric.widgets.box import Box
-from fabric.widgets.button import Button
-from fabric.widgets.label import Label
-from fabric.widgets.revealer import Revealer
-from fabric.widgets.widget import Widget
-
+from utils.imports import Box, Button, Label, Revealer, Widget
 from utils.widget_utils import nerd_font_icon
 
 from .widget_container import BaseWidget

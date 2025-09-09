@@ -2,15 +2,9 @@
 Simple configuration file watcher for auto-reloading Tsumiki when config files change.
 """
 
-import os
-import subprocess
-
-from fabric.utils import get_relative_path
-from gi.repository import Gio, GLib
-from loguru import logger
-
-from utils.colors import Colors
-from utils.constants import APPLICATION_NAME
+from .colors import Colors
+from .constants import APPLICATION_NAME
+from .imports import Gio, GLib, get_relative_path, logger, os, subprocess
 
 
 class ConfigWatcher:

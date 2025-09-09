@@ -1,14 +1,15 @@
 import re
 
-from fabric.widgets.box import Box
-from fabric.widgets.label import Label
-from loguru import logger
-
 from services.mpris import MprisPlayer, MprisPlayerManager
 from shared.media import PlayerBoxStack
 from shared.popover import Popover
 from shared.widget_container import ButtonWidget
 from utils.colors import Colors
+from utils.imports import (
+    Box,
+    Label,
+    logger,
+)
 
 
 class MprisWidget(ButtonWidget):

@@ -1,7 +1,9 @@
-from fabric.utils import exec_shell_command_async
-from fabric.widgets.box import Box
-from fabric.widgets.button import Button
-from fabric.widgets.label import Label
+from utils.imports import (
+    Box,
+    Button,
+    Label,
+    exec_shell_command_async,
+)
 
 from .popup import PopupWindow
 

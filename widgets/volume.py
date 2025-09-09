@@ -1,11 +1,12 @@
-from fabric.utils import cooldown
-from fabric.widgets.circularprogressbar import CircularProgressBar
-from fabric.widgets.label import Label
-from fabric.widgets.overlay import Overlay
-
 from services import audio_service
 from shared.widget_container import EventBoxWidget
 from utils.icons import text_icons
+from utils.imports import (
+    CircularProgressBar,
+    Label,
+    Overlay,
+    cooldown,
+)
 from utils.widget_utils import get_audio_icon_name, nerd_font_icon
 
 

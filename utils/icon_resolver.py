@@ -1,16 +1,7 @@
-import os
-import re
-
-import gi
-from gi.repository import GdkPixbuf, GLib, Gtk
-from loguru import logger
-
-from utils.functions import read_json_file, write_json_file
-
 from .constants import ICON_CACHE_FILE
+from .functions import read_json_file, write_json_file
 from .icons import symbolic_icons
-
-gi.require_versions({"Gtk": "3.0", "GdkPixbuf": "2.0"})
+from .imports import GdkPixbuf, GLib, Gtk, logger, os, re
 
 
 class IconResolver:
