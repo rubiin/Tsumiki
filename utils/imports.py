@@ -1,4 +1,4 @@
-# ruff: noqa: F401
+# ruff: noqa: F401, E402
 
 import math
 import mimetypes
@@ -49,11 +49,12 @@ from fabric.widgets.datetime import DateTime
 from fabric.widgets.entry import Entry
 from fabric.widgets.eventbox import EventBox
 from fabric.widgets.fixed import Fixed
-from fabric.widgets.flowbox import FlowBox
+from fabric.widgets.grid import Grid
 from fabric.widgets.image import Image
 from fabric.widgets.label import Label
 from fabric.widgets.overlay import Overlay
 from fabric.widgets.revealer import Revealer
+from fabric.widgets.scale import Scale
 from fabric.widgets.scrolledwindow import ScrolledWindow
 from fabric.widgets.separator import Separator
 from fabric.widgets.shapes import Corner
@@ -63,6 +64,28 @@ from fabric.widgets.widget import Widget
 from loguru import logger
 
 gi.require_versions(
-    {"Gtk": "3.0", "Gdk": "3.0", "GdkPixbuf": "2.0", "Playerctl": "2.0"}
+    {
+        "Gtk": "3.0",
+        "Gdk": "3.0",
+        "GdkPixbuf": "2.0",
+        "Playerctl": "2.0",
+        "GtkLayerShell": "0.1",
+        "GObject": "2.0",
+        "Glace": "0.1",
+        "Gray": "0.1",
+        "NM": "1.0",
+    }
 )
-from gi.repository import Gdk, GdkPixbuf, Gio, GLib, Gtk, Playerctl  # noqa: E402
+from gi.repository import (
+    NM,
+    Gdk,
+    GdkPixbuf,
+    Gio,
+    Glace,
+    GLib,
+    GObject,
+    Gray,
+    Gtk,
+    GtkLayerShell,
+    Playerctl,
+)

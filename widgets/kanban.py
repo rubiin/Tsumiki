@@ -1,25 +1,26 @@
-import os
 import typing
 from pathlib import Path
-
-import gi
-from fabric.utils import bulk_connect
-from fabric.widgets.box import Box
-from fabric.widgets.button import Button
-from fabric.widgets.centerbox import CenterBox
-from fabric.widgets.eventbox import EventBox
-from fabric.widgets.grid import Grid
-from fabric.widgets.label import Label
-from fabric.widgets.scrolledwindow import ScrolledWindow
-from gi.repository import Gdk, GLib, GObject, Gtk
-from loguru import logger
 
 from shared.list import ListBox
 from shared.widget_container import ButtonWidget
 from utils.functions import read_json_file, write_json_file
+from utils.imports import (
+    Box,
+    Button,
+    CenterBox,
+    EventBox,
+    Gdk,
+    GLib,
+    GObject,
+    Grid,
+    Gtk,
+    Label,
+    ScrolledWindow,
+    bulk_connect,
+    logger,
+    os,
+)
 from utils.widget_utils import create_surface_from_widget, nerd_font_icon
-
-gi.require_versions({"Gtk": "3.0", "GObject": "2.0", "Gdk": "3.0"})
 
 
 class InlineEditor(Box):
