@@ -1,4 +1,4 @@
-from fabric.utils import bulk_connect
+from fabric.utils import bulk_connect, remove_handler
 from fabric.widgets.eventbox import EventBox
 from fabric.widgets.label import Label
 from gi.repository import GLib
@@ -43,7 +43,7 @@ class ScrollableText(EventBox):
 
     def on_hover_stop(self, widget, event):
         if self.scroll_id:
-            GLib.source_remove(self.scroll_id)
+            remove_handler(self.scroll_id)
             self.scroll_id = None
 
     def scroll_text(self):

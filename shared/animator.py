@@ -2,7 +2,7 @@ from typing import Protocol, cast
 
 import gi
 from fabric import Property, Service, Signal
-from fabric.utils import clamp
+from fabric.utils import clamp, remove_handler
 from gi.repository import GLib, Gtk
 
 from utils.bezier import ease_linear, lerp
@@ -173,7 +173,7 @@ class Animator(Service):
         if self._tick_widget:
             self._tick_widget.remove_tick_callback(self._tick_handler)
         else:
-            GLib.source_remove(self._tick_handler)
+            remove_handler(self._tick_handler)
         self._tick_handler = None
         return
 

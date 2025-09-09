@@ -2,6 +2,7 @@ from typing import Literal
 
 import cairo
 import gi
+from fabric.utils import remove_handler
 from fabric.widgets.widget import Widget
 from gi.repository import GLib, Gtk
 from rlottie_python.rlottie_wrapper import LottieAnimation
@@ -132,7 +133,7 @@ class LottieAnimationWidget(Gtk.DrawingArea, BaseWidget):
         return True
 
     def stop_play(self):
-        GLib.source_remove(self.timeout)
+        remove_handler(self.timeout)
 
     def play_animation(
         self,

@@ -4,7 +4,13 @@ from fabric.notifications import (
     NotificationAction,
     NotificationCloseReason,
 )
-from fabric.utils import bulk_connect, get_relative_path, invoke_repeater, truncate
+from fabric.utils import (
+    bulk_connect,
+    get_relative_path,
+    invoke_repeater,
+    remove_handler,
+    truncate,
+)
 from fabric.widgets.box import Box
 from fabric.widgets.button import Button
 from fabric.widgets.circularprogressbar import CircularProgressBar
@@ -268,7 +274,7 @@ class NotificationWidget(EventBox):
 
     def stop_timeout(self):
         if self._timeout_id is not None:
-            GLib.source_remove(self._timeout_id)
+            remove_handler(self._timeout_id)
             self._timeout_id = None
 
     def close_notification(self):

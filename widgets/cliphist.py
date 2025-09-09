@@ -138,7 +138,7 @@ class ClipHistoryMenu(Box):
     def on_search_text_changed(self, entry, pspec):
         # Remove any existing pending filter operation
         if self._search_timer_id > 0:
-            GLib.source_remove(self._search_timer_id)
+            remove_handler(self._search_timer_id)
             self._search_timer_id = 0
 
         # Start a new timer to filter after a delay

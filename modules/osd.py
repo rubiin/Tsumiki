@@ -1,7 +1,7 @@
 from typing import ClassVar, Literal
 
 import gi
-from fabric.utils import bulk_connect, cooldown
+from fabric.utils import bulk_connect, cooldown, remove_handler
 from fabric.widgets.box import Box
 from fabric.widgets.image import Image
 from fabric.widgets.label import Label
@@ -329,11 +329,10 @@ class OSDContainer(Window):
 
         # Reset hide timer
         if self.hide_timer_id is not None:
-            GLib.source_remove(self.hide_timer_id)
+            remove_handler(self.hide_timer_id)
             self.hide_timer_id = None
 
         # Delay reveal to ensure animation plays
-        self.revealer.set_reveal_child(False)
         GLib.idle_add(lambda: self.revealer.set_reveal_child(True))
 
         self.hide_timer_id = GLib.timeout_add(self.timeout, self._hide)
