@@ -1,6 +1,3 @@
-# Author: Yousef EL-Darsh
-# License (SPDX): CC-BY-NC-ND-4.0
-
 from fabric.core.service import Signal
 from fabric.widgets.button import Button
 from gi.repository import Gdk
