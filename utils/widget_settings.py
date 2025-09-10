@@ -33,9 +33,9 @@ PowerButton = TypedDict(
     "PowerButton",
     {
         "icon": str,
-        "icon_size": int,
         "tooltip": bool,
         "items_per_row": int,
+        "icon_size": int,
         "label": bool,
         "show_icon": bool,
         "confirm": bool,
@@ -86,7 +86,12 @@ HyprIdle = TypedDict(
 # Window Count configuration
 WindowCount = TypedDict(
     "WindowCount",
-    {**BaseConfig.__annotations__, "label_format": str},
+    {
+        **BaseConfig.__annotations__,
+        "label_format": str,
+        "show_icon": bool,
+        "hide_when_zero": bool,
+    },
 )
 
 # Battery configuration
@@ -95,10 +100,10 @@ Battery = TypedDict(
     {
         "label": bool,
         "tooltip": bool,
+        "icon_size": int,
         "full_battery_level": int,
         "hide_label_when_full": bool,
         "hide_when_missing": bool,
-        "icon_size": int,
         "notifications": dict,
     },
 )
@@ -160,6 +165,7 @@ Quotes = TypedDict(
         "enabled": bool,
         "anchor": Anchor,
         "layer": Layer,
+        "update_interval": int,
     },
 )
 
@@ -192,14 +198,13 @@ Dock = TypedDict(
     "Dock",
     {
         "enabled": bool,
+        "tooltip": bool,
         "icon_size": int,
         "preview_apps": bool,
         "preview_size": tuple[int, int],
-        "ignored_apps": list[str],
-        "layer": Layer,
-        "anchor": Anchor,
         "show_when_no_windows": bool,
-        "tooltip": bool,
+        "ignored": list[str],
+        "layer": Layer,
     },
 )
 
@@ -214,7 +219,7 @@ AppLauncher = TypedDict(
 Bar = TypedDict(
     "Bar",
     {
-        "location": str,
+        "location": Literal["top", "bottom"],
         "layer": Layer,
         "auto_hide": bool,
     },
@@ -240,15 +245,21 @@ Modules = TypedDict(
 # Bar configuration
 General = TypedDict(
     "General",
-    {"check_updates": bool, "debug": bool, "monitor_styles": bool},
+    {
+        "check_updates": bool,
+        "debug": bool,
+        "monitor_styles": bool,
+        "auto_reload": bool,
+        "multi_monitor": bool,
+    },
 )
 
 # Cpu configuration
 Cpu = TypedDict(
     "Cpu",
     {
+        **BaseConfig.__annotations__,
         "mode": Widget_Mode,
-        "tooltip": bool,
         "show_icon": bool,
         "sensor": str,
         "temperature_unit": Temperature_Unit,
@@ -265,18 +276,37 @@ Mpris = TypedDict("Mpris", {**BaseConfig.__annotations__, "truncation_size": int
 Memory = TypedDict(
     "Memory",
     {
+        **BaseConfig.__annotations__,
         "mode": Widget_Mode,
-        "tooltip": bool,
         "show_icon": bool,
         "icon": str,
-        "graph": bool,
         "graph_length": int,
         "unit": Literal["kb", "mb", "gb", "tb"],
     },
 )
 
+
+Gpu = TypedDict(
+    "Gpu",
+    {
+        **BaseConfig.__annotations__,
+        "show_icon": bool,
+        "icon": str,
+        "mode": Widget_Mode,
+        "graph_length": int,
+    },
+)
+
 # Submap configuration
-Submap = TypedDict("Submap", {**BaseConfig.__annotations__, "icon": str})
+Submap = TypedDict(
+    "Submap",
+    {
+        **BaseConfig.__annotations__,
+        "icon": str,
+        "show_icon": bool,
+        "hide_on_default": bool,
+    },
+)
 
 
 # Network configuration
@@ -288,6 +318,10 @@ NetworkUsage = TypedDict(
         "download_icon": str,
         "download": bool,
         "upload": bool,
+        "upload_threshold": int,
+        "download_threshold": int,
+        "kb_digits": int,
+        "mb_digits": int,
     },
 )
 
@@ -300,7 +334,6 @@ Storage = TypedDict(
         "show_icon": bool,
         "icon": str,
         "path": str,
-        "graph": bool,
         "graph_length": int,
         "unit": Literal["kb", "mb", "gb", "tb"],
     },
@@ -309,7 +342,15 @@ Storage = TypedDict(
 # Workspaces configuration
 Workspaces = TypedDict(
     "Workspaces",
-    {"count": int, "occupied": bool, "ignored": list[int], "icon_map": dict},
+    {
+        "count": int,
+        "hide_unoccupied": bool,
+        "default_label_format": str,
+        "ignored": list[int],
+        "icon_map": dict,
+        "reverse_scroll": bool,
+        "empty_scroll": bool,
+    },
 )
 
 # WindowTitle configuration
@@ -317,9 +358,9 @@ WindowTitle = TypedDict(
     "WindowTitle",
     {
         "icon": bool,
+        "tooltip": bool,
         "truncation": bool,
         "truncation_size": int,
-        "mappings": bool,
         "title_map": list[dict[str, str]],
     },
 )
@@ -329,48 +370,65 @@ Updates = TypedDict(
     "Updates",
     {
         **BaseConfig.__annotations__,
+        "show_icon": bool,
+        "available_icon": str,
+        "no_updates_icon": str,
+        "hover_reveal": bool,
+        "reveal_duration": int,
         "os": str,
-        "icon": str,
+        "terminal": str,
+        "auto_hide": bool,
         "interval": int,
         "pad_zero": bool,
-        "auto_hide": bool,
+        "tooltip": bool,
+        "label": bool,
         "flatpak": bool,
         "snap": bool,
         "brew": bool,
-        "hover_reveal": bool,
-        "reveal_duration": int,
     },
 )
 
 
 # Bluetooth configuration
-BlueTooth = TypedDict("BlueTooth", {"label": bool, "tooltip": bool, "icon_size": int})
+BlueTooth = TypedDict("BlueTooth", {**BaseConfig.__annotations__, "icon_size": int})
 
 # Weather configuration
 Weather = TypedDict(
     "Weather",
     {
+        **BaseConfig.__annotations__,
         "location": str,
         "interval": int,
-        "tooltip": bool,
-        "label": bool,
         "expanded": bool,
         "temperature_unit": Temperature_Unit,
         "wind_speed_unit": Wind_Speed_Unit,
+        "label_format": str,
+        "hover_reveal": bool,
+        "reveal_duration": int,
+        "expanded": bool,
+        "interval": int,
     },
 )
 
+App_Launcher_Button = TypedDict(
+    "AppLauncher", {"tooltip": bool, "icon": str, "icon_size": int}
+)
+
 # Keyboard configuration
-Keyboard = TypedDict("Keyboard", {**BaseConfig.__annotations__, "icon": str})
+Keyboard = TypedDict(
+    "Keyboard", {**BaseConfig.__annotations__, "icon": str, "show_icon": bool}
+)
 
 # MicroPhone configuration
-MicroPhone = TypedDict("MicroPhone", {**BaseConfig.__annotations__})
+MicroPhone = TypedDict("MicroPhone", {**BaseConfig.__annotations__, "show_icon": bool})
 
 # Cava configuration
 Cava = TypedDict("Cava", {"bars": int, "color": str})
 
 # Overview configuration
-Overview = TypedDict("Overview", {"icon": str, **BaseConfig.__annotations__})
+Overview = TypedDict(
+    "Overview", {"icon": str, **BaseConfig.__annotations__, "show_occupied": bool}
+)
 
 
 Cliphist = TypedDict("Cliphist", {"icon": str, **BaseConfig.__annotations__})
@@ -410,14 +468,16 @@ DateTimeMenu = TypedDict(
     },
 )
 
+# TODO: custom_button_group
+
 # World clock configuration
 WorldClock = TypedDict(
     "WorldClock",
     {
-        "timezones": list[str],
-        "show_icon": bool,
-        "use_24hr": bool,
         "icon": str,
+        "show_icon": bool,
+        "timezones": list[str],
+        "use_24hr": bool,
     },
 )
 
@@ -426,11 +486,14 @@ ThemeSwitcher = TypedDict("ThemeSwitcher", {**BaseConfig.__annotations__, "icon"
 
 # Hyprpicker configuration
 HyprPicker = TypedDict(
-    "HyprPicker", {**BaseConfig.__annotations__, "icon": str, "quiet": bool}
+    "HyprPicker",
+    {**BaseConfig.__annotations__, "icon": str, "show_icon": bool, "quiet": bool},
 )
 
 # OCR configuration
-OCR = TypedDict("OCR", {**BaseConfig.__annotations__, "icon": str, "quiet": bool})
+OCR = TypedDict(
+    "OCR", {**BaseConfig.__annotations__, "icon": str, "quiet": bool, "show_icon": bool}
+)
 
 
 # Media configuration
@@ -439,7 +502,6 @@ Media = TypedDict(
     {
         "ignore": list[str],
         "truncation_size": int,
-        "show_active_only": bool,
         "truncation_size": int,
         "show_album": bool,
         "show_artist": bool,
@@ -504,7 +566,14 @@ Brightness = TypedDict("Brightness", {**BaseConfig.__annotations__, "step_size":
 
 # Recording configuration
 Recording = TypedDict(
-    "Recording", {"path": str, "icon_size": int, "tooltip": bool, "audio": bool}
+    "Recording",
+    {
+        "path": str,
+        "delayed": bool,
+        "delayed_timeout": int,
+        "tooltip": bool,
+        "audio": bool,
+    },
 )
 
 # ScreenShot configuration
@@ -512,10 +581,14 @@ ScreenShot = TypedDict(
     "ScreenShot",
     {
         "path": str,
-        "icon_size": int,
         "tooltip": bool,
+        "icon_size": int,
+        "label": bool,
+        "icon": str,
         "annotation": bool,
         "capture_sound": bool,
+        "delayed": bool,
+        "delayed_timeout": int,
     },
 )
 
@@ -536,8 +609,10 @@ class Widgets(TypedDict):
     hypridle: HyprIdle
     hyprsunset: HyprSunset
     hyprpicker: HyprPicker
+    app_launcher_button: App_Launcher_Button
     keyboard: Keyboard
     language: Language
+    gpu: Gpu
     memory: Memory
     microphone: MicroPhone
     mpris: Mpris
