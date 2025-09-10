@@ -97,11 +97,12 @@ def main():
         start_config_watching()
         logger.info(f"{Colors.INFO}[Main] Config auto-reload enabled")
 
+    logger.info(f"{Colors.INFO}[Main] Starting {APPLICATION_NAME}...")
+    logger.info(f"Starting shell... pid:{os.getpid()}")
+
     # Run the application
     app.run()
 
-    logger.info(f"{Colors.INFO}[Main] Starting {APPLICATION_NAME}...")
-    logger.info(f"Starting shell... pid:{os.getpid()}")
 
 
 if __name__ == "__main__":
