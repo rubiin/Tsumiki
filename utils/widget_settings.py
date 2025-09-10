@@ -468,7 +468,14 @@ DateTimeMenu = TypedDict(
     },
 )
 
-# TODO: custom_button_group
+
+Custom_Button_Group = TypedDict(
+    "Custom_Button_Group",
+    {
+        "buttons": list[dict[str, str]],
+        "spacing": int,
+    },
+)
 
 # World clock configuration
 WorldClock = TypedDict(
@@ -493,6 +500,28 @@ HyprPicker = TypedDict(
 # OCR configuration
 OCR = TypedDict(
     "OCR", {**BaseConfig.__annotations__, "icon": str, "quiet": bool, "show_icon": bool}
+)
+
+Collapsible_Group = TypedDict(
+    "Collapsible_Group",
+    {
+        "widgets": list[str],
+        "spacing": int,
+        "icon": str,
+        "tooltip": str,
+        "style_classes": list[str],
+    },
+)
+
+Widget_Groups = TypedDict(
+    "widget_groups",
+    [
+        {
+            "widgets": list[str],
+            "spacing": int,
+            "style_classes": list[str],
+        }
+    ],
 )
 
 
@@ -612,6 +641,7 @@ class Widgets(TypedDict):
     app_launcher_button: App_Launcher_Button
     keyboard: Keyboard
     language: Language
+    custom_button_group: Custom_Button_Group
     gpu: Gpu
     memory: Memory
     microphone: MicroPhone
@@ -649,3 +679,5 @@ class BarConfig(TypedDict):
     layout: Layout
     modules: Modules
     general: General
+    collapsible_group: Collapsible_Group
+    widget_groups: Widget_Groups
