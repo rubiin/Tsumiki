@@ -59,7 +59,8 @@ class PowerProfileItem(Button):
         self.set_active(active)
 
     def _handle_click(self, *_):
-        power_pfl_service.active_profile = self.key
+        print(f"Setting power profile to {self.profile}")
+        power_pfl_service.active_profile = self.profile
         return True
 
     def set_active(self, active: str):
