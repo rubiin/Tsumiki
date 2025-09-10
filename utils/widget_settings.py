@@ -513,16 +513,17 @@ Collapsible_Group = TypedDict(
     },
 )
 
-Widget_Groups = TypedDict(
-    "widget_groups",
-    [
+
+Widget_Groups = list[
+    TypedDict(
+        "WidgetGroup",
         {
             "widgets": list[str],
             "spacing": int,
             "style_classes": list[str],
-        }
-    ],
-)
+        },
+    )
+]
 
 
 # Media configuration
