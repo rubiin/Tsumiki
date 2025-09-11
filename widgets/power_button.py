@@ -59,7 +59,7 @@ class PowerMenuPopup(PopupWindow):
             child: Widget = child
             child.set_can_focus(can_focus)
 
-    def toggle_popup(self):
+    def toggle(self):
         self.set_action_buttons_focus(True)
         return super().toggle_popup()
 
@@ -122,6 +122,12 @@ class PowerControlButtons(HoverButton):
 class PowerWidget(ButtonWidget):
     """A widget to power off the system."""
 
+    def show_popover(self, *_):
+        """Show the popover."""
+        if self.popup is None:
+            self.popup = PowerMenuPopup(self.config)
+        self.popup.toggle()
+
     def __init__(self, **kwargs):
         super().__init__(name="power", **kwargs)
 
@@ -141,5 +147,5 @@ class PowerWidget(ButtonWidget):
 
         self.connect(
             "clicked",
-            lambda *_: PowerMenuPopup(self.config).toggle_popup(),
+            self.show_popover,
         )

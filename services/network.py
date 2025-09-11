@@ -478,11 +478,7 @@ class NetworkService(Service):
     def _get_device(self, device_type) -> Any:
         devices: list[NM.Device] = self._client.get_devices()  # type: ignore
         return next(
-            (
-                x
-                for x in devices
-                if x.get_device_type() == device_type
-            ),
+            (x for x in devices if x.get_device_type() == device_type),
             None,
         )
 
