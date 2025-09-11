@@ -20,7 +20,6 @@
 }
 
 #power-control-button {
-  padding: common.toEm(40) common.toEm(120);
   border-radius: 0;
   border-color: theme.$surface-disabled;
   text-decoration-color: theme.$text-main;
@@ -32,8 +31,13 @@
   background-position: center;
   background-size: 25%;
 
+  .power-button-container {
+    padding: common.toEm(80) common.toEm(120);
+  }
+
   label {
-    margin-top: 4.5em;
+    margin-top: 10px;
+    font-size: 14px;
   }
 
   &:focus,
@@ -41,5 +45,14 @@
   &:hover {
     background-color: #3700B3;
     outline-style: none;
+
+
+    #svg-icon {
+      -gtk-icon-effect: highlight;
+    }
+
+    label {
+      color: theme.$text-secondary;
+    }
   }
 }

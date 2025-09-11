@@ -22,6 +22,7 @@ class PowerMenuPopup(PopupWindow):
     ):
         self.icon_size = config.get("icon_size", 16)
 
+        self.icon_dir = get_relative_path("../assets/icons/svg/")
         power_buttons_list = config.get("buttons", [])
         self.grid = Grid(
             column_homogeneous=True,
@@ -36,6 +37,7 @@ class PowerMenuPopup(PopupWindow):
                     command=value,
                     size=self.icon_size,
                     parent=self,
+                    icon_path=self.icon_dir,
                 )
                 for key, value in power_buttons_list.items()
             ],
@@ -73,6 +75,7 @@ class PowerControlButtons(HoverButton):
         parent: PopupWindow,
         name: str,
         command: str,
+        icon_path: str,
         size: int,
         show_label=True,
         **kwargs,
@@ -83,27 +86,34 @@ class PowerControlButtons(HoverButton):
         self.size = size
         self.parent = parent
 
+        self.container_box = Box(
+            style_classes="power-button-container",
+            orientation="v",
+            children=[
+                Svg(
+                    svg_file=f"{icon_path}/{name}.svg",
+                    size=size,
+                    name="svg-icon",
+                ),
+            ],
+        )
+
         super().__init__(
             config=config,
             orientation="v",
             name="power-control-button",
             on_clicked=self.on_button_press,
-            child=Box(
-                orientation="v",
-                children=[
-                    Svg(
-                        svg_file=get_relative_path(f"../assets/icons/svg/{name}.svg"),
-                        size=size,
-                    ),
-                    Label(
-                        label=name.capitalize(),
-                        style_classes="panel-text",
-                        visible=show_label,
-                    ),
-                ],
-            ),
+            child=self.container_box,
             **kwargs,
         )
+
+        if show_label:
+            self.container_box.add(
+                Label(
+                    label=name.capitalize(),
+                    style_classes="panel-text",
+                )
+            )
 
     def on_button_press(self, *_):
         self.parent.toggle_popup()
@@ -130,6 +140,8 @@ class PowerWidget(ButtonWidget):
 
     def __init__(self, **kwargs):
         super().__init__(name="power", **kwargs)
+
+        self.popup = None
 
         if self.config.get("show_icon", True):
             # Create a TextIcon with the specified icon and size
