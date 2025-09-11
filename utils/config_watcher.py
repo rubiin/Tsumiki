@@ -27,13 +27,15 @@ class ConfigWatcher:
         self.monitors: list[Gio.FileMonitor] = []
         self.restart_pending = False
 
-        self.init_script = get_relative_path("../init.sh")
+        self.root_dir = get_relative_path("..")
+
+        self.init_script = f"{self.root_dir}/init.sh"
 
         # Files to monitor
         config_files = [
-            get_relative_path("../config.json"),
-            get_relative_path("../config.toml"),
-            get_relative_path("../theme.json"),
+            f"{self.root_dir}/config.json",
+            f"{self.root_dir}/config.toml",
+            f"{self.root_dir}/theme.json",
         ]
 
         self.RESTART_DELAY_MS = 1500

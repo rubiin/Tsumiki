@@ -32,9 +32,12 @@ class TsumikiConfig:
             return
 
         # TODO: always read from .config/tsumuki/config.json
-        self.json_config_file = get_relative_path("../config.json")
-        self.toml_config_file = get_relative_path("../config.toml")
-        self.theme_config_file = get_relative_path("../theme.json")
+
+        self.root_dir = get_relative_path("..")
+
+        self.json_config_file = f"{self.root_dir}/config.json"
+        self.toml_config_file = f"{self.root_dir}/config.toml"
+        self.theme_config_file = f"{self.root_dir}/theme.json"
 
         self.config = self.default_config()
 
@@ -88,7 +91,7 @@ class TsumikiConfig:
             )
             settings += f"${setting}: {value};\n"
 
-        with open(get_relative_path("../styles/_settings.scss"), "w") as f:
+        with open(f"{self.root_dir}/styles/_settings.scss", "w") as f:
             f.write(settings)
 
 

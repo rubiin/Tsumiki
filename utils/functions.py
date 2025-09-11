@@ -170,14 +170,15 @@ def ttl_lru_cache(seconds_to_live: int, maxsize: int = 128):
 # Function to copy the selected theme to the main styles directory
 @run_in_thread
 def copy_theme(theme: str):
-    destination_file = get_relative_path("../styles/theme.scss")
-    source_file = get_relative_path(f"../styles/themes/{theme}.scss")
+    theme_dir = get_relative_path("../styles")
+    destination_file = f"{theme_dir}/theme.scss"
+    source_file = f"{theme_dir}/themes/{theme}.scss"
 
     if not os.path.exists(source_file):
         logger.warning(
             f"{Colors.WARNING}Warning: The theme file '{theme}.scss' was not found. Using default theme."  # noqa: E501
         )
-        source_file = get_relative_path("../styles/themes/catpuccin-mocha.scss")
+        source_file = f"{theme_dir}/themes/catpuccin-mocha.scss"
 
     try:
         shutil.copyfile(source_file, destination_file)
