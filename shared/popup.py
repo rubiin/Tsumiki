@@ -244,6 +244,7 @@ class PopupWindow(Window):
         )
 
         super().__init__(
+            name=name,
             layer=self._layer,
             keyboard_mode=keyboard_mode,
             visible=False,

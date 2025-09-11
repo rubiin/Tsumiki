@@ -4,6 +4,10 @@
 @use "variable";
 
 
+#power-menu-overlay {
+  background: rgba(0, 0, 0, 0.4);
+}
+
 #power {
   border-radius: variable.$bar-widgets-power-border-radius;
   border: if(variable.$bar-widgets-power-border-enabled, variable.$border, none);

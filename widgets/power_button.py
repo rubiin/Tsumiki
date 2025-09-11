@@ -53,6 +53,7 @@ class PowerMenuPopup(PopupWindow):
             anchor="center",
             enable_inhibitor=True,
             keyboard_mode="exclusive",
+            name="power-menu-overlay",
             **kwargs,
         )
 
