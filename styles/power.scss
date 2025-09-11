@@ -25,12 +25,9 @@
 
 #power-control-button {
   border-radius: 0;
-  border-color: theme.$surface-disabled;
   text-decoration-color: theme.$text-main;
   color: theme.$text-main;
   background-color: #1E1E1E;
-  border-style: solid;
-  border-width: 1px;
   background-repeat: no-repeat;
   background-position: center;
   background-size: 25%;
@@ -47,13 +44,13 @@
   &:focus,
   &:active,
   &:hover {
-    background-color: #3700B3;
+    border-color: theme.$text-main;
+    border-style: solid;
+    border-width: 1px;
+    background-color: #19191a;
     outline-style: none;
 
 
-    #svg-icon {
-      -gtk-icon-effect: highlight;
-    }
 
     label {
       color: theme.$text-secondary;
