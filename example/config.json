@@ -7,11 +7,11 @@
 			"icon_size": 20
 		},
 		"battery": {
-			"hide_label_when_full": true,
-			"hide_when_missing": true,
 			"label": true,
 			"tooltip": true,
 			"icon_size": 14,
+			"hide_label_when_full": true,
+			"hide_when_missing": true,
 			"notifications": {
 				"low_threshold": 10,
 				"full_battery": false,
@@ -383,7 +383,8 @@
 		],
 		"middle_section": [
 			"date_time",
-			"weather"
+			"weather",
+			"overview"
 		],
 		"right_section": [
 			"@collapsible:0",
@@ -488,15 +489,15 @@
 			"enabled": true,
 			"tooltip": false,
 			"icon_size": 40,
-			"show_when_no_windows": false,
-			"ignored": [],
-			"hide_special_workspace_apps": false,
-			"layer": "top",
 			"preview_apps": true,
 			"preview_size": [
 				200,
 				130
-			]
+			],
+			"show_when_no_windows": false,
+			"ignored": [],
+			"hide_special_workspace_apps": false,
+			"layer": "top"
 		},
 		"desktop_clock": {
 			"enabled": false,
