@@ -24,7 +24,9 @@ class PowerMenuPopup(PopupWindow):
 
         self.icon_dir = get_relative_path("../assets/icons/svg/")
         power_buttons_list = config.get("buttons", [])
+
         self.grid = Grid(
+            name="power-button-menu",
             column_homogeneous=True,
             row_homogeneous=True,
         )
@@ -44,11 +46,9 @@ class PowerMenuPopup(PopupWindow):
             columns=config.get("items_per_row", 3),
         )
 
-        self.menu = Box(name="power-button-menu", orientation="v", children=self.grid)
-
         super().__init__(
-            child=self.menu,
-            transition_duration=300,
+            child=self.grid,
+            transition_duration=400,
             transition_type="slide-down",
             anchor="center",
             enable_inhibitor=True,
@@ -58,7 +58,7 @@ class PowerMenuPopup(PopupWindow):
         )
 
     def set_action_buttons_focus(self, can_focus: bool):
-        for child in self.menu.children[0]:
+        for child in self.grid.get_children():
             child: Widget = child
             child.set_can_focus(can_focus)
 
