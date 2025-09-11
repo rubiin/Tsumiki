@@ -243,13 +243,17 @@ class Wifi(Service):
 
     @Property(int, "readable")
     def internet(self):
+        active_connection = self._device.get_active_connection()
+        if not active_connection:
+            return "disconnected"
+
         return {
             NM.ActiveConnectionState.ACTIVATED: "activated",
             NM.ActiveConnectionState.ACTIVATING: "activating",
             NM.ActiveConnectionState.DEACTIVATING: "deactivating",
             NM.ActiveConnectionState.DEACTIVATED: "deactivated",
         }.get(
-            self._device.get_active_connection().get_state(),
+            active_connection.get_state(),
             "unknown",
         )
 
@@ -381,13 +385,17 @@ class Ethernet(Service):
 
     @Property(str, "readable")
     def internet(self) -> str:
+        active_connection = self._device.get_active_connection()
+        if not active_connection:
+            return "disconnected"
+
         return {
             NM.ActiveConnectionState.ACTIVATED: "activated",
             NM.ActiveConnectionState.ACTIVATING: "activating",
             NM.ActiveConnectionState.DEACTIVATING: "deactivating",
             NM.ActiveConnectionState.DEACTIVATED: "deactivated",
         }.get(
-            self._device.get_active_connection().get_state(),
+            active_connection.get_state(),
             "disconnected",
         )
 
@@ -474,7 +482,6 @@ class NetworkService(Service):
                 x
                 for x in devices
                 if x.get_device_type() == device_type
-                and x.get_active_connection() is not None
             ),
             None,
         )
