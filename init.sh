@@ -14,14 +14,8 @@ fi
 SCRIPT_PATH=$(readlink -f "$0")
 INSTALL_DIR=$(dirname "$SCRIPT_PATH")
 
-readonly RED="\033[31m"
-readonly GREEN="\033[32m"
-readonly YELLOW="\033[33m"
-readonly BLUE="\033[34m"
-readonly CYAN="\033[36m"
-readonly RESET="\033[0m"
-
 DETACHED_MODE=false
+FORCE_REINSTALL=false
 
 SHOULD_START=false
 SHOULD_UPDATE=false
@@ -29,10 +23,10 @@ SHOULD_INSTALL=false
 SHOULD_SETUP=false
 SHOULD_STOP=false
 
-log_info() { echo -e "${BLUE}ℹ️  $1${RESET}"; }
-log_success() { echo -e "${GREEN}✅ $1${RESET}"; }
-log_warning() { echo -e "${YELLOW}⚠️  $1${RESET}"; }
-log_error() { echo -e "${RED}❌ $1${RESET}" >&2; }
+log_info() { echo -e "\033[34mℹ️  $1\033[0m"; }
+log_success() { echo -e "\033[32m✅ $1\033[0m"; }
+log_warning() { echo -e "\033[33m⚠️  $1\033[0m"; }
+log_error() { echo -e "\033[31m❌ $1\033[0m" >&2; }
 
 check_prerequisites() {
 	if ! command -v git &>/dev/null; then
@@ -91,11 +85,22 @@ setup_venv() {
 	ensure_venv activate
 
 	log_info "📦 Installing Python dependencies..."
-	if ! pip install -r requirements.txt; then
-		log_error "❌ Failed to install packages from requirements.txt."
-		deactivate
-		exit 1
+
+	if [ "$FORCE_REINSTALL" = true ]; then
+		log_warning "🔄 Force reinstalling packages..."
+		if ! pip install --force-reinstall -r requirements.txt; then
+			log_error "❌ Failed to force reinstall packages from requirements.txt."
+			deactivate
+			exit 1
+		fi
+	else
+		if ! pip install -r requirements.txt; then
+			log_error "❌ Failed to install packages from requirements.txt."
+			deactivate
+			exit 1
+		fi
 	fi
+
 	log_success "✅ Python dependencies installed successfully."
 
 	deactivate
@@ -262,15 +267,16 @@ usage() {
 	log_success "✅ Available options:"
 	log_success "  ▶️  -start         Start the bar"
 	log_success "  🔄  -d             Enable detached mode (run in background)"
-	log_success "  🛑  -stop          Stop running instances"
+	log_success "  �  -f             Force reinstall Python packages during setup"
+	log_success "  �🛑  -stop          Stop running instances"
 	log_success "  ⬆️  -update        Update from git"
 	log_success "  📦  -install       Install system packages"
 	log_success "  🐍  -setup         Setup virtual environment and Python dependencies"
-	log_success "  🛠️  -install-setup Install packages and setup virtual environment"
-	log_success "  🔁  -restart       Kill existing instances and start the bar"
+	log_success "    -restart       Kill existing instances and start the bar"
 	log_warning "⚡ Examples:"
 	log_info "  $0 -start                    # ▶️ Just start the bar"
 	log_info "  $0 -d -start                 # ▶️ Detached start"
+	log_info "  $0 -f -setup                 # 🔄 Force reinstall Python packages"
 	log_info "  $0 -stop                     # 🛑 Stop running instances"
 	log_info "  $0 -update -start            # ⬆️ Update then start"
 	log_info "  $0 -install -setup -start    # 📦 Full setup and start"
@@ -297,6 +303,10 @@ for arg in "$@"; do
 		log_warning "Detached mode enabled"
 		DETACHED_MODE=true
 		;;
+	-f)
+		log_warning "Force reinstall mode enabled"
+		FORCE_REINSTALL=true
+		;;
 	-stop)
 		SHOULD_STOP=true
 		;;
@@ -307,10 +317,6 @@ for arg in "$@"; do
 		SHOULD_INSTALL=true
 		;;
 	-setup)
-		SHOULD_SETUP=true
-		;;
-	-install-setup)
-		SHOULD_INSTALL=true
 		SHOULD_SETUP=true
 		;;
 	-restart)
