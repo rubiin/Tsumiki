@@ -172,6 +172,7 @@ class WallPaperPickerOverlay(PopupWindow):
         self.wallpaper_box = WallpaperPickerBox()
         super().__init__(
             layer="top",
+            name="wallpaper",
             child=Box(
                 orientation="v",
                 spacing=10,

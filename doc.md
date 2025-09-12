@@ -66,11 +66,10 @@
   - **`cava`**: `object`
     - **`bars`**: `int` (default: 10)
     - **`color`**: `str` (default: "#89b4fa")
-  - **`overview`**: `object`
+  - **`overview_button`**: `object`
     - **`icon`**: `str` (default: "󰡃")
     - **`tooltip`**: `bool` (default: true)
     - **`label`**: `bool` (default: false)
-    - **`show_occupied`**: `bool` (default: true)
   - **`click_counter`**: `object`
     - **`count`**: `int` (default: 0)
   - **`cpu`**: `object`
@@ -291,6 +290,12 @@
     - **`layer`**: `str` (default: "top")
     - **`auto_hide`**: `bool` (default: false)
     - **`location`**: `str` (default: "top")
+  - **`overview`**: `object`
+    - **`enabled`**: `bool` (default: false)
+    - **`layer`**: `str` (default: "top")
+    - **`anchor`**: `str` (default: "center")
+    - **`transition_type`**: `str` (default: "crossfade")
+    - **`transition_duration`**: `int` (default: 350)
   - **`osd`**: `object`
     - **`enabled`**: `bool` (default: false)
     - **`timeout`**: `int` (default: 1500)

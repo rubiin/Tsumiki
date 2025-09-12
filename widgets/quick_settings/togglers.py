@@ -17,7 +17,7 @@ class QuickSettingToggler(CommandSwitcher):
         name: str,
         enabled_icon: str,
         disabled_icon: str,
-        args,
+        args="",
         **kwargs,
     ):
         super().__init__(

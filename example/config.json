@@ -19,11 +19,10 @@
 				"charging": false
 			}
 		},
-		"overview": {
+		"overview_button": {
 			"icon": "󰡃",
 			"tooltip": true,
-			"label": false,
-			"show_occupied": true
+			"label": false
 		},
 		"power": {
 			"icon": "󰐥",
@@ -438,7 +437,7 @@
 			"location": "top"
 		},
 		"app_launcher": {
-			"enabled": false,
+			"enabled": true,
 			"tooltip": false,
 			"icon_size": 40,
 			"ignored": [],
@@ -448,6 +447,13 @@
 			"layout": "list",
 			"grid_columns": 3
 		},
+		"overview": {
+			"enabled": true,
+			"layer": "top",
+			"anchor": "center",
+			"transition_type": "crossfade",
+			"transition_duration": 350
+		},
 		"notification": {
 			"enabled": true,
 			"dnd_on_screencast": true,
@@ -456,11 +462,11 @@
 			"ignored": [],
 			"timeout": 3000,
 			"max_actions": 3,
-			"transition_type": "slide-left",
-			"transition_duration": 350,
 			"play_sound": true,
 			"per_app_limits": {},
 			"sound_file": "notification4",
+			"transition_type": "slide-left",
+			"transition_duration": 350,
 			"persist": true,
 			"display_actions_on_hover": false,
 			"dismiss_on_hover": false

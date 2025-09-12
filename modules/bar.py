@@ -27,7 +27,7 @@ from widgets.language import LanguageWidget
 from widgets.microphone import MicrophoneIndicatorWidget
 from widgets.mpris import MprisWidget
 from widgets.ocr import OCRWidget
-from widgets.overview import OverviewWidget
+from widgets.overview_button import OverviewButtonWidget
 from widgets.power_button import PowerWidget
 from widgets.quick_settings.quick_settings import QuickSettingsButtonWidget
 from widgets.recorder import RecorderWidget
@@ -83,7 +83,7 @@ class StatusBar(Window):
             "mpris": MprisWidget,
             "network_usage": NetworkUsageWidget,
             "ocr": OCRWidget,
-            "overview": OverviewWidget,
+            "overview_button": OverviewButtonWidget,
             "power": PowerWidget,
             "recorder": RecorderWidget,
             "screenshot": ScreenShotWidget,

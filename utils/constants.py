@@ -101,12 +101,7 @@ DEFAULT_CONFIG = {
         },
         "wallpaper": {"icon": "󰸉", "label": False, "tooltip": True},
         "cava": {"bars": 10, "color": "#89b4fa"},
-        "overview": {
-            "icon": "󰡃",
-            "tooltip": True,
-            "label": False,
-            "show_occupied": True,
-        },
+        "overview_button": {"icon": "󰡃", "tooltip": True, "label": False},
         "click_counter": {"count": 0},
         "cpu": {
             "show_icon": True,
@@ -355,6 +350,13 @@ DEFAULT_CONFIG = {
     },
     "modules": {
         "bar": {"layer": "top", "auto_hide": False, "location": "top"},
+        "overview": {
+            "enabled": False,
+            "layer": "top",
+            "anchor": "center",
+            "transition_type": "crossfade",
+            "transition_duration": 350,
+        },
         "osd": {
             "enabled": False,
             "timeout": 1500,

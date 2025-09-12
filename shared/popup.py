@@ -285,6 +285,9 @@ class PopupWindow(Window):
         self.popup_visible = not self.popup_visible
         self.reveal_child.revealer.set_reveal_child(self.popup_visible)
 
+    def toggle(self):
+        return self.toggle_popup()
+
     def popup_timeout(self):
         curr_monitor = self.hyprland_monitor.get_current_gdk_monitor_id()
         self.monitor = curr_monitor

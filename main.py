@@ -60,6 +60,11 @@ def main():
 
         app.add_window(NotificationPopup(widget_config))
 
+    if module_options["overview"]["enabled"]:
+        from modules.overview import OverViewOverlay
+
+        app.add_window(OverViewOverlay(widget_config))
+
     if module_options["screen_corners"]["enabled"]:
         from modules.corners import ScreenCorners
 
@@ -69,6 +74,11 @@ def main():
         from modules.quotes import DesktopQuote
 
         app.add_window(DesktopQuote(widget_config))
+
+    if module_options["app_launcher"]["enabled"]:
+        from modules.app_launcher import AppLauncher
+
+        app.add_window(AppLauncher(widget_config))
 
     if module_options["dock"]["enabled"]:
         from modules.dock import Dock
@@ -99,6 +109,25 @@ def main():
 
     logger.info(f"{Colors.INFO}[Main] Starting {APPLICATION_NAME}...")
     logger.info(f"Starting shell... pid:{os.getpid()}")
+
+    @Application.action()
+    def toggle_window(name: str):
+        logger.info("[Main] Toggling window", name)
+        available_windows = [window.get_name() for window in app.get_windows()]
+
+        if name not in available_windows:
+            logger.warning(
+                f"{Colors.WARNING}[Main] No window named '{name}' found!",
+                f"Available windows: {available_windows}",
+            )
+            return False
+
+        window = filter(lambda w: w.get_name() == name, app.get_windows())
+        if window:
+            window = next(window)
+            window.toggle()
+
+        return False
 
     # Run the application
     app.run()

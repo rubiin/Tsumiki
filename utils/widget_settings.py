@@ -170,6 +170,18 @@ Quotes = TypedDict(
 )
 
 
+# Overview configuration
+Overview = TypedDict(
+    "Overview",
+    {
+        "enabled": bool,
+        "anchor": Anchor,
+        "layer": Layer,
+        "transition_type": Reveal_Animations,
+        "transition_duration": int,
+    },
+)
+
 # ScreenCorners configuration
 ScreenCorners = TypedDict(
     "ScreenCorners",
@@ -427,8 +439,8 @@ MicroPhone = TypedDict("MicroPhone", {**BaseConfig.__annotations__, "show_icon":
 Cava = TypedDict("Cava", {"bars": int, "color": str})
 
 # Overview configuration
-Overview = TypedDict(
-    "Overview", {"icon": str, **BaseConfig.__annotations__, "show_occupied": bool}
+Overview_Button = TypedDict(
+    "Overview_Button", {"icon": str, **BaseConfig.__annotations__}
 )
 
 
@@ -650,7 +662,7 @@ class Widgets(TypedDict):
     mpris: Mpris
     network_usage: NetworkUsage
     ocr: OCR
-    overview: Overview
+    overview_button: Overview_Button
     wallpaper: WallPaper
     power: PowerButton
     quick_settings: QuickSettings

@@ -1,3 +1,5 @@
+import json
+
 import gi
 from fabric.hyprland.widgets import get_hyprland_connection
 from fabric.utils.helpers import bulk_connect
@@ -14,6 +16,7 @@ from loguru import logger
 from shared.popup import PopupWindow
 from utils.app import AppUtils
 from utils.icon_resolver import IconResolver
+from utils.widget_settings import BarConfig
 from utils.widget_utils import create_surface_from_widget
 
 gi.require_versions({"Gtk": "3.0", "Gdk": "3.0", "GdkPixbuf": "2.0"})
@@ -278,14 +281,14 @@ class OverviewMenu(Box):
 
         monitors = {
             monitor["id"]: (monitor["x"], monitor["y"], monitor["transform"])
-            for monitor in (
+            for monitor in json.loads(
                 self._hyprland_connection.send_command("j/monitors")
                 .reply.decode()
                 .strip("\n")
             )
         }
 
-        for client in (
+        for client in json.loads(
             self._hyprland_connection.send_command("j/clients")
             .reply.decode()
             .strip("\n")
@@ -328,16 +331,18 @@ class OverviewMenu(Box):
 class OverViewOverlay(PopupWindow):
     """A popup window for selecting wallpapers."""
 
-    def __init__(self):
+    def __init__(self, config: BarConfig):
+        self.config = config.get("modules", {}).get("overview", {})
         super().__init__(
-            layer="top",
+            name="overview",
+            layer=self.config.get("layer", "top"),
             child=Box(
                 orientation="v",
                 children=[OverviewMenu()],
             ),
-            transition_duration=300,
-            transition_type="crossfade",
-            anchor="center",
+            transition_duration=self.config.get("transition_duration", 350),
+            transition_type=self.config.get("transition_type", "crossfade"),
+            anchor=self.config.get("anchor", "center"),
             enable_inhibitor=True,
             keyboard_mode="exclusive",
         )
