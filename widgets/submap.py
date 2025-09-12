@@ -39,9 +39,8 @@ class SubMapWidget(ButtonWidget):
             "[Submap] Connected to the hyprland socket"
         )
 
-    def _handle_reply(self, data: dict):
+    def _handle_reply(self, submap: str):
         try:
-            submap = data.get("submap", "default")
             if submap == "unknown request":
                 submap = "default"
 
@@ -61,7 +60,7 @@ class SubMapWidget(ButtonWidget):
     def _get_submap(self, *_):
         try:
             self._hyprland_connection.send_command_async(
-                "j/submap",
+                "submap",
                 lambda res, *_: self._handle_reply(res.reply.decode().strip("\n")),
             )
 
