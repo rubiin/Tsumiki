@@ -383,8 +383,7 @@
 		],
 		"middle_section": [
 			"date_time",
-			"weather",
-			"overview"
+			"weather"
 		],
 		"right_section": [
 			"@collapsible:0",
@@ -488,6 +487,7 @@
 		"dock": {
 			"enabled": true,
 			"tooltip": false,
+			"behavior": "intellihide",
 			"icon_size": 40,
 			"preview_apps": true,
 			"preview_size": [
@@ -496,6 +496,7 @@
 			],
 			"show_when_no_windows": false,
 			"ignored": [],
+			"always_show_focused": true,
 			"hide_special_workspace_apps": false,
 			"layer": "top"
 		},

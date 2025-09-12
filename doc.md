@@ -329,6 +329,7 @@
     - **`enabled`**: `bool` (default: false)
     - **`ignored_apps`**: `list` (default: [])
     - **`icon_size`**: `int` (default: 40)
+    - **`behavior`**: `str` (default: "intellihide")
     - **`tooltip`**: `bool` (default: false)
     - **`layer`**: `str` (default: "top")
     - **`show_when_no_windows`**: `bool` (default: false)

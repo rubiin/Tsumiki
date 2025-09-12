@@ -199,6 +199,7 @@ Dock = TypedDict(
     {
         "enabled": bool,
         "tooltip": bool,
+        "behavior": Literal["always_show", "intellihide"],
         "icon_size": int,
         "preview_apps": bool,
         "preview_size": tuple[int, int],

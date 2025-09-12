@@ -1947,6 +1947,12 @@
 							"description": "Determines whether screen corners are enabled.",
 							"default": true
 						},
+						"behavior": {
+							"type": "string",
+							"enum": ["always_show", "intellihide"],
+							"description": "Specifies the behavior of the dock.",
+							"default": "intellihide"
+						},
 						"tooltip": {
 							"type": "boolean",
 							"description": "Determines whether the dock has a tooltip.",

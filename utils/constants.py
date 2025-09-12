@@ -397,6 +397,7 @@ DEFAULT_CONFIG = {
             "enabled": False,
             "ignored_apps": [],
             "icon_size": 40,
+            "behavior": "intellihide",  # can be "always_show" or "intellihide"
             "tooltip": False,
             "layer": "top",
             "show_when_no_windows": False,

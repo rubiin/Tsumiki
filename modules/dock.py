@@ -87,7 +87,7 @@ class AppBar(Box):
                         icon_name="view-app-grid-symbolic",
                         icon_size=self.icon_size,
                     ),
-                    on_button_press_event=lambda *_: (self._on_launcher_clicked()),
+                    on_button_press_event=self.on_launcher_clicked,
                 )
             ],
         )
@@ -399,14 +399,22 @@ class Dock(Window):
             transition_duration=500,
             transition_type="slide-up",
         )
-        self.children = EventBox(
-            events=["enter-notify", "leave-notify"],
-            child=Box(style="min-height: 1px", children=self.revealer),
-            on_enter_notify_event=lambda *_: self.revealer.set_reveal_child(True),
-            on_leave_notify_event=lambda *_: self.revealer.set_reveal_child(False),
-        )
 
-        if self.config.get("show_when_no_windows", False):
+        if self.config.get("behavior", "always_show") == "always_show":
+            self.revealer.set_reveal_child(True)
+            self.children = self.revealer
+        else:
+            self.children = EventBox(
+                events=["enter-notify", "leave-notify"],
+                child=Box(style="min-height: 1px", children=self.revealer),
+                on_enter_notify_event=lambda *_: self.revealer.set_reveal_child(True),
+                on_leave_notify_event=lambda *_: self.revealer.set_reveal_child(False),
+            )
+
+        if (
+            self.config.get("show_when_no_windows", False)
+            and self.config.get("behavior", "always_hide") == "intellihide"
+        ):
             self._hyprland_connection = get_hyprland_connection()
 
             bulk_connect(
