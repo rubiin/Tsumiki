@@ -23,7 +23,7 @@ class ScreenCorners(Window):
     """A window that displays all four corners."""
 
     def __init__(self, config, **kwargs):
-        self.config = config["modules"]["screen_corners"]
+        self.config = config.get("modules", {}).get("screen_corners", {})
 
         size = self.config.get("size", 20)
         super().__init__(

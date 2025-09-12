@@ -281,7 +281,7 @@ class QuickSettingsMenu(Box):
 
         # Determine slider box class based on number of shortcuts
         if self.config.get("shortcuts", {}).get("enabled", False):
-            num_shortcuts = len(self.config["shortcuts"]["items"])
+            num_shortcuts = len(self.config.get("shortcuts", {}).get("items", []))
             if num_shortcuts > 2 and num_shortcuts <= 4:
                 slider_class = "slider-box-shorter"
             elif num_shortcuts <= 2 and num_shortcuts > 0:
@@ -328,7 +328,9 @@ class QuickSettingsMenu(Box):
                 style_classes=["section-box", "shortcuts-box"],
                 children=(
                     ShortcutsContainer(
-                        shortcuts_config=self.config["shortcuts"]["items"],
+                        shortcuts_config=self.config.get("shortcuts", {}).get(
+                            "items", []
+                        ),
                         style_classes="shortcuts-grid",
                         v_align="start",
                         h_align="fill",
@@ -365,7 +367,7 @@ class QuickSettingsMenu(Box):
                     style_classes="section-box",
                     children=(
                         PlayerBoxStack(
-                            MprisPlayerManager(), config=self.config["media"]
+                            MprisPlayerManager(), config=self.config.get("media", {})
                         ),
                     ),
                 ),

@@ -13,7 +13,7 @@ class DesktopQuote(Window):
     """
 
     def __init__(self, config, **kwargs):
-        self.config = config["modules"]["quotes"]
+        self.config = config.get("modules", {}).get("quotes", {})
 
         self.quote_label = Label(
             name="quote-label",

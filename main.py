@@ -25,10 +25,10 @@ def process_and_apply_css(app: Application):
         app.set_stylesheet_from_string("")
 
 
-general_options = widget_config["general"]
-module_options = widget_config["modules"]
+general_options = widget_config.get("general", {})
+module_options = widget_config.get("modules", {})
 
-if not general_options["debug"]:
+if not general_options.get("debug", False):
     for log in [
         "fabric",
         "widgets",
@@ -44,7 +44,7 @@ def main():
     """Main function to run the application."""
 
     helpers.ensure_directory(APP_DATA_DIRECTORY)
-    helpers.copy_theme(theme_config["name"])
+    helpers.copy_theme(theme_config.get("name", "catppuccin-mocha"))
     helpers.check_executable_exists("sass")
 
     helpers.set_process_name(APPLICATION_NAME)

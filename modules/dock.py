@@ -388,7 +388,7 @@ class Dock(Window):
     """A dock for applications."""
 
     def __init__(self, config):
-        self.config = config["modules"]["dock"]
+        self.config = config.get("modules", {}).get("dock", {})
         super().__init__(
             layer=self.config.get("layer", "top"),
             anchor="bottom-center",

@@ -62,19 +62,18 @@ class UpdatesWidget(ButtonWidget):
 
     def _build_base_command(self) -> str:
         script = get_relative_path("../assets/scripts/systemupdates.sh")
-        command = [f"{script} os={self.config['os']}"]
+        command = [f"{script} os={self.config.get('os', 'linux')}"]
 
         # Add terminal option
-        terminal = self.config.get("terminal", "kitty")
-        command.append(f"--terminal={terminal}")
+        command.append(f"--terminal={self.config.get('terminal', 'kitty')}")
 
-        if self.config.get("flatpak", False):
-            command.append("--flatpak")
-        if self.config.get("snap", False):
-            command.append("--snap")
-        if self.config.get("brew", False):
-            command.append("--brew")
-
+        command.extend(
+            [
+                f"--{opt}"
+                for opt in ("flatpak", "snap", "brew")
+                if self.config.get(opt, False)
+            ]
+        )
         return " ".join(command)
 
     def _should_update(self, *_):
@@ -82,9 +81,9 @@ class UpdatesWidget(ButtonWidget):
         Handles the 'changed' signal from the fabricator.
         Checks if the update interval has elapsed and triggers an update if necessary.
         """
-        if (datetime.now() - self.update_time).total_seconds() >= self.config[
-            "interval"
-        ]:
+        if (datetime.now() - self.update_time).total_seconds() >= self.config.get(
+            "interval", 3600
+        ):
             self._check_update()
             self.update_time = datetime.now()
         return True
@@ -120,15 +119,6 @@ class UpdatesWidget(ButtonWidget):
 
             # Tooltip
             self.set_tooltip_text(data.get("tooltip", ""))
-
-            # Auto-hide logic
-            if self.config.get("auto_hide", False):
-                self.set_visible(total > 0)
-
-        except (json.JSONDecodeError, ValueError) as e:
-            logger.exception(
-                f"{Colors.ERROR}[UpdatesWidget] Failed to parse update data: {e}"
-            )
 
             # Auto-hide logic
             if self.config.get("auto_hide", False):

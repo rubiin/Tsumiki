@@ -9,7 +9,7 @@ class DesktopClock(Window):
     """
 
     def __init__(self, config, **kwargs):
-        self.config = config["modules"]["desktop_clock"]
+        self.config = config.get("modules", {}).get("desktop_clock", {})
 
         super().__init__(
             name="desktop_clock",

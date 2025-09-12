@@ -1,3 +1,4 @@
+from fabric import Application
 from fabric.utils import (
     exec_shell_command_async,
     get_relative_path,
@@ -7,6 +8,7 @@ from fabric.widgets.centerbox import CenterBox
 from fabric.widgets.wayland import WaylandWindow as Window
 
 from shared.collapsible_group import CollapsibleGroupWidget
+from utils.widget_settings import BarConfig
 from widgets.app_launcher_button import AppLauncherButton
 from widgets.battery import BatteryWidget
 from widgets.bluetooth import BlueToothWidget
@@ -56,7 +58,7 @@ from widgets.world_clock import WorldClockWidget
 class StatusBar(Window):
     """A widget to display the status bar panel."""
 
-    def __init__(self, config, **kwargs):
+    def __init__(self, config: BarConfig, **kwargs):
         self.widgets_list = {
             "app_launcher_button": AppLauncherButton,
             "battery": BatteryWidget,
@@ -104,8 +106,8 @@ class StatusBar(Window):
             "collapsible_group": CollapsibleGroupWidget,
         }
 
-        options = config["general"]
-        bar_config = config["modules"]["bar"]
+        options = config.get("general", {})
+        bar_config = config.get("modules", {}).get("bar", {})
         layout = self.make_layout(config)
 
         # Main bar content (back to original CenterBox layout)
@@ -167,9 +169,10 @@ class StatusBar(Window):
 
         return layout
 
+    # TODO: type
     @staticmethod
-    def create_bars(app, config):
-        multi_monitor = config["general"].get("multi_monitor", False)
+    def create_bars(app: Application, config: BarConfig) -> list:
+        multi_monitor = config.get("general", {}).get("multi_monitor", False)
         bars = (
             StatusBar._create_multi_monitor_bars(config)
             if multi_monitor
@@ -185,7 +188,7 @@ class StatusBar(Window):
         return bars
 
     @staticmethod
-    def _create_multi_monitor_bars(config):
+    def _create_multi_monitor_bars(config: BarConfig):
         from utils.monitors import HyprlandWithMonitors
 
         monitor_util = HyprlandWithMonitors()
@@ -203,7 +206,7 @@ class StatusBar(Window):
         return bars if bars else [StatusBar(config)]
 
     @staticmethod
-    def _setup_hotplug(app, config, bars):
+    def _setup_hotplug(app: Application, config: BarConfig, bars: list):
         from utils.monitors import MonitorWatcher
 
         watcher = MonitorWatcher()
@@ -229,7 +232,7 @@ class StatusBar(Window):
         watcher.start_watching()
 
     @staticmethod
-    def _recreate_bars(app, config, bars):
+    def _recreate_bars(app: Application, config: BarConfig, bars: list):
         # Remove old
         for bar in bars:
             try:

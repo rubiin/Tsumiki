@@ -409,7 +409,7 @@ class DateTimeWidget(ButtonWidget):
     def __init__(self, **kwargs):
         super().__init__(name="date_time", **kwargs)
 
-        notification_config = self.config["notification"]
+        notification_config = self.config.get("notification", {})
 
         self.popup = None
 

@@ -45,13 +45,13 @@ class NotificationPopup(Window):
 
         self.widget_config = widget_config
 
-        self.config = widget_config["modules"]["notification"]
+        self.config = widget_config.get("modules", {}).get("notification", {})
 
         self.ignored_apps = helpers.unique_list(self.config.get("ignored", []))
 
         if self.config.get("play_sound", False):
             self.sound_file = get_relative_path(
-                f"../assets/sounds/{self.config['sound_file']}.mp3"
+                f"../assets/sounds/{self.config.get('sound_file', 'notification4')}.mp3"
             )
 
         self.notifications = Box(
@@ -90,7 +90,7 @@ class NotificationPopup(Window):
 
         if self.config.get("persist", True):
             self._server.cache_notification(
-                self.widget_config, notification, self.config["max_count"]
+                self.widget_config, notification, self.config.get("max_count", 3)
             )
 
         if self.config.get("play_sound", False):

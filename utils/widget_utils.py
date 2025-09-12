@@ -19,7 +19,7 @@ from shared.animated.scale import AnimatedScale
 from .config import widget_config
 from .icons import symbolic_icons, text_icons
 
-storage_config = widget_config["widgets"]["storage"]
+storage_config = widget_config.get("widgets", {}).get("storage", {})
 
 
 gi.require_versions({"Gtk": "3.0", "Gdk": "3.0", "GdkPixbuf": "2.0"})

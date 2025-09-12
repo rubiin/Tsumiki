@@ -455,9 +455,9 @@ class WeatherWidget(ButtonWidget, BaseWeatherWidget):
 
             self.weather_icon.set_label(text_icon)
 
-        if (datetime.now() - self.update_time).total_seconds() < self.config[
-            "interval"
-        ] and not forced:
+        if (datetime.now() - self.update_time).total_seconds() < self.config.get(
+            "interval", 3600
+        ) and not forced:
             # Check if the update time is more than interval seconds ago
             return
 

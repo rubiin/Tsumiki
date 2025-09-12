@@ -266,7 +266,7 @@ class OSDContainer(Window):
         **kwargs,
     ):
         self.hide_timer_id = None
-        self.config = config["modules"]["osd"]
+        self.config = config.get("modules", {}).get("osd", {})
 
         osds = self.config.get("osds", ["brightness", "volume"])
 
