@@ -1,8 +1,6 @@
 from fabric.widgets.image import Image
 
-from modules.app_launcher import AppLauncher
 from shared.widget_container import ButtonWidget
-from utils.config import widget_config
 
 
 class AppLauncherButton(ButtonWidget):
@@ -34,6 +32,9 @@ class AppLauncherButton(ButtonWidget):
 
     def _get_or_create_launcher(self):
         """Get or create the app launcher instance."""
+        from modules.app_launcher import AppLauncher
+        from utils.config import widget_config
+
         if self.app_launcher is None:
             self.app_launcher = AppLauncher(widget_config)
 
