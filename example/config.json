@@ -448,7 +448,7 @@
 			"grid_columns": 3
 		},
 		"overview": {
-			"enabled": true,
+			"enabled": false,
 			"layer": "top",
 			"anchor": "center",
 			"transition_type": "crossfade",
