@@ -91,7 +91,7 @@ class AudioSlider(SettingSlider):
         self.icon.set_label(self._get_icon_name())
 
     @cooldown(0.1)
-    def on_scale_move(self, _, __, moved_pos):
+    def on_scale_move(self, _, __, moved_pos: float):
         """Handle volume slider changes."""
         if self.audio_stream:
             self.audio_stream.volume = moved_pos

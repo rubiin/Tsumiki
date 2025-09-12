@@ -22,7 +22,7 @@ gi.require_versions({"Gtk": "3.0", "Gray": "0.1", "GdkPixbuf": "2.0", "Gdk": "3.
 class BaseSystemTray:
     """Base class for system tray implementations."""
 
-    def on_button_click(self, button, item: Gray.Item, event):
+    def on_button_click(self, button: ButtonWidget, item: Gray.Item, event):
         if event.button in (1, 3):
             menu = item.get_property("menu")
             if menu:
@@ -35,7 +35,7 @@ class BaseSystemTray:
             else:
                 item.context_menu(event.x, event.y)
 
-    def resolve_icon(self, item, icon_size: int = 16):
+    def resolve_icon(self, item: Gray.Item, icon_size: int = 16):
         pixmap = Gray.get_pixmap_for_pixmaps(item.get_icon_pixmaps(), icon_size)
 
         try:
@@ -136,7 +136,7 @@ class SystemTrayMenu(Box, BaseSystemTray):
         self.column = 0
         self.max_columns = 3
 
-    def add_item(self, item):
+    def add_item(self, item: Gray.Item):
         button = self._bake_item_button(item)
 
         # Connect signals
@@ -160,7 +160,7 @@ class SystemTrayMenu(Box, BaseSystemTray):
         if self.parent_widget:
             self.parent_widget.update_visibility()
 
-    def on_item_removed(self, button):
+    def on_item_removed(self, button: ButtonWidget):
         """Handle when an item is removed from the menu."""
         button.destroy()
         # Update parent widget visibility if parent is available
@@ -258,7 +258,7 @@ class SystemTrayWidget(ButtonWidget, BaseSystemTray):
         # Update visibility after an item is removed
         self.update_visibility()
 
-    def on_item_button_removed(self, button):
+    def on_item_button_removed(self, button: ButtonWidget):
         """Handle when a button is removed from the main tray."""
         button.destroy()
         self.update_visibility()

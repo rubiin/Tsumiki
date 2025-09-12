@@ -150,7 +150,7 @@ class StatusBar(Window):
                 lambda _: None,
             )
 
-    def make_layout(self, config):
+    def make_layout(self, config: BarConfig):
         """assigns the three sections their respective widgets"""
         from utils.widget_factory import WidgetResolver
 
@@ -169,7 +169,6 @@ class StatusBar(Window):
 
         return layout
 
-    # TODO: type
     @staticmethod
     def create_bars(app: Application, config: BarConfig) -> list:
         multi_monitor = config.get("general", {}).get("multi_monitor", False)

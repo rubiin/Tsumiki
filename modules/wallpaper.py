@@ -8,6 +8,7 @@ from fabric.widgets.grid import Grid
 from fabric.widgets.image import Image
 from fabric.widgets.label import Label
 from fabric.widgets.scrolledwindow import ScrolledWindow
+from gi.repository import Gtk
 from loguru import logger
 from PIL import Image as PILImage
 
@@ -152,7 +153,7 @@ class WallpaperPickerBox(ScrolledWindow):
         self._loaded_count = end
         self.loading = False
 
-    def on_scroll(self, adjustment):
+    def on_scroll(self, adjustment: Gtk.Adjustment):
         """Trigger loading more wallpapers when scrolling near the bottom."""
 
         value = adjustment.get_value()

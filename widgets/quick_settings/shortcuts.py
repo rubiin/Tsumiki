@@ -56,6 +56,9 @@ class ShortcutButton(HoverButton):
             logger.exception(f"Error executing shortcut command: {e}")
 
 
+# TODO: type
+
+
 class ShortcutsContainer(Box):
     """A container for the shortcuts grid with styling support."""
 

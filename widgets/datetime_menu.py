@@ -328,7 +328,7 @@ class DateNotificationMenu(Box):
         self.loaded_count += items_to_add
         self.loading = False
 
-    def on_scroll(self, adjustment):
+    def on_scroll(self, adjustment: Gtk.Adjustment):
         """Load more notifications when user scrolls near the bottom."""
         value = adjustment.get_value()
         upper = adjustment.get_upper()
@@ -337,7 +337,7 @@ class DateNotificationMenu(Box):
         if value + page_size >= upper - 50:
             self._load_next_batch()
 
-    def on_dnd_switch_toggled(self, switch, state):
+    def on_dnd_switch_toggled(self, switch: Gtk.Switch, state):
         notification_service.dont_disturb = switch.get_active()
 
     def on_dnd_switch(self, _, value, *args):

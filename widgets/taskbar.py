@@ -23,7 +23,9 @@ class TaskBarWidget(BoxWidget):
         self._manager = Glace.Manager()
         self._manager.connect("client-added", self.on_client_added)
 
-    def on_app_id(self, client, client_image: Image, client_button: Button, *_):
+    def on_app_id(
+        self, client: Glace.Client, client_image: Image, client_button: Button, *_
+    ):
         client_image.set_from_pixbuf(
             self.icon_resolver.get_icon_pixbuf(
                 client.get_app_id(), self.config.get("icon_size", 22)

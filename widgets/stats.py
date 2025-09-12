@@ -84,7 +84,7 @@ class CpuWidget(ButtonWidget):
         # Set up a fabricator to call the update_label method when the CPU usage changes
         util_fabricator.connect("changed", self._update_ui)
 
-    def set_cpu_name(self, cpu_name):
+    def set_cpu_name(self, cpu_name: str):
         self.cpu_name = cpu_name.strip()
 
     def _update_ui(self, _, value: dict):
@@ -519,7 +519,7 @@ class NetworkUsageWidget(ButtonWidget):
         # Set up a fabricator to call the update_label method at specified intervals
         util_fabricator.connect("changed", self._update_ui)
 
-    def format_speed(self, speed):
+    def format_speed(self, speed: int):
         # speed is in bytes/ms, so *1000 = bytes/s
         speed_bps = speed * 1000
         if speed_bps < 1024:

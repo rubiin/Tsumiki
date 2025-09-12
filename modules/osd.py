@@ -14,6 +14,7 @@ from services.brightness import BrightnessService
 from shared.widget_container import BaseWidget
 from utils.icons import symbolic_icons
 from utils.types import Keyboard_Mode
+from utils.widget_settings import BarConfig
 from utils.widget_utils import (
     create_scale,
     get_audio_icon_name,
@@ -83,7 +84,7 @@ class BrightnessOSDContainer(GenericOSDContainer):
         "brightness-changed": (GObject.SignalFlags.RUN_FIRST, None, (int,))
     }
 
-    def __init__(self, config, **kwargs):
+    def __init__(self, config: BarConfig, **kwargs):
         super().__init__(
             config=config,
             **kwargs,

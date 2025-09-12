@@ -1,5 +1,3 @@
-import json
-
 from fabric.hyprland.widgets import get_hyprland_connection
 from fabric.widgets.label import Label
 from loguru import logger
@@ -41,9 +39,8 @@ class SubMapWidget(ButtonWidget):
             "[Submap] Connected to the hyprland socket"
         )
 
-    def _handle_reply(self, reply: str):
+    def _handle_reply(self, data: dict):
         try:
-            data = json.loads(reply)
             submap = data.get("submap", "default")
             if submap == "unknown request":
                 submap = "default"

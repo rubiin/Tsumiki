@@ -5,6 +5,7 @@ from fabric.widgets.wayland import WaylandWindow as Window
 
 from services.quotes import QuotesService
 from utils.functions import convert_seconds_to_milliseconds
+from utils.widget_settings import BarConfig
 
 
 class DesktopQuote(Window):
@@ -12,7 +13,7 @@ class DesktopQuote(Window):
     A simple desktop quote widget.
     """
 
-    def __init__(self, config, **kwargs):
+    def __init__(self, config: BarConfig, **kwargs):
         self.config = config.get("modules", {}).get("quotes", {})
 
         self.quote_label = Label(

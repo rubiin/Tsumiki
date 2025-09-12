@@ -4,6 +4,8 @@ from fabric.widgets.box import Box
 from fabric.widgets.shapes import Corner
 from fabric.widgets.wayland import WaylandWindow as Window
 
+from utils.widget_settings import BarConfig
+
 
 class SideCorner(Box):
     """A container for a corner shape."""
@@ -22,7 +24,7 @@ class SideCorner(Box):
 class ScreenCorners(Window):
     """A window that displays all four corners."""
 
-    def __init__(self, config, **kwargs):
+    def __init__(self, config: BarConfig, **kwargs):
         self.config = config.get("modules", {}).get("screen_corners", {})
 
         size = self.config.get("size", 20)

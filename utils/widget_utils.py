@@ -99,7 +99,7 @@ def get_icon(app_icon, size=25) -> Image:
 
 
 # Function to get the widget class dynamically
-def lazy_load_widget(widget_name, widgets_list):
+def lazy_load_widget(widget_name: str, widgets_list):
     if widget_name in widgets_list:
         # Get the full module path (e.g., "widgets.BatteryWidget")
         class_path = widgets_list[widget_name]

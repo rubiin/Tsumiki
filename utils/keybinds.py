@@ -1,4 +1,3 @@
-import json
 from typing import Iterator
 
 from fabric.hyprland.widgets import get_hyprland_connection
@@ -30,8 +29,11 @@ class KeybindLoader:
 
     def load_keybinds(self):
         try:
-            output = self._hyprland_connection.send_command("j/binds").reply.decode()
-            binds = json.loads(output)
+            binds = (
+                self._hyprland_connection.send_command("j/binds")
+                .reply.decode()
+                .strip("\n")
+            )
         except Exception as e:
             logger.exception(f"ERROR: Failed to load keybinds from hyprctl: {e}")
             self.keybinds = []

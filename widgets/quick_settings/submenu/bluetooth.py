@@ -174,9 +174,9 @@ class BluetoothSubMenu(QuickSubMenu):
 
     def on_scan_toggle(self, btn: Button):
         self.client.toggle_scan()
-        btn.set_style_classes(
+        btn.add_style_class(
             ["active"]
-        ) if self.client.scanning else btn.set_style_classes([""])
+        ) if self.client.scanning else btn.remove_style_class(["active"])
         self.scan_button.play_animation()
 
     def populate_new_device(self, client: BluetoothClient, address: str):

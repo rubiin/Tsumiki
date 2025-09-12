@@ -56,7 +56,7 @@ class MicrophoneSlider(SettingSlider):
         self.icon_button.connect("clicked", self.on_mute_click)
 
     @cooldown(1)
-    def on_scale_move(self, _, __, moved_pos):
+    def on_scale_move(self, _, __, moved_pos: float):
         self.client.microphone.volume = moved_pos
 
     def update_state(self, *_):

@@ -122,7 +122,7 @@ class EmojiPickerMenu(Box):
         if query.strip() != "" and self._get_all_emoji_buttons():
             self.update_selection(0)
 
-    def _load_page(self, page_index):
+    def _load_page(self, page_index: int):
         self.update_selection(-1)
         page_box = Box(name=f"page-box-{page_index}", orientation="v", spacing=4)
         start_index = page_index * self.emojis_per_page

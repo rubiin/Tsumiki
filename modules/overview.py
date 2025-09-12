@@ -1,5 +1,3 @@
-import json
-
 import gi
 from fabric.hyprland.widgets import get_hyprland_connection
 from fabric.utils.helpers import bulk_connect
@@ -280,13 +278,17 @@ class OverviewMenu(Box):
 
         monitors = {
             monitor["id"]: (monitor["x"], monitor["y"], monitor["transform"])
-            for monitor in json.loads(
-                self._hyprland_connection.send_command("j/monitors").reply.decode()
+            for monitor in (
+                self._hyprland_connection.send_command("j/monitors")
+                .reply.decode()
+                .strip("\n")
             )
         }
 
-        for client in json.loads(
-            str(self._hyprland_connection.send_command("j/clients").reply.decode())
+        for client in (
+            self._hyprland_connection.send_command("j/clients")
+            .reply.decode()
+            .strip("\n")
         ):
             # Exclude special workspaces.
             if client["workspace"]["id"] > 0:

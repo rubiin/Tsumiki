@@ -20,6 +20,7 @@ from utils.config import widget_config
 from utils.constants import PINNED_APPS_FILE
 from utils.functions import read_json_file, write_json_file
 from utils.icon_resolver import IconResolver
+from utils.widget_settings import BarConfig
 
 gi.require_versions({"Glace": "0.1", "Gtk": "3.0"})
 
@@ -140,7 +141,7 @@ class AppBar(Box):
         self.popup.set_visible(True)
         self.popup_revealer.reveal()
 
-    def _update_preview_image(self, client, client_button: Button):
+    def _update_preview_image(self, client: Glace.Client, client_button: Button):
         self.popup.set_pointing_to(client_button)
 
         self._manager.capture_client(
@@ -150,7 +151,7 @@ class AppBar(Box):
             user_data=None,
         )
 
-    def _populate_pinned_apps(self, apps):
+    def _populate_pinned_apps(self, apps: list):
         for app in self.pinned_apps_container.get_children():
             self.pinned_apps_container.remove(app)
             app.destroy()
@@ -387,7 +388,7 @@ class AppBar(Box):
 class Dock(Window):
     """A dock for applications."""
 
-    def __init__(self, config):
+    def __init__(self, config: BarConfig):
         self.config = config.get("modules", {}).get("dock", {})
         super().__init__(
             layer=self.config.get("layer", "top"),
@@ -429,10 +430,8 @@ class Dock(Window):
 
             self._check_for_windows()
 
-    def _handle_workspace_response(self, reply: str):
+    def _handle_workspace_response(self, data: dict):
         try:
-            data = json.loads(reply)
-
             if data.get("windows", 0) == 0:
                 self.revealer.set_reveal_child(True)
             else:
@@ -445,7 +444,9 @@ class Dock(Window):
         try:
             self._hyprland_connection.send_command_async(
                 "j/activeworkspace",
-                lambda res, *_: self._handle_workspace_response(res.reply.decode()),
+                lambda res, *_: self._handle_workspace_response(
+                    res.reply.decode().strip("\n")
+                ),
             )
         except Exception as e:
             logger.exception(f"[Dock] Failed to get active workspace: {e}")

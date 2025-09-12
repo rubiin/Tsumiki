@@ -98,7 +98,7 @@ class WifiSubMenu(QuickSubMenu):
         self.items_loaded += items_to_add
         self.loading = False
 
-    def on_scroll(self, adjustment):
+    def on_scroll(self, adjustment: Gtk.Adjustment):
         value = adjustment.get_value()
         upper = adjustment.get_upper()
         page_size = adjustment.get_page_size()

@@ -11,7 +11,15 @@ from utils.widget_utils import nerd_font_icon
 class QuickSettingToggler(CommandSwitcher):
     """A button widget to toggle a command."""
 
-    def __init__(self, command, name, enabled_icon, disabled_icon, args="", **kwargs):
+    def __init__(
+        self,
+        command: str,
+        name: str,
+        enabled_icon: str,
+        disabled_icon: str,
+        args,
+        **kwargs,
+    ):
         super().__init__(
             command,
             enabled_icon,

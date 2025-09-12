@@ -36,7 +36,7 @@ class BrightnessSlider(SettingSlider):
         self.client.screen_brightness = 0
 
     @cooldown(0.1)
-    def on_scale_move(self, _, __, moved_pos):
+    def on_scale_move(self, _, __, moved_pos: float):
         self.client.screen_brightness = moved_pos
 
     def on_brightness_change(self, service: BrightnessService, _):

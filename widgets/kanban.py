@@ -109,7 +109,7 @@ class KanbanNote(EventBox):
         "changed": (GObject.SignalFlags.RUN_LAST, None, ()),
     }
 
-    def __init__(self, text):
+    def __init__(self, text: str):
         super().__init__()
         self.text = text
         # Variables to store the click offset for drag preview.
@@ -175,7 +175,7 @@ class KanbanNote(EventBox):
         row = self.get_parent()
         editor = InlineEditor(self.label.get_text())
 
-        def on_confirmed(editor, text):
+        def on_confirmed(editor, text: str):
             self.label.set_text(text)
             row.remove(editor)
             row.add(self)
@@ -288,7 +288,7 @@ class KanbanColumn(Gtk.Frame):
             },
         )
 
-    def add_note(self, text, suppress_signal=False):
+    def add_note(self, text: str, suppress_signal=False):
         note = KanbanNote(text)
         note.connect("changed", lambda x: self.emit("changed"))
         row = Gtk.ListBoxRow(name="kanban-row")
@@ -312,7 +312,9 @@ class KanbanColumn(Gtk.Frame):
         if not suppress_signal:
             self.emit("changed")
 
-    def on_drag_data_received(self, widget, drag_context, x, y, data, info, time):
+    def on_drag_data_received(
+        self, widget: Gtk.Widget, drag_context, x, y, data, info, time
+    ):
         text = data.get_text()
         if text:
             row = self.listbox.get_row_at_y(y)
@@ -331,11 +333,11 @@ class KanbanColumn(Gtk.Frame):
             drag_context.finish(True, False, time)
             self.emit("changed")  # Emit on move
 
-    def on_drag_motion(self, widget, drag_context, x, y, time):
+    def on_drag_motion(self, widget: Gtk.Widget, drag_context, x, y, time):
         Gdk.drag_status(drag_context, Gdk.DragAction.MOVE, time)
         return True
 
-    def on_drag_leave(self, widget, drag_context, time):
+    def on_drag_leave(self, widget: Gtk.Widget, drag_context, time):
         widget.get_parent().get_parent().drag_unhighlight()
 
 

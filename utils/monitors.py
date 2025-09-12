@@ -30,7 +30,7 @@ class HyprlandWithMonitors(Hyprland):
     @ttl_lru_cache(100, 5)
     def get_all_monitors(self) -> dict | None:
         try:
-            monitors = json.loads(self.send_command("j/monitors").reply.decode())
+            monitors = self.send_command("j/monitors").reply.decode().strip("\n")
             return {monitor["id"]: monitor["name"] for monitor in monitors}
         except Exception as e:
             logger.exception(f"[Monitors] Error getting all monitors: {e}")
@@ -52,8 +52,9 @@ class HyprlandWithMonitors(Hyprland):
 
     def get_current_gdk_monitor_id(self) -> int | None:
         try:
-            cmd = self.send_command("j/activeworkspace")
-            active_workspace = json.loads(cmd.reply.decode())
+            active_workspace = (
+                self.send_command("j/activeworkspace").reply.decode().strip("\n")
+            )
             return self.get_gdk_monitor_id_from_name(active_workspace["monitor"])
         except Exception as e:
             logger.exception(f"[Monitors] Error getting current GDK monitor ID: {e}")
@@ -62,7 +63,7 @@ class HyprlandWithMonitors(Hyprland):
     def get_monitor_names(self) -> list[str]:
         """Get list of all connected monitor names."""
         try:
-            monitors = json.loads(self.send_command("j/monitors").reply.decode())
+            monitors = self.send_command("j/monitors").reply.decode().strip("\n")
             return [monitor["name"] for monitor in monitors]
         except json.JSONDecodeError as e:
             logger.exception(f"[Monitors] Error parsing monitor data: {e}")

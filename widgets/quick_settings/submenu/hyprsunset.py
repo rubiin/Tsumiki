@@ -1,4 +1,5 @@
 from fabric.utils import cooldown, exec_shell_command_async
+from fabric.widgets.scale import Scale
 
 from shared.buttons import QSChevronButton
 from shared.submenu import QuickSubMenu
@@ -39,7 +40,7 @@ class HyprSunsetSubMenu(QuickSubMenu):
         reusable_fabricator.connect("changed", self.update_scale)
 
     @cooldown(0.1)
-    def on_scale_move(self, scale):
+    def on_scale_move(self, scale: Scale):
         temperature = int(scale.get_value())
         exec_shell_command_async(
             f"hyprctl hyprsunset temperature {temperature}",
@@ -57,7 +58,7 @@ class HyprSunsetSubMenu(QuickSubMenu):
         else:
             self.scale.set_sensitive(False)
 
-    def _update_ui(self, moved_pos):
+    def _update_ui(self, moved_pos: str | int):
         # Update the scale value based on the current temperature
         sanitized_value = int(
             moved_pos.strip("\n").strip("") if isinstance(moved_pos, str) else moved_pos
