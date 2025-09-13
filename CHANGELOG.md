@@ -1,5 +1,82 @@
 # Changelog
 
+## [3.0.0](https://github.com/rubiin/Tsumiki/compare/v2.4.1...v3.0.0) (2025-09-13)
+
+
+### ⚠ BREAKING CHANGES
+
+* power profile
+
+### 🚀 New Features
+
+* add behavior configuration for dock widget and update related settings ([59a4bf4](https://github.com/rubiin/Tsumiki/commit/59a4bf4d7412ca93f6c4e9cd88d5d6cce4dfd3f9))
+* add ClippingBox and LimitBox classes for enhanced widget functionality ([f38b06e](https://github.com/rubiin/Tsumiki/commit/f38b06e4d2855d1ae839f206109e86c548cf0c56))
+* add force reinstall option to init.sh for updating python dependencies ([#208](https://github.com/rubiin/Tsumiki/issues/208)) ([9faa47a](https://github.com/rubiin/Tsumiki/commit/9faa47ad125a628e1bc2b5c121db60003b0b4102))
+* implement overview button widget and related configuration ([cf1b547](https://github.com/rubiin/Tsumiki/commit/cf1b54706f3b5ac0615fe4ebf2a8cbf677ba7d8c))
+* implement overview button widget and update configuration for overview functionality ([1c48dc1](https://github.com/rubiin/Tsumiki/commit/1c48dc1ba7bfa036916f9340ea306b555156d5d4))
+
+
+### 🐛 Bug Fixes
+
+* :Modified power button styles in power.scss to adjust padding and label font size. ([eb7c647](https://github.com/rubiin/Tsumiki/commit/eb7c647da4cfb129153bbdcb6fde09a5bda5805c))
+* add Custom_Button_Group and Collapsible_Group TypedDicts for enhanced widget configuration ([0b4f82c](https://github.com/rubiin/Tsumiki/commit/0b4f82cf2d26c55d8228221782f15935fb005949))
+* add missing newlines and improve SVG structure for consistency across icon files ([8f09e47](https://github.com/rubiin/Tsumiki/commit/8f09e472f1289d6ab1461931bd629a01772f21a4))
+* add more operations on doc menu ([19444bd](https://github.com/rubiin/Tsumiki/commit/19444bd502df65fd8b88811de20df881d96015aa))
+* add name parameter to PopupWindow for better identification in PowerMenuPopup ([1395e48](https://github.com/rubiin/Tsumiki/commit/1395e48414f4401912b45d84d23d24541bebe9ac))
+* allow customizable size for DotIndicator and simplify app launcher toggle logic ([465e0ed](https://github.com/rubiin/Tsumiki/commit/465e0ed5654c71b8feb803c175b8be40ab0e18be))
+* correct method signature for on_shuffle_update in PlayerBox ([1932704](https://github.com/rubiin/Tsumiki/commit/193270433c5c41d4161541fe54952c345695095a))
+* disable overview widget by default ([1d8c346](https://github.com/rubiin/Tsumiki/commit/1d8c34682f6cb3ae5d4619721a9484ca6a56323b))
+* don't use get_relative_path multiple times if you can freaking avoid it ([690b39a](https://github.com/rubiin/Tsumiki/commit/690b39a80badd79113925bd79f4c462584fa39e0))
+* enhance JSON handling and error logging in various widgets ([2b821be](https://github.com/rubiin/Tsumiki/commit/2b821be6f43c72a5aabba55a54aa303a0840880e))
+* enhance workspace movement functionality by converting client address to hex format ([b1e82a6](https://github.com/rubiin/Tsumiki/commit/b1e82a6be601f86b951fdd1c798868d756be6450))
+* improve app preview handling on mouse enter and leave events ([39ab33b](https://github.com/rubiin/Tsumiki/commit/39ab33b84d76b48fbcc4af522fec8c921e6e0cd4))
+* move application start logging before running the app for better clarity ([f9dff5f](https://github.com/rubiin/Tsumiki/commit/f9dff5f8e54fa6691784a74973dc5e4d5a3949ea))
+* network initialisation when no network available ([#209](https://github.com/rubiin/Tsumiki/issues/209)) ([15fc47b](https://github.com/rubiin/Tsumiki/commit/15fc47bbacf4c3f0da8df219c353b7eb3a2b51e9))
+* pass widget_config to OverViewOverlay for proper initialization ([f7e0d46](https://github.com/rubiin/Tsumiki/commit/f7e0d46a647543aefe069b0054bcd37376b2ba34))
+* power profile ([9810cc8](https://github.com/rubiin/Tsumiki/commit/9810cc81e9ab7e2beb2a50f229c2b9a742cfe702))
+* reorder battery settings and add overview to middle section in layout ([79f15da](https://github.com/rubiin/Tsumiki/commit/79f15da8a6f0c269bb1bb8a333ca805eb92c329e))
+* update address handling in AppBar and improve menu display logic ([18bbbfc](https://github.com/rubiin/Tsumiki/commit/18bbbfcc2dc42884fd3cc9fd6b67ebbc6dc1cac3))
+* update banner and tsumiki images ([8728071](https://github.com/rubiin/Tsumiki/commit/87280718ec12928cfffa95f1b776c4e8484e8aa3))
+* update border-radius for power control button and adjust hover border width ([bf17340](https://github.com/rubiin/Tsumiki/commit/bf17340d821ff05ec15dd83b374891a6168066cf))
+* update box-shadow for power button menu and adjust focus styles for better visibility ([2dfc068](https://github.com/rubiin/Tsumiki/commit/2dfc068410b7d0128c50b1776aea73f8f5e3b7ab))
+* update config access patterns to use get() for safer retrieval ([13ffd98](https://github.com/rubiin/Tsumiki/commit/13ffd98e2ffa479724b17e77c0a3cbfb8293a689))
+* update daemon kill command for improved clarity and accuracy ([1c5aee9](https://github.com/rubiin/Tsumiki/commit/1c5aee90801b63351fb1f1a84535943ae30b87e6))
+* update monitor data retrieval to use json parsing ([f1eba38](https://github.com/rubiin/Tsumiki/commit/f1eba38576a8b63348ec31c09782b823215c69c6))
+* update power button menu structure and improve transition duration ([ea8109c](https://github.com/rubiin/Tsumiki/commit/ea8109c19ff8b993c9124b40c8b49fdd672ded0e))
+* update power control button styles for improved focus and hover effects ([fcbd71d](https://github.com/rubiin/Tsumiki/commit/fcbd71d051faa9843f114ae0e6bae85cb02cfc68))
+* update power profile setting to use the correct profile attribute ([c265fae](https://github.com/rubiin/Tsumiki/commit/c265faeb5103857a2ea74f25ea809177d0a629a3))
+* update submap handling to correctly process string input and fix command string ([1733028](https://github.com/rubiin/Tsumiki/commit/1733028fd1fd11d6206f5230c62f67fc513a1f79))
+* update Tsumiki image dimensions for better visibility ([1e0cbfd](https://github.com/rubiin/Tsumiki/commit/1e0cbfde1616e4e207a66493efeca770abc8f268))
+
+
+### ⚙️ Chores
+
+* remove author and license comments from swipingbutton.py ([84edba0](https://github.com/rubiin/Tsumiki/commit/84edba07251354605961dd0909cac26f31cb5c06))
+
+
+### ♻️ Code Refactoring
+
+* add type hints for better code clarity and maintainability ([ba2e38e](https://github.com/rubiin/Tsumiki/commit/ba2e38ec0ac4240fd465bd8a952a7d42384c5c75))
+* move imports for AppLauncher and widget_config into the _get_or_create_launcher method ([2a43900](https://github.com/rubiin/Tsumiki/commit/2a43900579438be3934498f4f3afaa776ea89f19))
+* remove redundant initialization of Glace.Manager in TaskBarWidget ([0ba59fc](https://github.com/rubiin/Tsumiki/commit/0ba59fc441ce6961647e05a3bcfbb7581a646eb1))
+* rename private methods to public in various modules for consistency ([dcd57d8](https://github.com/rubiin/Tsumiki/commit/dcd57d894bffaceae0030443ce4417c6b49b8d52))
+* reorganize TypedDict definitions and add missing fields for consistency ([b001ed2](https://github.com/rubiin/Tsumiki/commit/b001ed2f8fcd94ebd853ef261fed775cef3c42e7))
+* replace exec_shell_command_async with hyprland_connection methods in various widgets ([a27e00e](https://github.com/rubiin/Tsumiki/commit/a27e00ec1b525a393b764f43db0955c63e2f0dd4))
+* replace get_relative_path with ASSETS_DIR for asset path management ([8da0623](https://github.com/rubiin/Tsumiki/commit/8da0623637e5a3c847b8d1754b7fc773ddfef3b3))
+* replace GLib.source_remove with remove_handler for consistency ([2967706](https://github.com/rubiin/Tsumiki/commit/2967706555630487f3eb913b5a6ad07ce5762bc9))
+* simplify menu item handling in AppBar and consolidate pinning logic ([7991887](https://github.com/rubiin/Tsumiki/commit/79918875b8bc49b7b0acfbbcbace98db88644d11))
+* streamline enum and required properties formatting in schema ([606a516](https://github.com/rubiin/Tsumiki/commit/606a516b016260f74a3f1a152ddd27a1b122a95f))
+* streamline menu item creation and management in AppBar ([503bb2c](https://github.com/rubiin/Tsumiki/commit/503bb2c64d49ce6abce95bc039de9bd8e87ef924))
+* streamline workspace button setup and state management in WorkSpacesWidget ([3027096](https://github.com/rubiin/Tsumiki/commit/30270966874176901dcfec731548e09f13da6a7f))
+* streamline workspace handling in Dock and WindowCountWidget ([e4aea5f](https://github.com/rubiin/Tsumiki/commit/e4aea5f19dc6922c31dea367196801d4a7444a91))
+* update widget type hints for improved clarity and consistency ([13ce89d](https://github.com/rubiin/Tsumiki/commit/13ce89d0a3f79ad55159692a9ea2dd12e66b4ee5))
+* update Widget_Groups definition to use a list of TypedDict for improved structure ([1925e57](https://github.com/rubiin/Tsumiki/commit/1925e57f40e5f8751e6768be575a40955b893ab2))
+
+
+### 🚀 CI Improvements
+
+* add GitHub Actions workflow to auto-update Wiki from doc.md on push ([e641c10](https://github.com/rubiin/Tsumiki/commit/e641c104ad73bd710c7a67fc3e5cacca26544bbb))
+
 ## [2.4.1](https://github.com/rubiin/Tsumiki/compare/v2.4.0...v2.4.1) (2025-09-06)
 
 
