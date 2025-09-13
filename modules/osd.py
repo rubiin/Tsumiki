@@ -14,7 +14,6 @@ from services.brightness import BrightnessService
 from shared.widget_container import BaseWidget
 from utils.icons import symbolic_icons
 from utils.types import Keyboard_Mode
-from utils.widget_settings import BarConfig
 from utils.widget_utils import (
     create_scale,
     get_audio_icon_name,
@@ -27,7 +26,7 @@ gi.require_versions({"GObject": "2.0"})
 class GenericOSDContainer(Box, BaseWidget):
     """A generic OSD container to display the OSD for brightness and audio."""
 
-    def __init__(self, config, **kwargs):
+    def __init__(self, config: dict, **kwargs):
         is_vertical = config.get("orientation", "horizontal") == "vertical"
 
         super().__init__(
@@ -84,7 +83,7 @@ class BrightnessOSDContainer(GenericOSDContainer):
         "brightness-changed": (GObject.SignalFlags.RUN_FIRST, None, (int,))
     }
 
-    def __init__(self, config: BarConfig, **kwargs):
+    def __init__(self, config: dict, **kwargs):
         super().__init__(
             config=config,
             **kwargs,
@@ -119,7 +118,7 @@ class AudioOSDContainer(GenericOSDContainer):
         "volume-changed": (GObject.SignalFlags.RUN_FIRST, None, ())
     }
 
-    def __init__(self, config, **kwargs):
+    def __init__(self, config: dict, **kwargs):
         super().__init__(
             config=config,
             **kwargs,
@@ -191,7 +190,7 @@ class MicrophoneOSDContainer(GenericOSDContainer):
 
     __gsignals__: ClassVar = {"mic-changed": (GObject.SignalFlags.RUN_FIRST, None, ())}
 
-    def __init__(self, config, **kwargs):
+    def __init__(self, config: dict, **kwargs):
         super().__init__(
             config=config,
             **kwargs,

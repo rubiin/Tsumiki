@@ -137,7 +137,7 @@ class QuickSettingsButtonBox(Box):
 class QuickSettingsMenu(Box):
     """A menu to display the weather information."""
 
-    def __init__(self, config, **kwargs):
+    def __init__(self, config: dict, **kwargs):
         super().__init__(
             name="quicksettings-menu", orientation="v", all_visible=True, **kwargs
         )

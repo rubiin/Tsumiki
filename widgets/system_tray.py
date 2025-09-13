@@ -108,7 +108,7 @@ class BaseSystemTray:
 class SystemTrayMenu(Box, BaseSystemTray):
     """A widget to display additional system tray items in a grid."""
 
-    def __init__(self, config, parent_widget=None, **kwargs):
+    def __init__(self, config: dict, parent_widget=None, **kwargs):
         super().__init__(
             name="system-tray-menu",
             orientation="vertical",

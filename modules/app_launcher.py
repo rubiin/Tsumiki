@@ -15,7 +15,6 @@ from loguru import logger
 
 from shared.popup import PopupWindow
 from utils.app import AppUtils
-from utils.widget_settings import BarConfig
 
 
 class LauncherConfig:
@@ -29,7 +28,7 @@ class LauncherConfig:
     DEFAULT_ANCHOR = "center"
     DEFAULT_LAYOUT = "list"
 
-    def __init__(self, config: BarConfig):
+    def __init__(self, config: dict):
         self.raw_config = config.get("modules", {}).get("app_launcher", {})
         self._validate_and_set_defaults()
 
@@ -153,7 +152,7 @@ class HandlerManager:
 class AppLauncher(PopupWindow):
     """Launcher widget for launching applications and commands."""
 
-    def __init__(self, config, **kwargs):
+    def __init__(self, config: dict, **kwargs):
         # Initialize configuration with validation
         self.config = LauncherConfig(config)
 

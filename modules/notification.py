@@ -319,7 +319,7 @@ class NotificationWidget(EventBox):
 class NotificationRevealer(Revealer):
     """A widget to reveal a notification."""
 
-    def __init__(self, config, notification: Notification, **kwargs):
+    def __init__(self, config: dict, notification: Notification, **kwargs):
         self.notification_box = NotificationWidget(config, notification)
         self.timeout = config.get("timeout", 3000)
         self.notification_box.progress_timeout.max_value = self.timeout
