@@ -2,11 +2,12 @@ import os
 import subprocess
 
 import gi
-from fabric.utils import exec_shell_command_async, get_relative_path
+from fabric.utils import exec_shell_command_async
 from fabric.widgets.label import Label
 from gi.repository import Gdk, Gtk
 
 from shared.widget_container import ButtonWidget
+from utils.constants import ASSETS_DIR
 from utils.functions import ttl_lru_cache
 from utils.widget_utils import nerd_font_icon
 
@@ -45,7 +46,7 @@ class OCRWidget(ButtonWidget):
 
     def lazy_init(self):
         if not self.initialized:
-            self.script_file = get_relative_path("../assets/scripts/ocr.sh")
+            self.script_file = f"{ASSETS_DIR}/scripts/ocr.sh"
             if not os.path.isfile(self.script_file):
                 self.set_sensitive(False)
                 self.set_tooltip_text("Script not found")

@@ -4,7 +4,6 @@ from datetime import datetime
 from fabric.utils import (
     cooldown,
     exec_shell_command_async,
-    get_relative_path,
 )
 from fabric.widgets.label import Label
 from fabric.widgets.revealer import Revealer
@@ -12,6 +11,7 @@ from loguru import logger
 
 from shared.widget_container import ButtonWidget
 from utils.colors import Colors
+from utils.constants import ASSETS_DIR
 from utils.widget_utils import (
     nerd_font_icon,
     reusable_fabricator,
@@ -61,7 +61,7 @@ class UpdatesWidget(ButtonWidget):
         reusable_fabricator.connect("changed", self._should_update)
 
     def _build_base_command(self) -> str:
-        script = get_relative_path("../assets/scripts/systemupdates.sh")
+        script = f"{ASSETS_DIR}/scripts/systemupdates.sh"
         command = [f"{script} os={self.config.get('os', 'linux')}"]
 
         # Add terminal option

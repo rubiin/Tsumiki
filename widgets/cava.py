@@ -1,10 +1,11 @@
 from fabric import Fabricator
-from fabric.utils import exec_shell_command_async, get_relative_path
+from fabric.utils import exec_shell_command_async
 from fabric.widgets.box import Box
 from fabric.widgets.label import Label
 
 import utils.functions as helpers
 from shared.widget_container import ButtonWidget
+from utils.constants import ASSETS_DIR
 
 
 class CavaWidget(ButtonWidget):
@@ -31,7 +32,7 @@ class CavaWidget(ButtonWidget):
             style=f"color: {color};",
         )
 
-        script_path = get_relative_path("../assets/scripts/cava.sh")
+        script_path = f"{ASSETS_DIR}/scripts/cava.sh"
 
         self.container_box.children = Box(spacing=1, children=[cava_label]).build(
             lambda box, _: Fabricator(

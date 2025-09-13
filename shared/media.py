@@ -9,7 +9,6 @@ import gi
 from fabric.utils import (
     bulk_connect,
     cooldown,
-    get_relative_path,
     invoke_repeater,
 )
 from fabric.widgets.box import Box
@@ -27,7 +26,7 @@ from services.mpris import MprisPlayer, MprisPlayerManager
 from shared.buttons import HoverButton
 from shared.circle_image import CircularImage
 from utils.bezier import cubic_bezier
-from utils.constants import APP_DATA_DIRECTORY
+from utils.constants import APP_DATA_DIRECTORY, ASSETS_DIR
 from utils.functions import (
     ensure_directory,
     get_simple_palette_threaded,
@@ -189,7 +188,7 @@ class PlayerBox(Box):
         )
         # Setup
         self.player: MprisPlayer = player
-        self.fallback_cover_path = get_relative_path("../assets/images/disk.png")
+        self.fallback_cover_path = f"{ASSETS_DIR}/images/disk.png"
 
         self.image_size = 120
 

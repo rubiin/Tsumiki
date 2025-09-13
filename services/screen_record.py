@@ -4,12 +4,12 @@ import tempfile
 from datetime import datetime
 
 from fabric.core.service import Property, Service, Signal
-from fabric.utils import exec_shell_command, exec_shell_command_async, get_relative_path
+from fabric.utils import exec_shell_command, exec_shell_command_async
 from gi.repository import Gio, GLib
 from loguru import logger
 
 import utils.functions as helpers
-from utils.constants import APPLICATION_NAME
+from utils.constants import APPLICATION_NAME, ASSETS_DIR
 from utils.icons import symbolic_icons
 
 
@@ -29,7 +29,7 @@ class ScreenRecorderService(Service):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.home_dir = GLib.get_home_dir()
-        self.shutter_sound = get_relative_path("../assets/sounds/camera-shutter.mp3")
+        self.shutter_sound = f"{ASSETS_DIR}/sounds/camera-shutter.mp3"
 
     def record_and_emit(self, command):
         exec_shell_command_async(command, lambda *_: None)

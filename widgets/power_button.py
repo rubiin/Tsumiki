@@ -1,4 +1,4 @@
-from fabric.utils import exec_shell_command_async, get_relative_path
+from fabric.utils import exec_shell_command_async
 from fabric.widgets.box import Box
 from fabric.widgets.grid import Grid
 from fabric.widgets.label import Label
@@ -9,6 +9,7 @@ from shared.buttons import HoverButton
 from shared.dialog import Dialog
 from shared.popup import PopupWindow
 from shared.widget_container import ButtonWidget
+from utils.constants import ASSETS_DIR
 from utils.widget_utils import nerd_font_icon
 
 
@@ -22,7 +23,7 @@ class PowerMenuPopup(PopupWindow):
     ):
         self.icon_size = config.get("icon_size", 16)
 
-        self.icon_dir = get_relative_path("../assets/icons/svg/")
+        self.icon_dir = f"{ASSETS_DIR}/icons/svg/"
         power_buttons_list = config.get("buttons", [])
 
         self.grid = Grid(

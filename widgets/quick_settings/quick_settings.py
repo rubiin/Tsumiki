@@ -1,7 +1,7 @@
 import os
 
 import gi
-from fabric.utils import bulk_connect, get_relative_path, invoke_repeater
+from fabric.utils import bulk_connect, invoke_repeater
 from fabric.widgets.box import Box
 from fabric.widgets.centerbox import CenterBox
 from fabric.widgets.grid import Grid
@@ -22,6 +22,7 @@ from shared.circle_image import CircularImage
 from shared.dialog import Dialog
 from shared.media import PlayerBoxStack
 from shared.widget_container import ButtonWidget
+from utils.constants import ASSETS_DIR
 from utils.icons import symbolic_icons
 from utils.widget_utils import (
     get_audio_icon_name,
@@ -145,7 +146,7 @@ class QuickSettingsMenu(Box):
 
         raw_avatar_path = self.config.get("user", {}).get("avatar", "$HOME/.face")
         avatar_path = os.path.expanduser(os.path.expandvars(raw_avatar_path))
-        default_image = get_relative_path("../../assets/images/banner.jpg")
+        default_image = f"{ASSETS_DIR}/images/banner.jpg"
         user_image = avatar_path if os.path.exists(avatar_path) else default_image
         if user_image == default_image:
             logger.warning(f"Avatar not found: {avatar_path}")

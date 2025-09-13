@@ -2,7 +2,7 @@ import time
 from datetime import datetime
 
 import gi
-from fabric.utils import cooldown, get_relative_path
+from fabric.utils import cooldown
 from fabric.widgets.box import Box
 from fabric.widgets.grid import Grid
 from fabric.widgets.label import Label
@@ -13,6 +13,7 @@ from loguru import logger
 
 from services.weather import WeatherService
 from shared.widget_container import ButtonWidget
+from utils.constants import ASSETS_DIR
 from utils.functions import check_if_day
 from utils.icons import weather_icons
 from utils.widget_utils import (
@@ -117,7 +118,7 @@ class WeatherMenu(Box, BaseWeatherWidget):
 
         self.update_time = datetime.now()
 
-        self.weather_icons_dir = get_relative_path("../assets/icons/svg/weather")
+        self.weather_icons_dir = f"{ASSETS_DIR}/icons/svg/weather"
 
         self.current_weather_image = Svg(
             svg_file=f"{self.weather_icons_dir}/clear-day.svg",

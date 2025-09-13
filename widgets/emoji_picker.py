@@ -3,7 +3,6 @@ import subprocess
 
 import ijson
 from fabric.utils import remove_handler
-from fabric.utils.helpers import get_relative_path
 from fabric.widgets.box import Box
 from fabric.widgets.button import Button
 from fabric.widgets.entry import Entry
@@ -13,6 +12,7 @@ from gi.repository import Gdk
 from loguru import logger
 
 from shared.widget_container import ButtonWidget
+from utils.constants import ASSETS_DIR
 from utils.widget_utils import nerd_font_icon
 
 
@@ -74,7 +74,7 @@ class EmojiPickerMenu(Box):
 
     def _load_emoji_data(self):
         emoji_data = {}
-        emoji_file_path = get_relative_path("../assets/emoji.json")
+        emoji_file_path = f"{ASSETS_DIR}/emoji.json"
         if not os.path.exists(emoji_file_path):
             logger.exception(f"Emoji JSON file not found at: {emoji_file_path}")
             return {}

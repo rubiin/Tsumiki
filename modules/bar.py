@@ -1,13 +1,13 @@
 from fabric import Application
 from fabric.utils import (
     exec_shell_command_async,
-    get_relative_path,
 )
 from fabric.widgets.box import Box
 from fabric.widgets.centerbox import CenterBox
 from fabric.widgets.wayland import WaylandWindow as Window
 
 from shared.collapsible_group import CollapsibleGroupWidget
+from utils.constants import ASSETS_DIR
 from utils.widget_settings import BarConfig
 from widgets.app_launcher_button import AppLauncherButton
 from widgets.battery import BatteryWidget
@@ -146,7 +146,7 @@ class StatusBar(Window):
 
         if options["check_updates"]:
             exec_shell_command_async(
-                get_relative_path("../assets/scripts/barupdate.sh"),
+                f"{ASSETS_DIR}/scripts/barupdate.sh",
                 lambda _: None,
             )
 

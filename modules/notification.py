@@ -6,7 +6,6 @@ from fabric.notifications import (
 )
 from fabric.utils import (
     bulk_connect,
-    get_relative_path,
     invoke_repeater,
     remove_handler,
     truncate,
@@ -50,9 +49,7 @@ class NotificationPopup(Window):
         self.ignored_apps = helpers.unique_list(self.config.get("ignored", []))
 
         if self.config.get("play_sound", False):
-            self.sound_file = get_relative_path(
-                f"../assets/sounds/{self.config.get('sound_file', 'notification4')}.mp3"
-            )
+            self.sound_file = f"{constants.ASSETS_DIR}/sounds/{self.config.get('sound_file', 'notification4')}.mp3"  # noqa: E501
 
         self.notifications = Box(
             v_expand=True,

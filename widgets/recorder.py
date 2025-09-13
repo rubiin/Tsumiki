@@ -1,7 +1,6 @@
-from fabric.utils import get_relative_path
-
 from services.screen_record import ScreenRecorderService
 from shared.widget_container import ButtonWidget
+from utils.constants import ASSETS_DIR
 from utils.icons import text_icons
 from utils.widget_utils import nerd_font_icon
 
@@ -44,7 +43,7 @@ class RecorderWidget(ButtonWidget):
         if self._recording_lottie is None:
             self._recording_lottie = LottieAnimationWidget(
                 LottieAnimation.from_file(
-                    f"{get_relative_path('../assets/icons/')}/recording.json",
+                    f"{ASSETS_DIR}/icons/recording.json",
                 ),
                 scale=0.30,
                 h_align="center",
