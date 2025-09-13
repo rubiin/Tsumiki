@@ -142,6 +142,9 @@ playerctl
 ## To use the clipboard module
 cliphist
 
+## To use the gpu module
+nvtop
+
 ```
 
 - Clone this repository:
@@ -186,7 +189,7 @@ If you prefer to have more control over the installation process, you can instal
 Run the following command to install the required system packages:
 
 ```sh
-sudo pacman -S --noconfirm --needed pipewire playerctl dart-sass power-profiles-daemon networkmanager brightnessctl pkgconf wf-recorder kitty python pacman-contrib gtk3 cairo gtk-layer-shell libgirepository noto-fonts-emoji gobject-introspection gobject-introspection-runtime python-pip python-gobject python-psutil python-cairo python-loguru libnotify cliphist python-requests satty
+sudo pacman -S --noconfirm --needed pipewire playerctl dart-sass power-profiles-daemon networkmanager brightnessctl pkgconf wf-recorder kitty python pacman-contrib gtk3 cairo gtk-layer-shell libgirepository noto-fonts-emoji gobject-introspection gobject-introspection-runtime python-pip python-gobject python-psutil python-cairo python-loguru libnotify cliphist python-requests satty nvtop
 ```
 
 #### Step 2: Install AUR Packages

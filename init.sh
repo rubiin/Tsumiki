@@ -219,6 +219,7 @@ install_packages() {
 		cliphist
 		python-requests
 		satty
+		nvtop
 	)
 
 	# Install packages from AUR using yay
