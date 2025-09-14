@@ -14,6 +14,7 @@ from services.brightness import BrightnessService
 from shared.widget_container import BaseWidget
 from utils.icons import symbolic_icons
 from utils.types import Keyboard_Mode
+from utils.widget_settings import BarConfig
 from utils.widget_utils import (
     create_scale,
     get_audio_icon_name,
@@ -261,7 +262,7 @@ class OSDContainer(Window):
 
     def __init__(
         self,
-        config,
+        config: BarConfig,
         keyboard_mode: Keyboard_Mode = "none",
         **kwargs,
     ):

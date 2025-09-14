@@ -189,7 +189,13 @@ command="
 "
 
     execute_in_terminal "${command}"
-    echo "{\"total\":\"0\", \"tooltip\":\"0\"}"
+    # --- dynamic tooltip construction ---
+    local tooltip="󰣇 Official 0\n󰮯 AUR 0"
+    [[ "$CHECK_FLATPAK" -eq 1 ]] && tooltip="$tooltip\n Flatpak 0"
+    [[ "$CHECK_SNAP"   -eq 1 ]] && tooltip="$tooltip\n Snap 0"
+    [[ "$CHECK_BREW"   -eq 1 ]] && tooltip="$tooltip\n Brew 0"
+
+    echo "{\"total\":\"0\", \"tooltip\":\"$tooltip\"}"
 }
 
 
@@ -200,7 +206,14 @@ update_ubuntu() {
     read -n 1 -p 'Press any key to continue...'
     "
     execute_in_terminal "$command"
-    echo "{\"total\":\"0\", \"tooltip\":\"0\"}"
+
+    # --- dynamic tooltip construction ---
+    local tooltip="󰣇 Official 0\n󰮯 AUR 0"
+    [[ "$CHECK_FLATPAK" -eq 1 ]] && tooltip="$tooltip\n Flatpak 0"
+    [[ "$CHECK_SNAP"   -eq 1 ]] && tooltip="$tooltip\n Snap 0"
+    [[ "$CHECK_BREW"   -eq 1 ]] && tooltip="$tooltip\n Brew 0"
+
+    echo "{\"total\":\"0\", \"tooltip\":\"$tooltip\"}"
 }
 
 update_fedora() {
@@ -210,7 +223,13 @@ update_fedora() {
     read -n 1 -p 'Press any key to continue...'
     "
     execute_in_terminal "$command"
-    echo "{\"total\":\"0\", \"tooltip\":\"0\"}"
+    # --- dynamic tooltip construction ---
+    local tooltip="󰣇 Official 0\n󰮯 AUR 0"
+    [[ "$CHECK_FLATPAK" -eq 1 ]] && tooltip="$tooltip\n Flatpak 0"
+    [[ "$CHECK_SNAP"   -eq 1 ]] && tooltip="$tooltip\n Snap 0"
+    [[ "$CHECK_BREW"   -eq 1 ]] && tooltip="$tooltip\n Brew 0"
+
+    echo "{\"total\":\"0\", \"tooltip\":\"$tooltip\"}"
 }
 
 update_opensuse() {
@@ -220,7 +239,13 @@ update_opensuse() {
     read -n 1 -p 'Press any key to continue...'
     "
     execute_in_terminal "$command"
-    echo "{\"total\":\"0\", \"tooltip\":\"0\"}"
+    # --- dynamic tooltip construction ---
+    local tooltip="󰣇 Official 0\n󰮯 AUR 0"
+    [[ "$CHECK_FLATPAK" -eq 1 ]] && tooltip="$tooltip\n Flatpak 0"
+    [[ "$CHECK_SNAP"   -eq 1 ]] && tooltip="$tooltip\n Snap 0"
+    [[ "$CHECK_BREW"   -eq 1 ]] && tooltip="$tooltip\n Brew 0"
+
+    echo "{\"total\":\"0\", \"tooltip\":\"$tooltip\"}"
 }
 
 # New os= style argument parsing

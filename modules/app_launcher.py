@@ -15,6 +15,7 @@ from loguru import logger
 
 from shared.popup import PopupWindow
 from utils.app import AppUtils
+from utils.widget_settings import BarConfig
 
 
 class LauncherConfig:
@@ -28,7 +29,7 @@ class LauncherConfig:
     DEFAULT_ANCHOR = "center"
     DEFAULT_LAYOUT = "list"
 
-    def __init__(self, config: dict):
+    def __init__(self, config: BarConfig):
         self.raw_config = config.get("modules", {}).get("app_launcher", {})
         self._validate_and_set_defaults()
 

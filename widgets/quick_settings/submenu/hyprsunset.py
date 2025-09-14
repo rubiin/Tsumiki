@@ -1,3 +1,4 @@
+from fabric.hyprland.widgets import get_hyprland_connection
 from fabric.utils import cooldown, exec_shell_command_async
 from fabric.widgets.scale import Scale
 
@@ -17,6 +18,8 @@ class HyprSunsetSubMenu(QuickSubMenu):
     def __init__(self, **kwargs):
         # Create refresh button first since parent needs it
         self.scan_button = None
+
+        self._hyprland_connection = get_hyprland_connection()
 
         self.scale = create_scale(
             name="hyprsunset-scale",
@@ -54,6 +57,9 @@ class HyprSunsetSubMenu(QuickSubMenu):
             exec_shell_command_async(
                 "hyprctl hyprsunset temperature",
                 self._update_ui,
+            )
+            self._hyprland_connection.send_command(
+                "hyprctl hyprsunset temperature", lambda res: print(res.reply.decode())
             )
         else:
             self.scale.set_sensitive(False)
