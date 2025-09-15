@@ -20,7 +20,7 @@ repos:
 
   # Ruff for linting, formatting, and import sorting
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.12.11
+    rev: v0.13.0
     hooks:
       - id: ruff
         args: ["--fix"]
@@ -33,7 +33,7 @@ repos:
         args: ["--profile", "black"]
 
   - repo: https://github.com/biomejs/pre-commit
-    rev: v2.2.2 # Use the sha / tag you want to point at
+    rev: v2.2.4 # Use the sha / tag you want to point at
     hooks:
       - id: biome-check
         exclude: |
