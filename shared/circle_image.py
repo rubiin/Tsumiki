@@ -113,6 +113,7 @@ class CircularImage(Gtk.DrawingArea, BaseWidget):
     def set_image_size(self, size: Iterable[int] | int):
         if size is Iterable:
             x, y = size
+            self._image = self._image.scale_simple(x, y, GdkPixbuf.InterpType.BILINEAR)
         else:
             self._image = self._image.scale_simple(
                 size, size, GdkPixbuf.InterpType.BILINEAR
