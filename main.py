@@ -1,7 +1,7 @@
 import os
 
 from fabric import Application
-from fabric.utils import exec_shell_command, get_relative_path
+from fabric.utils import exec_shell_command, get_relative_path, monitor_file
 from loguru import logger
 
 import utils.functions as helpers
@@ -55,50 +55,56 @@ def main():
     # Create status bars
     StatusBar.create_bars(app, widget_config)
 
-    if module_options["notification"]["enabled"]:
+    if module_options.get("notification", {}).get("enabled", False):
         from modules.notification import NotificationPopup
 
         app.add_window(NotificationPopup(widget_config))
 
-    if module_options["overview"]["enabled"]:
+    if module_options.get("overview", {}).get("enabled", False):
         from modules.overview import OverViewOverlay
 
         app.add_window(OverViewOverlay(widget_config))
 
-    if module_options["screen_corners"]["enabled"]:
+    if module_options.get("screen_corners", {}).get("enabled", False):
         from modules.corners import ScreenCorners
 
         app.add_window(ScreenCorners(widget_config))
 
-    if module_options["quotes"]["enabled"]:
+    if module_options.get("quotes", {}).get("enabled", False):
         from modules.quotes import DesktopQuote
 
         app.add_window(DesktopQuote(widget_config))
 
-    if module_options["app_launcher"]["enabled"]:
+    if module_options.get("app_launcher", {}).get("enabled", False):
         from modules.app_launcher import AppLauncher
 
         app.add_window(AppLauncher(widget_config))
 
-    if module_options["dock"]["enabled"]:
+    if module_options.get("dock", {}).get("enabled", False):
         from modules.dock import Dock
 
         app.add_window(Dock(widget_config))
 
-    if module_options["desktop_clock"]["enabled"]:
+    if module_options.get("desktop_clock", {}).get("enabled", False):
         from modules.desktop_clock import DesktopClock
 
         app.add_window(DesktopClock(widget_config))
 
-    if module_options["osd"]["enabled"]:
+    if module_options.get("osd", {}).get("enabled", False):
         from modules.osd import OSDContainer
 
         app.add_window(OSDContainer(widget_config))
 
-    if general_options["debug"]:
+    if general_options.get("debug", False):
         helpers.set_debug_logger()
 
-    process_and_apply_css(app)
+    if general_options.get("monitor_styles", False):
+        main_css_file = monitor_file(get_relative_path("styles"))
+        common_css_file = monitor_file(get_relative_path("styles/common"))
+        main_css_file.connect("changed", lambda *_: process_and_apply_css(app))
+        common_css_file.connect("changed", lambda *_: process_and_apply_css(app))
+    else:
+        process_and_apply_css(app)
 
     # Start config file watching if enabled
     if general_options.get("auto_reload", True):
