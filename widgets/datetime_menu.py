@@ -86,7 +86,11 @@ class DateMenuNotification(Box):
         )
 
         body_container = Box(
-            spacing=15, orientation="h", style_classes="notification-body"
+            spacing=15,
+            orientation="h",
+            style_classes="notification-body",
+            v_align="start",
+            h_align="start",
         )
 
         try:
@@ -112,7 +116,6 @@ class DateMenuNotification(Box):
             Label(
                 markup=helpers.parse_markup(self._notification.body),
                 v_align="start",
-                h_expand=True,
                 h_align="start",
                 style="font-size: 13.5px;",
                 line_wrap="word-char",

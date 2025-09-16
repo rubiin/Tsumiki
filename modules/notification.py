@@ -156,7 +156,7 @@ class NotificationWidget(EventBox):
                 h_align="start",
                 style_classes="summary",
                 max_chars_width=30,
-                ellipsization="end",
+                line_wrap="word-char",
             ),
         )
 
@@ -182,7 +182,11 @@ class NotificationWidget(EventBox):
         )
 
         body_container = Box(
-            spacing=4, orientation="h", style_classes="notification-body"
+            spacing=4,
+            orientation="h",
+            style_classes="notification-body",
+            v_align="start",
+            h_align="start",
         )
 
         # Use provided image if available
@@ -213,7 +217,7 @@ class NotificationWidget(EventBox):
                 style_classes="body",
                 line_wrap="word-char",
                 max_chars_width=40,
-                lines=10
+                lines=10,
             ),
         )
 
