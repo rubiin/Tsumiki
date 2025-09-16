@@ -347,7 +347,12 @@
     - **`anchor`**: `str` (default: "center")
     - **`date_format`**: `str` (default: "%A, %d %B %Y")
     - **`time_format`**: `str` (default: "%H:%M")
-  - **`quotes`**: `object`
+  - **`desktop_quotes`**: `object`
+    - **`enabled`**: `bool` (default: false)
+    - **`anchor`**: `str` (default: "bottom-right")
+    - **`layer`**: `str` (default: "bottom")
+    - **`interval`**: `int` (default: 600)
+  - **`activate_linux`**: `object`
     - **`enabled`**: `bool` (default: false)
     - **`anchor`**: `str` (default: "bottom-right")
     - **`layer`**: `str` (default: "bottom")
