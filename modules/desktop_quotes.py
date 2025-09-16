@@ -43,7 +43,6 @@ class DesktopQuote(Window):
                 orientation="v",
                 children=(self.quote_label, self.author_label),
             ),
-            all_visible=True,
             **kwargs,
         )
 

@@ -32,6 +32,5 @@ class DesktopClock(Window):
                     ),
                 ],
             ),
-            all_visible=True,
             **kwargs,
         )

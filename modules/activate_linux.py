@@ -37,6 +37,5 @@ class ActivateLinux(Window):
                 orientation="v",
                 children=(self.main_label, self.sub_label),
             ),
-            all_visible=True,
             **kwargs,
         )

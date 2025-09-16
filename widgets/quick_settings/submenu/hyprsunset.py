@@ -58,9 +58,6 @@ class HyprSunsetSubMenu(QuickSubMenu):
                 "hyprctl hyprsunset temperature",
                 self._update_ui,
             )
-            self._hyprland_connection.send_command(
-                "hyprctl hyprsunset temperature", lambda res: print(res.reply.decode())
-            )
         else:
             self.scale.set_sensitive(False)
 
