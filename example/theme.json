@@ -104,7 +104,15 @@
 				"radius": "16px"
 			}
 		},
-		"quotes": {
+		"desktop_quotes": {
+			"spacing": ".125em",
+			"border": {
+				"enabled": false,
+				"width": "1px",
+				"radius": "16px"
+			}
+		},
+		"activate_linux": {
 			"spacing": ".125em",
 			"border": {
 				"enabled": false,

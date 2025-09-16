@@ -507,7 +507,7 @@
 			"layer": "top"
 		},
 		"desktop_clock": {
-			"enabled": true,
+			"enabled": false,
 			"anchor": "bottom-right",
 			"date_format": "%A, %d %B %Y",
 			"layer": "bottom",
