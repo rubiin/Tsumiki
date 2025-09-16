@@ -155,7 +155,7 @@ class NotificationWidget(EventBox):
                 ),
                 h_align="start",
                 style_classes="summary",
-                max_chars_width=16,
+                max_chars_width=30,
                 ellipsization="end",
             ),
         )
@@ -209,12 +209,12 @@ class NotificationWidget(EventBox):
             Label(
                 markup=helpers.parse_markup(self._notification.body),
                 v_align="start",
-                h_expand=True,
                 h_align="start",
                 style_classes="body",
-                chars_width=20,
+                line_wrap="word-char",
                 max_chars_width=45,
                 ellipsization="end",
+                lines=10
             ),
         )
 
