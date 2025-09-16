@@ -1,3 +1,5 @@
+import math
+
 import gi
 from fabric.notifications import Notification
 from fabric.utils import bulk_connect
@@ -93,18 +95,20 @@ class DateMenuNotification(Box):
             h_align="start",
         )
 
+        notification_image_size = math.ceil(0.75 * constants.NOTIFICATION_IMAGE_SIZE)
+
         try:
             if image_pixbuf := self._notification.image_pixbuf:
                 body_container.add(
                     CircularImage(
                         pixbuf=image_pixbuf.scale_simple(
-                            constants.NOTIFICATION_IMAGE_SIZE,
-                            constants.NOTIFICATION_IMAGE_SIZE,
+                            notification_image_size,
+                            notification_image_size,
                             GdkPixbuf.InterpType.BILINEAR,
                         ),
                         h_expand=True,
                         v_expand=True,
-                        size=constants.NOTIFICATION_IMAGE_SIZE,
+                        size=notification_image_size,
                     ),
                 )
             del image_pixbuf

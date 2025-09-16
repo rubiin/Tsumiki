@@ -6,7 +6,7 @@ from gi.repository import GLib
 HOME_DIR = GLib.get_home_dir()
 
 NOTIFICATION_WIDTH = 400
-NOTIFICATION_IMAGE_SIZE = 48
+NOTIFICATION_IMAGE_SIZE = 78
 HIGH_POLL_INTERVAL = 3600  # 1 hour in seconds
 MONITOR_HOTPLUG_DELAY_MS = 500  # Delay for monitor hotplug recreation
 
