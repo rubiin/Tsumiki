@@ -1,7 +1,7 @@
 import os
 
 from fabric import Application
-from fabric.utils import exec_shell_command, get_relative_path, monitor_file
+from fabric.utils import exec_shell_command, get_relative_path
 from loguru import logger
 
 import utils.functions as helpers
@@ -70,10 +70,15 @@ def main():
 
         app.add_window(ScreenCorners(widget_config))
 
-    if module_options.get("quotes", {}).get("enabled", False):
-        from modules.quotes import DesktopQuote
+    if module_options.get("desktop_quotes", {}).get("enabled", False):
+        from modules.desktop_quotes import DesktopQuote
 
         app.add_window(DesktopQuote(widget_config))
+
+    if module_options.get("activate_linux", {}).get("enabled", False):
+        from modules.activate_linux import ActivateLinux
+
+        app.add_window(ActivateLinux(widget_config))
 
     if module_options.get("app_launcher", {}).get("enabled", False):
         from modules.app_launcher import AppLauncher
@@ -98,13 +103,14 @@ def main():
     if general_options.get("debug", False):
         helpers.set_debug_logger()
 
-    if general_options.get("monitor_styles", False):
-        main_css_file = monitor_file(get_relative_path("styles"))
-        common_css_file = monitor_file(get_relative_path("styles/common"))
-        main_css_file.connect("changed", lambda *_: process_and_apply_css(app))
-        common_css_file.connect("changed", lambda *_: process_and_apply_css(app))
-    else:
-        process_and_apply_css(app)
+    # if general_options.get("monitor_styles", False):
+    #     main_css_file = monitor_file(get_relative_path("styles"))
+    #     common_css_file = monitor_file(get_relative_path("styles/common"))
+    #     main_css_file.connect("changed", lambda *_: process_and_apply_css(app))
+    #     common_css_file.connect("changed", lambda *_: process_and_apply_css(app))
+    # else:
+    #
+    process_and_apply_css(app)
 
     # Start config file watching if enabled
     if general_options.get("auto_reload", True):

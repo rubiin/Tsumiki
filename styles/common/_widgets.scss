@@ -169,20 +169,46 @@
 
 }
 
-#quotes {
-  border-radius: variable.$modules-quotes-border-radius;
-  border: if(variable.$modules-quotes-border-enabled, variable.$border, none);
-  border-width: variable.$modules-quotes-border-width;
+#activate_linux {
+  border-radius: variable.$modules-activate_linux-border-radius;
+  border: if(variable.$modules-activate_linux-border-enabled, variable.$border, none);
+  border-width: variable.$modules-activate_linux-border-width;
+  opacity: 0.6;
 
-  #quotes-box {
-      margin: 0rem 4rem 4rem 0rem;
+  #activate_linux-box {
+    margin: 0rem 6rem 6rem 0rem;
 
-      label {
-        font-size: 1.5rem;
-        font-weight: 600;
-        @extend %desktop-widget;
-      }
+    label {
+      @extend %desktop-widget;
+
+      font-weight: 400;
     }
+
+    #activate_linux-main-label {
+      font-size: 2.4rem;
+    }
+
+    #activate_linux-sub-label {
+      font-size: 1.8rem;
+    }
+  }
+
+}
+
+#desktop_quotes {
+  border-radius: variable.$modules-desktop_quotes-border-radius;
+  border: if(variable.$modules-desktop_quotes-border-enabled, variable.$border, none);
+  border-width: variable.$modules-desktop_quotes-border-width;
+
+  #desktop_quotes-box {
+    margin: 0rem 4rem 4rem 0rem;
+
+    label {
+      font-size: 1.5rem;
+      font-weight: 600;
+      @extend %desktop-widget;
+    }
+  }
 
 }
 

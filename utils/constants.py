@@ -420,7 +420,17 @@ DEFAULT_CONFIG = {
             "date_format": "%A, %d %B %Y",
             "time_format": "%H:%M",
         },
-        "quotes": {"enabled": False, "anchor": "bottom-right", "layer": "bottom"},
+        "desktop_quotes": {
+            "enabled": False,
+            "anchor": "bottom-right",
+            "layer": "bottom",
+            "interval": 600,
+        },
+        "activate_linux": {
+            "enabled": False,
+            "anchor": "bottom-right",
+            "layer": "bottom",
+        },
     },
     "general": {
         "check_updates": False,

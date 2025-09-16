@@ -159,13 +159,24 @@ DesktopClock = TypedDict(
 )
 
 # Quotes configuration
-Quotes = TypedDict(
-    "Quotes",
+DesktopQuotes = TypedDict(
+    "DesktopQuotes",
     {
         "enabled": bool,
         "anchor": Anchor,
         "layer": Layer,
-        "update_interval": int,
+        "interval": int,
+    },
+)
+
+
+# ActivateLinux configuration
+ActivateLinux = TypedDict(
+    "ActivateLinux",
+    {
+        "enabled": bool,
+        "anchor": Anchor,
+        "layer": Layer,
     },
 )
 
@@ -245,12 +256,13 @@ Modules = TypedDict(
     {
         "dock": Dock,
         "bar": Bar,
-        "quotes": Quotes,
+        "desktop_quotes": DesktopQuotes,
         "osd": OSD,
         "desktop_clock": DesktopClock,
         "screen_corners": ScreenCorners,
         "notification": Notification,
         "app_launcher": AppLauncher,
+        "activate_linux": ActivateLinux,
     },
 )
 

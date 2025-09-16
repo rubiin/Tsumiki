@@ -2204,6 +2204,51 @@
 						}
 					}
 				},
+				"desktop_quotes": {
+					"type": "object",
+					"properties": {
+						"enabled": {
+							"type": "boolean",
+							"description": "Determines whether the quotes widget is enabled.",
+							"default": false
+						},
+						"anchor": {
+							"$ref": "#/definitions/anchor",
+							"description": "Specifies the anchor position of the quotes widget.",
+							"default": "bottom-right"
+						}
+					},
+					"layer": {
+						"$ref": "#/definitions/layer",
+						"default": "top",
+						"description": "Layer on which the bar is displayed."
+					},
+					"interval": {
+						"type": "integer",
+						"description": "Interval in seconds to change the quote.",
+						"default": 600
+					}
+				},
+				"activate_linux": {
+					"type": "object",
+					"properties": {
+						"enabled": {
+							"type": "boolean",
+							"description": "Determines whether the desktop clock is enabled.",
+							"default": false
+						},
+						"anchor": {
+							"$ref": "#/definitions/anchor",
+							"description": "Specifies the anchor position of the desktop clock.",
+							"default": "bottom-right"
+						},
+						"layer": {
+							"$ref": "#/definitions/layer",
+							"default": "top",
+							"description": "Layer on which the bar is displayed."
+						}
+					}
+				},
 				"notification": {
 					"type": "object",
 					"properties": {

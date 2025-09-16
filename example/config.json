@@ -507,17 +507,22 @@
 			"layer": "top"
 		},
 		"desktop_clock": {
-			"enabled": false,
+			"enabled": true,
 			"anchor": "bottom-right",
 			"date_format": "%A, %d %B %Y",
 			"layer": "bottom",
 			"time_format": "%H:%M"
 		},
-		"quotes": {
+		"desktop_quotes": {
 			"enabled": false,
 			"anchor": "bottom-right",
 			"layer": "bottom",
-			"update_interval": 600
+			"interval": 600
+		},
+		"activate_linux": {
+			"enabled": false,
+			"anchor": "bottom-right",
+			"layer": "bottom"
 		}
 	},
 	"general": {

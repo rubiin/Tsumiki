@@ -14,19 +14,19 @@ class DesktopQuote(Window):
     """
 
     def __init__(self, config: BarConfig, **kwargs):
-        self.config = config.get("modules", {}).get("quotes", {})
+        self.config = config.get("modules", {}).get("desktop_quotes", {})
 
         self.quote_label = Label(
-            name="quote-label",
-            text="Loading quote...",
+            name="desktop_quotes-quote-label",
+            label="Loading quote...",
             line_wrap="word-char",
             chars_width=50,
             h_expand=True,
         )
 
         self.author_label = Label(
-            name="author-label",
-            text="Loading author...",
+            name="desktop_quotes-author-label",
+            label="Loading author...",
             line_wrap="word-char",
             chars_width=40,
             h_align="end",
@@ -35,11 +35,11 @@ class DesktopQuote(Window):
         )
 
         super().__init__(
-            name="quotes",
+            name="desktop_quotes",
             layer=self.config.get("layer", "top"),
             anchor=self.config.get("anchor", "center"),
             child=Box(
-                name="quotes-box",
+                name="desktop_quotes-box",
                 orientation="v",
                 children=(self.quote_label, self.author_label),
             ),

@@ -27,10 +27,6 @@ class WindowTitleWidget(ButtonWidget):
         self.container_box.children = self.active_window
 
     def _get_title(self, win_title: str, win_class: str):
-        with open("logfile.txt", "a") as f:
-            log_message = f"Getting title for: {win_title}, {win_class}\n"
-            f.write(log_message)
-
         mappings_enabled = self.config.get("mappings", True)
         trunc = self.config.get("truncation", True)
         trunc_size = self.config.get("truncation_size", 50)
