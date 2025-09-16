@@ -64,6 +64,7 @@
     margin-left: math.floor(calc($image_size / 2));
     min-width: $inner_player_width;
     min-height: $player_height;
+    opacity: .6;
   }
 
   #player-info-box {

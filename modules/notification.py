@@ -216,7 +216,7 @@ class NotificationWidget(EventBox):
                 h_align="start",
                 style_classes="body",
                 line_wrap="word-char",
-                max_chars_width=40,
+                max_chars_width=38,
                 lines=10,
             ),
         )
