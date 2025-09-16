@@ -325,6 +325,7 @@ DEFAULT_CONFIG = {
             "tooltip": True,
             "mappings": True,
             "title_map": [],
+            "fallback": "class",
         },
         "workspaces": {
             "count": 10,

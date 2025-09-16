@@ -263,6 +263,7 @@
     - **`tooltip`**: `bool` (default: true)
     - **`mappings`**: `bool` (default: true)
     - **`title_map`**: `list` (default: [])
+    - **`fallback`**: `str` (default: "class")
   - **`workspaces`**: `object`
     - **`count`**: `int` (default: 10)
     - **`hide_unoccupied`**: `bool` (default: true)

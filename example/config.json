@@ -201,7 +201,8 @@
 			"tooltip": true,
 			"truncation": true,
 			"truncation_size": 50,
-			"title_map": []
+			"title_map": [],
+			"fallback": "class"
 		},
 		"workspaces": {
 			"count": 10,
@@ -468,7 +469,6 @@
 			"transition_type": "slide-left",
 			"transition_duration": 350,
 			"persist": true,
-			"display_actions_on_hover": false,
 			"dismiss_on_hover": false
 		},
 		"osd": {

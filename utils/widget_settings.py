@@ -375,6 +375,7 @@ WindowTitle = TypedDict(
         "truncation": bool,
         "truncation_size": int,
         "title_map": list[dict[str, str]],
+        "fallback": Literal["class", "title"],
     },
 )
 
