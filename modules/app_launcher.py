@@ -88,8 +88,8 @@ class AppWidgetFactory:
                     label=app.display_name or "Unknown",
                     v_align="center",
                     h_align="center",
-                    ellipsize="end",
                     max_width_chars=10,
+                    ellipsization="end",
                 ),
             ],
         )
