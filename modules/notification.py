@@ -163,7 +163,7 @@ class NotificationWidget(EventBox):
         overlay = Overlay(
             child=self.progress_timeout,
             overlays=Button(
-                v_align="center",
+                v_align="start",
                 style_classes="close-button",
                 child=nerd_font_icon(
                     icon=text_icons["ui"]["window_close"],
