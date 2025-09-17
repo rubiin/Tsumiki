@@ -179,7 +179,7 @@ class PlayerBoxStack(Box):
 class PlayerBox(Box):
     """A widget that displays the current player information."""
 
-    def __init__(self, player: MprisPlayer, config, **kwargs):
+    def __init__(self, player: MprisPlayer, config: dict, **kwargs):
         super().__init__(
             h_align="center",
             name="player-box",

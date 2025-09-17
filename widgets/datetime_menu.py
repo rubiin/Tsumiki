@@ -145,7 +145,7 @@ class DateNotificationMenu(Box):
 
     def __init__(
         self,
-        config,
+        config: dict,
         **kwargs,
     ):
         super().__init__(

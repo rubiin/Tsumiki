@@ -11,7 +11,7 @@ from utils.widget_utils import nerd_font_icon
 class ShortcutButton(HoverButton):
     """A button that executes a custom command when clicked."""
 
-    def __init__(self, shortcut_config, **kwargs):
+    def __init__(self, shortcut_config: dict, **kwargs):
         super().__init__(name="shortcut-button", v_expand=True, **kwargs)
 
         self.command = shortcut_config.get("command", "")

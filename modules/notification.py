@@ -99,7 +99,7 @@ class NotificationWidget(EventBox):
 
     def __init__(
         self,
-        config,
+        config: dict,
         notification: Notification,
         **kwargs,
     ):

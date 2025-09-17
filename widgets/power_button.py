@@ -36,13 +36,13 @@ class PowerMenuPopup(PopupWindow):
             children=[
                 PowerControlButtons(
                     config=config,
-                    name=key,
-                    command=value,
+                    name=value,
+                    command=power_buttons_list[value],
                     size=self.icon_size,
                     parent=self,
                     icon_path=self.icon_dir,
                 )
-                for key, value in power_buttons_list.items()
+                for _, value in enumerate(power_buttons_list)
             ],
             columns=config.get("items_per_row", 3),
         )
@@ -73,7 +73,7 @@ class PowerControlButtons(HoverButton):
 
     def __init__(
         self,
-        config,
+        config: dict,
         parent: PopupWindow,
         name: str,
         command: str,
