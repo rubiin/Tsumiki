@@ -91,13 +91,18 @@
           margin-top: 5px;
           border-radius: variable.$modules-notification-border-radius;
           margin-bottom: 6px;
+          transition: border 190ms ease;
 
           .close-button {
             opacity: 0;
           }
 
           &:hover {
-            border: 1px solid theme.$surface-highlight;
+
+            #datemenu-notification-box {
+              background-color: theme.$background;
+
+            }
 
             .close-button {
               opacity: 1;
@@ -137,11 +142,12 @@
 
   .date-column {
 
-      #clock {
-        padding: variable.$padding;
-        label {
-          font-size: 3em;
-        }
+    #clock {
+      padding: variable.$padding;
+
+      label {
+        font-size: 3em;
+      }
     }
 
     .calendar {
