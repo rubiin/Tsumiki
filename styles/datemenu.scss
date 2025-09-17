@@ -91,17 +91,17 @@
           margin-top: 5px;
           border-radius: variable.$modules-notification-border-radius;
           margin-bottom: 6px;
-          transition: border 190ms ease;
+          transition: background-color 190ms ease;
+
 
           .close-button {
             opacity: 0;
           }
 
           &:hover {
-
             #datemenu-notification-box {
-              background-color: theme.$background;
 
+              background-color: theme.$background;
             }
 
             .close-button {
