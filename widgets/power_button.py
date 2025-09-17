@@ -18,7 +18,7 @@ class PowerMenuPopup(PopupWindow):
 
     def __init__(
         self,
-        config,
+        config: dict,
         **kwargs,
     ):
         self.icon_size = config.get("icon_size", 16)
