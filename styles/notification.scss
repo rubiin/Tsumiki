@@ -127,4 +127,10 @@ $hover-transition: background .15s ease-in-out;
 
   @extend %notification_widget;
 
+  #date-menu-notification-summary {
+    font-size: 13.5px;
+  }
+  #date-menu-notification-body {
+    font-size: 13.5px
+  }
 }

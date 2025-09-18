@@ -66,7 +66,7 @@ class DateMenuNotification(Box):
                 h_expand=True,
                 line_wrap="word-char",
                 style_classes="summary",
-                style="font-size: 13.5px;",
+                name="date-menu-notification-summary",
             ),
         )
         close_button = Button(
@@ -122,7 +122,7 @@ class DateMenuNotification(Box):
                 markup=helpers.parse_markup(self._notification.body),
                 v_align="start",
                 h_align="start",
-                style="font-size: 13.5px;",
+                name="date-menu-notification-body",
                 line_wrap="word-char",
                 chars_width=20,
                 max_chars_width=45,
