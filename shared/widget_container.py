@@ -100,7 +100,7 @@ class ButtonWidget(Button, BaseWidget):
         )
 
         widget_name = kwargs.get("name", "button")
-        self.config = widget_config.get("widgets", {}).get(widget_name, {})
+        self.config: dict = widget_config.get("widgets", {}).get(widget_name, {})
 
         self.container_box = Box(style_classes="box", spacing=6)
         self.add(self.container_box)
