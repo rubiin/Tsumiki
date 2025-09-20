@@ -201,6 +201,7 @@
 			"tooltip": true,
 			"truncation": true,
 			"truncation_size": 50,
+			"mappings": true,
 			"title_map": [],
 			"fallback": "class"
 		},
@@ -528,7 +529,7 @@
 	"general": {
 		"check_updates": false,
 		"debug": false,
-		"monitor_styles": true,
+		"monitor_styles": false,
 		"auto_reload": true,
 		"multi_monitor": false
 	}
