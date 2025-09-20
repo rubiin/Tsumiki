@@ -54,7 +54,7 @@ class WindowTitleWidget(ButtonWidget):
 
         fallback = (
             win_class.lower()
-            if self.comfig.get("fallback", "class") == "class"
+            if self.config.get("fallback", "class") == "class"
             else win_title
         )
         fallback = truncate(fallback, trunc_size) if trunc else fallback
