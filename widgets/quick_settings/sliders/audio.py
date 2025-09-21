@@ -32,13 +32,12 @@ class AudioSlider(SettingSlider):
         self.client = audio_service
         self.audio_stream = audio_stream
 
-        self.pixel_size = 20
 
         # Initialize with default values first
         super().__init__(
             icon_name=text_icons["volume"]["high"],
             start_value=0,
-            pixel_size=self.pixel_size,
+            pixel_size=20,
         )
 
         if show_chevron:
