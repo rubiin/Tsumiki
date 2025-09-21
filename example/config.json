@@ -418,8 +418,6 @@
 	"collapsible_groups": [
 		{
 			"widgets": [
-				"cliphist",
-				"emoji_picker",
 				"ocr",
 				"screenshot",
 				"recorder"

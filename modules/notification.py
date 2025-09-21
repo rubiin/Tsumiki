@@ -229,7 +229,6 @@ class NotificationWidget(EventBox):
             orientation="h",
             name="notification-action-box",
             h_expand=True,
-            column_homogeneous=True,
             row_homogeneous=True,
             column_spacing=4,
         )

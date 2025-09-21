@@ -102,7 +102,7 @@ class ButtonWidget(Button, BaseWidget):
         widget_name = kwargs.get("name", "button")
         self.config: dict = widget_config.get("widgets", {}).get(widget_name, {})
 
-        self.container_box = Box(style_classes="box", spacing=6)
+        self.container_box = Box(style_classes="box", spacing=6, h_align="center")
         self.add(self.container_box)
 
         if self.config.get("hover_reveal", True):
