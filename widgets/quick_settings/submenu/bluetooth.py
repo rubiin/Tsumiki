@@ -110,7 +110,7 @@ class BluetoothSubMenu(QuickSubMenu):
             h_expand=True,
             children=[
                 Label(
-                    "Paired Devices",
+                    label="Paired Devices",
                     h_align="start",
                     style_classes="panel-text",
                 ),
@@ -127,9 +127,9 @@ class BluetoothSubMenu(QuickSubMenu):
             h_expand=True,
             children=[
                 Label(
-                    "Available Devices",
+                    label="Available Devices",
                     h_align="start",
-                    style="margin:12px 0;",
+                    name="available-devices-label",
                     style_classes="panel-text",
                 ),
                 self.available_devices_listbox,

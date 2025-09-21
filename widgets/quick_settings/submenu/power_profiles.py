@@ -82,6 +82,7 @@ class PowerProfileSubMenu(QuickSubMenu):
 
         self.profile_box = Box(
             orientation="v",
+            name="power-profile-container",
             spacing=8,
             style="margin: 5px 0;",
         )

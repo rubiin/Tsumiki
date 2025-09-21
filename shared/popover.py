@@ -38,7 +38,6 @@ class PopoverManager:
             type="top-level",
             visible=False,
             all_visible=False,
-            style="background-color: rgba(0,0,0,0.0);",
         )
 
         # Add empty box so GTK doesn't complain

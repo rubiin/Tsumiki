@@ -163,7 +163,8 @@ $slider-height: 12px;
         &:hover {
           background-color: theme.$accent-blue;
           color: theme.$background;
-          .shortcut-icon{
+
+          .shortcut-icon {
             color: theme.$background;
           }
         }
@@ -296,6 +297,8 @@ $slider-height: 12px;
         }
       }
 
+
+
       #bluetooth-device-box.submenu-button {
         .submenu-button {
           padding: common.toEm(6);
@@ -336,7 +339,7 @@ $slider-height: 12px;
       padding: common.toEm(3) 0;
       padding-left: common.toEm(10);
 
-      .panel-font-icon{
+      .panel-font-icon {
         font-size: 16px;
       }
 
