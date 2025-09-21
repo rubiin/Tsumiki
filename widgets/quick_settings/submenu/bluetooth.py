@@ -67,8 +67,7 @@ class BluetoothDeviceBox(CenterBox):
                     device.icon_name, text_icons["bluetooth"]["enabled"]
                 ),
                 props={
-                    "style_classes": ["panel-font-icon"],
-                    "style": "font-size: 16px;",
+                    "style_classes": ["panel-font-icon"]
                 },
             ),
         )

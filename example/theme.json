@@ -270,7 +270,7 @@
 			},
 			"bluetooth": {
 				"spacing": ".125em",
-				"icon_size": "14px",
+				"icon_size": "12px",
 				"border": {
 					"enabled": false,
 					"width": "1px",
