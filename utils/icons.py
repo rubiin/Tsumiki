@@ -69,7 +69,7 @@ text_icons = {
     "fallback": "",
     "powerprofiles": {"power-saver": "󰌪", "performance": "󰓅", "balanced": "󰒂"},
     "volume": {
-        "overamplified": "󰕾",
+        "overamplified": "󱄠",
         "high": "󰕾",
         "medium": "󰖀",
         "low": "󰕿",

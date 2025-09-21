@@ -90,5 +90,5 @@ class VolumeWidget(EventBoxWidget):
                 self.volume_label.set_text(f"{volume}%")
 
         self.icon.set_text(
-            get_audio_icon_name(volume, self.audio.speaker.muted)["text_icon"]
+            get_audio_icon_name(volume, self.audio.speaker.muted)["icon_text"]
         )

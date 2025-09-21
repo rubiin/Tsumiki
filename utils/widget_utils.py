@@ -232,31 +232,21 @@ def create_scale(
 def get_audio_icon_name(
     volume: int, is_muted: bool
 ) -> dict[Literal["icon_text", "icon"], str]:
-    if volume <= 0 or is_muted:
-        return {
-            "text_icon": text_icons["volume"]["muted"],
-            "icon": symbolic_icons["audio"]["volume"]["muted"],
-        }
-    if volume > 0 and volume <= 32:
-        return {
-            "text_icon": text_icons["volume"]["low"],
-            "icon": symbolic_icons["audio"]["volume"]["low"],
-        }
-    if volume > 32 and volume <= 66:
-        return {
-            "text_icon": text_icons["volume"]["medium"],
-            "icon": symbolic_icons["audio"]["volume"]["medium"],
-        }
-    if volume > 66 and volume <= 100:
-        return {
-            "text_icon": text_icons["volume"]["high"],
-            "icon": symbolic_icons["audio"]["volume"]["high"],
-        }
+    if is_muted or volume == 0:
+        level = "muted"
+    elif volume <= 32:
+        level = "low"
+    elif volume <= 66:
+        level = "medium"
+    elif volume <= 100:
+        level = "high"
     else:
-        return {
-            "text_icon": text_icons["volume"]["overamplified"],
-            "icon": symbolic_icons["audio"]["volume"]["overamplified"],
-        }
+        level = "overamplified"
+
+    return {
+        "icon_text": text_icons["volume"][level],
+        "icon": symbolic_icons["audio"]["volume"][level],
+    }
 
 
 # Create a fabricator to poll the system stats

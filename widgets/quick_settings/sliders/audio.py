@@ -5,7 +5,7 @@ from services import audio_service
 from shared.buttons import HoverButton
 from shared.setting_scale import SettingSlider
 from utils.icons import text_icons
-from utils.widget_utils import nerd_font_icon
+from utils.widget_utils import get_audio_icon_name, nerd_font_icon
 
 
 class AudioSlider(SettingSlider):
@@ -67,12 +67,6 @@ class AudioSlider(SettingSlider):
 
         self.icon_button.connect("clicked", self.on_mute_click)
 
-    def _get_icon_name(self):
-        """Get the appropriate icon name based on mute state."""
-        if not self.audio_stream:
-            return text_icons["volume"]["high"]
-        return text_icons["volume"]["muted" if self.audio_stream.muted else "high"]
-
     def update_state(self, *_):
         """Update the slider state from the audio stream."""
         if not self.audio_stream:
@@ -88,7 +82,13 @@ class AudioSlider(SettingSlider):
 
         self.scale.set_value(volume)
         self.scale.set_tooltip_text(f"{volume}%")
-        self.icon.set_label(self._get_icon_name())
+        self.update_icon(volume)
+
+    def update_icon(self, volume=0):
+        icon_name = get_audio_icon_name(volume, self.client.speaker.muted)["icon_text"]
+
+        print("iconname slider", volume, icon_name)
+        self.icon.set_label(icon_name)
 
     @cooldown(0.1)
     def on_scale_move(self, _, __, moved_pos: float):
