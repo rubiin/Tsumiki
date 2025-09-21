@@ -87,7 +87,6 @@ class AudioSlider(SettingSlider):
     def update_icon(self, volume=0):
         icon_name = get_audio_icon_name(volume, self.client.speaker.muted)["icon_text"]
 
-        print("iconname slider", volume, icon_name)
         self.icon.set_label(icon_name)
 
     @cooldown(0.1)

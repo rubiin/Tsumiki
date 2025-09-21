@@ -16,9 +16,7 @@ class BrightnessSlider(SettingSlider):
         super().__init__(
             pixel_size=20,
             icon_name=text_icons["brightness"]["medium"],
-            min=0,
-            max=self.client.max_screen,  # Use actual max brightness
-            start_value=self.client.screen_brightness,
+            start_value=self.client.screen_brightness_percentage,
         )
 
         if self.client.screen_brightness == -1:
@@ -40,7 +38,7 @@ class BrightnessSlider(SettingSlider):
         self.client.screen_brightness = moved_pos
 
     def on_brightness_change(self, service: BrightnessService, _):
-        brightness_percent = int((service.screen_brightness / service.max_screen) * 100)
+        brightness_percent = service.screen_brightness_percentage
 
         # Avoid unnecessary updates if the value hasn't changed
         if brightness_percent == round(self.scale.get_value()):
