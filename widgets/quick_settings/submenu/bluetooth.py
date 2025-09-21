@@ -66,9 +66,7 @@ class BluetoothDeviceBox(CenterBox):
                 icon=self.icon_to_text_icon.get(
                     device.icon_name, text_icons["bluetooth"]["enabled"]
                 ),
-                props={
-                    "style_classes": ["panel-font-icon"]
-                },
+                props={"style_classes": ["panel-font-icon"]},
             ),
         )
 

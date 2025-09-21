@@ -8,7 +8,6 @@ from fabric.utils import (
     bulk_connect,
     invoke_repeater,
     remove_handler,
-    truncate,
 )
 from fabric.widgets.box import Box
 from fabric.widgets.button import Button
@@ -384,7 +383,7 @@ class ActionButton(HoverButton):
         **kwargs,
     ):
         super().__init__(
-            label=truncate(action.label, 20, "..."),
+            label=action.label,
             h_expand=True,
             on_clicked=self.on_click,
             style_classes="notification-action",

@@ -32,7 +32,6 @@ class AudioSlider(SettingSlider):
         self.client = audio_service
         self.audio_stream = audio_stream
 
-
         # Initialize with default values first
         super().__init__(
             icon_name=text_icons["volume"]["high"],
