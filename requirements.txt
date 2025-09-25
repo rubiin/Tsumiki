@@ -1,9 +1,9 @@
-click==8.2.1
+click==8.3.0
 fabric @ git+https://github.com/Fabric-Development/fabric.git
 ijson==3.4.0
 loguru==0.7.3
 pillow==11.3.0
-psutil==7.0.0
+psutil==7.1.0
 pycairo==1.28.0
 PyGObject==3.50.0
 PyGObject-stubs==2.13.0
