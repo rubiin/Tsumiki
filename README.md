@@ -215,7 +215,7 @@ Once the dependencies are installed, run the following command to start the bar 
 Add this to your `.config/hyprland.conf`
 
 ```sh
-exec = `~/.config/tsumiki/init.sh -start`
+exec = `sleep 5; ~/.config/tsumiki/init.sh -start`
 
 ```
 
