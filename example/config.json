@@ -462,7 +462,7 @@
 			"ignored": [],
 			"timeout": 3000,
 			"max_actions": 3,
-			"play_sound": true,
+			"play_sound": false,
 			"per_app_limits": {},
 			"sound_file": "notification4",
 			"transition_type": "slide-left",

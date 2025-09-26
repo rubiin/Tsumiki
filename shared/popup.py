@@ -204,6 +204,7 @@ class PopupWindow(Window):
         self,
         layer: Layer = "overlay",
         name="popup-window",
+        title="tsumiki",
         decorations="padding: 1px;",
         child: Widget | None = None,
         transition_type: Literal[
@@ -245,6 +246,7 @@ class PopupWindow(Window):
 
         super().__init__(
             name=name,
+            title=title,
             layer=self._layer,
             keyboard_mode=keyboard_mode,
             visible=False,

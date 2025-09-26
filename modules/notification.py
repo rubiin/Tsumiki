@@ -65,6 +65,7 @@ class NotificationPopup(Window):
             all_visible=True,
             visible=True,
             exclusive=False,
+            title="tsumiki-notifications",
             child=self.notifications,
             **kwargs,
         )

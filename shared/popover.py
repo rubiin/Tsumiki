@@ -30,7 +30,7 @@ class PopoverManager:
         self.overlay = WaylandWindow(
             name="popover-overlay",
             style_classes="popover-overlay",
-            title="fabric-shell-popover-overlay",
+            title="tsumiki",
             anchor="left top right bottom",
             margin="-50px 0px 0px 0px",
             exclusivity="auto",

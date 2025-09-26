@@ -221,6 +221,7 @@ class AppLauncher(PopupWindow):
 
         super().__init__(
             name="launcher",
+            title="launcher",
             anchor=self.config.anchor,
             transition_type=transition,
             transition_duration=300,

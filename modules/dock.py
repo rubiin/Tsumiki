@@ -394,6 +394,7 @@ class Dock(Window):
             layer=self.config.get("layer", "top"),
             anchor="bottom-center",
             name="dock",
+            title="dock",
         )
         self.revealer = Revealer(
             child=Box(children=[AppBar(self)], style="padding: 20px 50px 5px 50px;"),

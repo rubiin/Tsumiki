@@ -300,6 +300,7 @@ class OSDContainer(Window):
             pass_through=True,
             keyboard_mode=keyboard_mode,
             name="osd",
+            title="tsumiki",
             **kwargs,
         )
 
