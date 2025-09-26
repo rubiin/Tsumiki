@@ -295,28 +295,45 @@ Kill the app with `pkill tsumiki`. Run `init.sh -start`. This should show some l
 ### 4. **Sass compilation error or UI not rendering?**
 Your `theme.json` may be incorrect or outdated. You can copy the latest `theme.json` from the `example/` directory. Be aware that this will overwrite any custom changes you've made.
 
-### 5. **No Blur?**
 
-Add this to your `hyprland.conf`
-
-```conf
-layerrule = blur , fabric
-layerrule = ignorezero, fabric
-layerrule = blur ,gtk-layer-shell
-layerrule = ignorezero ,gtk-layer-shell
-
-```
-
-### 6. **No Icons?**
+### 5. **No Icons?**
 Make sure your icon theme has the required icons. One of the recommended icon theme is  `Tela Circle`
 
 
-### 7. **ImportError: cannot import XX**
+### 6. **ImportError: cannot import XX**
 This error usually occurs when the required module/package is not installed or cannot be found. Make sure you have all the necessary dependencies installed. You can run
 ```sh
 ./init.sh -install
 ```
 to install all the required packages and dependencies. Additionally, you can also manually install the package. Follow the instructions in the [Installation](#installation) section.
+
+
+
+## Post-Installation
+Add these rules to your `hyprland.conf` to make blur and other effects work properly
+
+```conf
+layerrule = blur, ^tsumiki-notifications$
+layerrule = xray 0, ^tsumiki-notifications$
+layerrule = blurpopups, ^tsumiki-notifications$
+layerrule = ignorezero, ^tsumiki-notifications$
+layerrule = noanim , ^tsumiki-notifications$
+layerrule = blur, ^fabric$
+layerrule = ignorezero, ^fabric$
+layerrule = xray 0, ^fabric$
+layerrule = blurpopups, ^fabric$
+layerrule = blur, ^tsumiki$
+layerrule = xray 0, ^tsumiki$
+layerrule = blurpopups, ^tsumiki$
+layerrule = ignorezero, ^tsumiki$
+layerrule = blur ,gtk-layer-shell
+layerrule = ignorezero ,gtk-layer-shell
+layerrule = blur, ^launcher$
+layerrule = xray 0, ^launcher$
+layerrule = blurpopups, ^launcher$
+layerrule = ignorezero, ^launcher$
+layerrule = animation popin, ^launcher$
+```
 
 ## Contributing
 
