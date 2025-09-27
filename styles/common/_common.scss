@@ -414,7 +414,7 @@ scrolledwindow {
 
     &:hover {
       background-color: theme.$surface-highlight;
-      box-shadow: 0 0 5px -3px transparentize(theme.$text-main, 0.8);
+      box-shadow: 0 0 5px -3px color.mix(theme.$text-main, transparent, 20%)
     }
 
   }
