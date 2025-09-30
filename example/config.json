@@ -208,6 +208,7 @@
 		"workspaces": {
 			"count": 10,
 			"hide_unoccupied": true,
+			"show_numbered": true,
 			"default_label_format": "{id}",
 			"ignored": [
 				-99

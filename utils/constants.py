@@ -332,6 +332,7 @@ DEFAULT_CONFIG = {
             "hide_unoccupied": True,
             "ignored": [-99],
             "reverse_scroll": False,
+            "show_numbered": True,
             "empty_scroll": False,
             "default_label_format": "{id}",
             "icon_map": {},
