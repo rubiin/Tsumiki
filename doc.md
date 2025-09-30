@@ -269,6 +269,7 @@
     - **`hide_unoccupied`**: `bool` (default: true)
     - **`ignored`**: `list[int]` (default: [-99])
     - **`reverse_scroll`**: `bool` (default: false)
+    - **`show_numbered`**: `bool` (default: true)
     - **`empty_scroll`**: `bool` (default: false)
     - **`default_label_format`**: `str` (default: "{id}")
     - **`icon_map`**: `object`
