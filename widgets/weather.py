@@ -2,7 +2,7 @@ import time
 from datetime import datetime
 
 import gi
-from fabric.utils import cooldown
+from fabric.utils import cooldown, invoke_repeater
 from fabric.widgets.box import Box
 from fabric.widgets.grid import Grid
 from fabric.widgets.label import Label
@@ -18,7 +18,6 @@ from utils.functions import check_if_day
 from utils.icons import weather_icons
 from utils.widget_utils import (
     nerd_font_icon,
-    reusable_fabricator,
 )
 
 gi.require_versions({"Gtk": "3.0"})
@@ -247,8 +246,7 @@ class WeatherMenu(Box, BaseWeatherWidget):
             callback=self.update_data,
         )
 
-        # reusing the fabricator to call specified intervals
-        reusable_fabricator.connect("changed", self.update_widget)
+        invoke_repeater(1000, self.update_widget)
 
     def update_data(self, data):
         self.update_app_data(data)
@@ -374,8 +372,7 @@ class WeatherWidget(ButtonWidget, BaseWeatherWidget):
 
         self._update_ui(forced=True)
 
-        # Set up a fabricator to call the update_label method at specified intervals
-        reusable_fabricator.connect("changed", self._update_ui)
+        invoke_repeater(1000, self._update_ui)
 
     def update_data(self, data):
         self.update_time = datetime.now()

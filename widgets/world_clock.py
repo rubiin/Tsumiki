@@ -1,11 +1,12 @@
 from datetime import datetime, timezone
 from zoneinfo import ZoneInfo, available_timezones
 
+from fabric.utils import invoke_repeater
 from fabric.widgets.label import Label
 from loguru import logger
 
 from shared.widget_container import ButtonWidget
-from utils.widget_utils import nerd_font_icon, reusable_fabricator
+from utils.widget_utils import nerd_font_icon
 
 
 class WorldClockWidget(ButtonWidget):
@@ -41,8 +42,7 @@ class WorldClockWidget(ButtonWidget):
             else:
                 logger.info(f"[world_clock] Skipping invalid timezone: {tz_name}")
 
-        # reusing the fabricator to call specified intervals
-        reusable_fabricator.connect("changed", self._update_ui)
+        invoke_repeater(1000, self._update_ui)
 
     def _update_ui(self, *_):
         try:

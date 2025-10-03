@@ -1,9 +1,9 @@
+from fabric.utils import invoke_repeater
 from fabric.widgets.label import Label
 
 import utils.functions as helpers
 from utils.widget_utils import (
     nerd_font_icon,
-    reusable_fabricator,
 )
 
 from .widget_container import ButtonWidget
@@ -61,7 +61,7 @@ class CommandSwitcher(ButtonWidget):
         self.connect("clicked", self.on_click)
 
         # reusing the fabricator to call specified intervals
-        reusable_fabricator.connect("changed", self._update_ui)
+        invoke_repeater(1000, self._update_ui)
         self._update_ui()  # Initial update
 
     # toggle the command on click
