@@ -251,9 +251,3 @@ def get_audio_icon_name(
 
 # Create a fabricator to poll the system stats
 util_fabricator = Fabricator(poll_from=stats_poll, stream=True)
-
-
-reusable_fabricator = Fabricator(
-    interval=1000,  # ms
-    poll_from=lambda *_: "echo",  # Dummy function to keep it alive
-)

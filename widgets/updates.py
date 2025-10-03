@@ -4,6 +4,7 @@ from datetime import datetime
 from fabric.utils import (
     cooldown,
     exec_shell_command_async,
+    invoke_repeater,
 )
 from fabric.widgets.label import Label
 from fabric.widgets.revealer import Revealer
@@ -14,7 +15,6 @@ from utils.colors import Colors
 from utils.constants import ASSETS_DIR
 from utils.widget_utils import (
     nerd_font_icon,
-    reusable_fabricator,
 )
 
 
@@ -58,7 +58,7 @@ class UpdatesWidget(ButtonWidget):
         self._check_update()
 
         # reusing the fabricator to call specified intervals
-        reusable_fabricator.connect("changed", self._should_update)
+        invoke_repeater(1000, self._should_update)
 
     def _build_base_command(self) -> str:
         script = f"{ASSETS_DIR}/scripts/systemupdates.sh"
