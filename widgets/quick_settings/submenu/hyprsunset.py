@@ -8,7 +8,6 @@ from utils.functions import is_app_running, toggle_command
 from utils.icons import text_icons
 from utils.widget_utils import (
     create_scale,
-    reusable_fabricator,
 )
 
 
@@ -90,8 +89,6 @@ class HyprSunsetToggle(QSChevronButton):
 
         self.connect("action-clicked", self.on_action)
 
-        # reusing the fabricator to call specified intervals
-        reusable_fabricator.connect("changed", self.update_action_button)
         invoke_repeater(1000, self.update_action_button)
 
     def on_action(self, *_):

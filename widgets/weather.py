@@ -246,7 +246,6 @@ class WeatherMenu(Box, BaseWeatherWidget):
             callback=self.update_data,
         )
 
-        # reusing the fabricator to call specified intervals
         invoke_repeater(1000, self.update_widget)
 
     def update_data(self, data):
@@ -373,7 +372,6 @@ class WeatherWidget(ButtonWidget, BaseWeatherWidget):
 
         self._update_ui(forced=True)
 
-        # Set up a fabricator to call the update_label method at specified intervals
         invoke_repeater(1000, self._update_ui)
 
     def update_data(self, data):
