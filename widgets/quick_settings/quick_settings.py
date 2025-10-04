@@ -137,12 +137,13 @@ class QuickSettingsButtonBox(Box):
 class QuickSettingsMenu(Box):
     """A menu to display the weather information."""
 
-    def __init__(self, config: dict, **kwargs):
+    def __init__(self, config: dict, popup, **kwargs):
         super().__init__(
             name="quicksettings-menu", orientation="v", all_visible=True, **kwargs
         )
 
         self.config = config
+        self.popup = popup
 
         raw_avatar_path = self.config.get("user", {}).get("avatar", "$HOME/.face")
         avatar_path = os.path.expanduser(os.path.expandvars(raw_avatar_path))
@@ -384,6 +385,7 @@ class QuickSettingsMenu(Box):
     def show_dialog(self, title: str, body: str, command: str):
         """Show a dialog with the given title and body."""
         self.get_parent().set_visible(False)
+        self.popup.hide_popover()
 
         Dialog().add_content(
             title=title,
@@ -452,8 +454,10 @@ class QuickSettingsButtonWidget(ButtonWidget):
             from shared.popover import Popover
 
             self.popup = Popover(
-                content=QuickSettingsMenu(config=self.config),
                 point_to=self,
+            )
+            self.popup.set_content(
+                QuickSettingsMenu(config=self.config, popup=self.popup),
             )
         self.popup.open()
 
