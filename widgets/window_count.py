@@ -15,13 +15,13 @@ class WindowCountWidget(ButtonWidget):
 
         self._hyprland_connection = get_hyprland_connection()
 
-        self.count_label = Label(label="0", style_classes="panel-text")
+        self.count_label = Label(label="0", style_classes=["panel-text"])
         self.container_box.add(self.count_label)
 
         if self.config.get("show_icon", True):
             self.icon = nerd_font_icon(
                 icon=self.config.get("icon", "󰕸"),
-                props={"style_classes": "panel-font-icon"},
+                props={"style_classes": ["panel-font-icon"]},
             )
             self.container_box.add(self.icon)
 

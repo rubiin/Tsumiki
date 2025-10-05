@@ -35,12 +35,12 @@ class UpdatesWidget(ButtonWidget):
         if self.config.get("show_icon", True):
             self.icon = nerd_font_icon(
                 icon=self.config.get("no_updates_icon", "󰒲"),
-                props={"style_classes": "panel-font-icon"},
+                props={"style_classes": ["panel-font-icon"]},
             )
             self.container_box.add(self.icon)
 
         if self.config.get("label", True):
-            self.update_label = Label(label="0", style_classes="panel-text")
+            self.update_label = Label(label="0", style_classes=["panel-text"])
 
             if self.config.get("hover_reveal", True):
                 self.revealer = Revealer(

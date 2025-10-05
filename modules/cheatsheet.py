@@ -36,13 +36,13 @@ class CheatSheet(Box):
         # Grid (not homogeneous so columns can have different widths)
         self._grid = Grid(
             homogeneous=False,
-            style_classes="cheatsheet-grid",
+            style_classes=["cheatsheet-grid"],
             row_spacing=10,
             column_spacing=40,
         )
 
         self.children = (
-            Label("Cheat Sheet", style_classes="cheatsheet-title"),
+            Label("Cheat Sheet", style_classes=["cheatsheet-title"]),
             self._grid,
         )
 
@@ -80,7 +80,7 @@ class CheatSheet(Box):
 
             # Group header (spanning both cols)
             self._grid.attach(
-                Label(group_name, style_classes="cheatsheet-group"),
+                Label(group_name, style_classes=["cheatsheet-group"]),
                 base_col,
                 0,
                 2,
@@ -96,8 +96,10 @@ class CheatSheet(Box):
                 for key, icon in self.key_icon_map.items():
                     combo = combo.replace(key, icon)
 
-                combo_label = Label(combo, style_classes="cheatsheet-key")
-                desc_label = Label(description, style_classes="cheatsheet-description")
+                combo_label = Label(combo, style_classes=["cheatsheet-key"])
+                desc_label = Label(
+                    description, style_classes=["cheatsheet-description"]
+                )
 
                 # Attach: combo in first col, description in second col
                 self._grid.attach(combo_label, base_col, row, 1, 1)

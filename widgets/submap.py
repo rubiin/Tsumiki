@@ -12,7 +12,7 @@ class SubMapWidget(ButtonWidget):
     def __init__(self, **kwargs):
         super().__init__(name="submap", **kwargs)
 
-        self.submap_label = Label(label="submap", style_classes="panel-text")
+        self.submap_label = Label(label="submap", style_classes=["panel-text"])
 
         self.container_box.add(self.submap_label)
 
@@ -20,7 +20,7 @@ class SubMapWidget(ButtonWidget):
             # Create a TextIcon with the specified icon and size
             self.icon = nerd_font_icon(
                 icon=self.config.get("icon", "󰕸"),
-                props={"style_classes": "panel-font-icon"},
+                props={"style_classes": ["panel-font-icon"]},
             )
             self.container_box.add(self.icon)
 

@@ -293,13 +293,13 @@ class PlayerBox(Box):
         self.position_label = Label(
             "00:00",
             v_align="center",
-            style_classes="time-label",
+            style_classes=["time-label"],
             visible=self.config.get("show_time", True),
         )
         self.length_label = Label(
             "00:00",
             v_align="center",
-            style_classes="time-label",
+            style_classes=["time-label"],
             visible=self.config.get("show_time", True),
         )
 

@@ -15,7 +15,7 @@ class MicrophoneIndicatorWidget(ButtonWidget):
 
         self.icon = nerd_font_icon(
             icon=MIC_OFF_ICON,
-            props={"style_classes": "panel-font-icon"},
+            props={"style_classes": ["panel-font-icon"]},
         )
 
         self.container_box.add(self.icon)
@@ -23,7 +23,7 @@ class MicrophoneIndicatorWidget(ButtonWidget):
         if self.config.get("label", True):
             self.mic_label = Label(
                 label="",
-                style_classes="panel-text",
+                style_classes=["panel-text"],
             )
             self.container_box.add(self.mic_label)
 

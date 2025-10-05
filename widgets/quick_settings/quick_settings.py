@@ -163,12 +163,12 @@ class QuickSettingsMenu(Box):
             label=username_label,
             v_align="center",
             h_align="start",
-            style_classes="user",
+            style_classes=["user"],
         )
 
         uptime_label = Label(
             label=f" {helpers.uptime()}",
-            style_classes="uptime",
+            style_classes=["uptime"],
             v_align="center",
             h_align="start",
         )
@@ -271,7 +271,7 @@ class QuickSettingsMenu(Box):
 
         # Create center box with sliders and shortcuts if configured
         center_box = Box(
-            orientation="h", spacing=10, style_classes="section-box", h_expand=True
+            orientation="h", spacing=10, style_classes=["section-box"], h_expand=True
         )
 
         main_grid = Grid(column_spacing=10, h_expand=True, column_homogeneous=False)
@@ -333,7 +333,7 @@ class QuickSettingsMenu(Box):
                         shortcuts_config=self.config.get("shortcuts", {}).get(
                             "items", []
                         ),
-                        style_classes="shortcuts-grid",
+                        style_classes=["shortcuts-grid"],
                         v_align="start",
                         h_align="fill",
                     ),
@@ -350,12 +350,12 @@ class QuickSettingsMenu(Box):
         # Create main layout box
         box = CenterBox(
             orientation="v",
-            style_classes="quick-settings-box",
+            style_classes=["quick-settings-box"],
             start_children=Box(
                 orientation="v",
                 spacing=10,
                 v_align="center",
-                style_classes="section-box",
+                style_classes=["section-box"],
                 children=(self.user_box, QuickSettingsButtonBox(popup=popup)),
             ),
             center_children=center_box,
@@ -366,7 +366,7 @@ class QuickSettingsMenu(Box):
                 Box(
                     orientation="v",
                     spacing=10,
-                    style_classes="section-box",
+                    style_classes=["section-box"],
                     children=(
                         PlayerBoxStack(
                             MprisPlayerManager(), config=self.config.get("media", {})
@@ -423,14 +423,18 @@ class QuickSettingsButtonWidget(ButtonWidget):
 
         self.popup = None
 
-        self.audio_icon = Image(style_classes="panel-font-icon")
+        self.audio_icon = Image(style_classes=["panel-font-icon"])
 
         self.network_icon = Image(
-            style_classes="panel-font-icon",
+            style_classes=[
+                "panel-font-icon",
+            ]
         )
 
         self.brightness_icon = Image(
-            style_classes="panel-font-icon",
+            style_classes=[
+                "panel-font-icon",
+            ]
         )
 
         self.update_brightness()

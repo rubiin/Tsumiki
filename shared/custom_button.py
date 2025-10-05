@@ -41,14 +41,14 @@ class CustomButtonWidget(ButtonWidget):
             if icon:
                 self.icon = nerd_font_icon(
                     icon=icon,
-                    props={"style_classes": "panel-font-icon"},
+                    props={"style_classes": ["panel-font-icon"]},
                 )
                 self.container_box.add(self.icon)
 
         # Setup label if specified
         if self.config.get("label", True):
             label_text = self.config.get("label_text", "Button")
-            self.label = Label(label=label_text, style_classes="panel-text")
+            self.label = Label(label=label_text, style_classes=["panel-text"])
             self.container_box.add(self.label)
 
         # Connect click handler

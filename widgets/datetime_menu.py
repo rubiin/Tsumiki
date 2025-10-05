@@ -49,7 +49,7 @@ class DateMenuNotification(Box):
         self._id = id
 
         header_container = Box(
-            spacing=8, orientation="h", style_classes="notification-header"
+            spacing=8, orientation="h", style_classes=["notification-header"]
         )
 
         header_container.children = (
@@ -65,13 +65,13 @@ class DateMenuNotification(Box):
                 h_align="start",
                 h_expand=True,
                 line_wrap="word-char",
-                style_classes="summary",
+                style_classes=["summary"],
                 name="date-menu-notification-summary",
             ),
         )
         close_button = Button(
             v_align="start",
-            style_classes="close-button",
+            style_classes=["close-button"],
             child=nerd_font_icon(
                 icon=text_icons["ui"]["window_close"],
                 props={
@@ -91,7 +91,7 @@ class DateMenuNotification(Box):
         body_container = Box(
             spacing=15,
             orientation="h",
-            style_classes="notification-body",
+            style_classes=["notification-body"],
             v_align="start",
             h_align="start",
         )
@@ -181,7 +181,7 @@ class DateNotificationMenu(Box):
 
             # Placeholder for when there are no notifications
             self.placeholder = Box(
-                style_classes="placeholder",
+                style_classes=["placeholder"],
                 orientation="v",
                 h_align="center",
                 v_align="center",
@@ -196,7 +196,7 @@ class DateNotificationMenu(Box):
                         },
                     ),
                     Label(
-                        label="Your all caught up!", style_classes="placeholder-text"
+                        label="Your all caught up!", style_classes=["placeholder-text"]
                     ),
                 ),
             )
@@ -210,7 +210,7 @@ class DateNotificationMenu(Box):
             )
 
             notification_column_header = Box(
-                style_classes="header",
+                style_classes=["header"],
                 orientation="h",
                 children=(
                     Label(label="Do Not Disturb", name="dnd-text"),
@@ -247,7 +247,7 @@ class DateNotificationMenu(Box):
         )
         self.scrolled_window = ScrolledWindow(
             v_expand=True,
-            style_classes="notification-scrollable",
+            style_classes=["notification-scrollable"],
             v_scrollbar_policy="automatic",
             h_scrollbar_policy="never",
             child=Box(children=(self.placeholder, self.notifications_listbox)),
@@ -273,7 +273,7 @@ class DateNotificationMenu(Box):
 
         if config.get("calendar", True):
             date_column = Box(
-                style_classes="date-column",
+                style_classes=["date-column"],
                 orientation="v",
                 children=(
                     DateTime(
@@ -283,7 +283,7 @@ class DateNotificationMenu(Box):
                         name="clock",
                     ),
                     Box(
-                        style_classes="calendar",
+                        style_classes=["calendar"],
                         v_expand=True,
                         children=(
                             Gtk.Calendar(

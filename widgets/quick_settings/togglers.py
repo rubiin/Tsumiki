@@ -29,7 +29,7 @@ class QuickSettingToggler(CommandSwitcher):
             label=True,
             tooltip=False,
             interval=1000,
-            style_classes="quicksettings-toggler",
+            style_classes=["quicksettings-toggler"],
             **kwargs,
         )
 
@@ -53,7 +53,7 @@ class NotificationQuickSetting(HoverButton):
     def __init__(self, popup, **kwargs):
         super().__init__(
             name="quicksettings-togglebutton",
-            style_classes="quicksettings-toggler",
+            style_classes=["quicksettings-toggler"],
         )
 
         self.popup = popup
@@ -63,7 +63,7 @@ class NotificationQuickSetting(HoverButton):
         )
         self.notification_icon = nerd_font_icon(
             icon=text_icons["notifications"]["noisy"],
-            props={"style_classes": "panel-font-icon"},
+            props={"style_classes": ["panel-font-icon"]},
         )
 
         self.children = Box(

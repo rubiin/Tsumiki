@@ -32,7 +32,7 @@ class VolumeWidget(EventBoxWidget):
         self.icon = nerd_font_icon(
             icon=text_icons["volume"]["medium"],
             props={
-                "style_classes": "panel-font-icon overlay-icon",
+                "style_classes": ["panel-font-icon", "overlay-icon"],
             },
         )
 
@@ -48,7 +48,7 @@ class VolumeWidget(EventBoxWidget):
         self.connect("scroll-event", self.on_scroll)
 
         if self.config.get("label", True):
-            self.volume_label = Label(style_classes="panel-text")
+            self.volume_label = Label(style_classes=["panel-text"])
             self.box.add(self.volume_label)
 
     @cooldown(0.1)

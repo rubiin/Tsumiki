@@ -627,12 +627,12 @@ class ClipHistoryWidget(ButtonWidget):
         self.container_box.add(
             nerd_font_icon(
                 icon=self.config.get("icon", "󰕸"),
-                props={"style_classes": "panel-font-icon"},
+                props={"style_classes": ["panel-font-icon"]},
             )
         )
 
         if self.config.get("label", True):
-            self.container_box.add(Label(label="Clip", style_classes="panel-text"))
+            self.container_box.add(Label(label="Clip", style_classes=["panel-text"]))
 
         if self.config.get("tooltip", False):
             self.set_tooltip_text("Clipboard History")

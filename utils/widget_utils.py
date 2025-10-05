@@ -204,7 +204,7 @@ def create_scale(
     orientation="h",
     h_expand=True,
     h_align="center",
-    style_classes="",
+    style_classes=[""],
     duration=0.8,
     **kwargs,
 ) -> AnimatedScale:
