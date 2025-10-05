@@ -2,7 +2,7 @@ import math
 
 import gi
 from fabric.notifications import Notification
-from fabric.utils import bulk_connect
+from fabric.utils import bulk_connect, logger
 from fabric.widgets.box import Box
 from fabric.widgets.button import Button
 from fabric.widgets.datetime import DateTime
@@ -11,7 +11,6 @@ from fabric.widgets.revealer import Revealer
 from fabric.widgets.scrolledwindow import ScrolledWindow
 from fabric.widgets.separator import Separator
 from gi.repository import GdkPixbuf, GLib, Gtk
-from loguru import logger
 
 import utils.constants as constants
 import utils.functions as helpers

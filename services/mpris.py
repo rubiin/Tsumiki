@@ -5,9 +5,8 @@ import gi
 
 # Fabric imports
 from fabric.core.service import Property, Service, Signal
-from fabric.utils import bulk_connect
+from fabric.utils import bulk_connect, logger
 from gi.repository import GLib
-from loguru import logger
 
 from utils.exceptions import PlayerctlImportError
 

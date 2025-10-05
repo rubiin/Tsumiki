@@ -1,7 +1,7 @@
 from typing import Iterator
 
 from fabric.hyprland.widgets import get_hyprland_connection
-from loguru import logger
+from fabric.utils import logger
 
 MODMASK_MAP = {
     64: "SUPER",

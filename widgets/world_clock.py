@@ -1,9 +1,8 @@
 from datetime import datetime, timezone
 from zoneinfo import ZoneInfo, available_timezones
 
-from fabric.utils import invoke_repeater
+from fabric.utils import invoke_repeater, logger
 from fabric.widgets.label import Label
-from loguru import logger
 
 from shared.widget_container import ButtonWidget
 from utils.widget_utils import nerd_font_icon

@@ -3,13 +3,12 @@ from typing import ClassVar
 import gi
 from fabric.hyprland.service import HyprlandEvent
 from fabric.hyprland.widgets import get_hyprland_connection
-from fabric.utils import bulk_connect
+from fabric.utils import bulk_connect, logger
 from fabric.widgets.box import Box
 from fabric.widgets.revealer import Revealer
 from fabric.widgets.wayland import WaylandWindow
 from fabric.widgets.widget import Widget
 from gi.repository import Gdk, GLib, GObject, GtkLayerShell
-from loguru import logger
 
 from utils.types import Reveal_Animations
 

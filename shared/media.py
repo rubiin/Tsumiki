@@ -10,6 +10,7 @@ from fabric.utils import (
     bulk_connect,
     cooldown,
     invoke_repeater,
+    logger,
 )
 from fabric.widgets.box import Box
 from fabric.widgets.button import Button
@@ -20,7 +21,6 @@ from fabric.widgets.overlay import Overlay
 from fabric.widgets.scale import Scale
 from fabric.widgets.stack import Stack
 from gi.repository import GLib, GObject
-from loguru import logger
 
 from services.mpris import MprisPlayer, MprisPlayerManager
 from shared.buttons import HoverButton

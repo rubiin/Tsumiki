@@ -24,9 +24,9 @@ from fabric.utils import (
     exec_shell_command_async,
     get_relative_path,
     invoke_repeater,
+    logger,
 )
 from gi.repository import Gdk, GdkPixbuf, Gio, GLib, Gtk
-from loguru import logger
 from PIL import Image
 
 from .colors import Colors

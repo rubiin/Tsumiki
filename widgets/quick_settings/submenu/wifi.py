@@ -1,10 +1,10 @@
 import gi
+from fabric.utils import logger
 from fabric.widgets.box import Box
 from fabric.widgets.button import Button
 from fabric.widgets.label import Label
 from fabric.widgets.scrolledwindow import ScrolledWindow
 from gi.repository import GObject, Gtk
-from loguru import logger
 
 from services.network import NetworkService, Wifi
 from shared.buttons import QSChevronButton, ScanButton

@@ -1,4 +1,4 @@
-from fabric.utils.helpers import get_desktop_applications
+from fabric.utils import get_desktop_applications
 
 
 class AppUtils:

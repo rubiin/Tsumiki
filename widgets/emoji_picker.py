@@ -2,14 +2,13 @@ import os
 import subprocess
 
 import ijson
-from fabric.utils import remove_handler
+from fabric.utils import logger, remove_handler
 from fabric.widgets.box import Box
 from fabric.widgets.button import Button
 from fabric.widgets.entry import Entry
 from fabric.widgets.label import Label
 from fabric.widgets.stack import Stack
 from gi.repository import Gdk
-from loguru import logger
 
 from shared.widget_container import ButtonWidget
 from utils.constants import ASSETS_DIR

@@ -1,8 +1,7 @@
 import os
 
 from fabric import Application
-from fabric.utils import exec_shell_command, get_relative_path
-from loguru import logger
+from fabric.utils import exec_shell_command, get_relative_path, logger
 
 import utils.functions as helpers
 from modules.bar import StatusBar

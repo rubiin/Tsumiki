@@ -1,8 +1,8 @@
 import re
 
+from fabric.utils import logger
 from fabric.widgets.box import Box
 from fabric.widgets.label import Label
-from loguru import logger
 
 from services.mpris import MprisPlayer, MprisPlayerManager
 from shared.media import PlayerBoxStack

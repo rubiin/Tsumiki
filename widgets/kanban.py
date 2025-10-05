@@ -3,7 +3,7 @@ import typing
 from pathlib import Path
 
 import gi
-from fabric.utils import bulk_connect
+from fabric.utils import bulk_connect, logger
 from fabric.widgets.box import Box
 from fabric.widgets.button import Button
 from fabric.widgets.centerbox import CenterBox
@@ -12,7 +12,6 @@ from fabric.widgets.grid import Grid
 from fabric.widgets.label import Label
 from fabric.widgets.scrolledwindow import ScrolledWindow
 from gi.repository import Gdk, GLib, GObject, Gtk
-from loguru import logger
 
 from shared.list import ListBox
 from shared.widget_container import ButtonWidget

@@ -7,6 +7,7 @@ from fabric.notifications import (
 from fabric.utils import (
     bulk_connect,
     invoke_repeater,
+    logger,
     remove_handler,
 )
 from fabric.widgets.box import Box
@@ -20,7 +21,6 @@ from fabric.widgets.revealer import Revealer
 from fabric.widgets.wayland import WaylandWindow as Window
 from fabric.widgets.widget import Widget
 from gi.repository import Gdk, GdkPixbuf, GLib
-from loguru import logger
 
 import utils.constants as constants
 import utils.functions as helpers

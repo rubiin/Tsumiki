@@ -5,10 +5,10 @@ from fabric.utils import (
     cooldown,
     exec_shell_command_async,
     invoke_repeater,
+    logger,
 )
 from fabric.widgets.label import Label
 from fabric.widgets.revealer import Revealer
-from loguru import logger
 
 from shared.widget_container import ButtonWidget
 from utils.colors import Colors
