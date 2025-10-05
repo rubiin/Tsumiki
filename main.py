@@ -27,17 +27,6 @@ def process_and_apply_css(app: Application):
 general_options = widget_config.get("general", {})
 module_options = widget_config.get("modules", {})
 
-if not general_options.get("debug", False):
-    for log in [
-        "fabric",
-        "widgets",
-        "utils",
-        "utils.config",
-        "modules",
-        "services",
-    ]:
-        logger.disable(log)
-
 
 def main():
     """Main function to run the application."""
@@ -99,17 +88,19 @@ def main():
 
         app.add_window(OSDContainer(widget_config))
 
-    if general_options.get("debug", False):
-        helpers.set_debug_logger()
+    # Disable verbose logging for non-debug mode
 
-    # if general_options.get("monitor_styles", False):
-    #     main_css_file = monitor_file(get_relative_path("styles"))
-    #     common_css_file = monitor_file(get_relative_path("styles/common"))
-    #     main_css_file.connect("changed", lambda *_: process_and_apply_css(app))
-    #     common_css_file.connect("changed", lambda *_: process_and_apply_css(app))
-    # else:
-    #
-    process_and_apply_css(app)
+    if not general_options.get("debug", False):
+        for log in [
+            "fabric",
+            "widgets",
+            "utils",
+            "utils.config",
+            "modules",
+            "services",
+            "config",
+        ]:
+            logger.disable(log)
 
     # Start config file watching if enabled
     if general_options.get("auto_reload", True):
@@ -117,6 +108,14 @@ def main():
 
         start_config_watching()
         logger.info(f"{Colors.INFO}[Main] Config auto-reload enabled")
+
+    # if general_options.get("monitor_styles", False):
+    #     main_css_file = monitor_file(get_relative_path("styles"))
+    #     common_css_file = monitor_file(get_relative_path("styles/common"))
+    #     main_css_file.connect("changed", lambda *_: process_and_apply_css(app))
+    #     common_css_file.connect("changed", lambda *_: process_and_apply_css(app))
+    # else:
+    process_and_apply_css(app)
 
     logger.info(f"{Colors.INFO}[Main] Starting {APPLICATION_NAME}...")
     logger.info(f"Starting shell... pid:{os.getpid()}")
