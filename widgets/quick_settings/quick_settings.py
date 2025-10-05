@@ -167,7 +167,7 @@ class QuickSettingsMenu(Box):
         )
 
         uptime_label = Label(
-            label=f"󱫠 {helpers.uptime()}",
+            label=f" {helpers.uptime()}",
             style_classes="uptime",
             v_align="center",
             h_align="start",
@@ -379,7 +379,7 @@ class QuickSettingsMenu(Box):
 
         invoke_repeater(
             1000,
-            lambda *_: uptime_label.set_label(f"󱫠 {helpers.uptime()}"),
+            lambda *_: uptime_label.set_label(f" {helpers.uptime()}"),
         )
 
     def show_dialog(self, title: str, body: str, command: str):
