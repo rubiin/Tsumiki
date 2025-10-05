@@ -37,23 +37,26 @@ class QuickSettingToggler(CommandSwitcher):
 class HyprIdleQuickSetting(QuickSettingToggler):
     """A button to toggle the hyper idle mode."""
 
-    def __init__(self, **kwargs):
+    def __init__(self, popup, **kwargs):
         super().__init__(
             command="hypridle",
             enabled_icon="",
             disabled_icon="",
             name="quicksettings-togglebutton",
         )
+        self.connect("clicked", lambda *_: popup.hide_popover())
 
 
 class NotificationQuickSetting(HoverButton):
     """A button to toggle the notification."""
 
-    def __init__(self):
+    def __init__(self, popup, **kwargs):
         super().__init__(
             name="quicksettings-togglebutton",
             style_classes="quicksettings-toggler",
         )
+
+        self.popup = popup
 
         self.notification_label = Label(
             label="Noisy",
@@ -82,6 +85,7 @@ class NotificationQuickSetting(HoverButton):
     def on_click(self, *_):
         """Toggle the notification."""
         notification_service.dont_disturb = not notification_service.dont_disturb
+        self.popup.hide_popover()
 
     def toggle_notification(self, _, value: bool, *args):
         """Toggle the notification."""

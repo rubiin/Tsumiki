@@ -53,7 +53,7 @@ class QuickSettingsButtonBox(Box):
             self.active_submenu._reveal(False)
             self.active_submenu = None
 
-    def __init__(self, **kwargs):
+    def __init__(self, popup, **kwargs):
         super().__init__(
             orientation="v",
             name="quick-settings-button-box",
@@ -83,11 +83,11 @@ class QuickSettingsButtonBox(Box):
             submenu=WifiSubMenu(),
         )
 
-        self.power_pfl = PowerProfileToggle(submenu=PowerProfileSubMenu())
+        self.power_pfl = PowerProfileToggle(submenu=PowerProfileSubMenu(), popup=popup)
 
-        self.hyprsunset = HyprSunsetToggle(submenu=HyprSunsetSubMenu())
-        self.hypridle = HyprIdleQuickSetting()
-        self.notification_btn = NotificationQuickSetting()
+        self.hyprsunset = HyprSunsetToggle(submenu=HyprSunsetSubMenu(), popup=popup)
+        self.hypridle = HyprIdleQuickSetting(popup=popup)
+        self.notification_btn = NotificationQuickSetting(popup=popup)
 
         self.grid.attach(self.wifi_toggle, 1, 1, 1, 1)
 
@@ -356,7 +356,7 @@ class QuickSettingsMenu(Box):
                 spacing=10,
                 v_align="center",
                 style_classes="section-box",
-                children=(self.user_box, QuickSettingsButtonBox()),
+                children=(self.user_box, QuickSettingsButtonBox(popup=popup)),
             ),
             center_children=center_box,
         )

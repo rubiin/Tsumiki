@@ -77,7 +77,7 @@ class HyprSunsetSubMenu(QuickSubMenu):
 class HyprSunsetToggle(QSChevronButton):
     """A widget to display a toggle button for Wifi."""
 
-    def __init__(self, submenu: QuickSubMenu, **kwargs):
+    def __init__(self, submenu: QuickSubMenu, popup, **kwargs):
         super().__init__(
             action_icon=text_icons["nightlight"]["disabled"],
             pixel_size=20,
@@ -85,6 +85,8 @@ class HyprSunsetToggle(QSChevronButton):
             submenu=submenu,
             **kwargs,
         )
+
+        self.popup = popup
         self.action_button.set_sensitive(True)
 
         self.connect("action-clicked", self.on_action)
@@ -96,6 +98,7 @@ class HyprSunsetToggle(QSChevronButton):
         # Get current slider value for dynamic command
         current_temp = int(self.submenu.scale.get_value())
         toggle_command("hyprsunset", f"hyprsunset -t {current_temp}")
+        self.popup.hide_popover()
         return True
 
     def update_action_button(self, *_):
