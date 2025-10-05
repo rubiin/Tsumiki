@@ -14,7 +14,7 @@ class RecorderWidget(ButtonWidget):
         # Initial UI setup
         self.recording_idle_image = nerd_font_icon(
             icon=text_icons["recorder"],
-            props={"style_classes": "panel-font-icon"},
+            props={"style_classes": ["panel-font-icon"]},
         )
         self.container_box.add(self.recording_idle_image)
 

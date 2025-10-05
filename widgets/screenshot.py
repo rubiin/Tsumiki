@@ -17,12 +17,12 @@ class ScreenShotWidget(ButtonWidget):
 
         self.container_box.children = nerd_font_icon(
             icon=self.config.get("icon", "󰕸"),
-            props={"style_classes": "panel-font-icon"},
+            props={"style_classes": ["panel-font-icon"]},
         )
 
         if self.config.get("label", True):
             self.container_box.add(
-                Label(label="screenshot", style_classes="panel-text")
+                Label(label="screenshot", style_classes=["panel-text"])
             )
 
         if self.config.get("tooltip", False):

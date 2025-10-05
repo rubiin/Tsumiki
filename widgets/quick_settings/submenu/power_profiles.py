@@ -26,7 +26,7 @@ class PowerProfileItem(Button):
         **kwargs,
     ):
         super().__init__(
-            style_classes="submenu-button power-profile",
+            style_classes=["submenu-button power-profile"],
             **kwargs,
         )
         self.profile = profile
@@ -45,7 +45,7 @@ class PowerProfileItem(Button):
                 ),
                 Label(
                     label=profile,
-                    style_classes="submenu-item-label",
+                    style_classes=["submenu-item-label"],
                 ),
             ),
         )

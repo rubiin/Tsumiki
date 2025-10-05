@@ -31,7 +31,7 @@ class ScanButton(HoverButton):
     """A button to start a scan action."""
 
     def __init__(self, **kwargs):
-        super().__init__(name="scan-button", style_classes="submenu-button", **kwargs)
+        super().__init__(name="scan-button", style_classes=["submenu-button"], **kwargs)
 
         self.scan_image = CircularImage(
             image_file=f"{ASSETS_DIR}icons/svg/refresh.svg",
@@ -90,7 +90,7 @@ class QSToggleButton(Box, BaseWidget):
         )
 
         self.action_label = Label(
-            style_classes="panel-text",
+            style_classes=["panel-text"],
             label=action_label,
             ellipsization="end",
             h_align="start",
@@ -98,7 +98,7 @@ class QSToggleButton(Box, BaseWidget):
         )
 
         self.action_button = HoverButton(
-            style_classes="quicksettings-toggle-action",
+            style_classes=["quicksettings-toggle-action"],
             on_clicked=self._action,
         )
 
@@ -108,7 +108,7 @@ class QSToggleButton(Box, BaseWidget):
             Box(
                 h_align="start",
                 v_align="center",
-                style_classes="quicksettings-toggle-action-box",
+                style_classes=["quicksettings-toggle-action-box"],
                 children=[self.action_icon, self.action_label],
             ),
         )
@@ -157,7 +157,7 @@ class QSChevronButton(QSToggleButton):
         )
 
         self.reveal_button = HoverButton(
-            style_classes="toggle-revealer",
+            style_classes=["toggle-revealer"],
             image=self.button_image,
             h_expand=True,
             on_clicked=self._reveal_toggle,

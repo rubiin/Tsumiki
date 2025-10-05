@@ -18,14 +18,14 @@ class LanguageWidget(ButtonWidget):
                 length=self.config.get("truncation_size", 10),
                 suffix="",
             ),
-            style_classes="panel-text",
+            style_classes=["panel-text"],
         )
 
         if self.config.get("show_icon", True):
             self.icon = nerd_font_icon(
                 icon=self.config.get("icon", "󰕸"),
                 props={
-                    "style_classes": "panel-font-icon",
+                    "style_classes": ["panel-font-icon"],
                 },
             )
             self.container_box.add(self.icon)

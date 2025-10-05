@@ -89,7 +89,7 @@ class PowerControlButtons(HoverButton):
         self.parent = parent
 
         self.container_box = Box(
-            style_classes="power-button-container",
+            style_classes=["power-button-container"],
             orientation="v",
             children=[
                 Svg(
@@ -113,7 +113,7 @@ class PowerControlButtons(HoverButton):
             self.container_box.add(
                 Label(
                     label=name.capitalize(),
-                    style_classes="panel-text",
+                    style_classes=["panel-text"],
                 )
             )
 
@@ -149,12 +149,12 @@ class PowerWidget(ButtonWidget):
             # Create a TextIcon with the specified icon and size
             self.icon = nerd_font_icon(
                 icon=self.config.get("icon", "󰕸"),
-                props={"style_classes": "panel-font-icon"},
+                props={"style_classes": ["panel-font-icon"]},
             )
             self.container_box.add(self.icon)
 
         if self.config.get("label", True):
-            self.container_box.add(Label(label="power", style_classes="panel-text"))
+            self.container_box.add(Label(label="power", style_classes=["panel-text"]))
 
         if self.config.get("tooltip", False):
             self.set_tooltip_text("Power")

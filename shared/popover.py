@@ -29,7 +29,7 @@ class PopoverManager:
         # Shared overlay window for all popovers
         self.overlay = WaylandWindow(
             name="popover-overlay",
-            style_classes="popover-overlay",
+            style_classes=["popover-overlay"],
             title="tsumiki",
             anchor="left top right bottom",
             margin="-50px 0px 0px 0px",
@@ -222,7 +222,7 @@ class Popover(Widget):
 
         # Add content to window
         self._content_window.add(
-            Box(style_classes="popover-content", children=self._content)
+            Box(style_classes=["popover-content"], children=self._content)
         )
 
         bulk_connect(

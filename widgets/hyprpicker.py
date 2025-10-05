@@ -20,12 +20,12 @@ class HyprPickerWidget(ButtonWidget):
             self.container_box.add(
                 nerd_font_icon(
                     icon=self.config.get("icon", "󰕸"),
-                    props={"style_classes": "panel-font-icon"},
+                    props={"style_classes": ["panel-font-icon"]},
                 )
             )
 
         if self.config.get("label", True):
-            self.container_box.add(Label(label="picker", style_classes="panel-text"))
+            self.container_box.add(Label(label="picker", style_classes=["panel-text"]))
 
         self.connect("button-press-event", self.on_button_press)
 

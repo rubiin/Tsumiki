@@ -15,13 +15,13 @@ class KeyboardLayoutWidget(ButtonWidget):
     def __init__(self, **kwargs):
         super().__init__(name="keyboard", **kwargs)
 
-        self.kb_label = Label(label="keyboard", style_classes="panel-text")
+        self.kb_label = Label(label="keyboard", style_classes=["panel-text"])
 
         if self.config.get("show_icon", True):
             # Create a TextIcon with the specified icon and size
             self.icon = nerd_font_icon(
                 icon=self.config.get("icon", "󰕸"),
-                props={"style_classes": "panel-font-icon"},
+                props={"style_classes": ["panel-font-icon"]},
             )
             self.container_box.add(self.icon)
 

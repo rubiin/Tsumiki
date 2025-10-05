@@ -36,7 +36,7 @@ class ShortcutButton(HoverButton):
                 label=shortcut_config.get("label", ""),
                 v_align="center",
                 h_align="center",
-                style_classes="shortcut-label",
+                style_classes=["shortcut-label"],
             )
             box.add(label)
 

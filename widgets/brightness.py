@@ -30,7 +30,7 @@ class BrightnessWidget(EventBoxWidget):
 
         # Create a circular progress bar to display the brightness level
         self.progress_bar = CircularProgressBar(
-            style_classes="overlay-progress-bar",
+            style_classes=["overlay-progress-bar"],
             pie=True,
             size=24,
             value=normalized_brightness / 100,
@@ -39,7 +39,7 @@ class BrightnessWidget(EventBoxWidget):
         self.icon = nerd_font_icon(
             icon=text_icons["brightness"]["medium"],
             props={
-                "style_classes": "panel-font-icon overlay-icon",
+                "style_classes": ["panel-font-icon", "overlay-icon"],
             },
         )
 
@@ -59,7 +59,7 @@ class BrightnessWidget(EventBoxWidget):
         if self.config.get("label", True):
             self.brightness_label = Label(
                 label=f"{normalized_brightness}%",
-                style_classes="panel-text",
+                style_classes=["panel-text"],
             )
             self.box.add(self.brightness_label)
 

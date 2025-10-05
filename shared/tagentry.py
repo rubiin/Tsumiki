@@ -69,7 +69,7 @@ class TagEntry(Box, BaseWidget):
 
     def create_tag(self, text):
         # Create a tag button
-        tag_box = EventBox(style_classes="tag")
+        tag_box = EventBox(style_classes=["tag"])
         tag_box.connect("button-press-event", self.on_tag_clicked)
         tag_box.tag_text = text
 

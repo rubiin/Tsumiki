@@ -90,7 +90,7 @@ class BaseSystemTray:
 
     def _bake_item_button(self, item: Gray.Item) -> HoverButton:
         button = HoverButton(
-            style_classes="flat", tooltip_text=item.get_property("title")
+            style_classes=["flat"], tooltip_text=item.get_property("title")
         )
         button.connect(
             "button-press-event",

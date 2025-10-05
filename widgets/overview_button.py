@@ -15,11 +15,13 @@ class OverviewButtonWidget(ButtonWidget):
 
         self.container_box.children = nerd_font_icon(
             icon=self.config.get("icon", "󰕸"),
-            props={"style_classes": "panel-font-icon"},
+            props={"style_classes": ["panel-font-icon"]},
         )
 
         if self.config.get("label", True):
-            self.container_box.add(Label(label="overview", style_classes="panel-text"))
+            self.container_box.add(
+                Label(label="overview", style_classes=["panel-text"])
+            )
 
         # Lazy-init overview popup
         self._overview_popup = None

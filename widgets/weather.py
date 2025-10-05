@@ -104,7 +104,7 @@ class WeatherMenu(Box, BaseWeatherWidget):
         **kwargs,
     ):
         super().__init__(
-            style_classes="weather-box",
+            style_classes=["weather-box"],
             orientation="v",
             h_expand=True,
             spacing=5,
@@ -132,37 +132,37 @@ class WeatherMenu(Box, BaseWeatherWidget):
         )
 
         self.location = Label(
-            style_classes="header-label",
+            style_classes=["header-label"],
             h_align="start",
             label="",
         )
 
         self.weather_description = Label(
-            style_classes="header-label",
+            style_classes=["header-label"],
             h_align="start",
             label="",
         )
 
         self.humidity = Label(
-            style_classes="header-label",
+            style_classes=["header-label"],
             h_align="start",
             label="",
         )
 
         self.wind_speed = Label(
-            style_classes="header-label",
+            style_classes=["header-label"],
             h_align="start",
             label="",
         )
 
         self.temperature = Label(
-            style_classes="header-label",
+            style_classes=["header-label"],
             h_align="start",
             label="",
         )
 
         self.sunset_sunrise = Label(
-            style_classes="header-label",
+            style_classes=["header-label"],
             h_align="start",
             name="sunrise-sunset",
             label="",
@@ -293,7 +293,7 @@ class WeatherMenu(Box, BaseWeatherWidget):
         if forced or current_time > 1200:
             for col, value in enumerate(self.next_values):
                 hour = Label(
-                    style_classes="weather-forecast-time",
+                    style_classes=["weather-forecast-time"],
                     label=f"{self.convert_to_12hr_format(value['time'])}",
                     h_align="center",
                 )
@@ -305,11 +305,11 @@ class WeatherMenu(Box, BaseWeatherWidget):
                     size=65,
                     h_align="center",
                     h_expand=True,
-                    style_classes="weather-forecast-icon",
+                    style_classes=["weather-forecast-icon"],
                 )
 
                 temp = Label(
-                    style_classes="weather-forecast-temp",
+                    style_classes=["weather-forecast-temp"],
                     label=self.get_temperature_hour(col),
                     h_align="center",
                 )
@@ -343,7 +343,7 @@ class WeatherWidget(ButtonWidget, BaseWeatherWidget):
         self.weather_icon = nerd_font_icon(
             icon="󱣶",
             props={
-                "style_classes": "panel-font-icon",
+                "style_classes": ["panel-font-icon"],
             },
         )
         self.container_box.add(self.weather_icon)
@@ -357,7 +357,7 @@ class WeatherWidget(ButtonWidget, BaseWeatherWidget):
         if self.config.get("label", True):
             self.weather_label = Label(
                 label="Fetching..",
-                style_classes="panel-text",
+                style_classes=["panel-text"],
             )
 
             if self.config.get("hover_reveal", True):

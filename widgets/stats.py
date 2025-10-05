@@ -41,7 +41,7 @@ class CpuWidget(ButtonWidget):
             self.graph_values = []
             self.cpu_level_label = Label(
                 label="0%",
-                style_classes="panel-text",
+                style_classes=["panel-text"],
             )
             self.container_box.children = self.cpu_level_label
 
@@ -59,7 +59,7 @@ class CpuWidget(ButtonWidget):
             self.icon = nerd_font_icon(
                 icon=self.config.get("icon", "󰕸"),
                 props={
-                    "style_classes": "panel-font-icon overlay-icon",
+                    "style_classes": ["panel-font-icon", "overlay-icon"],
                 },
             )
 
@@ -72,12 +72,12 @@ class CpuWidget(ButtonWidget):
             # Create a TextIcon with the specified icon and size
             self.icon = nerd_font_icon(
                 icon=self.config.get("icon", "󰕸"),
-                props={"style_classes": "panel-font-icon"},
+                props={"style_classes": ["panel-font-icon"]},
             )
 
             self.cpu_level_label = Label(
                 label="0%",
-                style_classes="panel-text",
+                style_classes=["panel-text"],
             )
             self.container_box.children = (self.icon, self.cpu_level_label)
 
@@ -165,7 +165,7 @@ class GpuWidget(ButtonWidget):
             self.graph_values = []
             self.gpu_level_label = Label(
                 label="0%",
-                style_classes="panel-text",
+                style_classes=["panel-text"],
             )
             self.container_box.children = self.gpu_level_label
 
@@ -183,7 +183,7 @@ class GpuWidget(ButtonWidget):
             self.icon = nerd_font_icon(
                 icon=self.config.get("icon", "󰕸"),
                 props={
-                    "style_classes": "panel-font-icon overlay-icon",
+                    "style_classes": ["panel-font-icon", "overlay-icon"],
                 },
             )
 
@@ -196,12 +196,12 @@ class GpuWidget(ButtonWidget):
             # Create a TextIcon with the specified icon and size
             self.icon = nerd_font_icon(
                 icon=self.config.get("icon", "󰕸"),
-                props={"style_classes": "panel-font-icon"},
+                props={"style_classes": ["panel-font-icon"]},
             )
 
             self.gpu_level_label = Label(
                 label="0%",
-                style_classes="panel-text",
+                style_classes=["panel-text"],
             )
             self.container_box.children = (self.icon, self.gpu_level_label)
 
@@ -274,7 +274,7 @@ class MemoryWidget(ButtonWidget):
         if self.current_mode == "graph":
             self.graph_values = []
             self.memory_level_label = Label(
-                label="0%", style_classes="panel-text", visible=False
+                label="0%", style_classes=["panel-text"], visible=False
             )
 
             self.container_box.children = self.memory_level_label
@@ -293,7 +293,7 @@ class MemoryWidget(ButtonWidget):
             self.icon = nerd_font_icon(
                 icon=self.config.get("icon", "󰕸"),
                 props={
-                    "style_classes": "panel-font-icon overlay-icon",
+                    "style_classes": ["panel-font-icon", "overlay-icon"],
                 },
             )
 
@@ -306,12 +306,12 @@ class MemoryWidget(ButtonWidget):
             # Create a TextIcon with the specified icon and size
             self.icon = nerd_font_icon(
                 icon=self.config.get("icon", "󰕸"),
-                props={"style_classes": "panel-font-icon"},
+                props={"style_classes": ["panel-font-icon"]},
             )
 
             self.memory_level_label = Label(
                 label="0%",
-                style_classes="panel-text",
+                style_classes=["panel-text"],
             )
             self.container_box.children = (self.icon, self.memory_level_label)
 
@@ -378,7 +378,7 @@ class StorageWidget(ButtonWidget):
 
             self.storage_level_label = Label(
                 label="0",
-                style_classes="panel-text",
+                style_classes=["panel-text"],
             )
 
             self.container_box.children = self.storage_level_label
@@ -397,7 +397,7 @@ class StorageWidget(ButtonWidget):
             self.icon = nerd_font_icon(
                 icon=self.config.get("icon", "󰕸"),
                 props={
-                    "style_classes": "panel-font-icon overlay-icon",
+                    "style_classes": ["panel-font-icon", "overlay-icon"],
                 },
             )
 
@@ -410,12 +410,12 @@ class StorageWidget(ButtonWidget):
             # Create a TextIcon with the specified icon and size
             self.icon = nerd_font_icon(
                 icon=self.config.get("icon", "󰕸"),
-                props={"style_classes": "panel-font-icon"},
+                props={"style_classes": ["panel-font-icon"]},
             )
 
             self.storage_level_label = Label(
                 label="0",
-                style_classes="panel-text",
+                style_classes=["panel-text"],
             )
 
             self.container_box.children = (self.icon, self.storage_level_label)
@@ -484,26 +484,26 @@ class NetworkUsageWidget(ButtonWidget):
 
         self.upload_icon = nerd_font_icon(
             icon=self.config.get("upload_icon", "󰕸"),
-            props={"style_classes": "panel-font-icon", "visible": show_upload},
+            props={"style_classes": ["panel-font-icon"], "visible": show_upload},
         )
 
         self.upload_label = Label(
             name="upload_label",
             label="0 MB",
-            style_classes="panel-text",
+            style_classes=["panel-text"],
             visible=show_upload,
             style="margin-right: 10px;",
         )
 
         self.download_icon = nerd_font_icon(
             icon=self.config.get("download_icon", "󰕸"),
-            props={"style_classes": "panel-font-icon", "visible": show_download},
+            props={"style_classes": ["panel-font-icon"], "visible": show_download},
         )
 
         self.download_label = Label(
             name="download_label",
             label="0 MB",
-            style_classes="panel-text",
+            style_classes=["panel-text"],
             visible=show_download,
         )
 

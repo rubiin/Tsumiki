@@ -17,7 +17,7 @@ class BlueToothWidget(ButtonWidget):
 
         self.bluetooth_icon = nerd_font_icon(
             icon=self.icons["enabled"],
-            props={"style_classes": "panel-font-icon"},
+            props={"style_classes": ["panel-font-icon"]},
         )
 
         self.container_box.add(
@@ -25,7 +25,7 @@ class BlueToothWidget(ButtonWidget):
         )
 
         if self.config.get("label", True):
-            self.bt_label = Label(label="On", style_classes="panel-text")
+            self.bt_label = Label(label="On", style_classes=["panel-text"])
             self.container_box.add(self.bt_label)
 
         self.bluetooth_client.connect("changed", self.update_bluetooth_status)

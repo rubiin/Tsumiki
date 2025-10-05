@@ -52,12 +52,12 @@ class CollapsibleGroupWidget(ButtonWidget):
         if self.show_icon:
             icon = nerd_font_icon(
                 icon=self.icon_name,
-                props={"style_classes": "panel-font-icon"},
+                props={"style_classes": ["panel-font-icon"]},
             )
             self.container_box.add(icon)
 
         if self.show_label:
-            label = Label(label=self.label_text, style_classes="panel-text")
+            label = Label(label=self.label_text, style_classes=["panel-text"])
             self.container_box.add(label)
 
     def _setup_popup(self):
