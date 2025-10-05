@@ -124,13 +124,14 @@ class PowerProfileSubMenu(QuickSubMenu):
 class PowerProfileToggle(QSChevronButton):
     """A widget to display a toggle button for Wifi."""
 
-    def __init__(self, submenu: QuickSubMenu, **kwargs):
+    def __init__(self, submenu: QuickSubMenu, popup, **kwargs):
         super().__init__(
             action_icon=text_icons["powerprofiles"]["power-saver"],
             action_label="Power Saver",
             submenu=submenu,
             **kwargs,
         )
+        self.popup = popup
 
         self.update_action_button()
         self.set_active_style(True)
@@ -147,3 +148,4 @@ class PowerProfileToggle(QSChevronButton):
     def update_action_button(self, *_):
         self.action_icon.set_label(icon_name_to_icon(power_pfl_service.active_profile))
         self.set_action_label(self.unslug(power_pfl_service.active_profile))
+        self.popup.hide_popover()
