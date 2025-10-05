@@ -33,7 +33,7 @@ class AnimatedScale(Scale, BaseWidget):
 
             self._animation_timeout = None
 
-            if abs(self.value - target_value) > 0.5:
+            if abs(self.value - target_value) > 0.5:  # animation threshold
                 self.animator.pause()
 
                 self.animator.min_value = self.value

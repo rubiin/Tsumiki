@@ -24,7 +24,7 @@ class VolumeWidget(EventBoxWidget):
 
         # Create a circular progress bar to display the volume level
         self.progress_bar = CircularProgressBar(
-            style_classes="overlay-progress-bar",
+            style_classes=["overlay-progress-bar"],
             pie=True,
             size=24,
         )

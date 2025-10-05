@@ -43,6 +43,7 @@ class HyprIdleQuickSetting(QuickSettingToggler):
             enabled_icon="",
             disabled_icon="",
             name="quicksettings-togglebutton",
+            **kwargs,
         )
         self.connect("clicked", lambda *_: popup.hide_popover())
 
@@ -54,6 +55,7 @@ class NotificationQuickSetting(HoverButton):
         super().__init__(
             name="quicksettings-togglebutton",
             style_classes=["quicksettings-toggler"],
+            **kwargs,
         )
 
         self.popup = popup
