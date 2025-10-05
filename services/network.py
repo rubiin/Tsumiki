@@ -4,9 +4,8 @@ from typing import Any, Literal
 
 import gi
 from fabric.core.service import Property, Service, Signal
-from fabric.utils import bulk_connect
+from fabric.utils import bulk_connect, logger
 from gi.repository import Gio
-from loguru import logger
 
 from utils.constants import NETWORK_RECENCY_THRESHOLD_SECONDS
 from utils.exceptions import NetworkManagerNotFoundError

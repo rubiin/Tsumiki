@@ -5,7 +5,7 @@ import tempfile
 from urllib.parse import unquote, urlparse
 
 import gi
-from fabric.utils import remove_handler
+from fabric.utils import logger, remove_handler
 from fabric.widgets.box import Box
 from fabric.widgets.button import Button
 from fabric.widgets.entry import Entry
@@ -13,7 +13,6 @@ from fabric.widgets.image import Image
 from fabric.widgets.label import Label
 from fabric.widgets.scrolledwindow import ScrolledWindow
 from gi.repository import Gdk, GdkPixbuf, GLib, Gtk
-from loguru import logger
 
 from shared.list import ListBox
 from shared.widget_container import ButtonWidget

@@ -2,8 +2,8 @@ import os
 import re
 
 import gi
+from fabric.utils import logger
 from gi.repository import GdkPixbuf, GLib, Gtk
-from loguru import logger
 
 from utils.functions import read_json_file, write_json_file
 

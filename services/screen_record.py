@@ -4,9 +4,8 @@ import tempfile
 from datetime import datetime
 
 from fabric.core.service import Property, Service, Signal
-from fabric.utils import exec_shell_command, exec_shell_command_async
+from fabric.utils import exec_shell_command, exec_shell_command_async, logger
 from gi.repository import Gio, GLib
-from loguru import logger
 
 import utils.functions as helpers
 from utils.constants import APPLICATION_NAME, ASSETS_DIR

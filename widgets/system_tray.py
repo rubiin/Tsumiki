@@ -3,13 +3,13 @@ import os
 import gi
 from fabric.utils import (
     bulk_connect,
+    logger,
 )
 from fabric.widgets.box import Box
 from fabric.widgets.grid import Grid
 from fabric.widgets.image import Image
 from fabric.widgets.separator import Separator
 from gi.repository import Gdk, GdkPixbuf, GLib, Gray, Gtk
-from loguru import logger
 
 from shared.buttons import HoverButton
 from shared.widget_container import ButtonWidget
