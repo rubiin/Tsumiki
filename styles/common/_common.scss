@@ -77,6 +77,14 @@
   @extend %label;
 }
 
+.panel-button.active{
+  background-color: theme.$accent-blue;
+  image, label{
+    color: theme.$background-dark;
+  }
+
+}
+
 
 .panel-box {
   border-radius: variable.$radius-large;

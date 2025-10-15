@@ -462,7 +462,12 @@ class QuickSettingsButtonWidget(ButtonWidget):
             self.popup.set_content(
                 QuickSettingsMenu(config=self.config, popup=self.popup),
             )
+            self.popup.connect(
+                "popover-closed", lambda *_: self.remove_style_class("active")
+            )
         self.popup.open()
+
+        self.add_style_class("active")
 
     def _get_network_icon(self, *_):
         # Check if the network service is ready

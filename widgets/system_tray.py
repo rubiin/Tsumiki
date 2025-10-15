@@ -224,6 +224,9 @@ class SystemTrayWidget(ButtonWidget, BaseSystemTray):
                 content=self.popup_menu,
                 point_to=self,
             )
+            self.popup.connect(
+                "popover-closed", lambda *_: self.remove_style_class("active")
+            )
 
         visible = self.popup.get_visible()
 
@@ -236,6 +239,7 @@ class SystemTrayWidget(ButtonWidget, BaseSystemTray):
         else:
             self.popup.open()
             self.toggle_icon.set_label(text_icons["chevron"]["up"])
+            self.add_style_class("active")
 
     def update_visibility(self):
         """Update widget visibility based on configuration and item count."""

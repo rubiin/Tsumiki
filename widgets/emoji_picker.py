@@ -362,4 +362,10 @@ class EmojiPickerWidget(ButtonWidget):
                 content=EmojiPickerMenu(parent=self),
                 point_to=self,
             )
+            self.popup.connect(
+                "popover-closed", lambda *_: self.remove_style_class("active")
+            )
+
         self.popup.open()
+
+        self.add_style_class("active")

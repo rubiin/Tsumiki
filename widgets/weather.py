@@ -347,7 +347,7 @@ class WeatherWidget(ButtonWidget, BaseWeatherWidget):
         )
         self.container_box.add(self.weather_icon)
 
-        self.popover = None
+        self.popup = None
 
         self.connect("button-press-event", self.on_button_press)
 
@@ -418,12 +418,15 @@ class WeatherWidget(ButtonWidget, BaseWeatherWidget):
 
         # Create popover only once
 
-        if self.popover is None:
+        if self.popup is None:
             from shared.popover import Popover
 
-            self.popover = Popover(
+            self.popup = Popover(
                 content=WeatherMenu(config=self.config),
                 point_to=self,
+            )
+            self.popup.connect(
+                "popover-closed", lambda *_: self.remove_style_class("active")
             )
 
         return False
@@ -431,8 +434,11 @@ class WeatherWidget(ButtonWidget, BaseWeatherWidget):
     @cooldown(1)
     def on_button_press(self, _, event):
         if event.button == 1:
-            self.popover.open() if self.popover else None
-            return
+            if self.popup is None:
+                return
+            self.popup.open()
+            self.add_style_class("active")
+
         else:
             self._update_ui(forced=True)
 
