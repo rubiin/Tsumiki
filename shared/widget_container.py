@@ -116,6 +116,15 @@ class ButtonWidget(Button, BaseWidget):
                 },
             )
 
+        self.connect(
+            "state-flags-changed",
+            lambda btn, *_: (
+                btn.set_cursor("pointer")
+                if btn.get_state_flags() & 2  # type: ignore
+                else btn.set_cursor("default"),
+            ),
+        )
+
     def _toggle_revealer(self, *_):
         if hasattr(self, "revealer"):
             self.revealer.set_reveal_child(not self.revealer.get_reveal_child())
