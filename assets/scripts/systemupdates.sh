@@ -183,7 +183,7 @@ command="
     echo '   tsumiki chan'
     echo ''\
 
-    $aur_helper -Syyu
+    $aur_helper -Su
     flatpak update -y || true
     read -n 1 -p 'Press any key to continue...'
 "
