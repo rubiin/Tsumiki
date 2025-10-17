@@ -57,6 +57,7 @@ class QuickSubMenu(Box, BaseWidget):
 
         if not self.title_icon and not self.title:
             return None
+
         if self.title_icon:
             submenu_box.add(
                 nerd_font_icon(

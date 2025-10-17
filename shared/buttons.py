@@ -85,7 +85,7 @@ class QSToggleButton(Box, BaseWidget):
             icon=action_icon,
             props={
                 "style_classes": ["panel-font-icon"],
-                "style": f"font-size: {self.pixel_size}px;",
+                "style": f"font-size: {self.pixel_size}px;padding-left: 6px;",
             },
         )
 

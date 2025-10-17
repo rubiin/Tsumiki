@@ -15,7 +15,6 @@ class HyprSunsetSubMenu(QuickSubMenu):
     """A submenu to display application-specific audio controls."""
 
     def __init__(self, **kwargs):
-        # Create refresh button first since parent needs it
         self.scan_button = None
 
         self._hyprland_connection = get_hyprland_connection()

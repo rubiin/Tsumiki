@@ -1,5 +1,4 @@
 from fabric.widgets.box import Box
-from fabric.widgets.button import Button
 from fabric.widgets.label import Label
 
 from services import power_pfl_service
@@ -15,7 +14,7 @@ def icon_name_to_icon(icon_name: str) -> str:
     return icon_map.get(icon_name, "󰌪")
 
 
-class PowerProfileItem(Button):
+class PowerProfileItem(HoverButton):
     """A button to display the power profile."""
 
     def __init__(
@@ -78,7 +77,7 @@ class PowerProfileSubMenu(QuickSubMenu):
         self.profiles = [profile["Profile"] for profile in power_pfl_service.profiles]
 
         self.profile_items = None
-        self.scan_button = HoverButton()
+        self.scan_button = None
 
         self.profile_box = Box(
             orientation="v",
