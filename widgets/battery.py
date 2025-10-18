@@ -30,7 +30,7 @@ class BatteryWidget(ButtonWidget):
         self.container_box.add(self.battery_icon)
 
         if self.config.get("label", True):
-            self.battery_label = Label(label="100%", style_classes="panel-text")
+            self.battery_label = Label(label="100%", style_classes=["panel-text"])
             self.container_box.add(self.battery_label)
 
         self.client = BatteryService()

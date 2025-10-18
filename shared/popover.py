@@ -3,12 +3,11 @@ from typing import ClassVar
 import gi
 from fabric.hyprland.service import HyprlandEvent
 from fabric.hyprland.widgets import get_hyprland_connection
-from fabric.utils import bulk_connect
+from fabric.utils import bulk_connect, logger
 from fabric.widgets.box import Box
 from fabric.widgets.wayland import WaylandWindow
 from fabric.widgets.widget import Widget
 from gi.repository import Gdk, GLib, GObject, GtkLayerShell
-from loguru import logger
 
 gi.require_versions(
     {"Gtk": "3.0", "Gdk": "3.0", "GtkLayerShell": "0.1", "GObject": "2.0"}
@@ -29,8 +28,8 @@ class PopoverManager:
         # Shared overlay window for all popovers
         self.overlay = WaylandWindow(
             name="popover-overlay",
-            style_classes="popover-overlay",
-            title="fabric-shell-popover-overlay",
+            style_classes=["popover-overlay"],
+            title="tsumiki",
             anchor="left top right bottom",
             margin="-50px 0px 0px 0px",
             exclusivity="auto",
@@ -222,7 +221,7 @@ class Popover(Widget):
 
         # Add content to window
         self._content_window.add(
-            Box(style_classes="popover-content", children=self._content)
+            Box(style_classes=["popover-content"], children=self._content)
         )
 
         bulk_connect(

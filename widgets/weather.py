@@ -2,14 +2,13 @@ import time
 from datetime import datetime
 
 import gi
-from fabric.utils import cooldown
+from fabric.utils import cooldown, invoke_repeater, logger
 from fabric.widgets.box import Box
 from fabric.widgets.grid import Grid
 from fabric.widgets.label import Label
 from fabric.widgets.revealer import Revealer
 from fabric.widgets.svg import Svg
 from gi.repository import Gtk
-from loguru import logger
 
 from services.weather import WeatherService
 from shared.widget_container import ButtonWidget
@@ -18,7 +17,6 @@ from utils.functions import check_if_day
 from utils.icons import weather_icons
 from utils.widget_utils import (
     nerd_font_icon,
-    reusable_fabricator,
 )
 
 gi.require_versions({"Gtk": "3.0"})
@@ -105,7 +103,7 @@ class WeatherMenu(Box, BaseWeatherWidget):
         **kwargs,
     ):
         super().__init__(
-            style_classes="weather-box",
+            style_classes=["weather-box"],
             orientation="v",
             h_expand=True,
             spacing=5,
@@ -133,37 +131,37 @@ class WeatherMenu(Box, BaseWeatherWidget):
         )
 
         self.location = Label(
-            style_classes="header-label",
+            style_classes=["header-label"],
             h_align="start",
             label="",
         )
 
         self.weather_description = Label(
-            style_classes="header-label",
+            style_classes=["header-label"],
             h_align="start",
             label="",
         )
 
         self.humidity = Label(
-            style_classes="header-label",
+            style_classes=["header-label"],
             h_align="start",
             label="",
         )
 
         self.wind_speed = Label(
-            style_classes="header-label",
+            style_classes=["header-label"],
             h_align="start",
             label="",
         )
 
         self.temperature = Label(
-            style_classes="header-label",
+            style_classes=["header-label"],
             h_align="start",
             label="",
         )
 
         self.sunset_sunrise = Label(
-            style_classes="header-label",
+            style_classes=["header-label"],
             h_align="start",
             name="sunrise-sunset",
             label="",
@@ -247,8 +245,7 @@ class WeatherMenu(Box, BaseWeatherWidget):
             callback=self.update_data,
         )
 
-        # reusing the fabricator to call specified intervals
-        reusable_fabricator.connect("changed", self.update_widget)
+        invoke_repeater(1000, self.update_widget)
 
     def update_data(self, data):
         self.update_app_data(data)
@@ -295,7 +292,7 @@ class WeatherMenu(Box, BaseWeatherWidget):
         if forced or current_time > 1200:
             for col, value in enumerate(self.next_values):
                 hour = Label(
-                    style_classes="weather-forecast-time",
+                    style_classes=["weather-forecast-time"],
                     label=f"{self.convert_to_12hr_format(value['time'])}",
                     h_align="center",
                 )
@@ -307,11 +304,11 @@ class WeatherMenu(Box, BaseWeatherWidget):
                     size=65,
                     h_align="center",
                     h_expand=True,
-                    style_classes="weather-forecast-icon",
+                    style_classes=["weather-forecast-icon"],
                 )
 
                 temp = Label(
-                    style_classes="weather-forecast-temp",
+                    style_classes=["weather-forecast-temp"],
                     label=self.get_temperature_hour(col),
                     h_align="center",
                 )
@@ -345,12 +342,12 @@ class WeatherWidget(ButtonWidget, BaseWeatherWidget):
         self.weather_icon = nerd_font_icon(
             icon="󱣶",
             props={
-                "style_classes": "panel-font-icon",
+                "style_classes": ["panel-font-icon"],
             },
         )
         self.container_box.add(self.weather_icon)
 
-        self.popover = None
+        self.popup = None
 
         self.connect("button-press-event", self.on_button_press)
 
@@ -359,7 +356,7 @@ class WeatherWidget(ButtonWidget, BaseWeatherWidget):
         if self.config.get("label", True):
             self.weather_label = Label(
                 label="Fetching..",
-                style_classes="panel-text",
+                style_classes=["panel-text"],
             )
 
             if self.config.get("hover_reveal", True):
@@ -374,8 +371,7 @@ class WeatherWidget(ButtonWidget, BaseWeatherWidget):
 
         self._update_ui(forced=True)
 
-        # Set up a fabricator to call the update_label method at specified intervals
-        reusable_fabricator.connect("changed", self._update_ui)
+        invoke_repeater(1000, self._update_ui)
 
     def update_data(self, data):
         self.update_time = datetime.now()
@@ -422,12 +418,15 @@ class WeatherWidget(ButtonWidget, BaseWeatherWidget):
 
         # Create popover only once
 
-        if self.popover is None:
+        if self.popup is None:
             from shared.popover import Popover
 
-            self.popover = Popover(
+            self.popup = Popover(
                 content=WeatherMenu(config=self.config),
                 point_to=self,
+            )
+            self.popup.connect(
+                "popover-closed", lambda *_: self.remove_style_class("active")
             )
 
         return False
@@ -435,8 +434,11 @@ class WeatherWidget(ButtonWidget, BaseWeatherWidget):
     @cooldown(1)
     def on_button_press(self, _, event):
         if event.button == 1:
-            self.popover.open() if self.popover else None
-            return
+            if self.popup is None:
+                return
+            self.popup.open()
+            self.add_style_class("active")
+
         else:
             self._update_ui(forced=True)
 

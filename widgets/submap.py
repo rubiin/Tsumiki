@@ -1,6 +1,6 @@
 from fabric.hyprland.widgets import get_hyprland_connection
+from fabric.utils import logger
 from fabric.widgets.label import Label
-from loguru import logger
 
 from shared.widget_container import ButtonWidget
 from utils.widget_utils import nerd_font_icon
@@ -12,7 +12,7 @@ class SubMapWidget(ButtonWidget):
     def __init__(self, **kwargs):
         super().__init__(name="submap", **kwargs)
 
-        self.submap_label = Label(label="submap", style_classes="panel-text")
+        self.submap_label = Label(label="submap", style_classes=["panel-text"])
 
         self.container_box.add(self.submap_label)
 
@@ -20,7 +20,7 @@ class SubMapWidget(ButtonWidget):
             # Create a TextIcon with the specified icon and size
             self.icon = nerd_font_icon(
                 icon=self.config.get("icon", "󰕸"),
-                props={"style_classes": "panel-font-icon"},
+                props={"style_classes": ["panel-font-icon"]},
             )
             self.container_box.add(self.icon)
 

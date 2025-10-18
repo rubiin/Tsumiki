@@ -2,7 +2,7 @@
 
 from typing import Any, Optional
 
-from loguru import logger
+from fabric.utils import logger
 
 from shared.custom_button import CustomButtonWidget
 

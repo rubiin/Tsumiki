@@ -34,7 +34,7 @@ class GenericOSDContainer(Box, BaseWidget):
             orientation=config.get("orientation", "horizontal"),
             spacing=10,
             name="osd-container",
-            style_classes="vertical" if is_vertical else "",
+            style_classes=["vertical"] if is_vertical else [],
             **kwargs,
         )
 
@@ -300,6 +300,7 @@ class OSDContainer(Window):
             pass_through=True,
             keyboard_mode=keyboard_mode,
             name="osd",
+            title="tsumiki",
             **kwargs,
         )
 

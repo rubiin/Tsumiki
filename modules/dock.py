@@ -2,7 +2,7 @@ import json
 
 import gi
 from fabric.hyprland.widgets import get_hyprland_connection
-from fabric.utils import bulk_connect, truncate
+from fabric.utils import bulk_connect, logger, truncate
 from fabric.widgets.box import Box
 from fabric.widgets.button import Button
 from fabric.widgets.eventbox import EventBox
@@ -11,7 +11,6 @@ from fabric.widgets.revealer import Revealer
 from fabric.widgets.separator import Separator
 from fabric.widgets.wayland import WaylandWindow as Window
 from gi.repository import Glace, GLib, Gtk
-from loguru import logger
 
 from modules.app_launcher import AppLauncher
 from shared.popoverv1 import PopOverWindow
@@ -394,6 +393,7 @@ class Dock(Window):
             layer=self.config.get("layer", "top"),
             anchor="bottom-center",
             name="dock",
+            title="dock",
         )
         self.revealer = Revealer(
             child=Box(children=[AppBar(self)], style="padding: 20px 50px 5px 50px;"),

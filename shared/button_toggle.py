@@ -1,9 +1,9 @@
+from fabric.utils import invoke_repeater
 from fabric.widgets.label import Label
 
 import utils.functions as helpers
 from utils.widget_utils import (
     nerd_font_icon,
-    reusable_fabricator,
 )
 
 from .widget_container import ButtonWidget
@@ -22,7 +22,7 @@ class CommandSwitcher(ButtonWidget):
         label=True,
         args="",
         tooltip=True,
-        style_classes="",
+        style_classes=[""],
         **kwargs,
     ):
         self.command = command
@@ -44,7 +44,7 @@ class CommandSwitcher(ButtonWidget):
 
         self.icon = nerd_font_icon(
             icon=enabled_icon,
-            props={"style_classes": "panel-font-icon"},
+            props={"style_classes": ["panel-font-icon"]},
         )
 
         self.container_box.add(
@@ -54,14 +54,14 @@ class CommandSwitcher(ButtonWidget):
         if self.label:
             self.label_text = Label(
                 label="Enabled",
-                style_classes="panel-text",
+                style_classes=["panel-text"],
             )
             self.container_box.add(self.label_text)
 
         self.connect("clicked", self.on_click)
 
         # reusing the fabricator to call specified intervals
-        reusable_fabricator.connect("changed", self._update_ui)
+        invoke_repeater(1000, self._update_ui)
         self._update_ui()  # Initial update
 
     # toggle the command on click

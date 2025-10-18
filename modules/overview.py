@@ -2,7 +2,7 @@ import json
 
 import gi
 from fabric.hyprland.widgets import get_hyprland_connection
-from fabric.utils.helpers import bulk_connect
+from fabric.utils import bulk_connect, logger
 from fabric.widgets.box import Box
 from fabric.widgets.button import Button
 from fabric.widgets.eventbox import EventBox
@@ -11,7 +11,6 @@ from fabric.widgets.image import Image
 from fabric.widgets.label import Label
 from fabric.widgets.overlay import Overlay
 from gi.repository import Gdk, GdkPixbuf, Gtk
-from loguru import logger
 
 from shared.popup import PopupWindow
 from utils.app import AppUtils

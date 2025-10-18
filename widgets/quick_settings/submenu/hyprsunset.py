@@ -1,5 +1,5 @@
 from fabric.hyprland.widgets import get_hyprland_connection
-from fabric.utils import cooldown, exec_shell_command_async
+from fabric.utils import cooldown, exec_shell_command_async, invoke_repeater
 from fabric.widgets.scale import Scale
 
 from shared.buttons import QSChevronButton
@@ -8,7 +8,6 @@ from utils.functions import is_app_running, toggle_command
 from utils.icons import text_icons
 from utils.widget_utils import (
     create_scale,
-    reusable_fabricator,
 )
 
 
@@ -16,7 +15,6 @@ class HyprSunsetSubMenu(QuickSubMenu):
     """A submenu to display application-specific audio controls."""
 
     def __init__(self, **kwargs):
-        # Create refresh button first since parent needs it
         self.scan_button = None
 
         self._hyprland_connection = get_hyprland_connection()
@@ -40,7 +38,7 @@ class HyprSunsetSubMenu(QuickSubMenu):
 
         # Connect the slider immediately
         self.scale.connect("value-changed", self.on_scale_move)
-        reusable_fabricator.connect("changed", self.update_scale)
+        invoke_repeater(1000, self.update_scale)
 
     @cooldown(0.1)
     def on_scale_move(self, scale: Scale):
@@ -78,7 +76,7 @@ class HyprSunsetSubMenu(QuickSubMenu):
 class HyprSunsetToggle(QSChevronButton):
     """A widget to display a toggle button for Wifi."""
 
-    def __init__(self, submenu: QuickSubMenu, **kwargs):
+    def __init__(self, submenu: QuickSubMenu, popup, **kwargs):
         super().__init__(
             action_icon=text_icons["nightlight"]["disabled"],
             pixel_size=20,
@@ -86,18 +84,20 @@ class HyprSunsetToggle(QSChevronButton):
             submenu=submenu,
             **kwargs,
         )
+
+        self.popup = popup
         self.action_button.set_sensitive(True)
 
         self.connect("action-clicked", self.on_action)
 
-        # reusing the fabricator to call specified intervals
-        reusable_fabricator.connect("changed", self.update_action_button)
+        invoke_repeater(1000, self.update_action_button)
 
     def on_action(self, *_):
         """Handle the action button click event."""
         # Get current slider value for dynamic command
         current_temp = int(self.submenu.scale.get_value())
         toggle_command("hyprsunset", f"hyprsunset -t {current_temp}")
+        self.popup.hide_popover()
         return True
 
     def update_action_button(self, *_):

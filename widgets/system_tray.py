@@ -3,13 +3,13 @@ import os
 import gi
 from fabric.utils import (
     bulk_connect,
+    logger,
 )
 from fabric.widgets.box import Box
 from fabric.widgets.grid import Grid
 from fabric.widgets.image import Image
 from fabric.widgets.separator import Separator
 from gi.repository import Gdk, GdkPixbuf, GLib, Gray, Gtk
-from loguru import logger
 
 from shared.buttons import HoverButton
 from shared.widget_container import ButtonWidget
@@ -90,7 +90,7 @@ class BaseSystemTray:
 
     def _bake_item_button(self, item: Gray.Item) -> HoverButton:
         button = HoverButton(
-            style_classes="flat", tooltip_text=item.get_property("title")
+            style_classes=["flat"], tooltip_text=item.get_property("title")
         )
         button.connect(
             "button-press-event",
@@ -224,6 +224,9 @@ class SystemTrayWidget(ButtonWidget, BaseSystemTray):
                 content=self.popup_menu,
                 point_to=self,
             )
+            self.popup.connect(
+                "popover-closed", lambda *_: self.remove_style_class("active")
+            )
 
         visible = self.popup.get_visible()
 
@@ -236,6 +239,7 @@ class SystemTrayWidget(ButtonWidget, BaseSystemTray):
         else:
             self.popup.open()
             self.toggle_icon.set_label(text_icons["chevron"]["up"])
+            self.add_style_class("active")
 
     def update_visibility(self):
         """Update widget visibility based on configuration and item count."""

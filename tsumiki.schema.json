@@ -1085,6 +1085,11 @@
 							"default": true,
 							"description": "Hide workspaces that do not contain any windows."
 						},
+						"show_numbered": {
+							"type": "boolean",
+							"default": true,
+							"description": "Show workspace numbers on the workspaces widget."
+						},
 						"default_label_format": {
 							"type": "string",
 							"default": "{id}",

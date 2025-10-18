@@ -1,11 +1,11 @@
 from datetime import datetime, timezone
 from zoneinfo import ZoneInfo, available_timezones
 
+from fabric.utils import invoke_repeater, logger
 from fabric.widgets.label import Label
-from loguru import logger
 
 from shared.widget_container import ButtonWidget
-from utils.widget_utils import nerd_font_icon, reusable_fabricator
+from utils.widget_utils import nerd_font_icon
 
 
 class WorldClockWidget(ButtonWidget):
@@ -21,7 +21,7 @@ class WorldClockWidget(ButtonWidget):
             # Create a TextIcon with the specified icon and size
             self.icon = nerd_font_icon(
                 icon=self.config.get("icon", "󰃰"),  # fallback icon,
-                props={"style_classes": "panel-font-icon"},
+                props={"style_classes": ["panel-font-icon"]},
             )
             self.container_box.add(self.icon)
 
@@ -34,15 +34,14 @@ class WorldClockWidget(ButtonWidget):
 
         for tz_name in timezones:
             if tz_name in valid_zones:
-                label = Label(style_classes="world-clock-label")
+                label = Label(style_classes=["world-clock-label"])
                 self.container_box.pack_start(label, True, True, 0)
                 tz = ZoneInfo(tz_name)
                 self.clocks.append((label, tz))
             else:
                 logger.info(f"[world_clock] Skipping invalid timezone: {tz_name}")
 
-        # reusing the fabricator to call specified intervals
-        reusable_fabricator.connect("changed", self._update_ui)
+        invoke_repeater(1000, self._update_ui)
 
     def _update_ui(self, *_):
         try:

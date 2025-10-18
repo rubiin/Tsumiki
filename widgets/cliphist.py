@@ -5,7 +5,7 @@ import tempfile
 from urllib.parse import unquote, urlparse
 
 import gi
-from fabric.utils import remove_handler
+from fabric.utils import logger, remove_handler
 from fabric.widgets.box import Box
 from fabric.widgets.button import Button
 from fabric.widgets.entry import Entry
@@ -13,7 +13,6 @@ from fabric.widgets.image import Image
 from fabric.widgets.label import Label
 from fabric.widgets.scrolledwindow import ScrolledWindow
 from gi.repository import Gdk, GdkPixbuf, GLib, Gtk
-from loguru import logger
 
 from shared.list import ListBox
 from shared.widget_container import ButtonWidget
@@ -627,12 +626,12 @@ class ClipHistoryWidget(ButtonWidget):
         self.container_box.add(
             nerd_font_icon(
                 icon=self.config.get("icon", "󰕸"),
-                props={"style_classes": "panel-font-icon"},
+                props={"style_classes": ["panel-font-icon"]},
             )
         )
 
         if self.config.get("label", True):
-            self.container_box.add(Label(label="Clip", style_classes="panel-text"))
+            self.container_box.add(Label(label="Clip", style_classes=["panel-text"]))
 
         if self.config.get("tooltip", False):
             self.set_tooltip_text("Clipboard History")
@@ -653,4 +652,8 @@ class ClipHistoryWidget(ButtonWidget):
                 content=ClipHistoryMenu(),
                 point_to=self,
             )
+            self.popup.connect(
+                "popover-closed", lambda *_: self.remove_style_class("active")
+            )
         self.popup.open()
+        self.add_style_class("active")

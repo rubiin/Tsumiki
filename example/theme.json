@@ -33,7 +33,7 @@
 		},
 		"dock": {
 			"scaling": 100,
-			"opacity": 80,
+			"opacity": 45,
 			"shadow": {
 				"enabled": false,
 				"offset": 0,

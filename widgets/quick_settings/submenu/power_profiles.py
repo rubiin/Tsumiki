@@ -1,5 +1,4 @@
 from fabric.widgets.box import Box
-from fabric.widgets.button import Button
 from fabric.widgets.label import Label
 
 from services import power_pfl_service
@@ -15,7 +14,7 @@ def icon_name_to_icon(icon_name: str) -> str:
     return icon_map.get(icon_name, "󰌪")
 
 
-class PowerProfileItem(Button):
+class PowerProfileItem(HoverButton):
     """A button to display the power profile."""
 
     def __init__(
@@ -26,7 +25,7 @@ class PowerProfileItem(Button):
         **kwargs,
     ):
         super().__init__(
-            style_classes="submenu-button power-profile",
+            style_classes=["submenu-button", "power-profile"],
             **kwargs,
         )
         self.profile = profile
@@ -45,7 +44,7 @@ class PowerProfileItem(Button):
                 ),
                 Label(
                     label=profile,
-                    style_classes="submenu-item-label",
+                    style_classes=["submenu-item-label"],
                 ),
             ),
         )
@@ -78,7 +77,7 @@ class PowerProfileSubMenu(QuickSubMenu):
         self.profiles = [profile["Profile"] for profile in power_pfl_service.profiles]
 
         self.profile_items = None
-        self.scan_button = HoverButton()
+        self.scan_button = None
 
         self.profile_box = Box(
             orientation="v",
@@ -124,13 +123,14 @@ class PowerProfileSubMenu(QuickSubMenu):
 class PowerProfileToggle(QSChevronButton):
     """A widget to display a toggle button for Wifi."""
 
-    def __init__(self, submenu: QuickSubMenu, **kwargs):
+    def __init__(self, submenu: QuickSubMenu, popup, **kwargs):
         super().__init__(
             action_icon=text_icons["powerprofiles"]["power-saver"],
             action_label="Power Saver",
             submenu=submenu,
             **kwargs,
         )
+        self.popup = popup
 
         self.update_action_button()
         self.set_active_style(True)
@@ -147,3 +147,4 @@ class PowerProfileToggle(QSChevronButton):
     def update_action_button(self, *_):
         self.action_icon.set_label(icon_name_to_icon(power_pfl_service.active_profile))
         self.set_action_label(self.unslug(power_pfl_service.active_profile))
+        self.popup.hide_popover()

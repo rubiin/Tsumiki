@@ -374,6 +374,7 @@ Workspaces = TypedDict(
         "ignored": list[int],
         "icon_map": dict,
         "reverse_scroll": bool,
+        "show_numbered": bool,
         "empty_scroll": bool,
     },
 )

@@ -1,14 +1,13 @@
 import os
 
 import gi
-from fabric.utils import bulk_connect, invoke_repeater
+from fabric.utils import bulk_connect, invoke_repeater, logger
 from fabric.widgets.box import Box
 from fabric.widgets.centerbox import CenterBox
 from fabric.widgets.grid import Grid
 from fabric.widgets.image import Image
 from fabric.widgets.label import Label
 from gi.repository import GLib, Gtk
-from loguru import logger
 
 import utils.functions as helpers
 from services import (
@@ -53,7 +52,7 @@ class QuickSettingsButtonBox(Box):
             self.active_submenu._reveal(False)
             self.active_submenu = None
 
-    def __init__(self, **kwargs):
+    def __init__(self, popup, **kwargs):
         super().__init__(
             orientation="v",
             name="quick-settings-button-box",
@@ -83,11 +82,11 @@ class QuickSettingsButtonBox(Box):
             submenu=WifiSubMenu(),
         )
 
-        self.power_pfl = PowerProfileToggle(submenu=PowerProfileSubMenu())
+        self.power_pfl = PowerProfileToggle(submenu=PowerProfileSubMenu(), popup=popup)
 
-        self.hyprsunset = HyprSunsetToggle(submenu=HyprSunsetSubMenu())
-        self.hypridle = HyprIdleQuickSetting()
-        self.notification_btn = NotificationQuickSetting()
+        self.hyprsunset = HyprSunsetToggle(submenu=HyprSunsetSubMenu(), popup=popup)
+        self.hypridle = HyprIdleQuickSetting(popup=popup)
+        self.notification_btn = NotificationQuickSetting(popup=popup)
 
         self.grid.attach(self.wifi_toggle, 1, 1, 1, 1)
 
@@ -137,12 +136,13 @@ class QuickSettingsButtonBox(Box):
 class QuickSettingsMenu(Box):
     """A menu to display the weather information."""
 
-    def __init__(self, config: dict, **kwargs):
+    def __init__(self, config: dict, popup, **kwargs):
         super().__init__(
             name="quicksettings-menu", orientation="v", all_visible=True, **kwargs
         )
 
         self.config = config
+        self.popup = popup
 
         raw_avatar_path = self.config.get("user", {}).get("avatar", "$HOME/.face")
         avatar_path = os.path.expanduser(os.path.expandvars(raw_avatar_path))
@@ -162,12 +162,12 @@ class QuickSettingsMenu(Box):
             label=username_label,
             v_align="center",
             h_align="start",
-            style_classes="user",
+            style_classes=["user"],
         )
 
         uptime_label = Label(
-            label=helpers.uptime(),
-            style_classes="uptime",
+            label=f" {helpers.uptime()}",
+            style_classes=["uptime"],
             v_align="center",
             h_align="start",
         )
@@ -270,7 +270,7 @@ class QuickSettingsMenu(Box):
 
         # Create center box with sliders and shortcuts if configured
         center_box = Box(
-            orientation="h", spacing=10, style_classes="section-box", h_expand=True
+            orientation="h", spacing=10, style_classes=["section-box"], h_expand=True
         )
 
         main_grid = Grid(column_spacing=10, h_expand=True, column_homogeneous=False)
@@ -332,7 +332,7 @@ class QuickSettingsMenu(Box):
                         shortcuts_config=self.config.get("shortcuts", {}).get(
                             "items", []
                         ),
-                        style_classes="shortcuts-grid",
+                        style_classes=["shortcuts-grid"],
                         v_align="start",
                         h_align="fill",
                     ),
@@ -349,13 +349,13 @@ class QuickSettingsMenu(Box):
         # Create main layout box
         box = CenterBox(
             orientation="v",
-            style_classes="quick-settings-box",
+            style_classes=["quick-settings-box"],
             start_children=Box(
                 orientation="v",
                 spacing=10,
                 v_align="center",
-                style_classes="section-box",
-                children=(self.user_box, QuickSettingsButtonBox()),
+                style_classes=["section-box"],
+                children=(self.user_box, QuickSettingsButtonBox(popup=popup)),
             ),
             center_children=center_box,
         )
@@ -365,7 +365,7 @@ class QuickSettingsMenu(Box):
                 Box(
                     orientation="v",
                     spacing=10,
-                    style_classes="section-box",
+                    style_classes=["section-box"],
                     children=(
                         PlayerBoxStack(
                             MprisPlayerManager(), config=self.config.get("media", {})
@@ -378,12 +378,13 @@ class QuickSettingsMenu(Box):
 
         invoke_repeater(
             1000,
-            lambda *_: uptime_label.set_label(helpers.uptime()),
+            lambda *_: uptime_label.set_label(f" {helpers.uptime()}"),
         )
 
     def show_dialog(self, title: str, body: str, command: str):
         """Show a dialog with the given title and body."""
         self.get_parent().set_visible(False)
+        self.popup.hide_popover()
 
         Dialog().add_content(
             title=title,
@@ -421,14 +422,18 @@ class QuickSettingsButtonWidget(ButtonWidget):
 
         self.popup = None
 
-        self.audio_icon = Image(style_classes="panel-font-icon")
+        self.audio_icon = Image(style_classes=["panel-font-icon"])
 
         self.network_icon = Image(
-            style_classes="panel-font-icon",
+            style_classes=[
+                "panel-font-icon",
+            ]
         )
 
         self.brightness_icon = Image(
-            style_classes="panel-font-icon",
+            style_classes=[
+                "panel-font-icon",
+            ]
         )
 
         self.update_brightness()
@@ -452,10 +457,17 @@ class QuickSettingsButtonWidget(ButtonWidget):
             from shared.popover import Popover
 
             self.popup = Popover(
-                content=QuickSettingsMenu(config=self.config),
                 point_to=self,
             )
+            self.popup.set_content(
+                QuickSettingsMenu(config=self.config, popup=self.popup),
+            )
+            self.popup.connect(
+                "popover-closed", lambda *_: self.remove_style_class("active")
+            )
         self.popup.open()
+
+        self.add_style_class("active")
 
     def _get_network_icon(self, *_):
         # Check if the network service is ready

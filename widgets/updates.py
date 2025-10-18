@@ -4,17 +4,17 @@ from datetime import datetime
 from fabric.utils import (
     cooldown,
     exec_shell_command_async,
+    invoke_repeater,
+    logger,
 )
 from fabric.widgets.label import Label
 from fabric.widgets.revealer import Revealer
-from loguru import logger
 
 from shared.widget_container import ButtonWidget
 from utils.colors import Colors
 from utils.constants import ASSETS_DIR
 from utils.widget_utils import (
     nerd_font_icon,
-    reusable_fabricator,
 )
 
 
@@ -35,12 +35,12 @@ class UpdatesWidget(ButtonWidget):
         if self.config.get("show_icon", True):
             self.icon = nerd_font_icon(
                 icon=self.config.get("no_updates_icon", "󰒲"),
-                props={"style_classes": "panel-font-icon"},
+                props={"style_classes": ["panel-font-icon"]},
             )
             self.container_box.add(self.icon)
 
         if self.config.get("label", True):
-            self.update_label = Label(label="0", style_classes="panel-text")
+            self.update_label = Label(label="0", style_classes=["panel-text"])
 
             if self.config.get("hover_reveal", True):
                 self.revealer = Revealer(
@@ -58,7 +58,7 @@ class UpdatesWidget(ButtonWidget):
         self._check_update()
 
         # reusing the fabricator to call specified intervals
-        reusable_fabricator.connect("changed", self._should_update)
+        invoke_repeater(1000, self._should_update)
 
     def _build_base_command(self) -> str:
         script = f"{ASSETS_DIR}/scripts/systemupdates.sh"

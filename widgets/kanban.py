@@ -3,7 +3,7 @@ import typing
 from pathlib import Path
 
 import gi
-from fabric.utils import bulk_connect
+from fabric.utils import bulk_connect, logger
 from fabric.widgets.box import Box
 from fabric.widgets.button import Button
 from fabric.widgets.centerbox import CenterBox
@@ -12,7 +12,6 @@ from fabric.widgets.grid import Grid
 from fabric.widgets.label import Label
 from fabric.widgets.scrolledwindow import ScrolledWindow
 from gi.repository import Gdk, GLib, GObject, Gtk
-from loguru import logger
 
 from shared.list import ListBox
 from shared.widget_container import ButtonWidget
@@ -408,12 +407,12 @@ class KanbanWidget(ButtonWidget):
         self.container_box.add(
             nerd_font_icon(
                 icon=self.config.get("icon", "󰒲"),
-                props={"style_classes": "panel-font-icon"},
+                props={"style_classes": ["panel-font-icon"]},
             )
         )
 
         if self.config.get("label", True):
-            self.container_box.add(Label(label="Kanban", style_classes="panel-text"))
+            self.container_box.add(Label(label="Kanban", style_classes=["panel-text"]))
 
         if self.config.get("tooltip", False):
             self.set_tooltip_text("Kanban Board")
@@ -434,4 +433,8 @@ class KanbanWidget(ButtonWidget):
                 content=Kanban(),
                 point_to=self,
             )
+            self.popup.connect(
+                "popover-closed", lambda *_: self.remove_style_class("active")
+            )
         self.popup.open()
+        self.add_style_class("active")

@@ -3,13 +3,12 @@ from typing import ClassVar
 import gi
 from fabric.hyprland.service import HyprlandEvent
 from fabric.hyprland.widgets import get_hyprland_connection
-from fabric.utils import bulk_connect
+from fabric.utils import bulk_connect, logger
 from fabric.widgets.box import Box
 from fabric.widgets.revealer import Revealer
 from fabric.widgets.wayland import WaylandWindow
 from fabric.widgets.widget import Widget
 from gi.repository import Gdk, GLib, GObject, GtkLayerShell
-from loguru import logger
 
 from utils.types import Reveal_Animations
 
@@ -32,7 +31,7 @@ class PopoverManager:
         # Shared overlay window for all popovers
         self.overlay = WaylandWindow(
             name="popover-overlay",
-            style_classes="popover-overlay",
+            style_classes=["popover-overlay"],
             title="fabric-shell-popover-overlay",
             anchor="left top right bottom",
             margin="-50px 0px 0px 0px",
@@ -235,7 +234,7 @@ class Popover(Widget):
             transition_duration=self._animation_duration,
             transition_type=self._animation,
             child_revealed=False,
-            child=Box(style_classes="popover-content", children=self._content),
+            child=Box(style_classes=["popover-content"], children=self._content),
         )
 
         # Connect draw event to fix positioning

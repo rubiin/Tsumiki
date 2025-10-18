@@ -2,14 +2,13 @@ import mimetypes
 import os
 
 from fabric.core.service import Signal
-from fabric.utils import exec_shell_command_async
+from fabric.utils import exec_shell_command_async, logger
 from fabric.widgets.box import Box
 from fabric.widgets.grid import Grid
 from fabric.widgets.image import Image
 from fabric.widgets.label import Label
 from fabric.widgets.scrolledwindow import ScrolledWindow
 from gi.repository import Gtk
-from loguru import logger
 from PIL import Image as PILImage
 
 from shared.buttons import HoverButton

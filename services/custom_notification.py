@@ -3,7 +3,7 @@ import threading
 
 from fabric import Signal
 from fabric.notifications import Notification, Notifications, NotificationSerializedData
-from loguru import logger
+from fabric.utils import logger
 
 from utils.colors import Colors
 from utils.constants import (

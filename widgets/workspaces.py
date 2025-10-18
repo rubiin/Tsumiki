@@ -1,6 +1,6 @@
 from fabric.core.widgets import WorkspaceButton
 from fabric.hyprland.widgets import HyprlandWorkspaces as Workspaces
-from fabric.utils.helpers import bulk_connect
+from fabric.utils import bulk_connect
 
 from shared.widget_container import BoxWidget
 from utils.functions import unique_list
@@ -18,6 +18,7 @@ class WorkSpacesWidget(BoxWidget):
         self.default_format = config.get("default_label_format", "{id}")
         self.workspace_count = config.get("count", 8)
         self.hide_unoccupied = config.get("hide_unoccupied", False)
+        self.show_numbered = config.get("show_numbered", True)
 
         # Create a HyperlandWorkspace widget to manage workspace buttons
         self.workspace = Workspaces(
@@ -54,7 +55,7 @@ class WorkSpacesWidget(BoxWidget):
     def _setup_button(self, ws_id: int) -> WorkspaceButton:
         button = WorkspaceButton(
             id=ws_id,
-            label=self._create_workspace_label(ws_id),
+            label=self._create_workspace_label(ws_id) if self.show_numbered else None,
             visible=ws_id not in self.ignored_ws,
         )
 

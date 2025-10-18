@@ -3,9 +3,8 @@ import warnings
 
 from fabric.hyprland import Hyprland
 from fabric.hyprland.widgets import get_hyprland_connection
-from fabric.utils import bulk_connect
+from fabric.utils import bulk_connect, logger
 from gi.repository import Gdk, GLib
-from loguru import logger
 
 from .constants import MONITOR_HOTPLUG_DELAY_MS
 from .functions import ttl_lru_cache

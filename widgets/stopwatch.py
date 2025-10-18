@@ -22,10 +22,10 @@ class StopWatchWidget(ButtonWidget):
 
         self.icon = nerd_font_icon(
             icon=self.config.get("stopped_icon", "󰒲"),
-            props={"style_classes": "panel-font-icon"},
+            props={"style_classes": ["panel-font-icon"]},
         )
 
-        self.time_label = Label(label="00:00", style_classes="panel-text")
+        self.time_label = Label(label="00:00", style_classes=["panel-text"])
         self.container_box.children = (self.icon, self.time_label)
 
         self.connect("clicked", self.on_click)

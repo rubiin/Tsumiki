@@ -1,8 +1,8 @@
 import re
 
+from fabric.utils import logger
 from fabric.widgets.box import Box
 from fabric.widgets.label import Label
-from loguru import logger
 
 from services.mpris import MprisPlayer, MprisPlayerManager
 from shared.media import PlayerBoxStack
@@ -26,9 +26,9 @@ class MprisWidget(ButtonWidget):
 
         self.player = None
 
-        self.label = Label(label="Nothing playing", style_classes="panel-text")
+        self.label = Label(label="Nothing playing", style_classes=["panel-text"])
 
-        self.cover = Box(style_classes="cover")
+        self.cover = Box(style_classes=["cover"])
         self.container_box.children = [self.cover, self.label]
 
         # Services
@@ -84,11 +84,15 @@ class MprisWidget(ButtonWidget):
         if self.popup is None:
             self.popup = Popover(
                 content=Box(
-                    style_classes="mpris-box",
+                    style_classes=["mpris-box"],
                     children=[
                         PlayerBoxStack(self.mpris_manager, config=self.config),
                     ],
                 ),
                 point_to=self,
             )
+            self.popup.connect(
+                "popover-closed", lambda *_: self.remove_style_class("active")
+            )
         self.popup.open()
+        self.add_style_class("active")

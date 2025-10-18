@@ -2,14 +2,13 @@ import os
 import subprocess
 
 import ijson
-from fabric.utils import remove_handler
+from fabric.utils import logger, remove_handler
 from fabric.widgets.box import Box
 from fabric.widgets.button import Button
 from fabric.widgets.entry import Entry
 from fabric.widgets.label import Label
 from fabric.widgets.stack import Stack
 from gi.repository import Gdk
-from loguru import logger
 
 from shared.widget_container import ButtonWidget
 from utils.constants import ASSETS_DIR
@@ -337,12 +336,12 @@ class EmojiPickerWidget(ButtonWidget):
         self.container_box.add(
             nerd_font_icon(
                 icon=self.config.get("icon", "󰕸"),
-                props={"style_classes": "panel-font-icon"},
+                props={"style_classes": ["panel-font-icon"]},
             )
         )
 
         if self.config.get("label", True):
-            self.container_box.add(Label(label="Emoji", style_classes="panel-text"))
+            self.container_box.add(Label(label="Emoji", style_classes=["panel-text"]))
 
         if self.config.get("tooltip", False):
             self.set_tooltip_text("Emoji Picker")
@@ -363,4 +362,10 @@ class EmojiPickerWidget(ButtonWidget):
                 content=EmojiPickerMenu(parent=self),
                 point_to=self,
             )
+            self.popup.connect(
+                "popover-closed", lambda *_: self.remove_style_class("active")
+            )
+
         self.popup.open()
+
+        self.add_style_class("active")

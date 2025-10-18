@@ -7,6 +7,7 @@ from fabric.notifications import (
 from fabric.utils import (
     bulk_connect,
     invoke_repeater,
+    logger,
     remove_handler,
 )
 from fabric.widgets.box import Box
@@ -20,7 +21,6 @@ from fabric.widgets.revealer import Revealer
 from fabric.widgets.wayland import WaylandWindow as Window
 from fabric.widgets.widget import Widget
 from gi.repository import Gdk, GdkPixbuf, GLib
-from loguru import logger
 
 import utils.constants as constants
 import utils.functions as helpers
@@ -65,6 +65,7 @@ class NotificationPopup(Window):
             all_visible=True,
             visible=True,
             exclusive=False,
+            title="tsumiki-notifications",
             child=self.notifications,
             **kwargs,
         )
@@ -141,7 +142,7 @@ class NotificationWidget(EventBox):
         )
 
         header_container = Box(
-            spacing=8, orientation="h", style_classes="notification-header"
+            spacing=8, orientation="h", style_classes=["notification-header"]
         )
 
         header_container.children = (
@@ -153,7 +154,7 @@ class NotificationWidget(EventBox):
                     else notification.app_name,
                 ),
                 h_align="start",
-                style_classes="summary",
+                style_classes=["summary"],
                 max_chars_width=30,
                 line_wrap="word-char",
             ),
@@ -162,8 +163,9 @@ class NotificationWidget(EventBox):
         overlay = Overlay(
             child=self.progress_timeout,
             overlays=Button(
-                v_align="start",
-                style_classes="close-button",
+                v_align="center",
+                h_align="center",
+                style_classes=["close-button"],
                 child=nerd_font_icon(
                     icon=text_icons["ui"]["window_close"],
                     props={
@@ -184,7 +186,7 @@ class NotificationWidget(EventBox):
         body_container = Box(
             spacing=4,
             orientation="h",
-            style_classes="notification-body",
+            style_classes=["notification-body"],
             v_align="start",
             h_align="start",
         )
@@ -214,7 +216,7 @@ class NotificationWidget(EventBox):
                 markup=helpers.parse_markup(self._notification.body),
                 v_align="start",
                 h_align="start",
-                style_classes="body",
+                style_classes=["body"],
                 line_wrap="word-char",
                 max_chars_width=38,
                 lines=10,
@@ -386,7 +388,7 @@ class ActionButton(HoverButton):
             label=action.label,
             h_expand=True,
             on_clicked=self.on_click,
-            style_classes="notification-action",
+            style_classes=["notification-action"],
             **kwargs,
         )
 

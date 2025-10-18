@@ -29,7 +29,7 @@ class QuickSettingToggler(CommandSwitcher):
             label=True,
             tooltip=False,
             interval=1000,
-            style_classes="quicksettings-toggler",
+            style_classes=["quicksettings-toggler"],
             **kwargs,
         )
 
@@ -37,30 +37,35 @@ class QuickSettingToggler(CommandSwitcher):
 class HyprIdleQuickSetting(QuickSettingToggler):
     """A button to toggle the hyper idle mode."""
 
-    def __init__(self, **kwargs):
+    def __init__(self, popup, **kwargs):
         super().__init__(
             command="hypridle",
             enabled_icon="",
             disabled_icon="",
             name="quicksettings-togglebutton",
+            **kwargs,
         )
+        self.connect("clicked", lambda *_: popup.hide_popover())
 
 
 class NotificationQuickSetting(HoverButton):
     """A button to toggle the notification."""
 
-    def __init__(self):
+    def __init__(self, popup, **kwargs):
         super().__init__(
             name="quicksettings-togglebutton",
-            style_classes="quicksettings-toggler",
+            style_classes=["quicksettings-toggler"],
+            **kwargs,
         )
+
+        self.popup = popup
 
         self.notification_label = Label(
             label="Noisy",
         )
         self.notification_icon = nerd_font_icon(
             icon=text_icons["notifications"]["noisy"],
-            props={"style_classes": "panel-font-icon"},
+            props={"style_classes": ["panel-font-icon"]},
         )
 
         self.children = Box(
@@ -82,6 +87,7 @@ class NotificationQuickSetting(HoverButton):
     def on_click(self, *_):
         """Toggle the notification."""
         notification_service.dont_disturb = not notification_service.dont_disturb
+        self.popup.hide_popover()
 
     def toggle_notification(self, _, value: bool, *args):
         """Toggle the notification."""

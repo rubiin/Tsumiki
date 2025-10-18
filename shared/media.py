@@ -10,6 +10,7 @@ from fabric.utils import (
     bulk_connect,
     cooldown,
     invoke_repeater,
+    logger,
 )
 from fabric.widgets.box import Box
 from fabric.widgets.button import Button
@@ -20,7 +21,6 @@ from fabric.widgets.overlay import Overlay
 from fabric.widgets.scale import Scale
 from fabric.widgets.stack import Stack
 from gi.repository import GLib, GObject
-from loguru import logger
 
 from services.mpris import MprisPlayer, MprisPlayerManager
 from shared.buttons import HoverButton
@@ -293,13 +293,13 @@ class PlayerBox(Box):
         self.position_label = Label(
             "00:00",
             v_align="center",
-            style_classes="time-label",
+            style_classes=["time-label"],
             visible=self.config.get("show_time", True),
         )
         self.length_label = Label(
             "00:00",
             v_align="center",
-            style_classes="time-label",
+            style_classes=["time-label"],
             visible=self.config.get("show_time", True),
         )
 

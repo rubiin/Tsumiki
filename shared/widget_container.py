@@ -64,13 +64,13 @@ class EventBoxWidget(EventBox, BaseWidget):
 
     def __init__(self, **kwargs):
         super().__init__(
-            style_classes="panel-eventbox",
+            style_classes=["panel-eventbox"],
             **kwargs,
         )
 
         widget_name = kwargs.get("name", "eventbox")
         self.config: dict = widget_config.get("widgets", {}).get(widget_name, {})
-        self.box = Box(style_classes="panel-box")
+        self.box = Box(style_classes=["panel-box"])
         self.add(
             self.box,
         )
@@ -95,14 +95,14 @@ class ButtonWidget(Button, BaseWidget):
 
     def __init__(self, **kwargs):
         super().__init__(
-            style_classes="panel-button",
+            style_classes=["panel-button"],
             **kwargs,
         )
 
         widget_name = kwargs.get("name", "button")
         self.config: dict = widget_config.get("widgets", {}).get(widget_name, {})
 
-        self.container_box = Box(style_classes="box", spacing=6)
+        self.container_box = Box(style_classes=["box"], spacing=6)
         self.add(self.container_box)
 
         if self.config.get("hover_reveal", True):
@@ -115,6 +115,15 @@ class ButtonWidget(Button, BaseWidget):
                     "leave-notify-event": self._toggle_revealer,
                 },
             )
+
+        self.connect(
+            "state-flags-changed",
+            lambda btn, *_: (
+                btn.set_cursor("pointer")
+                if btn.get_state_flags() & 2  # type: ignore
+                else btn.set_cursor("default"),
+            ),
+        )
 
     def _toggle_revealer(self, *_):
         if hasattr(self, "revealer"):
