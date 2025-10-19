@@ -16,8 +16,7 @@ $base_margin: common.toEm(4);
   }
 }
 
-.weather-box {
-  @include common.floating-widget;
+.weather-menu {
 
   #weather-expander {
     arrow {

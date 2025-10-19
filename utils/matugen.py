@@ -23,8 +23,8 @@ class Matugen:
 
             base_command = (
                 f'matugen image -q "{wallpaper}" '
-                f'-t scheme-{scheme} '
-                f'--contrast {contrast}'
+                f"-t scheme-{scheme} "
+                f"--contrast {contrast}"
             )
 
             # Placeholder for actual palette generation logic

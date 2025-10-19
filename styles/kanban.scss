@@ -5,8 +5,7 @@
 
 
 #kanban-board {
-  @include common.floating-widget;
-  @include common.spacing;
+
   border: 4px solid theme.$surface-disabled;
   min-height: 400px;
   min-width: 600px;

@@ -86,6 +86,11 @@
 }
 
 
+#popover-content {
+  @include mixins.floating-widget;
+  @include mixins.spacing;
+}
+
 .panel-box {
   border-radius: variable.$radius-large;
   padding: .1em .9em;
@@ -383,8 +388,7 @@ scrolledwindow {
 
 
 .wallpaper-picker-box {
-  @include mixins.floating-widget;
-  @include mixins.spacing;
+
 }
 
 #wallpaper-button {

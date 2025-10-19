@@ -540,7 +540,7 @@
 				"padding_x": "1em",
 				"padding_y": "1em",
 				"shadow": {
-					"enabled": false,
+					"enabled": true,
 					"offset": 0,
 					"blur": 0,
 					"spread": 0,

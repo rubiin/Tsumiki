@@ -234,7 +234,7 @@ class Popover(Widget):
             transition_duration=self._animation_duration,
             transition_type=self._animation,
             child_revealed=False,
-            child=Box(style_classes=["popover-content"], children=self._content),
+            child=Box(name="popover-content", children=self._content),
         )
 
         # Connect draw event to fix positioning

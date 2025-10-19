@@ -220,9 +220,7 @@ class Popover(Widget):
         self._content.connect("draw", self.on_content_ready)
 
         # Add content to window
-        self._content_window.add(
-            Box(style_classes=["popover-content"], children=self._content)
-        )
+        self._content_window.add(Box(name="popover-content", children=self._content))
 
         bulk_connect(
             self._content_window,

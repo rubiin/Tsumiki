@@ -62,8 +62,6 @@ $slider-height: 12px;
 
 #quicksettings-menu {
   min-width: variable.$quicksettings-width;
-  @include common.floating-widget;
-  @include common.spacing;
   padding: 4pt 1pt;
 
   .power-profile {

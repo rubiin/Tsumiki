@@ -6,10 +6,6 @@
 
 
 #emoji-menu {
-
-  @include common.floating-widget;
-  @include common.spacing;
-
   #search-entry {
     font-weight: bold;
     background-color: theme.$surface-disabled;
