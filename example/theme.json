@@ -56,8 +56,9 @@
 			"opacity": 100,
 			"widget_style": "default",
 			"sliders": {
-				"height": "0.5em",
-				"slider": false
+				"height": "7px",
+				"knob_height": "8px",
+				"knob": false
 			},
 			"shadow": {
 				"enabled": false,
@@ -448,8 +449,9 @@
 			"quick_settings": {
 				"spacing": ".125em",
 				"sliders": {
-					"height": "0.7em",
-					"slider": false
+					"height": "7px",
+					"knob_height": "8px",
+					"knob": true
 				},
 				"border": {
 					"enabled": false,

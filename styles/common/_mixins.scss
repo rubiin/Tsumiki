@@ -95,9 +95,10 @@
   border: variable.$border;
 }
 
-@mixin slider($height: 11px,
+@mixin slider(
+  $height: 11px,
   $highlight-color: white,
-  $slider: false,
+  $knob: false,
   $radius: variable.$radius,
   $slider-color: theme.$background-dark,
   $min-length: "",
@@ -130,7 +131,7 @@
     }
   }
 
-  @if $slider {
+  @if $knob {
     slider {
       background-color: theme.$text-main;
       border-color: variable.$border-color;

@@ -36,7 +36,7 @@
   }
 
 
-  @include common.slider($slider: variable.$modules-osd-sliders-slider, $min-length: 150px, $height: variable.$modules-osd-sliders-height);
+  @include common.slider($knob: variable.$modules-osd-sliders-knob, $min-length: 150px, $height: variable.$modules-osd-sliders-height);
 
 
 }

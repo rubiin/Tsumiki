@@ -199,7 +199,7 @@ $slider-height: 12px;
 
       #setting-slider {
         @include common.slider($highlight-color: theme.$accent-blue,
-          $slider: variable.$bar-widgets-quick_settings-sliders-slider,
+          $knob: variable.$bar-widgets-quick_settings-sliders-knob,
           $min-length: 320px,
           $height: variable.$bar-widgets-quick_settings-sliders-height );
       }
@@ -210,7 +210,7 @@ $slider-height: 12px;
 
       #setting-slider {
         @include common.slider($highlight-color: theme.$accent-blue,
-          $slider: variable.$bar-widgets-quick_settings-sliders-slider,
+          $knob: variable.$bar-widgets-quick_settings-sliders-knob,
           $min-length: 250px,
           $height: variable.$bar-widgets-quick_settings-sliders-height );
       }
@@ -223,7 +223,7 @@ $slider-height: 12px;
 
       #setting-slider {
         @include common.slider($highlight-color: theme.$accent-blue,
-          $slider: variable.$bar-widgets-quick_settings-sliders-slider,
+          $knob: variable.$bar-widgets-quick_settings-sliders-knob,
           $min-length: 180px,
           $height: variable.$bar-widgets-quick_settings-sliders-height );
       }
@@ -403,7 +403,7 @@ $slider-height: 12px;
 #hyprsunset-sub-menu {
 
   @include common.slider($highlight-color: theme.$accent-blue,
-    $slider: variable.$bar-widgets-quick_settings-sliders-slider,
+    $knob: variable.$bar-widgets-quick_settings-sliders-knob,
     $min-length: 320px,
     $height: variable.$bar-widgets-quick_settings-sliders-height );
 }
