@@ -78,8 +78,8 @@ class CollapsibleGroupWidget(ButtonWidget):
 
         self.popup = Popover(content=self.widgets_box, point_to=self)
         self.popup.connect(
-                "popover-closed", lambda *_: self.remove_style_class("active")
-            )
+            "popover-closed", lambda *_: self.remove_style_class("active")
+        )
 
     def _set_expanded(self, expanded: bool):
         """Sets the expanded state of the widget."""

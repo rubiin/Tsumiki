@@ -1,6 +1,7 @@
 @use "variable";
 @use "theme";
 
+
 .panel-collapsible-group {
   background-color: theme.$background-dark;
   border-radius: variable.$radius-large;
@@ -9,13 +10,16 @@
 
 }
 
-.collapsible_group.active {
-  background: theme.$accent-blue;
-  color: theme.$text-main;
-}
+#collapsible_group {
 
-.collapsible_group:hover {
-  background: theme.$surface-highlight;
+
+  &.active {
+    background: theme.$accent-blue;
+      color: theme.$text-main;
+  }
+  &:hover {
+background: theme.$surface-highlight;
+  }
 }
 
 .panel-collapsible-group .panel-button {
