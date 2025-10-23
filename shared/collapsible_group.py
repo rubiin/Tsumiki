@@ -3,7 +3,6 @@ from fabric.widgets.label import Label
 
 from utils.widget_utils import nerd_font_icon
 
-from .popover import Popover
 from .widget_container import ButtonWidget
 
 
@@ -62,6 +61,9 @@ class CollapsibleGroupWidget(ButtonWidget):
 
     def _setup_popup(self):
         """Set up the popup that contains the grouped widgets."""
+
+        from .popover import Popover
+
         # Fix: Read spacing and style_classes directly from config
         self.widgets_box = Box(
             orientation="h",
@@ -75,6 +77,9 @@ class CollapsibleGroupWidget(ButtonWidget):
         self._populate_widgets()
 
         self.popup = Popover(content=self.widgets_box, point_to=self)
+        self.popup.connect(
+                "popover-closed", lambda *_: self.remove_style_class("active")
+            )
 
     def _set_expanded(self, expanded: bool):
         """Sets the expanded state of the widget."""
