@@ -5,6 +5,7 @@ from fabric.hyprland.widgets import get_hyprland_connection
 from fabric.utils import bulk_connect, logger, truncate
 from fabric.widgets.box import Box
 from fabric.widgets.button import Button
+from fabric.widgets.centerbox import CenterBox
 from fabric.widgets.eventbox import EventBox
 from fabric.widgets.image import Image
 from fabric.widgets.revealer import Revealer
@@ -407,7 +408,11 @@ class Dock(Window):
         else:
             self.children = EventBox(
                 events=["enter-notify", "leave-notify"],
-                child=Box(style="min-height: 1px", children=self.revealer),
+                child=CenterBox(
+                    center_children=self.revealer,
+                    start_children=Box(style="min-height: 10px; min-width: 5px;"),
+                    end_children=Box(style="min-height: 10px; min-width: 5px;"),
+                ),
                 on_enter_notify_event=lambda *_: self.revealer.set_reveal_child(True),
                 on_leave_notify_event=lambda *_: self.revealer.set_reveal_child(False),
             )
