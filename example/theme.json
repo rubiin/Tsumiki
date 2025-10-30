@@ -1,3 +1,4 @@
+
 {
 	"name": "catpuccin-mocha",
 	"font": {
@@ -33,7 +34,7 @@
 		},
 		"dock": {
 			"scaling": 100,
-			"opacity": 45,
+			"opacity": 80,
 			"shadow": {
 				"enabled": false,
 				"offset": 0,
@@ -42,7 +43,7 @@
 				"opacity": 100
 			},
 			"padding_x": "8px",
-			"padding_y": "4px",
+			"padding_y": "8px",
 			"margin_x": "8px",
 			"margin_y": "8px",
 			"border": {
@@ -56,8 +57,8 @@
 			"opacity": 100,
 			"widget_style": "default",
 			"sliders": {
-				"height": "7px",
-				"knob_height": "8px",
+				"height": "0.5em",
+				"slider": false,
 				"knob": false
 			},
 			"shadow": {
@@ -105,7 +106,7 @@
 				"radius": "16px"
 			}
 		},
-		"desktop_quotes": {
+		"quotes": {
 			"spacing": ".125em",
 			"border": {
 				"enabled": false,
@@ -114,7 +115,6 @@
 			}
 		},
 		"activate_linux": {
-			"spacing": ".125em",
 			"border": {
 				"enabled": false,
 				"width": "1px",
@@ -271,7 +271,7 @@
 			},
 			"bluetooth": {
 				"spacing": ".125em",
-				"icon_size": "12px",
+				"icon_size": "14px",
 				"border": {
 					"enabled": false,
 					"width": "1px",
@@ -449,9 +449,9 @@
 			"quick_settings": {
 				"spacing": ".125em",
 				"sliders": {
-					"height": "7px",
-					"knob_height": "8px",
-					"knob": true
+					"height": "0.7em",
+					"slider": false,
+					"knob": false
 				},
 				"border": {
 					"enabled": false,
@@ -539,17 +539,17 @@
 				"opacity": 100,
 				"margin_x": "0",
 				"margin_y": "1.25em",
-				"padding_x": "0.5em",
-				"padding_y": "0.2em",
+				"padding_x": "1em",
+				"padding_y": "1em",
 				"shadow": {
-					"enabled": true,
+					"enabled": false,
 					"offset": 0,
-					"blur": "2px",
-					"spread": "2px",
-					"opacity": 50
+					"blur": 0,
+					"spread": 0,
+					"opacity": 100
 				},
 				"border": {
-					"enabled": false,
+					"enabled": true,
 					"width": "1px",
 					"radius": "1.5em"
 				},

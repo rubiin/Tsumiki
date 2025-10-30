@@ -196,9 +196,9 @@
 }
 
 #desktop_quotes {
-  border-radius: variable.$modules-desktop_quotes-border-radius;
-  border: if(variable.$modules-desktop_quotes-border-enabled, variable.$border, none);
-  border-width: variable.$modules-desktop_quotes-border-width;
+  border-radius: variable.$modules-quotes-border-radius;
+  border: if(variable.$modules-quotes-border-enabled, variable.$border, none);
+  border-width: variable.$modules-quotes-border-width;
 
   #desktop_quotes-box {
     margin: 0rem 4rem 4rem 0rem;
