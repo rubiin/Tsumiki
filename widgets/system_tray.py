@@ -72,6 +72,7 @@ class SystemTrayWidget(ButtonWidget):
 
         # Create main tray box and toggle icon
         self.tray_box = Box(name="system-tray-box", orientation="horizontal", spacing=2)
+        self._items: dict[str, SystemTrayItem] = {}
 
         self.icon_size = self.config.get("icon_size", 16)
 
@@ -152,15 +153,18 @@ class SystemTrayWidget(ButtonWidget):
         # Widget is visible if there are any items (visible or hidden)
         self.set_visible(has_visible_items or has_hidden_items)
 
-    def on_item_removed(self, _, identifier: str):
+    def on_item_removed(self, _, item_identifier):
         """Handle when an item is removed from the system tray."""
+        item_button = self._items.get(item_identifier)
+
+        if not item_button:
+            return
+
+        item_button.destroy()
+        self._items.pop(item_identifier)
         # Update visibility after an item is removed
         self.update_visibility()
-
-    def on_item_button_removed(self, button: ButtonWidget):
-        """Handle when a button is removed from the main tray."""
-        button.destroy()
-        self.update_visibility()
+        return
 
     def on_item_added(self, _, item_identifier: str):
         item = self._watcher.items.get(item_identifier)
@@ -179,13 +183,14 @@ class SystemTrayWidget(ButtonWidget):
         # Check if item should be hidden in popover
         hidden_list = self.config.get("hidden", [])
         is_hidden = any(x.lower() in title.lower() for x in hidden_list)
-        button = SystemTrayItem(item=item, icon_size=self.icon_size)
+        item_button = SystemTrayItem(item=item, icon_size=self.icon_size)
+        self._items[item.identifier] = item_button
 
         # Add to appropriate container
         if is_hidden:
-            self.popup_menu.add_item(button)
+            self.popup_menu.add_item(item_button)
         else:
-            self.tray_box.pack_start(button, False, False, 0)
+            self.tray_box.pack_start(item_button, False, False, 0)
 
         # Update visibility after adding an item
         self.update_visibility()
