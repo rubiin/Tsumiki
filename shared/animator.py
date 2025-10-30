@@ -1,17 +1,82 @@
+# Author: Yousef EL-Darsh
+# License (SPDX): AGPL-3.0-or-later
+
+from functools import cache
 from typing import Protocol, cast
 
 import gi
-from fabric import Property, Service, Signal
-from fabric.utils import clamp, remove_handler
+from fabric.core.service import Property, Service, Signal
+from fabric.utils import clamp
 from gi.repository import GLib, Gtk
-
-from utils.bezier import ease_linear, lerp
 
 gi.require_versions({"Gtk": "3.0"})
 
 
+@cache
+def lerp(start: float, end: float, progress: float) -> float:
+    return start + (end - start) * progress
+
+
+@cache
+def steps(n: int, progress: float, start_jump: bool = False) -> float:
+    if start_jump:
+        return min(int(progress * n), n - 1) / (n - 1) if n > 1 else 0.0
+    return min(int(progress * n + 1e-10), n) / n
+
+
+@cache
+def cubic_bezier(
+    x1: float, y1: float, x2: float, y2: float, progress: float, epsilon=1e-6
+) -> float:
+    # implementation yanked off of the internet, don't blame me about anything.
+    # Fast-path boundaries to avoid overshoot and unnecessary work
+    if progress <= 0.0 or progress >= 1.0:
+        return clamp(progress, 0.0, 1.0)
+
+    t_guess = progress
+    for _ in range(8):
+        t = t_guess
+        t_sq = t * t
+        omt = 1.0 - t
+        omt_sq = omt * omt
+
+        x = 3 * x1 * omt_sq * t + 3 * x2 * omt * t_sq + t * t_sq
+        dx = 3 * x1 * omt_sq + 6 * (x2 - x1) * omt * t + 3 * (1 - x2) * t_sq
+
+        if abs(dx) < epsilon:
+            break
+
+        delta = (x - progress) / dx
+        t_guess -= delta
+        t_guess = clamp(t_guess, 0.0, 1.0)
+
+        if abs(delta) < epsilon:
+            break
+
+    t = clamp(t_guess, 0.0, 1.0)
+    t_sq = t * t
+    omt = 1.0 - t
+    return 3 * y1 * omt * omt * t + 3 * y2 * omt * t_sq + t * t_sq
+
+
+def ease_linear(progress: float) -> float:
+    return cubic_bezier(1, 1, 0, 0, progress)
+
+
+def ease_in(progress: float) -> float:
+    return cubic_bezier(0.4, 0, 1, 1, progress)
+
+
+def ease_out(progress: float) -> float:
+    return cubic_bezier(0, 0, 0.2, 1, progress)
+
+
+def ease_in_out(progress: float) -> float:
+    return cubic_bezier(0.4, 0, 0.2, 1, progress)
+
+
 class TimingFunctionCallback(Protocol):
-    """A callback that takes a progress value and returns a float."""
+    """"""
 
     def __call__(self, progress: float, *args, **kwargs) -> float: ...
 
@@ -52,11 +117,7 @@ class Animator(Service):
 
     @value.setter
     def value(self, value: float):
-        self._value = clamp(
-            value,
-            min(self._min_value, self._max_value),
-            max(self._min_value, self._max_value),
-        )
+        self._value = value
         return
 
     @Property(float, "read-write")
@@ -130,10 +191,10 @@ class Animator(Service):
         self._tick_handler = None
         self._timeline_pos = 0.0
 
-    def _get_time_now(self):
+    def do_get_time_now(self):
         return GLib.get_monotonic_time() / 1_000_000
 
-    def _update_value(self, delta_time: float):
+    def do_update_value(self, delta_time: float):
         if not self._playing:
             return
 
@@ -161,19 +222,19 @@ class Animator(Service):
         self._timeline_pos = 0.0
         return
 
-    def _handle_tick(self, *_):
-        current_time = self._get_time_now()
-        self._update_value(current_time)
+    def do_handle_tick(self, *_):
+        current_time = self.do_get_time_now()
+        self.do_update_value(current_time)
         return True
 
-    def _remove_tick_handlers(self):
+    def do_remove_tick_handlers(self):
         if not self._tick_handler:
             return
 
         if self._tick_widget:
             self._tick_widget.remove_tick_callback(self._tick_handler)
         else:
-            remove_handler(self._tick_handler)
+            GLib.source_remove(self._tick_handler)
         self._tick_handler = None
         return
 
@@ -182,32 +243,27 @@ class Animator(Service):
             return
 
         self.playing = True
-        self._start_time = self._get_time_now()
+        self._start_time = self.do_get_time_now()
 
         if self._tick_handler:
             return
 
         if self._tick_widget:
-            self._tick_handler = self._tick_widget.add_tick_callback(self._handle_tick)
+            self._tick_handler = self._tick_widget.add_tick_callback(
+                self.do_handle_tick
+            )
             return
 
-        self._tick_handler = GLib.timeout_add(self._tick_interval, self._handle_tick)
+        self._tick_handler = GLib.timeout_add(self._tick_interval, self.do_handle_tick)
         return
 
     def pause(self):
         self.playing = False
-        return self._remove_tick_handlers()
+        return self.do_remove_tick_handlers()
 
     def stop(self):
         if not self._tick_handler:
             self._timeline_pos = 0
             self.playing = False
             return
-        return self._remove_tick_handlers()
-
-    def play_pause(self):
-        if self._playing:
-            self.pause()
-        else:
-            self.play()
-        return
+        return self.do_remove_tick_handlers()

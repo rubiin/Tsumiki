@@ -6,11 +6,11 @@ from fabric.widgets.button import Button
 from fabric.widgets.image import Image
 from fabric.widgets.label import Label
 
-from utils.bezier import cubic_bezier
 from utils.constants import ASSETS_DIR
 from utils.icons import symbolic_icons, text_icons
 from utils.widget_utils import nerd_font_icon, setup_cursor_hover
 
+from .animator import cubic_bezier
 from .circle_image import CircularImage
 from .submenu import QuickSubMenu
 from .widget_container import BaseWidget

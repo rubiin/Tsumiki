@@ -2,7 +2,7 @@ from functools import partial
 
 from fabric.widgets.circularprogressbar import CircularProgressBar
 
-from utils.bezier import cubic_bezier
+from shared.animator import cubic_bezier
 
 
 class AnimatedCircularProgressBar(CircularProgressBar):

@@ -23,9 +23,9 @@ from fabric.widgets.stack import Stack
 from gi.repository import GLib, GObject
 
 from services.mpris import MprisPlayer, MprisPlayerManager
+from shared.animator import cubic_bezier
 from shared.buttons import HoverButton
 from shared.circle_image import CircularImage
-from utils.bezier import cubic_bezier
 from utils.constants import APP_DATA_DIRECTORY, ASSETS_DIR
 from utils.functions import (
     ensure_directory,
