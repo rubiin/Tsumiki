@@ -1,111 +1,20 @@
-import os
-
 import gi
+from fabric.system_tray.widgets import SystemTrayItem, get_tray_watcher
 from fabric.utils import (
     bulk_connect,
-    logger,
 )
 from fabric.widgets.box import Box
 from fabric.widgets.grid import Grid
-from fabric.widgets.image import Image
 from fabric.widgets.separator import Separator
-from gi.repository import Gdk, GdkPixbuf, GLib, Gray, Gtk
 
-from shared.buttons import HoverButton
 from shared.widget_container import ButtonWidget
 from utils.icons import text_icons
 from utils.widget_utils import nerd_font_icon
 
-gi.require_versions({"Gtk": "3.0", "Gray": "0.1", "GdkPixbuf": "2.0", "Gdk": "3.0"})
+gi.require_versions({"Gtk": "3.0", "GdkPixbuf": "2.0", "Gdk": "3.0"})
 
 
-class BaseSystemTray:
-    """Base class for system tray implementations."""
-
-    def on_button_click(self, button: ButtonWidget, item: Gray.Item, event):
-        if event.button in (1, 3):
-            menu = item.get_property("menu")
-            if menu:
-                menu.popup_at_widget(
-                    button,
-                    Gdk.Gravity.SOUTH,
-                    Gdk.Gravity.NORTH,
-                    event,
-                )
-            else:
-                item.context_menu(event.x, event.y)
-
-    def resolve_icon(self, item: Gray.Item, icon_size: int = 16):
-        pixmap = Gray.get_pixmap_for_pixmaps(item.get_icon_pixmaps(), icon_size)
-
-        try:
-            if pixmap is not None:
-                return pixmap.as_pixbuf(icon_size, GdkPixbuf.InterpType.HYPER)
-            else:
-                icon_name = item.get_icon_name()
-                icon_theme_path = item.get_icon_theme_path()
-
-                logger.info(
-                    f"""[SystemTray] Resolving icon: {icon_name}, size: {icon_size},
-                    theme path: {icon_theme_path}"""
-                )
-
-                # Use custom theme path if available
-                if icon_theme_path:
-                    custom_theme = Gtk.IconTheme.new()
-                    custom_theme.prepend_search_path(icon_theme_path)
-                    try:
-                        return custom_theme.load_icon(
-                            icon_name,
-                            icon_size,
-                            Gtk.IconLookupFlags.FORCE_SIZE,
-                        )
-                    except GLib.Error:
-                        # Fallback to default theme if custom path fails
-                        return Gtk.IconTheme.get_default().load_icon(
-                            icon_name,
-                            icon_size,
-                            Gtk.IconLookupFlags.FORCE_SIZE,
-                        )
-                else:
-                    if os.path.exists(
-                        icon_name
-                    ):  # for some apps, the icon_name is a path
-                        return GdkPixbuf.Pixbuf.new_from_file_at_size(
-                            icon_name, width=icon_size, height=icon_size
-                        )
-                    else:
-                        return Gtk.IconTheme.get_default().load_icon(
-                            icon_name,
-                            icon_size,
-                            Gtk.IconLookupFlags.FORCE_SIZE,
-                        )
-        except GLib.Error:
-            # Fallback to 'image-missing' icon
-            return Gtk.IconTheme.get_default().load_icon(
-                "image-missing",
-                icon_size,
-                Gtk.IconLookupFlags.FORCE_SIZE,
-            )
-
-    def _bake_item_button(self, item: Gray.Item) -> HoverButton:
-        button = HoverButton(
-            style_classes=["flat"], tooltip_text=item.get_property("title")
-        )
-        button.connect(
-            "button-press-event",
-            lambda button, event: self.on_button_click(button, item, event),
-        )
-        self._update_item_button(item, button)
-        return button
-
-    def _update_item_button(self, item: Gray.Item, button: HoverButton):
-        button.set_image(
-            Image(pixbuf=self.resolve_icon(item=item, icon_size=self.icon_size))
-        )
-
-
-class SystemTrayMenu(Box, BaseSystemTray):
+class SystemTrayMenu(Box):
     """A widget to display additional system tray items in a grid."""
 
     def __init__(self, config: dict, parent_widget=None, **kwargs):
@@ -136,21 +45,8 @@ class SystemTrayMenu(Box, BaseSystemTray):
         self.column = 0
         self.max_columns = 3
 
-    def add_item(self, item: Gray.Item):
-        button = self._bake_item_button(item)
-
-        # Connect signals
-        bulk_connect(
-            item,
-            {
-                "removed": lambda *_: self.on_item_removed(button),
-                "icon-changed": lambda icon_item: self._update_item_button(
-                    icon_item, button
-                ),
-            },
-        )
-
-        self.grid.attach(button, self.column, self.row, 1, 1)
+    def add_item(self, item: SystemTrayItem):
+        self.grid.attach(item, self.column, self.row, 1, 1)
         self.column += 1
         if self.column >= self.max_columns:
             self.column = 0
@@ -168,7 +64,7 @@ class SystemTrayMenu(Box, BaseSystemTray):
             self.parent_widget.update_visibility()
 
 
-class SystemTrayWidget(ButtonWidget, BaseSystemTray):
+class SystemTrayWidget(ButtonWidget):
     """A widget to display the system tray items."""
 
     def __init__(self, **kwargs):
@@ -194,20 +90,19 @@ class SystemTrayWidget(ButtonWidget, BaseSystemTray):
 
         self.popup = None
 
-        # Initialize watcher
-        self.watcher = Gray.Watcher()
+        self._watcher = get_tray_watcher()
 
         bulk_connect(
-            self.watcher,
+            self._watcher,
             {
                 "item-added": self.on_item_added,
                 "item-removed": self.on_item_removed,
             },
         )
 
-        # Load existing items
-        for item_id in self.watcher.get_items():
-            self.on_item_added(self.watcher, item_id)
+        # # Load existing items
+        for item_id in self._watcher.items:
+            self.on_item_added(self._watcher, item_id)
 
         # Connect click handler
         self.connect("clicked", self.on_click)
@@ -267,8 +162,8 @@ class SystemTrayWidget(ButtonWidget, BaseSystemTray):
         button.destroy()
         self.update_visibility()
 
-    def on_item_added(self, _, identifier: str):
-        item = self.watcher.get_item_for_identifier(identifier)
+    def on_item_added(self, _, item_identifier: str):
+        item = self._watcher.items.get(item_identifier)
         if not item:
             return
 
@@ -284,24 +179,12 @@ class SystemTrayWidget(ButtonWidget, BaseSystemTray):
         # Check if item should be hidden in popover
         hidden_list = self.config.get("hidden", [])
         is_hidden = any(x.lower() in title.lower() for x in hidden_list)
+        button = SystemTrayItem(item=item, icon_size=self.icon_size)
 
         # Add to appropriate container
         if is_hidden:
-            self.popup_menu.add_item(item)
+            self.popup_menu.add_item(button)
         else:
-            button = self._bake_item_button(item)
-
-            # Connect signals
-            bulk_connect(
-                item,
-                {
-                    "removed": lambda *_: self.on_item_button_removed(button),
-                    "icon-changed": lambda icon_item: self._update_item_button(
-                        icon_item, button
-                    ),
-                },
-            )
-
             self.tray_box.pack_start(button, False, False, 0)
 
         # Update visibility after adding an item

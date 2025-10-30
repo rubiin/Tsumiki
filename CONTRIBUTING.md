@@ -104,7 +104,7 @@ yay -S fabric-cli-git
 
 Then run the following command from the root of the repo to generate the stubs:
 ```sh
-fabric-cli gs Glace-0.1 Gray-0.1 GtkLayerShell-0.1 Playerctl-2.0 NM-1.0
+fabric-cli gs Glace-0.1 GtkLayerShell-0.1 Playerctl-2.0 NM-1.0
 ```
 
 ## Getting Started

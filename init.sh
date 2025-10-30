@@ -224,7 +224,6 @@ install_packages() {
 
 	# Install packages from AUR using yay
 	aur_deps=(
-		gray-git
 		python-fabric-git
 		gnome-bluetooth-3.0
 		python-rlottie-python
@@ -250,7 +249,7 @@ install_packages() {
 		aur_helper="yay"
 	else
 		log_error "❌ AUR helper (yay or paru) not found. Please install one first."
-		log_warning "⚠️  You can manually install: gray-git python-fabric-git"
+		log_warning "⚠️  You can manually install: python-fabric-git"
 		exit 1
 	fi
 

@@ -11,4 +11,4 @@ restore_config:
     cp config.json.bak config.json
 
 stubs_gen:
-    fabric-cli gs Glace-0.1 Gray-0.1 GtkLayerShell-0.1 Playerctl-2.0 NM-1.0
+    fabric-cli gs Glace-0.1 GtkLayerShell-0.1 Playerctl-2.0 NM-1.0
