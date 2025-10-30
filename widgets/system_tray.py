@@ -1,12 +1,19 @@
+import os
+
 import gi
-from fabric.system_tray.widgets import SystemTrayItem, get_tray_watcher
+from fabric.system_tray.service import SystemTray as SystemTrayService
+from fabric.system_tray.service import SystemTrayItem as SystemTrayItemService
 from fabric.utils import (
     bulk_connect,
 )
 from fabric.widgets.box import Box
 from fabric.widgets.grid import Grid
+from fabric.widgets.image import Image
 from fabric.widgets.separator import Separator
+from gi.repository import Gdk, GdkPixbuf, GLib, Gtk
+from loguru import logger
 
+from shared.buttons import HoverButton
 from shared.widget_container import ButtonWidget
 from utils.icons import text_icons
 from utils.widget_utils import nerd_font_icon
@@ -14,7 +21,93 @@ from utils.widget_utils import nerd_font_icon
 gi.require_versions({"Gtk": "3.0", "GdkPixbuf": "2.0", "Gdk": "3.0"})
 
 
-class SystemTrayMenu(Box):
+class BaseSystemTray:
+    """Base class for system tray implementations."""
+
+    def on_button_click(self, button: ButtonWidget, item: SystemTrayItemService, event):
+        if event.button in (1, 3):
+            menu = item.get_property("menu")
+            if menu:
+                menu.popup_at_widget(
+                    button,
+                    Gdk.Gravity.SOUTH,
+                    Gdk.Gravity.NORTH,
+                    event,
+                )
+            else:
+                item.context_menu(event.x, event.y)
+
+    def resolve_icon(self, item: SystemTrayItemService, icon_size: int = 16):
+        pixmap = item.icon_pixmap
+
+        try:
+            if pixmap is not None:
+                return pixmap.as_pixbuf(icon_size, GdkPixbuf.InterpType.HYPER)
+            else:
+                icon_name = item.icon_name
+                icon_theme_path = item.icon_theme
+
+                logger.info(
+                    f"""[SystemTray] Resolving icon: {icon_name}, size: {icon_size},
+                    theme path: {icon_theme_path}"""
+                )
+
+                # Use custom theme path if available
+                if icon_theme_path:
+                    custom_theme = Gtk.IconTheme.new()
+                    custom_theme.prepend_search_path(icon_theme_path)
+                    try:
+                        return custom_theme.load_icon(
+                            icon_name,
+                            icon_size,
+                            Gtk.IconLookupFlags.FORCE_SIZE,
+                        )
+                    except GLib.Error:
+                        # Fallback to default theme if custom path fails
+                        return Gtk.IconTheme.get_default().load_icon(
+                            icon_name,
+                            icon_size,
+                            Gtk.IconLookupFlags.FORCE_SIZE,
+                        )
+                else:
+                    if os.path.exists(
+                        icon_name
+                    ):  # for some apps, the icon_name is a path
+                        return GdkPixbuf.Pixbuf.new_from_file_at_size(
+                            icon_name, width=icon_size, height=icon_size
+                        )
+                    else:
+                        return Gtk.IconTheme.get_default().load_icon(
+                            icon_name,
+                            icon_size,
+                            Gtk.IconLookupFlags.FORCE_SIZE,
+                        )
+        except GLib.Error:
+            # Fallback to 'image-missing' icon
+            return Gtk.IconTheme.get_default().load_icon(
+                "image-missing",
+                icon_size,
+                Gtk.IconLookupFlags.FORCE_SIZE,
+            )
+
+    def _bake_item_button(self, item: SystemTrayItemService) -> HoverButton:
+        button = HoverButton(
+            style_classes=["flat"], tooltip_text=item.get_property("title")
+        )
+        button.connect(
+            "button-press-event",
+            lambda button, event: self.on_button_click(button, item, event),
+        )
+        self._update_item_button(item, button)
+        return button
+
+    def _update_item_button(self, item: SystemTrayItemService, button: HoverButton):
+        button.set_image(
+            Image(pixbuf=self.resolve_icon(item=item, icon_size=self.icon_size))
+        )
+
+
+class SystemTrayMenu(Box, BaseSystemTray):
     """A widget to display additional system tray items in a grid."""
 
     def __init__(self, config: dict, parent_widget=None, **kwargs):
@@ -45,7 +138,7 @@ class SystemTrayMenu(Box):
         self.column = 0
         self.max_columns = 3
 
-    def add_item(self, item: SystemTrayItem):
+    def add_item(self, item):
         self.grid.attach(item, self.column, self.row, 1, 1)
         self.column += 1
         if self.column >= self.max_columns:
@@ -64,7 +157,7 @@ class SystemTrayMenu(Box):
             self.parent_widget.update_visibility()
 
 
-class SystemTrayWidget(ButtonWidget):
+class SystemTrayWidget(ButtonWidget, BaseSystemTray):
     """A widget to display the system tray items."""
 
     def __init__(self, **kwargs):
@@ -72,7 +165,7 @@ class SystemTrayWidget(ButtonWidget):
 
         # Create main tray box and toggle icon
         self.tray_box = Box(name="system-tray-box", orientation="horizontal", spacing=2)
-        self._items: dict[str, SystemTrayItem] = {}
+        self._items: dict[str, HoverButton] = {}
 
         self.icon_size = self.config.get("icon_size", 16)
 
@@ -91,7 +184,7 @@ class SystemTrayWidget(ButtonWidget):
 
         self.popup = None
 
-        self._watcher = get_tray_watcher()
+        self._watcher = SystemTrayService()
 
         bulk_connect(
             self._watcher,
@@ -183,7 +276,7 @@ class SystemTrayWidget(ButtonWidget):
         # Check if item should be hidden in popover
         hidden_list = self.config.get("hidden", [])
         is_hidden = any(x.lower() in title.lower() for x in hidden_list)
-        item_button = SystemTrayItem(item=item, icon_size=self.icon_size)
+        item_button = self._bake_item_button(item=item)
         self._items[item.identifier] = item_button
 
         # Add to appropriate container
