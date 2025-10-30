@@ -34,8 +34,6 @@
 
 #date-menu {
 
-  @include common.spacing;
-
   #notification-column {
     min-width: 435px;
     min-height: 380px;
@@ -151,7 +149,9 @@
     }
 
     .calendar {
-      @extend %widget;
+      transition: 200ms;
+      border-radius: variable.$radius * 2;
+      color: theme.$text-main;
       background-color: theme.$background-alt;
 
       padding: variable.$padding * 2 variable.$padding * 2 0;

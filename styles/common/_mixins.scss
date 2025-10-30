@@ -87,13 +87,7 @@
   font-size: 12px;
 }
 
-%widget {
-  transition: 200ms;
-  border-radius: variable.$radius;
-  color: theme.$text-main;
-  background-color: theme.$background-alt;
-  border: variable.$border;
-}
+
 
 @mixin slider(
   $height: 11px,
