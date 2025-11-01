@@ -169,7 +169,7 @@ class SystemTrayWidget(ButtonWidget, BaseSystemTray):
         self.chevron_icon = nerd_font_icon(
             icon=text_icons["chevron"]["down"],
             props={
-                "style_classes": ["panel-font-icon", "chevron-icon.left-bordered"],
+                "style_classes": ["panel-font-icon", "chevron-icon"],
             },
         )
 

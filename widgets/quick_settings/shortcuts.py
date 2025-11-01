@@ -5,13 +5,14 @@ from fabric.widgets.grid import Grid
 from fabric.widgets.label import Label
 
 from shared.buttons import HoverButton
+from utils.widget_settings import ShortCutItem
 from utils.widget_utils import nerd_font_icon
 
 
 class ShortcutButton(HoverButton):
     """A button that executes a custom command when clicked."""
 
-    def __init__(self, shortcut_config: dict, **kwargs):
+    def __init__(self, shortcut_config: ShortCutItem, **kwargs):
         super().__init__(name="shortcut-button", v_expand=True, **kwargs)
 
         self.command = shortcut_config.get("command", "")
@@ -54,9 +55,6 @@ class ShortcutButton(HoverButton):
             )
         except Exception as e:
             logger.exception(f"Error executing shortcut command: {e}")
-
-
-# TODO: type
 
 
 class ShortcutsContainer(Box):
