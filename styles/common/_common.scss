@@ -77,9 +77,11 @@
   @extend %label;
 }
 
-.panel-button.active{
+.panel-button.active {
   background-color: theme.$accent-blue;
-  image, label{
+
+  image,
+  label {
     color: theme.$background-dark;
   }
 
@@ -387,9 +389,7 @@ scrolledwindow {
 }
 
 
-.wallpaper-picker-box {
-
-}
+.wallpaper-picker-box {}
 
 #wallpaper-button {
   border-radius: 10px;
@@ -438,11 +438,11 @@ scrolledwindow {
   }
 }
 
-.chevron_icon {
+.chevron-icon {
   font-size: 12px;
   color: theme.$text-main;
 }
 
 #popover-overlay {
-background-color: rgba(0, 0, 0, 0.0);
+  background-color: rgba(0, 0, 0, 0.0);
 }

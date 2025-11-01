@@ -26,7 +26,7 @@ class MicrophoneSlider(SettingSlider):
         if show_chevron:
             self.chevron_icon = nerd_font_icon(
                 icon=text_icons["chevron"]["right"],
-                props={"style_classes": ["chevron_icon"]},
+                props={"style_classes": ["chevron-icon"]},
             )
             self.chevron_btn = HoverButton(
                 child=Box(

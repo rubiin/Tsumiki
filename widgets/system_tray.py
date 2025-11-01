@@ -9,7 +9,6 @@ from fabric.utils import (
 from fabric.widgets.box import Box
 from fabric.widgets.grid import Grid
 from fabric.widgets.image import Image
-from fabric.widgets.separator import Separator
 from gi.repository import Gdk, GdkPixbuf, GLib, Gtk
 from loguru import logger
 
@@ -45,19 +44,17 @@ class BaseSystemTray:
                 return pixmap.as_pixbuf(icon_size, GdkPixbuf.InterpType.HYPER)
             else:
                 icon_name = item.icon_name
-                icon_theme_path = item.icon_theme
+                icon_theme = item.icon_theme
 
                 logger.info(
                     f"""[SystemTray] Resolving icon: {icon_name}, size: {icon_size},
-                    theme path: {icon_theme_path}"""
+                    theme path: {icon_theme}"""
                 )
 
                 # Use custom theme path if available
-                if icon_theme_path:
-                    custom_theme = Gtk.IconTheme.new()
-                    custom_theme.prepend_search_path(icon_theme_path)
+                if icon_theme:
                     try:
-                        return custom_theme.load_icon(
+                        return icon_theme.load_icon(
                             icon_name,
                             icon_size,
                             Gtk.IconLookupFlags.FORCE_SIZE,
@@ -169,15 +166,15 @@ class SystemTrayWidget(ButtonWidget, BaseSystemTray):
 
         self.icon_size = self.config.get("icon_size", 16)
 
-        self.toggle_icon = nerd_font_icon(
+        self.chevron_icon = nerd_font_icon(
             icon=text_icons["chevron"]["down"],
             props={
-                "style_classes": ["panel-font-icon"],
+                "style_classes": ["panel-font-icon", "chevron-icon"],
             },
         )
 
         # Set children directly in Box to avoid double styling
-        self.container_box.children = (self.tray_box, Separator(), self.toggle_icon)
+        self.container_box.children = (self.tray_box, self.chevron_icon)
 
         # Create popup menu for hidden items
         self.popup_menu = SystemTrayMenu(config=self.config, parent_widget=self)
@@ -223,11 +220,11 @@ class SystemTrayWidget(ButtonWidget, BaseSystemTray):
 
         if visible:
             self.popup.hide()
-            self.toggle_icon.set_label(text_icons["chevron"]["down"])
+            self.chevron_icon.set_label(text_icons["chevron"]["down"])
 
         else:
             self.popup.open()
-            self.toggle_icon.set_label(text_icons["chevron"]["up"])
+            self.chevron_icon.set_label(text_icons["chevron"]["up"])
             self.add_style_class("active")
 
     def update_visibility(self):
