@@ -41,6 +41,7 @@
     margin: 0 variable.$bar-widgets-system_tray-spacing;
   }
 
+
   .toggle-icon,
   .panel-font-icon {
     margin: 0;
@@ -51,10 +52,4 @@
     }
   }
 
-  separator {
-    background-color: variable.$border-color;
-    border-radius: variable.$radius;
-    margin: 8px 4px;
-    min-width: 1.2px;
-  }
 }

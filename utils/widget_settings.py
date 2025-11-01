@@ -578,9 +578,13 @@ UserConfig = TypedDict(
 )
 
 
-ShortcutsConfig = TypedDict(
-    "Shortcuts", {"enabled": bool, "items": list[dict[str, str]]}
+ShortCutItem = TypedDict(
+    "ShortCutItem",
+    {"icon": str, "label": str, "command": str, "tooltip": str, "icon_size": int},
 )
+
+
+ShortcutsConfig = TypedDict("Shortcuts", {"enabled": bool, "items": list[ShortCutItem]})
 
 ControlsConfig = TypedDict(
     "Controls",

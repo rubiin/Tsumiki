@@ -441,14 +441,6 @@ scrolledwindow {
 .chevron-icon {
   font-size: 12px;
   color: theme.$text-main;
-
-  &.left-bordered {
-    border-left: 1px solid theme.$surface-disabled;
-  }
-
-  &.right-bordered {
-    border-left: 1px solid theme.$surface-disabled;
-  }
 }
 
 #popover-overlay {
