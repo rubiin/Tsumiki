@@ -41,7 +41,7 @@ class AudioSlider(SettingSlider):
 
         if show_chevron:
             self.chevron_icon = nerd_font_icon(
-                icon="", props={"style_classes": ["chevron_icon"]}
+                icon="", props={"style_classes": ["chevron-icon"]}
             )
 
             self.chevron_btn = HoverButton(
