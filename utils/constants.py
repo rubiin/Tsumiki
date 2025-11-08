@@ -1042,6 +1042,7 @@ WINDOW_TITLE_MAP = [
     ["chromium", "", "Chromium"],
     ["opera", "", "Opera"],
     ["vivaldi", "󰖟", "Vivaldi"],
+    ["librefox", "󰖟", "Librefox"],
     ["waterfox", "󰖟", "Waterfox"],
     ["zen", "󰖟", "Zen Browser"],
     ["thorium", "󰖟", "Thorium"],
