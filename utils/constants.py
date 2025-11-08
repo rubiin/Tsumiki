@@ -1033,15 +1033,7 @@ KBLAYOUT_MAP = {
 
 WINDOW_TITLE_MAP = [
     # Original Entries
-    ["discord", "", "Discord"],
-    ["vesktop", "", "Vesktop"],
-    ["org.kde.dolphin", "", "Dolphin"],
-    ["plex", "󰚺", "Plex"],
-    ["steam", "", "Steam"],
-    ["spotify", "󰓇", "Spotify"],
-    ["spotube", "󰓇", "Spotify"],
-    ["ristretto", "󰋩", "Ristretto"],
-    ["obsidian", "󱓧", "Obsidian"],
+    ["rofi", "", "Rofi"],
     # Browsers
     ["google-chrome", "", "Google Chrome"],
     ["brave-browser", "󰖟", "Brave Browser"],
@@ -1068,6 +1060,8 @@ WINDOW_TITLE_MAP = [
     ["st", "", "st Terminal"],
     ["com.mitchellh.ghostty", "󰊠", "Ghostty"],
     # Development Tools
+    ["docker", "", "Docker"],
+    ["emacs", "", "Emacs"],
     ["cursor", "󰨞", "Cursor"],
     ["vscode", "󰨞", "VS Code"],
     ["code", "󰨞", "VS Code"],
@@ -1082,7 +1076,6 @@ WINDOW_TITLE_MAP = [
     ["Postman", "󱃖", "Postman"],
     ["eclipse", "", "Eclipse"],
     ["netbeans", "", "NetBeans"],
-    ["docker", "", "Docker"],
     ["vim", "", "Vim"],
     ["neovim", "", "Neovim"],
     ["neovide", "", "Neovide"],
@@ -1096,7 +1089,12 @@ WINDOW_TITLE_MAP = [
     ["teamspeak", "", "TeamSpeak"],
     ["skype", "󰒯", "Skype"],
     ["thunderbird", "", "Thunderbird"],
+    ["discord", "", "Discord"],
+    ["vesktop", "", "Vesktop"],
+    ["legcord", "", "Legcord"],
+    ["webcord", "", "WebCord"],
     # File Managers
+    ["org.kde.dolphin", "", "Dolphin"],
     ["nautilus", "󰝰", "Files (Nautilus)"],
     ["thunar", "󰝰", "Thunar"],
     ["pcmanfm", "󰝰", "PCManFM"],
@@ -1108,6 +1106,10 @@ WINDOW_TITLE_MAP = [
     ["vlc", "󰕼", "VLC Media Player"],
     ["mpv", "", "MPV"],
     ["rhythmbox", "󰓃", "Rhythmbox"],
+    ["spotify", "󰓇", "Spotify"],
+    ["spotube", "󰓇", "Spotify"],
+    ["plex", "󰚺", "Plex"],
+    ["ristretto", "󰋩", "Ristretto"],
     # Graphics Tools
     ["gimp", "", "GIMP"],
     ["inkscape", "", "Inkscape"],
@@ -1116,6 +1118,7 @@ WINDOW_TITLE_MAP = [
     # Video Editing
     ["kdenlive", "", "Kdenlive"],
     # Games and Gaming Platforms
+    ["steam", "", "Steam"],
     ["lutris", "󰺵", "Lutris"],
     ["heroic", "󰺵", "Heroic Games Launcher"],
     ["minecraft", "󰍳", "Minecraft"],
@@ -1124,6 +1127,16 @@ WINDOW_TITLE_MAP = [
     # Office and Productivity
     ["evernote", "", "Evernote"],
     ["sioyek", "", "Sioyek"],
+    ["libreoffice-base", "", "LibreOffice Base"],
+    ["libreoffice-calc", "", "LibreOffice Calc"],
+    ["libreoffice-draw", "", "LibreOffice Draw"],
+    ["libreoffice-impress", "", "LibreOffice Impress"],
+    ["libreoffice-math", "", "LibreOffice Math"],
+    ["libreoffice-writer", "", "LibreOffice Writer"],
+    ["obsidian", "󱓧", "Obsidian"],
+    ["libreoffice", "", "LibreOffice Default"],
+    ["title:LibreOffice", "", "LibreOffice Dialogs"],
+    ["soffice", "", "LibreOffice Base Selector"],
     # Cloud Services and Sync
     ["dropbox", "󰇣", "Dropbox"],
     # cleanup and maintenance tools
