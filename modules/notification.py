@@ -352,6 +352,7 @@ class NotificationRevealer(Revealer):
             if not self.child_revealed:
                 return False
             if time <= 0:
+                self._notification.close("expired")
                 return False
             time -= 10
             return True
