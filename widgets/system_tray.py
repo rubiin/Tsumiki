@@ -41,7 +41,7 @@ class BaseSystemTray:
 
         try:
             if pixmap is not None:
-                return pixmap.as_pixbuf(icon_size, GdkPixbuf.InterpType.HYPER)
+                return pixmap.as_pixbuf(icon_size, "bilinear")
             else:
                 icon_name = item.icon_name
                 icon_theme = item.icon_theme
