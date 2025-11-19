@@ -1,0 +1,194 @@
+---
+import Default from '@astrojs/starlight/components/LanguageSelect.astro';
+---
+
+<div class="language-select-wrapper">
+  <Default {...Astro.props} />
+  <div class="translation-help-tooltip">
+    <div class="help-content">
+      <p><strong>Your language is missing?</strong></p>
+      <p>Help us translate this documentation!</p>
+      <a href="https://github.com/HyDE-Project/hyde-site?tab=readme-ov-file#translating" target="_blank" rel="noopener noreferrer">
+        See how to contribute translations →
+      </a>
+    </div>
+  </div>
+</div>
+
+<style>
+  .language-select-wrapper {
+    position: relative;
+    display: inline-block;
+  }
+
+  /* Add hover effect to the entire language selector */
+  .language-select-wrapper:hover .translation-help-tooltip {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  .translation-help-tooltip {
+    position: absolute;
+    top: 100%;
+    right: 100%;
+    margin-right: 1rem;
+    margin-top: 0.5rem;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 1000;
+    pointer-events: none;
+  }
+
+  .help-content {
+    background: var(--sl-color-bg-nav);
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 8px;
+    padding: 1.2rem;
+    width: 300px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    position: relative;
+    backdrop-filter: blur(10px);
+  }
+
+  .help-content::before {
+    content: '';
+    position: absolute;
+    top: -6px;
+    right: 16px;
+    width: 12px;
+    height: 12px;
+    background: var(--sl-color-bg-nav);
+    border: 1px solid var(--sl-color-gray-5);
+    border-bottom: none;
+    border-right: none;
+    transform: rotate(45deg);
+  }
+
+  .help-content p {
+    margin: 0 0 0.75rem 0;
+    color: var(--sl-color-white);
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+
+  .help-content p:first-child {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .help-content p:last-of-type {
+    margin-bottom: 1rem;
+  }
+
+  .help-content a {
+    display: inline-block;
+    color: var(--hyde-blue);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    padding: 0.6rem 1rem;
+    background: rgba(144, 150, 182, 0.15);
+    border: 1px solid rgba(144, 150, 182, 0.3);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    text-align: center;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .help-content a:hover {
+    color: var(--hyde-purple);
+    background: rgba(169, 132, 204, 0.2);
+    border-color: rgba(169, 132, 204, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(169, 132, 204, 0.3);
+  }
+
+  /* Dark theme adjustments */
+  [data-theme="dark"] .help-content {
+    background: rgba(54, 55, 66, 0.95);
+    border-color: var(--sl-color-gray-4);
+  }
+
+  [data-theme="dark"] .help-content::before {
+    background: rgba(54, 55, 66, 0.95);
+    border-color: var(--sl-color-gray-4);
+  }
+
+  /* Light theme adjustments */
+  [data-theme="light"] .help-content {
+    background: rgba(255, 255, 255, 0.95);
+    border-color: var(--sl-color-gray-3);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+  }
+
+  [data-theme="light"] .help-content::before {
+    background: rgba(255, 255, 255, 0.95);
+    border-color: var(--sl-color-gray-3);
+  }
+
+  [data-theme="light"] .help-content p {
+    color: var(--sl-color-black);
+  }
+
+  /* Mobile responsive */
+  @media (max-width: 768px) {
+    .translation-help-tooltip {
+      right: auto;
+      left: 0;
+      top: 100%;
+      margin-right: 0;
+      margin-top: 0.5rem;
+    }
+    
+    .help-content {
+      width: 280px;
+    }
+    
+    .help-content::before {
+      right: auto;
+      left: 16px;
+      top: -6px;
+      border-left: none;
+      border-bottom: none;
+      border-top: 1px solid var(--sl-color-gray-5);
+      border-right: 1px solid var(--sl-color-gray-5);
+      transform: rotate(-45deg);
+    }
+  }
+
+  @media (max-width: 480px) {
+    .translation-help-tooltip {
+      left: -20px;
+    }
+    
+    .help-content {
+      width: 260px;
+    }
+    
+    .help-content::before {
+      left: 36px;
+    }
+  }
+
+  /* Ensure tooltip appears above other elements */
+  .language-select-wrapper {
+    z-index: 100;
+  }
+
+  .translation-help-tooltip {
+    z-index: 1001;
+  }
+
+  /* Add a subtle animation when tooltip appears */
+  .translation-help-tooltip {
+    transform: translateY(-5px);
+    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  }
+
+  .language-select-wrapper:hover .translation-help-tooltip {
+    transform: translateY(0);
+  }
+</style>

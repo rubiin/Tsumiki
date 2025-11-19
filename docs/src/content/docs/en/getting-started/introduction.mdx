@@ -1,0 +1,78 @@
+---
+title: Introduction
+description: Get started with HyDE.
+sidebar:
+  order: 1
+---
+
+import LatestRelease from '../../../../components/LatestRelease.astro'
+
+<div align="center"><img src="https://raw.githubusercontent.com/prasanthrangan/hyprdots/main/Source/assets/hyde_banner.png" /><br /></div>
+
+::::caution
+
+The HyDE project is still in progress...
+The documentation is not yet fully complete, but we are actively working to improve and expand it.
+::::
+
+HyDE is a clean, aesthetic, and modular development environment for Hyprland on
+Arch. It focuses on a consistent look and feel, sensible defaults, and upgrades
+that don't get in your way.
+
+## What you'll find here
+
+- A guided installation flow and tips for first boot
+- An opinionated, modular layout that keeps configuration tidy
+- Theming tools and a community gallery for sharing styles
+- Reference docs for bundled utilities and commands
+
+## Latest Release
+
+<div className="latest-release">
+  <LatestRelease
+    repo="HyDE-Project/HyDE"
+    versionLabel="Version:"
+    dateLabel="Date:"
+  />
+</div>
+
+For full notes and assets, see the{' '}<a
+	href="https://github.com/HyDE-Project/HyDE/releases"
+	className="underline"
+	target="_blank"
+	rel="noopener noreferrer">
+	releases page</a>{' '}
+on GitHub.
+
+
+::::tip
+
+Help us improve
+
+Contribute fixes and improvements on GitHub or share feedback in Discord. Your
+input directly shapes HyDE and this documentation.
+
+::::
+
+## Quick install
+
+```sh
+pacman -S --needed git base-devel
+git clone --depth 1 https://github.com/HyDE-Project/HyDE ~/HyDE
+cd ~/HyDE/Scripts
+./install.sh
+```
+
+After install completes, reboot to the display manager and sign in to HyDE.
+
+## Next steps
+
+- Read the full [Installation guide](/en/getting-started/installation)
+- Learn how to [Update](/en/getting-started/update)
+- Explore [Theming](/en/theming/making-themes) and the community [Gallery](/en/theming/gallery)
+
+---
+
+Contribute to HyDE and its docs on GitHub:
+[HyDE-Project/HyDE](https://github.com/HyDE-Project/HyDE)
+

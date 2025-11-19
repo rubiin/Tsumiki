@@ -1,0 +1,135 @@
+---
+title: HyDE
+description: HyDE your Development Environment - Aesthetic, dynamic and minimal dots for Arch hyprland!
+template: splash
+hero:
+  tagline: your Development Environment ✨
+  image:
+    file: ../../../assets/hyde.svg
+  actions:
+    - text: Get Started with HyDE
+      link: /en/getting-started/introduction
+      icon: rocket
+    - text: Explore on GitHub
+      link: https://github.com/HyDE-Project
+      icon: github
+      variant: minimal
+---
+
+import { Card, CardGrid } from "@astrojs/starlight/components";
+
+<div className="badges">
+  <a href="https://discord.gg/AYbJ9MJez7">
+    <img
+      alt="Discord members"
+      src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fdiscordapp.com%2Fapi%2Finvites%2FmT5YqjaJFh%3Fwith_counts%3Dtrue&query=%24.approximate_member_count&suffix=%20members&style=for-the-badge&logo=discord&logoSize=auto&label=HyDE%20Discord&labelColor=ebbcba&color=c79bf0"
+    />
+  </a>
+  <a href="https://github.com/HyDE-Project/HyDE">
+    <img
+      alt="GitHub stars"
+      src="https://img.shields.io/github/stars/HyDE-Project/HyDE?style=for-the-badge&logo=github&label=Stars&color=8aadf4"
+    />
+  </a>
+  <a href="https://github.com/HyDE-Project/HyDE/releases">
+    <img
+      alt="Latest release"
+      src="https://img.shields.io/github/v/release/HyDE-Project/HyDE?style=for-the-badge&label=Latest&color=c6a0f6"
+    />
+  </a>
+  <a href="https://github.com/HyDE-Project/HyDE">
+    <img
+      alt="License"
+      src="https://img.shields.io/github/license/HyDE-Project/HyDE?style=for-the-badge&color=8bd5ca&label=License"
+    />
+  </a>
+  <a href="https://github.com/HyDE-Project/HyDE/issues">
+    <img
+      alt="Issues"
+      src="https://img.shields.io/github/issues/HyDE-Project/HyDE?style=for-the-badge&color=f5a97f&label=Issues"
+    />
+  </a>
+</div>
+
+## What is HyDE?
+
+HyDE is an aesthetic, modular, and XDG-compliant development environment for
+Hyprland on Arch, focused on clean design, maintainability, and delightful UX.
+It separates core scripts from user config, making updates safer and easier.
+
+<CardGrid>
+  <a className="card-anchor" href="/en/getting-started/installation">
+    <Card title="Install HyDE" icon="rocket">
+      Step-by-step instructions to set up HyDE quickly and safely.
+    </Card>
+  </a>
+  <a
+    className="card-anchor"
+    href="https://discord.gg/AYbJ9MJez7"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    <Card title="Join Discord" icon="discord">
+      Get help, share setups, and follow announcements.
+    </Card>
+  </a>
+</CardGrid>
+
+## Features
+
+<CardGrid stagger>
+  <Card title="XDG Compliance" icon="seti:vala">
+    Keeps configuration, data, and cache neatly organized using XDG standards.
+  </Card>
+  <Card title="Easier core updates" icon="add-document">
+    Core scripts are separate from your dotfiles for safer, conflict-free updates.
+  </Card>
+  <Card title="More Themes!" icon="moon">
+	  Curated themes via themepatcher for waybar, rofi, and wallpapers — plus a
+	  community gallery of themes.
+  </Card>
+  <Card title="Modular!" icon="puzzle">
+	Modular by design — toggle features, swap components, and extend easily.
+</Card>
+
+</CardGrid>
+
+## Install
+
+```sh
+pacman -S --needed git base-devel
+git clone --depth 1 https://github.com/HyDE-Project/HyDE ~/HyDE
+cd ~/HyDE/Scripts
+./install.sh
+```
+
+Need help? See the full guide: [Getting Started > Installation](/en/getting-started/installation)
+
+## Showcase
+
+<div className="showcase">
+  <img
+    src="https://raw.githubusercontent.com/prasanthrangan/hyprdots/main/Source/assets/wb_mode_sel.png"
+    alt="Notification Action"
+  />
+  <img
+    src="https://raw.githubusercontent.com/prasanthrangan/hyprdots/main/Source/assets/rofi_style_3.png"
+    alt="Rofi Launcher"
+  />
+  <img
+    src="https://raw.githubusercontent.com/prasanthrangan/hyprdots/main/Source/assets/rofi_style_12.png"
+    alt="Rofi Launcher 2"
+  />
+  <img
+    src="https://raw.githubusercontent.com/prasanthrangan/hyprdots/main/Source/assets/wlog_style_2.png"
+    alt="Wlogout menu"
+  />
+  <img
+    src="https://raw.githubusercontent.com/prasanthrangan/hyprdots/main/Source/assets/game_launch_3.png"
+    alt="Game Launcher"
+  />
+  <img
+    src="https://raw.githubusercontent.com/prasanthrangan/hyprdots/main/Source/assets/game_launch_5.png"
+    alt="Game Launcher 2"
+  />
+</div>
