@@ -9,7 +9,6 @@ from fabric.widgets.image import Image
 from fabric.widgets.label import Label
 from fabric.widgets.scrolledwindow import ScrolledWindow
 from gi.repository import Gtk
-from PIL import Image as PILImage
 
 from shared.buttons import HoverButton
 from shared.popup import PopupWindow
@@ -49,6 +48,8 @@ class ImageButton(HoverButton):
     @run_in_thread
     def _create_thumbnail(self):
         try:
+            from PIL import Image as PILImage
+
             # Open original image
             with PILImage.open(self.wp_path) as img:
                 # Resize to thumbnail

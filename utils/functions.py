@@ -27,7 +27,6 @@ from fabric.utils import (
     logger,
 )
 from gi.repository import Gdk, GdkPixbuf, Gio, GLib, Gtk
-from PIL import Image
 
 from .colors import Colors
 from .constants import NAMED_COLORS
@@ -85,6 +84,8 @@ def tint_color(color, tint_factor=1) -> tuple[int, int, int]:
 
 def _pillow_worker(image_path, callback, color_count, resize):
     try:
+        from PIL import Image
+
         with Image.open(image_path) as img:
             img = img.convert("RGB")
             img.thumbnail((resize, resize), Image.LANCZOS)  # Fast, in-place resize
