@@ -340,6 +340,10 @@ if [ "$SHOULD_UPDATE" = true ]; then
 	log_info "=== ⬆️  Updating from Git ==="
 	cd "$INSTALL_DIR" && git fetch --all && git reset --hard origin/$(git rev-parse --abbrev-ref HEAD)
 	log_success "✅ Update completed."
+
+	if ! git diff --quiet HEAD@{1} HEAD -- requirements.txt; then
+    echo "📌 requirements.txt changed in the last update. Please update the packages"
+	fi
 fi
 
 if [ "$SHOULD_INSTALL" = true ]; then
