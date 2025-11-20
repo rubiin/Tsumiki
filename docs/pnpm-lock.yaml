@@ -12,19 +12,19 @@ importers:
         specifier: ^0.9.4
         version: 0.9.5(prettier@3.6.2)(typescript@5.9.3)
       '@astrojs/starlight':
-        specifier: ^0.35.2
+        specifier: ^0.35.3
         version: 0.35.3(astro@5.15.9(@types/node@24.10.1)(rollup@4.53.3)(typescript@5.9.3)(yaml@2.8.1))
       astro:
-        specifier: ^5.13.5
+        specifier: ^5.15.9
         version: 5.15.9(@types/node@24.10.1)(rollup@4.53.3)(typescript@5.9.3)(yaml@2.8.1)
       sharp:
-        specifier: ^0.34.3
+        specifier: ^0.34.5
         version: 0.34.5
       tslib:
         specifier: ^2.8.1
         version: 2.8.1
       typescript:
-        specifier: ^5.9.2
+        specifier: ^5.9.3
         version: 5.9.3
 
 packages:
@@ -2744,7 +2744,7 @@ snapshots:
 
   '@types/sax@1.2.7':
     dependencies:
-      '@types/node': 17.0.45
+      '@types/node': 24.10.1
 
   '@types/unist@2.0.11': {}
 
