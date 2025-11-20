@@ -10,8 +10,8 @@ $workspace-transition: padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
 #workspaces {
   font-weight: 700;
   padding: .19em 1em;
-  border-radius: variable.$bar-widgets-workspaces-border-radius;
   border: if(variable.$bar-widgets-workspaces-border-enabled, variable.$border, none);
+  border-radius: variable.$bar-widgets-workspaces-border-radius;
   border-width: variable.$bar-widgets-workspaces-border-width;
 
   &>button {
@@ -39,11 +39,20 @@ $workspace-transition: padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
       transition: $workspace-transition;
       padding-left: variable.$bar-widgets-workspaces-pill-active_width;
       padding-right: variable.$bar-widgets-workspaces-pill-active_width;
-      background-color: theme.$ws-active;
+      border: if(variable.$bar-widgets-workspaces-pill-border-enabled, variable.$border, none);
+      border-radius: variable.$bar-widgets-workspaces-pill-border-radius;
+      border-width: variable.$bar-widgets-workspaces-pill-border-width;
 
-      &>label {
-        color: theme.$background-dark;
+
+      @if variable.$bar-widgets-workspaces-pill-border-enabled {
+        // If border is enabled, change label color on hover to match border color
       }
+      @else {
+        &>label {
+            color: theme.$background-dark;
+          }
+      }
+
     }
 
     &.unoccupied {
