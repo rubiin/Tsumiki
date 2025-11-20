@@ -517,7 +517,12 @@
 				"pill": {
 					"height": ".125em",
 					"width": ".5em",
-					"active_width": "1em"
+					"active_width": "1em",
+					"border": {
+						"enabled": true,
+						"width": "2px",
+						"radius": "16px"
+					}
 				},
 				"border": {
 					"enabled": false,
@@ -540,13 +545,13 @@
 				"margin_x": "0",
 				"margin_y": "1.25em",
 				"padding_x": "0.5em",
-				"padding_y": "0.2em",
+				"padding_y": "0.5em",
 				"shadow": {
 					"enabled": true,
 					"offset": 0,
-					"blur": "2px",
-					"spread": "2px",
-					"opacity": 50
+					"blur": 0,
+					"spread": 0,
+					"opacity": 100
 				},
 				"border": {
 					"enabled": false,
