@@ -5,405 +5,378 @@ sidebar:
   order: 2
 ---
 
-<link rel="stylesheet" href="/src/styles/tables.css">
 
-<!-- TODO:
-
-Translators:
-Request a translation for config.toml schema at
-https://github.com/HyDE-Project/HyDE/blob/master/Configs/.local/share/hyde/schema/config.toml
-
-translate the schema to your language
-example:
-config.en.toml
-
-run `./gen-table.py config.en.toml` to generate the table
-then paste it in here. 
-
- -->
-
----
-HyDE exposes `xdg_config/hyde/config.toml` file for users to modify. This lets users have the ability to interact the scripts without using command arguments.
+Tsumiki defines the configuration settings for a modular system, allowing users to customize the layout, icons, intervals, and various components. The configuration is written in Python and structured using typed dictionaries for strong typing.
 
 Users are encouraged to use an editor that support schema validation to ensure the configuration file is valid.
 ```toml
-"$schema" = "https://raw.githubusercontent.com/HyDE-Project/HyDE/refs/heads/master/Configs/.local/share/hyde/schema/config.toml.json"
+	"$schema": "./tsumiki.schema.json",
 ```
 ---
-### [battery.notify]
-
-batterynotify.sh configuration.
-
-| Key | Description | Default |
-| --- | ----------- | ------- |
-| dock | Dock status for battery notifications. | true |
-| interval | Interval for battery notifications. | 5 |
-| notify | Notification threshold. | 1140 |
-| timer | Timer for battery notifications. | 120 |
-
-### [battery.notify.execute]
-
-Commands to execute for battery notifications.
-
-| Key | Description | Default |
-| --- | ----------- | ------- |
-| charging | Command to execute when charging. |  |
-| critical | Command to execute when battery is critical. | systemctl suspend |
-| discharging | Command to execute when discharging. |  |
-| low | Command to execute when battery is low. |  |
-| unplug | Command to execute when unplugged. |  |
-
-### [battery.notify.threshold]
-
-Thresholds for battery notifications.
-
-| Key | Description | Default |
-| --- | ----------- | ------- |
-| critical | Critical battery threshold. | 10 |
-| full | Full battery threshold. | 90 |
-| low | Low battery threshold. | 20 |
-| unplug | Unplug battery threshold. | 100 |
-
-### [brightness]
-
-brightnesscontrol.sh configuration.
-
-| Key | Description | Default |
-| --- | ----------- | ------- |
-| notify | Enable notifications for brightness control. | true |
-| steps | Number of steps to increase/decrease brightness. | 5 |
-
-### [cava]
-
-Cava visualizer configuration.
-
-| Key | Description | Default |
-| --- | ----------- | ------- |
-| channels | Audio channels: stereo or mono. | stereo |
-| range | Bar sensitivity | 8 |
-| reverse | Reverse spectrum movement (0 or 1). | 1 |
-
-### [cava.hyprlock]
-
-'cava.sh hyprlock' configuration.
-
-| Key | Description | Default |
-| --- | ----------- | ------- |
-| bar | Bar characters for cava. | ▁▂▃▄▅▆▇█ |
-| bar_array | Bar array for hyprlock preset. | ["▁", "▂", "▃", "▄", "▅", "▆", "▇", "█"] |
-| range | Number of bars minus one. | 7 |
-| standby | Standby character for cava. | 🎶 |
-| width | Width of the cava output. | 20 |
-
-### [cava.stdout]
-
-'cava.sh stdout' configuration.
-
-| Key | Description | Default |
-| --- | ----------- | ------- |
-| bar | Bar characters for cava. | ▁▂▃▄▅▆▇█ |
-| bar_array | Bar array for stdout preset. | ["░", "▒", "▓", "█"] |
-| range | Number of bars minus one. | 7 |
-| standby | Standby character for cava. | 🎶 |
-| width | Width of the cava output. | 20 |
-
-### [cava.waybar]
-
-'cava.sh waybar' configuration.
-
-| Key | Description | Default |
-| --- | ----------- | ------- |
-| bar | Bar characters for cava. | ▁▂▃▄▅▆▇█ |
-| bar_array | Bar array for waybar preset. | ["◜", "◝", "◞", "◟", "◠", "◡", "◢", "◣"] |
-| range | Number of bars minus one. | 7 |
-| standby | Standby character for cava. | 🎶 |
-| width | Width of the cava output. | 20 |
-
-### [hyprland]
-
-Hyprland configuration.
-
-| Key | Description | Default |
-| --- | ----------- | ------- |
-| background_path | LockScreen's Background path. |  |
-| bar | Bar. | waybar |
-| browser | Browser. | firefox |
-| button_layout | Button layout. (gtk only) |  |
-| color_scheme | Color scheme. | prefer-dark |
-| cursor_size | Cursor size. | 24 |
-| cursor_theme | Cursor theme. | Bibata-Modern-Ice |
-| document_font_size | Document font size. | 10 |
-| editor | Editor. | code |
-| explorer | File manager. | dolphin |
-| font | Font. | Canterell |
-| font_antialiasing | Font antialiasing. | rgba |
-| font_hinting | Font hinting. | full |
-| font_size | Font size. | 10 |
-| gtk_theme | GTK theme. | Wallbash-Gtk |
-| icon_theme | Icon theme. | Tela-circle-dracula |
-| idle | Idle manager. | hypridle |
-| lockscreen | Lockscreen. | lockscreen.sh |
-| monospace_font | Monospace font. | CaskaydiaCove Nerd Font Mono |
-| monospace_font_size | Monospace font size. | 9 |
-| quickapps | Quick apps. | kitty |
-| terminal | Terminal. | kitty |
-
-### [hyprland-start]
-
-Hyprland start configuration.
-
-| Key | Description | Default |
-| --- | ----------- | ------- |
-| apptray_bluetooth | Bluetooth applet. | blueman-applet |
-| auth_dialogue | Authentication dialogue. | polkitkdeauth.sh |
-| bar | Bar. | hyde-shell waybar --watch |
-| battery_notify | Battery notification script. | batterynotify.sh |
-| dbus_share_picker | DBus share picker. | dbus-update-activation-environment --systemd --all |
-| idle_daemon | Idle daemon. | hypridle |
-| image_clipboard | Image clipboard. | wl-paste --type image --watch cliphist store |
-| network_manager | Network manager. | nm-applet --indicator |
-| notifications | Notifications. | swaync |
-| removable_media | Removable media manager. | udiskie --no-automount --smart-tray |
-| systemd_share_picker | Systemd share picker. | systemctl --user import-environment QT_QPA_PLATFORMTHEME WAYLAND_DISPLAY XDG_CURRENT_DESKTOP |
-| text_clipboard | Text clipboard. | wl-paste --type text --watch cliphist store |
-| wallpaper | Wallpaper script. | $scrPath/wallpaper.sh --global |
-| xdg_portal_reset | XDG portal reset script. | resetxdgportal.sh |
-
-### [mediaplayer]
-
-mediaplayer.py configuration.
-
-| Key | Description | Default |
-| --- | ----------- | ------- |
-| artist_track_separator | Separator symbols to display between artist and track. |    |
-| max_length | Max length of song and artist string. | 70 |
-| prefix_paused | Prefix for paused media. |    |
-| prefix_playing | Prefix for playing media. |  |
-| standby_text | To display on standby. |   Music |
-
-### [notification]
-
-Notification script configuration.
-
-| Key | Description | Default |
-| --- | ----------- | ------- |
-| font | Font for notifications. | mononoki Nerd Font |
-| font_size | Font size for notifications. | 10 |
-
-### [rofi]
-
-Global rofi configuration.
-
-| Key | Description | Default |
-| --- | ----------- | ------- |
-| scale | Rofi default scaling. | 10 |
-
-### [rofi.animation]
-
-'animation.sh select' configuration.
-
-| Key | Description | Default |
-| --- | ----------- | ------- |
-| scale | Scaling for animation. | 10 |
-
-### [rofi.bookmarks]
-
-hyde-shell rofi.bookmarks.sh configuration.
-
-| Key | Description | Default |
-| --- | ----------- | ------- |
-| args | Additional arguments for bookmarks. | [] |
-| font | Font for bookmarks. | JetBrainsMono Nerd Font |
-| scale | Scaling for bookmarks. | 10 |
-| style | Style for rofi bookmarks. |  |
-
-### [rofi.cliphist]
-
-cliphist.sh configuration.
-
-| Key | Description | Default |
-| --- | ----------- | ------- |
-| scale | Scaling for cliphist. | 10 |
-
-### [rofi.emoji]
-
-emoji-picker.sh configuration.
-
-| Key | Description | Default |
-| --- | ----------- | ------- |
-| args | Additional arguments for emoji picker. | ["-multi-select"] |
-| scale | Scaling for emoji picker. | 10 |
-| style | Style for emoji picker. | 1 |
-
-### [rofi.glyph]
-
-glyph-picker.sh configuration.
-
-| Key | Description | Default |
-| --- | ----------- | ------- |
-| args | Additional arguments for glyph picker. | ["-multi-select"] |
-| scale | Scaling for glyph picker. | 10 |
-
-### [rofi.hyprlock]
-
-'hyprlock.sh select' configuration.
-
-| Key | Description | Default |
-| --- | ----------- | ------- |
-| scale | Scaling for hyprlock. | 10 |
-
-### [rofi.launch]
-
-rofilaunch.sh configuration.
-
-| Key | Description | Default |
-| --- | ----------- | ------- |
-| drun_args | Additional arguments for drun mode. | [] |
-| drun_style | Style for drun mode. | style_1 |
-| filebrowser_args | Additional arguments for filebrowser mode. | [] |
-| filebrowser_style | Style for filebrowser mode. | style_1 |
-| run_args | Additional arguments for run mode. | [] |
-| run_style | Style for run mode. | style_1 |
-| scale | Scaling for launch. | 5 |
-| window_args | Additional arguments for window mode. | [] |
-| window_style | Style for window mode. | style_1 |
-
-### [rofi.theme]
-
-themeselect.sh configuration.
-
-| Key | Description | Default |
-| --- | ----------- | ------- |
-| scale | Scaling for theme selector. | 6 |
-
-### [rofi.wallpaper]
-
-swwwallselect.sh configuration.
-
-| Key | Description | Default |
-| --- | ----------- | ------- |
-| scale | Scaling for wallpaper. | 10 |
-
-### [rofi.websearch]
-
-hyde-shell rofi.websearch.sh configuration.
-
-| Key | Description | Default |
-| --- | ----------- | ------- |
-| args | Additional arguments for websearch. | [] |
-| font | Font for websearch. | JetBrainsMono Nerd Font |
-| scale | Scaling for websearch. | 10 |
-| style | Style for rofi websearch. |  |
-
-### [rofi.keybind.hint]
-
-keybind_hint.sh configuration.
-
-| Key | Description | Default |
-| --- | ----------- | ------- |
-| delimiter | Delimiter for keybind hints. | 	 |
-| height | Height for keybind hints. | 40em |
-| line | Number of lines for keybind hints. | 16 |
-| width | Width for keybind hints. | 40em |
-
-### [screenshot]
-
-screenshot.sh configuration.
-
-| Key | Description | Default |
-| --- | ----------- | ------- |
-| annotation_post_command | Post command for annotation tool. | [""] |
-| annotation_pre_command | Pre command for annotation tool. | [] |
-| annotation_tool | Annotation tool for screenshots. | satty |
-
-### [screenshot.ocr]
-
-OCR configuration.
-
-| Key | Description | Default |
-| --- | ----------- | ------- |
-| tesseract_languages | Place desired languages to use for text recognition. To see installed languages run `tesseract --list-langs`. | ["eng"] |
-
-### [sysmonitor]
-
-sysmonlaunch.sh configuration.
-
-| Key | Description | Default |
-| --- | ----------- | ------- |
-| commands | Fallback command options. | [""] |
-| execute | Default command to execute. |  |
-
-### [volume]
-
-volumecontrol.sh configuration.
-
-| Key | Description | Default |
-| --- | ----------- | ------- |
-| boost | Enable volume boost. | false |
-| boost_limit | Volume boost limit. | 120 |
-| notify | Enable notifications for volume control. | true |
-| steps | Number of steps to increase/decrease volume. | 5 |
-
-### [wallbash]
-
-wallbash configuration.
-
-| Key | Description | Default |
-| --- | ----------- | ------- |
-| skip_template | Templates to skip when using wallbash. | [""] |
-
-### [wallpaper]
-
-Wallpaper configuration.
-
-| Key | Description | Default |
-| --- | ----------- | ------- |
-| backend | Wallpaper backend, requires 'wallpaper.<backend>.sh' as handler script in $PATH | swww |
-| custom_paths | List of paths to search for wallpapers. | [] |
-
-### [wallpaper.swww]
-
-swwwallselect.sh configuration.
-
-| Key | Description | Default |
-| --- | ----------- | ------- |
-| duration | Transition duration. | 1 |
-| framerate | Transition framerate. | 60 |
-| transition_default | Transition type for default wallpaper. | grow |
-| transition_next | Transition type for next wallpaper. | grow |
-| transition_prev | Transition type for previous wallpaper. | outer |
-
-### [waybar]
-
-waybar configuration.
-
-| Key | Description | Default |
-| --- | ----------- | ------- |
-| font | Font for waybar. | JetBrainsMono Nerd Font |
-| icon_size | Icon size for waybar. | 10 |
-| position | A fallback position of the waybar.   | top |
-| scale | Total scaling for waybar. | 10 |
-
-### [weather]
-
-Weather configuration.
-
-| Key | Description | Default |
-| --- | ----------- | ------- |
-| forecast_days | Number of days to show forecast (0-3). | 3 |
-| location | Location/coordinates string for the weather output. |  |
-| show_icon | Show the weather icon in waybar. | true |
-| show_location | Show the location in waybar. | true |
-| show_today | Show detailed description of today in tooltip. | true |
-| temperature_unit | Temperature unit ('c' or 'f'). | c |
-| time_format | Time format ('12h' or '24h'). | 24h |
-| windspeed_unit | Windspeed unit ('km/h' or 'mph'). | km/h |
-
-### [wlogout]
-
-wlogout configuration.
-
-| Key | Description | Default |
-| --- | ----------- | ------- |
-| style | Style for wlogout. | 2 |
-
+The following table outlines the complete schema for Tsumiki's configuration file, detailing each setting, its type, and default values where applicable.
+
+- **`$schema`**: `str` (default: "./tsumiki.schema.json")
+
+- **`widgets`**: `object`
+  - **`app_launcher_button`**: `object`
+    - **`icon`**: `str` (default: "view-app-grid-symbolic")
+    - **`icon_size`**: `int` (default: 16)
+    - **`tooltip`**: `bool` (default: true)
+  - **`cliphist`**: `object`
+    - **`icon`**: `str` (default: "")
+    - **`label`**: `bool` (default: false)
+    - **`tooltip`**: `bool` (default: true)
+  - **`emoji_picker`**: `object`
+    - **`icon`**: `str` (default: "")
+    - **`label`**: `bool` (default: false)
+    - **`tooltip`**: `bool` (default: true)
+    - **`per_row`**: `int` (default: 9)
+    - **`per_column`**: `int` (default: 4)
+  - **`kanban`**: `object`
+    - **`icon`**: `str` (default: "󱞁")
+    - **`label`**: `bool` (default: true)
+    - **`tooltip`**: `bool` (default: true)
+  - **`battery`**: `object`
+    - **`full_battery_level`**: `int` (default: 100)
+    - **`hide_label_when_full`**: `bool` (default: true)
+    - **`hide_when_missing`**: `bool` (default: true)
+    - **`label`**: `bool` (default: true)
+    - **`tooltip`**: `bool` (default: true)
+    - **`icon_size`**: `int` (default: 14)
+    - **`notifications`**: `object`
+      - **`low_threshold`**: `int` (default: 10)
+      - **`full_battery`**: `bool` (default: false)
+      - **`low_battery`**: `bool` (default: false)
+      - **`charging`**: `bool` (default: false)
+  - **`quick_settings`**: `object`
+    - **`hover_reveal`**: `bool` (default: false)
+    - **`user`**: `object`
+      - **`avatar`**: `str` (default: "~/.face")
+      - **`name`**: `str` (default: "system")
+      - **`distro_icon`**: `bool` (default: true)
+    - **`controls`**: `object`
+      - **`sliders`**: `list[str]` (default: ["brightness", "volume"])
+    - **`media`**: `object`
+      - **`enabled`**: `bool` (default: true)
+      - **`ignore`**: `list` (default: [])
+      - **`truncation_size`**: `int` (default: 30)
+      - **`show_album`**: `bool` (default: true)
+      - **`show_artist`**: `bool` (default: true)
+      - **`show_time`**: `bool` (default: true)
+      - **`show_time_tooltip`**: `bool` (default: true)
+    - **`shortcuts`**: `object`
+      - **`enabled`**: `bool` (default: true)
+      - **`items`**: `list` (default: [])
+  - **`bluetooth`**: `object`
+    - **`label`**: `bool` (default: true)
+    - **`tooltip`**: `bool` (default: true)
+  - **`brightness`**: `object`
+    - **`label`**: `bool` (default: true)
+    - **`tooltip`**: `bool` (default: true)
+    - **`step_size`**: `int` (default: 5)
+  - **`wallpaper`**: `object`
+    - **`icon`**: `str` (default: "󰸉")
+    - **`label`**: `bool` (default: false)
+    - **`tooltip`**: `bool` (default: true)
+  - **`cava`**: `object`
+    - **`bars`**: `int` (default: 10)
+    - **`color`**: `str` (default: "#89b4fa")
+  - **`overview_button`**: `object`
+    - **`icon`**: `str` (default: "󰡃")
+    - **`tooltip`**: `bool` (default: true)
+    - **`label`**: `bool` (default: false)
+  - **`click_counter`**: `object`
+    - **`count`**: `int` (default: 0)
+  - **`cpu`**: `object`
+    - **`show_icon`**: `bool` (default: true)
+    - **`icon`**: `str` (default: "")
+    - **`tooltip`**: `bool` (default: true)
+    - **`round`**: `bool` (default: true)
+    - **`temperature_unit`**: `str` (default: "celsius")
+    - **`show_unit`**: `bool` (default: true)
+    - **`sensor`**: `str` (default: "")
+    - **`mode`**: `str` (default: "circular")
+    - **`graph_length`**: `int` (default: 4)
+  - **`gpu`**: `object`
+    - **`show_icon`**: `bool` (default: true)
+    - **`icon`**: `str` (default: "")
+    - **`tooltip`**: `bool` (default: true)
+    - **`mode`**: `str` (default: "circular")
+    - **`graph_length`**: `int` (default: 4)
+  - **`date_time`**: `object`
+    - **`format`**: `str` (default: "%b %d %H:%M")
+    - **`calendar`**: `bool` (default: true)
+    - **`clock_format`**: `str` (default: "12h")
+    - **`hover_reveal`**: `bool` (default: false)
+    - **`reveal_duration`**: `int` (default: 500)
+    - **`notification`**: `object`
+      - **`enabled`**: `bool` (default: true)
+      - **`count`**: `bool` (default: true)
+      - **`hide_count_on_zero`**: `bool` (default: false)
+  - **`divider`**: `object`
+    - **`size`**: `int` (default: 2)
+  - **`hypridle`**: `object`
+    - **`enabled_icon`**: `str` (default: "")
+    - **`disabled_icon`**: `str` (default: "")
+    - **`label`**: `bool` (default: true)
+    - **`tooltip`**: `bool` (default: true)
+  - **`hyprpicker`**: `object`
+    - **`icon`**: `str` (default: "")
+    - **`tooltip`**: `bool` (default: true)
+    - **`label`**: `bool` (default: false)
+    - **`quiet`**: `bool` (default: false)
+    - **`show_icon`**: `bool` (default: true)
+  - **`hyprsunset`**: `object`
+    - **`temperature`**: `str` (default: "2800k")
+    - **`enabled_icon`**: `str` (default: "󱩌")
+    - **`disabled_icon`**: `str` (default: "󰛨")
+    - **`label`**: `bool` (default: true)
+    - **`tooltip`**: `bool` (default: true)
+  - **`keyboard`**: `object`
+    - **`icon`**: `str` (default: "󰌌")
+    - **`label`**: `bool` (default: true)
+    - **`tooltip`**: `bool` (default: true)
+    - **`show_icon`**: `bool` (default: true)
+  - **`window_count`**: `object`
+    - **`icon`**: `str` (default: "")
+    - **`label_format`**: `str` (default: "[{count}]")
+    - **`hide_when_zero`**: `bool` (default: true)
+    - **`tooltip`**: `bool` (default: true)
+    - **`show_icon`**: `bool` (default: false)
+  - **`language`**: `object`
+    - **`icon`**: `str` (default: "")
+    - **`tooltip`**: `bool` (default: true)
+    - **`truncation_size`**: `int` (default: 2)
+    - **`show_icon`**: `bool` (default: true)
+  - **`widget_groups`**: `list[object]`
+    - **`widgets`**: `list[str]` (default: ["updates", "battery"])
+    - **`spacing`**: `int` (default: 4)
+    - **`style_classes`**: `list[str]` (default: ["bordered"])
+  - **`memory`**: `object`
+    - **`show_icon`**: `bool` (default: true)
+    - **`icon`**: `str` (default: "")
+    - **`tooltip`**: `bool` (default: true)
+    - **`mode`**: `str` (default: "circular")
+    - **`graph_length`**: `int` (default: 4)
+    - **`unit`**: `str` (default: "gb")
+  - **`network_usage`**: `object`
+    - **`upload_icon`**: `str` (default: "")
+    - **`download_icon`**: `str` (default: "")
+    - **`tooltip`**: `bool` (default: true)
+    - **`upload`**: `bool` (default: true)
+    - **`download`**: `bool` (default: true)
+    - **`upload_threshold`**: `int` (default: 100)
+    - **`download_threshold`**: `int` (default: 1024)
+    - **`kb_digits`**: `int` (default: 0)
+    - **`mb_digits`**: `int` (default: 2)
+  - **`microphone`**: `object`
+    - **`label`**: `bool` (default: false)
+    - **`tooltip`**: `bool` (default: true)
+    - **`show_icon`**: `bool` (default: true)
+  - **`mpris`**: `object`
+    - **`truncation_size`**: `int` (default: 20)
+    - **`tooltip`**: `bool` (default: true)
+  - **`ocr`**: `object`
+    - **`icon`**: `str` (default: "󰐳")
+    - **`tooltip`**: `bool` (default: true)
+    - **`label`**: `bool` (default: false)
+    - **`show_icon`**: `bool` (default: true)
+    - **`quiet`**: `bool` (default: false)
+  - **`power`**: `object`
+    - **`icon`**: `str` (default: "󰐥")
+    - **`tooltip`**: `bool` (default: true)
+    - **`items_per_row`**: `int` (default: 3)
+    - **`icon_size`**: `int` (default: 100)
+    - **`show_icon`**: `bool` (default: true)
+    - **`label`**: `bool` (default: false)
+    - **`confirm`**: `bool` (default: true)
+    - **`buttons`**: `object`
+      - **`shutdown`**: `str` (default: "systemctl poweroff")
+      - **`reboot`**: `str` (default: "systemctl reboot")
+      - **`hibernate`**: `str` (default: "systemctl hibernate")
+      - **`suspend`**: `str` (default: "systemctl suspend")
+      - **`lock`**: `str` (default: "loginctl lock-session")
+      - **`logout`**: `str` (default: "loginctl terminate-user $USER")
+  - **`recorder`**: `object`
+    - **`path`**: `str` (default: "Videos/Screencasting")
+    - **`tooltip`**: `bool` (default: true)
+    - **`audio`**: `bool` (default: true)
+    - **`delayed`**: `bool` (default: false)
+    - **`delayed_timeout`**: `int` (default: 5000)
+  - **`screenshot`**: `object`
+    - **`path`**: `str` (default: "Pictures/Screenshots")
+    - **`icon`**: `str` (default: "󰄀")
+    - **`tooltip`**: `bool` (default: true)
+    - **`annotation`**: `bool` (default: true)
+    - **`delayed`**: `bool` (default: false)
+    - **`delayed_timeout`**: `int` (default: 5000)
+    - **`label`**: `bool` (default: false)
+    - **`capture_sound`**: `bool` (default: false)
+  - **`stopwatch`**: `object`
+    - **`stopped_icon`**: `str` (default: "󱫞")
+    - **`running_icon`**: `str` (default: "󱫠")
+  - **`storage`**: `object`
+    - **`path`**: `str` (default: "/")
+    - **`show_icon`**: `bool` (default: true)
+    - **`icon`**: `str` (default: "󰋊")
+    - **`mode`**: `str` (default: "circular")
+    - **`tooltip`**: `bool` (default: true)
+    - **`graph_length`**: `int` (default: 4)
+    - **`unit`**: `str` (default: "gb")
+  - **`submap`**: `object`
+    - **`icon`**: `str` (default: "󰌌")
+    - **`label`**: `bool` (default: true)
+    - **`tooltip`**: `bool` (default: true)
+    - **`show_icon`**: `bool` (default: true)
+    - **`hide_on_default`**: `bool` (default: false)
+  - **`system_tray`**: `object`
+    - **`icon_size`**: `int` (default: 16)
+    - **`ignored`**: `list` (default: [])
+    - **`hidden`**: `list` (default: [])
+    - **`hide_when_empty`**: `bool` (default: false)
+  - **`taskbar`**: `object`
+    - **`icon_size`**: `int` (default: 22)
+    - **`ignored`**: `list` (default: [])
+    - **`tooltip`**: `bool` (default: true)
+  - **`theme_switcher`**: `object`
+    - **`icon`**: `str` (default: "")
+    - **`notify`**: `bool` (default: false)
+  - **`updates`**: `object`
+    - **`show_icon`**: `bool` (default: true)
+    - **`available_icon`**: `str` (default: "󰏗")
+    - **`no_updates_icon`**: `str` (default: "󰏖")
+    - **`os`**: `str` (default: "arch")
+    - **`hover_reveal`**: `bool` (default: false)
+    - **`reveal_duration`**: `int` (default: 500)
+    - **`interval`**: `int` (default: 3600)
+    - **`tooltip`**: `bool` (default: true)
+    - **`terminal`**: `str` (default: "kitty")
+    - **`pad_zero`**: `bool` (default: true)
+    - **`label`**: `bool` (default: true)
+    - **`auto_hide`**: `bool` (default: false)
+    - **`flatpak`**: `bool` (default: false)
+    - **`snap`**: `bool` (default: false)
+    - **`brew`**: `bool` (default: false)
+  - **`volume`**: `object`
+    - **`label`**: `bool` (default: true)
+    - **`tooltip`**: `bool` (default: true)
+    - **`step_size`**: `int` (default: 5)
+  - **`weather`**: `object`
+    - **`location`**: `str` (default: "")
+    - **`label`**: `bool` (default: true)
+    - **`label_format`**: `str` (default: "{condition} {temperature}")
+    - **`tooltip`**: `bool` (default: true)
+    - **`expanded`**: `bool` (default: true)
+    - **`temperature_unit`**: `str` (default: "celsius")
+    - **`wind_speed_unit`**: `str` (default: "kmh")
+    - **`interval`**: `int` (default: 3600)
+    - **`hover_reveal`**: `bool` (default: false)
+  - **`window_title`**: `object`
+    - **`icon`**: `bool` (default: true)
+    - **`truncation`**: `bool` (default: true)
+    - **`truncation_size`**: `int` (default: 20)
+    - **`tooltip`**: `bool` (default: true)
+    - **`mappings`**: `bool` (default: true)
+    - **`title_map`**: `list` (default: [])
+    - **`fallback`**: `str` (default: "class")
+  - **`workspaces`**: `object`
+    - **`count`**: `int` (default: 10)
+    - **`hide_unoccupied`**: `bool` (default: true)
+    - **`ignored`**: `list[int]` (default: [-99])
+    - **`reverse_scroll`**: `bool` (default: false)
+    - **`show_numbered`**: `bool` (default: true)
+    - **`empty_scroll`**: `bool` (default: false)
+    - **`default_label_format`**: `str` (default: "{id}")
+    - **`icon_map`**: `object`
+  - **`world_clock`**: `object`
+    - **`icon`**: `str` (default: "󱉊'")
+    - **`use_24hr`**: `bool` (default: true)
+    - **`show_icon`**: `bool` (default: true)
+    - **`timezones`**: `list[str]` (default: ["America/New_York", "Asia/Tokyo"])
+  - **`custom_button_group`**: `object`
+    - **`buttons`**: `list` (default: [])
+    - **`spacing`**: `int` (default: 4)
+
+- **`layout`**: `object`
+  - **`left_section`**: `list[str]` (default: ["workspaces", "window_title"])
+  - **`middle_section`**: `list[str]` (default: ["date_time"])
+  - **`right_section`**: `list[str]` (default: ["system_tray"])
+
+- **`modules`**: `object`
+  - **`bar`**: `object`
+    - **`layer`**: `str` (default: "top")
+    - **`auto_hide`**: `bool` (default: false)
+    - **`location`**: `str` (default: "top")
+  - **`overview`**: `object`
+    - **`enabled`**: `bool` (default: false)
+    - **`layer`**: `str` (default: "top")
+    - **`anchor`**: `str` (default: "center")
+    - **`transition_type`**: `str` (default: "crossfade")
+    - **`transition_duration`**: `int` (default: 350)
+  - **`osd`**: `object`
+    - **`enabled`**: `bool` (default: false)
+    - **`timeout`**: `int` (default: 1500)
+    - **`anchor`**: `str` (default: "bottom-center")
+    - **`orientation`**: `str` (default: "horizontal")
+    - **`percentage`**: `bool` (default: true)
+    - **`icon_size`**: `int` (default: 28)
+    - **`play_sound`**: `bool` (default: false)
+    - **`transition_type`**: `str` (default: "slide-up")
+    - **`transition_duration`**: `int` (default: 500)
+    - **`osds`**: `list[str]` (default: ["brightness", "volume"])
+  - **`app_launcher`**: `object`
+    - **`enabled`**: `bool` (default: false)
+    - **`tooltip`**: `bool` (default: true)
+    - **`icon_size`**: `int` (default: 16)
+  - **`notification`**: `object`
+    - **`enabled`**: `bool` (default: true)
+    - **`anchor`**: `str` (default: "top-right")
+    - **`auto_dismiss`**: `bool` (default: true)
+    - **`dnd_on_screencast`**: `bool` (default: false)
+    - **`ignored`**: `list` (default: [])
+    - **`timeout`**: `int` (default: 3000)
+    - **`max_count`**: `int` (default: 200)
+    - **`transition_type`**: `str` (default: "slide-left")
+    - **`transition_duration`**: `int` (default: 350)
+    - **`per_app_limits`**: `object`
+    - **`play_sound`**: `bool` (default: false)
+    - **`max_actions`**: `int` (default: 5)
+    - **`dismiss_on_hover`**: `bool` (default: false)
+    - **`sound_file`**: `str` (default: "notification4")
+    - **`persist`**: `bool` (default: true)
+  - **`screen_corners`**: `object`
+    - **`enabled`**: `bool` (default: false)
+    - **`size`**: `int` (default: 20)
+  - **`dock`**: `object`
+    - **`enabled`**: `bool` (default: false)
+    - **`ignored_apps`**: `list` (default: [])
+    - **`icon_size`**: `int` (default: 40)
+    - **`behavior`**: `str` (default: "intellihide")
+    - **`tooltip`**: `bool` (default: false)
+    - **`layer`**: `str` (default: "top")
+    - **`show_when_no_windows`**: `bool` (default: false)
+    - **`preview_apps`**: `bool` (default: true)
+    - **`preview_size`**: `list[int]` (default: [200, 130])
+  - **`desktop_clock`**: `object`
+    - **`enabled`**: `bool` (default: false)
+    - **`layer`**: `str` (default: "bottom")
+    - **`anchor`**: `str` (default: "center")
+    - **`date_format`**: `str` (default: "%A, %d %B %Y")
+    - **`time_format`**: `str` (default: "%H:%M")
+  - **`desktop_quotes`**: `object`
+    - **`enabled`**: `bool` (default: false)
+    - **`anchor`**: `str` (default: "bottom-right")
+    - **`layer`**: `str` (default: "bottom")
+    - **`interval`**: `int` (default: 600)
+  - **`activate_linux`**: `object`
+    - **`enabled`**: `bool` (default: false)
+    - **`anchor`**: `str` (default: "bottom-right")
+    - **`layer`**: `str` (default: "bottom")
+
+- **`general`**: `object`
+  - **`check_updates`**: `bool` (default: false)
+  - **`debug`**: `bool` (default: true)
+  - **`monitor_styles`**: `bool` (default: true)
+  - **`location`**: `str` (default: "top")
+  - **`auto_reload`**: `bool` (default: true)
+  - **`multi_monitor`**: `bool` (default: false)
