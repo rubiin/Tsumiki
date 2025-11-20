@@ -9,6 +9,8 @@ description: Frequently asked questions about HyDE
 Hyprland related questions should be referenced to [Hyprland Wiki](https://wiki.hyprland.org)
 :::
 
+
+
 <details>
 <summary id="wallpapers">How do I add global or custom wallpapers?</summary>
 <div>
@@ -253,7 +255,7 @@ To do this, follow these steps:
 
 If you still can't log in after these steps, you can set, on the same file, `AllowEmptyPassword` to true, reboot, log in still writing your password, and after logging in you can set it back to false safely.
 
-Here is a [GitHub Issue](https://github.com/HyDE-Project/HyDE/issues/404) about this behaviour. 
+Here is a [GitHub Issue](https://github.com/HyDE-Project/HyDE/issues/404) about this behaviour.
 
 </div>
 </details>

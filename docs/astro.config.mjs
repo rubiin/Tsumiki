@@ -40,10 +40,7 @@ export default defineConfig({
           label: '🛠️ Configuring',
           autogenerate: {directory: 'configuring'},
         },
-        {
-          label: '📙 Man Pages',
-          autogenerate: {directory: 'man-pages'},
-        },
+
         {
           label: '🎨 Theming',
           autogenerate: {directory: 'theming'},
