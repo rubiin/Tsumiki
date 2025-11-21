@@ -121,6 +121,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "muhchaudhary",
+      "name": "Muhammad Ahmad Chaudhary",
+      "avatar_url": "https://avatars.githubusercontent.com/u/61593188?v=4",
+      "profile": "https://github.com/muhchaudhary",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,
