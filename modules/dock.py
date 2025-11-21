@@ -390,12 +390,6 @@ class Dock(Window):
 
     def __init__(self, config: BarConfig):
         self.config = config.get("modules", {}).get("dock", {})
-        super().__init__(
-            layer=self.config.get("layer", "top"),
-            anchor="bottom-center",
-            name="dock",
-            title="dock",
-        )
         self.revealer = Revealer(
             child=Box(children=[AppBar(self)], style="padding: 20px 50px 5px 50px;"),
             transition_duration=500,
@@ -404,9 +398,9 @@ class Dock(Window):
 
         if self.config.get("behavior", "always_show") == "always_show":
             self.revealer.set_reveal_child(True)
-            self.children = self.revealer
+            child = self.revealer
         else:
-            self.children = EventBox(
+            child = EventBox(
                 events=["enter-notify", "leave-notify"],
                 child=CenterBox(
                     center_children=self.revealer,
@@ -434,6 +428,14 @@ class Dock(Window):
             )
 
             self._check_for_windows()
+
+        super().__init__(
+            layer=self.config.get("layer", "top"),
+            anchor="bottom-center",
+            child=child,
+            name="dock",
+            title="dock",
+        )
 
     def _handle_workspace_response(self, data: dict):
         try:
