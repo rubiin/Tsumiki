@@ -1,5 +1,24 @@
 # Changelog
 
+## [2.7.0](https://github.com/rubiin/Tsumiki/compare/v2.6.6...v2.7.0) (2025-11-21)
+
+
+### 🚀 New Features
+
+* add border properties for workspace switcher widget ([c3f5f6c](https://github.com/rubiin/Tsumiki/commit/c3f5f6c26b47460d507e7536db375b8d03c48bc5))
+* notify user when requirements.txt changes after update ([66f91b2](https://github.com/rubiin/Tsumiki/commit/66f91b2593b9481d794fcd8e98471b91fd34e2b2))
+
+
+### 🐛 Bug Fixes
+
+* move PIL import statements to avoid potential import errors ([f35d258](https://github.com/rubiin/Tsumiki/commit/f35d258f4abf440819f952c8b21cab457dab6278))
+* update icon interpolation method to use bilinear for better rendering ([9ba1727](https://github.com/rubiin/Tsumiki/commit/9ba1727e80c217eb946421da7b39b5113bcaf115))
+
+
+### ⚙️ Chores
+
+* **deps:** update all non-major dependencies ([#246](https://github.com/rubiin/Tsumiki/issues/246)) ([8e17ccb](https://github.com/rubiin/Tsumiki/commit/8e17ccb7e19e46d040e3770ce3e46ec39b4c09eb))
+
 ## [2.6.6](https://github.com/rubiin/Tsumiki/compare/v2.6.1...v2.6.6) (2025-11-18)
 
 
