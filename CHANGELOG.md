@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.7.1](https://github.com/rubiin/Tsumiki/compare/v2.7.0...v2.7.1) (2025-11-21)
+
+
+### 📚 Documentation
+
+* add muhchaudhary as a contributor for bug ([#249](https://github.com/rubiin/Tsumiki/issues/249)) ([4acaead](https://github.com/rubiin/Tsumiki/commit/4acaead6d616f3473f6cea5d952167fe00ed2c66))
+
 ## [2.7.0](https://github.com/rubiin/Tsumiki/compare/v2.6.6...v2.7.0) (2025-11-21)
 
 
