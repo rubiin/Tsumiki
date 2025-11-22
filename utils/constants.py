@@ -1131,6 +1131,7 @@ WINDOW_TITLE_MAP = [
     ["libreoffice-base", "", "LibreOffice Base"],
     ["libreoffice-calc", "", "LibreOffice Calc"],
     ["libreoffice-draw", "", "LibreOffice Draw"],
+    ["org.pwmt.zathura", "", "Zathura"],
     ["libreoffice-impress", "", "LibreOffice Impress"],
     ["libreoffice-math", "", "LibreOffice Math"],
     ["libreoffice-writer", "", "LibreOffice Writer"],
