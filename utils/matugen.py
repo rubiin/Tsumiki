@@ -4,6 +4,7 @@ from fabric.utils import exec_shell_command, get_relative_path
 
 from utils.functions import run_in_thread
 
+
 class Matugen:
     """
     Matugen is a utility for generating color palettes.

@@ -1,8 +1,7 @@
 from fabric.widgets.box import Box
-from fabric.widgets.scale import Scale
 
 from utils.icons import text_icons
-from utils.widget_utils import nerd_font_icon
+from utils.widget_utils import create_scale, nerd_font_icon
 
 from .buttons import HoverButton
 from .widget_container import BaseWidget
@@ -35,14 +34,14 @@ class SettingSlider(Box, BaseWidget):
 
         self.icon_button = HoverButton(image=self.icon, name="setting-slider-button")
 
-        self.scale = Scale(
-            marks=None,
-            min_value=min,
-            max_value=max,
+        self.scale = create_scale(
             name="setting-slider-scale",
+            duration=0.8,
+            curve=(0.34, 1.56, 0.64, 1.0),
             value=start_value,
             increments=(1, 1),
             tooltip_text=str(start_value),
+            min_value=min,
+            max_value=max,
         )
-
         self.children = (self.icon_button, self.scale)

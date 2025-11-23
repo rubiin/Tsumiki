@@ -389,7 +389,6 @@ scrolledwindow {
 }
 
 
-.wallpaper-picker-box {}
 
 #wallpaper-button {
   border-radius: 10px;
@@ -446,3 +445,16 @@ scrolledwindow {
 #popover-overlay {
   background-color: rgba(0, 0, 0, 0.0);
 }
+
+
+#setting-slider-scale {
+
+            .overamplified trough highlight {
+              background-color: theme.$accent-red;
+            }
+
+            .muted trough highlight,
+            .muted slider {
+              background-color: theme.$surface-disabled;
+            }
+  }
