@@ -7,6 +7,13 @@ class Matugen:
     It can be used to create color schemes for various applications.
     """
 
+    _instance = None
+
+    def __new__(cls):
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+        return cls._instance
+
     def normalize_contrast(self, contrast: float) -> float:
         return max(-1, min(1, contrast))
 
