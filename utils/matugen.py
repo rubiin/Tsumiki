@@ -17,6 +17,9 @@ class Matugen:
     def normalize_contrast(self, contrast: float) -> float:
         return max(-1, min(1, contrast))
 
+    def generate_css(self, value: dict):
+        pass
+
     def generate_palette(
         self, wallpaper: str, contrast: float = 0.5, scheme="tonal-spot", mode="dark"
     ) -> list:
@@ -38,7 +41,7 @@ class Matugen:
             )
 
             # Placeholder for actual palette generation logic
-            return exec_shell_command_async(base_command, lambda x: x.get(mode, []))
+            return exec_shell_command_async(base_command, self.generate_css)
         except Exception as e:
             print(f"Error generating palette: {e}")
             return []
