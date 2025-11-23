@@ -8,6 +8,9 @@ from modules.bar import StatusBar
 from utils.colors import Colors
 from utils.config import theme_config, widget_config
 from utils.constants import APP_DATA_DIRECTORY, APPLICATION_NAME
+from utils.matugen import Matugen
+
+matugen = Matugen()
 
 
 @helpers.run_in_thread
@@ -144,4 +147,6 @@ def main():
 
 
 if __name__ == "__main__":
+    matugen.generate_palette(wallpaper=get_relative_path("./assets/images/disk.png"))
+
     main()

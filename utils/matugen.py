@@ -1,5 +1,8 @@
-from fabric.utils import exec_shell_command_async, get_relative_path
+import json
 
+from fabric.utils import exec_shell_command, get_relative_path
+
+from utils.functions import run_in_thread
 
 class Matugen:
     """
@@ -17,9 +20,12 @@ class Matugen:
     def normalize_contrast(self, contrast: float) -> float:
         return max(-1, min(1, contrast))
 
-    def generate_css(self, value: dict):
-        pass
+    @run_in_thread
+    def generate_css(self, value):
+        value = json.loads(value)
+        print(value["colors"])
 
+    @run_in_thread
     def generate_palette(
         self, wallpaper: str, contrast: float = 0.5, scheme="tonal-spot", mode="dark"
     ) -> list:
@@ -41,7 +47,8 @@ class Matugen:
             )
 
             # Placeholder for actual palette generation logic
-            return exec_shell_command_async(base_command, self.generate_css)
+            val = exec_shell_command(base_command)
+            self.generate_css(value=val)
         except Exception as e:
             print(f"Error generating palette: {e}")
             return []
