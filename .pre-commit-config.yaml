@@ -20,7 +20,7 @@ repos:
 
   # Ruff for linting, formatting, and import sorting
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.14.4
+    rev: v0.14.6
     hooks:
       - id: ruff
         args: ["--fix"]
@@ -33,7 +33,7 @@ repos:
         args: ["--profile", "black"]
 
   - repo: https://github.com/biomejs/pre-commit
-    rev: v2.3.4 # Use the sha / tag you want to point at
+    rev: v2.3.7 # Use the sha / tag you want to point at
     hooks:
       - id: biome-check
         exclude: |
@@ -44,7 +44,7 @@ repos:
                         assets/matugen/tsumiki.css
                     )$
   - repo: https://github.com/gitleaks/gitleaks
-    rev: v8.28.0
+    rev: v8.29.1
     hooks:
       - id: gitleaks
 
