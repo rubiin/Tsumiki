@@ -74,14 +74,14 @@ class AudioSlider(SettingSlider):
         is_muted = self.audio_stream.muted
 
         self.scale.set_sensitive(not is_muted)
-        self.scale.toggle_css_class("muted", is_muted)
+        self.toggle_css_class("muted", is_muted)
 
         # Avoid unnecessary updates if the value hasn't changed
         if volume == round(self.scale.get_value()):
             return
 
         is_over_amplified = volume > 100
-        self.scale.toggle_css_class("overamplified", is_over_amplified)
+        self.toggle_css_class("overamplified", is_over_amplified)
 
         self.scale.set_value(volume)
         self.scale.set_tooltip_text(f"{volume}%")
