@@ -160,6 +160,32 @@ class NotificationWidget(EventBox):
             ),
         )
 
+        # Check if body is too long and needs expanding
+        body_text = self._notification.body or ""
+        max_collapsed_lines = self.config.get("max_lines", 4)
+        max_expanded_lines = self.config.get("max_expanded_lines", 20)
+        line_count = body_text.count("\n") + 1
+        char_threshold = 150
+
+        is_long_content = (
+            line_count > max_collapsed_lines or len(body_text) > char_threshold
+        )
+
+        # Create expand button if content is long (will be added to header)
+        self.expand_button = None
+        if is_long_content:
+            self._is_expanded = False
+            self.expand_button = Button(
+                style_classes=["expand-button"],
+                child=nerd_font_icon(
+                    icon=text_icons["chevron"]["down"],
+                    props={"style_classes": ["panel-font-icon", "expand-icon"]},
+                ),
+                on_clicked=lambda *_: self._toggle_expand(
+                    max_collapsed_lines, max_expanded_lines
+                ),
+            )
+
         overlay = Overlay(
             child=self.progress_timeout,
             overlays=Button(
@@ -176,12 +202,12 @@ class NotificationWidget(EventBox):
             ),
         )
 
-        header_container.pack_end(
-            overlay,
-            False,
-            False,
-            0,
-        )
+        # Pack close button at end
+        header_container.pack_end(overlay, False, False, 0)
+
+        # Pack expand button before close button (if exists)
+        if self.expand_button:
+            header_container.pack_end(self.expand_button, False, False, 0)
 
         body_container = Box(
             spacing=4,
@@ -211,17 +237,31 @@ class NotificationWidget(EventBox):
             # If the image is not available, use the symbolic icon
             logger.warning(f"{Colors.WARNING}[Notification] Image not available.")
 
-        body_container.add(
-            Label(
-                markup=helpers.parse_markup(self._notification.body),
+        # Create body label
+        if is_long_content:
+            self.body_label = Label(
+                markup=helpers.parse_markup(body_text),
                 v_align="start",
                 h_align="start",
                 style_classes=["body"],
                 line_wrap="word-char",
                 max_chars_width=38,
-                lines=10,
-            ),
-        )
+            )
+            # Set lines after creation (constructor param doesn't work reliably)
+            self.body_label.set_lines(max_collapsed_lines)
+            self.body_label.set_ellipsize(3)  # PANGO_ELLIPSIZE_END
+            body_container.add(self.body_label)
+        else:
+            body_container.add(
+                Label(
+                    markup=helpers.parse_markup(body_text),
+                    v_align="start",
+                    h_align="start",
+                    style_classes=["body"],
+                    line_wrap="word-char",
+                    max_chars_width=38,
+                ),
+            )
 
         actions_len = len(self._notification.actions)
         actions_count = min(actions_len, self.config.get("max_actions", 3))
@@ -264,6 +304,16 @@ class NotificationWidget(EventBox):
 
         if self.config.get("auto_dismiss", False):
             self.start_timeout()
+
+    def _toggle_expand(self, collapsed_lines: int, expanded_lines: int):
+        """Toggle between collapsed and expanded body text."""
+        self._is_expanded = not self._is_expanded
+        if self._is_expanded:
+            self.body_label.set_lines(expanded_lines)
+            self.expand_button.get_child().set_label(text_icons["chevron"]["up"])
+        else:
+            self.body_label.set_lines(collapsed_lines)
+            self.expand_button.get_child().set_label(text_icons["chevron"]["down"])
 
     def on_close_button_clicked(self, *_):
         self._notification.close("dismissed-by-user")

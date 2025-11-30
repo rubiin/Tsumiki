@@ -60,6 +60,26 @@ $hover-transition: background .15s ease-in-out;
       -gtk-icon-effect: none;
       border-radius: common.toEm(15);
     }
+
+    .expand-button {
+      background-color: transparent;
+      padding: common.toEm(2) common.toEm(8);
+      border-radius: variable.$radius;
+      margin-top: common.toEm(2);
+
+      .expand-icon {
+        font-size: 10px;
+        color: theme.$text-disabled;
+      }
+
+      &:hover {
+        background-color: color.mix(theme.$text-main, transparent, 15%);
+
+        .expand-icon {
+          color: theme.$text-main;
+        }
+      }
+    }
   }
 
   .close-button {
