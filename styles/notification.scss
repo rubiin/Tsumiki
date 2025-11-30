@@ -17,12 +17,13 @@ $hover-transition: background .15s ease-in-out;
   border-width: variable.$modules-notification-border-width;
   transition: border 100ms ease-in-out;
 
-
-  $shadow: 0 0 0 variable.$bar-border-width theme.$shadow-color,
-    variable.$modules-notification-shadow-offset variable.$modules-notification-shadow-blur variable.$modules-notification-shadow-spread color.adjust(theme.$shadow-color,
-      $alpha: calc(variable.$modules-notification-shadow-opacity - 1));
-
-  box-shadow: if(variable.$modules-notification-shadow-enabled, $shadow, none);
+  @include common.module-shadow(
+    variable.$modules-notification-shadow-enabled,
+    variable.$modules-notification-shadow-offset,
+    variable.$modules-notification-shadow-blur,
+    variable.$modules-notification-shadow-spread,
+    variable.$modules-notification-shadow-opacity
+  );
 
   .notification-header {
     padding: common.toEm(5);

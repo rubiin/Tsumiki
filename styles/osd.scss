@@ -13,11 +13,13 @@
   border: if(variable.$modules-osd-border-enabled, variable.$border, none);
   border-width: variable.$modules-osd-border-width;
 
-  $shadow: 0 0 0 variable.$bar-border-width theme.$shadow-color,
-    variable.$modules-osd-shadow-offset variable.$modules-osd-shadow-blur variable.$modules-osd-shadow-spread color.adjust(theme.$shadow-color,
-      $alpha: calc(variable.$modules-osd-shadow-opacity - 1));
-
-  box-shadow: if(variable.$modules-osd-shadow-enabled, $shadow, none);
+  @include common.module-shadow(
+    variable.$modules-osd-shadow-enabled,
+    variable.$modules-osd-shadow-offset,
+    variable.$modules-osd-shadow-blur,
+    variable.$modules-osd-shadow-spread,
+    variable.$modules-osd-shadow-opacity
+  );
 
   @include common.widget_style(variable.$modules-osd-widget_style);
 

@@ -1,31 +1,30 @@
 @use "theme";
 @use "variable";
+@use "common";
 @use "sass:color";
 
 #dock-bar {
   $modules-dock-opacity-ratio: variable.$modules-dock-opacity * .01;
-  $transparency-value: (
-    1 - $modules-dock-opacity-ratio) * 100%;
-  background-color: color.mix(theme.$bar-background, transparent, $transparency-value
+  $transparency-value: (1 - $modules-dock-opacity-ratio) * 100%;
+  background-color: color.mix(theme.$bar-background, transparent, $transparency-value);
+  padding: variable.$modules-dock-padding_y variable.$modules-dock-padding_x;
+  margin: variable.$modules-dock-margin_y variable.$modules-dock-margin_x;
+  border: if(variable.$modules-dock-border-enabled, variable.$border, none);
+  border-radius: variable.$modules-dock-border-radius;
+  transition: all .25s cubic-bezier(.5, .25, 0, 1);
+
+  @include common.module-shadow(
+    variable.$modules-dock-shadow-enabled,
+    variable.$modules-dock-shadow-offset,
+    variable.$modules-dock-shadow-blur,
+    variable.$modules-dock-shadow-spread,
+    variable.$modules-dock-shadow-opacity
   );
-padding: variable.$modules-dock-padding_y variable.$modules-dock-padding_x;
-margin: variable.$modules-dock-margin_y variable.$modules-dock-margin_x;
-border: if(variable.$modules-dock-border-enabled, variable.$border, none);
-border-radius: variable.$modules-dock-border-radius;
-transition: all .25s cubic-bezier(.5, .25, 0, 1);
 
-
-$shadow: 0 0 0 variable.$bar-border-width theme.$shadow-color,
-  variable.$modules-dock-shadow-offset variable.$modules-dock-shadow-blur variable.$modules-dock-shadow-spread color.adjust(theme.$shadow-color,
-    $alpha: calc(variable.$modules-dock-shadow-opacity - 1));
-
-box-shadow: if(variable.$modules-dock-shadow-enabled, $shadow, none);
-
-separator {
-  background-color: variable.$border-color;
-  border-radius: variable.$radius;
-  margin: 8px 4px;
-  min-width: 1.2px;
-}
-
+  separator {
+    background-color: variable.$border-color;
+    border-radius: variable.$radius;
+    margin: 8px 4px;
+    min-width: 1.2px;
+  }
 }

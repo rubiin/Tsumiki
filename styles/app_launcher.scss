@@ -1,6 +1,7 @@
 @use "theme";
 @use "sass:color";
 @use "variable";
+@use "common";
 
 
 button.launcher-button {
@@ -35,12 +36,13 @@ button.launcher-button {
   border: if(variable.$modules-app_launcher-border-enabled, variable.$border, none);
   border-width: variable.$modules-app_launcher-border-width;
 
-
-  $shadow: 0 0 0 variable.$bar-border-width theme.$shadow-color,
-    variable.$modules-app_launcher-shadow-offset variable.$modules-app_launcher-shadow-blur variable.$modules-app_launcher-shadow-spread color.adjust(theme.$shadow-color,
-      $alpha: calc(variable.$modules-app_launcher-shadow-opacity - 1));
-
-  box-shadow: if(variable.$modules-app_launcher-shadow-enabled, $shadow, none);
+  @include common.module-shadow(
+    variable.$modules-app_launcher-shadow-enabled,
+    variable.$modules-app_launcher-shadow-offset,
+    variable.$modules-app_launcher-shadow-blur,
+    variable.$modules-app_launcher-shadow-spread,
+    variable.$modules-app_launcher-shadow-opacity
+  );
 
   &-prompt {
     border-bottom: 1px solid theme.$surface-disabled;

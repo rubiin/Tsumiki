@@ -2,6 +2,21 @@
 @use "../theme";
 @use "../variable";
 
+/// Generates a module shadow with configurable parameters
+/// @param {Boolean} $enabled - Whether shadow is enabled
+/// @param {Length} $offset - Shadow offset
+/// @param {Length} $blur - Shadow blur radius
+/// @param {Length} $spread - Shadow spread
+/// @param {Number} $opacity - Shadow opacity (0-100)
+@mixin module-shadow($enabled, $offset, $blur, $spread, $opacity) {
+  @if $enabled {
+    $shadow: 0 0 0 variable.$bar-border-width theme.$shadow-color,
+      $offset $blur $spread color.adjust(theme.$shadow-color, $alpha: calc($opacity * 0.01 - 1));
+    box-shadow: $shadow;
+  } @else {
+    box-shadow: none;
+  }
+}
 
 /* General */
 %unset {
