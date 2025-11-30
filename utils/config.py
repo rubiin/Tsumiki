@@ -15,9 +15,23 @@ from .functions import (
 )
 from .widget_settings import BarConfig
 
+# Pre-computed excluded keys for config merging
+_EXCLUDED_SCHEMA_KEYS = frozenset(["$schema"])
+_LIST_CONFIG_KEYS = frozenset(["widget_groups", "collapsible_groups"])
+
 
 class TsumikiConfig:
     "A class to read the configuration file and return the default configuration"
+
+    __slots__ = (
+        "_initialized",
+        "config",
+        "json_config_file",
+        "root_dir",
+        "theme_config",
+        "theme_config_file",
+        "toml_config_file",
+    )
 
     _instance = None
 
@@ -31,28 +45,27 @@ class TsumikiConfig:
             return
 
         # TODO: always read from .config/tsumuki/config.json
-
         self.root_dir = get_relative_path("..")
 
         self.json_config_file = f"{self.root_dir}/config.json"
         self.toml_config_file = f"{self.root_dir}/config.toml"
         self.theme_config_file = f"{self.root_dir}/theme.json"
 
-        self.config = self.default_config()
-
+        self.config = self._load_config()
         self.theme_config = read_json_file(file_path=self.theme_config_file)
 
-        self.set_css_settings()
+        self._write_css_settings()
         self._initialized = True
 
-    def default_config(self) -> BarConfig:
-        # Read the configuration from the JSON file
-        check_toml = os.path.exists(self.toml_config_file)
+    def _load_config(self) -> BarConfig:
+        """Load and merge configuration from JSON or TOML file."""
         check_json = os.path.exists(self.json_config_file)
+        check_toml = os.path.exists(self.toml_config_file)
 
         if not check_json and not check_toml:
             raise FileNotFoundError("Please provide either a json or toml config.")
 
+        # Prefer JSON over TOML
         parsed_data = (
             read_json_file(file_path=self.json_config_file)
             if check_json
@@ -61,37 +74,38 @@ class TsumikiConfig:
 
         validate_widgets(parsed_data, DEFAULT_CONFIG)
 
-        for key in exclude_keys(DEFAULT_CONFIG, ["$schema"]):
-            if key == "widget_groups":
+        # Merge configuration with defaults
+        for key, default_value in DEFAULT_CONFIG.items():
+            if key in _EXCLUDED_SCHEMA_KEYS:
+                continue
+
+            if key in _LIST_CONFIG_KEYS:
                 # For lists, use the user's value or default if not present
-                parsed_data[key] = parsed_data.get(key, DEFAULT_CONFIG[key])
+                parsed_data[key] = parsed_data.get(key, default_value)
             else:
                 # For dictionaries, merge with defaults
                 parsed_data[key] = deep_merge(
-                    parsed_data.get(key, {}), DEFAULT_CONFIG[key]
+                    parsed_data.get(key, {}), default_value
                 )
 
         return parsed_data
 
     @run_in_thread
-    def set_css_settings(self):
+    def _write_css_settings(self):
+        """Generate SCSS settings file from theme config."""
         logger.info("[CONFIG] Applying css settings...")
 
         css_styles = flatten_dict(exclude_keys(self.theme_config, ["name"]))
 
-        settings = ""
-
-        for setting in css_styles:
-            # Convert python boolean to scss boolean
-            value = (
-                json.dumps(css_styles[setting])
-                if isinstance(css_styles[setting], bool)
-                else css_styles[setting]
-            )
-            settings += f"${setting}: {value};\n"
+        # Use list comprehension and join for faster string building
+        lines = [
+            f"${setting}: {json.dumps(value) if isinstance(value, bool) else value};"
+            for setting, value in css_styles.items()
+        ]
 
         with open(f"{self.root_dir}/styles/_settings.scss", "w") as f:
-            f.write(settings)
+            f.write("\n".join(lines))
+            f.write("\n")
 
 
 configuration = TsumikiConfig()
