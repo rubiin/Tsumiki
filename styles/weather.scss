@@ -6,14 +6,13 @@
 $base_margin: common.toEm(4);
 
 #weather {
-  border-radius: variable.$bar-widgets-weather-border-radius;
-  border: if(variable.$bar-widgets-weather-border-enabled, variable.$border, none);
-  border-width: variable.$bar-widgets-weather-border-width;
-
-  #nerd-icon.panel-font-icon {
-    font-size: variable.$bar-widgets-weather-icon_size;
-    margin-right: variable.$bar-widgets-weather-spacing;
-  }
+  @include common.bar-widget-style(
+    variable.$bar-widgets-weather-border-radius,
+    variable.$bar-widgets-weather-border-enabled,
+    variable.$bar-widgets-weather-border-width,
+    variable.$bar-widgets-weather-icon_size,
+    variable.$bar-widgets-weather-spacing
+  );
 }
 
 .weather-menu {

@@ -5,20 +5,17 @@
 
 
 #overview-menu {
-
   padding: 5px;
 }
 
 #overview_button {
-  border-radius: variable.$bar-widgets-overview-border-radius;
-  border: if(variable.$bar-widgets-overview-border-enabled, variable.$border, none);
-  border-width: variable.$bar-widgets-overview-border-width;
-
-  #nerd-icon.panel-font-icon {
-    font-size: variable.$bar-widgets-overview-icon_size;
-    margin-right: variable.$bar-widgets-overview-spacing;
-  }
-
+  @include common.bar-widget-style(
+    variable.$bar-widgets-overview-border-radius,
+    variable.$bar-widgets-overview-border-enabled,
+    variable.$bar-widgets-overview-border-width,
+    variable.$bar-widgets-overview-icon_size,
+    variable.$bar-widgets-overview-spacing
+  );
 }
 
 #overview-window {
