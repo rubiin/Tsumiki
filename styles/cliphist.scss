@@ -84,11 +84,12 @@
 }
 
 #cliphist {
-  @include common.bar-widget-style(
-    variable.$bar-widgets-cliphist-border-radius,
-    variable.$bar-widgets-cliphist-border-enabled,
-    variable.$bar-widgets-cliphist-border-width,
-    variable.$bar-widgets-cliphist-icon_size,
-    variable.$bar-widgets-cliphist-spacing
-  );
+  border-radius: variable.$bar-widgets-cliphist-border-radius;
+  border: if(variable.$bar-widgets-cliphist-border-enabled, variable.$border, none);
+  border-width: variable.$bar-widgets-cliphist-border-width;
+
+  #nerd-icon.panel-font-icon {
+    font-size: variable.$bar-widgets-cliphist-icon_size;
+    margin-right: variable.$bar-widgets-cliphist-spacing;
+  }
 }

@@ -82,11 +82,12 @@
 
 
 #kanban {
-  @include common.bar-widget-style(
-    variable.$bar-widgets-kanban-border-radius,
-    variable.$bar-widgets-kanban-border-enabled,
-    variable.$bar-widgets-kanban-border-width,
-    variable.$bar-widgets-kanban-icon_size,
-    variable.$bar-widgets-kanban-spacing
-  );
+  border-radius: variable.$bar-widgets-kanban-border-radius;
+  border: if(variable.$bar-widgets-kanban-border-enabled, variable.$border, none);
+  border-width: variable.$bar-widgets-kanban-border-width;
+
+  #nerd-icon.panel-font-icon {
+    font-size: variable.$bar-widgets-kanban-icon_size;
+    margin-right: variable.$bar-widgets-kanban-spacing;
+  }
 }
