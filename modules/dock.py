@@ -70,7 +70,7 @@ class AppBar(Box):
         "popup",
         "popup_revealer",
         "preview_size",
-        "separator"
+        "separator",
     )
 
     def on_launcher_clicked(self, *_):
@@ -398,7 +398,7 @@ class AppBar(Box):
             targets=DOCK_DND_TARGET,
             actions=Gdk.DragAction.MOVE,
         )
-        client_button.connect("drag-begin", self._on_drag_begin, box)
+        client_button.connect("drag-begin", self._on_drag_begin, box, client_image)
         client_button.connect("drag-data-get", self._on_drag_data_get, client)
         client_button.connect("drag-end", self._on_drag_end, box)
 
@@ -443,11 +443,16 @@ class AppBar(Box):
             return True
         return False
 
-    def _on_drag_begin(self, widget, context, box):
+    def _on_drag_begin(self, widget, context, box, client_image):
         """Handle drag start."""
         self._is_dragging = True
         self._dragging_box = box
-        Gtk.drag_set_icon_name(context, "application-x-executable", 0, 0)
+        # Use the app's actual icon as drag icon
+        pixbuf = client_image.get_pixbuf()
+        if pixbuf:
+            Gtk.drag_set_icon_pixbuf(context, pixbuf, 0, 0)
+        else:
+            Gtk.drag_set_icon_name(context, "application-x-executable", 0, 0)
 
     def _on_drag_end(self, widget, context, box):
         """Handle drag end."""
