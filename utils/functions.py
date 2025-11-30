@@ -5,7 +5,6 @@ import os
 import re
 import shutil
 import subprocess
-import threading
 import time
 from collections import Counter
 from datetime import datetime
