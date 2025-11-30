@@ -57,6 +57,7 @@ class AppBar(Box):
         "_is_dragging",
         "_manager",
         "_parent",
+        "_pinned_app_buttons",
         "_preview_image",
         "app_identifiers",
         "app_launcher",
@@ -127,6 +128,7 @@ class AppBar(Box):
         self.separator = Separator(visible=False)
         self.add(self.separator)
 
+        self._pinned_app_buttons = {}  # app_id -> Button widget
         self._populate_pinned_apps(self.pinned_apps)
 
         if self.config.get("preview_apps", True):
@@ -175,25 +177,45 @@ class AppBar(Box):
         )
 
     def _populate_pinned_apps(self, apps: list):
+        """Initial population of pinned apps (only called once at startup)."""
         for app in self.pinned_apps_container.get_children():
             self.pinned_apps_container.remove(app)
             app.destroy()
+        self._pinned_app_buttons.clear()
 
-        """Add user-configured pinned apps."""
         for item in apps:
-            app = self.app_util.find_app(item)
-            btn = self._bake_button(
-                name="pinned_app",
-                tooltip_markup=app.display_name if app else "Unknown",
-                image=Image(
-                    pixbuf=app.get_icon_pixbuf(self.icon_size),
-                    size=self.icon_size,
-                ),
-                on_clicked=lambda *_, app=app: app.launch(),
-            )
+            self._add_pinned_app_button(item)
 
-            if app:
-                self.pinned_apps_container.add(btn)
+    def _add_pinned_app_button(self, app_id: str) -> bool:
+        """Add a single pinned app button. Returns True if added."""
+        if app_id in self._pinned_app_buttons:
+            return False  # Already exists
+
+        app = self.app_util.find_app(app_id)
+        if not app:
+            return False
+
+        btn = self._bake_button(
+            name="pinned_app",
+            tooltip_markup=app.display_name,
+            image=Image(
+                pixbuf=app.get_icon_pixbuf(self.icon_size),
+                size=self.icon_size,
+            ),
+            on_clicked=lambda *_, app=app: app.launch(),
+        )
+        self._pinned_app_buttons[app_id] = btn
+        self.pinned_apps_container.add(btn)
+        return True
+
+    def _remove_pinned_app_button(self, app_id: str) -> bool:
+        """Remove a single pinned app button. Returns True if removed."""
+        btn = self._pinned_app_buttons.pop(app_id, None)
+        if btn:
+            self.pinned_apps_container.remove(btn)
+            btn.destroy()
+            return True
+        return False
 
     def _check_if_pinned(self, client: Glace.Client) -> bool:
         """Check if a client is pinned."""
@@ -326,19 +348,23 @@ class AppBar(Box):
 
         self.menu.show_all()
 
-    def _update_pins(self):
+    def _save_pinned_apps(self):
+        """Save pinned apps to file."""
         write_json_file(self.pinned_apps, PINNED_APPS_FILE)
-        self._populate_pinned_apps(self.pinned_apps)
 
     def _pin_running_app(self, client: Glace.Client):
+        app_id = client.get_app_id()
         if not self._check_if_pinned(client):
-            self.pinned_apps.append(client.get_app_id())
-            self._update_pins()
+            self.pinned_apps.append(app_id)
+            self._add_pinned_app_button(app_id)
+            self._save_pinned_apps()
 
     def _unpin_app(self, client: Glace.Client):
+        app_id = client.get_app_id()
         if self._check_if_pinned(client):
-            self.pinned_apps.remove(client.get_app_id())
-            self._update_pins()
+            self.pinned_apps.remove(app_id)
+            self._remove_pinned_app_button(app_id)
+            self._save_pinned_apps()
 
     def on_app_id(self, client, client_button: Button, client_image: Image, *_):
         if client.get_app_id() in self.config.get("ignored_apps", []):
