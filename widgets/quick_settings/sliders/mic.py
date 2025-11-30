@@ -66,12 +66,14 @@ class MicrophoneSlider(SettingSlider):
             return
 
         volume = round(self.audio_stream.volume)
+        is_muted = self.audio_stream.muted
 
         # Avoid unnecessary updates if the value hasn't changed
         if round(volume) == round(self.scale.get_value()):
             return
 
-        self.scale.set_sensitive(not self.audio_stream.muted)
+        self.scale.set_sensitive(not is_muted)
+        self.scale.toggle_css_class("muted", is_muted)
         self.scale.set_value(volume)
         self.scale.set_tooltip_text(f"{volume}%")
         self.icon.set_label(self._get_icon_name())

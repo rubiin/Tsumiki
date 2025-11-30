@@ -202,6 +202,15 @@ $slider-height: 12px;
           $knob: variable.$bar-widgets-quick_settings-sliders-knob,
           $min-length: 320px,
           $height: variable.$bar-widgets-quick_settings-sliders-height );
+
+        &.overamplified trough highlight {
+          background-color: theme.$accent-red;
+        }
+
+        &.muted trough highlight,
+        &.muted slider {
+          background-color: theme.$surface-disabled;
+        }
       }
     }
 
@@ -213,6 +222,15 @@ $slider-height: 12px;
           $knob: variable.$bar-widgets-quick_settings-sliders-knob,
           $min-length: 250px,
           $height: variable.$bar-widgets-quick_settings-sliders-height );
+
+        &.overamplified trough highlight {
+          background-color: theme.$accent-red;
+        }
+
+        &.muted trough highlight,
+        &.muted slider {
+          background-color: theme.$surface-disabled;
+        }
       }
     }
 
@@ -226,6 +244,15 @@ $slider-height: 12px;
           $knob: variable.$bar-widgets-quick_settings-sliders-knob,
           $min-length: 180px,
           $height: variable.$bar-widgets-quick_settings-sliders-height );
+
+        &.overamplified trough highlight {
+          background-color: theme.$accent-red;
+        }
+
+        &.muted trough highlight,
+        &.muted slider {
+          background-color: theme.$surface-disabled;
+        }
       }
     }
 

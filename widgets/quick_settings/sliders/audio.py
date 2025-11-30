@@ -71,8 +71,10 @@ class AudioSlider(SettingSlider):
             return
 
         volume = int(self.audio_stream.volume)
+        is_muted = self.audio_stream.muted
 
-        self.scale.set_sensitive(not self.audio_stream.muted)
+        self.scale.set_sensitive(not is_muted)
+        self.scale.toggle_css_class("muted", is_muted)
 
         # Avoid unnecessary updates if the value hasn't changed
         if volume == round(self.scale.get_value()):
