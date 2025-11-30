@@ -36,17 +36,17 @@
 #panel {
   &-inner {
     $bar-opacity-ratio: variable.$bar-opacity * .01;
-    $transparency-value: (
-      1 - $bar-opacity-ratio) * 100%;
-    background-color: color.mix(theme.$bar-background, transparent, $transparency-value
+    $transparency-value: (1 - $bar-opacity-ratio) * 100%;
+    background-color: color.mix(theme.$bar-background, transparent, $transparency-value);
+    padding: variable.$bar-padding_y variable.$bar-padding_x;
+
+    @include mixins.module-shadow(
+      variable.$bar-shadow-enabled,
+      variable.$bar-shadow-offset,
+      variable.$bar-shadow-blur,
+      variable.$bar-shadow-spread,
+      variable.$bar-shadow-opacity
     );
-
-  padding: variable.$bar-padding_y variable.$bar-padding_x;
-  $shadow: 0 0 0 variable.$bar-border-width theme.$shadow-color,
-    variable.$bar-shadow-offset variable.$bar-shadow-blur variable.$bar-shadow-spread color.adjust(theme.$shadow-color,
-      $alpha: calc(variable.$bar-shadow-opacity - 1));
-
-  box-shadow: if(variable.$bar-shadow-enabled, $shadow, none);
 
   @if (variable.$bar-style-panel ==floating) {
     margin: 1rem 1.5rem 0rem 1.5rem;
@@ -104,11 +104,13 @@
   padding: variable.$bar-buttons-padding-x variable.$bar-buttons-padding-y;
   opacity: variable.$bar-buttons-opacity * .01;
 
-  $shadow: 0 0 0 variable.$bar-border-width theme.$shadow-color,
-    variable.$bar-buttons-shadow-offset variable.$bar-buttons-shadow-blur variable.$bar-buttons-shadow-spread color.adjust(theme.$shadow-color,
-      $alpha: calc(variable.$bar-buttons-shadow-opacity - 1));
-
-  box-shadow: if(variable.$bar-buttons-shadow-enabled, $shadow, none);
+  @include mixins.module-shadow(
+    variable.$bar-buttons-shadow-enabled,
+    variable.$bar-buttons-shadow-offset,
+    variable.$bar-buttons-shadow-blur,
+    variable.$bar-buttons-shadow-spread,
+    variable.$bar-buttons-shadow-opacity
+  );
 
   @include mixins.widget_style(variable.$bar-style-widget);
 
@@ -146,16 +148,16 @@ tooltip {
   opacity: variable.$bar-menus-tooltip-opacity * .01;
   background-color: theme.$background-dark;
   border-radius: variable.$bar-menus-tooltip-border-radius;
-
   animation: tooltipShow .25s cubic-bezier(.5, .25, 0, 1);
   border: if(variable.$bar-menus-tooltip-border-enabled, variable.$border, none);
 
-
-  $shadow: 0 0 0 variable.$bar-border-width theme.$shadow-color,
-    variable.$bar-menus-tooltip-shadow-offset variable.$bar-menus-tooltip-shadow-blur variable.$bar-menus-tooltip-shadow-spread color.adjust(theme.$shadow-color,
-      $alpha: calc(variable.$bar-menus-tooltip-shadow-opacity - 1));
-
-  box-shadow: if(variable.$bar-menus-tooltip-shadow-enabled, $shadow, none);
+  @include mixins.module-shadow(
+    variable.$bar-menus-tooltip-shadow-enabled,
+    variable.$bar-menus-tooltip-shadow-offset,
+    variable.$bar-menus-tooltip-shadow-blur,
+    variable.$bar-menus-tooltip-shadow-spread,
+    variable.$bar-menus-tooltip-shadow-opacity
+  );
 
   label {
     @extend %unset;
