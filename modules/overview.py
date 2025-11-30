@@ -233,7 +233,7 @@ class OverviewMenu(Box):
 
         self._hyprland_connection = get_hyprland_connection()
 
-        # Initialize app registry for better icon resolution (cached, not refreshed every update)
+        # Initialize app registry for better icon resolution
         self.app_util = AppUtils()
         self._all_apps = self.app_util.all_applications
         self.app_identifiers = self.app_util.app_identifiers
