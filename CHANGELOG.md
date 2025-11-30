@@ -1,5 +1,28 @@
 # Changelog
 
+## [2.7.1](https://github.com/rubiin/Tsumiki/compare/v2.7.0...v2.7.1) (2025-11-30)
+
+
+### 🐛 Bug Fixes
+
+* update description in overview to reflect correct project name ([9d8c6f3](https://github.com/rubiin/Tsumiki/commit/9d8c6f391a31f50fa6154c1fc22fa1edd05d3d28))
+
+
+### 📚 Documentation
+
+* add muhchaudhary as a contributor for bug ([#249](https://github.com/rubiin/Tsumiki/issues/249)) ([4acaead](https://github.com/rubiin/Tsumiki/commit/4acaead6d616f3473f6cea5d952167fe00ed2c66))
+* site ([#252](https://github.com/rubiin/Tsumiki/issues/252)) ([daa797b](https://github.com/rubiin/Tsumiki/commit/daa797bc6e5ca4dece7bb2bb6d1bd0604fcd330e))
+
+
+### ⚙️ Chores
+
+* simplify renovate configuration by removing unused package managers ([14c2556](https://github.com/rubiin/Tsumiki/commit/14c2556e1295e97249fa1f10dafb9c8068f5e681))
+
+
+### ♻️ Code Refactoring
+
+* replace threading with utility function for better readability and maintainability ([5c02a82](https://github.com/rubiin/Tsumiki/commit/5c02a82c2cb628fbfeaffac27bfacf4d89693351))
+
 ## [2.7.0](https://github.com/rubiin/Tsumiki/compare/v2.6.6...v2.7.0) (2025-11-21)
 
 
