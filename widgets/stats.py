@@ -208,15 +208,36 @@ class GpuWidget(ButtonWidget):
         # Set up a fabricator to call the update_label method when the CPU usage changes
         util_fabricator.connect("changed", self._update_ui)
 
+        # Cache for GPU stats to avoid blocking main thread
+        self._gpu_stats = None
+
+    def _fetch_gpu_stats(self):
+        """Fetch GPU stats in background and update cache."""
+        try:
+            value = exec_shell_command("nvtop -s")
+            stats = json.loads(value.strip("\n"))
+            if type(stats) is list:
+                stats = stats[0]
+            self._gpu_stats = stats
+        except Exception:
+            self._gpu_stats = None
+
     def _update_ui(self, *_):
-        # Update the label with the current GPU usage if enabled
+        # Fetch GPU stats asynchronously to avoid blocking
+        exec_shell_command_async(
+            "nvtop -s",
+            self._on_gpu_stats_received,
+        )
+        return True
 
-        value = exec_shell_command("nvtop -s")
-
-        stats = json.loads(value.strip("\n"))
-
-        if type(stats) is list:
-            stats = stats[0]
+    def _on_gpu_stats_received(self, value: str):
+        """Handle GPU stats received from async command."""
+        try:
+            stats = json.loads(value.strip("\n"))
+            if type(stats) is list:
+                stats = stats[0]
+        except (json.JSONDecodeError, Exception):
+            return
 
         frequency = stats.get("gpu_clock", "0 MHz")
         usage = stats.get("mem_util", "0").strip("%")
