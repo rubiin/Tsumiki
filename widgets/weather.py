@@ -446,7 +446,9 @@ class WeatherWidget(ButtonWidget, BaseWeatherWidget):
         forced = kwargs.get("forced", False)
 
         # Check if the update time is more than 5 minutes ago, update the icon
-        if (datetime.now() - self.update_time).total_seconds() > 300:
+        if hasattr(self, "current_weather") and (
+            datetime.now() - self.update_time
+        ).total_seconds() > 300:
             text_icon = (
                 weather_icons[self.current_weather["weatherCode"]]["icon"]
                 if check_if_day(
@@ -462,7 +464,7 @@ class WeatherWidget(ButtonWidget, BaseWeatherWidget):
             "interval", 3600
         ) and not forced:
             # Check if the update time is more than interval seconds ago
-            return
+            return True  # Keep the repeater alive
 
         WeatherService().get_weather_async(
             location=self.config.get("location", ""),
