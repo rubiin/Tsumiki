@@ -12,6 +12,9 @@ from .icons import symbolic_icons
 
 gi.require_versions({"Gtk": "3.0", "GdkPixbuf": "2.0"})
 
+# Pre-compiled regex for splitting app_id
+_APP_ID_SPLIT_RE = re.compile(r"-|\.|_|\s")
+
 
 class IconResolver:
     """A class to resolve icons for applications."""
@@ -99,7 +102,7 @@ class IconResolver:
                 if matching:
                     return data_dir + matching[0]
 
-                for word in list(filter(None, re.split(r"-|\.|_|\s", app_id))):
+                for word in list(filter(None, _APP_ID_SPLIT_RE.split(app_id))):
                     matching = [s for s in files if word.lower() in s.lower()]
                     if matching:
                         return data_dir + matching[0]

@@ -1,10 +1,14 @@
 import re
 
-from fabric.utils import exec_shell_command
+# Pre-compiled regex patterns for interface filtering
+_FIELDS_RE = re.compile(r"\W+")
+_VIRTUAL_IFACE_RE = re.compile(r"^(ifb|lxdbr|virbr|br|vnet|tun|tap)[0-9]+$")
 
 
 class NetworkSpeed:
     """A service to monitor network speed."""
+
+    __slots__ = ("interval", "last_total_down_bytes", "last_total_up_bytes")
 
     _instance = None
 
@@ -14,17 +18,25 @@ class NetworkSpeed:
         return cls._instance
 
     def __init__(self):
+        if hasattr(self, "interval"):
+            return  # Already initialized
         self.interval = 1000
         self.last_total_down_bytes = 0
         self.last_total_up_bytes = 0
 
     def get_network_speed(self):
-        lines = exec_shell_command("cat /proc/net/dev").split("\n")
+        # Read /proc/net/dev directly instead of spawning subprocess
+        try:
+            with open("/proc/net/dev", "r") as f:
+                lines = f.readlines()
+        except OSError:
+            return {"download": 0.0, "upload": 0.0}
+
         total_down_bytes = 0
         total_up_bytes = 0
 
         for line in lines:
-            fields = re.split(r"\W+", line.strip())
+            fields = _FIELDS_RE.split(line.strip())
             if len(fields) <= 2:
                 continue
 
@@ -32,19 +44,13 @@ class NetworkSpeed:
             try:
                 current_interface_down_bytes = int(fields[1])
                 current_interface_up_bytes = int(fields[9])
-            except ValueError:
+            except (ValueError, IndexError):
                 continue
 
-            # Skip virtual interfaces or interfaces with invalid byte counts
+            # Skip loopback and virtual interfaces or interfaces with invalid byte counts
             if (
                 interface == "lo"
-                or re.match(r"^ifb[0-9]+", interface)
-                or re.match(r"^lxdbr[0-9]+", interface)
-                or re.match(r"^virbr[0-9]+", interface)
-                or re.match(r"^br[0-9]+", interface)
-                or re.match(r"^vnet[0-9]+", interface)
-                or re.match(r"^tun[0-9]+", interface)
-                or re.match(r"^tap[0-9]+", interface)
+                or _VIRTUAL_IFACE_RE.match(interface)
                 or current_interface_down_bytes < 0
                 or current_interface_up_bytes < 0
             ):

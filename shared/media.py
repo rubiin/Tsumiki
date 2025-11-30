@@ -6,6 +6,10 @@ import urllib.request
 from functools import partial
 
 import gi
+
+# Pre-compiled regex for newline replacement
+_NEWLINE_RE = re.compile(r"\r?\n")
+
 from fabric.utils import (
     bulk_connect,
     cooldown,
@@ -246,7 +250,7 @@ class PlayerBox(Box):
             self.track_title,
             "label",
             GObject.BindingFlags.DEFAULT,
-            lambda _, x: re.sub(r"\r?\n", " ", x)
+            lambda _, x: _NEWLINE_RE.sub(" ", x)
             if x != "" and x is not None
             else "No Title",  # type: ignore
         )
@@ -255,7 +259,7 @@ class PlayerBox(Box):
             self.track_artist,
             "label",
             GObject.BindingFlags.DEFAULT,
-            lambda _, x: re.sub(r"\r?\n", " ", x)
+            lambda _, x: _NEWLINE_RE.sub(" ", x)
             if x != "" and x is not None
             else "No Artist",  # type: ignore
         )
@@ -265,7 +269,7 @@ class PlayerBox(Box):
             self.track_album,
             "label",
             GObject.BindingFlags.DEFAULT,
-            lambda _, x: re.sub(r"\r?\n", " ", x)
+            lambda _, x: _NEWLINE_RE.sub(" ", x)
             if x != "" and x is not None
             else "No Album",  # type: ignore
         )

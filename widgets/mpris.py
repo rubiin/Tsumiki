@@ -1,5 +1,8 @@
 import re
 
+# Pre-compiled regex for newline replacement
+_NEWLINE_RE = re.compile(r"\r?\n")
+
 from fabric.utils import logger
 from fabric.widgets.box import Box
 from fabric.widgets.label import Label
@@ -58,7 +61,7 @@ class MprisWidget(ButtonWidget):
         self.connect("clicked", self.on_click)
 
     def get_current(self):
-        bar_label = re.sub(r"\r?\n", " ", self.player.title)
+        bar_label = _NEWLINE_RE.sub(" ", self.player.title)
 
         truncated_info = (
             bar_label

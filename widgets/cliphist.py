@@ -5,6 +5,10 @@ import tempfile
 from urllib.parse import unquote, urlparse
 
 import gi
+
+# Pre-compiled regex for HTML image tag detection
+_HTML_IMG_RE = re.compile(r"^\s*<img\s+")
+
 from fabric.utils import logger, remove_handler
 from fabric.widgets.box import Box
 from fabric.widgets.button import Button
@@ -424,7 +428,7 @@ class ClipHistoryMenu(Box):
             or content.startswith("\x89PNG")
             or content.startswith("GIF8")
             or content.startswith("\xff\xd8\xff")  # JPEG
-            or re.match(r"^\s*<img\s+", content) is not None  # HTML image tag
+            or _HTML_IMG_RE.match(content) is not None  # HTML image tag
             or (
                 "binary" in content.lower()
                 and any(
