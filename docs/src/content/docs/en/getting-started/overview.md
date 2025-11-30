@@ -1,6 +1,6 @@
 ---
 title: Overview
-description: HyDE's Configuration Guide
+description: Tsumiki's Configuration Guide
 sidebar:
   order: 1
 ---
