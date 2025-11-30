@@ -4,18 +4,17 @@
 @use "variable";
 
 
-
 #date_time {
-
-  border-radius: variable.$bar-widgets-date_time-border-radius;
-  border: if(variable.$bar-widgets-date_time-border-enabled, variable.$border, none);
-  border-width: variable.$bar-widgets-date_time-border-width;
+  @include common.bar-widget-style(
+    variable.$bar-widgets-date_time-border-radius,
+    variable.$bar-widgets-date_time-border-enabled,
+    variable.$bar-widgets-date_time-border-width
+  );
 
   #notification-indicator {
     font-weight: bold;
     font-size: 15px;
   }
-
 
   #notification-count {
     font-weight: 700;
