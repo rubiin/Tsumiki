@@ -21,8 +21,10 @@ class CircularImage(Gtk.DrawingArea, BaseWidget):
 
     @angle.setter
     def angle(self, value: int):
-        self._angle = value % 360
-        self.queue_draw()
+        new_angle = value % 360
+        if new_angle != self._angle:
+            self._angle = new_angle
+            self.queue_draw()
 
     def __init__(
         self,
