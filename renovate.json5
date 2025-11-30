@@ -1,40 +1,52 @@
 {
-    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-    "labels": [
-        "dependencies"
-    ],
-    "rangeStrategy": "bump",
-    "extends": [
-        "config:recommended"
-    ],
-    "enabledManagers": [
-        "pip_requirements"
-    ],
-    "packageRules": [
-        {
-            "matchManagers": [
-                "pip_requirements"
-            ],
-            "matchUpdateTypes": [
-                "minor",
-                "patch"
-            ],
-            "groupName": "all non-major dependencies",
-            "groupSlug": "all-minor-patch"
-        },
-        {
-            "matchManagers": [
-                "pip_requirements"
-            ],
-            "matchUpdateTypes": [
-                "major"
-            ],
-            "groupName": "all major dependencies",
-            "groupSlug": "all-major-patch"
-        }
-    ],
-    "rebaseWhen": "conflicted",
-    "schedule": [
-        "before 2pm on Monday"
-    ]
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "labels": [
+    "dependencies"
+  ],
+  "rangeStrategy": "bump",
+  "extends": [
+    "config:recommended"
+  ],
+  "enabledManagers": [
+    "pip_requirements",
+    "npm",
+    "npm-package-lock",
+    "yarn",
+    "pnpm"
+  ],
+  "packageRules": [
+    {
+      "matchManagers": [
+        "pip_requirements",
+        "npm",
+        "npm-package-lock",
+        "yarn",
+        "pnpm"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ],
+      "groupName": "all non-major dependencies",
+      "groupSlug": "all-minor-patch"
+    },
+    {
+      "matchManagers": [
+        "pip_requirements",
+        "npm",
+        "npm-package-lock",
+        "yarn",
+        "pnpm"
+      ],
+      "matchUpdateTypes": [
+        "major"
+      ],
+      "groupName": "all major dependencies",
+      "groupSlug": "all-major-patch"
+    }
+  ],
+  "rebaseWhen": "conflicted",
+  "schedule": [
+    "before 2pm on Monday"
+  ]
 }

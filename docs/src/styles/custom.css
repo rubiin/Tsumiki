@@ -1,0 +1,924 @@
+/* Custom styles for HyDE site - ONLY for main page eyecandy and consistent colors */
+
+/* HyDE Brand Colors - Global */
+:root {
+	--hyde-light: #d9d9d9;
+	--hyde-dark: #363742;
+	--hyde-cream: #d4cfc9;
+	--hyde-rose: #c8a09e;
+	--hyde-purple: #a984cc;
+	--hyde-blue: #9096b6;
+
+	/* Color variations for effects - ONLY used on main page */
+	--hyde-purple-glow: rgba(169, 132, 204, 0.6);
+	--hyde-blue-glow: rgba(144, 150, 182, 0.6);
+	--hyde-rose-glow: rgba(200, 160, 158, 0.6);
+	--hyde-cream-subtle: rgba(212, 207, 201, 0.1);
+	--hyde-dark-subtle: rgba(54, 55, 66, 0.8);
+}
+
+/* Light theme color adjustments */
+[data-theme="light"] {
+	--hyde-bg-light: #fafafa;
+	--hyde-bg-dark: #ffffff;
+	--hyde-text-primary: var(--hyde-dark);
+	--hyde-text-secondary: #555;
+}
+
+[data-theme="dark"] {
+	--hyde-bg-light: var(--hyde-dark);
+	--hyde-bg-dark: #2a2b35;
+	--hyde-text-primary: var(--hyde-light);
+	--hyde-text-secondary: var(--hyde-cream);
+}
+
+/* ========== MINIMAL CONSISTENT COLORS FOR ALL PAGES ========== */
+
+/* Just consistent link colors - no fancy effects */
+a {
+	color: var(--hyde-blue);
+}
+
+a:hover {
+	color: var(--hyde-purple);
+}
+
+/* Simple header title with HyDE colors - no animations for other pages */
+.site-title {
+	color: var(--hyde-purple);
+}
+
+/* ========== MAIN PAGE ONLY - FANCY EFFECTS ========== */
+/* These styles ONLY apply to the main index page for eyecandy */
+
+/* Full page background for splash template */
+body:has([data-template="splash"]),
+html:has([data-template="splash"]) {
+	min-height: 100vh;
+}
+
+/* Apply background to the entire splash page */
+[data-template="splash"] {
+	min-height: 100vh;
+	position: relative;
+}
+
+/* Main content area styling for splash page */
+[data-template="splash"] .main-frame {
+	background: transparent;
+	position: relative;
+	z-index: 2;
+}
+
+/* Content below hero - Features section and more */
+[data-template="splash"] .content-panel {
+	background: transparent;
+	position: relative;
+	z-index: 2;
+}
+
+/* Style the main content area below hero */
+[data-template="splash"] main {
+	position: relative;
+	z-index: 2;
+	background: transparent;
+}
+
+/* Features section styling */
+[data-template="splash"] h2 {
+	font-size: 3.5rem;
+	font-weight: 700;
+	text-align: center;
+	margin: 4rem 0 3rem 0;
+	background: linear-gradient(
+		45deg,
+		var(--hyde-purple) 0%,
+		var(--hyde-blue) 50%,
+		var(--hyde-rose) 100%
+	);
+	background-size: 200% 200%;
+	background-clip: text;
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	animation: hydeGradient 4s ease-in-out infinite;
+	position: relative;
+	z-index: 3;
+}
+
+/* Light theme Features heading */
+[data-theme="light"] [data-template="splash"] h2 {
+	background: linear-gradient(
+		45deg,
+		var(--hyde-dark) 0%,
+		var(--hyde-purple) 50%,
+		var(--hyde-blue) 100%
+	);
+	background-size: 200% 200%;
+	background-clip: text;
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+}
+
+/* Card grid styling for splash page */
+[data-template="splash"] .card-grid {
+	position: relative !important;
+	z-index: 3 !important;
+	max-width: 1200px !important;
+	margin: 0 auto !important;
+	padding: 2rem !important;
+}
+
+/* Individual card styling with HyDE theme */
+[data-template="splash"] .card {
+	background: rgba(255, 255, 255, 0.05) !important;
+	backdrop-filter: blur(10px) !important;
+	border: 1px solid rgba(169, 132, 204, 0.2) !important;
+	border-radius: 20px !important;
+	padding: 2rem !important;
+	transition: all 0.3s ease !important;
+	position: relative !important;
+	overflow: hidden !important;
+}
+
+/* Style Starlight's actual card elements */
+[data-template="splash"] article.card {
+	background: rgba(255, 255, 255, 0.05) !important;
+	backdrop-filter: blur(10px) !important;
+	border: 1px solid rgba(169, 132, 204, 0.2) !important;
+	border-radius: 20px !important;
+	padding: 2rem !important;
+	transition: all 0.3s ease !important;
+	position: relative !important;
+	overflow: hidden !important;
+	margin: 1rem !important;
+}
+
+/* Make wrapped cards remain visually consistent when inside anchors */
+.card-anchor {
+	display: block;
+	text-decoration: none;
+}
+.card-anchor article.card {
+	height: 100%;
+}
+
+/* Dark theme cards */
+[data-theme="dark"] [data-template="splash"] .card {
+	background: rgba(54, 55, 66, 0.1) !important;
+	border: 1px solid rgba(169, 132, 204, 0.3) !important;
+	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Dark theme article cards */
+[data-theme="dark"] [data-template="splash"] article.card {
+	background: rgba(54, 55, 66, 0.1) !important;
+	border: 1px solid rgba(169, 132, 204, 0.3) !important;
+	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Light theme cards */
+[data-theme="light"] [data-template="splash"] .card {
+	background: rgba(255, 255, 255, 0.8) !important;
+	border: 1px solid rgba(169, 132, 204, 0.2) !important;
+	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Light theme article cards */
+[data-theme="light"] [data-template="splash"] article.card {
+	background: rgba(255, 255, 255, 0.8) !important;
+	border: 1px solid rgba(169, 132, 204, 0.2) !important;
+	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Card hover effects */
+[data-template="splash"] .card:hover {
+	transform: translateY(-10px) !important;
+	border-color: var(--hyde-purple) !important;
+}
+
+/* Article card hover effects */
+[data-template="splash"] article.card:hover {
+	transform: translateY(-10px) !important;
+	border-color: var(--hyde-purple) !important;
+}
+
+[data-theme="dark"] [data-template="splash"] .card:hover {
+	box-shadow: 0 15px 40px rgba(169, 132, 204, 0.4) !important;
+	background: rgba(54, 55, 66, 0.2) !important;
+}
+
+[data-theme="dark"] [data-template="splash"] article.card:hover {
+	box-shadow: 0 15px 40px rgba(169, 132, 204, 0.4) !important;
+	background: rgba(54, 55, 66, 0.2) !important;
+}
+
+[data-theme="light"] [data-template="splash"] .card:hover {
+	box-shadow: 0 15px 40px rgba(169, 132, 204, 0.3) !important;
+	background: rgba(255, 255, 255, 0.95) !important;
+}
+
+[data-theme="light"] [data-template="splash"] article.card:hover {
+	box-shadow: 0 15px 40px rgba(169, 132, 204, 0.3) !important;
+	background: rgba(255, 255, 255, 0.95) !important;
+}
+
+/* Card titles with HyDE colors */
+[data-template="splash"] .card h3 {
+	color: var(--hyde-purple) !important;
+	font-size: 1.5rem !important;
+	font-weight: 600 !important;
+	margin-bottom: 1rem !important;
+}
+
+/* Style card titles (p.title span) */
+[data-template="splash"] article.card p.title span {
+	color: var(--hyde-purple) !important;
+	font-size: 1.5rem !important;
+	font-weight: 600 !important;
+}
+
+/* Card content text */
+[data-template="splash"] .card p {
+	font-size: 1.1rem !important;
+	line-height: 1.6 !important;
+	opacity: 0.9 !important;
+}
+
+/* Style card content (.body p) */
+[data-template="splash"] article.card .body p {
+	font-size: 1.1rem !important;
+	line-height: 1.6 !important;
+	opacity: 0.9 !important;
+}
+
+[data-theme="dark"] [data-template="splash"] .card p {
+	color: var(--hyde-cream) !important;
+}
+
+[data-theme="dark"] [data-template="splash"] article.card .body p {
+	color: var(--hyde-cream) !important;
+}
+
+[data-theme="light"] [data-template="splash"] .card p {
+	color: var(--hyde-dark) !important;
+}
+
+[data-theme="light"] [data-template="splash"] article.card .body p {
+	color: var(--hyde-dark) !important;
+}
+
+/* Card icons with HyDE theme */
+[data-template="splash"] .card .icon {
+	color: var(--hyde-blue) !important;
+	font-size: 2rem !important;
+	margin-bottom: 1rem !important;
+}
+
+/* Style card icons */
+[data-template="splash"] article.card .icon {
+	color: var(--hyde-blue) !important;
+	width: 2rem !important;
+	height: 2rem !important;
+}
+
+/* Dark theme splash page background */
+[data-theme="dark"] [data-template="splash"] {
+	background: linear-gradient(
+		135deg,
+		var(--hyde-dark) 0%,
+		#2a2b35 50%,
+		var(--hyde-dark) 100%
+	);
+}
+
+/* Light theme splash page background */
+[data-theme="light"] [data-template="splash"] {
+	background: linear-gradient(
+		135deg,
+		var(--hyde-cream) 0%,
+		#f0ebe5 50%,
+		var(--hyde-cream) 100%
+	);
+}
+
+/* Animated background pattern for entire splash page */
+[data-template="splash"]::before {
+	content: "";
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	opacity: 0.3;
+	animation: backgroundPulse 8s ease-in-out infinite;
+	z-index: 0;
+	pointer-events: none;
+}
+
+/* Dark theme particles for splash page */
+[data-theme="dark"] [data-template="splash"]::before {
+	background:
+		radial-gradient(
+			circle at 20% 20%,
+			var(--hyde-purple-glow) 0%,
+			transparent 50%
+		),
+		radial-gradient(
+			circle at 80% 80%,
+			var(--hyde-blue-glow) 0%,
+			transparent 50%
+		),
+		radial-gradient(
+			circle at 40% 60%,
+			var(--hyde-rose-glow) 0%,
+			transparent 50%
+		);
+}
+
+/* Light theme particles for splash page */
+[data-theme="light"] [data-template="splash"]::before {
+	background:
+		radial-gradient(
+			circle at 20% 20%,
+			rgba(169, 132, 204, 0.2) 0%,
+			transparent 50%
+		),
+		radial-gradient(
+			circle at 80% 80%,
+			rgba(144, 150, 182, 0.2) 0%,
+			transparent 50%
+		),
+		radial-gradient(
+			circle at 40% 60%,
+			rgba(200, 160, 158, 0.2) 0%,
+			transparent 50%
+		);
+}
+
+/* Ensure content appears above background */
+[data-template="splash"] > * {
+	position: relative;
+	z-index: 1;
+}
+
+/* Hero section - ONLY on main page */
+.hero {
+	position: relative;
+	padding: 5rem 2rem;
+	min-height: 80vh;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: flex-start;
+	overflow: visible;
+	border-radius: 0 0 2rem 2rem;
+	background: transparent;
+	max-width: 1400px;
+	margin: 0 auto;
+	width: 100%;
+}
+
+/* Badge row below hero title */
+.badges {
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+	gap: 1rem;
+	margin: 1rem 0 2rem 0;
+	position: relative;
+	z-index: 3;
+}
+.badges img {
+	height: 32px;
+}
+
+/* Colorful highlights list */
+.highlights {
+	list-style: none;
+	padding: 0;
+	margin: 2rem auto;
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+	gap: 1rem;
+	max-width: 1100px;
+}
+.highlights li {
+	background: linear-gradient(
+		135deg,
+		rgba(169, 132, 204, 0.2),
+		rgba(144, 150, 182, 0.2)
+	);
+	border: 1px solid rgba(169, 132, 204, 0.35);
+	border-radius: 16px;
+	padding: 1rem 1.25rem;
+	color: var(--hyde-text-primary);
+	backdrop-filter: blur(8px);
+	transition:
+		transform 0.2s ease,
+		box-shadow 0.2s ease,
+		border-color 0.2s ease;
+}
+.highlights li:hover {
+	transform: translateY(-4px);
+	box-shadow: 0 10px 28px rgba(169, 132, 204, 0.25);
+	border-color: var(--hyde-purple);
+}
+.hl-icon {
+	margin-right: 0.5rem;
+	filter: drop-shadow(0 2px 6px rgba(169, 132, 204, 0.45));
+}
+
+/* Showcase grid */
+.showcase {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+	gap: 1.5rem;
+	margin: 2.5rem auto 1rem auto;
+	max-width: 1600px;
+	align-items: start;
+}
+.showcase img {
+	display: block;
+	width: 100%;
+	height: auto;
+	aspect-ratio: 16 / 9;
+	object-fit: cover;
+	border-radius: 16px;
+	border: 1px solid rgba(169, 132, 204, 0.45);
+	background: rgba(255, 255, 255, 0.05);
+	box-shadow: 0 16px 38px rgba(0, 0, 0, 0.22);
+}
+
+/* Keep images comfortable on small screens */
+@media (max-width: 640px) {
+	.showcase {
+		grid-template-columns: 1fr;
+		max-width: 100%;
+		gap: 1rem;
+	}
+}
+
+/* Hero image positioning - large image anchored to right */
+.hero img,
+.hero .hero-image img {
+	position: absolute !important;
+	top: 0 !important;
+	right: 0 !important;
+	transform: none !important;
+	width: 60vw !important;
+	height: 100% !important;
+	max-width: 800px !important;
+	object-fit: contain !important;
+	object-position: right center !important;
+	opacity: 0.15 !important;
+	filter: blur(1px) !important;
+	z-index: 1 !important;
+	pointer-events: none !important;
+}
+
+/* Better visibility for light theme */
+[data-theme="light"] .hero img,
+[data-theme="light"] .hero .hero-image img {
+	opacity: 0.25 !important;
+	filter: blur(0.5px) contrast(1.2) !important;
+}
+
+@keyframes backgroundPulse {
+	0%,
+	100% {
+		opacity: 0.3;
+		transform: scale(1);
+	}
+	50% {
+		opacity: 0.5;
+		transform: scale(1.05);
+	}
+}
+
+/* HyDE title with animated gradient - main page only */
+.hero h1 {
+	font-size: 8rem;
+	font-weight: 900;
+	margin: 0;
+	padding: 0;
+	background: linear-gradient(
+		45deg,
+		var(--hyde-light) 0%,
+		var(--hyde-purple) 25%,
+		var(--hyde-blue) 50%,
+		var(--hyde-rose) 75%,
+		var(--hyde-cream) 100%
+	);
+	background-size: 300% 300%;
+	background-clip: text;
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	animation: hydeGradient 4s ease-in-out infinite;
+	letter-spacing: 0.1em;
+	z-index: 3;
+	position: relative;
+	text-align: left;
+	display: inline;
+}
+
+/* Light theme title adjustment */
+[data-theme="light"] .hero h1 {
+	background: linear-gradient(
+		45deg,
+		var(--hyde-dark) 0%,
+		var(--hyde-purple) 25%,
+		var(--hyde-blue) 50%,
+		var(--hyde-rose) 75%,
+		var(--hyde-dark) 100%
+	);
+	background-size: 300% 300%;
+	background-clip: text;
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+}
+
+@keyframes hydeGradient {
+	0%,
+	100% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+}
+
+/* Tagline with subtle glow - main page only */
+.hero .tagline {
+	font-size: 2.5rem;
+	margin: 0;
+	padding: 0;
+	animation: taglineGlow 3s ease-in-out infinite;
+	font-weight: 300;
+	letter-spacing: 0.05em;
+	z-index: 3;
+	position: relative;
+	text-align: left;
+	display: inline;
+	margin-left: 2rem;
+	vertical-align: baseline;
+}
+
+/* Dark theme tagline */
+[data-theme="dark"] .hero .tagline {
+	color: var(--hyde-cream);
+	text-shadow: 0 0 20px var(--hyde-blue-glow);
+}
+
+/* Light theme tagline */
+[data-theme="light"] .hero .tagline {
+	color: var(--hyde-dark);
+	text-shadow: 0 0 10px rgba(54, 55, 66, 0.3);
+}
+
+@keyframes taglineGlow {
+	0%,
+	100% {
+		opacity: 1;
+	}
+	50% {
+		opacity: 0.8;
+	}
+}
+
+/* Title container for inline layout */
+.hero .hero-title {
+	display: flex;
+	align-items: baseline;
+	margin-bottom: 3rem;
+}
+
+/* Background logo with blur effect */
+.hero::before {
+	content: "";
+	position: absolute;
+	top: 50%;
+	right: 5%;
+	transform: translateY(-50%);
+	width: 1000px;
+	height: 400px;
+	/* background-image: url('../../assets/hyde.svg'); */
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: center;
+	opacity: 0.1;
+	filter: blur(2px);
+	z-index: 1;
+	pointer-events: none;
+}
+
+/* Action buttons with hover effects - main page only */
+.hero .actions {
+	display: flex;
+	gap: 1.5rem;
+	flex-wrap: wrap;
+	z-index: 3;
+	position: relative;
+	margin-left: 4rem;
+}
+
+.hero .actions a {
+	padding: 1.1rem 2.2rem;
+	border-radius: 50px;
+	text-decoration: none;
+	font-weight: 600;
+	letter-spacing: 0.05em;
+	transition: all 0.3s ease;
+	position: relative;
+	overflow: hidden;
+	border: 2px solid transparent;
+}
+
+/* Dark theme buttons */
+[data-theme="dark"] .hero .actions a {
+	background: linear-gradient(135deg, var(--hyde-purple), var(--hyde-blue));
+	color: var(--hyde-light);
+	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .hero .actions a:hover {
+	transform: translateY(-5px);
+	box-shadow: 0 10px 30px var(--hyde-purple-glow);
+	border-color: var(--hyde-cream);
+	background: linear-gradient(135deg, var(--hyde-rose), var(--hyde-purple));
+}
+
+/* Light theme buttons */
+[data-theme="light"] .hero .actions a {
+	background: linear-gradient(135deg, var(--hyde-purple), var(--hyde-blue));
+	color: white;
+	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="light"] .hero .actions a:hover {
+	transform: translateY(-5px);
+	box-shadow: 0 10px 30px rgba(169, 132, 204, 0.4);
+	border-color: var(--hyde-dark);
+	background: linear-gradient(135deg, var(--hyde-rose), var(--hyde-purple));
+}
+
+.hero .actions a[data-variant="minimal"] {
+	background: transparent !important;
+	border: 2px solid var(--hyde-blue);
+	color: var(--hyde-blue);
+}
+
+[data-theme="dark"] .hero .actions a[data-variant="minimal"]:hover {
+	background: var(--hyde-blue) !important;
+	color: var(--hyde-dark);
+}
+
+[data-theme="light"] .hero .actions a[data-variant="minimal"]:hover {
+	background: var(--hyde-blue) !important;
+	color: white;
+}
+
+/* Floating particles for entire splash page */
+[data-template="splash"]::after {
+	content: "";
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-size: 400px 300px;
+	animation: particleFloat 12s linear infinite;
+	pointer-events: none;
+	opacity: 0.6;
+	z-index: 1;
+}
+
+[data-theme="dark"] [data-template="splash"]::after {
+	background-image:
+		radial-gradient(2px 2px at 100px 150px, var(--hyde-purple), transparent),
+		radial-gradient(1px 1px at 200px 50px, var(--hyde-blue), transparent),
+		radial-gradient(1px 1px at 50px 200px, var(--hyde-rose), transparent),
+		radial-gradient(2px 2px at 300px 100px, var(--hyde-cream), transparent);
+}
+
+[data-theme="light"] [data-template="splash"]::after {
+	background-image:
+		radial-gradient(
+			2px 2px at 100px 150px,
+			rgba(169, 132, 204, 0.6),
+			transparent
+		),
+		radial-gradient(
+			1px 1px at 200px 50px,
+			rgba(144, 150, 182, 0.6),
+			transparent
+		),
+		radial-gradient(
+			1px 1px at 50px 200px,
+			rgba(200, 160, 158, 0.6),
+			transparent
+		),
+		radial-gradient(2px 2px at 300px 100px, rgba(54, 55, 66, 0.4), transparent);
+	opacity: 0.4;
+}
+
+@keyframes particleFloat {
+	0% {
+		transform: translateY(0px) translateX(0px);
+		opacity: 0;
+	}
+	10% {
+		opacity: 0.6;
+	}
+	90% {
+		opacity: 0.6;
+	}
+	100% {
+		transform: translateY(-100vh) translateX(50px);
+		opacity: 0;
+	}
+}
+
+/* Responsive design for main page */
+@media (max-width: 768px) {
+	.hero {
+		align-items: center;
+		text-align: center;
+		padding: 2rem 1rem;
+		min-height: 70vh;
+	}
+
+	.hero .hero-title {
+		flex-direction: column;
+		align-items: center;
+		margin-bottom: 2rem;
+	}
+
+	.hero h1 {
+		font-size: 4rem;
+		margin-bottom: 1rem;
+	}
+
+	.hero .tagline {
+		font-size: 1.5rem;
+		margin-left: 0;
+	}
+
+	.hero .actions {
+		flex-direction: column;
+		align-items: center;
+		width: 100%;
+		margin-left: 0;
+	}
+
+	.hero .actions a {
+		width: 80%;
+		text-align: center;
+	}
+
+	.hero::before {
+		opacity: 0.05;
+		width: 300px;
+		height: 300px;
+	}
+
+	.hero img,
+	.hero .hero-image img {
+		width: 40vw !important;
+		max-width: 300px !important;
+		opacity: 0.08 !important;
+	}
+
+	/* Features section mobile */
+	[data-template="splash"] h2 {
+		font-size: 2.5rem;
+		margin: 3rem 0 2rem 0;
+	}
+
+	[data-template="splash"] .card-grid {
+		padding: 1rem;
+	}
+
+	[data-template="splash"] .card {
+		padding: 1.5rem !important;
+	}
+}
+
+@media (max-width: 480px) {
+	.hero h1 {
+		font-size: 3rem;
+	}
+
+	.hero .tagline {
+		font-size: 1.2rem;
+	}
+
+	[data-template="splash"] h2 {
+		font-size: 2rem;
+	}
+}
+
+/* Medium screens - adjust sizes */
+@media (max-width: 1024px) and (min-width: 769px) {
+	.hero h1 {
+		font-size: 6rem;
+	}
+
+	.hero .tagline {
+		font-size: 2rem;
+	}
+
+	.hero .actions {
+		margin-left: 2rem;
+	}
+
+	.hero::before {
+		width: 350px;
+		height: 350px;
+	}
+
+	.hero img,
+	.hero .hero-image img {
+		width: 50vw !important;
+		max-width: 600px !important;
+	}
+
+	[data-template="splash"] h2 {
+		font-size: 3rem;
+	}
+}
+
+/* ========== END MAIN PAGE ONLY STYLES ========== */
+
+/* Performance optimization - disable animations for users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+	.hero *,
+	.hero *::before,
+	.hero *::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+	}
+}
+
+/* ========== MINIMAL STYLING FOR ALL OTHER PAGES ========== */
+/* Keep default Starlight behavior but with consistent HyDE colors */
+
+/* Subtle HyDE color consistency for headers (no animations) */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	color: var(--hyde-purple);
+}
+
+/* Simple code styling with HyDE colors */
+code {
+	background-color: rgba(169, 132, 204, 0.1);
+	color: var(--hyde-purple);
+	border-radius: 4px;
+	padding: 2px 6px;
+}
+
+pre {
+	border: 1px solid var(--hyde-purple);
+	border-radius: 8px;
+}
+
+/* Simple table styling */
+th {
+	background-color: var(--hyde-purple);
+	color: white;
+}
+
+/* Subtle focus states */
+button:focus,
+a:focus,
+select:focus {
+	outline: 2px solid var(--hyde-purple);
+	outline-offset: 2px;
+}
+
+/* That's it! Keep everything else as default Starlight */
+
+/* Latest release inline layout in introduction */
+.latest-release {
+	display: grid;
+	grid-template-columns: auto 1fr;
+	grid-auto-rows: auto;
+	gap: 0.5rem 1rem;
+	align-items: center;
+	max-width: 520px;
+	margin: 1rem 0 0 0;
+}
+.latest-release .lr-label {
+	font-weight: 600;
+	color: var(--hyde-purple);
+}
+.latest-release .latest-release-content {
+	display: contents;
+}
+.latest-release .latest-version .latest-date {
+	grid-column: 2;
+}

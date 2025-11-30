@@ -1,0 +1,58 @@
+/* Centralized table styling for all HyDE documentation pages */
+
+/* Table container styling */
+.sl-markdown-content :is(th:first-child, td:first-child) {
+	padding-inline-start: 0.5rem;
+}
+
+.sl-markdown-content :is(th:last-child, td:last-child) {
+	padding-inline-end: 0.5rem;
+}
+
+/* Main table styling */
+table {
+	width: 100%;
+	margin: 1em 2em;
+	border-collapse: collapse;
+}
+
+th,
+td {
+	border: 0.1em solid var(--sl-color-gray-5);
+	padding: 1em 2em;
+	text-align: left;
+}
+
+/* Header styling using CSS variables from custom.css */
+th {
+	background-color: var(--hyde-purple) !important;
+	color: var(--hyde-light) !important;
+	text-align: center;
+	margin: 0;
+	padding: 1em 2em;
+	font-weight: bold;
+}
+
+/* Light theme adjustments */
+:root[data-theme="light"] th {
+	background-color: var(--hyde-purple) !important;
+	color: var(--sl-color-white) !important;
+}
+
+/* Dark theme (default) */
+:root[data-theme="dark"] th {
+	background-color: var(--hyde-purple) !important;
+	color: var(--hyde-light) !important;
+}
+
+/* Responsive table styling */
+@media (max-width: 768px) {
+	table {
+		font-size: 0.9em;
+	}
+
+	th,
+	td {
+		padding: 0.5em 1em;
+	}
+}

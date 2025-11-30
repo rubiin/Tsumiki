@@ -1,0 +1,45 @@
+---
+interface Props {
+	repo?: string;
+	versionLabel?: string;
+	dateLabel?: string;
+}
+
+const {
+	repo = "rubiin/Tsumiki",
+	versionLabel,
+	dateLabel,
+} = Astro.props as Props;
+
+let tagName: string | null = null;
+let publishedAt: string | null = null;
+
+try {
+	const res = await fetch(
+		`https://api.github.com/repos/${repo}/releases/latest`,
+		{
+			headers: { Accept: "application/vnd.github+json" },
+		},
+	);
+	if (res.ok) {
+		const data = await res.json();
+		tagName = data?.tag_name ?? null;
+		const rawDate = data?.published_at as string | undefined;
+		if (rawDate) {
+			const d = new Date(rawDate);
+			// ISO date (YYYY-MM-DD) for consistency with docs
+			publishedAt = isNaN(d.getTime()) ? null : d.toISOString().slice(0, 10);
+		}
+	}
+} catch (err) {
+	console.log("Failed to fetch latest release:", err);
+}
+---
+
+
+<div class="latest-release-content">
+	<span class="lr-label lr-version-label">{versionLabel ?? ''}</span>
+	<span class="latest-version">{tagName ?? '—'}</span>
+	<span class="lr-label lr-date-label">{dateLabel ?? ''}</span>
+	<span class="latest-date">{publishedAt ?? '—'}</span>
+</div>

@@ -1,0 +1,37 @@
+name: Auto-merge Dependabot/Pre-commit PRs
+
+on:
+  pull_request_target:
+  check_suite:
+    types:
+      - completed
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  auto-merge:
+    runs-on: ubuntu-latest
+    if: github.actor == 'dependabot[bot]' || github.actor == 'pre-commit-ci[bot]'
+    steps:
+      - name: Dependabot metadata
+        if: github.actor == 'dependabot[bot]'
+        id: metadata
+        uses: dependabot/fetch-metadata@v2
+        with:
+          github-token: ${{ secrets.TOKEN_GITHUB }}
+
+      - name: Enable auto-merge for Dependabot PRs
+        if: github.actor == 'dependabot[bot]'
+        run: gh pr merge --auto --squash "$PR_URL"
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GH_TOKEN: ${{ secrets.TOKEN_GITHUB }}
+
+      - name: Enable auto-merge for pre-commit-ci PRs
+        if: github.actor == 'pre-commit-ci[bot]'
+        run: gh pr merge --auto --squash "$PR_URL"
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GH_TOKEN: ${{ secrets.TOKEN_GITHUB }}

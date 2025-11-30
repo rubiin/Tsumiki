@@ -1,0 +1,115 @@
+---
+title: Installation
+description: Get started with Tsumiki.
+sidebar:
+  order: 2
+---
+
+import LatestRelease from '../../../../components/LatestRelease.astro'
+
+<div align="center"><img src="https://raw.githubusercontent.com/rubiin/Tsumiki/refs/heads/master/assets/images/tsumiki.png" /><br /></div>
+
+::::caution
+
+The documentation is not yet fully complete, but we are actively working to improve and expand it.
+::::
+
+Tsumiki (formerly Hydepanel) is a modular status bar for the Hyprland Wayland compositor. Built on Fabric Widget System, it offers a flexible architecture for building custom panels with individual widgets. It’s designed to be lightweight, performant, and user-configurable.
+
+The name Tsumiki (pronounced as su-me-ki) comes from the Japanese word "tsumiki" (積み木), which means "building blocks". Just like toy blocks that stack together to form something greater, Tsumiki is designed to be modular, lightweight, and easy to build upon
+
+## What you'll find here
+
+- A guided installation flow and tips for first boot
+- An opinionated, modular layout that keeps configuration tidy
+- Theming and customization options to make Tsumiki your own
+
+## Latest Release
+
+<div className="latest-release">
+  <LatestRelease
+    repo="rubiin/Tsumiki"
+    versionLabel="Version:"
+    dateLabel="Date:"
+  />
+</div>
+
+For full notes and assets, see the{' '}<a
+	href="https://github.com/rubiin/Tsumiki/releases"
+	className="underline"
+	target="_blank"
+	rel="noopener noreferrer">
+	releases page</a>{' '}
+on GitHub.
+
+
+::::caution
+You need a functioning Hyprland installation.
+::::
+
+
+## Clone this repository:
+
+```sh
+git clone https://github.com/rubiin/Tsumiki.git ~/.config/tsumiki
+```
+
+- Run the following command to install the required packages for particular os, few of them are already installed if you have a working system:
+
+## Installation
+
+You can choose one of two installation methods: **Automated Setup** or **Manual Setup**.
+
+### Option 1: Automated Setup Using `init.sh -setup`
+
+1.  **Run the `init.sh -setup` script** to automatically setup the virtual environment and install all the required packages and dependencies (both `pacman` and AUR packages):
+
+```sh
+./init.sh -setup
+```
+
+This script will:
+
+- Install all required `pacman` and AUR packages.
+- Set up the virtual environment and any required configurations.
+
+1.  **Start the environment or bar** once the installation is complete:
+
+```sh
+./init.sh -start
+```
+
+This will launch the environment or bar as defined in your project.
+
+### Option 2: Manual Setup (Install Dependencies First)
+
+If you prefer to have more control over the installation process, you can install the required dependencies manually and then run the `init.sh -start` script.
+
+#### Step 1: Install `pacman` Packages
+
+Run the following command to install the required system packages:
+
+```sh
+sudo pacman -S --noconfirm --needed pipewire playerctl dart-sass power-profiles-daemon networkmanager brightnessctl pkgconf wf-recorder kitty python pacman-contrib gtk3 cairo gtk-layer-shell libgirepository noto-fonts-emoji gobject-introspection gobject-introspection-runtime python-pip python-gobject python-psutil python-cairo python-loguru libnotify cliphist python-requests satty nvtop
+```
+
+#### Step 2: Install AUR Packages
+
+Using `yay` to install the required AUR packages:
+
+```sh
+yay -S --needed	python-fabric-git gnome-bluetooth-3.0 python-rlottie-python python-pytomlpp slurp imagemagick tesseract tesseract-data-eng ttf-jetbrains-mono-nerd grimblast-git python-ijson glace-git
+```
+
+If you have something else besides `yay`, install with the respective aur helper.
+
+
+::::tip
+
+Help us improve
+
+Contribute fixes and improvements on GitHub or share feedback in Discord. Your
+input directly shapes Tsumiki and this documentation.
+[Tsumiki](https://github.com/rubiin/Tsumiki)
+
+::::

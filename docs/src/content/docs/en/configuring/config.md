@@ -1,0 +1,382 @@
+---
+title: Main Configuration
+description: HyDE's Configuration Guide
+sidebar:
+  order: 2
+---
+
+
+Tsumiki defines the configuration settings for a modular system, allowing users to customize the layout, icons, intervals, and various components. The configuration is written in Python and structured using typed dictionaries for strong typing.
+
+Users are encouraged to use an editor that support schema validation to ensure the configuration file is valid.
+```toml
+	"$schema": "./tsumiki.schema.json",
+```
+---
+The following table outlines the complete schema for Tsumiki's configuration file, detailing each setting, its type, and default values where applicable.
+
+- **`$schema`**: `str` (default: "./tsumiki.schema.json")
+
+- **`widgets`**: `object`
+  - **`app_launcher_button`**: `object`
+    - **`icon`**: `str` (default: "view-app-grid-symbolic")
+    - **`icon_size`**: `int` (default: 16)
+    - **`tooltip`**: `bool` (default: true)
+  - **`cliphist`**: `object`
+    - **`icon`**: `str` (default: "")
+    - **`label`**: `bool` (default: false)
+    - **`tooltip`**: `bool` (default: true)
+  - **`emoji_picker`**: `object`
+    - **`icon`**: `str` (default: "")
+    - **`label`**: `bool` (default: false)
+    - **`tooltip`**: `bool` (default: true)
+    - **`per_row`**: `int` (default: 9)
+    - **`per_column`**: `int` (default: 4)
+  - **`kanban`**: `object`
+    - **`icon`**: `str` (default: "󱞁")
+    - **`label`**: `bool` (default: true)
+    - **`tooltip`**: `bool` (default: true)
+  - **`battery`**: `object`
+    - **`full_battery_level`**: `int` (default: 100)
+    - **`hide_label_when_full`**: `bool` (default: true)
+    - **`hide_when_missing`**: `bool` (default: true)
+    - **`label`**: `bool` (default: true)
+    - **`tooltip`**: `bool` (default: true)
+    - **`icon_size`**: `int` (default: 14)
+    - **`notifications`**: `object`
+      - **`low_threshold`**: `int` (default: 10)
+      - **`full_battery`**: `bool` (default: false)
+      - **`low_battery`**: `bool` (default: false)
+      - **`charging`**: `bool` (default: false)
+  - **`quick_settings`**: `object`
+    - **`hover_reveal`**: `bool` (default: false)
+    - **`user`**: `object`
+      - **`avatar`**: `str` (default: "~/.face")
+      - **`name`**: `str` (default: "system")
+      - **`distro_icon`**: `bool` (default: true)
+    - **`controls`**: `object`
+      - **`sliders`**: `list[str]` (default: ["brightness", "volume"])
+    - **`media`**: `object`
+      - **`enabled`**: `bool` (default: true)
+      - **`ignore`**: `list` (default: [])
+      - **`truncation_size`**: `int` (default: 30)
+      - **`show_album`**: `bool` (default: true)
+      - **`show_artist`**: `bool` (default: true)
+      - **`show_time`**: `bool` (default: true)
+      - **`show_time_tooltip`**: `bool` (default: true)
+    - **`shortcuts`**: `object`
+      - **`enabled`**: `bool` (default: true)
+      - **`items`**: `list` (default: [])
+  - **`bluetooth`**: `object`
+    - **`label`**: `bool` (default: true)
+    - **`tooltip`**: `bool` (default: true)
+  - **`brightness`**: `object`
+    - **`label`**: `bool` (default: true)
+    - **`tooltip`**: `bool` (default: true)
+    - **`step_size`**: `int` (default: 5)
+  - **`wallpaper`**: `object`
+    - **`icon`**: `str` (default: "󰸉")
+    - **`label`**: `bool` (default: false)
+    - **`tooltip`**: `bool` (default: true)
+  - **`cava`**: `object`
+    - **`bars`**: `int` (default: 10)
+    - **`color`**: `str` (default: "#89b4fa")
+  - **`overview_button`**: `object`
+    - **`icon`**: `str` (default: "󰡃")
+    - **`tooltip`**: `bool` (default: true)
+    - **`label`**: `bool` (default: false)
+  - **`click_counter`**: `object`
+    - **`count`**: `int` (default: 0)
+  - **`cpu`**: `object`
+    - **`show_icon`**: `bool` (default: true)
+    - **`icon`**: `str` (default: "")
+    - **`tooltip`**: `bool` (default: true)
+    - **`round`**: `bool` (default: true)
+    - **`temperature_unit`**: `str` (default: "celsius")
+    - **`show_unit`**: `bool` (default: true)
+    - **`sensor`**: `str` (default: "")
+    - **`mode`**: `str` (default: "circular")
+    - **`graph_length`**: `int` (default: 4)
+  - **`gpu`**: `object`
+    - **`show_icon`**: `bool` (default: true)
+    - **`icon`**: `str` (default: "")
+    - **`tooltip`**: `bool` (default: true)
+    - **`mode`**: `str` (default: "circular")
+    - **`graph_length`**: `int` (default: 4)
+  - **`date_time`**: `object`
+    - **`format`**: `str` (default: "%b %d %H:%M")
+    - **`calendar`**: `bool` (default: true)
+    - **`clock_format`**: `str` (default: "12h")
+    - **`hover_reveal`**: `bool` (default: false)
+    - **`reveal_duration`**: `int` (default: 500)
+    - **`notification`**: `object`
+      - **`enabled`**: `bool` (default: true)
+      - **`count`**: `bool` (default: true)
+      - **`hide_count_on_zero`**: `bool` (default: false)
+  - **`divider`**: `object`
+    - **`size`**: `int` (default: 2)
+  - **`hypridle`**: `object`
+    - **`enabled_icon`**: `str` (default: "")
+    - **`disabled_icon`**: `str` (default: "")
+    - **`label`**: `bool` (default: true)
+    - **`tooltip`**: `bool` (default: true)
+  - **`hyprpicker`**: `object`
+    - **`icon`**: `str` (default: "")
+    - **`tooltip`**: `bool` (default: true)
+    - **`label`**: `bool` (default: false)
+    - **`quiet`**: `bool` (default: false)
+    - **`show_icon`**: `bool` (default: true)
+  - **`hyprsunset`**: `object`
+    - **`temperature`**: `str` (default: "2800k")
+    - **`enabled_icon`**: `str` (default: "󱩌")
+    - **`disabled_icon`**: `str` (default: "󰛨")
+    - **`label`**: `bool` (default: true)
+    - **`tooltip`**: `bool` (default: true)
+  - **`keyboard`**: `object`
+    - **`icon`**: `str` (default: "󰌌")
+    - **`label`**: `bool` (default: true)
+    - **`tooltip`**: `bool` (default: true)
+    - **`show_icon`**: `bool` (default: true)
+  - **`window_count`**: `object`
+    - **`icon`**: `str` (default: "")
+    - **`label_format`**: `str` (default: "[{count}]")
+    - **`hide_when_zero`**: `bool` (default: true)
+    - **`tooltip`**: `bool` (default: true)
+    - **`show_icon`**: `bool` (default: false)
+  - **`language`**: `object`
+    - **`icon`**: `str` (default: "")
+    - **`tooltip`**: `bool` (default: true)
+    - **`truncation_size`**: `int` (default: 2)
+    - **`show_icon`**: `bool` (default: true)
+  - **`widget_groups`**: `list[object]`
+    - **`widgets`**: `list[str]` (default: ["updates", "battery"])
+    - **`spacing`**: `int` (default: 4)
+    - **`style_classes`**: `list[str]` (default: ["bordered"])
+  - **`memory`**: `object`
+    - **`show_icon`**: `bool` (default: true)
+    - **`icon`**: `str` (default: "")
+    - **`tooltip`**: `bool` (default: true)
+    - **`mode`**: `str` (default: "circular")
+    - **`graph_length`**: `int` (default: 4)
+    - **`unit`**: `str` (default: "gb")
+  - **`network_usage`**: `object`
+    - **`upload_icon`**: `str` (default: "")
+    - **`download_icon`**: `str` (default: "")
+    - **`tooltip`**: `bool` (default: true)
+    - **`upload`**: `bool` (default: true)
+    - **`download`**: `bool` (default: true)
+    - **`upload_threshold`**: `int` (default: 100)
+    - **`download_threshold`**: `int` (default: 1024)
+    - **`kb_digits`**: `int` (default: 0)
+    - **`mb_digits`**: `int` (default: 2)
+  - **`microphone`**: `object`
+    - **`label`**: `bool` (default: false)
+    - **`tooltip`**: `bool` (default: true)
+    - **`show_icon`**: `bool` (default: true)
+  - **`mpris`**: `object`
+    - **`truncation_size`**: `int` (default: 20)
+    - **`tooltip`**: `bool` (default: true)
+  - **`ocr`**: `object`
+    - **`icon`**: `str` (default: "󰐳")
+    - **`tooltip`**: `bool` (default: true)
+    - **`label`**: `bool` (default: false)
+    - **`show_icon`**: `bool` (default: true)
+    - **`quiet`**: `bool` (default: false)
+  - **`power`**: `object`
+    - **`icon`**: `str` (default: "󰐥")
+    - **`tooltip`**: `bool` (default: true)
+    - **`items_per_row`**: `int` (default: 3)
+    - **`icon_size`**: `int` (default: 100)
+    - **`show_icon`**: `bool` (default: true)
+    - **`label`**: `bool` (default: false)
+    - **`confirm`**: `bool` (default: true)
+    - **`buttons`**: `object`
+      - **`shutdown`**: `str` (default: "systemctl poweroff")
+      - **`reboot`**: `str` (default: "systemctl reboot")
+      - **`hibernate`**: `str` (default: "systemctl hibernate")
+      - **`suspend`**: `str` (default: "systemctl suspend")
+      - **`lock`**: `str` (default: "loginctl lock-session")
+      - **`logout`**: `str` (default: "loginctl terminate-user $USER")
+  - **`recorder`**: `object`
+    - **`path`**: `str` (default: "Videos/Screencasting")
+    - **`tooltip`**: `bool` (default: true)
+    - **`audio`**: `bool` (default: true)
+    - **`delayed`**: `bool` (default: false)
+    - **`delayed_timeout`**: `int` (default: 5000)
+  - **`screenshot`**: `object`
+    - **`path`**: `str` (default: "Pictures/Screenshots")
+    - **`icon`**: `str` (default: "󰄀")
+    - **`tooltip`**: `bool` (default: true)
+    - **`annotation`**: `bool` (default: true)
+    - **`delayed`**: `bool` (default: false)
+    - **`delayed_timeout`**: `int` (default: 5000)
+    - **`label`**: `bool` (default: false)
+    - **`capture_sound`**: `bool` (default: false)
+  - **`stopwatch`**: `object`
+    - **`stopped_icon`**: `str` (default: "󱫞")
+    - **`running_icon`**: `str` (default: "󱫠")
+  - **`storage`**: `object`
+    - **`path`**: `str` (default: "/")
+    - **`show_icon`**: `bool` (default: true)
+    - **`icon`**: `str` (default: "󰋊")
+    - **`mode`**: `str` (default: "circular")
+    - **`tooltip`**: `bool` (default: true)
+    - **`graph_length`**: `int` (default: 4)
+    - **`unit`**: `str` (default: "gb")
+  - **`submap`**: `object`
+    - **`icon`**: `str` (default: "󰌌")
+    - **`label`**: `bool` (default: true)
+    - **`tooltip`**: `bool` (default: true)
+    - **`show_icon`**: `bool` (default: true)
+    - **`hide_on_default`**: `bool` (default: false)
+  - **`system_tray`**: `object`
+    - **`icon_size`**: `int` (default: 16)
+    - **`ignored`**: `list` (default: [])
+    - **`hidden`**: `list` (default: [])
+    - **`hide_when_empty`**: `bool` (default: false)
+  - **`taskbar`**: `object`
+    - **`icon_size`**: `int` (default: 22)
+    - **`ignored`**: `list` (default: [])
+    - **`tooltip`**: `bool` (default: true)
+  - **`theme_switcher`**: `object`
+    - **`icon`**: `str` (default: "")
+    - **`notify`**: `bool` (default: false)
+  - **`updates`**: `object`
+    - **`show_icon`**: `bool` (default: true)
+    - **`available_icon`**: `str` (default: "󰏗")
+    - **`no_updates_icon`**: `str` (default: "󰏖")
+    - **`os`**: `str` (default: "arch")
+    - **`hover_reveal`**: `bool` (default: false)
+    - **`reveal_duration`**: `int` (default: 500)
+    - **`interval`**: `int` (default: 3600)
+    - **`tooltip`**: `bool` (default: true)
+    - **`terminal`**: `str` (default: "kitty")
+    - **`pad_zero`**: `bool` (default: true)
+    - **`label`**: `bool` (default: true)
+    - **`auto_hide`**: `bool` (default: false)
+    - **`flatpak`**: `bool` (default: false)
+    - **`snap`**: `bool` (default: false)
+    - **`brew`**: `bool` (default: false)
+  - **`volume`**: `object`
+    - **`label`**: `bool` (default: true)
+    - **`tooltip`**: `bool` (default: true)
+    - **`step_size`**: `int` (default: 5)
+  - **`weather`**: `object`
+    - **`location`**: `str` (default: "")
+    - **`label`**: `bool` (default: true)
+    - **`label_format`**: `str` (default: "{condition} {temperature}")
+    - **`tooltip`**: `bool` (default: true)
+    - **`expanded`**: `bool` (default: true)
+    - **`temperature_unit`**: `str` (default: "celsius")
+    - **`wind_speed_unit`**: `str` (default: "kmh")
+    - **`interval`**: `int` (default: 3600)
+    - **`hover_reveal`**: `bool` (default: false)
+  - **`window_title`**: `object`
+    - **`icon`**: `bool` (default: true)
+    - **`truncation`**: `bool` (default: true)
+    - **`truncation_size`**: `int` (default: 20)
+    - **`tooltip`**: `bool` (default: true)
+    - **`mappings`**: `bool` (default: true)
+    - **`title_map`**: `list` (default: [])
+    - **`fallback`**: `str` (default: "class")
+  - **`workspaces`**: `object`
+    - **`count`**: `int` (default: 10)
+    - **`hide_unoccupied`**: `bool` (default: true)
+    - **`ignored`**: `list[int]` (default: [-99])
+    - **`reverse_scroll`**: `bool` (default: false)
+    - **`show_numbered`**: `bool` (default: true)
+    - **`empty_scroll`**: `bool` (default: false)
+    - **`default_label_format`**: `str` (default: "{id}")
+    - **`icon_map`**: `object`
+  - **`world_clock`**: `object`
+    - **`icon`**: `str` (default: "󱉊'")
+    - **`use_24hr`**: `bool` (default: true)
+    - **`show_icon`**: `bool` (default: true)
+    - **`timezones`**: `list[str]` (default: ["America/New_York", "Asia/Tokyo"])
+  - **`custom_button_group`**: `object`
+    - **`buttons`**: `list` (default: [])
+    - **`spacing`**: `int` (default: 4)
+
+- **`layout`**: `object`
+  - **`left_section`**: `list[str]` (default: ["workspaces", "window_title"])
+  - **`middle_section`**: `list[str]` (default: ["date_time"])
+  - **`right_section`**: `list[str]` (default: ["system_tray"])
+
+- **`modules`**: `object`
+  - **`bar`**: `object`
+    - **`layer`**: `str` (default: "top")
+    - **`auto_hide`**: `bool` (default: false)
+    - **`location`**: `str` (default: "top")
+  - **`overview`**: `object`
+    - **`enabled`**: `bool` (default: false)
+    - **`layer`**: `str` (default: "top")
+    - **`anchor`**: `str` (default: "center")
+    - **`transition_type`**: `str` (default: "crossfade")
+    - **`transition_duration`**: `int` (default: 350)
+  - **`osd`**: `object`
+    - **`enabled`**: `bool` (default: false)
+    - **`timeout`**: `int` (default: 1500)
+    - **`anchor`**: `str` (default: "bottom-center")
+    - **`orientation`**: `str` (default: "horizontal")
+    - **`percentage`**: `bool` (default: true)
+    - **`icon_size`**: `int` (default: 28)
+    - **`play_sound`**: `bool` (default: false)
+    - **`transition_type`**: `str` (default: "slide-up")
+    - **`transition_duration`**: `int` (default: 500)
+    - **`osds`**: `list[str]` (default: ["brightness", "volume"])
+  - **`app_launcher`**: `object`
+    - **`enabled`**: `bool` (default: false)
+    - **`tooltip`**: `bool` (default: true)
+    - **`icon_size`**: `int` (default: 16)
+  - **`notification`**: `object`
+    - **`enabled`**: `bool` (default: true)
+    - **`anchor`**: `str` (default: "top-right")
+    - **`auto_dismiss`**: `bool` (default: true)
+    - **`dnd_on_screencast`**: `bool` (default: false)
+    - **`ignored`**: `list` (default: [])
+    - **`timeout`**: `int` (default: 3000)
+    - **`max_count`**: `int` (default: 200)
+    - **`transition_type`**: `str` (default: "slide-left")
+    - **`transition_duration`**: `int` (default: 350)
+    - **`per_app_limits`**: `object`
+    - **`play_sound`**: `bool` (default: false)
+    - **`max_actions`**: `int` (default: 5)
+    - **`dismiss_on_hover`**: `bool` (default: false)
+    - **`sound_file`**: `str` (default: "notification4")
+    - **`persist`**: `bool` (default: true)
+  - **`screen_corners`**: `object`
+    - **`enabled`**: `bool` (default: false)
+    - **`size`**: `int` (default: 20)
+  - **`dock`**: `object`
+    - **`enabled`**: `bool` (default: false)
+    - **`ignored_apps`**: `list` (default: [])
+    - **`icon_size`**: `int` (default: 40)
+    - **`behavior`**: `str` (default: "intellihide")
+    - **`tooltip`**: `bool` (default: false)
+    - **`layer`**: `str` (default: "top")
+    - **`show_when_no_windows`**: `bool` (default: false)
+    - **`preview_apps`**: `bool` (default: true)
+    - **`preview_size`**: `list[int]` (default: [200, 130])
+  - **`desktop_clock`**: `object`
+    - **`enabled`**: `bool` (default: false)
+    - **`layer`**: `str` (default: "bottom")
+    - **`anchor`**: `str` (default: "center")
+    - **`date_format`**: `str` (default: "%A, %d %B %Y")
+    - **`time_format`**: `str` (default: "%H:%M")
+  - **`desktop_quotes`**: `object`
+    - **`enabled`**: `bool` (default: false)
+    - **`anchor`**: `str` (default: "bottom-right")
+    - **`layer`**: `str` (default: "bottom")
+    - **`interval`**: `int` (default: 600)
+  - **`activate_linux`**: `object`
+    - **`enabled`**: `bool` (default: false)
+    - **`anchor`**: `str` (default: "bottom-right")
+    - **`layer`**: `str` (default: "bottom")
+
+- **`general`**: `object`
+  - **`check_updates`**: `bool` (default: false)
+  - **`debug`**: `bool` (default: true)
+  - **`monitor_styles`**: `bool` (default: true)
+  - **`location`**: `str` (default: "top")
+  - **`auto_reload`**: `bool` (default: true)
+  - **`multi_monitor`**: `bool` (default: false)

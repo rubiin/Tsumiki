@@ -44,14 +44,6 @@ $workspace-transition: padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
       border-width: variable.$bar-widgets-workspaces-pill-border-width;
 
 
-      @if variable.$bar-widgets-workspaces-pill-border-enabled {
-        // If border is enabled, change label color on hover to match border color
-      }
-      @else {
-        &>label {
-            color: theme.$background-dark;
-          }
-      }
 
     }
 
