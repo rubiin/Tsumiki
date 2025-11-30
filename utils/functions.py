@@ -35,6 +35,19 @@ from .thread import run_in_thread, thread
 
 gi.require_versions({"Gtk": "3.0", "Gdk": "3.0", "GdkPixbuf": "2.0"})
 
+# Pre-compiled regex patterns for color validation
+_HEX_COLOR_RE = re.compile(r"^#(?:[a-fA-F0-9]{3,4}|[a-fA-F0-9]{6,8})$")
+_RGB_RE = re.compile(r"^rgb\(\s*(\d{1,3}%?\s*,\s*){2}\d{1,3}%?\s*\)$")
+_RGBA_RE = re.compile(r"^rgba\(\s*(\d{1,3}%?\s*,\s*){3}(0|1|0?\.\d+)\s*\)$")
+
+# Pre-computed constants
+_NAMED_COLORS_SET = frozenset(NAMED_COLORS)
+_SPECIAL_WIDGET_TYPES = frozenset(("custom_button", "group", "collapsible"))
+_GROUP_TYPES = ("widget_groups", "collapsible_groups")
+_URGENCY_LEVELS = frozenset(("low", "normal", "critical"))
+_BYTES_FACTORS = {"kb": 1, "mb": 2, "gb": 3, "tb": 4}
+_WHITE = (255, 255, 255)
+
 
 # Function to execute a shell command synchronously with formatted string
 def formatted_exec_shell_command(
@@ -77,8 +90,7 @@ def mix_colors(color1, color2, ratio=0.5) -> tuple[int, int, int]:
 # Function to tint a color by mixing it with white
 def tint_color(color, tint_factor=1) -> tuple[int, int, int]:
     # tint_factor: 0 means original color, 1 means full white
-    white = (255, 255, 255)
-    return mix_colors(color, white, tint_factor)
+    return mix_colors(color, _WHITE, tint_factor)
 
 
 def delayed_call(
@@ -330,7 +342,7 @@ def format_seconds_to_hours_minutes(secs: int) -> str:
 def convert_bytes(
     bytes: int, to: Literal["kb", "mb", "gb", "tb"], format_spec=".1f"
 ) -> str:
-    factor = {"kb": 1, "mb": 2, "gb": 3, "tb": 4}.get(to, 1)
+    factor = _BYTES_FACTORS.get(to, 1)
     return f"{format(bytes / (1024**factor), format_spec)}{to.upper()}"
 
 
@@ -413,17 +425,13 @@ def convert_to_percent(
 def is_valid_gjs_color(color: str) -> bool:
     color_lower = color.strip().lower()
 
-    if color_lower in NAMED_COLORS:
+    if color_lower in _NAMED_COLORS_SET:
         return True
 
-    hex_color_regex = r"^#(?:[a-fA-F0-9]{3,4}|[a-fA-F0-9]{6,8})$"
-    rgb_regex = r"^rgb\(\s*(\d{1,3}%?\s*,\s*){2}\d{1,3}%?\s*\)$"
-    rgba_regex = r"^rgba\(\s*(\d{1,3}%?\s*,\s*){3}(0|1|0?\.\d+)\s*\)$"
-
-    if re.match(hex_color_regex, color):
+    if _HEX_COLOR_RE.match(color):
         return True
 
-    return bool(re.match(rgb_regex, color_lower) or re.match(rgba_regex, color_lower))
+    return bool(_RGB_RE.match(color_lower) or _RGBA_RE.match(color_lower))
 
 
 # Function to get the system uptime
@@ -496,17 +504,17 @@ def add_style_class_lazy(widget: Gtk.Widget, class_name: str | Iterable[str]) ->
 
 def _get_config_collection(parsed_data: dict, widget_type: str) -> list:
     """Get collection for widget type - DRY principle."""
-    collections = {
-        "custom_button": lambda: (
+    if widget_type == "custom_button":
+        return (
             parsed_data.get("widgets", {})
             .get("custom_button_group", {})
             .get("buttons", [])
-        ),
-        "group": lambda: parsed_data.get("widget_groups", []),
-        "collapsible": lambda: parsed_data.get("collapsible_groups", []),
-    }
-    getter = collections.get(widget_type, lambda: [])
-    return getter()
+        )
+    if widget_type == "group":
+        return parsed_data.get("widget_groups", [])
+    if widget_type == "collapsible":
+        return parsed_data.get("collapsible_groups", [])
+    return []
 
 
 def _validate_indexed_reference(
@@ -546,17 +554,20 @@ def _validate_indexed_reference(
     return idx
 
 
+# Pre-defined collection names mapping
+_COLLECTION_NAMES = {
+    "custom_button": "custom button",
+    "group": "widget group",
+    "collapsible": "collapsible group",
+}
+
+
 def _validate_special_widget(
     widget_type: str, identifier: str, parsed_data: dict, section: str
 ) -> None:
     """Unified validation for special widget types - DRY principle."""
     collection = _get_config_collection(parsed_data, widget_type)
-    collection_names = {
-        "custom_button": "custom button",
-        "group": "widget group",
-        "collapsible": "collapsible group",
-    }
-    collection_name = collection_names.get(widget_type, widget_type)
+    collection_name = _COLLECTION_NAMES.get(widget_type, widget_type)
     _validate_indexed_reference(identifier, collection, collection_name, section)
 
 
@@ -596,7 +607,7 @@ def validate_widget_reference(
         widget_type, identifier = widget_spec[1:].split(":", 1)
 
         # Unified validation for all special widget types
-        if widget_type in ["custom_button", "group", "collapsible"]:
+        if widget_type in _SPECIAL_WIDGET_TYPES:
             _validate_special_widget(widget_type, identifier, parsed_data, section)
         else:
             raise ValueError(
@@ -628,7 +639,7 @@ def validate_widgets(parsed_data, default_config):
                 )
 
     # Validate widgets inside groups
-    for group_type in ["widget_groups", "collapsible_groups"]:
+    for group_type in _GROUP_TYPES:
         groups = parsed_data.get(group_type, [])
         if isinstance(groups, list):
             for idx, group in enumerate(groups):
@@ -699,7 +710,7 @@ def send_notification(
     notification.set_body(body)
 
     # Set the urgency level if provided
-    if urgency in ["low", "normal", "critical"]:
+    if urgency in _URGENCY_LEVELS:
         notification.set_urgent(urgency)
 
     # Set the icon if provided
@@ -754,7 +765,7 @@ def ensure_directory(path: str):
 
 # Function to check if an app is running
 def is_app_running(app_name: str) -> bool:
-    return len(exec_shell_command(f"pidof {app_name}")) != 0
+    return bool(exec_shell_command(f"pidof {app_name}"))
 
 
 # Function to take a memory snapshot
@@ -775,26 +786,50 @@ def take_snapshot():
     return True  # Keep the timeout active
 
 
+# Pre-defined log domains tuple (immutable)
+_LOG_DOMAINS = (
+    None,  # Default domain
+    "Gtk",
+    "Gdk",
+    "GLib",
+    "GLib-GObject",
+    "Pango",
+    "Atk",
+    "GIO",
+    "GStreamer",
+    "Gst",
+    "Soup",
+    "GVfs",
+    "GWeather",
+    "WebKit",
+    "Vte",
+    "Cogl",
+    "NM",
+    "BlueZ",
+    "ModemManager",
+)
+
+
 # Function to set a debug logger for GLib
 def set_debug_logger():
-    def log_handler(domain, level, message):
-        import traceback
+    import traceback
 
-        level_name = {
-            GLib.LogLevelFlags.LEVEL_ERROR: "ERROR",
-            GLib.LogLevelFlags.LEVEL_CRITICAL: "CRITICAL",
-            GLib.LogLevelFlags.LEVEL_WARNING: "WARNING",
-            GLib.LogLevelFlags.LEVEL_MESSAGE: "MESSAGE",
-            GLib.LogLevelFlags.LEVEL_INFO: "INFO",
-            GLib.LogLevelFlags.LEVEL_DEBUG: "DEBUG",
-        }.get(
-            GLib.LogLevelFlags(
-                level
-                & ~GLib.LogLevelFlags.FLAG_FATAL
-                & ~GLib.LogLevelFlags.FLAG_RECURSION
-            ),
-            f"UNKNOWN({level})",
-        )
+    # Build level map once
+    level_map = {
+        GLib.LogLevelFlags.LEVEL_ERROR: "ERROR",
+        GLib.LogLevelFlags.LEVEL_CRITICAL: "CRITICAL",
+        GLib.LogLevelFlags.LEVEL_WARNING: "WARNING",
+        GLib.LogLevelFlags.LEVEL_MESSAGE: "MESSAGE",
+        GLib.LogLevelFlags.LEVEL_INFO: "INFO",
+        GLib.LogLevelFlags.LEVEL_DEBUG: "DEBUG",
+    }
+
+    # Pre-compute mask
+    mask = ~(GLib.LogLevelFlags.FLAG_FATAL | GLib.LogLevelFlags.FLAG_RECURSION)
+
+    def log_handler(domain, level, message):
+        masked_level = GLib.LogLevelFlags(level & mask)
+        level_name = level_map.get(masked_level, f"UNKNOWN({level})")
         print(f"\n[{domain or 'Default'}] {level_name}: {message}")
         traceback.print_stack()
 
@@ -808,28 +843,5 @@ def set_debug_logger():
         | GLib.LogLevelFlags.LEVEL_DEBUG
     )
 
-    # Common GTK/GLib and related log domains
-    domains = [
-        None,  # Default domain
-        "Gtk",  # GTK (Graphical Toolkit)
-        "Gdk",  # GDK (Windowing Abstraction Layer)
-        "GLib",  # GLib (Core utility library)
-        "GLib-GObject",  # GObject (Object system and signals)
-        "Pango",  # Pango (Text layout/rendering)
-        "Atk",  # ATK (Accessibility Toolkit)
-        "GIO",  # GIO (I/O and VFS abstraction)
-        "GStreamer",  # GStreamer (Multimedia framework)
-        "Gst",  # GStreamer (sometimes abbreviated domain)
-        "Soup",  # libsoup (HTTP library)
-        "GVfs",  # GNOME Virtual File System
-        "GWeather",  # GNOME Weather library
-        "WebKit",  # WebKitGTK (Web rendering engine)
-        "Vte",  # Virtual Terminal Emulator (GNOME Terminal)
-        "Cogl",  # Cogl (GPU rendering abstraction)
-        "NM",  # NetworkManager
-        "BlueZ",  # Bluetooth stack for Linux
-        "ModemManager",  # Manages mobile broadband connections
-    ]
-
-    for domain in domains:
+    for domain in _LOG_DOMAINS:
         GLib.log_set_handler(domain, log_levels, log_handler)
