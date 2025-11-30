@@ -450,13 +450,12 @@ scrolledwindow {
 
 
 #setting-slider-scale {
-
-            .overamplified trough highlight {
-              background-color: theme.$accent-red;
-            }
-
-            .muted trough highlight,
-            .muted slider {
-              background-color: theme.$surface-disabled;
-            }
+  .overamplified trough highlight {
+    background-color: theme.$accent-red;
   }
+
+  .muted trough highlight,
+  .muted slider {
+    background-color: theme.$surface-disabled;
+  }
+}

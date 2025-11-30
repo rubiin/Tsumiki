@@ -358,44 +358,52 @@ $slider-height: 12px;
       }
     }
 
-    #quicksettings-togglebutton.active button image,
-    #quicksettings-togglebutton.active button label,
-    #quicksettings-togglebutton.active button {
-      background-color: theme.$accent-blue;
-      color: color.mix(#000000, white, 8%);
-      padding-left: common.toEm(1);
-      padding-right: common.toEm(4);
-    }
+    #quicksettings-togglebutton {
+      button {
+        background-color: theme.$background;
+        color: theme.$text-main;
 
-    #quicksettings-togglebutton.active button:hover image,
-    #quicksettings-togglebutton.active button:hover label,
-    #quicksettings-togglebutton.active button:hover {
-      background-color: color.mix(theme.$accent-blue, black, 90%);
-    }
+        image, label {
+          background-color: theme.$background;
+          color: theme.$text-main;
+        }
 
-    #quicksettings-togglebutton.active button:active image,
-    #quicksettings-togglebutton.active button:active label,
-    #quicksettings-togglebutton.active button:active {
-      background-color: color.mix(theme.$accent-blue, black, 90%);
-    }
+        &:hover {
+          background-color: theme.$background;
 
-    #quicksettings-togglebutton button image,
-    #quicksettings-togglebutton button label,
-    #quicksettings-togglebutton button {
-      background-color: theme.$background;
-      color: theme.$text-main;
-    }
+          image, label {
+            background-color: theme.$background;
+          }
+        }
 
-    #quicksettings-togglebutton button:hover image,
-    #quicksettings-togglebutton button:hover label,
-    #quicksettings-togglebutton button:hover {
-      background-color: theme.$background;
-    }
+        &:active {
+          background-color: theme.$background-alt;
 
-    #quicksettings-togglebutton button:active image,
-    #quicksettings-togglebutton button:active label,
-    #quicksettings-togglebutton button:active {
-      background-color: theme.$background-alt;
+          image, label {
+            background-color: theme.$background-alt;
+          }
+        }
+      }
+
+      &.active button {
+        background-color: theme.$accent-blue;
+        color: color.mix(#000000, white, 8%);
+        padding-left: common.toEm(1);
+        padding-right: common.toEm(4);
+
+        image, label {
+          background-color: theme.$accent-blue;
+          color: color.mix(#000000, white, 8%);
+        }
+
+        &:hover, &:active {
+          background-color: color.mix(theme.$accent-blue, black, 90%);
+
+          image, label {
+            background-color: color.mix(theme.$accent-blue, black, 90%);
+          }
+        }
+      }
     }
   }
 }
