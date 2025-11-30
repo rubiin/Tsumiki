@@ -446,9 +446,10 @@ class WeatherWidget(ButtonWidget, BaseWeatherWidget):
         forced = kwargs.get("forced", False)
 
         # Check if the update time is more than 5 minutes ago, update the icon
-        if hasattr(self, "current_weather") and (
-            datetime.now() - self.update_time
-        ).total_seconds() > 300:
+        if (
+            hasattr(self, "current_weather")
+            and (datetime.now() - self.update_time).total_seconds() > 300
+        ):
             text_icon = (
                 weather_icons[self.current_weather["weatherCode"]]["icon"]
                 if check_if_day(

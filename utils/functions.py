@@ -81,6 +81,37 @@ def tint_color(color, tint_factor=1) -> tuple[int, int, int]:
     return mix_colors(color, white, tint_factor)
 
 
+def delayed_call(
+    delay_ms: int,
+    callback: Callable[..., Any],
+    *args: Any,
+    **kwargs: Any,
+) -> int:
+    """Schedule a function to be called after a delay.
+
+    Similar to JavaScript's setTimeout. The callback runs on the main GTK thread.
+    """
+
+    def _wrapper() -> bool:
+        callback(*args, **kwargs)
+        return False  # Don't repeat
+
+    return GLib.timeout_add(delay_ms, _wrapper)
+
+
+def delayed_call_seconds(
+    delay_seconds: float,
+    callback: Callable[..., Any],
+    *args: Any,
+    **kwargs: Any,
+) -> int:
+    """Schedule a function to be called after a delay in seconds.
+
+    Convenience wrapper around delayed_call for second-based delays.
+    """
+    return delayed_call(int(delay_seconds * 1000), callback, *args, **kwargs)
+
+
 def _pillow_worker(image_path, callback, color_count, resize):
     try:
         from PIL import Image
