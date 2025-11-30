@@ -120,8 +120,6 @@ class WeatherService(Service):
         ttl: int = 3600,
         refresh: bool = False,
     ):
-        threading.Thread(
-            target=self._weather_worker,
-            args=(location, ttl, refresh, callback),
-            daemon=True,
-        ).start()
+        from utils.thread import thread
+
+        thread(self._weather_worker, location, ttl, refresh, callback)

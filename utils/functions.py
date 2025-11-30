@@ -107,11 +107,7 @@ def get_simple_palette_threaded(
     color_count: int = 4,
     resize: int = 64,
 ):
-    threading.Thread(
-        target=_pillow_worker,
-        args=(image_path, callback, color_count, resize),
-        daemon=True,
-    ).start()
+    thread(_pillow_worker, image_path, callback, color_count, resize)
 
 
 # Function to escape the markup

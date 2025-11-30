@@ -233,10 +233,11 @@ class OverviewMenu(Box):
 
         self._hyprland_connection = get_hyprland_connection()
 
-        # Initialize app registry for better icon resolution
+        # Initialize app registry for better icon resolution (cached, not refreshed every update)
         self.app_util = AppUtils()
         self._all_apps = self.app_util.all_applications
         self.app_identifiers = self.app_util.app_identifiers
+        self._app_cache_dirty = False
 
         # Remove the window_class_aliases dictionary completely
         # TODO: replace with glace
@@ -252,11 +253,17 @@ class OverviewMenu(Box):
 
         self.update()
 
+    def _refresh_app_cache_if_needed(self):
+        """Only refresh app cache when a new window appears with unknown app_id."""
+        if self._app_cache_dirty:
+            self.app_util.refresh()
+            self._all_apps = self.app_util.all_applications
+            self.app_identifiers = self.app_util.app_identifiers
+            self._app_cache_dirty = False
+
     def update(self, signal_update=False):
-        # Refresh app registry when updating to ensure latest data
-        self.app_util.refresh()
-        self._all_apps = self.app_util.all_applications
-        self.app_identifiers = self.app_util.app_identifiers
+        # Only refresh app cache if needed (marked dirty by unknown app_id)
+        self._refresh_app_cache_if_needed()
 
         # Remove old clients and workspaces.
         for client in self.clients.values():

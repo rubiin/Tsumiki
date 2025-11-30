@@ -35,7 +35,8 @@ class EmojiPickerMenu(Box):
         self.total_pages = 0
 
         self._arranger_handler: int = 0
-        self._all_emojis = self._load_emoji_data()
+        self._all_emojis = None  # Lazy loaded
+        self._emoji_file_path = f"{ASSETS_DIR}/emoji.json"
 
         self.stack = Stack(
             name="viewport",
@@ -71,19 +72,25 @@ class EmojiPickerMenu(Box):
 
         self.add(self.picker_box)
 
-    def _load_emoji_data(self):
-        emoji_data = {}
-        emoji_file_path = f"{ASSETS_DIR}/emoji.json"
-        if not os.path.exists(emoji_file_path):
-            logger.exception(f"Emoji JSON file not found at: {emoji_file_path}")
-            return {}
+    def _ensure_emoji_data(self):
+        """Lazy load emoji data on first access."""
+        if self._all_emojis is not None:
+            return
 
-        with open(emoji_file_path, "r") as f:
-            emoji_data = {
+        if not os.path.exists(self._emoji_file_path):
+            logger.exception(f"Emoji JSON file not found at: {self._emoji_file_path}")
+            self._all_emojis = {}
+            return
+
+        with open(self._emoji_file_path, "r") as f:
+            self._all_emojis = {
                 emoji_char: emoji_info
                 for emoji_char, emoji_info in ijson.kvitems(f, "")
             }
-        return emoji_data
+
+    def _load_emoji_data(self):
+        self._ensure_emoji_data()
+        return self._all_emojis
 
     def close_picker(self):
         self.selected_index = -1
@@ -92,6 +99,9 @@ class EmojiPickerMenu(Box):
         self._parent.popup.hide_popover()
 
     def arrange_viewport(self, query: str = ""):
+        # Ensure emoji data is loaded on first use
+        self._ensure_emoji_data()
+
         remove_handler(self._arranger_handler) if self._arranger_handler else None
         self.stack.children = []
         self.selected_index = -1

@@ -89,6 +89,6 @@ class QuotesService(Service):
         self,
         callback: Callable[[Optional[dict]], None],
     ):
-        threading.Thread(
-            target=self._quotes_worker, args=(callback,), daemon=True
-        ).start()
+        from utils.thread import thread
+
+        thread(self._quotes_worker, callback)
