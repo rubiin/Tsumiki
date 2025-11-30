@@ -11,7 +11,7 @@ from fabric.widgets.image import Image
 from fabric.widgets.revealer import Revealer
 from fabric.widgets.separator import Separator
 from fabric.widgets.wayland import WaylandWindow as Window
-from gi.repository import Glace, GLib, Gtk
+from gi.repository import Gdk, Glace, GLib, Gtk
 
 from modules.app_launcher import AppLauncher
 from shared.popoverv1 import PopOverWindow
@@ -23,6 +23,9 @@ from utils.icon_resolver import IconResolver
 from utils.widget_settings import BarConfig
 
 gi.require_versions({"Glace": "0.1", "Gtk": "3.0"})
+
+# DnD target for dock app reordering
+DOCK_DND_TARGET = [Gtk.TargetEntry.new("dock-app", Gtk.TargetFlags.SAME_APP, 0)]
 
 
 class DotIndicator(Gtk.DrawingArea):
@@ -63,6 +66,7 @@ class AppBar(Box):
 
     def __init__(self, parent):
         self._parent = parent
+        self._is_dragging = False  # Track drag state to prevent dock hiding
 
         self.app_util = AppUtils()
         self._all_apps = self.app_util.all_applications
@@ -317,13 +321,6 @@ class AppBar(Box):
             self.pinned_apps.remove(client.get_app_id())
             self._update_pins()
 
-    def on_button_press_event(self, event, client):
-        if event.button == 1:
-            client.activate()
-        else:
-            self._show_menu(client)
-            self.menu.popup_at_pointer(event)
-
     def on_app_id(self, client, client_button: Button, client_image: Image, *_):
         if client.get_app_id() in self.config.get("ignored_apps", []):
             client_button.destroy()
@@ -349,9 +346,6 @@ class AppBar(Box):
 
         client_button = self._bake_button(
             image=client_image,
-            on_button_press_event=lambda _, event: self.on_button_press_event(
-                event, client
-            ),
             on_enter_notify_event=lambda *_: self.on_enter_notify_event(
                 client, client_button
             ),
@@ -365,6 +359,38 @@ class AppBar(Box):
             spacing=4,
             children=[client_button, DotIndicator()],
         )
+
+        # Store client reference on box for DnD
+        box._dock_client = client
+        box._drag_started = False
+
+        # Handle button press/release manually to allow both click and drag
+        client_button.connect(
+            "button-press-event",
+            lambda w, e: self._on_button_press(w, e, client, box),
+        )
+        client_button.connect(
+            "button-release-event",
+            lambda w, e: self._on_button_release(w, e, client, box),
+        )
+
+        # Set up drag source on the button
+        client_button.drag_source_set(
+            start_button_mask=Gdk.ModifierType.BUTTON1_MASK,
+            targets=DOCK_DND_TARGET,
+            actions=Gdk.DragAction.MOVE,
+        )
+        client_button.connect("drag-begin", self._on_drag_begin, box)
+        client_button.connect("drag-data-get", self._on_drag_data_get, client)
+        client_button.connect("drag-end", self._on_drag_end, box)
+
+        # Set up drag destination on the box
+        box.drag_dest_set(
+            Gtk.DestDefaults.ALL,
+            DOCK_DND_TARGET,
+            Gdk.DragAction.MOVE,
+        )
+        box.connect("drag-data-received", self._on_drag_data_received)
 
         bulk_connect(
             client,
@@ -384,14 +410,101 @@ class AppBar(Box):
         if len(self.pinned_apps) > 0 and not self.separator.get_visible():
             self.separator.set_visible(True)
 
+    def _on_button_press(self, widget, event, client, box):
+        """Handle button press - right click shows menu."""
+        if event.button == 3:
+            # Right click - show context menu
+            self._show_menu(client)
+            self.menu.popup_at_pointer(event)
+            return True
+        # For left click, let GTK handle drag detection
+        return False
+
+    def _on_button_release(self, widget, event, client, box):
+        """Handle button release - activate window if no drag occurred."""
+        if event.button == 1 and not box._drag_started:
+            # Left click release without drag - activate the window
+            client.activate()
+            return True
+        return False
+
+    def _on_drag_begin(self, widget, context, box):
+        """Handle drag start - set a visual drag icon."""
+        box._drag_started = True
+        self._is_dragging = True  # Prevent dock from hiding
+        box.get_style_context().add_class("dragging")
+        Gtk.drag_set_icon_name(context, "application-x-executable", 0, 0)
+
+    def _on_drag_end(self, widget, context, box):
+        """Handle drag end - remove visual feedback."""
+        box._drag_started = False
+        self._is_dragging = False
+        box.get_style_context().remove_class("dragging")
+
+    def _on_drag_data_get(self, widget, context, data, info, time, client):
+        """Provide the dragged client's address for identification."""
+        try:
+            addr = str(client.get_hyprland_address())
+            data.set(data.get_target(), 8, addr.encode())
+        except Exception as e:
+            logger.warning(f"[Dock] Failed to get drag data: {e}")
+
+    def _on_drag_data_received(
+        self, widget, context, x, y, data, info, time
+    ):
+        """Handle drop - reorder the dock apps."""
+        widget.get_style_context().remove_class("dragging")
+
+        try:
+            source_addr = data.get_data().decode()
+        except Exception:
+            return
+
+        # Find the source box (the one being dragged)
+        source_box = None
+        for child in self.get_children():
+            if hasattr(child, "_dock_client"):
+                try:
+                    if str(child._dock_client.get_hyprland_address()) == source_addr:
+                        source_box = child
+                        break
+                except Exception:
+                    continue
+
+        if source_box is None or source_box == widget:
+            return
+
+        # Get current positions (skip non-client children)
+        children = [c for c in self.get_children() if hasattr(c, "_dock_client")]
+        if source_box not in children or widget not in children:
+            return
+
+        source_idx = children.index(source_box)
+        dest_idx = children.index(widget)
+
+        if source_idx == dest_idx:
+            return
+
+        # Reorder: remove source and insert at destination position
+        self.reorder_child(source_box, self._get_child_position(widget))
+
+    def _get_child_position(self, widget):
+        """Get the position of a widget in the box."""
+        children = self.get_children()
+        try:
+            return children.index(widget)
+        except ValueError:
+            return -1
+
 
 class Dock(Window):
     """A dock for applications."""
 
     def __init__(self, config: BarConfig):
         self.config = config.get("modules", {}).get("dock", {})
+        self._app_bar = AppBar(self)
         self.revealer = Revealer(
-            child=Box(children=[AppBar(self)], style="padding: 20px 50px 5px 50px;"),
+            child=Box(children=[self._app_bar], style="padding: 20px 50px 5px 50px;"),
             transition_duration=500,
             transition_type="slide-up",
         )
@@ -408,7 +521,7 @@ class Dock(Window):
                     end_children=Box(style="min-height: 10px; min-width: 5px;"),
                 ),
                 on_enter_notify_event=lambda *_: self.revealer.set_reveal_child(True),
-                on_leave_notify_event=lambda *_: self.revealer.set_reveal_child(False),
+                on_leave_notify_event=lambda *_: self._on_leave_notify(),
             )
 
         if (
@@ -436,6 +549,11 @@ class Dock(Window):
             name="dock",
             title="dock",
         )
+
+    def _on_leave_notify(self):
+        """Hide dock on leave, unless a drag is in progress."""
+        if not self._app_bar._is_dragging:
+            self.revealer.set_reveal_child(False)
 
     def _handle_workspace_response(self, data: dict):
         try:
