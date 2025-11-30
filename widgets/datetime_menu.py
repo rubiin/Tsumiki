@@ -97,21 +97,40 @@ class DateMenuNotification(Box):
 
         notification_image_size = math.ceil(0.75 * constants.NOTIFICATION_IMAGE_SIZE)
 
+        # Try to get cached pixbuf first, fall back to deserializing
         try:
-            if image_pixbuf := self._notification.image_pixbuf:
+            cached_pixbuf = notification_service.get_cached_pixbuf(
+                self._id, notification_image_size
+            )
+            if cached_pixbuf:
                 body_container.add(
                     CircularImage(
-                        pixbuf=image_pixbuf.scale_simple(
-                            notification_image_size,
-                            notification_image_size,
-                            GdkPixbuf.InterpType.BILINEAR,
-                        ),
+                        pixbuf=cached_pixbuf,
                         h_expand=True,
                         v_expand=True,
                         size=notification_image_size,
                     ),
                 )
-            del image_pixbuf
+            elif image_pixbuf := self._notification.image_pixbuf:
+                scaled = image_pixbuf.scale_simple(
+                    notification_image_size,
+                    notification_image_size,
+                    GdkPixbuf.InterpType.BILINEAR,
+                )
+                if scaled:
+                    # Cache for future use
+                    notification_service.cache_pixbuf(
+                        self._id, scaled, notification_image_size
+                    )
+                    body_container.add(
+                        CircularImage(
+                            pixbuf=scaled,
+                            h_expand=True,
+                            v_expand=True,
+                            size=notification_image_size,
+                        ),
+                    )
+                del image_pixbuf
         except GLib.GError:
             # If the image is not available, use the symbolic icon
             logger.warning(f"{Colors.WARNING}[Notification] Image not available.")

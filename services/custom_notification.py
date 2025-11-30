@@ -1,13 +1,16 @@
+import math
 import os
 import threading
 
 from fabric import Signal
 from fabric.notifications import Notification, Notifications, NotificationSerializedData
 from fabric.utils import logger
+from gi.repository import GdkPixbuf, GLib
 
 from utils.colors import Colors
 from utils.constants import (
     NOTIFICATION_CACHE_FILE,
+    NOTIFICATION_IMAGE_SIZE,
 )
 from utils.functions import read_json_file, write_json_file
 
@@ -53,6 +56,8 @@ class CustomNotifications(Notifications):
         self._count = 0  # Will be updated to highest ID when loading
         self.deserialized_notifications = []
         self._dont_disturb = False
+        # Cache for pre-scaled pixbufs: {notification_id: {size: GdkPixbuf.Pixbuf}}
+        self._pixbuf_cache: dict[int, dict[int, GdkPixbuf.Pixbuf]] = {}
         self._load_notifications()
 
     def _load_notifications(self):
@@ -103,16 +108,105 @@ class CustomNotifications(Notifications):
             item = next((p for p in self.all_notifications if p["id"] == id), None)
             if item:
                 self.all_notifications.remove(item)
+                # Clean up cached pixbuf for this notification
+                self._pixbuf_cache.pop(id, None)
                 self._persist_and_emit()
 
                 if len(self.all_notifications) == 0:
                     self.emit("clear_all", True)
+
+    def get_cached_pixbuf(
+        self, notification_id: int, size: int | None = None
+    ) -> GdkPixbuf.Pixbuf | None:
+        """Get a cached pixbuf for a notification, optionally at a specific size.
+
+        Args:
+            notification_id: The notification ID
+            size: Desired size (will be scaled if not cached at this size)
+
+        Returns:
+            Cached pixbuf or None if not available
+        """
+        if notification_id not in self._pixbuf_cache:
+            return None
+
+        cache = self._pixbuf_cache[notification_id]
+        size = size or NOTIFICATION_IMAGE_SIZE
+
+        # Return exact size if cached
+        if size in cache:
+            return cache[size]
+
+        # Scale from largest available cached size
+        if cache:
+            largest_size = max(cache.keys())
+            source_pixbuf = cache[largest_size]
+            scaled = source_pixbuf.scale_simple(
+                size, size, GdkPixbuf.InterpType.BILINEAR
+            )
+            if scaled:
+                cache[size] = scaled
+            return scaled
+
+        return None
+
+    def cache_pixbuf(
+        self,
+        notification_id: int,
+        pixbuf: GdkPixbuf.Pixbuf,
+        size: int | None = None,
+    ) -> None:
+        """Cache a pixbuf for a notification.
+
+        Args:
+            notification_id: The notification ID
+            pixbuf: The pixbuf to cache
+            size: The size of the pixbuf (defaults to NOTIFICATION_IMAGE_SIZE)
+        """
+        size = size or NOTIFICATION_IMAGE_SIZE
+        if notification_id not in self._pixbuf_cache:
+            self._pixbuf_cache[notification_id] = {}
+        self._pixbuf_cache[notification_id][size] = pixbuf
+
+    def cache_pixbuf_from_notification(
+        self, notification_id: int, notification: Notification
+    ) -> None:
+        """Cache a notification's image pixbuf at common sizes.
+
+        Args:
+            notification_id: The notification ID
+            notification: The notification object with image_pixbuf
+        """
+        try:
+            if pixbuf := notification.image_pixbuf:
+                # Cache at the base size
+                base_size = NOTIFICATION_IMAGE_SIZE
+                scaled = pixbuf.scale_simple(
+                    base_size, base_size, GdkPixbuf.InterpType.BILINEAR
+                )
+                if scaled:
+                    self.cache_pixbuf(notification_id, scaled, base_size)
+
+                # Also cache smaller size used in date menu (75% of base)
+                smaller_size = math.ceil(0.75 * base_size)
+                scaled_small = pixbuf.scale_simple(
+                    smaller_size, smaller_size, GdkPixbuf.InterpType.BILINEAR
+                )
+                if scaled_small:
+                    self.cache_pixbuf(notification_id, scaled_small, smaller_size)
+        except GLib.GError:
+            logger.debug(f"[Notification] Could not cache pixbuf for {notification_id}")
 
     def cache_notification(self, widget_config, data: Notification, max_count: int):
         """Cache a notification, ensuring thread safety."""
         with self._lock:
             self._cleanup_invalid_notifications()
             new_notification = self._create_serialized_notification(data)
+            notification_id = new_notification["id"]
+
+            # Cache the pixbuf before the notification object is potentially GC'd
+            self.cache_pixbuf_from_notification(notification_id, data)
+
             self._enforce_per_app_limit(widget_config, new_notification, max_count)
             self.all_notifications.append(new_notification)
             self._enforce_global_limit(max_count)
@@ -160,7 +254,10 @@ class CustomNotifications(Notifications):
         """Remove oldest notifications if total count exceeds global limit."""
         while len(self.all_notifications) > max_count:
             oldest = self.all_notifications.pop(0)
-            self.emit("notification-closed", oldest["id"], "dismissed-by-limit")
+            oldest_id = oldest["id"]
+            # Clean up cached pixbuf
+            self._pixbuf_cache.pop(oldest_id, None)
+            self.emit("notification-closed", oldest_id, "dismissed-by-limit")
 
     def _enforce_per_app_limit(
         self, widget_config, new_notification: dict, max_count: int
@@ -179,7 +276,10 @@ class CustomNotifications(Notifications):
             to_remove = len(app_notifications) - app_limit + 1
             for old in app_notifications[:to_remove]:
                 self.all_notifications.remove(old)
-                self.emit("notification-closed", old["id"], "dismissed-by-limit")
+                old_id = old["id"]
+                # Clean up cached pixbuf
+                self._pixbuf_cache.pop(old_id, None)
+                self.emit("notification-closed", old_id, "dismissed-by-limit")
 
     def _deserialize_notification(self, notification: NotificationSerializedData):
         """Deserialize a notification."""
@@ -198,6 +298,8 @@ class CustomNotifications(Notifications):
         highest_id = self._count
 
         self.all_notifications = []
+        # Clear all cached pixbufs
+        self._pixbuf_cache.clear()
 
         self._persist_and_emit()
 
