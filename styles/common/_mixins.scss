@@ -185,6 +185,26 @@
   padding: variable.$bar-menus-popover-padding_x variable.$bar-menus-popover-padding_y;
 }
 
+/// Mixin for bar widget border and icon styling
+/// @param {String} $widget-name - The widget name prefix (e.g., 'cpu', 'memory')
+/// @param {Length} $border-radius - Border radius value
+/// @param {Boolean} $border-enabled - Whether border is enabled
+/// @param {Length} $border-width - Border width value
+/// @param {Length} $icon-size - Icon font size (optional)
+/// @param {Length} $spacing - Icon margin-right spacing (optional)
+@mixin bar-widget-style($border-radius, $border-enabled, $border-width, $icon-size: null, $spacing: null) {
+  border-radius: $border-radius;
+  border: if($border-enabled, variable.$border, none);
+  border-width: $border-width;
+
+  @if $icon-size and $spacing {
+    #nerd-icon.panel-font-icon {
+      font-size: $icon-size;
+      margin-right: $spacing;
+    }
+  }
+}
+
 @mixin switch {
   slider {
     background-color: theme.$background-dark;
