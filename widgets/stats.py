@@ -1,4 +1,5 @@
 import json
+from collections import deque
 
 from fabric.utils import exec_shell_command, exec_shell_command_async
 from fabric.widgets.circularprogressbar import CircularProgressBar
@@ -38,7 +39,8 @@ class CpuWidget(ButtonWidget):
         )
 
         if self.current_mode == "graph":
-            self.graph_values = []
+            self._graph_maxlen = self.config.get("graph_length", 4)
+            self.graph_values = deque(maxlen=self._graph_maxlen)
             self.cpu_level_label = Label(
                 label="0%",
                 style_classes=["panel-text"],
@@ -94,10 +96,7 @@ class CpuWidget(ButtonWidget):
 
         if self.current_mode == "graph":
             self.graph_values.append(get_bar_graph(usage))
-
-            if len(self.graph_values) > self.config.get("graph_length", 4):
-                self.graph_values.pop(0)
-
+            # deque with maxlen auto-removes old values
             self.cpu_level_label.set_label("".join(self.graph_values))
 
         elif self.current_mode == "progress":
@@ -162,7 +161,8 @@ class GpuWidget(ButtonWidget):
         self.current_mode = self.config.get("mode", "label")
 
         if self.current_mode == "graph":
-            self.graph_values = []
+            self._graph_maxlen = self.config.get("graph_length", 4)
+            self.graph_values = deque(maxlen=self._graph_maxlen)
             self.gpu_level_label = Label(
                 label="0%",
                 style_classes=["panel-text"],
@@ -224,10 +224,7 @@ class GpuWidget(ButtonWidget):
 
         if self.current_mode == "graph":
             self.graph_values.append(get_bar_graph(usage))
-
-            if len(self.graph_values) > self.config.get("graph_length", 4):
-                self.graph_values.pop(0)
-
+            # deque with maxlen auto-removes old values
             self.gpu_level_label.set_label("".join(self.graph_values))
 
         elif self.current_mode == "progress":
@@ -272,7 +269,8 @@ class MemoryWidget(ButtonWidget):
         self.current_mode = self.config.get("mode", "label")
 
         if self.current_mode == "graph":
-            self.graph_values = []
+            self._graph_maxlen = self.config.get("graph_length", 4)
+            self.graph_values = deque(maxlen=self._graph_maxlen)
             self.memory_level_label = Label(
                 label="0%", style_classes=["panel-text"], visible=False
             )
@@ -327,10 +325,7 @@ class MemoryWidget(ButtonWidget):
 
         if self.current_mode == "graph":
             self.graph_values.append(get_bar_graph(self.percent_used))
-
-            if len(self.graph_values) > self.config.get("graph_length", 4):
-                self.graph_values.pop(0)
-
+            # deque with maxlen auto-removes old values
             self.memory_level_label.set_label("".join(self.graph_values))
 
         elif self.current_mode == "progress":
@@ -374,7 +369,8 @@ class StorageWidget(ButtonWidget):
         self.current_mode = self.config.get("mode", "label")
 
         if self.current_mode == "graph":
-            self.graph_values = []
+            self._graph_maxlen = self.config.get("graph_length", 4)
+            self.graph_values = deque(maxlen=self._graph_maxlen)
 
             self.storage_level_label = Label(
                 label="0",
@@ -430,10 +426,7 @@ class StorageWidget(ButtonWidget):
 
         if self.current_mode == "graph":
             self.graph_values.append(get_bar_graph(percent))
-
-            if len(self.graph_values) > self.config.get("graph_length", 4):
-                self.graph_values.pop(0)
-
+            # deque with maxlen auto-removes old values
             self.storage_level_label.set_label("".join(self.graph_values))
 
         elif self.current_mode == "progress":
