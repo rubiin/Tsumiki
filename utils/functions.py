@@ -42,7 +42,9 @@ _RGBA_RE = re.compile(r"^rgba\(\s*(\d{1,3}%?\s*,\s*){3}(0|1|0?\.\d+)\s*\)$")
 
 # Pre-computed constants
 _NAMED_COLORS_SET = frozenset(NAMED_COLORS)
-_SPECIAL_WIDGET_TYPES = frozenset(("custom_button", "group", "collapsible"))
+_SPECIAL_WIDGET_TYPES = frozenset(
+    ("custom_button", "group", "collapsible", "custom_module")
+)
 _GROUP_TYPES = ("widget_groups", "collapsible_groups")
 _URGENCY_LEVELS = frozenset(("low", "normal", "critical"))
 _BYTES_FACTORS = {"kb": 1, "mb": 2, "gb": 3, "tb": 4}
@@ -514,6 +516,8 @@ def _get_config_collection(parsed_data: dict, widget_type: str) -> list:
         return parsed_data.get("widget_groups", [])
     if widget_type == "collapsible":
         return parsed_data.get("collapsible_groups", [])
+    if widget_type == "custom_module":
+        return parsed_data.get("widgets", {}).get("custom_module", [])
     return []
 
 
@@ -559,6 +563,7 @@ _COLLECTION_NAMES = {
     "custom_button": "custom button",
     "group": "widget group",
     "collapsible": "collapsible group",
+    "custom_module": "custom module",
 }
 
 
