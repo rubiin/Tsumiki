@@ -1,5 +1,55 @@
 # Changelog
 
+## [2.8.0](https://github.com/rubiin/Tsumiki/compare/v2.7.1...v2.8.0) (2025-12-01)
+
+
+### 🚀 New Features
+
+* add delayed_call functions for scheduling callbacks with delays ([d51d822](https://github.com/rubiin/Tsumiki/commit/d51d822b5f9e91b3f3fca4dee55112af57d7ffab))
+* add expand/collapse functionality to notification body with styling for expand button ([db3b532](https://github.com/rubiin/Tsumiki/commit/db3b5328721810569bd73902c41e619a0124c4ad))
+* add keybinds configuration and enhance dock layout with horizontal orientation support ([be2ffaa](https://github.com/rubiin/Tsumiki/commit/be2ffaa8b9f4f4bf71952e5cbd7f61da849838f3))
+* add orientation configuration for dock and update styles for horizontal and vertical layouts ([bfda978](https://github.com/rubiin/Tsumiki/commit/bfda97850e5105dc746646fdf6ba524f8e7133f2))
+* add pre-compiled regex patterns for improved performance and readability in various modules ([e55f04e](https://github.com/rubiin/Tsumiki/commit/e55f04e7eed7ea96d2923349cc37197893b072c6))
+* enhance AppBar with drag-and-drop support and refactor drag handling ([38f963c](https://github.com/rubiin/Tsumiki/commit/38f963cbe3ad46be365ee178f398ca96269e92e6))
+* enhance drag-and-drop functionality by using the app's icon as the drag icon ([23a1e95](https://github.com/rubiin/Tsumiki/commit/23a1e95c10d654ab31f29c0e7d75fb97d86b9f1d))
+* implement asynchronous loading of emoji data in EmojiPickerMenu ([7ed38b8](https://github.com/rubiin/Tsumiki/commit/7ed38b886be0b0ba4c89ff9a072dd4494fc99cc7))
+* implement drag-and-drop functionality for dock app reordering ([672ed27](https://github.com/rubiin/Tsumiki/commit/672ed277cf41726cde4180805afbaaaf93d074bb))
+* implement MultiDotIndicator for grouped app representation and enhance app grouping functionality in the dock ([ffd6cb0](https://github.com/rubiin/Tsumiki/commit/ffd6cb084bc4ddfca1d4ca5847bad284c1cf61fb))
+* improve workspace button state management for occupied and unoccupied states ([49f66e6](https://github.com/rubiin/Tsumiki/commit/49f66e62504d46641d7a587e61ccaa18d0a3601b))
+* refactor AppUtils for improved initialization, suffix normalization, and application lookup efficiency ([18dd5f3](https://github.com/rubiin/Tsumiki/commit/18dd5f32ed63699b5176da7c699dce4549c2f327))
+* refactor audio and microphone sliders to use toggle_css_class for muted state ([d87433e](https://github.com/rubiin/Tsumiki/commit/d87433e420392f5f5e3e89fcdbd8e4ae914ed509))
+* refactor color validation and logging mechanisms for improved readability and maintainability ([6064e4b](https://github.com/rubiin/Tsumiki/commit/6064e4b5c5a1b60f764d63180c7b03697606ba69))
+* refactor ConfigWatcher to streamline file monitoring and improve initialization logic ([6c80a79](https://github.com/rubiin/Tsumiki/commit/6c80a791042b36866e4aa83100d3c1cb908f1fe5))
+* refactor TsumikiConfig to improve configuration loading and CSS settings generation ([0bc36df](https://github.com/rubiin/Tsumiki/commit/0bc36df741ce5bfd270163a18b303bcd3731ef73))
+* update audio and microphone sliders to manage muted state and CSS class toggling ([9d03275](https://github.com/rubiin/Tsumiki/commit/9d03275d51a89b9a9be2f770827aca96717cb9ab))
+
+
+### 🐛 Bug Fixes
+
+* add bar-widget-style mixin for consistent border and icon styling across widgets ([fc75861](https://github.com/rubiin/Tsumiki/commit/fc75861660c34be95933619647cf5ef43c0a511b))
+* fetch GPU stats asynchronously to improve UI responsiveness ([8cdf2e3](https://github.com/rubiin/Tsumiki/commit/8cdf2e31af9a02483e60960e5ec570f028aabd8a))
+* implement pixbuf caching for notifications to improve performance and reduce scaling overhead ([6f69c12](https://github.com/rubiin/Tsumiki/commit/6f69c129ce4d1af01120f876dd17bd3d4796502f))
+* optimize angle setter to reduce unnecessary redraws ([e11262b](https://github.com/rubiin/Tsumiki/commit/e11262b50f25d1ab2bd2d324b588264275165b6b))
+* refactor #date_time styles to use common mixin for consistency ([e2e1796](https://github.com/rubiin/Tsumiki/commit/e2e1796cc414ef21aaf81f224b639c5796a36ce5))
+* refactor collapsible group styles for improved organization and clarity ([3f81321](https://github.com/rubiin/Tsumiki/commit/3f81321f8ba185679c9e74261b300a169b2b19e0))
+* refactor shadow handling in common styles to use mixin for consistency ([b5c2f2d](https://github.com/rubiin/Tsumiki/commit/b5c2f2d1e71433f21e8f076b07874c03ac039528))
+* refactor shadow handling in multiple stylesheets to use common mixin ([4b950b3](https://github.com/rubiin/Tsumiki/commit/4b950b3c09527147e4d6357b71593563c3d6e85b))
+* refactor widget styles to use common mixin for consistency across components ([50f094c](https://github.com/rubiin/Tsumiki/commit/50f094c20993202acbb3978ab5be202900902e34))
+* remove duplicate font-family declaration in main.scss ([d0e3bf2](https://github.com/rubiin/Tsumiki/commit/d0e3bf23aec09f99748f66c989f25ed45e767be1))
+* replace list with deque for graph values to optimize memory usage ([723ad48](https://github.com/rubiin/Tsumiki/commit/723ad48f8fe60ef17d8fd31bc9325cd5a4c5f9d9))
+* simplify comment for app registry initialization in OverviewMenu ([2957be6](https://github.com/rubiin/Tsumiki/commit/2957be60d50365017a59f09f2786f40ea24587a6))
+* update quicksettings toggle button styles for improved consistency and clarity ([4aaef6e](https://github.com/rubiin/Tsumiki/commit/4aaef6e24961ebb13f56f5aed89ca06ca58c3f23))
+
+
+### ⚡️ Performance Improvements
+
+* enhance AppBar to manage pinned app buttons ([349f045](https://github.com/rubiin/Tsumiki/commit/349f0457b9ef5a96d1164c1b34b3d2cf5c5a60d9))
+
+
+### ⚙️ Chores
+
+* **deps:** update dependency pytomlpp to v1.1.0 ([#255](https://github.com/rubiin/Tsumiki/issues/255)) ([afd41ab](https://github.com/rubiin/Tsumiki/commit/afd41ab1ef836afb6d4d7905f7d3d157b912f4a8))
+
 ## [2.7.1](https://github.com/rubiin/Tsumiki/compare/v2.7.0...v2.7.1) (2025-11-30)
 
 
