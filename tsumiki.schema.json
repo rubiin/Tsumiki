@@ -2107,6 +2107,35 @@
 							},
 							"default": []
 						},
+						"group_apps": {
+							"type": "boolean",
+							"default": true,
+							"description": "Determines whether to group windows of the same application."
+						},
+						"truncation_size": {
+							"type": "integer",
+							"default": 20,
+							"description": "Maximum length of window titles before truncation."
+						},
+						"orientation": {
+							"type": "string",
+							"enum": [
+								"horizontal",
+								"vertical"
+							],
+							"default": "horizontal",
+							"description": "Specifies the orientation of the dock."
+						},
+						"always_show_focused": {
+							"type": "boolean",
+							"default": true,
+							"description": "Determines whether the focused window is always shown in the dock."
+						},
+						"hide_special_workspace_apps": {
+							"type": "boolean",
+							"default": false,
+							"description": "Determines whether apps on special workspaces are hidden from the dock."
+						},
 						"layer": {
 							"$ref": "#/definitions/layer",
 							"default": "top",

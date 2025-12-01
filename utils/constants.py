@@ -413,6 +413,11 @@ DEFAULT_CONFIG = {
                 200,
                 130,
             ],
+            "group_apps": True,
+            "truncation_size": 20,
+            "orientation": "horizontal",
+            "always_show_focused": True,
+            "hide_special_workspace_apps": False,
         },
         "desktop_clock": {
             "enabled": False,

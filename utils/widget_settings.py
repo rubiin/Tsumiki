@@ -242,7 +242,11 @@ Dock = TypedDict(
         "preview_apps": bool,
         "preview_size": tuple[int, int],
         "show_when_no_windows": bool,
+        "group_apps": bool,
+        "truncation_size": int,
         "ignored": list[str],
+        "always_show_focused": bool,
+        "hide_special_workspace_apps": bool,
         "layer": Layer,
     },
 )

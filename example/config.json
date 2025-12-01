@@ -316,18 +316,18 @@
 			"tooltip": true
 		},
 		"keybinds": {
-					"icon": "󰌌",
-					"label": false,
-					"tooltip": true,
-					"show_icon": true,
-					"width": 800,
-					"height": 500,
-					"hide_empty_descriptions": true,
-					"anchor": "center",
-					"transition_type": "crossfade",
-					"transition_duration": 300,
-					"title": "Keybinds"
-				},
+			"icon": "󰌌",
+			"label": false,
+			"tooltip": true,
+			"show_icon": true,
+			"width": 800,
+			"height": 500,
+			"hide_empty_descriptions": true,
+			"anchor": "center",
+			"transition_type": "crossfade",
+			"transition_duration": 300,
+			"title": "Keybinds"
+		},
 		"emoji_picker": {
 			"icon": "",
 			"label": false,
@@ -389,7 +389,17 @@
 				}
 			],
 			"spacing": 4
-		}
+		},
+		"custom_module": [
+			{
+				"exec": "pamixer --get-volume",
+				"format": "󰕾 {}%",
+				"interval": 1,
+				"on_scroll_up": "pamixer -i 5",
+				"on_scroll_down": "pamixer -d 5",
+				"exec_on_event": true
+			}
+		]
 	},
 	"layout": {
 		"left_section": [
@@ -468,10 +478,19 @@
 			"transition_type": "crossfade",
 			"transition_duration": 350
 		},
+		"cheatsheet": {
+			"enabled": true,
+			"layer": "top",
+			"anchor": "center",
+			"transition_type": "crossfade",
+			"transition_duration": 350
+		},
 		"notification": {
 			"enabled": true,
 			"dnd_on_screencast": true,
 			"anchor": "top-right",
+			"max_lines": 4,
+			"max_expanded_lines": 20,
 			"auto_dismiss": true,
 			"ignored": [],
 			"timeout": 3000,
@@ -511,6 +530,7 @@
 			"icon_size": 40,
 			"preview_apps": true,
 			"group_apps": true,
+			"truncation_size": 20,
 			"preview_size": [
 				200,
 				130

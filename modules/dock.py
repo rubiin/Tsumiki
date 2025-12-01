@@ -150,6 +150,7 @@ class AppBar(Box):
         self.preview_size = self.config.get("preview_size", [40, 50])
         self.orientation = self.config.get("orientation", "horizontal")
         self._group_apps = self.config.get("group_apps", True)
+        self.truncation_size = self.config.get("truncation_size", 20)
 
         # Track grouped apps: app_id -> {box, button, indicator, clients: []}
         self._app_groups = {}
@@ -341,73 +342,93 @@ class AppBar(Box):
         mi.connect("activate", lambda *_: callback())
         return mi
 
-    def _show_menu(self, client: Glace.Client):
-        """Show the context menu for a client."""
-
+    def _init_menu(self):
+        """Initialize or clear the context menu."""
         self._close_popup()
-
         if not self.menu:
             self.menu = Gtk.Menu()
         else:
-            for title_item in self.menu.get_children():
-                self.menu.remove(title_item)
-                title_item.destroy()
+            for item in self.menu.get_children():
+                self.menu.remove(item)
+                item.destroy()
 
-        new_window = self._make_item(
-            "New Window", lambda: self._open_new_window(client)
-        )
-        toggle_full_screen = self._make_item(
-            "Toggle Full Screen", lambda: self._toggle_fullscreen(client)
-        )
-        toggle_floating = self._make_item(
-            "Toggle Floating", lambda: self._toggle_floating(client)
-        )
-        close_item = self._make_item("Close", lambda: self._close_running_app(client))
-        close_all_item = self._make_item(
-            "Close All", lambda: self._close_running_app(client)
+    def _build_client_submenu(self, client: Glace.Client) -> Gtk.Menu:
+        """Build a submenu for a single client with toggle, close, workspace."""
+        submenu = Gtk.Menu()
+
+        # Activate
+        submenu.add(self._make_item("Activate", lambda: client.activate()))
+
+        # Toggle Floating
+        submenu.add(
+            self._make_item("Toggle Floating", lambda: self._toggle_floating(client))
         )
 
-        title_item = Gtk.MenuItem(label=truncate(client.get_title(), 20))
+        # Toggle Fullscreen
+        fs_label = (
+            "Exit Full Screen" if client.get_fullscreen() else "Toggle Full Screen"
+        )
+        submenu.add(self._make_item(fs_label, lambda: self._toggle_fullscreen(client)))
 
-        item_menu = Gtk.Menu()
-        title_item.set_submenu(item_menu)
+        # Close
+        submenu.add(self._make_item("Close", lambda: self._close_running_app(client)))
 
-        if client.get_fullscreen():
-            toggle_full_screen.set_label("Exit Full Screen")
+        submenu.add(Gtk.SeparatorMenuItem())
 
-        for i in range(1, 10):
+        # Workspace move options (1-8)
+        for i in range(1, 9):
             ws_item = Gtk.MenuItem(label=f"Move to Workspace {i}")
             ws_item.connect(
                 "activate", lambda *_, i=i: self._move_to_workspace(client, i)
             )
+            submenu.add(ws_item)
 
-            item_menu.add(ws_item)
+        return submenu
+
+    def _build_common_menu_items(
+        self, client: Glace.Client, clients: list | None = None
+    ):
+        """Build common menu items (close all, pin/unpin, new window)."""
+        items = []
+        clients = clients or [client]
+
+        # Close All
+        items.append(
+            self._make_item(
+                "Close All",
+                lambda: [self._close_running_app(c) for c in clients.copy()],
+            )
+        )
 
         # Pin / Unpin
         if self._check_if_pinned(client):
-            pin_item = self._make_item("Unpin", lambda: self._unpin_app(client))
+            items.append(self._make_item("Unpin", lambda: self._unpin_app(client)))
         else:
-            pin_item = self._make_item("Pin", lambda: self._pin_running_app(client))
+            items.append(self._make_item("Pin", lambda: self._pin_running_app(client)))
 
-        close_item.connect("activate", lambda *_: self._close_running_app(client))
-        new_window.connect("activate", lambda *_: self._open_new_window(client))
-
-        toggle_full_screen.connect(
-            "activate", lambda *_: self._toggle_fullscreen(client)
+        # New Window
+        items.append(
+            self._make_item("New Window", lambda: self._open_new_window(client))
         )
-        toggle_floating.connect("activate", lambda *_: self._toggle_floating(client))
-        close_all_item.connect("activate", lambda *_: self._toggle_floating(client))
 
-        # Add items to menu
-        for item in [
-            title_item,
-            pin_item,
-            new_window,
-            toggle_full_screen,
-            toggle_floating,
-            close_item,
-            close_all_item,
-        ]:
+        return items
+
+    def _show_menu(self, client: Glace.Client):
+        """Show the context menu for a single client."""
+        self._init_menu()
+
+        # Instance with submenu
+        title = truncate(
+            client.get_title() or client.get_app_id() or "", self.truncation_size
+        )
+        instance_item = Gtk.MenuItem(label=title)
+        instance_item.set_submenu(self._build_client_submenu(client))
+        self.menu.add(instance_item)
+
+        self.menu.add(Gtk.SeparatorMenuItem())
+
+        # Common items (Close All, Pin/Unpin, New Window)
+        for item in self._build_common_menu_items(client):
             self.menu.add(item)
 
         self.menu.show_all()
@@ -684,54 +705,21 @@ class AppBar(Box):
             self.separator.set_visible(True)
 
     def _show_group_menu(self, app_id: str, clients: list):
-        """Show context menu for a grouped app."""
-        self._close_popup()
+        """Show context menu for a grouped app (multiple windows)."""
+        self._init_menu()
 
-        if not self.menu:
-            self.menu = Gtk.Menu()
-        else:
-            for item in self.menu.get_children():
-                self.menu.remove(item)
-                item.destroy()
-
-        # Add menu item for each window
+        # Add each instance with its submenu
         for client in clients:
-            title = truncate(client.get_title() or app_id, 30)
-            window_item = Gtk.MenuItem(label=title)
-            submenu = Gtk.Menu()
+            title = truncate(client.get_title() or app_id, self.truncation_size)
+            instance_item = Gtk.MenuItem(label=title)
+            instance_item.set_submenu(self._build_client_submenu(client))
+            self.menu.add(instance_item)
 
-            activate_item = self._make_item("Activate", lambda c=client: c.activate())
-            close_item = self._make_item(
-                "Close", lambda c=client: self._close_running_app(c)
-            )
-
-            submenu.add(activate_item)
-            submenu.add(close_item)
-            window_item.set_submenu(submenu)
-            self.menu.add(window_item)
-
-        # Add separator
         self.menu.add(Gtk.SeparatorMenuItem())
 
-        # Add common actions
-        new_window = self._make_item(
-            "New Window", lambda: self._open_new_window(clients[0])
-        )
-        self.menu.add(new_window)
-
-        # Pin/Unpin
-        if app_id in self.pinned_apps:
-            pin_item = self._make_item("Unpin", lambda: self._unpin_app(clients[0]))
-        else:
-            pin_item = self._make_item("Pin", lambda: self._pin_running_app(clients[0]))
-        self.menu.add(pin_item)
-
-        # Close all
-        close_all = self._make_item(
-            "Close All",
-            lambda: [self._close_running_app(c) for c in clients.copy()],
-        )
-        self.menu.add(close_all)
+        # Common items (Close All, Pin/Unpin, New Window)
+        for item in self._build_common_menu_items(clients[0], clients):
+            self.menu.add(item)
 
         self.menu.show_all()
 
