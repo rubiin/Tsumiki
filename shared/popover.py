@@ -25,31 +25,48 @@ class PopoverManager:
         return cls._instance
 
     def __init__(self):
-        # Shared overlay window for all popovers
-        self.overlay = WaylandWindow(
-            name="popover-overlay",
-            style_classes=["popover-overlay"],
-            title="tsumiki",
-            anchor="left top right bottom",
-            margin="-50px 0px 0px 0px",
-            exclusivity="auto",
-            layer="overlay",
-            type="top-level",
-            visible=False,
-            all_visible=False,
-        )
+        if hasattr(self, "_initialized"):
+            return
+        self._initialized = True
 
-        # Add empty box so GTK doesn't complain
-        self.overlay.add(Box())
+        # Lazy-initialized overlay window
+        self._overlay = None
+        self._hyprland_connection = None
 
         # Keep track of active popovers
         self.active_popover = None
         self.available_windows = []
 
-        # Close popover when clicking overlay
-        self.overlay.connect("button-press-event", self.on_overlay_clicked)
-        self._hyprland_connection = get_hyprland_connection()
-        self._hyprland_connection.connect("event::focusedmonv2", self.on_monitor_change)
+    @property
+    def overlay(self):
+        """Lazily create the overlay window on first access."""
+        if self._overlay is None:
+            self._overlay = WaylandWindow(
+                name="popover-overlay",
+                style_classes=["popover-overlay"],
+                title="tsumiki",
+                anchor="left top right bottom",
+                margin="-50px 0px 0px 0px",
+                exclusivity="auto",
+                layer="overlay",
+                type="top-level",
+                visible=False,
+                all_visible=False,
+            )
+
+            # Add empty box so GTK doesn't complain
+            self._overlay.add(Box())
+
+            # Close popover when clicking overlay
+            self._overlay.connect("button-press-event", self.on_overlay_clicked)
+
+            # Connect hyprland monitor change handler
+            self._hyprland_connection = get_hyprland_connection()
+            self._hyprland_connection.connect(
+                "event::focusedmonv2", self.on_monitor_change
+            )
+
+        return self._overlay
 
     def on_monitor_change(self, _, event: HyprlandEvent):
         if self.active_popover:
