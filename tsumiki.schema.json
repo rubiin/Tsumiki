@@ -2119,10 +2119,7 @@
 						},
 						"orientation": {
 							"type": "string",
-							"enum": [
-								"horizontal",
-								"vertical"
-							],
+							"enum": ["horizontal", "vertical"],
 							"default": "horizontal",
 							"description": "Specifies the orientation of the dock."
 						},
