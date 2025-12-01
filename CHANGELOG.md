@@ -1,5 +1,19 @@
 # Changelog
 
+## [2.9.0](https://github.com/rubiin/Tsumiki/compare/v2.8.0...v2.9.0) (2025-12-01)
+
+
+### 🚀 New Features
+
+* add swipe-to-dismiss functionality for notifications ([#258](https://github.com/rubiin/Tsumiki/issues/258)) ([f9286dc](https://github.com/rubiin/Tsumiki/commit/f9286dcd238e0ceef9d5aa04d18933af1d4ac19f))
+* custom module ([#256](https://github.com/rubiin/Tsumiki/issues/256)) ([0a0f49a](https://github.com/rubiin/Tsumiki/commit/0a0f49a0f29f6d9a98682ebc5470fc0fc92aada7))
+* remove cheatsheet module and add configuration to widget settings ([ee5a6eb](https://github.com/rubiin/Tsumiki/commit/ee5a6eb680f69ad12785cd9f654db147796a86b1))
+
+
+### 🐛 Bug Fixes
+
+* custom module ([5971361](https://github.com/rubiin/Tsumiki/commit/597136183947e26f19604aebc87594327576e162))
+
 ## [2.8.0](https://github.com/rubiin/Tsumiki/compare/v2.7.1...v2.8.0) (2025-12-01)
 
 
