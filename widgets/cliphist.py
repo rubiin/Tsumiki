@@ -1,6 +1,5 @@
 import os
 import re
-import subprocess
 import tempfile
 from urllib.parse import unquote, urlparse
 
@@ -12,7 +11,7 @@ from fabric.widgets.entry import Entry
 from fabric.widgets.image import Image
 from fabric.widgets.label import Label
 from fabric.widgets.scrolledwindow import ScrolledWindow
-from gi.repository import Gdk, GdkPixbuf, GLib, Gtk
+from gi.repository import Gdk, GdkPixbuf, Gio, GLib, Gtk
 
 from shared.list import ListBox
 from shared.widget_container import ButtonWidget
@@ -167,34 +166,44 @@ class ClipHistoryMenu(Box):
         self._loading = True
         self.search_entry.set_text("")  # Clear search
         self.search_entry.grab_focus()
-        # Start loading in background using GLib.idle_add
-        GLib.idle_add(self._load_clipboard_items_thread)
+        # Start loading asynchronously
+        self._load_clipboard_items_async()
 
-    def _load_clipboard_items_thread(self):
-        """Worker for loading clipboard items, now runs in main loop via idle_add"""
+    def _load_clipboard_items_async(self):
+        """Load clipboard items asynchronously without blocking UI"""
         try:
-            result = subprocess.run(
-                ["cliphist", "list"], capture_output=True, check=True
+            # Use Gio.Subprocess for true async execution
+            launcher = Gio.SubprocessLauncher.new(
+                Gio.SubprocessFlags.STDOUT_PIPE | Gio.SubprocessFlags.STDERR_PIPE
             )
-            # Decode stdout with error handling
-            stdout_str = result.stdout.decode("utf-8", errors="replace")
-            lines = stdout_str.strip().split("\n")
-            new_items = []
-            for line in lines:
-                if not line or "<meta http-equiv" in line:
-                    continue
-                new_items.append(line)
-            self._update_items(new_items)
-        except subprocess.CalledProcessError as e:
-            logger.exception(f"Error loading clipboard history: {e}")
+            proc = launcher.spawnv(["cliphist", "list"])
+            proc.communicate_async(
+                None, None, self._on_clipboard_list_ready, None
+            )
         except Exception as e:
-            logger.exception(f"Unexpected error: {e}")
+            logger.exception(f"Error starting cliphist: {e}")
+            self._loading = False
+
+    def _on_clipboard_list_ready(self, proc, result, user_data):
+        """Callback when clipboard list command completes"""
+        try:
+            _, stdout, _ = proc.communicate_finish(result)
+            if stdout:
+                stdout_str = stdout.get_data().decode("utf-8", errors="replace")
+                lines = stdout_str.strip().split("\n")
+                new_items = []
+                for line in lines:
+                    if not line or "<meta http-equiv" in line:
+                        continue
+                    new_items.append(line)
+                self._update_items(new_items)
+        except Exception as e:
+            logger.exception(f"Error loading clipboard history: {e}")
         finally:
             self._loading = False
             if self._pending_updates:
                 self._pending_updates = False
-                GLib.idle_add(self._load_clipboard_items_thread)
-        return False  # Ensure idle_add does not repeat
+                self._load_clipboard_items_async()
 
     def _update_items(self, new_items):
         """Update the items list from main thread"""
@@ -355,16 +364,32 @@ class ClipHistoryMenu(Box):
 
         return button
 
-    def _load_image(self, item_id, button):
+    def _load_image_preview_async(self, item_id, button):
+        """Load image preview asynchronously"""
+        if item_id in self.image_cache:
+            # Use cached pixbuf
+            GLib.idle_add(self._update_image_button, button, self.image_cache[item_id])
+            return
+
         try:
-            if item_id in self.image_cache:
-                pixbuf = self.image_cache[item_id]
-            else:
-                result = subprocess.run(
-                    ["cliphist", "decode", item_id], capture_output=True, check=True
-                )
+            launcher = Gio.SubprocessLauncher.new(
+                Gio.SubprocessFlags.STDOUT_PIPE | Gio.SubprocessFlags.STDERR_PIPE
+            )
+            proc = launcher.spawnv(["cliphist", "decode", item_id])
+            proc.communicate_async(
+                None, None, self._on_image_loaded, (item_id, button)
+            )
+        except Exception as e:
+            logger.exception(f"Error starting image decode: {e}")
+
+    def _on_image_loaded(self, proc, result, user_data):
+        """Callback when image decode completes"""
+        item_id, button = user_data
+        try:
+            _, stdout, _ = proc.communicate_finish(result)
+            if stdout:
                 loader = GdkPixbuf.PixbufLoader()
-                loader.write(result.stdout)
+                loader.write(stdout.get_data())
                 loader.close()
                 pixbuf = loader.get_pixbuf()
                 width, height = pixbuf.get_width(), pixbuf.get_height()
@@ -379,15 +404,9 @@ class ClipHistoryMenu(Box):
                     new_width, new_height, GdkPixbuf.InterpType.BILINEAR
                 )
                 self.image_cache[item_id] = pixbuf
-            self._update_image_button(button, pixbuf)
+                self._update_image_button(button, pixbuf)
         except Exception as e:
             logger.exception(f"Error loading image preview: {e}")
-        return False
-
-    def _load_image_preview_async(self, item_id, button):
-        """Load image preview using GLib.idle_add instead of threads"""
-
-        GLib.idle_add(self._load_image, item_id, button)
 
     def _update_image_button(self, button, pixbuf):
         """Update the button with the loaded image preview"""
@@ -438,51 +457,83 @@ class ClipHistoryMenu(Box):
             )
         )
 
-    def _paste(self, item_id):
-        try:
-            result = subprocess.run(
-                ["cliphist", "decode", item_id], capture_output=True, check=True
-            )
-            subprocess.run(["wl-copy"], input=result.stdout, check=True)
-            GLib.idle_add(self.close)
-        except subprocess.CalledProcessError as e:
-            logger.exception(f"Error pasting clipboard item: {e}")
-        return False
-
     def paste_item(self, item_id):
-        """Copy the selected item to the clipboard and close (GLib.idle_add)"""
-
-        GLib.idle_add(self._paste, item_id)
-
-    def _delete(self, item_id):
+        """Copy the selected item to the clipboard asynchronously"""
         try:
-            subprocess.run(["cliphist", "delete", item_id], check=True)
-            self._pending_updates = True
-            if not self._loading:
-                GLib.idle_add(self._load_clipboard_items_thread)
-        except subprocess.CalledProcessError as e:
-            logger.exception(f"Error deleting clipboard item: {e}")
-        return False
+            launcher = Gio.SubprocessLauncher.new(
+                Gio.SubprocessFlags.STDOUT_PIPE | Gio.SubprocessFlags.STDERR_PIPE
+            )
+            proc = launcher.spawnv(["cliphist", "decode", item_id])
+            proc.communicate_async(
+                None, None, self._on_paste_decoded, None
+            )
+        except Exception as e:
+            logger.exception(f"Error starting paste decode: {e}")
+
+    def _on_paste_decoded(self, proc, result, user_data):
+        """Callback when paste decode completes"""
+        try:
+            _, stdout, _ = proc.communicate_finish(result)
+            if stdout:
+                # Now pipe to wl-copy
+                launcher = Gio.SubprocessLauncher.new(
+                    Gio.SubprocessFlags.STDIN_PIPE
+                )
+                wl_proc = launcher.spawnv(["wl-copy"])
+                wl_proc.communicate_async(
+                    GLib.Bytes.new(stdout.get_data()),
+                    None,
+                    self._on_paste_complete,
+                    None
+                )
+        except Exception as e:
+            logger.exception(f"Error decoding paste item: {e}")
+
+    def _on_paste_complete(self, proc, result, user_data):
+        """Callback when wl-copy completes"""
+        try:
+            proc.communicate_finish(result)
+            self.close()
+        except Exception as e:
+            logger.exception(f"Error pasting clipboard item: {e}")
 
     def delete_item(self, item_id):
-        """Delete the selected clipboard item (GLib.idle_add)"""
-
-        GLib.idle_add(self._delete, item_id)
-
-    def _clear(self):
+        """Delete the selected clipboard item asynchronously"""
         try:
-            subprocess.run(["cliphist", "wipe"], check=True)
+            launcher = Gio.SubprocessLauncher.new(Gio.SubprocessFlags.NONE)
+            proc = launcher.spawnv(["cliphist", "delete", item_id])
+            proc.wait_async(None, self._on_delete_complete, None)
+        except Exception as e:
+            logger.exception(f"Error starting delete: {e}")
+
+    def _on_delete_complete(self, proc, result, user_data):
+        """Callback when delete completes"""
+        try:
+            proc.wait_finish(result)
             self._pending_updates = True
             if not self._loading:
-                GLib.idle_add(self._load_clipboard_items_thread)
-        except subprocess.CalledProcessError as e:
-            logger.exception(f"Error clearing clipboard history: {e}")
-        return False
+                self._load_clipboard_items_async()
+        except Exception as e:
+            logger.exception(f"Error deleting clipboard item: {e}")
 
     def clear_history(self, *_):
-        """Clear all clipboard history (GLib.idle_add)"""
+        """Clear all clipboard history asynchronously"""
+        try:
+            launcher = Gio.SubprocessLauncher.new(Gio.SubprocessFlags.NONE)
+            proc = launcher.spawnv(["cliphist", "wipe"])
+            proc.wait_async(None, self._on_clear_complete, None)
+        except Exception as e:
+            logger.exception(f"Error starting clear: {e}")
 
-        GLib.idle_add(self._clear)
+    def _on_clear_complete(self, proc, result, user_data):
+        """Callback when clear completes"""
+        try:
+            proc.wait_finish(result)
+            self._pending_updates = True
+            if not self._loading:
+                self._load_clipboard_items_async()
+        except Exception as e:
+            logger.exception(f"Error clearing clipboard history: {e}")
 
     def filter_items(self, entry, *_):
         """Filter clipboard items based on search text"""
