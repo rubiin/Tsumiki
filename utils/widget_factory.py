@@ -110,6 +110,13 @@ class WidgetResolver:
                 ["collapsible_groups"],
                 self._instantiate_collapsible_group,
             ),
+            "custom_module": lambda: self._create_indexed_widget(
+                identifier,
+                context,
+                "custom_module",
+                ["widgets", "custom_module"],
+                self._instantiate_custom_module,
+            ),
         }
 
         resolver = resolvers.get(widget_type)
@@ -169,6 +176,17 @@ class WidgetResolver:
         collapsible_group.widgets_config = group_config.get("widgets", [])
         collapsible_group.set_context(config, self.widgets_list)
         return collapsible_group
+
+    def _instantiate_custom_module(
+        self, module_config: dict, config: dict, index: int
+    ) -> Any:
+        """Create CustomModuleWidget instance."""
+        from widgets.custom_module import CustomModuleWidget
+
+        return CustomModuleWidget(
+            widget_name=f"custom_module_{index}",
+            config=module_config,
+        )
 
     def batch_resolve(
         self, widget_specs: list[str], context: dict[str, Any]

@@ -507,6 +507,30 @@ Custom_Button_Group = TypedDict(
     },
 )
 
+# Custom Module configuration (Waybar-compatible)
+CustomModule = TypedDict(
+    "CustomModule",
+    {
+        "exec": str,
+        "exec_on_event": bool,
+        "interval": int,
+        "return_type": Literal["plain", "json"],
+        "format": str,
+        "max_length": int,
+        "rotate": int,
+        "tooltip": bool,
+        "on_click": str,
+        "on_click_right": str,
+        "on_click_middle": str,
+        "on_scroll_up": str,
+        "on_scroll_down": str,
+        "signal": int,
+        "restart_interval": int,
+        "format_icons": dict[str, str],
+    },
+    total=False,
+)
+
 # World clock configuration
 WorldClock = TypedDict(
     "WorldClock",
@@ -677,6 +701,7 @@ class Widgets(TypedDict):
     keyboard: Keyboard
     language: Language
     custom_button_group: Custom_Button_Group
+    custom_module: list[CustomModule]
     gpu: Gpu
     memory: Memory
     microphone: MicroPhone

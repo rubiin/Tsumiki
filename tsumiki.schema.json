@@ -131,6 +131,11 @@
 						"type": "string",
 						"pattern": "^@custom_button:\\d+$",
 						"description": "Specifies an individual custom button by index (e.g., @custom_button:0, @custom_button:1)."
+					},
+					{
+						"type": "string",
+						"pattern": "^@custom_module:\\d+$",
+						"description": "Specifies a custom module by index (e.g., @custom_module:0). Runs external commands like Waybar."
 					}
 				]
 			}
@@ -1788,6 +1793,97 @@
 						}
 					},
 					"required": ["buttons", "spacing"]
+				},
+				"custom_module": {
+					"type": "array",
+					"description": "Waybar-compatible custom modules that run external commands",
+					"items": {
+						"type": "object",
+						"properties": {
+							"exec": {
+								"type": "string",
+								"description": "Command or script to execute"
+							},
+							"exec_on_event": {
+								"type": "boolean",
+								"default": false,
+								"description": "Re-run exec after click/scroll events"
+							},
+							"interval": {
+								"type": "integer",
+								"minimum": 0,
+								"default": 0,
+								"description": "Seconds between updates (0 = run once)"
+							},
+							"return_type": {
+								"type": "string",
+								"enum": ["plain", "json"],
+								"default": "plain",
+								"description": "Output format: empty for plain text, 'json' for Waybar JSON protocol"
+							},
+							"format": {
+								"type": "string",
+								"default": "{}",
+								"description": "Format string where {} is replaced with output"
+							},
+							"max_length": {
+								"type": "integer",
+								"minimum": 0,
+								"default": 0,
+								"description": "Maximum text length (0 = no limit)"
+							},
+							"rotate": {
+								"type": "integer",
+								"default": 0,
+								"description": "Rotate text by degrees"
+							},
+							"tooltip": {
+								"type": "boolean",
+								"default": true,
+								"description": "Show tooltip"
+							},
+							"on_click": {
+								"type": "string",
+								"description": "Command to run on left click"
+							},
+							"on_click_right": {
+								"type": "string",
+								"description": "Command to run on right click"
+							},
+							"on_click_middle": {
+								"type": "string",
+								"description": "Command to run on middle click"
+							},
+							"on_scroll_up": {
+								"type": "string",
+								"description": "Command to run on scroll up"
+							},
+							"on_scroll_down": {
+								"type": "string",
+								"description": "Command to run on scroll down"
+							},
+							"signal": {
+								"type": "integer",
+								"minimum": 1,
+								"maximum": 30,
+								"description": "SIGRTMIN+N signal number to trigger update"
+							},
+							"restart_interval": {
+								"type": "integer",
+								"minimum": 0,
+								"default": 0,
+								"description": "Restart continuous command after N seconds"
+							},
+							"format_icons": {
+								"type": "object",
+								"additionalProperties": {
+									"type": "string"
+								},
+								"description": "Map of state/percentage to icons"
+							}
+						},
+						"required": ["exec"]
+					}
 				}
 			}
 		},
