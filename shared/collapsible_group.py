@@ -112,6 +112,8 @@ class CollapsibleGroupWidget(ButtonWidget):
         # Use the widget factory system
         from utils.widget_factory import WidgetResolver
 
+        # Note: Don't use `self.widgets_list or {}` because LazyWidgetDict
+        # inherits from dict but is empty, so it evaluates to falsy
         widgets_list = self.widgets_list if self.widgets_list is not None else {}
         resolver = WidgetResolver(widgets_list)
         widgets = resolver.batch_resolve(self.widgets_config, self._resolver_context)
