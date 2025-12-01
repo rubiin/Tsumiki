@@ -15,11 +15,17 @@ gi.require_versions({"Gtk": "3.0", "GdkPixbuf": "2.0"})
 # Pre-compiled regex for splitting app_id
 _APP_ID_SPLIT_RE = re.compile(r"-|\.|_|\s")
 
+# Debounce delay for batching icon cache writes (ms)
+_CACHE_WRITE_DELAY_MS = 2000
+
 
 class IconResolver:
     """A class to resolve icons for applications."""
 
+    __slots__ = ("_cache_dirty", "_icon_dict", "_write_pending")
+
     _instance = None
+    _initialized = False
 
     def __new__(cls):
         if cls._instance is None:
@@ -27,11 +33,17 @@ class IconResolver:
         return cls._instance
 
     def __init__(self):
+        if IconResolver._initialized:
+            return
+        IconResolver._initialized = True
+
         if os.path.exists(ICON_CACHE_FILE):
             self._icon_dict = read_json_file(ICON_CACHE_FILE) or {}
-
         else:
             self._icon_dict = {}
+
+        self._cache_dirty = False
+        self._write_pending = False
 
     def get_icon_name(self, app_id: str):
         if app_id in self._icon_dict:
@@ -80,7 +92,24 @@ class IconResolver:
 
     def _store_new_icon(self, app_id: str, icon: str):
         self._icon_dict[app_id] = icon
-        write_json_file(self._icon_dict, ICON_CACHE_FILE)
+        self._cache_dirty = True
+        self._schedule_cache_write()
+
+    def _schedule_cache_write(self):
+        """Schedule a debounced write to batch multiple icon discoveries."""
+        if self._write_pending:
+            return  # Already scheduled
+        self._write_pending = True
+        GLib.timeout_add(_CACHE_WRITE_DELAY_MS, self._flush_cache)
+
+    def _flush_cache(self):
+        """Write cache to disk if dirty."""
+        self._write_pending = False
+        if self._cache_dirty:
+            write_json_file(self._icon_dict, ICON_CACHE_FILE)
+            self._cache_dirty = False
+            logger.info("[ICONS] Flushed icon cache to disk")
+        return False  # Don't repeat
 
     def _get_icon_from_desktop_file(self, desktop_file_path: str):
         with open(desktop_file_path, "r") as f:
