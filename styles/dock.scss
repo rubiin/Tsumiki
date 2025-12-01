@@ -44,5 +44,12 @@
       min-height: 1.2px;
       min-width: unset;
     }
+
+
+    // Make dot indicator overlay the button edge to keep consistent width
+    > box > drawingarea:first-child {
+      margin-right: -5px;
+      margin-left: 0;
+    }
   }
 }

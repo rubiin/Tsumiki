@@ -131,6 +131,8 @@ Notification = TypedDict(
         "enabled": bool,
         "ignored": list[str],
         "timeout": int,
+        "max_lines": int,
+        "max_expanded_lines": int,
         "anchor": Anchor,
         "auto_dismiss": bool,
         "persist": bool,
@@ -222,6 +224,7 @@ Dock = TypedDict(
     {
         "enabled": bool,
         "tooltip": bool,
+        "orientation": Literal["vertical", "horizontal"],
         "behavior": Literal["always_show", "intellihide"],
         "icon_size": int,
         "preview_apps": bool,

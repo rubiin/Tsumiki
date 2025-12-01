@@ -315,6 +315,19 @@
 			"label": false,
 			"tooltip": true
 		},
+		"keybinds": {
+					"icon": "󰌌",
+					"label": false,
+					"tooltip": true,
+					"show_icon": true,
+					"width": 800,
+					"height": 500,
+					"hide_empty_descriptions": true,
+					"anchor": "center",
+					"transition_type": "crossfade",
+					"transition_duration": 300,
+					"title": "Keybinds"
+				},
 		"emoji_picker": {
 			"icon": "",
 			"label": false,
@@ -492,10 +505,12 @@
 		},
 		"dock": {
 			"enabled": true,
+			"orientation": "horizontal",
 			"tooltip": false,
 			"behavior": "intellihide",
 			"icon_size": 40,
 			"preview_apps": true,
+			"group_apps": true,
 			"preview_size": [
 				200,
 				130

@@ -519,7 +519,7 @@
 					"width": ".5em",
 					"active_width": "1em",
 					"border": {
-						"enabled": true,
+						"enabled": false,
 						"width": "2px",
 						"radius": "16px"
 					}

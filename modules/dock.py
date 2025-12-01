@@ -106,23 +106,23 @@ class AppBar(Box):
         # Determine orientation for boxes
         is_vertical = self.orientation == "vertical"
         box_orientation = "vertical" if is_vertical else "horizontal"
-        launcher_margin = "margin-right: 8px;" if is_vertical else "margin-bottom: 8px;"
+        launcher_style = "margin-bottom: 8px;" if is_vertical else "margin-right: 8px;"
+
+        launcher_button = Button(
+            style=launcher_style,
+            image=Image(
+                icon_name="view-app-grid-symbolic",
+                icon_size=self.icon_size,
+            ),
+            on_button_press_event=self.on_launcher_clicked,
+        )
 
         super().__init__(
             spacing=10,
             orientation=box_orientation,
             name="dock-bar",
             style_classes=["window-basic", "sleek-border", f"dock-{self.orientation}"],
-            children=[
-                Button(
-                    style=launcher_margin,
-                    image=Image(
-                        icon_name="view-app-grid-symbolic",
-                        icon_size=self.icon_size,
-                    ),
-                    on_button_press_event=self.on_launcher_clicked,
-                )
-            ],
+            children=[launcher_button],
         )
         self.pinned_apps = read_json_file(PINNED_APPS_FILE) or []
         self.icon_resolver = IconResolver()
@@ -133,7 +133,7 @@ class AppBar(Box):
 
         pinned_align = "h_align" if is_vertical else "v_align"
         self.pinned_apps_container = Box(
-            spacing=7, orientation=box_orientation, **{pinned_align: "start"}
+            spacing=7, orientation=box_orientation, **{pinned_align: "center"}
         )
         self.add(self.pinned_apps_container)
         self.separator = Separator(
@@ -412,20 +412,25 @@ class AppBar(Box):
             ),
         )
 
-        # Use horizontal layout for vertical dock (indicator on side)
         is_vertical = self.orientation == "vertical"
-        indicator_orientation = "horizontal" if is_vertical else "vertical"
 
         if is_vertical:
+            # For vertical dock: horizontal box with dot beside button
             box = Box(
-                orientation=indicator_orientation,
-                spacing=4,
-                children=[DotIndicator(), client_button],
+                orientation="horizontal",
+                spacing=0,
+                h_align="center",
+                children=[
+                    DotIndicator(),
+                    client_button,
+                ],
             )
         else:
+            # For horizontal dock: vertical box with dot below button
             box = Box(
-                orientation=indicator_orientation,
+                orientation="vertical",
                 spacing=4,
+                v_align="center",
                 children=[client_button, DotIndicator()],
             )
         # Store client reference on box for DnD
