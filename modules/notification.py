@@ -34,6 +34,9 @@ from utils.widget_utils import get_icon, nerd_font_icon
 
 gi.require_versions({"Gdk": "3.0", "GdkPixbuf": "2.0"})
 
+# Swipe threshold for dismissing notifications (normalized: 0.0 to 1.0)
+_SWIPE_DISMISS_THRESHOLD = 0.35
+
 
 class NotificationPopup(Window):
     """A widget to grab and display notifications."""
@@ -95,7 +98,7 @@ class NotificationPopup(Window):
 
 
 class NotificationWidget(EventBox):
-    """A widget to display a notification."""
+    """A widget to display a notification with swipe-to-dismiss support."""
 
     def __init__(
         self,
@@ -114,6 +117,19 @@ class NotificationWidget(EventBox):
         self._notification = notification
 
         self._timeout_id = None
+
+        # Swipe gesture state
+        self._drag_start_x: float | None = None
+        self._drag_start_y: float | None = None
+        self._is_dragging = False
+        self._swipe_offset = 0.0
+
+        # Enable motion events for drag detection
+        self.add_events(
+            Gdk.EventMask.BUTTON_PRESS_MASK
+            | Gdk.EventMask.BUTTON_RELEASE_MASK
+            | Gdk.EventMask.POINTER_MOTION_MASK
+        )
 
         self.progress_timeout = CircularProgressBar(
             name="notification-circular-progress-bar",
@@ -136,6 +152,8 @@ class NotificationWidget(EventBox):
             self,
             {
                 "button-press-event": self.on_button_press,
+                "button-release-event": self._on_button_release,
+                "motion-notify-event": self._on_motion_notify,
                 "enter-notify-event": self.on_hover,
                 "leave-notify-event": self.on_unhover,
             },
@@ -333,10 +351,81 @@ class NotificationWidget(EventBox):
         self.stop_timeout()
         return False
 
-    def on_button_press(self, _, event):
-        if event.button != 1:
+    def on_button_press(self, widget, event):
+        """Handle button press - start drag tracking for swipe gestures."""
+        if event.button == 1:
+            # Left click: start tracking for potential swipe
+            self._drag_start_x = event.x
+            self._drag_start_y = event.y
+            self._is_dragging = False
+            self._swipe_offset = 0.0
+            return True
+        else:
+            # Right/middle click: dismiss immediately
             self._notification.close("dismissed-by-user")
             self.stop_timeout()
+            return True
+
+    def _on_motion_notify(self, widget, event):
+        """Handle mouse motion for swipe gesture."""
+        if self._drag_start_x is None:
+            return False
+
+        dx = event.x - self._drag_start_x
+        dy = event.y - self._drag_start_y
+
+        # Check if this is a horizontal swipe (more horizontal than vertical)
+        if abs(dx) > 10 and abs(dx) > abs(dy):
+            self._is_dragging = True
+            self.pause_timeout()
+
+            # Calculate normalized offset based on widget width
+            alloc = widget.get_allocation()
+            if alloc.width > 0:
+                self._swipe_offset = dx / alloc.width
+
+                # Apply visual translation to the notification box
+                self.notification_box.set_margin_start(int(dx) if dx > 0 else 0)
+                self.notification_box.set_margin_end(int(-dx) if dx < 0 else 0)
+
+                # Add visual feedback - fade out as user swipes further
+                opacity = max(0.3, 1.0 - abs(self._swipe_offset))
+                self.notification_box.set_opacity(opacity)
+
+        return True
+
+    def _on_button_release(self, widget, event):
+        """Handle button release - complete swipe gesture if threshold met."""
+        if self._drag_start_x is None:
+            return False
+
+        if self._is_dragging:
+            # Check if swipe threshold is met
+            if abs(self._swipe_offset) >= _SWIPE_DISMISS_THRESHOLD:
+                # Dismiss notification
+                self._notification.close("dismissed-by-user")
+                self.stop_timeout()
+            else:
+                # Reset position with animation
+                self._reset_swipe_position()
+        else:
+            # It was a tap, not a drag - could trigger default action here
+            pass
+
+        # Reset drag state
+        self._drag_start_x = None
+        self._drag_start_y = None
+        self._is_dragging = False
+        self._swipe_offset = 0.0
+
+        return True
+
+    def _reset_swipe_position(self):
+        """Reset the notification position after an incomplete swipe."""
+        self.notification_box.set_margin_start(0)
+        self.notification_box.set_margin_end(0)
+        self.notification_box.set_opacity(1.0)
+        self.resume_timeout()
 
     def get_timeout(self):
         return (
