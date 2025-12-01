@@ -14,7 +14,6 @@ from typing import Any, Callable, Iterable, Literal, Optional
 
 import gi
 import psutil
-import qrcode
 from fabric import Application
 from fabric.utils import (
     FormattedString,
@@ -658,6 +657,8 @@ def validate_widgets(parsed_data, default_config):
 # Function to generate a QR code image
 @ttl_lru_cache(3600, 10)
 def make_qrcode(text: str, size: int = 200) -> GdkPixbuf.Pixbuf:
+    import qrcode
+
     # Generate QR Code image
     qr = qrcode.make(text)
     buffer = BytesIO()
