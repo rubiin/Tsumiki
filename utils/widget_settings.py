@@ -195,6 +195,18 @@ Overview = TypedDict(
     },
 )
 
+# Overview configuration
+Cheatsheet = TypedDict(
+    "Cheatsheet",
+    {
+        "enabled": bool,
+        "anchor": Anchor,
+        "layer": Layer,
+        "transition_type": Reveal_Animations,
+        "transition_duration": int,
+    },
+)
+
 # ScreenCorners configuration
 ScreenCorners = TypedDict(
     "ScreenCorners",
@@ -266,6 +278,7 @@ Modules = TypedDict(
         "notification": Notification,
         "app_launcher": AppLauncher,
         "activate_linux": ActivateLinux,
+        "cheatsheet": Cheatsheet,
     },
 )
 

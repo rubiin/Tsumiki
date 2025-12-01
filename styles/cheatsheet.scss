@@ -1,0 +1,127 @@
+@use "sass:color";
+@use "theme";
+@use "common";
+@use "variable";
+
+#cheatsheet {
+  padding: 30px 40px;
+  min-width: 900px;
+
+  .cheatsheet-title {
+    font-size: 2rem;
+    font-weight: bold;
+    color: theme.$text-main;
+    margin-bottom: 20px;
+  }
+
+  .cheatsheet-row {
+    min-height: 300px;
+  }
+
+  .cheatsheet-group {
+    background-color: color.mix(theme.$surface-disabled, transparent, 50%);
+    border-radius: variable.$radius;
+    padding: 16px 20px;
+    min-width: 250px;
+
+    .cheatsheet-group-title {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: theme.$text-main;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid color.mix(theme.$text-main, transparent, 70%);
+    }
+
+    .cheatsheet-entry {
+      padding: 6px 0;
+      border-radius: 8px;
+      transition: background-color 0.15s ease;
+
+      &:hover {
+        background-color: color.mix(theme.$surface-highlight, transparent, 60%);
+        padding-left: 8px;
+        padding-right: 8px;
+      }
+
+      .cheatsheet-key {
+        font-family: monospace, variable.$font-name;
+        font-size: 0.95rem;
+        font-weight: bold;
+        color: theme.$text-main;
+        background-color: color.mix(theme.$background, transparent, 30%);
+        padding: 4px 10px;
+        border-radius: 6px;
+        min-width: 100px;
+      }
+
+      .cheatsheet-description {
+        font-size: 0.9rem;
+        color: theme.$text-main;
+        opacity: 0.9;
+      }
+    }
+
+    .cheatsheet-more {
+      font-size: 0.85rem;
+      color: theme.$text-secondary;
+      font-style: italic;
+      margin-top: 8px;
+      opacity: 0.7;
+    }
+  }
+
+  #cheatsheet-group-placeholder {
+    background-color: transparent;
+  }
+
+  .cheatsheet-pagination {
+    margin-top: 20px;
+    padding: 10px 0;
+
+    .cheatsheet-nav-btn {
+      background-color: color.mix(theme.$surface-disabled, transparent, 50%);
+      border-radius: 50%;
+      padding: 12px;
+      min-width: 44px;
+      min-height: 44px;
+      transition: all 0.2s ease;
+
+      &:hover:not(.disabled) {
+        background-color: theme.$surface-highlight;
+        // transform: scale(1.05);
+      }
+
+      &:active:not(.disabled) {
+        background-color: theme.$text-main;
+        // transform: scale(0.95);
+      }
+
+      &.disabled {
+        opacity: 0.3;
+
+      }
+
+      .cheatsheet-nav-icon {
+        font-size: 1.4rem;
+        color: theme.$text-main;
+      }
+    }
+
+    .cheatsheet-page-label {
+      font-size: 1rem;
+      color: theme.$text-main;
+      font-weight: 500;
+      min-width: 60px;
+    }
+  }
+}
+
+// Stack animation
+#cheatsheet-stack {
+  transition: opacity 0.2s ease;
+}
+
+.cheatsheet-page {
+  padding: 10px 0;
+}

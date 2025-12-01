@@ -53,6 +53,7 @@ def main():
 
         app.add_window(OverViewOverlay(widget_config))
 
+
     if module_options.get("screen_corners", {}).get("enabled", False):
         from modules.corners import ScreenCorners
 
