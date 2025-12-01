@@ -28,6 +28,51 @@ gi.require_versions({"Glace": "0.1", "Gtk": "3.0"})
 DOCK_DND_TARGET = [Gtk.TargetEntry.new("dock-app", Gtk.TargetFlags.SAME_APP, 0)]
 
 
+class MultiDotIndicator(Gtk.DrawingArea):
+    """A dot indicator widget that can show multiple dots for grouped apps."""
+
+    def __init__(self, count=1, size=5, spacing=3, orientation="vertical"):
+        super().__init__(visible=True)
+        self._count = count
+        self._size = size
+        self._spacing = spacing
+        self._orientation = orientation
+        self._update_size()
+        self.connect("draw", self.on_draw)
+
+    def _update_size(self):
+        if self._orientation == "vertical":
+            # Dots stacked vertically (for horizontal dock)
+            width = self._size
+            height = (self._size * self._count) + (self._spacing * (self._count - 1))
+        else:
+            # Dots side by side (for vertical dock)
+            width = (self._size * self._count) + (self._spacing * (self._count - 1))
+            height = self._size
+        self.set_size_request(width, height)
+
+    def set_count(self, count: int):
+        self._count = max(1, min(count, 5))  # Limit to 5 dots max
+        self._update_size()
+        self.queue_draw()
+
+    def on_draw(self, area, cr):
+        alloc = self.get_allocation()
+        radius = self._size / 2 - 1
+
+        for i in range(self._count):
+            if self._orientation == "vertical":
+                cx = alloc.width / 2
+                cy = radius + 1 + i * (self._size + self._spacing)
+            else:
+                cx = radius + 1 + i * (self._size + self._spacing)
+                cy = alloc.height / 2
+
+            cr.arc(cx, cy, radius, 0, 2 * 3.14)
+            cr.set_source_rgb(1.0, 1.0, 1.0)  # white dot
+            cr.fill()
+
+
 class DotIndicator(Gtk.DrawingArea):
     """A simple dot indicator widget."""
 
@@ -52,7 +97,9 @@ class AppBar(Box):
 
     __slots__ = (
         "_all_apps",
+        "_app_groups",
         "_dragging_box",
+        "_group_apps",
         "_hyprland_connection",
         "_is_dragging",
         "_manager",
@@ -102,6 +149,10 @@ class AppBar(Box):
         self.icon_size = self.config.get("icon_size", 30)
         self.preview_size = self.config.get("preview_size", [40, 50])
         self.orientation = self.config.get("orientation", "horizontal")
+        self._group_apps = self.config.get("group_apps", True)
+
+        # Track grouped apps: app_id -> {box, button, indicator, clients: []}
+        self._app_groups = {}
 
         # Determine orientation for boxes
         is_vertical = self.orientation == "vertical"
@@ -399,7 +450,324 @@ class AppBar(Box):
         if self.config.get("preview_apps", True):
             GLib.timeout_add(100, self._close_popup)
 
+    def _on_group_enter(self, app_id: str, client_button: Button):
+        """Handle hover on a grouped app - show preview of first/active window."""
+        if not self.config.get("preview_apps", False):
+            return
+        group = self._app_groups.get(app_id)
+        if not group or not group["clients"]:
+            return
+        # Show preview of active window, or first window if none active
+        active_client = None
+        for c in group["clients"]:
+            if c.get_activated():
+                active_client = c
+                break
+        if not active_client:
+            active_client = group["clients"][0]
+        self._update_preview_image(active_client, client_button)
+
+    def _get_app_id_safe(self, client: Glace.Client) -> str | None:
+        """Safely get app_id, returning None if not available yet."""
+        try:
+            app_id = client.get_app_id()
+            return app_id if app_id else None
+        except Exception:
+            return None
+
+    def _add_client_to_group(self, app_id: str, client: Glace.Client):
+        """Add a client to an existing app group."""
+        if app_id not in self._app_groups:
+            return
+
+        group = self._app_groups[app_id]
+        group["clients"].append(client)
+        group["indicator"].set_count(len(group["clients"]))
+
+        # Update active state when this client's activated state changes
+        def update_active(*_):
+            # Check if any client in the group is activated
+            any_active = any(c.get_activated() for c in group["clients"])
+            if any_active:
+                group["button"].add_style_class("active")
+            else:
+                group["button"].remove_style_class("active")
+
+        def on_close(*_):
+            self._remove_client_from_group(app_id, client)
+
+        bulk_connect(
+            client,
+            {
+                "notify::activated": update_active,
+                "close": on_close,
+            },
+        )
+
+    def _remove_client_from_group(self, app_id: str, client: Glace.Client):
+        """Remove a client from an app group."""
+        if app_id not in self._app_groups:
+            return
+
+        group = self._app_groups[app_id]
+        if client in group["clients"]:
+            group["clients"].remove(client)
+
+        if len(group["clients"]) == 0:
+            # No more clients, remove the group
+            box = group["box"]
+            self.remove(box)
+            box.destroy()
+            del self._app_groups[app_id]
+        else:
+            # Update the indicator count
+            group["indicator"].set_count(len(group["clients"]))
+            # Update active state
+            any_active = any(c.get_activated() for c in group["clients"])
+            if any_active:
+                group["button"].add_style_class("active")
+            else:
+                group["button"].remove_style_class("active")
+
+    def _create_app_group(self, app_id: str, client: Glace.Client):
+        """Create a new app group for the given client."""
+        is_vertical = self.orientation == "vertical"
+        indicator_orientation = "vertical" if is_vertical else "horizontal"
+
+        client_image = Image(size=self.icon_size)
+        indicator = MultiDotIndicator(
+            count=1,
+            size=5,
+            spacing=3,
+            orientation=indicator_orientation,
+        )
+
+        client_button = self._bake_button(
+            image=client_image,
+            on_enter_notify_event=lambda *_: self._on_group_enter(
+                app_id, client_button
+            ),
+            on_leave_notify_event=lambda *_: self.on_leave_notify_event(
+                None, client_button
+            ),
+        )
+
+        if is_vertical:
+            box = Box(
+                orientation="horizontal",
+                spacing=0,
+                h_align="center",
+                children=[
+                    Box(v_align="center", children=[indicator]),
+                    client_button,
+                ],
+            )
+        else:
+            box = Box(
+                orientation="vertical",
+                spacing=4,
+                v_align="center",
+                children=[
+                    client_button,
+                    Box(h_align="center", children=[indicator]),
+                ],
+            )
+
+        # Store group info
+        self._app_groups[app_id] = {
+            "box": box,
+            "button": client_button,
+            "indicator": indicator,
+            "image": client_image,
+            "clients": [client],
+        }
+
+        box._dock_app_id = app_id
+
+        # Handle click - cycle through windows or activate single window
+        def on_click(*_):
+            clients = self._app_groups.get(app_id, {}).get("clients", [])
+            if len(clients) == 1:
+                clients[0].activate()
+            elif len(clients) > 1:
+                # Find current active and activate next
+                active_idx = -1
+                for i, c in enumerate(clients):
+                    if c.get_activated():
+                        active_idx = i
+                        break
+                next_idx = (active_idx + 1) % len(clients)
+                clients[next_idx].activate()
+
+        # Handle button press/release
+        def on_button_press(w, e):
+            if e.button == 3:
+                clients = self._app_groups.get(app_id, {}).get("clients", [])
+                if clients:
+                    self._show_group_menu(app_id, clients)
+                    self.menu.popup_at_pointer(e)
+                return True
+            return False
+
+        def on_button_release(w, e):
+            if e.button == 1 and not self._is_dragging:
+                on_click()
+                return True
+            return False
+
+        client_button.connect("button-press-event", on_button_press)
+        client_button.connect("button-release-event", on_button_release)
+
+        # Set up drag
+        client_button.drag_source_set(
+            start_button_mask=Gdk.ModifierType.BUTTON1_MASK,
+            targets=DOCK_DND_TARGET,
+            actions=Gdk.DragAction.MOVE,
+        )
+        client_button.connect("drag-begin", self._on_drag_begin, box, client_image)
+        client_button.connect("drag-end", self._on_drag_end, box)
+
+        box.drag_dest_set(
+            Gtk.DestDefaults.ALL,
+            DOCK_DND_TARGET,
+            Gdk.DragAction.MOVE,
+        )
+        box.connect("drag-data-received", self._on_drag_data_received)
+
+        # Set initial icon if app_id is available
+        if app_id:
+            client_image.set_from_pixbuf(
+                self.icon_resolver.get_icon_pixbuf(app_id, self.icon_size)
+            )
+            client_button.set_tooltip_text(
+                client.get_title() if self.config.get("tooltip", True) else None
+            )
+
+        # Update icon when app_id changes
+        def on_app_id_change(*_):
+            aid = self._get_app_id_safe(client)
+            if aid and aid in self.config.get("ignored_apps", []):
+                self._remove_client_from_group(app_id, client)
+                return
+            if aid:
+                client_image.set_from_pixbuf(
+                    self.icon_resolver.get_icon_pixbuf(aid, self.icon_size)
+                )
+            client_button.set_tooltip_text(
+                client.get_title() if self.config.get("tooltip", True) else None
+            )
+
+        # Update active state
+        def update_active(*_):
+            clients = self._app_groups.get(app_id, {}).get("clients", [])
+            any_active = any(c.get_activated() for c in clients)
+            if any_active:
+                client_button.add_style_class("active")
+            else:
+                client_button.remove_style_class("active")
+
+        def on_close(*_):
+            self._remove_client_from_group(app_id, client)
+
+        bulk_connect(
+            client,
+            {
+                "notify::app-id": on_app_id_change,
+                "notify::activated": update_active,
+                "close": on_close,
+            },
+        )
+
+        self.add(box)
+
+        if len(self.pinned_apps) > 0 and not self.separator.get_visible():
+            self.separator.set_visible(True)
+
+    def _show_group_menu(self, app_id: str, clients: list):
+        """Show context menu for a grouped app."""
+        self._close_popup()
+
+        if not self.menu:
+            self.menu = Gtk.Menu()
+        else:
+            for item in self.menu.get_children():
+                self.menu.remove(item)
+                item.destroy()
+
+        # Add menu item for each window
+        for client in clients:
+            title = truncate(client.get_title() or app_id, 30)
+            window_item = Gtk.MenuItem(label=title)
+            submenu = Gtk.Menu()
+
+            activate_item = self._make_item("Activate", lambda c=client: c.activate())
+            close_item = self._make_item(
+                "Close", lambda c=client: self._close_running_app(c)
+            )
+
+            submenu.add(activate_item)
+            submenu.add(close_item)
+            window_item.set_submenu(submenu)
+            self.menu.add(window_item)
+
+        # Add separator
+        self.menu.add(Gtk.SeparatorMenuItem())
+
+        # Add common actions
+        new_window = self._make_item(
+            "New Window", lambda: self._open_new_window(clients[0])
+        )
+        self.menu.add(new_window)
+
+        # Pin/Unpin
+        if app_id in self.pinned_apps:
+            pin_item = self._make_item("Unpin", lambda: self._unpin_app(clients[0]))
+        else:
+            pin_item = self._make_item("Pin", lambda: self._pin_running_app(clients[0]))
+        self.menu.add(pin_item)
+
+        # Close all
+        close_all = self._make_item(
+            "Close All",
+            lambda: [self._close_running_app(c) for c in clients.copy()],
+        )
+        self.menu.add(close_all)
+
+        self.menu.show_all()
+
     def on_client_added(self, _, client: Glace.Client):
+        app_id = self._get_app_id_safe(client)
+
+        # If grouping is enabled
+        if self._group_apps:
+            if app_id:
+                # Check if ignored
+                if app_id in self.config.get("ignored_apps", []):
+                    return
+                # If we already have this app, add to existing group
+                if app_id in self._app_groups:
+                    self._add_client_to_group(app_id, client)
+                    return
+                # Create a new group
+                self._create_app_group(app_id, client)
+                return
+            else:
+                # app_id not available yet, wait for it
+                def on_app_id_ready(*_):
+                    aid = self._get_app_id_safe(client)
+                    if aid:
+                        client.disconnect_by_func(on_app_id_ready)
+                        if aid in self.config.get("ignored_apps", []):
+                            return
+                        if aid in self._app_groups:
+                            self._add_client_to_group(aid, client)
+                        else:
+                            self._create_app_group(aid, client)
+
+                client.connect("notify::app-id", on_app_id_ready)
+                return
+
+        # Non-grouped mode (original behavior)
         client_image = Image(size=self.icon_size)
 
         client_button = self._bake_button(
