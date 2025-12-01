@@ -12,15 +12,41 @@ import subprocess
 
 from fabric.utils import bulk_connect, exec_shell_command_async, invoke_repeater, logger
 from fabric.widgets.label import Label
-from gi.repository import GLib
+from gi.repository import Gdk, GLib
 
 from shared.widget_container import ButtonWidget
 from utils.colors import Colors
 from utils.widget_utils import nerd_font_icon
 
+# Module-level constants - evaluated once at import
+_BUTTON_HANDLERS = {
+    1: "on_click",
+    2: "on_click_middle",
+    3: "on_click_right",
+}
+
+_SCROLL_HANDLERS = {
+    Gdk.ScrollDirection.UP: "on_scroll_up",
+    Gdk.ScrollDirection.DOWN: "on_scroll_down",
+}
+
 
 class CustomModuleWidget(ButtonWidget):
     """A Waybar-compatible custom module widget."""
+
+    __slots__ = (
+        "_exec_cmd",
+        "_exec_on_event",
+        "_format_str",
+        "_interval",
+        "_last_class",
+        "_max_len",
+        "_process",
+        "_signal_handler_id",
+        "icon",
+        "module_config",
+        "text_label",
+    )
 
     def __init__(
         self,
@@ -35,6 +61,13 @@ class CustomModuleWidget(ButtonWidget):
         self._process: subprocess.Popen | None = None
         self._last_class: str | None = None
         self._signal_handler_id: int | None = None
+
+        # Cache frequently accessed config values
+        self._exec_cmd = self.module_config.get("exec")
+        self._interval = self.module_config.get("interval", 0)
+        self._format_str = self.module_config.get("format", "{}")
+        self._max_len = self.module_config.get("max_length", 0)
+        self._exec_on_event = self.module_config.get("exec_on_event", False)
 
         # Create icon label (optional)
         icon = self.module_config.get("format_icons", {}).get("default")
@@ -82,37 +115,31 @@ class CustomModuleWidget(ButtonWidget):
         """Register a Unix signal handler to trigger updates."""
         # SIGRTMIN is typically 34, we add the user-specified offset
         actual_signal = signal.SIGRTMIN + sig_num
-
-        def handler(signum, frame):
-            self._execute_command()
-
-        signal.signal(actual_signal, handler)
+        signal.signal(actual_signal, lambda *_: self._execute_command())
         self._signal_handler_id = sig_num
 
     def _start_execution(self):
         """Start the command execution based on configuration."""
-        exec_cmd = self.module_config.get("exec")
-        if not exec_cmd:
+        if not self._exec_cmd:
             logger.warning(
                 f"{Colors.WARNING}[CustomModule] No 'exec' command specified"
             )
             return
 
-        interval = self.module_config.get("interval", 0)
-
-        if interval and interval > 0:
+        if self._interval > 0:
             # Periodic execution
             self._execute_command()
-            invoke_repeater(interval * 1000, self._periodic_execute)
+            invoke_repeater(self._interval * 1000, self._periodic_execute)
+            return
+
+        # One-shot or continuous execution
+        restart_interval = self.module_config.get("restart_interval", 0)
+        if restart_interval > 0:
+            # Continuous with restart
+            self._start_continuous()
         else:
-            # One-shot or continuous execution
-            restart_interval = self.module_config.get("restart_interval", 0)
-            if restart_interval > 0:
-                # Continuous with restart
-                self._start_continuous()
-            else:
-                # Single execution
-                self._execute_command()
+            # Single execution
+            self._execute_command()
 
     def _periodic_execute(self, *_) -> bool:
         """Called periodically by invoke_repeater."""
@@ -121,25 +148,20 @@ class CustomModuleWidget(ButtonWidget):
 
     def _execute_command(self):
         """Execute the configured command asynchronously."""
-        exec_cmd = self.module_config.get("exec")
-        if not exec_cmd:
+        if not self._exec_cmd:
             return
 
-        # Expand ~ to home directory
-        exec_cmd = os.path.expanduser(exec_cmd)
-
         exec_shell_command_async(
-            exec_cmd,
+            os.path.expanduser(self._exec_cmd),
             self._handle_output,
         )
 
     def _start_continuous(self):
         """Start a continuous/streaming command."""
-        exec_cmd = self.module_config.get("exec")
-        if not exec_cmd:
+        if not self._exec_cmd:
             return
 
-        exec_cmd = os.path.expanduser(exec_cmd)
+        exec_cmd = os.path.expanduser(self._exec_cmd)
 
         try:
             self._process = subprocess.Popen(
@@ -183,29 +205,49 @@ class CustomModuleWidget(ButtonWidget):
         else:
             self._handle_text_output(output)
 
+    def _format_text(self, text: str) -> str:
+        """Apply format string and max_length to text."""
+        display_text = (
+            self._format_str.replace("{}", str(text))
+            if "{}" in self._format_str
+            else text
+        )
+        if self._max_len > 0 and len(display_text) > self._max_len:
+            display_text = display_text[: self._max_len] + "…"
+        return display_text
+
+    def _update_icon(self, alt: str | None, percentage: int | None):
+        """Update icon based on alt or percentage."""
+        if not self.icon:
+            return
+
+        format_icons = self.module_config.get("format_icons", {})
+        if not format_icons:
+            return
+
+        icon = None
+        if alt and alt in format_icons:
+            icon = format_icons[alt]
+        elif percentage is not None:
+            # Find icon for percentage ranges
+            for key, val in format_icons.items():
+                if isinstance(key, str) and key.isdigit() and percentage >= int(key):
+                    icon = val
+
+        if icon:
+            self.icon.set_label(icon)
+
     def _handle_json_output(self, output: str):
         """Parse Waybar-compatible JSON output."""
         try:
             data = json.loads(output)
 
-            # Get text
+            # Get text and format it
             text = data.get("text", "")
             alt = data.get("alt", "")
             percentage = data.get("percentage")
 
-            # Apply format string
-            format_str = self.module_config.get("format", "{}")
-            if "{}" in format_str:
-                display_text = format_str.replace("{}", str(text))
-            else:
-                display_text = text
-
-            # Apply max_length
-            max_len = self.module_config.get("max_length", 0)
-            if max_len > 0 and len(display_text) > max_len:
-                display_text = display_text[:max_len] + "…"
-
-            self.text_label.set_label(display_text)
+            self.text_label.set_label(self._format_text(text))
 
             # Tooltip
             if self.module_config.get("tooltip", True):
@@ -224,22 +266,7 @@ class CustomModuleWidget(ButtonWidget):
                 self._last_class = new_class
 
             # Update icon based on alt or percentage
-            format_icons = self.module_config.get("format_icons", {})
-            if format_icons:
-                icon = None
-                if alt and alt in format_icons:
-                    icon = format_icons[alt]
-                elif percentage is not None:
-                    # Find icon for percentage ranges
-                    for key, val in format_icons.items():
-                        if (
-                            isinstance(key, str)
-                            and key.isdigit()
-                            and percentage >= int(key)
-                        ):
-                            icon = val
-                if icon and self.icon:
-                    self.icon.set_label(icon)
+            self._update_icon(alt, percentage)
 
         except json.JSONDecodeError as e:
             logger.warning(f"{Colors.WARNING}[CustomModule] Invalid JSON output: {e}")
@@ -247,62 +274,42 @@ class CustomModuleWidget(ButtonWidget):
 
     def _handle_text_output(self, output: str):
         """Handle plain text output."""
-        format_str = self.module_config.get("format", "{}")
-        if "{}" in format_str:
-            display_text = format_str.replace("{}", output)
-        else:
-            display_text = output
-
-        max_len = self.module_config.get("max_length", 0)
-        if max_len > 0 and len(display_text) > max_len:
-            display_text = display_text[:max_len] + "…"
-
-        self.text_label.set_label(display_text)
+        self.text_label.set_label(self._format_text(output))
 
     def _on_button_press(self, widget, event) -> bool:
         """Handle button press events."""
-        handlers = {
-            1: "on_click",
-            2: "on_click_middle",
-            3: "on_click_right",
-        }
+        handler_key = _BUTTON_HANDLERS.get(event.button)
+        if not handler_key:
+            return False
 
-        handler_key = handlers.get(event.button)
-        if handler_key:
-            cmd = self.module_config.get(handler_key)
-            if cmd:
-                exec_shell_command_async(os.path.expanduser(cmd), lambda _: None)
+        cmd = self.module_config.get(handler_key)
+        if not cmd:
+            return False
 
-                # Re-execute main command if exec_on_event is true
-                if self.module_config.get("exec_on_event", False):
-                    self._execute_command()
+        exec_shell_command_async(os.path.expanduser(cmd), lambda _: None)
 
-                return True
+        # Re-execute main command if exec_on_event is true
+        if self._exec_on_event:
+            self._execute_command()
 
-        return False
+        return True
 
     def _on_scroll(self, widget, event) -> bool:
         """Handle scroll events."""
-        from gi.repository import Gdk
-
-        direction = event.direction
-
-        if direction == Gdk.ScrollDirection.UP:
-            cmd = self.module_config.get("on_scroll_up")
-        elif direction == Gdk.ScrollDirection.DOWN:
-            cmd = self.module_config.get("on_scroll_down")
-        else:
+        handler_key = _SCROLL_HANDLERS.get(event.direction)
+        if not handler_key:
             return False
 
-        if cmd:
-            exec_shell_command_async(os.path.expanduser(cmd), lambda _: None)
+        cmd = self.module_config.get(handler_key)
+        if not cmd:
+            return False
 
-            if self.module_config.get("exec_on_event", False):
-                self._execute_command()
+        exec_shell_command_async(os.path.expanduser(cmd), lambda _: None)
 
-            return True
+        if self._exec_on_event:
+            self._execute_command()
 
-        return False
+        return True
 
     def destroy(self):
         """Clean up resources."""
