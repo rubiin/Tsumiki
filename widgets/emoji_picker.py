@@ -90,15 +90,18 @@ class EmojiPickerMenu(Box):
         def _load():
             try:
                 if not os.path.exists(self._emoji_file_path):
-                    logger.exception(f"Emoji JSON file not found: {self._emoji_file_path}")
+                    logger.exception(
+                        f"Emoji JSON file not found: {self._emoji_file_path}"
+                    )
                     GLib.idle_add(self._on_emoji_load_complete, {}, callback)
                     return
 
                 # Use ijson for streaming JSON parsing
-                emoji_dict = {}
                 with open(self._emoji_file_path, "r") as f:
-                    for emoji_char, emoji_info in ijson.kvitems(f, ""):
-                        emoji_dict[emoji_char] = emoji_info
+                    emoji_dict = {
+                        emoji_char: emoji_info
+                        for emoji_char, emoji_info in ijson.kvitems(f, "")
+                    }
 
                 GLib.idle_add(self._on_emoji_load_complete, emoji_dict, callback)
             except Exception as e:
@@ -154,7 +157,6 @@ class EmojiPickerMenu(Box):
         self.stack.add(loading_box)
 
     def _do_arrange_viewport(self, query: str = ""):
-
         remove_handler(self._arranger_handler) if self._arranger_handler else None
         self.stack.children = []
         self.selected_index = -1
@@ -386,7 +388,7 @@ class EmojiPickerMenu(Box):
                 GLib.Bytes.new(emoji_char.encode("utf-8")),
                 None,
                 lambda p, r, _: None,  # Fire and forget
-                None
+                None,
             )
         except Exception as e:
             logger.exception(f"Clipboard copy failed: {e}")

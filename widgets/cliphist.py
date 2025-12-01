@@ -177,9 +177,7 @@ class ClipHistoryMenu(Box):
                 Gio.SubprocessFlags.STDOUT_PIPE | Gio.SubprocessFlags.STDERR_PIPE
             )
             proc = launcher.spawnv(["cliphist", "list"])
-            proc.communicate_async(
-                None, None, self._on_clipboard_list_ready, None
-            )
+            proc.communicate_async(None, None, self._on_clipboard_list_ready, None)
         except Exception as e:
             logger.exception(f"Error starting cliphist: {e}")
             self._loading = False
@@ -376,9 +374,7 @@ class ClipHistoryMenu(Box):
                 Gio.SubprocessFlags.STDOUT_PIPE | Gio.SubprocessFlags.STDERR_PIPE
             )
             proc = launcher.spawnv(["cliphist", "decode", item_id])
-            proc.communicate_async(
-                None, None, self._on_image_loaded, (item_id, button)
-            )
+            proc.communicate_async(None, None, self._on_image_loaded, (item_id, button))
         except Exception as e:
             logger.exception(f"Error starting image decode: {e}")
 
@@ -464,9 +460,7 @@ class ClipHistoryMenu(Box):
                 Gio.SubprocessFlags.STDOUT_PIPE | Gio.SubprocessFlags.STDERR_PIPE
             )
             proc = launcher.spawnv(["cliphist", "decode", item_id])
-            proc.communicate_async(
-                None, None, self._on_paste_decoded, None
-            )
+            proc.communicate_async(None, None, self._on_paste_decoded, None)
         except Exception as e:
             logger.exception(f"Error starting paste decode: {e}")
 
@@ -476,15 +470,13 @@ class ClipHistoryMenu(Box):
             _, stdout, _ = proc.communicate_finish(result)
             if stdout:
                 # Now pipe to wl-copy
-                launcher = Gio.SubprocessLauncher.new(
-                    Gio.SubprocessFlags.STDIN_PIPE
-                )
+                launcher = Gio.SubprocessLauncher.new(Gio.SubprocessFlags.STDIN_PIPE)
                 wl_proc = launcher.spawnv(["wl-copy"])
                 wl_proc.communicate_async(
                     GLib.Bytes.new(stdout.get_data()),
                     None,
                     self._on_paste_complete,
-                    None
+                    None,
                 )
         except Exception as e:
             logger.exception(f"Error decoding paste item: {e}")
