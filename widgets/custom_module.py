@@ -1,10 +1,3 @@
-"""
-Waybar-compatible custom module widget.
-
-Runs external commands/scripts and displays their output on the bar.
-Supports both plain text and Waybar JSON protocol output.
-"""
-
 import json
 import os
 import signal
@@ -69,7 +62,6 @@ class CustomModuleWidget(ButtonWidget):
         self._max_len = self.module_config.get("max_length", 0)
         self._exec_on_event = self.module_config.get("exec_on_event", False)
 
-        # Create icon label (optional)
         icon = self.module_config.get("format_icons", {}).get("default")
         if icon:
             self.icon = nerd_font_icon(
@@ -80,16 +72,15 @@ class CustomModuleWidget(ButtonWidget):
         else:
             self.icon = None
 
-        # Create text label
         self.text_label = Label(label="", style_classes=["panel-text"])
         self.container_box.add(self.text_label)
 
-        # Apply rotation if specified
         rotation = self.module_config.get("rotate", 0)
         if rotation:
             self.text_label.set_angle(rotation)
 
-        # Connect click and scroll events
+        self.add_events(Gdk.EventMask.SCROLL_MASK | Gdk.EventMask.SMOOTH_SCROLL_MASK)
+
         bulk_connect(
             self,
             {
@@ -108,7 +99,6 @@ class CustomModuleWidget(ButtonWidget):
                     f"{Colors.WARNING}[CustomModule] Failed to register signal: {e}"
                 )
 
-        # Start execution
         self._start_execution()
 
     def _register_signal(self, sig_num: int):
@@ -127,7 +117,6 @@ class CustomModuleWidget(ButtonWidget):
             return
 
         if self._interval > 0:
-            # Periodic execution
             self._execute_command()
             invoke_repeater(self._interval * 1000, self._periodic_execute)
             return
@@ -135,10 +124,8 @@ class CustomModuleWidget(ButtonWidget):
         # One-shot or continuous execution
         restart_interval = self.module_config.get("restart_interval", 0)
         if restart_interval > 0:
-            # Continuous with restart
             self._start_continuous()
         else:
-            # Single execution
             self._execute_command()
 
     def _periodic_execute(self, *_) -> bool:
@@ -242,7 +229,6 @@ class CustomModuleWidget(ButtonWidget):
         try:
             data = json.loads(output)
 
-            # Get text and format it
             text = data.get("text", "")
             alt = data.get("alt", "")
             percentage = data.get("percentage")
@@ -295,10 +281,23 @@ class CustomModuleWidget(ButtonWidget):
         return True
 
     def _on_scroll(self, widget, event) -> bool:
-        """Handle scroll events."""
-        handler_key = _SCROLL_HANDLERS.get(event.direction)
-        if not handler_key:
-            return False
+        """Handle scroll events (both discrete and smooth scrolling)."""
+        direction = event.direction
+
+        # Handle smooth scrolling (touchpads and modern mice)
+        if direction == Gdk.ScrollDirection.SMOOTH:
+            _, _, delta_y = event.get_scroll_deltas()
+            if delta_y > 0:
+                handler_key = "on_scroll_down"
+            elif delta_y < 0:
+                handler_key = "on_scroll_up"
+            else:
+                return False
+        else:
+            # Handle discrete scrolling (traditional scroll wheels)
+            handler_key = _SCROLL_HANDLERS.get(direction)
+            if not handler_key:
+                return False
 
         cmd = self.module_config.get(handler_key)
         if not cmd:

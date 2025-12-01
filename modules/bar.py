@@ -212,23 +212,6 @@ class StatusBar(Window):
 
         watcher = MonitorWatcher()
 
-        def recreate():
-            # Remove old
-            for bar in bars:
-                try:
-                    app.remove_window(bar)
-                    bar.destroy()
-                except Exception:
-                    pass
-
-            # Create new
-            bars.clear()
-            new_bars = StatusBar._create_multi_monitor_bars(config)
-            bars.extend(new_bars)
-
-            for bar in bars:
-                app.add_window(bar)
-
         watcher.add_callback(lambda: StatusBar._recreate_bars(app, config, bars))
         watcher.start_watching()
 
