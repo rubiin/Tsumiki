@@ -47,7 +47,7 @@ class NetworkSpeed:
             except (ValueError, IndexError):
                 continue
 
-            # Skip loopback and virtual interfaces or interfaces with invalid byte counts
+            # Skip loopback and virtual interfaces or interfaces with invalid byte count
             if (
                 interface == "lo"
                 or _VIRTUAL_IFACE_RE.match(interface)

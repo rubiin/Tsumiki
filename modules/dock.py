@@ -66,6 +66,7 @@ class AppBar(Box):
         "icon_resolver",
         "icon_size",
         "menu",
+        "orientation",
         "pinned_apps",
         "pinned_apps_container",
         "popup",
@@ -100,14 +101,21 @@ class AppBar(Box):
         self.app_launcher = None
         self.icon_size = self.config.get("icon_size", 30)
         self.preview_size = self.config.get("preview_size", [40, 50])
+        self.orientation = self.config.get("orientation", "horizontal")
+
+        # Determine orientation for boxes
+        is_vertical = self.orientation == "vertical"
+        box_orientation = "vertical" if is_vertical else "horizontal"
+        launcher_margin = "margin-right: 8px;" if is_vertical else "margin-bottom: 8px;"
 
         super().__init__(
             spacing=10,
+            orientation=box_orientation,
             name="dock-bar",
-            style_classes=["window-basic", "sleek-border"],
+            style_classes=["window-basic", "sleek-border", f"dock-{self.orientation}"],
             children=[
                 Button(
-                    style="margin-bottom: 8px;",
+                    style=launcher_margin,
                     image=Image(
                         icon_name="view-app-grid-symbolic",
                         icon_size=self.icon_size,
@@ -123,9 +131,14 @@ class AppBar(Box):
         self._preview_image = Image()
         self._hyprland_connection = get_hyprland_connection()
 
-        self.pinned_apps_container = Box(spacing=7, v_align="start")
+        pinned_align = "h_align" if is_vertical else "v_align"
+        self.pinned_apps_container = Box(
+            spacing=7, orientation=box_orientation, **{pinned_align: "start"}
+        )
         self.add(self.pinned_apps_container)
-        self.separator = Separator(visible=False)
+        self.separator = Separator(
+            orientation="horizontal" if is_vertical else "vertical", visible=False
+        )
         self.add(self.separator)
 
         self._pinned_app_buttons = {}  # app_id -> Button widget
@@ -399,12 +412,22 @@ class AppBar(Box):
             ),
         )
 
-        box = Box(
-            orientation="vertical",
-            spacing=4,
-            children=[client_button, DotIndicator()],
-        )
+        # Use horizontal layout for vertical dock (indicator on side)
+        is_vertical = self.orientation == "vertical"
+        indicator_orientation = "horizontal" if is_vertical else "vertical"
 
+        if is_vertical:
+            box = Box(
+                orientation=indicator_orientation,
+                spacing=4,
+                children=[DotIndicator(), client_button],
+            )
+        else:
+            box = Box(
+                orientation=indicator_orientation,
+                spacing=4,
+                children=[client_button, DotIndicator()],
+            )
         # Store client reference on box for DnD
         box._dock_client = client
 
@@ -516,23 +539,47 @@ class Dock(Window):
     def __init__(self, config: BarConfig):
         self.config = config.get("modules", {}).get("dock", {})
         self._app_bar = AppBar(self)
+
+        # Determine orientation and set appropriate styles
+        orientation = self.config.get("orientation", "horizontal")
+        is_vertical = orientation == "vertical"
+
+        # Set padding and transition based on orientation
+        if is_vertical:
+            padding_style = "padding: 50px 5px 50px 20px;"
+            transition_type = "slide-right"
+        else:
+            padding_style = "padding: 20px 50px 5px 50px;"
+            transition_type = "slide-up"
+
         self.revealer = Revealer(
-            child=Box(children=[self._app_bar], style="padding: 20px 50px 5px 50px;"),
+            child=Box(children=[self._app_bar], style=padding_style),
             transition_duration=500,
-            transition_type="slide-up",
+            transition_type=transition_type,
         )
 
         if self.config.get("behavior", "always_show") == "always_show":
             self.revealer.set_reveal_child(True)
             child = self.revealer
         else:
-            child = EventBox(
-                events=["enter-notify", "leave-notify"],
-                child=CenterBox(
+            # Adjust CenterBox for vertical orientation
+            if is_vertical:
+                centerbox = CenterBox(
+                    orientation="vertical",
+                    center_children=self.revealer,
+                    start_children=Box(style="min-height: 5px; min-width: 10px;"),
+                    end_children=Box(style="min-height: 5px; min-width: 10px;"),
+                )
+            else:
+                centerbox = CenterBox(
                     center_children=self.revealer,
                     start_children=Box(style="min-height: 10px; min-width: 5px;"),
                     end_children=Box(style="min-height: 10px; min-width: 5px;"),
-                ),
+                )
+
+            child = EventBox(
+                events=["enter-notify", "leave-notify"],
+                child=centerbox,
                 on_enter_notify_event=lambda *_: self.revealer.set_reveal_child(True),
                 on_leave_notify_event=lambda *_: self._on_leave_notify(),
             )
@@ -555,9 +602,13 @@ class Dock(Window):
 
             self._check_for_windows()
 
+        # Determine anchor based on config or default based on orientation
+        default_anchor = "center-left" if is_vertical else "bottom-center"
+        anchor = self.config.get("anchor", default_anchor)
+
         super().__init__(
             layer=self.config.get("layer", "top"),
-            anchor="bottom-center",
+            anchor=anchor,
             child=child,
             name="dock",
             title="dock",

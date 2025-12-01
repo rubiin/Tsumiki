@@ -27,4 +27,22 @@
     margin: 8px 4px;
     min-width: 1.2px;
   }
+
+  // Horizontal dock (default)
+  &.dock-horizontal {
+    separator {
+      margin: 8px 4px;
+      min-width: 1.2px;
+      min-height: unset;
+    }
+  }
+
+  // Vertical dock
+  &.dock-vertical {
+    separator {
+      margin: 4px 8px;
+      min-height: 1.2px;
+      min-width: unset;
+    }
+  }
 }

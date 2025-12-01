@@ -1939,6 +1939,17 @@
 							"description": "Determines whether screen corners are enabled.",
 							"default": true
 						},
+						"orientation": {
+							"type": "string",
+							"enum": ["horizontal", "vertical"],
+							"description": "Specifies the orientation of the dock.",
+							"default": "horizontal"
+						},
+						"anchor": {
+							"$ref": "#/definitions/anchor",
+							"description": "Specifies the anchor position of the dock.",
+							"default": "bottom-center"
+						},
 						"behavior": {
 							"type": "string",
 							"enum": ["always_show", "intellihide"],

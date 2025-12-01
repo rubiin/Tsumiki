@@ -5,10 +5,6 @@ import tempfile
 from urllib.parse import unquote, urlparse
 
 import gi
-
-# Pre-compiled regex for HTML image tag detection
-_HTML_IMG_RE = re.compile(r"^\s*<img\s+")
-
 from fabric.utils import logger, remove_handler
 from fabric.widgets.box import Box
 from fabric.widgets.button import Button
@@ -23,6 +19,10 @@ from shared.widget_container import ButtonWidget
 from utils.widget_utils import nerd_font_icon
 
 gi.require_versions({"Gdk": "3.0", "GdkPixbuf": "2.0"})
+
+
+# Pre-compiled regex for HTML image tag detection
+_HTML_IMG_RE = re.compile(r"^\s*<img\s+")
 
 
 # TODO: add scrolled pagination

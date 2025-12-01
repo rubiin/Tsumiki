@@ -1,8 +1,5 @@
 import re
 
-# Pre-compiled regex for newline replacement
-_NEWLINE_RE = re.compile(r"\r?\n")
-
 from fabric.utils import logger
 from fabric.widgets.box import Box
 from fabric.widgets.label import Label
@@ -12,6 +9,9 @@ from shared.media import PlayerBoxStack
 from shared.popover import Popover
 from shared.widget_container import ButtonWidget
 from utils.colors import Colors
+
+# Pre-compiled regex for newline replacement
+_NEWLINE_RE = re.compile(r"\r?\n")
 
 
 class MprisWidget(ButtonWidget):

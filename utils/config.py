@@ -84,9 +84,7 @@ class TsumikiConfig:
                 parsed_data[key] = parsed_data.get(key, default_value)
             else:
                 # For dictionaries, merge with defaults
-                parsed_data[key] = deep_merge(
-                    parsed_data.get(key, {}), default_value
-                )
+                parsed_data[key] = deep_merge(parsed_data.get(key, {}), default_value)
 
         return parsed_data
 

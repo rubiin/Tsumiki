@@ -6,10 +6,6 @@ import urllib.request
 from functools import partial
 
 import gi
-
-# Pre-compiled regex for newline replacement
-_NEWLINE_RE = re.compile(r"\r?\n")
-
 from fabric.utils import (
     bulk_connect,
     cooldown,
@@ -46,6 +42,10 @@ from utils.widget_utils import (
 )
 
 gi.require_versions({"GObject": "2.0"})
+
+
+# Pre-compiled regex for newline replacement
+_NEWLINE_RE = re.compile(r"\r?\n")
 
 
 class PlayerBoxStack(Box):
