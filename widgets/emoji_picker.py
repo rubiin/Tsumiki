@@ -1,5 +1,4 @@
 import os
-import subprocess
 
 import ijson
 from fabric.utils import logger, remove_handler
@@ -8,10 +7,11 @@ from fabric.widgets.button import Button
 from fabric.widgets.entry import Entry
 from fabric.widgets.label import Label
 from fabric.widgets.stack import Stack
-from gi.repository import Gdk
+from gi.repository import Gdk, Gio, GLib
 
 from shared.widget_container import ButtonWidget
 from utils.constants import ASSETS_DIR
+from utils.thread import run_in_thread
 from utils.widget_utils import nerd_font_icon
 
 
@@ -36,6 +36,8 @@ class EmojiPickerMenu(Box):
 
         self._arranger_handler: int = 0
         self._all_emojis = None  # Lazy loaded
+        self._emoji_loading = False  # Loading state flag
+        self._pending_query = None  # Query to execute after loading
         self._emoji_file_path = f"{ASSETS_DIR}/emoji.json"
 
         self.stack = Stack(
@@ -72,25 +74,53 @@ class EmojiPickerMenu(Box):
 
         self.add(self.picker_box)
 
-    def _ensure_emoji_data(self):
-        """Lazy load emoji data on first access."""
+    def _load_emoji_data_async(self, callback=None):
+        """Load emoji data in background thread."""
+        if self._emoji_loading:
+            return
+
         if self._all_emojis is not None:
+            if callback:
+                callback()
             return
 
-        if not os.path.exists(self._emoji_file_path):
-            logger.exception(f"Emoji JSON file not found at: {self._emoji_file_path}")
-            self._all_emojis = {}
-            return
+        self._emoji_loading = True
 
-        with open(self._emoji_file_path, "r") as f:
-            self._all_emojis = {
-                emoji_char: emoji_info
-                for emoji_char, emoji_info in ijson.kvitems(f, "")
-            }
+        @run_in_thread
+        def _load():
+            try:
+                if not os.path.exists(self._emoji_file_path):
+                    logger.exception(f"Emoji JSON file not found: {self._emoji_file_path}")
+                    GLib.idle_add(self._on_emoji_load_complete, {}, callback)
+                    return
 
-    def _load_emoji_data(self):
-        self._ensure_emoji_data()
-        return self._all_emojis
+                # Use ijson for streaming JSON parsing
+                emoji_dict = {}
+                with open(self._emoji_file_path, "r") as f:
+                    for emoji_char, emoji_info in ijson.kvitems(f, ""):
+                        emoji_dict[emoji_char] = emoji_info
+
+                GLib.idle_add(self._on_emoji_load_complete, emoji_dict, callback)
+            except Exception as e:
+                logger.exception(f"Error loading emoji data: {e}")
+                GLib.idle_add(self._on_emoji_load_complete, {}, callback)
+
+        _load()
+
+    def _on_emoji_load_complete(self, emoji_dict, callback):
+        """Called on main thread when emoji loading completes."""
+        self._all_emojis = emoji_dict
+        self._emoji_loading = False
+
+        # Execute pending query if any
+        if self._pending_query is not None:
+            query = self._pending_query
+            self._pending_query = None
+            self._do_arrange_viewport(query)
+        elif callback:
+            callback()
+
+        return False
 
     def close_picker(self):
         self.selected_index = -1
@@ -99,8 +129,31 @@ class EmojiPickerMenu(Box):
         self._parent.popup.hide_popover()
 
     def arrange_viewport(self, query: str = ""):
-        # Ensure emoji data is loaded on first use
-        self._ensure_emoji_data()
+        """Arrange viewport - loads emoji data async if needed."""
+        if self._all_emojis is None:
+            # Show loading indicator and load in background
+            self._pending_query = query
+            self._show_loading()
+            self._load_emoji_data_async()
+            return
+
+        self._do_arrange_viewport(query)
+
+    def _show_loading(self):
+        """Show a loading indicator while emoji data loads."""
+        self.stack.children = []
+        loading_box = Box(
+            name="loading-box",
+            orientation="v",
+            h_align="center",
+            v_align="center",
+            children=[
+                Label(label="Loading emojis...", style_classes=["dim-label"]),
+            ],
+        )
+        self.stack.add(loading_box)
+
+    def _do_arrange_viewport(self, query: str = ""):
 
         remove_handler(self._arranger_handler) if self._arranger_handler else None
         self.stack.children = []
@@ -325,9 +378,17 @@ class EmojiPickerMenu(Box):
         self.update_selection(new_index)
 
     def _copy_emoji_to_clipboard(self, emoji_char: str):
+        """Copy emoji to clipboard asynchronously."""
         try:
-            subprocess.run(["wl-copy"], input=emoji_char.encode("utf-8"), check=True)
-        except subprocess.CalledProcessError as e:
+            launcher = Gio.SubprocessLauncher.new(Gio.SubprocessFlags.STDIN_PIPE)
+            proc = launcher.spawnv(["wl-copy"])
+            proc.communicate_async(
+                GLib.Bytes.new(emoji_char.encode("utf-8")),
+                None,
+                lambda p, r, _: None,  # Fire and forget
+                None
+            )
+        except Exception as e:
             logger.exception(f"Clipboard copy failed: {e}")
 
 
