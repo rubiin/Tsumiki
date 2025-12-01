@@ -6,7 +6,6 @@ from typing import Literal
 import cairo  # For rendering the drag preview
 import gi
 import psutil
-from fabric import Fabricator
 from fabric.utils import bulk_connect
 from fabric.widgets.image import Image
 from fabric.widgets.label import Label
@@ -37,6 +36,34 @@ def stats_poll(fabricator):
             "disk": psutil.disk_usage(storage_config.get("path", "/")),
         }
         sleep(1)
+
+
+# Lazy-loaded stats fabricator - only created when first stat widget is used
+_util_fabricator = None
+
+
+def get_util_fabricator():
+    """Get the stats fabricator, creating it on first access."""
+    global _util_fabricator
+    if _util_fabricator is None:
+        from fabric import Fabricator
+
+        _util_fabricator = Fabricator(poll_from=stats_poll, stream=True)
+    return _util_fabricator
+
+
+# Backward compatibility - lazy proxy for util_fabricator
+class _LazyFabricator:
+    """Proxy that creates the fabricator on first use."""
+
+    def __getattr__(self, name):
+        return getattr(get_util_fabricator(), name)
+
+    def __setattr__(self, name, value):
+        setattr(get_util_fabricator(), name, value)
+
+
+util_fabricator = _LazyFabricator()
 
 
 def on_enter_notify_event(cursor, widget: Widget):
@@ -247,7 +274,3 @@ def get_audio_icon_name(
         "icon_text": text_icons["volume"][level],
         "icon": symbolic_icons["audio"]["volume"][level],
     }
-
-
-# Create a fabricator to poll the system stats
-util_fabricator = Fabricator(poll_from=stats_poll, stream=True)

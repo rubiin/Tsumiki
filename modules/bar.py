@@ -1,3 +1,5 @@
+import importlib
+
 from fabric import Application
 from fabric.utils import (
     exec_shell_command_async,
@@ -6,107 +8,116 @@ from fabric.widgets.box import Box
 from fabric.widgets.centerbox import CenterBox
 from fabric.widgets.wayland import WaylandWindow as Window
 
-from shared.collapsible_group import CollapsibleGroupWidget
 from utils.constants import ASSETS_DIR
 from utils.widget_settings import BarConfig
-from widgets.app_launcher_button import AppLauncherButton
-from widgets.battery import BatteryWidget
-from widgets.bluetooth import BlueToothWidget
-from widgets.brightness import BrightnessWidget
-from widgets.cava import CavaWidget
-from widgets.click_counter import ClickCounterWidget
-from widgets.cliphist import ClipHistoryWidget
-from widgets.custom_module import CustomModuleWidget
-from widgets.datetime_menu import DateTimeWidget
-from widgets.emoji_picker import EmojiPickerWidget
-from widgets.hypridle import HyprIdleWidget
-from widgets.hyprpicker import HyprPickerWidget
-from widgets.hyprsunset import HyprSunsetWidget
-from widgets.kanban import KanbanWidget
-from widgets.keyboard_layout import KeyboardLayoutWidget
-from widgets.language import LanguageWidget
-from widgets.microphone import MicrophoneIndicatorWidget
-from widgets.mpris import MprisWidget
-from widgets.ocr import OCRWidget
-from widgets.overview_button import OverviewButtonWidget
-from widgets.power_button import PowerWidget
-from widgets.quick_settings.quick_settings import QuickSettingsButtonWidget
-from widgets.recorder import RecorderWidget
-from widgets.screenshot import ScreenShotWidget
-from widgets.stats import (
-    CpuWidget,
-    GpuWidget,
-    MemoryWidget,
-    NetworkUsageWidget,
-    StorageWidget,
-)
-from widgets.stopwatch import StopWatchWidget
-from widgets.submap import SubMapWidget
-from widgets.system_tray import SystemTrayWidget
-from widgets.taskbar import TaskBarWidget
-from widgets.theme import ThemeSwitcherWidget
-from widgets.updates import UpdatesWidget
-from widgets.utility_widgets import DividerWidget, SpacingWidget
-from widgets.volume import VolumeWidget
-from widgets.wallpaper import WallpaperWidget
-from widgets.weather import WeatherWidget
-from widgets.window_count import WindowCountWidget
-from widgets.window_title import WindowTitleWidget
-from widgets.workspaces import WorkSpacesWidget
-from widgets.world_clock import WorldClockWidget
+
+
+class LazyWidgetDict(dict):
+    """A dictionary that lazily imports widget classes on first access.
+
+    This speeds up startup by only importing widgets that are actually used
+    in the user's layout configuration.
+    """
+
+    def __init__(self, widget_paths: dict[str, str]):
+        super().__init__()
+        self._paths = widget_paths
+        self._cache = {}
+
+    def __getitem__(self, key: str):
+        # Return cached class if already imported
+        if key in self._cache:
+            return self._cache[key]
+
+        # Check if we have a path for this widget
+        if key not in self._paths:
+            raise KeyError(f"Widget '{key}' not found")
+
+        # Dynamically import the widget class
+        class_path = self._paths[key]
+        module_name, class_name = class_path.rsplit(".", 1)
+        module = importlib.import_module(module_name)
+        widget_class = getattr(module, class_name)
+
+        # Cache and return
+        self._cache[key] = widget_class
+        return widget_class
+
+    def get(self, key: str, default=None):
+        try:
+            return self[key]
+        except KeyError:
+            return default
+
+    def __contains__(self, key: str) -> bool:
+        return key in self._paths
+
+    def keys(self):
+        return self._paths.keys()
+
+    def items(self):
+        # For iteration, import all (used by WidgetGroup)
+        for key in self._paths:
+            yield key, self[key]
+
+
+# Lazy widget loading - widgets are imported on-demand to speed up startup
+# Format: "widget_name": "module.path.ClassName"
+LAZY_WIDGETS_LIST = {
+    "app_launcher_button": "widgets.app_launcher_button.AppLauncherButton",
+    "battery": "widgets.battery.BatteryWidget",
+    "bluetooth": "widgets.bluetooth.BlueToothWidget",
+    "brightness": "widgets.brightness.BrightnessWidget",
+    "cava": "widgets.cava.CavaWidget",
+    "click_counter": "widgets.click_counter.ClickCounterWidget",
+    "cliphist": "widgets.cliphist.ClipHistoryWidget",
+    "collapsible_group": "shared.collapsible_group.CollapsibleGroupWidget",
+    "cpu": "widgets.stats.CpuWidget",
+    "custom_module": "widgets.custom_module.CustomModuleWidget",
+    "date_time": "widgets.datetime_menu.DateTimeWidget",
+    "divider": "widgets.utility_widgets.DividerWidget",
+    "emoji_picker": "widgets.emoji_picker.EmojiPickerWidget",
+    "gpu": "widgets.stats.GpuWidget",
+    "hypridle": "widgets.hypridle.HyprIdleWidget",
+    "hyprpicker": "widgets.hyprpicker.HyprPickerWidget",
+    "hyprsunset": "widgets.hyprsunset.HyprSunsetWidget",
+    "kanban": "widgets.kanban.KanbanWidget",
+    "keyboard": "widgets.keyboard_layout.KeyboardLayoutWidget",
+    "language": "widgets.language.LanguageWidget",
+    "memory": "widgets.stats.MemoryWidget",
+    "microphone": "widgets.microphone.MicrophoneIndicatorWidget",
+    "mpris": "widgets.mpris.MprisWidget",
+    "network_usage": "widgets.stats.NetworkUsageWidget",
+    "ocr": "widgets.ocr.OCRWidget",
+    "overview_button": "widgets.overview_button.OverviewButtonWidget",
+    "power": "widgets.power_button.PowerWidget",
+    "quick_settings": "widgets.quick_settings.quick_settings.QuickSettingsButtonWidget",
+    "recorder": "widgets.recorder.RecorderWidget",
+    "screenshot": "widgets.screenshot.ScreenShotWidget",
+    "spacing": "widgets.utility_widgets.SpacingWidget",
+    "stopwatch": "widgets.stopwatch.StopWatchWidget",
+    "storage": "widgets.stats.StorageWidget",
+    "submap": "widgets.submap.SubMapWidget",
+    "system_tray": "widgets.system_tray.SystemTrayWidget",
+    "taskbar": "widgets.taskbar.TaskBarWidget",
+    "theme_switcher": "widgets.theme.ThemeSwitcherWidget",
+    "updates": "widgets.updates.UpdatesWidget",
+    "volume": "widgets.volume.VolumeWidget",
+    "wallpaper": "widgets.wallpaper.WallpaperWidget",
+    "weather": "widgets.weather.WeatherWidget",
+    "window_count": "widgets.window_count.WindowCountWidget",
+    "window_title": "widgets.window_title.WindowTitleWidget",
+    "workspaces": "widgets.workspaces.WorkSpacesWidget",
+    "world_clock": "widgets.world_clock.WorldClockWidget",
+}
 
 
 class StatusBar(Window):
     """A widget to display the status bar panel."""
 
     def __init__(self, config: BarConfig, **kwargs):
-        self.widgets_list = {
-            "app_launcher_button": AppLauncherButton,
-            "battery": BatteryWidget,
-            "bluetooth": BlueToothWidget,
-            "world_clock": WorldClockWidget,
-            "brightness": BrightnessWidget,
-            "cava": CavaWidget,
-            "cliphist": ClipHistoryWidget,
-            "gpu": GpuWidget,
-            "kanban": KanbanWidget,
-            "emoji_picker": EmojiPickerWidget,
-            "click_counter": ClickCounterWidget,
-            "cpu": CpuWidget,
-            "custom_module": CustomModuleWidget,
-            "date_time": DateTimeWidget,
-            "hypridle": HyprIdleWidget,
-            "hyprpicker": HyprPickerWidget,
-            "hyprsunset": HyprSunsetWidget,
-            "keyboard": KeyboardLayoutWidget,
-            "language": LanguageWidget,
-            "memory": MemoryWidget,
-            "microphone": MicrophoneIndicatorWidget,
-            "mpris": MprisWidget,
-            "network_usage": NetworkUsageWidget,
-            "ocr": OCRWidget,
-            "overview_button": OverviewButtonWidget,
-            "power": PowerWidget,
-            "recorder": RecorderWidget,
-            "screenshot": ScreenShotWidget,
-            "storage": StorageWidget,
-            "system_tray": SystemTrayWidget,
-            "taskbar": TaskBarWidget,
-            "theme_switcher": ThemeSwitcherWidget,
-            "updates": UpdatesWidget,
-            "volume": VolumeWidget,
-            "submap": SubMapWidget,
-            "weather": WeatherWidget,
-            "window_title": WindowTitleWidget,
-            "workspaces": WorkSpacesWidget,
-            "spacing": SpacingWidget,
-            "stopwatch": StopWatchWidget,
-            "divider": DividerWidget,
-            "quick_settings": QuickSettingsButtonWidget,
-            "window_count": WindowCountWidget,
-            "wallpaper": WallpaperWidget,
-            "collapsible_group": CollapsibleGroupWidget,
-        }
+        # Use lazy widget loading - classes are imported on first use
+        self.widgets_list = LazyWidgetDict(LAZY_WIDGETS_LIST)
 
         options = config.get("general", {})
         bar_config = config.get("modules", {}).get("bar", {})
