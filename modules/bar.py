@@ -52,6 +52,14 @@ class LazyWidgetDict(dict):
     def __contains__(self, key: str) -> bool:
         return key in self._paths
 
+    def __bool__(self) -> bool:
+        """Return True if there are any widget paths defined."""
+        return bool(self._paths)
+
+    def __len__(self) -> int:
+        """Return the number of widget paths defined."""
+        return len(self._paths)
+
     def keys(self):
         return self._paths.keys()
 

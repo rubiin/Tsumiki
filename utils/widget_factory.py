@@ -137,6 +137,8 @@ class WidgetResolver:
     ) -> Optional[Any]:
         """Unified indexed widget creation - DRY principle."""
         config = context.get("config", {})
+
+        print("Config path:", config)
         collection = self.helper.get_config_path(config, *config_path)
 
         index = self.helper.validate_and_get_index(identifier, collection, widget_type)

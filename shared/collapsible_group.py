@@ -112,11 +112,15 @@ class CollapsibleGroupWidget(ButtonWidget):
         # Use the widget factory system
         from utils.widget_factory import WidgetResolver
 
-        resolver = WidgetResolver(self.widgets_list or {})
+        widgets_list = self.widgets_list if self.widgets_list is not None else {}
+        resolver = WidgetResolver(widgets_list)
         widgets = resolver.batch_resolve(self.widgets_config, self._resolver_context)
 
         for widget in widgets:
             self.widgets_box.add(widget)
+
+        # Show all widgets - required for dynamically added widgets
+        self.widgets_box.show_all()
 
     def set_context(self, config: dict, widgets_list: dict):
         """Set resolution context for widget creation.
