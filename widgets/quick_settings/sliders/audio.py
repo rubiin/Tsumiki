@@ -23,12 +23,7 @@ class AudioSlider(SettingSlider):
         self.client.connect("speaker-changed", self.update_state)
 
     def __init__(self, audio_stream=None, show_chevron=False):
-        """Initialize the audio slider.
-
-        Args:
-            audio_stream: Optional AudioStream object. If None, controls device audio.
-                        If provided, controls application-specific audio.
-        """
+        """Initialize the audio slider."""
         self.client = audio_service
         self.audio_stream = audio_stream
 

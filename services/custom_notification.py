@@ -118,15 +118,7 @@ class CustomNotifications(Notifications):
     def get_cached_pixbuf(
         self, notification_id: int, size: int | None = None
     ) -> GdkPixbuf.Pixbuf | None:
-        """Get a cached pixbuf for a notification, optionally at a specific size.
-
-        Args:
-            notification_id: The notification ID
-            size: Desired size (will be scaled if not cached at this size)
-
-        Returns:
-            Cached pixbuf or None if not available
-        """
+        """Get a cached pixbuf for a notification, optionally at a specific size."""
         if notification_id not in self._pixbuf_cache:
             return None
 
@@ -156,13 +148,7 @@ class CustomNotifications(Notifications):
         pixbuf: GdkPixbuf.Pixbuf,
         size: int | None = None,
     ) -> None:
-        """Cache a pixbuf for a notification.
-
-        Args:
-            notification_id: The notification ID
-            pixbuf: The pixbuf to cache
-            size: The size of the pixbuf (defaults to NOTIFICATION_IMAGE_SIZE)
-        """
+        """Cache a pixbuf for a notification."""
         size = size or NOTIFICATION_IMAGE_SIZE
         if notification_id not in self._pixbuf_cache:
             self._pixbuf_cache[notification_id] = {}
@@ -171,12 +157,7 @@ class CustomNotifications(Notifications):
     def cache_pixbuf_from_notification(
         self, notification_id: int, notification: Notification
     ) -> None:
-        """Cache a notification's image pixbuf at common sizes.
-
-        Args:
-            notification_id: The notification ID
-            notification: The notification object with image_pixbuf
-        """
+        """Cache a notification's image pixbuf at common sizes."""
         try:
             if pixbuf := notification.image_pixbuf:
                 # Cache at the base size

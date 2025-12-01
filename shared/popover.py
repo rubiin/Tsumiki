@@ -146,13 +146,7 @@ class Popover(Widget):
         content=None,
     ):
         super().__init__()
-        """
-        Initialize a popover.
 
-        Args:
-            content_factory: Function that returns content widget when called
-            point_to: Widget to position the popover next to
-        """
         self._content_factory = content_factory
         self._point_to = point_to
         self._content_window = None

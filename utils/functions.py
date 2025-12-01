@@ -523,20 +523,7 @@ def _get_config_collection(parsed_data: dict, widget_type: str) -> list:
 def _validate_indexed_reference(
     identifier: str, collection: list, collection_name: str, section: str
 ) -> int:
-    """Helper function to validate indexed references (groups, buttons, etc.).
-
-    Args:
-        identifier: String identifier that should be a digit
-        collection: List to validate against
-        collection_name: Name of collection for error messages
-        section: Section name for error reporting
-
-    Returns:
-        Validated index
-
-    Raises:
-        ValueError: If validation fails
-    """
+    """Helper function to validate indexed references (groups, buttons, etc.)."""
     if not identifier.isdigit():
         raise ValueError(
             f"Invalid {collection_name} index '{identifier}' in section {section}. "
@@ -590,17 +577,7 @@ def _validate_regular_widget(
 def validate_widget_reference(
     widget_spec: str, parsed_data: dict, default_config: dict, section: str = "layout"
 ):
-    """Unified validation for any widget reference using dispatcher pattern.
-
-    Args:
-        widget_spec: Widget specification to validate
-        parsed_data: Parsed configuration data
-        default_config: Default configuration for widget names
-        section: Section name for error reporting
-
-    Raises:
-        ValueError: If widget specification is invalid
-    """
+    """Unified validation for any widget reference using dispatcher pattern."""
     # Handle special references
     if widget_spec.startswith("@"):
         if ":" not in widget_spec:
@@ -623,15 +600,7 @@ def validate_widget_reference(
 
 
 def validate_widgets(parsed_data, default_config):
-    """Validates the widgets defined in the layout configuration.
-
-    Args:
-        parsed_data (dict): The parsed configuration data
-        default_config (dict): The default configuration data
-
-    Raises:
-        ValueError: If an invalid widget is found in the layout
-    """
+    """Validates the widgets defined in the layout configuration."""
     layout = parsed_data.get("layout", {})
 
     # Validate widgets in all sections

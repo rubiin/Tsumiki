@@ -134,17 +134,7 @@ class Popover(Widget):
         animation_duration: int = 700,
     ):
         super().__init__()
-        """
-        Initialize a popover.
 
-        Args:
-            point_to: Widget to position the popover next to
-            content_factory: Function that returns content widget when called
-            content: Predefined widget for popover content
-            animation: Animation style ('slide-down', 'slide-up', 'fade',
-            'slide-left', 'slide-right')
-            animation_duration: Animation duration in milliseconds
-        """
         self._content_factory = content_factory
         self._point_to = point_to
         self._content_window = None

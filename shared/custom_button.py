@@ -14,14 +14,6 @@ class CustomButtonWidget(ButtonWidget):
     def __init__(
         self, widget_name: str = "custom_button", config: dict | None = None, **kwargs
     ):
-        """Initialize the custom button widget.
-
-        Args:
-            widget_name: The name of the widget instance
-            config: An optional configuration dictionary. If None, config is
-                loaded from the global scope.
-            **kwargs: Additional arguments passed to the parent
-        """
         super().__init__(name=widget_name, **kwargs)
 
         if config is not None:

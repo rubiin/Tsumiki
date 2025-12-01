@@ -45,26 +45,13 @@ class WidgetResolver:
     """Universal widget resolver with unified handling for all widget types."""
 
     def __init__(self, widgets_list: dict[str, type]):
-        """Initialize the widget resolver.
-
-        Args:
-            widgets_list: Dictionary mapping widget names to widget classes
-        """
         self.widgets_list = widgets_list
         self.helper = IndexedWidgetHelper()
 
     def resolve_widget(
         self, widget_spec: str, context: dict[str, Any]
     ) -> Optional[Any]:
-        """Unified method to resolve ALL widget types.
-
-        Args:
-            widget_spec: Widget specification (e.g., "battery", "@custom_button:0")
-            context: Context containing config and other data needed for resolution
-
-        Returns:
-            Widget instance or None if resolution fails
-        """
+        """Unified method to resolve ALL widget types."""
         try:
             # Unified pattern: extract type and identifier
             if widget_spec.startswith("@"):
@@ -136,9 +123,9 @@ class WidgetResolver:
         instantiator_func,
     ) -> Optional[Any]:
         """Unified indexed widget creation - DRY principle."""
+
         config = context.get("config", {})
 
-        print("Config path:", config)
         collection = self.helper.get_config_path(config, *config_path)
 
         index = self.helper.validate_and_get_index(identifier, collection, widget_type)
@@ -193,15 +180,7 @@ class WidgetResolver:
     def batch_resolve(
         self, widget_specs: list[str], context: dict[str, Any]
     ) -> list[Any]:
-        """Resolve multiple widgets efficiently.
-
-        Args:
-            widget_specs: List of widget specifications to resolve
-            context: Context containing config and other data
-
-        Returns:
-            List of successfully created widget instances
-        """
+        """Resolve multiple widgets efficiently."""
         return [
             widget
             for spec in widget_specs

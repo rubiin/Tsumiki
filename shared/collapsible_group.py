@@ -125,12 +125,7 @@ class CollapsibleGroupWidget(ButtonWidget):
         self.widgets_box.show_all()
 
     def set_context(self, config: dict, widgets_list: dict):
-        """Set resolution context for widget creation.
-
-        Args:
-            config: Main configuration dictionary
-            widgets_list: Dictionary mapping widget names to widget classes
-        """
+        """Set resolution context for widget creation."""
         self._resolver_context = {"config": config}
         self.widgets_list = widgets_list
 
