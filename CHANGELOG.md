@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.10.0](https://github.com/rubiin/Tsumiki/compare/v2.9.0...v2.10.0) (2025-12-01)
+
+
+### 🚀 New Features
+
+* add new configuration options for dock and widget settings ([d15927c](https://github.com/rubiin/Tsumiki/commit/d15927ccdf73539f19c2a7a46c51d063e64e90aa))
+
 ## [2.9.0](https://github.com/rubiin/Tsumiki/compare/v2.8.0...v2.9.0) (2025-12-01)
 
 
