@@ -1,24 +1,24 @@
 import json
-from collections import deque
 
-from fabric.utils import exec_shell_command, exec_shell_command_async
-from fabric.widgets.circularprogressbar import CircularProgressBar
+from fabric.utils import exec_shell_command_async
 from fabric.widgets.label import Label
-from fabric.widgets.overlay import Overlay
 
 import utils.functions as helpers
 from services.networkspeed import NetworkSpeed
+from shared.mixins import StatDisplayMixin
 from shared.widget_container import ButtonWidget
 from utils.icons import text_icons
 from utils.widget_utils import (
-    get_bar_graph,
     nerd_font_icon,
     util_fabricator,
 )
 
 
-class CpuWidget(ButtonWidget):
+class CpuWidget(ButtonWidget, StatDisplayMixin):
     """A widget to display the current CPU usage."""
+
+    _stat_icon = "󰕸"
+    _stat_name = "cpu"
 
     def __init__(
         self,
@@ -30,58 +30,13 @@ class CpuWidget(ButtonWidget):
             **kwargs,
         )
 
-        # Set the CPU name and mode
-        self.current_mode = self.config.get("mode", "label")
-
         exec_shell_command_async(
             "bash -c \"lscpu | grep 'Model name' | awk -F: '{print $2}'\"",
             self.set_cpu_name,
         )
 
-        if self.current_mode == "graph":
-            self._graph_maxlen = self.config.get("graph_length", 4)
-            self.graph_values = deque(maxlen=self._graph_maxlen)
-            self.cpu_level_label = Label(
-                label="0%",
-                style_classes=["panel-text"],
-            )
-            self.container_box.children = self.cpu_level_label
-
-        elif self.current_mode == "progress":
-            # Create a circular progress bar to display the volume level
-            self.progress_bar = CircularProgressBar(
-                name="stat-circle",
-                line_style="round",
-                line_width=2,
-                size=28,
-                start_angle=150,
-                end_angle=390,
-            )
-
-            self.icon = nerd_font_icon(
-                icon=self.config.get("icon", "󰕸"),
-                props={
-                    "style_classes": ["panel-font-icon", "overlay-icon"],
-                },
-            )
-
-            # Create an event box to handle scroll events for volume control
-            self.container_box.children = (
-                Overlay(child=self.progress_bar, overlays=self.icon, name="overlay"),
-            )
-
-        else:
-            # Create a TextIcon with the specified icon and size
-            self.icon = nerd_font_icon(
-                icon=self.config.get("icon", "󰕸"),
-                props={"style_classes": ["panel-font-icon"]},
-            )
-
-            self.cpu_level_label = Label(
-                label="0%",
-                style_classes=["panel-text"],
-            )
-            self.container_box.children = (self.icon, self.cpu_level_label)
+        # Setup display mode using mixin
+        self.setup_stat_display(self.container_box)
 
         # Set up a fabricator to call the update_label method when the CPU usage changes
         util_fabricator.connect("changed", self._update_ui)
@@ -94,16 +49,8 @@ class CpuWidget(ButtonWidget):
         frequency = value.get("cpu_freq")
         usage = value.get("cpu_usage")
 
-        if self.current_mode == "graph":
-            self.graph_values.append(get_bar_graph(usage))
-            # deque with maxlen auto-removes old values
-            self.cpu_level_label.set_label("".join(self.graph_values))
-
-        elif self.current_mode == "progress":
-            self.progress_bar.set_value(usage / 100.0)
-
-        else:
-            self.cpu_level_label.set_label(f"{usage}%")
+        # Use mixin to update display
+        self.update_stat_display(usage, f"{usage}%")
 
         # Update the tooltip with the memory usage details if enabled
         if self.config.get("tooltip", False):
@@ -144,8 +91,11 @@ class CpuWidget(ButtonWidget):
         return True
 
 
-class GpuWidget(ButtonWidget):
+class GpuWidget(ButtonWidget, StatDisplayMixin):
     """A widget to display the current GPU usage."""
+
+    _stat_icon = "󰕸"
+    _stat_name = "gpu"
 
     def __init__(
         self,
@@ -157,70 +107,14 @@ class GpuWidget(ButtonWidget):
             **kwargs,
         )
 
-        # Set the GPU name and mode
-        self.current_mode = self.config.get("mode", "label")
-
-        if self.current_mode == "graph":
-            self._graph_maxlen = self.config.get("graph_length", 4)
-            self.graph_values = deque(maxlen=self._graph_maxlen)
-            self.gpu_level_label = Label(
-                label="0%",
-                style_classes=["panel-text"],
-            )
-            self.container_box.children = self.gpu_level_label
-
-        elif self.current_mode == "progress":
-            # Create a circular progress bar to display the volume level
-            self.progress_bar = CircularProgressBar(
-                name="stat-circle",
-                line_style="round",
-                line_width=2,
-                size=28,
-                start_angle=150,
-                end_angle=390,
-            )
-
-            self.icon = nerd_font_icon(
-                icon=self.config.get("icon", "󰕸"),
-                props={
-                    "style_classes": ["panel-font-icon", "overlay-icon"],
-                },
-            )
-
-            # Create an event box to handle scroll events for volume control
-            self.container_box.children = (
-                Overlay(child=self.progress_bar, overlays=self.icon, name="overlay"),
-            )
-
-        else:
-            # Create a TextIcon with the specified icon and size
-            self.icon = nerd_font_icon(
-                icon=self.config.get("icon", "󰕸"),
-                props={"style_classes": ["panel-font-icon"]},
-            )
-
-            self.gpu_level_label = Label(
-                label="0%",
-                style_classes=["panel-text"],
-            )
-            self.container_box.children = (self.icon, self.gpu_level_label)
+        # Setup display mode using mixin
+        self.setup_stat_display(self.container_box)
 
         # Set up a fabricator to call the update_label method when the CPU usage changes
         util_fabricator.connect("changed", self._update_ui)
 
         # Cache for GPU stats to avoid blocking main thread
         self._gpu_stats = None
-
-    def _fetch_gpu_stats(self):
-        """Fetch GPU stats in background and update cache."""
-        try:
-            value = exec_shell_command("nvtop -s")
-            stats = json.loads(value.strip("\n"))
-            if type(stats) is list:
-                stats = stats[0]
-            self._gpu_stats = stats
-        except Exception:
-            self._gpu_stats = None
 
     def _update_ui(self, *_):
         # Fetch GPU stats asynchronously to avoid blocking
@@ -240,19 +134,15 @@ class GpuWidget(ButtonWidget):
             return
 
         frequency = stats.get("gpu_clock", "0 MHz")
-        usage = stats.get("mem_util", "0").strip("%")
+        usage_str = stats.get("mem_util", "0").strip("%")
+        try:
+            usage = float(usage_str)
+        except ValueError:
+            usage = 0
         gpu_name = stats.get("device_name", "N/A")
 
-        if self.current_mode == "graph":
-            self.graph_values.append(get_bar_graph(usage))
-            # deque with maxlen auto-removes old values
-            self.gpu_level_label.set_label("".join(self.graph_values))
-
-        elif self.current_mode == "progress":
-            self.progress_bar.set_value(usage / 100.0)
-
-        else:
-            self.gpu_level_label.set_label(usage)
+        # Use mixin to update display
+        self.update_stat_display(usage, f"{usage_str}%")
 
         # Update the tooltip with the memory usage details if enabled
         if self.config.get("tooltip", False):
@@ -273,8 +163,11 @@ class GpuWidget(ButtonWidget):
         return True
 
 
-class MemoryWidget(ButtonWidget):
+class MemoryWidget(ButtonWidget, StatDisplayMixin):
     """A widget to display the current memory usage."""
+
+    _stat_icon = "󰕸"
+    _stat_name = "memory"
 
     def __init__(
         self,
@@ -286,53 +179,8 @@ class MemoryWidget(ButtonWidget):
             **kwargs,
         )
 
-        # Set the memory name and mode
-        self.current_mode = self.config.get("mode", "label")
-
-        if self.current_mode == "graph":
-            self._graph_maxlen = self.config.get("graph_length", 4)
-            self.graph_values = deque(maxlen=self._graph_maxlen)
-            self.memory_level_label = Label(
-                label="0%", style_classes=["panel-text"], visible=False
-            )
-
-            self.container_box.children = self.memory_level_label
-
-        elif self.current_mode == "progress":
-            # Create a circular progress bar to display the volume level
-            self.progress_bar = CircularProgressBar(
-                name="stat-circle",
-                line_style="round",
-                line_width=2,
-                size=28,
-                start_angle=150,
-                end_angle=390,
-            )
-
-            self.icon = nerd_font_icon(
-                icon=self.config.get("icon", "󰕸"),
-                props={
-                    "style_classes": ["panel-font-icon", "overlay-icon"],
-                },
-            )
-
-            # Create an event box to handle scroll events for volume control
-            self.container_box.children = (
-                Overlay(child=self.progress_bar, overlays=self.icon, name="overlay"),
-            )
-
-        else:
-            # Create a TextIcon with the specified icon and size
-            self.icon = nerd_font_icon(
-                icon=self.config.get("icon", "󰕸"),
-                props={"style_classes": ["panel-font-icon"]},
-            )
-
-            self.memory_level_label = Label(
-                label="0%",
-                style_classes=["panel-text"],
-            )
-            self.container_box.children = (self.icon, self.memory_level_label)
+        # Setup display mode using mixin
+        self.setup_stat_display(self.container_box)
 
         # Set up a fabricator to call the update_label method  at specified intervals
         util_fabricator.connect("changed", self._update_ui)
@@ -344,16 +192,8 @@ class MemoryWidget(ButtonWidget):
         self.total_memory = memory.total
         self.percent_used = memory.percent
 
-        if self.current_mode == "graph":
-            self.graph_values.append(get_bar_graph(self.percent_used))
-            # deque with maxlen auto-removes old values
-            self.memory_level_label.set_label("".join(self.graph_values))
-
-        elif self.current_mode == "progress":
-            self.progress_bar.set_value(self.percent_used / 100.0)
-
-        else:
-            self.memory_level_label.set_label(f"{self.get_used()}")
+        # Use mixin to update display
+        self.update_stat_display(self.percent_used, f"{self.get_used()}")
 
         # Update the tooltip with the memory usage details if enabled
         if self.config.get("tooltip", False):
@@ -373,8 +213,11 @@ class MemoryWidget(ButtonWidget):
         return f"{self.get_used()}/{self.get_total()}"
 
 
-class StorageWidget(ButtonWidget):
+class StorageWidget(ButtonWidget, StatDisplayMixin):
     """A widget to display the current storage usage."""
+
+    _stat_icon = "󰕸"
+    _stat_name = "storage"
 
     def __init__(
         self,
@@ -386,56 +229,8 @@ class StorageWidget(ButtonWidget):
             **kwargs,
         )
 
-        # Set the memory name and mode
-        self.current_mode = self.config.get("mode", "label")
-
-        if self.current_mode == "graph":
-            self._graph_maxlen = self.config.get("graph_length", 4)
-            self.graph_values = deque(maxlen=self._graph_maxlen)
-
-            self.storage_level_label = Label(
-                label="0",
-                style_classes=["panel-text"],
-            )
-
-            self.container_box.children = self.storage_level_label
-
-        elif self.current_mode == "progress":
-            # Create a circular progress bar to display the volume level
-            self.progress_bar = CircularProgressBar(
-                name="stat-circle",
-                line_style="round",
-                line_width=2,
-                size=28,
-                start_angle=150,
-                end_angle=390,
-            )
-
-            self.icon = nerd_font_icon(
-                icon=self.config.get("icon", "󰕸"),
-                props={
-                    "style_classes": ["panel-font-icon", "overlay-icon"],
-                },
-            )
-
-            # Create an event box to handle scroll events for volume control
-            self.container_box.children = (
-                Overlay(child=self.progress_bar, overlays=self.icon, name="overlay"),
-            )
-
-        else:
-            # Create a TextIcon with the specified icon and size
-            self.icon = nerd_font_icon(
-                icon=self.config.get("icon", "󰕸"),
-                props={"style_classes": ["panel-font-icon"]},
-            )
-
-            self.storage_level_label = Label(
-                label="0",
-                style_classes=["panel-text"],
-            )
-
-            self.container_box.children = (self.icon, self.storage_level_label)
+        # Setup display mode using mixin
+        self.setup_stat_display(self.container_box)
 
         # Set up a fabricator to call the update_label method at specified intervals
         util_fabricator.connect("changed", self._update_ui)
@@ -445,16 +240,8 @@ class StorageWidget(ButtonWidget):
         self.disk = value.get("disk")
         percent = self.disk.percent
 
-        if self.current_mode == "graph":
-            self.graph_values.append(get_bar_graph(percent))
-            # deque with maxlen auto-removes old values
-            self.storage_level_label.set_label("".join(self.graph_values))
-
-        elif self.current_mode == "progress":
-            self.progress_bar.set_value(percent / 100.0)
-
-        else:
-            self.storage_level_label.set_label(f"{self.get_used()}")
+        # Use mixin to update display
+        self.update_stat_display(percent, f"{self.get_used()}")
 
         # Update the tooltip with the storage usage details if enabled
         if self.config.get("tooltip", False):
