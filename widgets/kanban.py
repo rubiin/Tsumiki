@@ -14,6 +14,7 @@ from fabric.widgets.scrolledwindow import ScrolledWindow
 from gi.repository import Gdk, GLib, GObject, Gtk
 
 from shared.list import ListBox
+from shared.mixins import PopoverMixin
 from shared.widget_container import ButtonWidget
 from utils.functions import read_json_file, write_json_file
 from utils.widget_utils import create_surface_from_widget, nerd_font_icon
@@ -392,17 +393,11 @@ class Kanban(Box):
             )
 
 
-class KanbanWidget(ButtonWidget):
-    """A widget to display and manage clipboard history."""
+class KanbanWidget(ButtonWidget, PopoverMixin):
+    """A widget to display and manage kanban board."""
 
-    def __init__(
-        self,
-        **kwargs,
-    ):
-        super().__init__(
-            name="kanban",
-            **kwargs,
-        )
+    def __init__(self, **kwargs):
+        super().__init__(name="kanban", **kwargs)
 
         self.container_box.add(
             nerd_font_icon(
@@ -417,24 +412,4 @@ class KanbanWidget(ButtonWidget):
         if self.config.get("tooltip", False):
             self.set_tooltip_text("Kanban Board")
 
-        self.popup = None
-
-        self.connect(
-            "clicked",
-            self.show_popover,
-        )
-
-    def show_popover(self, *_):
-        """Show the popover."""
-        if self.popup is None:
-            from shared.popover import Popover
-
-            self.popup = Popover(
-                content=Kanban(),
-                point_to=self,
-            )
-            self.popup.connect(
-                "popover-closed", lambda *_: self.remove_style_class("active")
-            )
-        self.popup.open()
-        self.add_style_class("active")
+        self.setup_popover(Kanban)

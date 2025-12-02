@@ -14,6 +14,7 @@ from fabric.widgets.scrolledwindow import ScrolledWindow
 from gi.repository import Gdk, GdkPixbuf, Gio, GLib, Gtk
 
 from shared.list import ListBox
+from shared.mixins import PopoverMixin
 from shared.widget_container import ButtonWidget
 from utils.widget_utils import nerd_font_icon
 
@@ -658,17 +659,11 @@ class ClipHistoryMenu(Box):
             logger.exception(f"Error cleaning up temporary files: {e}")
 
 
-class ClipHistoryWidget(ButtonWidget):
+class ClipHistoryWidget(ButtonWidget, PopoverMixin):
     """A widget to display and manage clipboard history."""
 
-    def __init__(
-        self,
-        **kwargs,
-    ):
-        super().__init__(
-            name="cliphist",
-            **kwargs,
-        )
+    def __init__(self, **kwargs):
+        super().__init__(name="cliphist", **kwargs)
 
         self.container_box.add(
             nerd_font_icon(
@@ -683,24 +678,4 @@ class ClipHistoryWidget(ButtonWidget):
         if self.config.get("tooltip", False):
             self.set_tooltip_text("Clipboard History")
 
-        self.popup = None
-
-        self.connect(
-            "clicked",
-            self.show_popover,
-        )
-
-    def show_popover(self, *_):
-        """Show the popover."""
-        if self.popup is None:
-            from shared.popover import Popover
-
-            self.popup = Popover(
-                content=ClipHistoryMenu(),
-                point_to=self,
-            )
-            self.popup.connect(
-                "popover-closed", lambda *_: self.remove_style_class("active")
-            )
-        self.popup.open()
-        self.add_style_class("active")
+        self.setup_popover(ClipHistoryMenu)

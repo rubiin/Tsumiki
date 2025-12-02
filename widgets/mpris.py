@@ -6,7 +6,7 @@ from fabric.widgets.label import Label
 
 from services.mpris import MprisPlayer, MprisPlayerManager
 from shared.media import PlayerBoxStack
-from shared.popover import Popover
+from shared.mixins import PopoverMixin
 from shared.widget_container import ButtonWidget
 from utils.colors import Colors
 
@@ -14,18 +14,11 @@ from utils.colors import Colors
 _NEWLINE_RE = re.compile(r"\r?\n")
 
 
-class MprisWidget(ButtonWidget):
+class MprisWidget(ButtonWidget, PopoverMixin):
     """A widget to control the MPRIS."""
 
-    def __init__(
-        self,
-        **kwargs,
-    ):
-        # Initialize the EventBox with specific name and style
-        super().__init__(
-            name="mpris",
-            **kwargs,
-        )
+    def __init__(self, **kwargs):
+        super().__init__(name="mpris", **kwargs)
 
         self.player = None
 
@@ -56,9 +49,12 @@ class MprisWidget(ButtonWidget):
             "show_time_tooltip": True,
         }
 
-        self.popup = None
-
-        self.connect("clicked", self.on_click)
+        self.setup_popover(
+            lambda: Box(
+                style_classes=["mpris-box"],
+                children=[PlayerBoxStack(self.mpris_manager, config=self.config)],
+            )
+        )
 
     def get_current(self):
         bar_label = _NEWLINE_RE.sub(" ", self.player.title)
@@ -82,20 +78,3 @@ class MprisWidget(ButtonWidget):
 
         if self.config.get("tooltip", False):
             self.set_tooltip_text(bar_label)
-
-    def on_click(self, *_):
-        if self.popup is None:
-            self.popup = Popover(
-                content=Box(
-                    style_classes=["mpris-box"],
-                    children=[
-                        PlayerBoxStack(self.mpris_manager, config=self.config),
-                    ],
-                ),
-                point_to=self,
-            )
-            self.popup.connect(
-                "popover-closed", lambda *_: self.remove_style_class("active")
-            )
-        self.popup.open()
-        self.add_style_class("active")

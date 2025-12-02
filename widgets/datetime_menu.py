@@ -18,6 +18,7 @@ from services import notification_service
 from shared.buttons import HoverButton
 from shared.circle_image import CircularImage
 from shared.list import ListBox
+from shared.mixins import PopoverMixin
 from shared.widget_container import ButtonWidget
 from utils.colors import Colors
 from utils.icons import text_icons
@@ -429,15 +430,13 @@ class DateNotificationMenu(Box):
         self.notifications_listbox.set_visible(True)
 
 
-class DateTimeWidget(ButtonWidget):
+class DateTimeWidget(ButtonWidget, PopoverMixin):
     """A widget to power off the system."""
 
     def __init__(self, **kwargs):
         super().__init__(name="date_time", **kwargs)
 
         notification_config = self.config.get("notification", {})
-
-        self.popup = None
 
         if notification_config.get("enabled", True):
             self.notification_indicator = nerd_font_icon(
@@ -491,10 +490,7 @@ class DateTimeWidget(ButtonWidget):
                 DateTime(self.config.get("format", "%m-%d %H:%M"), name="date-time")
             )
 
-        self.connect(
-            "clicked",
-            self.show_popover,
-        )
+        self.setup_popover(lambda: DateNotificationMenu(config=self.config))
 
     def on_notification_count(self, _, value, *args):
         if value > 0:
@@ -513,18 +509,3 @@ class DateTimeWidget(ButtonWidget):
             self.notification_indicator.set_label(
                 text_icons["notifications"]["noisy"],
             )
-
-    def show_popover(self, *_):
-        """Show the popover."""
-        if self.popup is None:
-            from shared.popover import Popover
-
-            self.popup = Popover(
-                content=DateNotificationMenu(config=self.config),
-                point_to=self,
-            )
-            self.popup.connect(
-                "popover-closed", lambda *_: self.remove_style_class("active")
-            )
-        self.popup.open()
-        self.add_style_class("active")

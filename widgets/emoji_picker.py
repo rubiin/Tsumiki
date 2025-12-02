@@ -9,6 +9,7 @@ from fabric.widgets.label import Label
 from fabric.widgets.stack import Stack
 from gi.repository import Gdk, Gio, GLib
 
+from shared.mixins import PopoverMixin
 from shared.widget_container import ButtonWidget
 from utils.constants import ASSETS_DIR
 from utils.thread import run_in_thread
@@ -394,17 +395,11 @@ class EmojiPickerMenu(Box):
             logger.exception(f"Clipboard copy failed: {e}")
 
 
-class EmojiPickerWidget(ButtonWidget):
+class EmojiPickerWidget(ButtonWidget, PopoverMixin):
     """A widget to display and manage emoji picker."""
 
-    def __init__(
-        self,
-        **kwargs,
-    ):
-        super().__init__(
-            name="emoji_picker",
-            **kwargs,
-        )
+    def __init__(self, **kwargs):
+        super().__init__(name="emoji_picker", **kwargs)
 
         self.container_box.add(
             nerd_font_icon(
@@ -419,26 +414,4 @@ class EmojiPickerWidget(ButtonWidget):
         if self.config.get("tooltip", False):
             self.set_tooltip_text("Emoji Picker")
 
-        self.popup = None
-
-        self.connect(
-            "clicked",
-            self.show_popover,
-        )
-
-    def show_popover(self, *_):
-        """Show the popover."""
-        if self.popup is None:
-            from shared.popover import Popover
-
-            self.popup = Popover(
-                content=EmojiPickerMenu(parent=self),
-                point_to=self,
-            )
-            self.popup.connect(
-                "popover-closed", lambda *_: self.remove_style_class("active")
-            )
-
-        self.popup.open()
-
-        self.add_style_class("active")
+        self.setup_popover(lambda: EmojiPickerMenu(parent=self))
