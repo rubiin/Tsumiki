@@ -21,21 +21,32 @@ class AppUtils:
         if AppUtils._initialized:
             return
         AppUtils._initialized = True
-        self._all_applications = get_desktop_applications()
-        self._app_identifiers = self._build_app_identifiers_map()
+        # Defer loading until first access to save memory at startup
+        self._all_applications = None
+        self._app_identifiers = None
+
+    def _ensure_loaded(self):
+        """Lazily load applications on first access."""
+        if self._all_applications is None:
+            self._all_applications = get_desktop_applications()
+            self._app_identifiers = self._build_app_identifiers_map()
 
     @property
     def all_applications(self):
-        """Return all desktop applications."""
+        """Return all desktop applications (lazy-loaded)."""
+        self._ensure_loaded()
         return self._all_applications
 
     @property
     def app_identifiers(self):
         """Return the mapping of app identifiers to DesktopApp objects."""
+        self._ensure_loaded()
         return self._app_identifiers
 
     def refresh(self):
         """Return all desktop applications, optionally refreshing the list."""
+        from fabric.utils import get_desktop_applications
+
         self._all_applications = get_desktop_applications()
         self._app_identifiers = self._build_app_identifiers_map()
         return True
