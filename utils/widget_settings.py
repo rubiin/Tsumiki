@@ -265,6 +265,7 @@ Bar = TypedDict(
         "location": Literal["top", "bottom"],
         "layer": Layer,
         "auto_hide": bool,
+        "auto_hide_timeout": int,
     },
 )
 

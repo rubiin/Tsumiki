@@ -1979,8 +1979,14 @@
 						},
 						"auto_hide": {
 							"type": "boolean",
-							"description": "Determines whether the bar should auto-hide.",
+							"description": "Determines whether the bar should auto-hide after inactivity.",
 							"default": false
+						},
+						"auto_hide_timeout": {
+							"type": "integer",
+							"description": "Time in milliseconds before the bar auto-hides after inactivity.",
+							"default": 3000,
+							"minimum": 500
 						}
 					}
 				},

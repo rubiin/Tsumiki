@@ -290,7 +290,8 @@
 - **`modules`**: `object`
   - **`bar`**: `object`
     - **`layer`**: `str` (default: "top")
-    - **`auto_hide`**: `bool` (default: false)
+    - **`auto_hide`**: `bool` (default: false) - Whether the bar should auto-hide after inactivity
+    - **`auto_hide_timeout`**: `int` (default: 3000) - Time in milliseconds before the bar auto-hides
     - **`location`**: `str` (default: "top")
   - **`overview`**: `object`
     - **`enabled`**: `bool` (default: false)

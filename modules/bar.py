@@ -6,7 +6,10 @@ from fabric.utils import (
 )
 from fabric.widgets.box import Box
 from fabric.widgets.centerbox import CenterBox
+from fabric.widgets.eventbox import EventBox
+from fabric.widgets.revealer import Revealer
 from fabric.widgets.wayland import WaylandWindow as Window
+from gi.repository import GLib
 
 from utils.constants import ASSETS_DIR
 from utils.widget_settings import BarConfig
@@ -131,6 +134,12 @@ class StatusBar(Window):
         bar_config = config.get("modules", {}).get("bar", {})
         layout = self.make_layout(config)
 
+        # Auto-hide configuration
+        self._auto_hide = bar_config.get("auto_hide", False)
+        self._auto_hide_timeout = bar_config.get("auto_hide_timeout", 3000)
+        self._hide_timer_id = None
+        self._is_hovered = False
+
         # Main bar content (back to original CenterBox layout)
         self.box = CenterBox(
             name="panel-inner",
@@ -152,6 +161,47 @@ class StatusBar(Window):
         )
 
         anchor = f"left {bar_config.get('location', 'top')} right"
+        location = bar_config.get("location", "top")
+
+        # Only use revealer/eventbox if auto-hide is enabled
+        if self._auto_hide:
+            # Determine transition type based on bar location
+            transition_type = "slide-down" if location == "top" else "slide-up"
+
+            # Create revealer for auto-hide functionality
+            self.revealer = Revealer(
+                child=self.box,
+                transition_type=transition_type,
+                transition_duration=300,
+                reveal_child=True,
+            )
+
+            # Create a hover zone that remains visible even when bar is hidden
+            # This allows the user to hover at the edge to reveal the bar
+            hover_zone = Box(style="min-height: 5px;")
+
+            # Stack the revealer and hover zone
+            if location == "top":
+                container = Box(
+                    orientation="v",
+                    children=[self.revealer, hover_zone],
+                )
+            else:
+                container = Box(
+                    orientation="v",
+                    children=[hover_zone, self.revealer],
+                )
+
+            # Wrap in event box to detect mouse hover
+            child = EventBox(
+                events=["enter-notify", "leave-notify"],
+                child=container,
+                on_enter_notify_event=self._on_enter_notify,
+                on_leave_notify_event=self._on_leave_notify,
+            )
+        else:
+            self.revealer = None
+            child = self.box
 
         super().__init__(
             name="panel",
@@ -161,15 +211,51 @@ class StatusBar(Window):
             exclusivity="auto",
             visible=True,
             all_visible=False,
-            child=self.box,
+            child=child,
             **kwargs,
         )
+
+        # Start auto-hide timer if enabled
+        if self._auto_hide:
+            self._start_hide_timer()
 
         if options["check_updates"]:
             exec_shell_command_async(
                 f"{ASSETS_DIR}/scripts/barupdate.sh",
                 lambda _: None,
             )
+
+    def _on_enter_notify(self, *_):
+        """Handle mouse entering the bar area."""
+        self._is_hovered = True
+        self._cancel_hide_timer()
+        self.revealer.set_reveal_child(True)
+        return False
+
+    def _on_leave_notify(self, *_):
+        """Handle mouse leaving the bar area."""
+        self._is_hovered = False
+        if self._auto_hide:
+            self._start_hide_timer()
+        return False
+
+    def _start_hide_timer(self):
+        """Start the timer to hide the bar after inactivity."""
+        self._cancel_hide_timer()
+        self._hide_timer_id = GLib.timeout_add(self._auto_hide_timeout, self._hide_bar)
+
+    def _cancel_hide_timer(self):
+        """Cancel any pending hide timer."""
+        if self._hide_timer_id is not None:
+            GLib.source_remove(self._hide_timer_id)
+            self._hide_timer_id = None
+
+    def _hide_bar(self):
+        """Hide the bar if not hovered."""
+        if not self._is_hovered:
+            self.revealer.set_reveal_child(False)
+        self._hide_timer_id = None
+        return False  # Don't repeat the timeout
 
     def make_layout(self, config: BarConfig):
         """assigns the three sections their respective widgets"""

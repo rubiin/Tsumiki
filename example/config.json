@@ -458,6 +458,7 @@
 		"bar": {
 			"layer": "background",
 			"auto_hide": false,
+			"auto_hide_timeout": 3000,
 			"location": "top"
 		},
 		"app_launcher": {
