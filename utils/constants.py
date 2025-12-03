@@ -448,8 +448,21 @@ DEFAULT_CONFIG = {
     },
 }
 
-# sourced from hyprpanel
-KBLAYOUT_MAP = {
+# Lazy-loaded keyboard layout map - only loaded when keyboard widget is used
+_KBLAYOUT_MAP = None
+
+
+def get_kblayout_map() -> dict:
+    """Get keyboard layout map, loading it lazily on first access."""
+    global _KBLAYOUT_MAP
+    if _KBLAYOUT_MAP is None:
+        _KBLAYOUT_MAP = _create_kblayout_map()
+    return _KBLAYOUT_MAP
+
+
+def _create_kblayout_map() -> dict:
+    """Create the keyboard layout map. Sourced from hyprpanel."""
+    return {
     "Abkhazian (Russia)": "RU (Ab)",
     "Akan": "GH (Akan)",
     "Albanian": "AL",

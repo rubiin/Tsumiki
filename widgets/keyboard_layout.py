@@ -5,7 +5,7 @@ from fabric.utils import logger
 from fabric.widgets.label import Label
 
 from shared.widget_container import ButtonWidget
-from utils.constants import KBLAYOUT_MAP
+from utils.constants import get_kblayout_map
 from utils.widget_utils import nerd_font_icon
 
 
@@ -63,7 +63,7 @@ class KeyboardLayoutWidget(ButtonWidget):
 
             layout = main_kb["active_keymap"]
 
-            label = KBLAYOUT_MAP.get(layout, layout)
+            label = get_kblayout_map().get(layout, layout)
 
             if self.config.get("tooltip", False):
                 caps = "On" if main_kb["capsLock"] else "Off"
