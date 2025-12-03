@@ -1,3 +1,5 @@
+# ruff: noqa: E501
+
 from fabric.utils import get_relative_path
 from gi.repository import GLib
 
@@ -18,7 +20,7 @@ SYSTEM_CACHE_DIR = GLib.get_user_data_dir()
 APP_DATA_DIRECTORY = f"{SYSTEM_CACHE_DIR}/{APPLICATION_NAME}"
 
 
-NOTIFICATION_CACHE_FILE = f"{APP_DATA_DIRECTORY}/notifications.json"  # noqa: E501
+NOTIFICATION_CACHE_FILE = f"{APP_DATA_DIRECTORY}/notifications.json"
 WEATHER_CACHE_FILE = f"{APP_DATA_DIRECTORY}/weather.json"
 QUOTES_CACHE_FILE = f"{APP_DATA_DIRECTORY}/quotes.json"
 ICON_CACHE_FILE = f"{APP_DATA_DIRECTORY}/icons.json"

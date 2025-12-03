@@ -82,8 +82,6 @@
 					"volume"
 				]
 			},
-			"auto_hide": false,
-			"auto_hide_timeout": 2000,
 			"media": {
 				"enabled": true,
 				"ignore": [],
@@ -255,8 +253,6 @@
 			"format": "%b %d %H:%M",
 			"calendar": true,
 			"clock_format": "24h",
-			"auto_hide": false,
-			"auto_hide_timeout": 2000,
 			"hover_reveal": false,
 			"reveal_duration": 500,
 			"notification": {

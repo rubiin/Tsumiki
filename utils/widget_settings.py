@@ -507,8 +507,6 @@ DateTimeMenu = TypedDict(
         "notification": DateTimeNotification,
         "calendar": bool,
         "hover_reveal": bool,
-        "auto_hide": bool,
-        "auto_hide_timeout": int,
         "transition_type": str,
         "transition_duration": int,
         "hover_reveal": bool,
@@ -644,8 +642,6 @@ QuickSettings = TypedDict(
     {
         "media": Media,
         "hover_reveal": bool,
-        "auto_hide": bool,
-        "auto_hide_timeout": int,
         "shortcuts": ShortcutsConfig,
         "user": UserConfig,
         "controls": ControlsConfig,

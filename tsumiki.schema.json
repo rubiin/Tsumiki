@@ -535,16 +535,6 @@
 							},
 							"required": ["sliders"]
 						},
-						"auto_hide": {
-							"type": "boolean",
-							"default": false,
-							"description": "Determines whether to automatically hide the quick settings."
-						},
-						"auto_hide_timeout": {
-							"type": "number",
-							"default": 2000,
-							"description": "The timeout duration for automatically hiding the quick settings."
-						},
 						"media": {
 							"type": "object",
 							"properties": {
@@ -672,15 +662,7 @@
 							"required": ["enabled", "items"]
 						}
 					},
-					"required": [
-						"hover_reveal",
-						"user",
-						"controls",
-						"auto_hide",
-						"auto_hide_timeout",
-						"media",
-						"shortcuts"
-					]
+					"required": ["hover_reveal", "user", "controls", "media", "shortcuts"]
 				},
 				"stopwatch": {
 					"type": "object",
@@ -1308,16 +1290,6 @@
 							"default": "24h",
 							"description": "Clock format (12h or 24h)."
 						},
-						"auto_hide": {
-							"type": "boolean",
-							"default": false,
-							"description": "Hide date/time when inactive."
-						},
-						"auto_hide_timeout": {
-							"type": "number",
-							"default": 2000,
-							"description": "Delay in milliseconds before auto-hide."
-						},
 						"hover_reveal": {
 							"type": "boolean",
 							"default": true,
@@ -1350,14 +1322,7 @@
 							"required": ["enabled", "count", "hide_count_on_zero"]
 						}
 					},
-					"required": [
-						"format",
-						"calendar",
-						"clock_format",
-						"auto_hide",
-						"auto_hide_timeout",
-						"notification"
-					]
+					"required": ["format", "calendar", "clock_format", "notification"]
 				},
 				"hypridle": {
 					"type": "object",

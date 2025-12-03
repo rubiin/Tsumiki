@@ -1,299 +1,510 @@
-"$schema" = "./tsumiki.schema.json"
+[38;2;205;214;244m"$schema" = "./tsumiki.schema.json"[0m
 
-[battery]
-full_battery_level = 100
-hide_label_when_full = true
-label = true
-tooltip = true
+[38;2;205;214;244m[widgets.app_launcher_button][0m
+[38;2;205;214;244mtooltip = true[0m
+[38;2;205;214;244micon = "view-app-grid-symbolic"[0m
+[38;2;205;214;244micon_size = 20[0m
 
-[bluetooth]
-icon_size = 14
-label = true
-tooltip = true
+[38;2;205;214;244m[widgets.battery][0m
+[38;2;205;214;244mlabel = true[0m
+[38;2;205;214;244mtooltip = true[0m
+[38;2;205;214;244micon_size = 14[0m
+[38;2;205;214;244mhide_label_when_full = true[0m
+[38;2;205;214;244mhide_when_missing = true[0m
 
-[brightness]
-icon_size = "14px"
-label = true
-tooltip = true
-step_size = 5
+[38;2;205;214;244m[widgets.battery.notifications][0m
+[38;2;205;214;244mlow_threshold = 10[0m
+[38;2;205;214;244mfull_battery = false[0m
+[38;2;205;214;244mlow_battery = false[0m
+[38;2;205;214;244mcharging = false[0m
 
-[cava]
-bars = 10
+[38;2;205;214;244m[widgets.overview_button][0m
+[38;2;205;214;244micon = "󰡃"[0m
+[38;2;205;214;244mtooltip = true[0m
+[38;2;205;214;244mlabel = false[0m
 
-[click_counter]
-count = 0
+[38;2;205;214;244m[widgets.power][0m
+[38;2;205;214;244micon = "󰐥"[0m
+[38;2;205;214;244mtooltip = true[0m
+[38;2;205;214;244mitems_per_row = 3[0m
+[38;2;205;214;244micon_size = 100[0m
+[38;2;205;214;244mshow_icon = true[0m
+[38;2;205;214;244mlabel = false[0m
+[38;2;205;214;244mconfirm = true[0m
 
-[cpu]
-icon = ""
-icon_size = "12px"
-label = true
-tooltip = true
-unit = "celsius"
-round = true
-show_unit = true
-sensor = "acpitz"
+[38;2;205;214;244m[widgets.power.buttons][0m
+[38;2;205;214;244mshutdown = "systemctl poweroff"[0m
+[38;2;205;214;244mreboot = "systemctl reboot"[0m
+[38;2;205;214;244mhibernate = "systemctl hibernate"[0m
+[38;2;205;214;244msuspend = "systemctl suspend"[0m
+[38;2;205;214;244mlock = "loginctl lock-session"[0m
+[38;2;205;214;244mlogout = "loginctl terminate-user $USER"[0m
 
-[date_time]
-format = "%b %d %H:%M"
-notification_count = true
-notification = true
-calendar = true
-clock_format = "24h",
-uptime = true
+[38;2;205;214;244m[widgets.recorder][0m
+[38;2;205;214;244mpath = "Videos/Screencasting"[0m
+[38;2;205;214;244maudio = true[0m
+[38;2;205;214;244mtooltip = true[0m
+[38;2;205;214;244mdelayed = false[0m
+[38;2;205;214;244mdelayed_timeout = 5000[0m
 
-[divider]
-size = 2
+[38;2;205;214;244m[widgets.screenshot][0m
+[38;2;205;214;244mpath = "Pictures/Screenshots"[0m
+[38;2;205;214;244mtooltip = true[0m
+[38;2;205;214;244mlabel = false[0m
+[38;2;205;214;244mannotation = false[0m
+[38;2;205;214;244mcapture_sound = false[0m
+[38;2;205;214;244micon = "󰄀"[0m
+[38;2;205;214;244mdelayed = false[0m
+[38;2;205;214;244mdelayed_timeout = 5000[0m
 
-[hypridle]
-enabled_icon = ""
-disabled_icon = ""
-icon_size = "12px"
-label = true
-tooltip = true
+[38;2;205;214;244m[widgets.network_usage][0m
+[38;2;205;214;244mupload_icon = ""[0m
+[38;2;205;214;244mdownload_icon = ""[0m
+[38;2;205;214;244mtooltip = true[0m
+[38;2;205;214;244mupload = true[0m
+[38;2;205;214;244mdownload = true[0m
+[38;2;205;214;244mupload_threshold = 100[0m
+[38;2;205;214;244mdownload_threshold = 1024[0m
+[38;2;205;214;244mkb_digits = 0[0m
+[38;2;205;214;244mmb_digits = 2[0m
 
-[hyprsunset]
-temperature = "2800k"
-enabled_icon = "󱩌"
-disabled_icon = "󰛨"
-icon_size = "12px"
-label = true
-tooltip = true
+[38;2;205;214;244m[widgets.quick_settings][0m
+[38;2;205;214;244mhover_reveal = false[0m
 
-[keyboard]
-icon = "󰌌"
-icon_size = "14px"
-label = true
-tooltip = true
+[38;2;205;214;244m[widgets.quick_settings.user][0m
+[38;2;205;214;244mavatar = "~/.face"[0m
+[38;2;205;214;244mname = "system"[0m
+[38;2;205;214;244mdistro_icon = true[0m
 
-[language]
-truncation_size = 2
-icon_size = "14px"
-tooltip = true
-icon = ""
+[38;2;205;214;244m[widgets.quick_settings.controls][0m
+[38;2;205;214;244msliders = ["brightness", "volume"][0m
 
-[layout]
-left_section = [ "workspaces", "window_title" ]
-middle_section = [ "date_time" ]
-right_section = [ "recorder", "@collapsible:0", "@group:0", "system_tray" ]
+[38;2;205;214;244m[widgets.quick_settings.media][0m
+[38;2;205;214;244menabled = true[0m
+[38;2;205;214;244mignore = [][0m
+[38;2;205;214;244mtruncation_size = 30[0m
+[38;2;205;214;244mshow_album = true[0m
+[38;2;205;214;244mshow_artist = true[0m
+[38;2;205;214;244mshow_time = true[0m
+[38;2;205;214;244mshow_time_tooltip = true[0m
 
-[[widget_groups]]
-widgets = [ "updates", "ocr", "battery" ]
-spacing = 4
-style_classes = [ "compact" ]
+[38;2;205;214;244m[widgets.quick_settings.shortcuts][0m
+[38;2;205;214;244menabled = true[0m
 
-[[widget_groups]]
-widgets = [ "quick_settings", "cpu" ]
-spacing = 0
-style_classes = [ "compact" ]
+[38;2;205;214;244m[[widgets.quick_settings.shortcuts.items]][0m
+[38;2;205;214;244micon = ""[0m
+[38;2;205;214;244mlabel = "Terminal"[0m
+[38;2;205;214;244mcommand = "kitty"[0m
+[38;2;205;214;244mtooltip = "Open terminal"[0m
+[38;2;205;214;244micon_size = 18[0m
 
-# Collapsible groups create popup menus with utility widgets, accessed as @collapsible:0, @collapsible:1, etc
-[[collapsible_groups]]
-widgets = [
-    "cliphist",
-    "emoji_picker",
-    "ocr",
-    "screenshot",
-    "recorder"
-]
-spacing = 4
-icon = "󰒓"  # icon for the collapsible group button
-tooltip = "Utility Tools"  # tooltip for the collapsible group button
-style_classes = [ "utility-tools" ]
+[38;2;205;214;244m[[widgets.quick_settings.shortcuts.items]][0m
+[38;2;205;214;244micon = ""[0m
+[38;2;205;214;244mlabel = "Browser"[0m
+[38;2;205;214;244mcommand = "firefox"[0m
+[38;2;205;214;244mtooltip = "Launch Firefox"[0m
+[38;2;205;214;244micon_size = 18[0m
 
-[memory]
-icon = ""
-icon_size = "12px"
-label = true
-tooltip = true
+[38;2;205;214;244m[[widgets.quick_settings.shortcuts.items]][0m
+[38;2;205;214;244micon = ""[0m
+[38;2;205;214;244mlabel = "Spotify"[0m
+[38;2;205;214;244mcommand = "spotify"[0m
+[38;2;205;214;244mtooltip = "Launch Spotify"[0m
+[38;2;205;214;244micon_size = 18[0m
 
-[submap]
-icon = "󰌌"
-icon_size = "12px"
-label = true
-tooltip = true
+[38;2;205;214;244m[[widgets.quick_settings.shortcuts.items]][0m
+[38;2;205;214;244micon = ""[0m
+[38;2;205;214;244mlabel = "Code"[0m
+[38;2;205;214;244mcommand = "code"[0m
+[38;2;205;214;244mtooltip = "Launch Code"[0m
+[38;2;205;214;244micon_size = 18[0m
 
-[microphone]
-icon_size = "12px"
-label = false
-tooltip = true
+[38;2;205;214;244m[widgets.stopwatch][0m
+[38;2;205;214;244mstopped_icon = "󱫞"[0m
+[38;2;205;214;244mrunning_icon = "󱫠"[0m
 
-[ocr]
-icon = "󰐳"
-icon_size = "14px"
-tooltip = true
-label = true
+[38;2;205;214;244m[widgets.storage][0m
+[38;2;205;214;244mpath = "/"[0m
+[38;2;205;214;244mshow_icon = true[0m
+[38;2;205;214;244micon = "󰋊"[0m
+[38;2;205;214;244mmode = "label"[0m
+[38;2;205;214;244mtooltip = true[0m
+[38;2;205;214;244mgraph_length = 4[0m
+[38;2;205;214;244munit = "gb"[0m
 
-[mpris]
-truncation_size = 200
-tooltip = true
+[38;2;205;214;244m[widgets.system_tray][0m
+[38;2;205;214;244micon_size = 16[0m
+[38;2;205;214;244mignored = [][0m
+[38;2;205;214;244mhidden = [][0m
+[38;2;205;214;244mhide_when_empty = false[0m
 
-[notification]
-anchor = "top-right"
-auto_dismiss = true
-ignored = [ ]
-timeout = 3_000
-play_sound = true
-sound_file = "notification4"
-max_count = 5
+[38;2;205;214;244m[widgets.taskbar][0m
+[38;2;205;214;244micon_size = 22[0m
+[38;2;205;214;244mignored = [][0m
+[38;2;205;214;244mtooltip = true[0m
 
-[osd]
-enabled = true
-timeout = 1_500
-anchor = "bottom-center"
-percentage = true
-icon_size = 28
+[38;2;205;214;244m[widgets.theme_switcher][0m
+[38;2;205;214;244micon = ""[0m
+[38;2;205;214;244mnotify = false[0m
 
-[general]
-check_updates = false
-layer = "top"
-auto_hide = false
-debug = true
-location = "top"
-widget_style = "default"
-auto_reload = true
+[38;2;205;214;244m[widgets.updates][0m
+[38;2;205;214;244mshow_icon = true[0m
+[38;2;205;214;244mavailable_icon = "󰏗"[0m
+[38;2;205;214;244mno_updates_icon = "󰏖"[0m
+[38;2;205;214;244mhover_reveal = true[0m
+[38;2;205;214;244mreveal_duration = 500[0m
+[38;2;205;214;244mos = "arch"[0m
+[38;2;205;214;244mterminal = "kitty"[0m
+[38;2;205;214;244mauto_hide = false[0m
+[38;2;205;214;244minterval = 3600[0m
+[38;2;205;214;244mpad_zero = false[0m
+[38;2;205;214;244mtooltip = true[0m
+[38;2;205;214;244mlabel = true[0m
+[38;2;205;214;244mflatpak = true[0m
+[38;2;205;214;244msnap = false[0m
+[38;2;205;214;244mbrew = false[0m
 
-  [general.screen_corners]
-  enabled = false
-  size = 20
+[38;2;205;214;244m[widgets.volume][0m
+[38;2;205;214;244mlabel = true[0m
+[38;2;205;214;244mtooltip = true[0m
+[38;2;205;214;244mstep_size = 5[0m
 
-  [general.desktop_clock]
-  enabled = true
-  anchor = "bottom-right"
-  date_format = "%A, %d %B %Y"
+[38;2;205;214;244m[widgets.hyprpicker][0m
+[38;2;205;214;244micon = ""[0m
+[38;2;205;214;244mtooltip = true[0m
+[38;2;205;214;244mlabel = false[0m
+[38;2;205;214;244mshow_icon = true[0m
+[38;2;205;214;244mquiet = false[0m
 
-[power]
-icon = "󰐥"
-icon_size = "18px"
-tooltip = true
+[38;2;205;214;244m[widgets.weather][0m
+[38;2;205;214;244mlocation = "kathmandu"[0m
+[38;2;205;214;244mlabel = true[0m
+[38;2;205;214;244mtooltip = true[0m
+[38;2;205;214;244mtemperature_unit = "celsius"[0m
+[38;2;205;214;244mlabel_format = "{temperature} {condition}"[0m
+[38;2;205;214;244mwind_speed_unit = "kmh"[0m
+[38;2;205;214;244mhover_reveal = true[0m
+[38;2;205;214;244mreveal_duration = 500[0m
+[38;2;205;214;244mexpanded = true[0m
+[38;2;205;214;244minterval = 3600[0m
 
-[recorder]
-path = "Videos/Screencasting"
-audio = true
-icon_size = 16
-tooltip = true
+[38;2;205;214;244m[widgets.window_title][0m
+[38;2;205;214;244micon = true[0m
+[38;2;205;214;244mtooltip = true[0m
+[38;2;205;214;244mtruncation = true[0m
+[38;2;205;214;244mtruncation_size = 50[0m
+[38;2;205;214;244mmappings = true[0m
+[38;2;205;214;244mtitle_map = [][0m
+[38;2;205;214;244mfallback = "class"[0m
 
-[spacing]
-size = 20
+[38;2;205;214;244m[widgets.workspaces][0m
+[38;2;205;214;244mcount = 10[0m
+[38;2;205;214;244mhide_unoccupied = true[0m
+[38;2;205;214;244mshow_numbered = true[0m
+[38;2;205;214;244mdefault_label_format = "{id}"[0m
+[38;2;205;214;244mignored = [-99][0m
+[38;2;205;214;244mreverse_scroll = false[0m
+[38;2;205;214;244mempty_scroll = false[0m
+[38;2;205;214;244micon_map = {}[0m
 
-[network_usage]
-icon_size = "14px"
-upload_icon = ""
-download_icon = ""
-tooltip = true
-upload = true
-download = false
+[38;2;205;214;244m[widgets.bluetooth][0m
+[38;2;205;214;244mlabel = true[0m
+[38;2;205;214;244mtooltip = true[0m
 
-[quick_settings.media]
-ignore = [ ]
-truncation_size = 30
-show_album = true
-show_artist = true
-show_time = true
-show_time_tooltip = true
+[38;2;205;214;244m[widgets.brightness][0m
+[38;2;205;214;244mlabel = true[0m
+[38;2;205;214;244mtooltip = true[0m
+[38;2;205;214;244mstep_size = 5[0m
 
-[[quick_settings.shortcuts]]
-icon = "terminal-symbolic"
-label = "Terminal"
-command = "kitty"
-tooltip = "Open terminal"
-icon_size = 18
+[38;2;205;214;244m[widgets.cava][0m
+[38;2;205;214;244mbars = 10[0m
+[38;2;205;214;244mcolor = "#89b4fa"[0m
 
-[[quick_settings.shortcuts]]
-icon = "firefox-symbolic"
-label = "Browser"
-command = "firefox"
-tooltip = "Launch Firefox"
-icon_size = 18
+[38;2;205;214;244m[widgets.click_counter][0m
+[38;2;205;214;244mcount = 0[0m
 
-[stopwatch]
-stopped_icon = "󱫞"
-running_icon = "󱫠"
-icon_size = "16px"
+[38;2;205;214;244m[widgets.cpu][0m
+[38;2;205;214;244mshow_icon = true[0m
+[38;2;205;214;244micon = ""[0m
+[38;2;205;214;244mmode = "label"[0m
+[38;2;205;214;244mtooltip = true[0m
+[38;2;205;214;244mtemperature_unit = "celsius"[0m
+[38;2;205;214;244mround = true[0m
+[38;2;205;214;244mshow_unit = true[0m
+[38;2;205;214;244msensor = "acpitz"[0m
+[38;2;205;214;244mgraph_length = 4[0m
 
-[storage]
-icon = "󰋊"
-icon_size = "14px"
-label = true
-tooltip = true
+[38;2;205;214;244m[widgets.gpu][0m
+[38;2;205;214;244mshow_icon = true[0m
+[38;2;205;214;244micon = ""[0m
+[38;2;205;214;244mtooltip = true[0m
+[38;2;205;214;244mmode = "circular"[0m
+[38;2;205;214;244mgraph_length = 4[0m
 
-[system_tray]
-icon_size = 16
-ignored = [ ]
-hidden = [ ]
-hide_when_empty = false
+[38;2;205;214;244m[widgets.date_time][0m
+[38;2;205;214;244mformat = "%b %d %H:%M"[0m
+[38;2;205;214;244mcalendar = true[0m
+[38;2;205;214;244mclock_format = "24h"[0m
+[38;2;205;214;244mhover_reveal = false[0m
+[38;2;205;214;244mreveal_duration = 500[0m
 
-[taskbar]
-icon_size = 22
+[38;2;205;214;244m[widgets.date_time.notification][0m
+[38;2;205;214;244menabled = true[0m
+[38;2;205;214;244mcount = true[0m
+[38;2;205;214;244mhide_count_on_zero = true[0m
 
-[theme]
-name = "catpuccin-mocha"
+[38;2;205;214;244m[widgets.hypridle][0m
+[38;2;205;214;244menabled_icon = ""[0m
+[38;2;205;214;244mdisabled_icon = ""[0m
+[38;2;205;214;244mlabel = true[0m
+[38;2;205;214;244mtooltip = true[0m
 
-[theme_switcher]
-icon = ""
-icon_size = "14px"
-notify = false
+[38;2;205;214;244m[widgets.hyprsunset][0m
+[38;2;205;214;244mtemperature = "2800k"[0m
+[38;2;205;214;244menabled_icon = "󱩌"[0m
+[38;2;205;214;244mdisabled_icon = "󰛨"[0m
+[38;2;205;214;244mlabel = true[0m
+[38;2;205;214;244mtooltip = true[0m
 
-[updates]
-os = "arch"
-icon = "󱧘"
-icon_size = "14px"
-interval = 3_600_000
-tooltip = true
-label = true
+[38;2;205;214;244m[widgets.keyboard][0m
+[38;2;205;214;244micon = "󰌌"[0m
+[38;2;205;214;244mlabel = true[0m
+[38;2;205;214;244mtooltip = true[0m
+[38;2;205;214;244mshow_icon = false[0m
 
-[volume]
-icon_size = "14px"
-label = true
-tooltip = true
-step_size = 5
+[38;2;205;214;244m[widgets.window_count][0m
+[38;2;205;214;244micon = ""[0m
+[38;2;205;214;244mlabel_format = "[{count}]"[0m
+[38;2;205;214;244mtooltip = true[0m
+[38;2;205;214;244mshow_icon = false[0m
+[38;2;205;214;244mhide_when_zero = true[0m
 
-[weather]
-location = ""
-label = true
-tooltip = true
-interval = 3_600_000
+[38;2;205;214;244m[widgets.language][0m
+[38;2;205;214;244mtruncation_size = 2[0m
+[38;2;205;214;244mtooltip = true[0m
+[38;2;205;214;244micon = ""[0m
+[38;2;205;214;244mshow_icon = false[0m
 
-[window_title]
-icon = true
-truncation = true
-truncation_size = 50
-title_map = [ ]
+[38;2;205;214;244m[widgets.memory][0m
+[38;2;205;214;244mshow_icon = true[0m
+[38;2;205;214;244micon = ""[0m
+[38;2;205;214;244mmode = "label"[0m
+[38;2;205;214;244mtooltip = true[0m
+[38;2;205;214;244mgraph_length = 4[0m
+[38;2;205;214;244munit = "gb"[0m
 
-[workspaces]
-count = 8
-hide_unoccupied = true
-default_label_format = "{id}"
-ignored = [ -99 ]
-reverse_scroll = false
-empty_scroll = false
-icon_map = { }
+[38;2;205;214;244m[widgets.cliphist][0m
+[38;2;205;214;244micon = ""[0m
+[38;2;205;214;244mlabel = false[0m
+[38;2;205;214;244mtooltip = true[0m
 
-[cliphist]
-icon = ""
-label = false
-tooltip = true
+[38;2;205;214;244m[widgets.kanban][0m
+[38;2;205;214;244micon = "󱞁"[0m
+[38;2;205;214;244mlabel = false[0m
+[38;2;205;214;244mtooltip = true[0m
 
-[emoji_picker]
-icon = ""
-label = false
-tooltip = true
+[38;2;205;214;244m[widgets.keybinds][0m
+[38;2;205;214;244micon = "󰌌"[0m
+[38;2;205;214;244mlabel = false[0m
+[38;2;205;214;244mtooltip = true[0m
+[38;2;205;214;244mshow_icon = true[0m
+[38;2;205;214;244mwidth = 800[0m
+[38;2;205;214;244mheight = 500[0m
+[38;2;205;214;244mhide_empty_descriptions = true[0m
+[38;2;205;214;244manchor = "center"[0m
+[38;2;205;214;244mtransition_type = "crossfade"[0m
+[38;2;205;214;244mtransition_duration = 300[0m
+[38;2;205;214;244mtitle = "Keybinds"[0m
 
-[screenshot]
-path = "Pictures/Screenshots"
-icon_size = 16
-tooltip = true
-label = false
-annotation = true
-capture_sound = true
-icon = "󰄀"
+[38;2;205;214;244m[widgets.emoji_picker][0m
+[38;2;205;214;244micon = ""[0m
+[38;2;205;214;244mlabel = false[0m
+[38;2;205;214;244mtooltip = true[0m
+[38;2;205;214;244mper_row = 9[0m
+[38;2;205;214;244mper_column = 4[0m
 
-[hyprpicker]
-icon = ""
-tooltip = true
-label = false
-show_icon = true
+[38;2;205;214;244m[widgets.submap][0m
+[38;2;205;214;244micon = "󰌌"[0m
+[38;2;205;214;244mlabel = true[0m
+[38;2;205;214;244mtooltip = true[0m
+[38;2;205;214;244mshow_icon = false[0m
+[38;2;205;214;244mhide_on_default = false[0m
 
-[kanban]
-icon = "󱞁"
-label = false
-tooltip = true
+[38;2;205;214;244m[widgets.microphone][0m
+[38;2;205;214;244mlabel = false[0m
+[38;2;205;214;244mtooltip = true[0m
+[38;2;205;214;244mshow_icon = true[0m
+
+[38;2;205;214;244m[widgets.ocr][0m
+[38;2;205;214;244micon = "󰐳"[0m
+[38;2;205;214;244mtooltip = true[0m
+[38;2;205;214;244mlabel = false[0m
+[38;2;205;214;244mshow_icon = true[0m
+[38;2;205;214;244mquiet = false[0m
+
+[38;2;205;214;244m[widgets.mpris][0m
+[38;2;205;214;244mtruncation_size = 10[0m
+[38;2;205;214;244mtooltip = false[0m
+
+[38;2;205;214;244m[widgets.world_clock][0m
+[38;2;205;214;244micon = "󰃰"[0m
+[38;2;205;214;244mshow_icon = true[0m
+[38;2;205;214;244muse_24hr = true[0m
+[38;2;205;214;244mtimezones = ["America/New_York", "Asia/Tokyo"][0m
+
+[38;2;205;214;244m[widgets.custom_button_group][0m
+[38;2;205;214;244mspacing = 4[0m
+
+[38;2;205;214;244m[[widgets.custom_button_group.buttons]][0m
+[38;2;205;214;244mcommand = "firefox"[0m
+[38;2;205;214;244micon = "󰈹"[0m
+[38;2;205;214;244mlabel_text = "Firefox"[0m
+[38;2;205;214;244mtooltip_text = "Open Firefox Browser"[0m
+[38;2;205;214;244mshow_icon = true[0m
+[38;2;205;214;244mlabel = false[0m
+[38;2;205;214;244mtooltip = true[0m
+
+[38;2;205;214;244m[[widgets.custom_button_group.buttons]][0m
+[38;2;205;214;244mcommand = "spotify"[0m
+[38;2;205;214;244micon = ""[0m
+[38;2;205;214;244mlabel_text = "Spotify"[0m
+[38;2;205;214;244mtooltip_text = "Open Spotify"[0m
+[38;2;205;214;244mshow_icon = true[0m
+[38;2;205;214;244mlabel = false[0m
+[38;2;205;214;244mtooltip = true[0m
+
+[38;2;205;214;244m[[widgets.custom_module]][0m
+[38;2;205;214;244mexec = "pamixer --get-volume"[0m
+[38;2;205;214;244mformat = "󰕾 {}%"[0m
+[38;2;205;214;244minterval = 1[0m
+[38;2;205;214;244mon_scroll_up = "pamixer -i 5"[0m
+[38;2;205;214;244mon_scroll_down = "pamixer -d 5"[0m
+[38;2;205;214;244mexec_on_event = true[0m
+
+[38;2;205;214;244m[layout][0m
+[38;2;205;214;244mleft_section = ["workspaces", "window_title"][0m
+[38;2;205;214;244mmiddle_section = ["date_time", "weather"][0m
+[38;2;205;214;244mright_section = ["@collapsible:0", "@group:0", "system_tray", "power"][0m
+
+[38;2;205;214;244m[[widget_groups]][0m
+[38;2;205;214;244mwidgets = ["quick_settings", "updates", "battery"][0m
+[38;2;205;214;244mspacing = 2[0m
+[38;2;205;214;244mstyle_classes = ["compact"][0m
+
+[38;2;205;214;244m[[widget_groups]][0m
+[38;2;205;214;244mwidgets = ["quick_settings"][0m
+[38;2;205;214;244mspacing = 0[0m
+[38;2;205;214;244mstyle_classes = ["compact"][0m
+
+[38;2;205;214;244m[[collapsible_groups]][0m
+[38;2;205;214;244mwidgets = ["ocr", "screenshot", "recorder"][0m
+[38;2;205;214;244mspacing = 4[0m
+[38;2;205;214;244micon = "󰒓"[0m
+[38;2;205;214;244mtooltip = "Utility Tools"[0m
+[38;2;205;214;244mstyle_classes = ["utility-tools"][0m
+
+[38;2;205;214;244m[modules.bar][0m
+[38;2;205;214;244mlayer = "background"[0m
+[38;2;205;214;244mauto_hide = false[0m
+[38;2;205;214;244mauto_hide_timeout = 3000[0m
+[38;2;205;214;244mlocation = "top"[0m
+
+[38;2;205;214;244m[modules.app_launcher][0m
+[38;2;205;214;244menabled = true[0m
+[38;2;205;214;244mtooltip = false[0m
+[38;2;205;214;244micon_size = 40[0m
+[38;2;205;214;244mignored = [][0m
+[38;2;205;214;244manchor = "center"[0m
+[38;2;205;214;244mwidth = 280[0m
+[38;2;205;214;244mheight = 320[0m
+[38;2;205;214;244mlayout = "list"[0m
+[38;2;205;214;244mgrid_columns = 3[0m
+
+[38;2;205;214;244m[modules.overview][0m
+[38;2;205;214;244menabled = false[0m
+[38;2;205;214;244mlayer = "top"[0m
+[38;2;205;214;244manchor = "center"[0m
+[38;2;205;214;244mtransition_type = "crossfade"[0m
+[38;2;205;214;244mtransition_duration = 350[0m
+
+[38;2;205;214;244m[modules.cheatsheet][0m
+[38;2;205;214;244menabled = true[0m
+[38;2;205;214;244mlayer = "top"[0m
+[38;2;205;214;244manchor = "center"[0m
+[38;2;205;214;244mtransition_type = "crossfade"[0m
+[38;2;205;214;244mtransition_duration = 350[0m
+
+[38;2;205;214;244m[modules.notification][0m
+[38;2;205;214;244menabled = true[0m
+[38;2;205;214;244mdnd_on_screencast = true[0m
+[38;2;205;214;244manchor = "top-right"[0m
+[38;2;205;214;244mmax_lines = 4[0m
+[38;2;205;214;244mmax_expanded_lines = 20[0m
+[38;2;205;214;244mauto_dismiss = true[0m
+[38;2;205;214;244mignored = [][0m
+[38;2;205;214;244mtimeout = 3000[0m
+[38;2;205;214;244mmax_actions = 3[0m
+[38;2;205;214;244mplay_sound = false[0m
+[38;2;205;214;244mper_app_limits = {}[0m
+[38;2;205;214;244msound_file = "notification4"[0m
+[38;2;205;214;244mtransition_type = "slide-left"[0m
+[38;2;205;214;244mtransition_duration = 350[0m
+[38;2;205;214;244mpersist = true[0m
+[38;2;205;214;244mdismiss_on_hover = false[0m
+
+[38;2;205;214;244m[modules.osd][0m
+[38;2;205;214;244menabled = true[0m
+[38;2;205;214;244mtimeout = 3000[0m
+[38;2;205;214;244micon_size = 28[0m
+[38;2;205;214;244mtransition_type = "slide-up"[0m
+[38;2;205;214;244mtransition_duration = 500[0m
+[38;2;205;214;244mplay_sound = false[0m
+[38;2;205;214;244morientation = "horizontal"[0m
+[38;2;205;214;244manchor = "bottom-center"[0m
+[38;2;205;214;244mpercentage = true[0m
+[38;2;205;214;244mosds = ["brightness", "volume"][0m
+
+[38;2;205;214;244m[modules.screen_corners][0m
+[38;2;205;214;244menabled = false[0m
+[38;2;205;214;244msize = 20[0m
+
+[38;2;205;214;244m[modules.dock][0m
+[38;2;205;214;244menabled = true[0m
+[38;2;205;214;244morientation = "horizontal"[0m
+[38;2;205;214;244mtooltip = false[0m
+[38;2;205;214;244mbehavior = "intellihide"[0m
+[38;2;205;214;244micon_size = 40[0m
+[38;2;205;214;244mpreview_apps = true[0m
+[38;2;205;214;244mgroup_apps = true[0m
+[38;2;205;214;244mtruncation_size = 20[0m
+[38;2;205;214;244mpreview_size = [200, 130][0m
+[38;2;205;214;244mshow_when_no_windows = false[0m
+[38;2;205;214;244mignored = [][0m
+[38;2;205;214;244malways_show_focused = true[0m
+[38;2;205;214;244mhide_special_workspace_apps = false[0m
+[38;2;205;214;244mlayer = "top"[0m
+
+[38;2;205;214;244m[modules.desktop_clock][0m
+[38;2;205;214;244menabled = false[0m
+[38;2;205;214;244manchor = "bottom-right"[0m
+[38;2;205;214;244mdate_format = "%A, %d %B %Y"[0m
+[38;2;205;214;244mlayer = "bottom"[0m
+[38;2;205;214;244mtime_format = "%H:%M"[0m
+
+[38;2;205;214;244m[modules.desktop_quotes][0m
+[38;2;205;214;244menabled = false[0m
+[38;2;205;214;244manchor = "bottom-right"[0m
+[38;2;205;214;244mlayer = "bottom"[0m
+[38;2;205;214;244minterval = 600[0m
+
+[38;2;205;214;244m[modules.activate_linux][0m
+[38;2;205;214;244menabled = false[0m
+[38;2;205;214;244manchor = "bottom-right"[0m
+[38;2;205;214;244mlayer = "bottom"[0m
+
+[38;2;205;214;244m[general][0m
+[38;2;205;214;244mcheck_updates = false[0m
+[38;2;205;214;244mdebug = false[0m
+[38;2;205;214;244mmonitor_styles = false[0m
+[38;2;205;214;244mauto_reload = true[0m
+[38;2;205;214;244mmulti_monitor = false[0m
