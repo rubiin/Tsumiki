@@ -37,15 +37,21 @@ class IconResolver:
             return
         IconResolver._initialized = True
 
-        if os.path.exists(ICON_CACHE_FILE):
-            self._icon_dict = read_json_file(ICON_CACHE_FILE) or {}
-        else:
-            self._icon_dict = {}
-
+        # Defer icon cache loading until first access
+        self._icon_dict = None
         self._cache_dirty = False
         self._write_pending = False
 
+    def _ensure_cache_loaded(self):
+        """Lazily load the icon cache on first access."""
+        if self._icon_dict is None:
+            if os.path.exists(ICON_CACHE_FILE):
+                self._icon_dict = read_json_file(ICON_CACHE_FILE) or {}
+            else:
+                self._icon_dict = {}
+
     def get_icon_name(self, app_id: str):
+        self._ensure_cache_loaded()
         if app_id in self._icon_dict:
             return self._icon_dict[app_id]
         new_icon = self._compositor_find_icon(app_id)
