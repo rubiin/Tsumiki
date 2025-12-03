@@ -19,8 +19,6 @@ class PopoverMixin:
     Mixin for lazy popover initialization.
     """
 
-    __slots__ = ("_popover_content_factory", "_popover_on_close", "_popup")
-
     _popup = None
     _popover_content_factory: Callable | None = None
 
