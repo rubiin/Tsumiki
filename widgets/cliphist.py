@@ -40,7 +40,8 @@ class ClipHistoryMenu(Box):
 
         # Create a temporary directory for image icons
         self.tmp_dir = tempfile.mkdtemp(prefix="cliphist-")
-        self.image_cache = {}  # Cache for image previews
+        self.image_cache = {}  # Cache for image previews (limited to MAX_IMAGE_CACHE)
+        self.MAX_IMAGE_CACHE = 30  # Limit cache size to prevent memory bloat
 
         self.selected_index = -1  # Track the selected item index
         self._arranger_handler = 0
@@ -400,6 +401,11 @@ class ClipHistoryMenu(Box):
                 pixbuf = pixbuf.scale_simple(
                     new_width, new_height, GdkPixbuf.InterpType.BILINEAR
                 )
+                # Limit cache size to prevent memory bloat
+                if len(self.image_cache) >= self.MAX_IMAGE_CACHE:
+                    # Remove oldest entry (first key)
+                    oldest_key = next(iter(self.image_cache))
+                    del self.image_cache[oldest_key]
                 self.image_cache[item_id] = pixbuf
                 self._update_image_button(button, pixbuf)
         except Exception as e:

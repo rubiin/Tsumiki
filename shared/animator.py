@@ -1,7 +1,7 @@
 # Author: Yousef EL-Darsh
 # License (SPDX): AGPL-3.0-or-later
 
-from functools import cache
+from functools import lru_cache
 from typing import Protocol, cast
 
 import gi
@@ -12,19 +12,21 @@ from gi.repository import GLib, Gtk
 gi.require_versions({"Gtk": "3.0"})
 
 
-@cache
+# Use lru_cache with bounded size to prevent unbounded memory growth
+# Progress values are floats with many decimal places, so cache can grow large
+@lru_cache(maxsize=512)
 def lerp(start: float, end: float, progress: float) -> float:
     return start + (end - start) * progress
 
 
-@cache
+@lru_cache(maxsize=256)
 def steps(n: int, progress: float, start_jump: bool = False) -> float:
     if start_jump:
         return min(int(progress * n), n - 1) / (n - 1) if n > 1 else 0.0
     return min(int(progress * n + 1e-10), n) / n
 
 
-@cache
+@lru_cache(maxsize=1024)
 def cubic_bezier(
     x1: float, y1: float, x2: float, y2: float, progress: float, epsilon=1e-6
 ) -> float:
