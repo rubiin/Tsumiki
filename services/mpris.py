@@ -223,7 +223,7 @@ class MprisPlayer(Service):
     @Property(bool, "readable", default_value=False)
     def can_loop(self) -> bool:
         try:
-            self._player.set_shuffle(self._player.get_property("shuffle"))
+            self._player.set_loop_status(self._player.get_property("loop_status"))
             return True
         except Exception:
             return False
