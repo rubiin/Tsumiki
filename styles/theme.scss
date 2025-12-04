@@ -6,19 +6,19 @@
 */
 
 
-$background: rgba(14, 21, 19, 1);
+$background: rgba(24, 18, 22, 1);
 
-$blue: rgba(175, 198, 255, 1);
+$blue: rgba(206, 189, 254, 1);
 
-$blue_container: rgba(45, 69, 120, 1);
+$blue_container: rgba(76, 62, 118, 1);
 
 $blue_source: rgba(0, 0, 255, 1);
 
 $blue_value: rgba(0, 0, 255, 1);
 
-$cyan: rgba(129, 213, 203, 1);
+$cyan: rgba(130, 211, 226, 1);
 
-$cyan_container: rgba(0, 80, 74, 1);
+$cyan_container: rgba(0, 78, 89, 1);
 
 $cyan_source: rgba(0, 255, 255, 1);
 
@@ -28,105 +28,105 @@ $error: rgba(255, 180, 171, 1);
 
 $error_container: rgba(147, 0, 10, 1);
 
-$green: rgba(149, 213, 167, 1);
+$green: rgba(183, 208, 133, 1);
 
-$green_container: rgba(16, 81, 47, 1);
+$green_container: rgba(58, 77, 16, 1);
 
 $green_source: rgba(0, 255, 0, 1);
 
 $green_value: rgba(0, 255, 0, 1);
 
-$inverse_on_surface: rgba(43, 50, 48, 1);
+$inverse_on_surface: rgba(54, 46, 51, 1);
 
-$inverse_primary: rgba(8, 107, 90, 1);
+$inverse_primary: rgba(131, 76, 117, 1);
 
-$inverse_surface: rgba(222, 228, 224, 1);
+$inverse_surface: rgba(236, 223, 229, 1);
 
-$magenta: rgba(228, 183, 243, 1);
+$magenta: rgba(243, 178, 228, 1);
 
-$magenta_container: rgba(92, 56, 107, 1);
+$magenta_container: rgba(103, 53, 94, 1);
 
 $magenta_source: rgba(255, 0, 255, 1);
 
 $magenta_value: rgba(255, 0, 255, 1);
 
-$on_background: rgba(222, 228, 224, 1);
+$on_background: rgba(236, 223, 229, 1);
 
-$on_blue: rgba(20, 47, 96, 1);
+$on_blue: rgba(53, 39, 94, 1);
 
-$on_blue_container: rgba(217, 226, 255, 1);
+$on_blue_container: rgba(232, 221, 255, 1);
 
-$on_cyan: rgba(0, 55, 51, 1);
+$on_cyan: rgba(0, 54, 62, 1);
 
-$on_cyan_container: rgba(157, 242, 231, 1);
+$on_cyan_container: rgba(158, 239, 255, 1);
 
 $on_error: rgba(105, 0, 5, 1);
 
 $on_error_container: rgba(255, 218, 214, 1);
 
-$on_green: rgba(0, 57, 29, 1);
+$on_green: rgba(37, 54, 0, 1);
 
-$on_green_container: rgba(176, 241, 194, 1);
+$on_green_container: rgba(211, 236, 158, 1);
 
-$on_magenta: rgba(68, 34, 83, 1);
+$on_magenta: rgba(77, 31, 71, 1);
 
-$on_magenta_container: rgba(247, 216, 255, 1);
+$on_magenta_container: rgba(255, 215, 243, 1);
 
-$on_primary: rgba(0, 56, 46, 1);
+$on_primary: rgba(78, 30, 69, 1);
 
-$on_primary_container: rgba(161, 242, 221, 1);
+$on_primary_container: rgba(255, 215, 240, 1);
 
-$on_primary_fixed: rgba(0, 32, 26, 1);
+$on_primary_fixed: rgba(53, 8, 46, 1);
 
-$on_primary_fixed_variant: rgba(0, 81, 67, 1);
+$on_primary_fixed_variant: rgba(104, 53, 92, 1);
 
-$on_red: rgba(84, 33, 5, 1);
+$on_red: rgba(86, 29, 38, 1);
 
-$on_red_container: rgba(255, 219, 205, 1);
+$on_red_container: rgba(255, 218, 220, 1);
 
-$on_secondary: rgba(29, 53, 47, 1);
+$on_secondary: rgba(62, 42, 56, 1);
 
-$on_secondary_container: rgba(205, 232, 223, 1);
+$on_secondary_container: rgba(249, 218, 237, 1);
 
-$on_secondary_fixed: rgba(6, 32, 26, 1);
+$on_secondary_fixed: rgba(40, 22, 35, 1);
 
-$on_secondary_fixed_variant: rgba(51, 75, 69, 1);
+$on_secondary_fixed_variant: rgba(86, 64, 79, 1);
 
-$on_surface: rgba(222, 228, 224, 1);
+$on_surface: rgba(236, 223, 229, 1);
 
-$on_surface_variant: rgba(191, 201, 196, 1);
+$on_surface_variant: rgba(210, 194, 202, 1);
 
-$on_tertiary: rgba(16, 52, 71, 1);
+$on_tertiary: rgba(75, 38, 23, 1);
 
-$on_tertiary_container: rgba(199, 231, 255, 1);
+$on_tertiary_container: rgba(255, 219, 206, 1);
 
-$on_tertiary_fixed: rgba(0, 30, 46, 1);
+$on_tertiary_fixed: rgba(50, 18, 5, 1);
 
-$on_tertiary_fixed_variant: rgba(42, 74, 95, 1);
+$on_tertiary_fixed_variant: rgba(102, 60, 44, 1);
 
 $on_white: rgba(0, 54, 61, 1);
 
 $on_white_container: rgba(158, 239, 253, 1);
 
-$on_yellow: rgba(38, 53, 0, 1);
+$on_yellow: rgba(59, 47, 0, 1);
 
-$on_yellow_container: rgba(212, 236, 157, 1);
+$on_yellow_container: rgba(252, 225, 134, 1);
 
-$outline: rgba(137, 147, 143, 1);
+$outline: rgba(155, 141, 148, 1);
 
-$outline_variant: rgba(63, 73, 70, 1);
+$outline_variant: rgba(79, 68, 74, 1);
 
-$primary: rgba(133, 214, 193, 1);
+$primary: rgba(245, 178, 225, 1);
 
-$primary_container: rgba(0, 81, 67, 1);
+$primary_container: rgba(104, 53, 92, 1);
 
-$primary_fixed: rgba(161, 242, 221, 1);
+$primary_fixed: rgba(255, 215, 240, 1);
 
-$primary_fixed_dim: rgba(133, 214, 193, 1);
+$primary_fixed_dim: rgba(245, 178, 225, 1);
 
-$red: rgba(255, 181, 149, 1);
+$red: rgba(255, 178, 185, 1);
 
-$red_container: rgba(113, 54, 25, 1);
+$red_container: rgba(114, 51, 59, 1);
 
 $red_source: rgba(255, 0, 0, 1);
 
@@ -134,45 +134,45 @@ $red_value: rgba(255, 0, 0, 1);
 
 $scrim: rgba(0, 0, 0, 1);
 
-$secondary: rgba(177, 204, 195, 1);
+$secondary: rgba(220, 190, 208, 1);
 
-$secondary_container: rgba(51, 75, 69, 1);
+$secondary_container: rgba(86, 64, 79, 1);
 
-$secondary_fixed: rgba(205, 232, 223, 1);
+$secondary_fixed: rgba(249, 218, 237, 1);
 
-$secondary_fixed_dim: rgba(177, 204, 195, 1);
+$secondary_fixed_dim: rgba(220, 190, 208, 1);
 
 $shadow: rgba(0, 0, 0, 1);
 
-$source_color: rgba(43, 65, 59, 1);
+$source_color: rgba(92, 50, 82, 1);
 
-$surface: rgba(14, 21, 19, 1);
+$surface: rgba(24, 18, 22, 1);
 
-$surface_bright: rgba(52, 59, 56, 1);
+$surface_bright: rgba(63, 55, 59, 1);
 
-$surface_container: rgba(27, 33, 31, 1);
+$surface_container: rgba(36, 30, 34, 1);
 
-$surface_container_high: rgba(37, 43, 41, 1);
+$surface_container_high: rgba(47, 40, 44, 1);
 
-$surface_container_highest: rgba(48, 54, 52, 1);
+$surface_container_highest: rgba(58, 51, 55, 1);
 
-$surface_container_low: rgba(23, 29, 27, 1);
+$surface_container_low: rgba(32, 26, 30, 1);
 
-$surface_container_lowest: rgba(9, 15, 14, 1);
+$surface_container_lowest: rgba(18, 12, 16, 1);
 
-$surface_dim: rgba(14, 21, 19, 1);
+$surface_dim: rgba(24, 18, 22, 1);
 
-$surface_tint: rgba(133, 214, 193, 1);
+$surface_tint: rgba(245, 178, 225, 1);
 
-$surface_variant: rgba(63, 73, 70, 1);
+$surface_variant: rgba(79, 68, 74, 1);
 
-$tertiary: rgba(170, 203, 228, 1);
+$tertiary: rgba(245, 185, 163, 1);
 
-$tertiary_container: rgba(42, 74, 95, 1);
+$tertiary_container: rgba(102, 60, 44, 1);
 
-$tertiary_fixed: rgba(199, 231, 255, 1);
+$tertiary_fixed: rgba(255, 219, 206, 1);
 
-$tertiary_fixed_dim: rgba(170, 203, 228, 1);
+$tertiary_fixed_dim: rgba(245, 185, 163, 1);
 
 $white: rgba(130, 211, 224, 1);
 
@@ -182,9 +182,9 @@ $white_source: rgba(255, 255, 255, 1);
 
 $white_value: rgba(255, 255, 255, 1);
 
-$yellow: rgba(184, 207, 132, 1);
+$yellow: rgba(222, 197, 110, 1);
 
-$yellow_container: rgba(59, 77, 15, 1);
+$yellow_container: rgba(85, 69, 0, 1);
 
 $yellow_source: rgba(255, 255, 0, 1);
 

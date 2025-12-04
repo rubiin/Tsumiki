@@ -47,7 +47,6 @@ class MatugenService(Service):
 
         logger.info(f"{Colors.INFO}Matugen service initialized")
 
-
     @Property(bool, "read-write", default_value=False)
     def enabled(self) -> bool:
         """Whether matugen is enabled."""
@@ -141,6 +140,10 @@ class MatugenService(Service):
 
     def generate(self, image_path: str | None = None) -> None:
         """Generate colors from an image asynchronously."""
+
+        if image_path is None:
+            image_path = self._image_path
+
         try:
             cmd = f"matugen image -q {image_path} -t {self._scheme}"
             cmd += f" --mode {self._mode} --contrast {self._contrast}"
@@ -172,6 +175,10 @@ class MatugenService(Service):
 
     def generate_sync(self, image_path: str | None = None) -> bool:
         """Generate colors from an image synchronously."""
+
+        if image_path is None:
+            image_path = self._image_path
+
         try:
             cmd = f"matugen image -q {image_path} -t {self._scheme}"
             cmd += f" --mode {self._mode} --contrast {self._contrast}"
