@@ -1,282 +1,215 @@
 ---
 title: Making Themes
-description: How to make themes for HyDE
+description: How to make themes for Tsumiki
 ---
 
-Here we will walk you through the process of making themes for HyDE step by step.
-This tutorial will work for both hyprdots and HyDE.
+Here we will walk you through the process of making themes for Tsumiki step by step.
 
-### Quick Start Guide
 
-Clone the hyde-theme-starter repo into your themes directory
+## Theme File Location
 
-:::tip
-Rename `MyTheme` to your theme name, make sure it doesn't conflict in names in [HyDE-Gallery](https://github.com/HyDE-Project/hyde-gallery)
-:::
+All theme files are located in `styles/themes/` and use the `.scss` extension.
 
-```bash
-git clone https://github.com/richen604/hyde-theme-starter ~/MyTheme
+## Theme Structure
+
+A theme file defines SCSS variables that control the appearance of the entire application. Copy the template below and customize the color values.
+
+### Template
+
+```scss
+/* ---------------------------- */
+/* Base Colors                  */
+/* ---------------------------- */
+$background: #1e1e2e; // Main background
+$background-alt: #181825; // Secondary background (elevated surfaces)
+$background-dark: #11111b; // Darkest background (popups, dropdowns)
+
+/* Text Colors */
+$text-main: #cdd6f4; // Primary text color
+$text-secondary: #bac2de; // Secondary text color
+$text-muted: #a6adc8; // Tertiary text, muted
+$text-disabled: #6c7086; // Text for disabled elements
+
+/* Surface Colors */
+$surface-disabled: #313244; // Background for disabled items
+$surface-neutral: #45475a; // Neutral surface for cards, panels
+$surface-highlight: #585b70; // Selection and highlights
+
+/* Accent Colors */
+$accent-light: #f5e0dc; // Lightest accent
+$accent-pink: #f5c2e7; // Pink accent
+$accent-purple: #cba6f7; // Purple accent
+$accent-red: #f38ba8; // Red for errors
+$accent-orange: #fab387; // Orange for warnings
+$accent-yellow: #f9e2af; // Yellow for highlights
+$accent-green: #a6e3a1; // Green for success
+$accent-teal: #94e2d5; // Teal for information
+$accent-blue: #89b4fa; // Blue for links and actions
+$accent-light-blue: #89dceb; // Sky blue accent
+$accent-lavender: #b4befe; // Lavender for subtle highlights
+
+/* Additional UI Elements */
+$bar-background: rgb(36, 35, 35); // Status bar background
+$shadow-color: rgba(0, 0, 0, 0.6); // Drop shadows
+$ws-active: $text-muted; // Active workspace indicator
+$ws-hover: $accent-pink; // Workspace hover state
 ```
 
-1. Required components - all must be in `tar.*` format:
+## Variable Reference
 
-   - A GTK theme (mandatory)
-     - search [Gnome-Look Themes](https://www.gnome-look.org/browse?cat=135&ord=latest) for existing themes
-     - or see [Generate GTK4](#generate-gtk4-from-wallbash) for generating GTK theme from wallpaper
-   - Icon pack (optional) - defaults to Tela-circle
-     - search [Gnome-Look Icons](https://www.gnome-look.org/browse?cat=132&ord=latest) for existing icon packs
-   - Cursor theme (optional) - defaults to Bibata-Modern-Ice
-     - search [Gnome-Look Cursors](https://www.gnome-look.org/browse?cat=107&ord=latest) for existing cursor themes
-   - Font (optional)
-     - search [fonts.google.com](https://fonts.google.com/) for web fonts
-     - search [nerdfonts.com](https://www.nerdfonts.com/) for patched developer fonts
+### Background Colors
 
-2. A collection of wallpapers that match your desired style/color scheme
+| Variable | Purpose | Usage |
+|----------|---------|-------|
+| `$background` | Main application background | Primary window/panel background |
+| `$background-alt` | Elevated surfaces | Cards, secondary panels, menus |
+| `$background-dark` | Darkest background | Popups, dropdowns, overlays |
+| `$bar-background` | Status bar | Top/bottom bar background |
 
-   - [Wallhaven](https://wallhaven.cc/) - For wallpapers
-   - [farbenfroh.io](https://farbenfroh.io/) - For color match wallpapers if you have a desired color scheme in mind
-   - Don't add too many wallpapers, 8-10 is a good number
+### Text Colors
 
-3. Install `just` for running helper scripts `yay -S just`
+| Variable | Purpose | Usage |
+|----------|---------|-------|
+| `$text-main` | Primary text | Headings, important content |
+| `$text-secondary` | Secondary text | Descriptions, subtitles |
+| `$text-muted` | Muted text | Placeholders, hints |
+| `$text-disabled` | Disabled text | Inactive/disabled elements |
 
-Go to your theme directory `cd ~/MyTheme` (replace `MyTheme` with your theme name)
+### Surface Colors
 
-:::tip
-Rename `MyTheme` in the `justfile` to your theme name
-:::
+| Variable | Purpose | Usage |
+|----------|---------|-------|
+| `$surface-disabled` | Disabled backgrounds | Inactive buttons, disabled inputs |
+| `$surface-neutral` | Neutral surfaces | Cards, panels, input backgrounds |
+| `$surface-highlight` | Highlighted surfaces | Hover states, selections |
 
-```bash
-theme = "MyTheme"
+### Accent Colors
+
+| Variable | Purpose | Semantic Meaning |
+|----------|---------|------------------|
+| `$accent-blue` | Primary accent | Links, primary actions, focus states |
+| `$accent-light-blue` | Secondary blue | Alternative links, secondary info |
+| `$accent-purple` | Tertiary accent | Tags, badges, decorative elements |
+| `$accent-lavender` | Subtle accent | Soft highlights, borders |
+| `$accent-pink` | Decorative | Playful elements, notifications |
+| `$accent-light` | Lightest accent | Subtle backgrounds, borders |
+
+### Semantic Colors
+
+| Variable | Purpose | When to Use |
+|----------|---------|-------------|
+| `$accent-green` | Success | Confirmations, completed states, positive feedback |
+| `$accent-teal` | Information | Info messages, neutral notifications |
+| `$accent-yellow` | Warning | Caution states, pending actions |
+| `$accent-orange` | Alert | Important warnings, attention required |
+| `$accent-red` | Error/Danger | Errors, destructive actions, critical alerts |
+
+### UI Element Colors
+
+| Variable | Purpose |
+|----------|---------|
+| `$shadow-color` | Box shadows (use rgba for transparency) |
+| `$ws-active` | Active workspace indicator color |
+| `$ws-hover` | Workspace hover state color |
+
+## Color Guidelines
+
+### Contrast Requirements
+
+1. **Text on backgrounds**: Ensure sufficient contrast between text colors and backgrounds
+   - `$text-main` on `$background` should have high contrast
+   - `$text-secondary` can have slightly lower contrast
+   - `$text-muted` can be subtle but still readable
+
+2. **Text on accents**: When placing text on accent-colored backgrounds, use `$background` or `$background-dark` for the text color
+
+### Color Harmony
+
+For a cohesive theme:
+
+1. **Choose a base palette**: Start with 2-3 related hues
+2. **Define variations**: Create light/dark/muted versions
+3. **Accent sparingly**: Use bright accents for emphasis only
+4. **Maintain consistency**: Keep similar saturation levels across accents
+
+## Step-by-Step Creation
+
+1. **Create the file**:
+   ```bash
+   touch styles/themes/my-theme.scss
+   ```
+
+2. **Copy the template** from above
+
+3. **Define your color palette**:
+   - Pick a background color family
+   - Choose complementary accent colors
+   - Ensure text colors have good contrast
+
+4. **Test the theme**:
+   - Update `theme.json` with your theme name:
+     ```json
+     {
+       "name": "my-theme"
+     }
+     ```
+   - Restart Tsumiki or trigger a theme reload
+
+5. **Iterate**: Adjust colors based on how they look in the actual UI
+
+## Example: Creating a "Ocean" Theme
+
+```scss
+/* Ocean Theme - Cool blues and teals */
+
+/* Base Colors */
+$background: #0d1b2a;
+$background-alt: #1b263b;
+$background-dark: #0a1628;
+
+/* Text Colors */
+$text-main: #e0e1dd;
+$text-secondary: #b0b3ae;
+$text-muted: #778da9;
+$text-disabled: #415a77;
+
+/* Surface Colors */
+$surface-disabled: #1b263b;
+$surface-neutral: #2b3a4d;
+$surface-highlight: #3d5a80;
+
+/* Accent Colors */
+$accent-light: #caf0f8;
+$accent-pink: #f72585;
+$accent-purple: #7209b7;
+$accent-red: #ef476f;
+$accent-orange: #f77f00;
+$accent-yellow: #fcbf49;
+$accent-green: #06d6a0;
+$accent-teal: #48cae4;
+$accent-blue: #00b4d8;
+$accent-light-blue: #90e0ef;
+$accent-lavender: #ade8f4;
+
+/* UI Elements */
+$bar-background: #0d1b2a;
+$shadow-color: rgba(0, 0, 0, 0.5);
+$ws-active: $text-muted;
+$ws-hover: $accent-teal;
 ```
 
-Run `just init` to generate initial directory structure
-
-Your theme should have the following structure:
-
-```bash
-~/MyTheme/
-├── Config/                  # Part of your final theme - Configuration files
-│   └── hyde/
-│       └── themes/
-│           └── MyTheme/     # main theme directory
-│               └── wallpapers/
-├── refs/                    # for reference files we generate
-├── screenshots/             # for screenshots of your theme
-├── Source/                  # Part of your final theme - Arcs ie. gtk, cursor, icon, font
-│   └── arcs/
-├── .gitignore
-├── justfile                 # for running helper scripts
-└── README.md                # links to this webpage
-```
-
-### Arcs
-
-Arcs are the GTK theme, icon, cursor, and font components that make up parts of your theme.
-Lets add these right away to the `Source/arcs` directory so they are ready for testing.
-
-Your folder structure should look something like this:
-
-```bash
-~/MyTheme/
-├── Source/
-│   └── arcs/
-│       ├── Gtk_<Your-GTK-Theme>.tar.*
-│       ├── Cursor_<Your-Cursor-Theme>.tar.*
-│       └── Icon_<Your-Icon-Theme>.tar.*
-│       └── Font_<Your-Font-Name>.tar.*
-```
-
-**Make sure to use the correct prefix for each arc**. eg. `Gtk_<Your-GTK-Theme>.tar.*`
-
-### Viewing your theme with Wallbash
-
-Copy your wallpapers to your theme directory
-
-```bash
-cp -r ~/wallpapers ~/MyTheme/Config/.config/hyde/themes/MyTheme/wallpapers
-```
-
-cd into your theme directory
-
-```bash
-cd ~/MyTheme
-```
-
-install your theme
-
-```bash
-just install
-```
-
-### Testing your theme with wallbash
-
-There are two ways to initialize your theme. from wallbash or from an existing theme.
-
-We are going to use wallbash for this guide. as it gives you a good understanding of how wallbash generates the colors for your theme. You can learn more about wallbash [here](#understanding-wallbash).
-
-Open Wallbash, setting auto, dark, or light (`Meta + Shift + R`). </br>
-Set your chosen wallpaper as the current wallpaper (`Meta + Shift + W`)
-
-Observe how wallbash adapts the colors to your wallpaper for the following applications:
-
-- GTK (nwg-look)
-  - to test your arc gtk theme, change from wallbash mode to theme mode (Meta + Shift + R)
-  - then check `pavucontrol` to see if your gtk theme looks weird. if it does, follow the instructions in [Generate GTK4](#generate-gtk4-from-wallbash) to generate GTK4 theme files using wallbash
-- Kitty (kitty)
-- QT (qt5ct + qt6ct)
-- Waybar (waybar)
-- Spotify (spotify)
-- VSCode (code) - needs wallbash enabled as color theme
-- Cava (cava)
-
-### Generate theme files
-
-Make sure the wallpaper you picked is the best wallpaper that wallbash generates for your theme. </br>
-Now run the following commands to generate the wallbash files.
-
-```bash
-just gen-all
-just set-wall
-```
-
-You'll see a bunch of new files in your theme `refs` directory.
-
-```bash
-~/MyTheme/
-├── refs/                   # for reference files we generate
-│   ├── gtk-4.0/            # GTK4 theme files
-│   │   ├── gtk.css         # Light theme
-│   │   └── gtk-dark.css    # Dark theme
-│   ├── kvantum/            # Kvantum theme files
-│   │   ├── kvantum.theme   # Kvantum theme config
-│   │   └── kvconfig.theme  # Kvantum config
-│   ├── hypr.theme          # Hyprland theme
-│   ├── kitty.theme         # Kitty terminal theme
-│   ├── rofi.theme          # Rofi theme
-│   ├── theme.dcol          # wallbash "theme" mode overrides
-│   └── waybar.theme        # Waybar theme
-│   └── wall.set            # First wallpaper theme uses
-```
-
-You can copy all the files to your `Config/.config/hyde/themes/MyTheme` directory.
-
-```bash
-cp -r ./refs/* ./Config/.config/hyde/themes/MyTheme
-```
-
-run install again to update your theme
-
-```bash
-just install
-```
-
-These files are used to set the "theme" mode for your theme. (`Meta + Shift + R`)
-
-### Editing \*.theme files
-
-These files are important for themes to work correctly.
-
-You should reference a theme like [Bad Blood](https://github.com/HyDE-Project/hyde-gallery/blob/Bad-Blood/Configs/.config/hyde/themes/Bad%20Blood) along this guide.
-
-Each \*.theme file contains configuration lines
-
-The first line has the format: file_path | command_to_execute
-
-- hypr.theme - `$HOME/.config/hypr/themes/theme.conf|> $HOME/.config/hypr/themes/colors.conf`
-- kitty.theme - `$HOME/.config/kitty/theme.conf|killall -SIGUSR1 kitty`
-- rofi.theme - `$HOME/.config/rofi/theme.rasi`
-- waybar.theme - `$HOME/.config/waybar/theme.css|${scrDir}/wbarconfgen.sh`
-
-the most important file is `hypr.theme`
-
-```bash
-$HOME/.config/hypr/themes/theme.conf|> $HOME/.config/hypr/themes/colors.conf
-# ~/.config/hypr/theme/theme.conf is an auto-generated file. Do not edit.
-
-$GTK_THEME=Bad-Blood # folder name inside `Source/arcs/Gtk_<Your-GTK-Theme>.tar.*`
-$ICON_THEME=besgnulinux-mono-red # folder name inside `Source/arcs/Icon_<Your-Icon-Theme>.tar.*`
-$COLOR_SCHEME=prefer-dark # prefer-dark, prefer-light, or auto
-$CURSOR_THEME=Night-Diamond-Red # folder name inside `Source/arcs/Cursor_<Your-Cursor-Theme>.tar.*`
-$CURSOR_SIZE=30 # cursor size in pixels
-```
-
-- Edit the variables for arcs, must match the name of the folder **inside** each arc in `Source/arcs` like above
-- Set hyprland borders, colors, and other theme related settings
-- You can use hypr.theme to set additional programs for your theme. such as SDDM or Vscode theme
-- Becomes `$HOME/.config/hypr/themes/theme.conf`
-
-Any updates to your theme in either `Config` or `Source` should be run with `just install` to update your theme.
-
-### Editing theme.dcol
-
-The `theme.dcol` file is used to override some generated wallbash colors for wallbash modes.
-Check out [understanding wallbash](#understanding-wallbash) for more information.
-
-This file is entirely optional
-
-### Finalizing your theme
-
-Your theme should now be ready to be added to the hyde-gallery!
-
-A few more finishing touches:
-
-- Add some screenshots to `~/screenshots`
-- Add your theme to the Hyde-Gallery
-
-### Adding Themes to Hyde-Gallery
-
-In your theme directory, generate the readme using
-
-```bash
-python3 generate_readme.py
-```
-
-Initialize git
-
-```bash
-git init && git branch -M main && git add . && git commit -m "My first HyDE theme"
-```
-
-[create a github repo](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-new-repository)
-
-```bash
-git remote add origin <your-repo-url>
-git push -u origin main
-```
-
-Fork hyde-gallery <https://github.com/HyDE-Project/hyde-gallery> </br>
-Add your theme to the list and `hyde-themes.json`
-
-## More Information
-
-### Generate GTK4 from wallbash
-
-If your theme doesn't include GTK4 support, pavucontrol and other GTK4 applications may appear with a plain white theme.
-
-Run the following command to generate the GTK4 theme files
-
-```bash
-just gen-gtk4
-```
-
-Copy the `refs/gtk-4.0` directory to your theme directory
-
-```bash
-mkdir -p ./Config/.config/hyde/themes/MyTheme/gtk-4.0
-cp -r ./refs/gtk-4.0/* ./Config/.config/hyde/themes/MyTheme/gtk-4.0/
-```
-
-### Understanding wallbash
-
-Wallbash generates 4 primary colors from your wallpaper, then creates color groups around each primary color with the following structure:
-
-For each primary color (`wallbash_pry1` through `wallbash_pry4`):
-
-- Text color (`wallbash_txt1` through `wallbash_txt4`)
-- 9 accent colors (`wallbash_1xa1` through `wallbash_1xa9` for group 1, etc.)
-
-Each color has an RGBA variant with configurable opacity (e.g. `wallbash_pry1_rgba(0.95)`)
-
-Total: 44 base colors (4 groups × 11 colors) plus RGBA variants
-
-Use `just gen-dcol` to generate a `theme.dcol` with all the wallbash generated colors for your active wallpaper for reference
+## Tips
+
+- Use **hex colors** (`#rrggbb`) or **rgba** (`rgba(r, g, b, a)`) for transparency
+- Reference other variables using `$variable-name` syntax
+- Test in both light and dark environments
+- Check all widgets: bar, notifications, menus, popups
+
+## Available Themes
+
+Browse existing themes in `styles/themes/` for inspiration:
+- `catpuccin-mocha.scss` - Warm, cozy dark theme
+- `nord.scss` - Cool, Arctic-inspired palette
+- `dracula.scss` - Dark theme with vibrant accents
+- `gruvbox.scss` - Retro, earthy tones
+- `tokyonight.scss` - Modern, purple-blue dark theme
