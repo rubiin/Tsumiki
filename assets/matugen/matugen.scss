@@ -1,0 +1,12 @@
+@use "sass:color";
+
+/*
+* Css Colors
+* Generated with Matugen
+*/
+
+<* for name, value in colors *>
+${{name}}: {{value.default.rgba}};
+<* endfor *>
+
+
