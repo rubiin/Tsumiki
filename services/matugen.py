@@ -199,7 +199,7 @@ class MatugenService(Service):
             def on_complete(result):
                 if result is not None:
                     logger.info(
-                        f"{Colors.SUCCESS}Matugen colors generated successfully"
+                        f"{Colors.OKGREEN}Matugen colors generated successfully"
                     )
                     self.emit("colors_generated")
                 else:
@@ -239,7 +239,7 @@ class MatugenService(Service):
                 check=True,
             )
 
-            logger.info(f"{Colors.SUCCESS}Matugen colors generated successfully")
+            logger.info(f"{Colors.OKGREEN}Matugen colors generated successfully")
             self.emit("colors_generated")
             return True
 

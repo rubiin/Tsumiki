@@ -695,7 +695,7 @@ def ensure_matugen_config() -> bool:
         # Copy template to config location
         shutil.copy2(template_file, matugen_config_file)
         logger.info(
-            f"{Colors.SUCCESS}Copied matugen config template to {matugen_config_file}"
+            f"{Colors.OKGREEN}Copied matugen config template to {matugen_config_file}"
         )
         return True
 

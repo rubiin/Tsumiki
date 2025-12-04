@@ -52,7 +52,7 @@ def main():
     if matugen_config.get("enabled", False):
         from services import matugen_service
 
-        image_path = matugen_config.get("image", "")
+        image_path = matugen_config.get("wallpaper", "")
         if image_path:
             logger.info(f"{Colors.INFO}[Main] Generating matugen palette...")
             matugen_service.generate_sync(image_path)
