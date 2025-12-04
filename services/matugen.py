@@ -1,12 +1,13 @@
 import os
 
-from fabric.core.service import Property, Service, Signal
-from fabric.utils import exec_shell_command, exec_shell_command_async
-from loguru import logger
+from fabric.core.service import Service, Signal
+from fabric.utils import exec_shell_command, exec_shell_command_async, logger
 
 import utils.functions as helpers
-from utils.colors import Colors
 from utils.config import theme_config
+
+# Config path constant
+_CONFIG_PATH = os.path.expanduser("~/.config/tsumiki/assets/matugen/config.toml")
 
 
 class MatugenService(Service):
@@ -29,206 +30,61 @@ class MatugenService(Service):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-
         helpers.check_executable_exists("matugen")
+        self._config = theme_config.get("matugen", {})
 
-        # Load configuration from theme.json
-        matugen_config = theme_config.get("matugen", {})
+    def _build_cmd(self, image_path: str) -> str:
+        """Build matugen command from config."""
+        cfg = self._config
+        scheme = cfg.get("scheme", "scheme-tonal-spot")
+        mode = cfg.get("mode", "dark")
+        contrast = cfg.get("contrast", 0.0)
 
-        # Configuration with theme.json values as defaults
-        self._image_path: str = os.path.expanduser(matugen_config.get("wallpaper", ""))
-        self._scheme: str = matugen_config.get("scheme", "tonal-spot")
-        self._contrast: float = matugen_config.get("contrast", 0.0)
-        self._mode: str = matugen_config.get("mode", "dark")
-        self._config_path: str = os.path.expanduser(
-            "~/.config/tsumiki/assets/matugen/config.toml"
+        return (
+            f"matugen image -q {image_path} -t {scheme} "
+            f"--mode {mode} --contrast {contrast} --config {_CONFIG_PATH}"
         )
-
-        logger.info(f"{Colors.INFO}Matugen service initialized")
-
-    @Property(str, "read-write")
-    def image_path(self) -> str:
-        """Path to the source image for color extraction."""
-        return self._image_path
-
-    @image_path.setter
-    def image_path(self, value: str):
-        self._image_path = os.path.expanduser(value)
-
-    @Property(str, "read-write")
-    def scheme(self) -> str:
-        """Color scheme type.
-
-        Available schemes:
-        - scheme-content
-        - scheme-expressive
-        - scheme-fidelity
-        - scheme-fruit-salad
-        - scheme-monochrome
-        - scheme-neutral
-        - scheme-rainbow
-        - scheme-tonal-spot (default)
-        """
-        return self._scheme
-
-    @scheme.setter
-    def scheme(self, value: str):
-        valid_schemes = [
-            "content",
-            "expressive",
-            "fidelity",
-            "fruit-salad",
-            "monochrome",
-            "neutral",
-            "rainbow",
-            "tonal-spot",
-        ]
-        if value not in valid_schemes:
-            logger.warning(
-                f"{Colors.WARNING}Invalid scheme '{value}'. "
-                f"Valid options: {', '.join(valid_schemes)}"
-            )
-            return
-        self._scheme = f"scheme-{value}"
-
-    @Property(float, "read-write")
-    def contrast(self) -> float:
-        """Contrast level (-1.0 to 1.0)."""
-        return self._contrast
-
-    @contrast.setter
-    def contrast(self, value: float):
-        if not -1.0 <= value <= 1.0:
-            logger.warning(
-                f"{Colors.WARNING}Contrast must be between -1.0 and 1.0. Got: {value}"
-            )
-            value = max(-1.0, min(1.0, value))
-        self._contrast = value
-
-    @Property(str, "read-write")
-    def mode(self) -> str:
-        """Color mode: 'dark' or 'light'."""
-        return self._mode
-
-    @mode.setter
-    def mode(self, value: str):
-        if value not in ["dark", "light"]:
-            logger.warning(
-                f"{Colors.WARNING}Invalid mode '{value}'. Must be 'dark' or 'light'."
-            )
-            return
-        self._mode = value
-
-    @Property(str, "read-write")
-    def config_path(self) -> str:
-        """Path to the matugen config.toml file."""
-        return self._config_path
-
-    @config_path.setter
-    def config_path(self, value: str):
-        self._config_path = os.path.expanduser(value)
 
     def generate(self, image_path: str | None = None) -> None:
         """Generate colors from an image asynchronously."""
-
-        if image_path is None:
-            image_path = self._image_path
+        image_path = image_path or os.path.expanduser(
+            self._config.get("wallpaper", "")
+        )
 
         if not os.path.exists(image_path):
-            error_msg = f"Image path does not exist: {image_path}"
-            logger.error(f"{Colors.ERROR}{error_msg}")
-            self.emit("generation_failed", error_msg)
+            self.emit("generation_failed", f"Image not found: {image_path}")
             return
 
-        try:
-            cmd = f"matugen image -q {image_path} -t {self._scheme}"
-            cmd += f" --mode {self._mode} --contrast {self._contrast}"
-            cmd += f" --config {self._config_path}"
+        cmd = self._build_cmd(image_path)
+        logger.info(f"[Matugen] Running: {cmd}")
 
-            logger.info(f"{Colors.INFO}Running matugen: {cmd}")
+        def on_complete(result):
+            if result is not None:
+                logger.info("[Matugen] Colors generated successfully")
+                self.emit("colors_generated")
+            else:
+                self.emit("generation_failed", "Matugen returned no result")
 
-            def on_complete(result):
-                if result is not None:
-                    logger.info(
-                        f"{Colors.OKGREEN}Matugen colors generated successfully"
-                    )
-                    self.emit("colors_generated")
-                else:
-                    error_msg = "Matugen command returned no result"
-                    logger.error(f"{Colors.ERROR}{error_msg}")
-                    self.emit("generation_failed", error_msg)
-
-            exec_shell_command_async(cmd, on_complete)
-
-        except ValueError as e:
-            error_msg = str(e)
-            logger.error(f"{Colors.ERROR}Matugen error: {error_msg}")
-            self.emit("generation_failed", error_msg)
-        except Exception as e:
-            error_msg = f"Unexpected error: {e}"
-            logger.error(f"{Colors.ERROR}Matugen error: {error_msg}")
-            self.emit("generation_failed", error_msg)
+        exec_shell_command_async(cmd, on_complete)
 
     def generate_sync(self, image_path: str | None = None) -> bool:
         """Generate colors from an image synchronously."""
-
-        if image_path is None:
-            image_path = self._image_path
+        image_path = image_path or os.path.expanduser(
+            self._config.get("wallpaper", "")
+        )
 
         if not os.path.exists(image_path):
-            error_msg = f"Image path does not exist: {image_path}"
-            logger.error(f"{Colors.ERROR}{error_msg}")
-            self.emit("generation_failed", error_msg)
+            self.emit("generation_failed", f"Image not found: {image_path}")
             return False
+
+        cmd = self._build_cmd(image_path)
+        logger.info(f"[Matugen] Running: {cmd}")
 
         try:
-            cmd = f"matugen image -q {image_path} -t {self._scheme}"
-            cmd += f" --mode {self._mode} --contrast {self._contrast}"
-            cmd += f" --config {self._config_path}"
-
-            logger.info(f"{Colors.INFO}Running matugen: {cmd}")
-
             exec_shell_command(cmd)
-            logger.info(f"{Colors.OKGREEN}Matugen colors generated successfully")
+            logger.info("[Matugen] Colors generated successfully")
             self.emit("colors_generated")
             return True
-
-        except ValueError as e:
-            error_msg = str(e)
-            logger.error(f"{Colors.ERROR}Matugen error: {error_msg}")
-            self.emit("generation_failed", error_msg)
-            return False
         except Exception as e:
-            error_msg = f"Unexpected error: {e}"
-            logger.error(f"{Colors.ERROR}Matugen error: {error_msg}")
-            self.emit("generation_failed", error_msg)
+            self.emit("generation_failed", str(e))
             return False
-
-    def generate_from_config(
-        self,
-        image_path: str,
-        scheme: str | None = None,
-        contrast: float | None = None,
-        mode: str | None = None,
-        quiet: bool | None = None,
-    ) -> None:
-        """Generate colors with all parameters specified at once.
-
-        Args:
-            image_path: Path to the source image.
-            scheme: Color scheme type (optional, uses current if not provided).
-            contrast: Contrast level -1.0 to 1.0 (optional).
-            mode: 'dark' or 'light' (optional).
-            quiet: Whether to run in quiet mode (optional).
-        """
-        # Temporarily update settings
-        if scheme is not None:
-            self.scheme = scheme
-        if contrast is not None:
-            self.contrast = contrast
-        if mode is not None:
-            self.mode = mode
-        if quiet is not None:
-            self.quiet = quiet
-
-        self.generate(image_path)
