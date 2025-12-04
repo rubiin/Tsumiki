@@ -236,6 +236,7 @@ install_packages() {
 		grimblast-git
 		python-ijson
 		glace-git
+		matugen-bin
 	)
 
 	sudo pacman -S --noconfirm --needed "${pacman_deps[@]}" || {
