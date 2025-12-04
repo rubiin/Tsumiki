@@ -1,19 +1,4 @@
----
-title: Main Configuration
-description: HyDE's Configuration Guide
-sidebar:
-  order: 2
----
-
-
-Tsumiki defines the configuration settings for a modular system, allowing users to customize the layout, icons, intervals, and various components. The configuration is written in Python and structured using typed dictionaries for strong typing.
-
-Users are encouraged to use an editor that support schema validation to ensure the configuration file is valid.
-```toml
-	"$schema": "./tsumiki.schema.json",
-```
----
-The following table outlines the complete schema for Tsumiki's configuration file, detailing each setting, its type, and default values where applicable.
+# Tsumiki Configuration Documentation
 
 - **`$schema`**: `str` (default: "./tsumiki.schema.json")
 

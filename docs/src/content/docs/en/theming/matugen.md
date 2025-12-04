@@ -13,12 +13,11 @@ Add a `matugen` section to your `theme.json` (or edit the existing one). Example
   "wallpaper": "~/Pictures/wallpaper.jpg",
   "scheme": "scheme-tonal-spot",
   "mode": "dark",
-  "contrast": 0.0,
-  "quiet": true
+  "contrast": 0.0
 }
 ```
 
-Fields
+## Fields
 
 - `enabled` (bool): If true, Tsumiki will attempt to generate a palette at startup when the service is available.
 - `wallpaper` (string): Path to the image used to extract colors. Can be an absolute path or `~` expansion.
@@ -35,7 +34,7 @@ Fields
 - `contrast` (float): Contrast adjustment between -1.0 and 1.0.
 - `quiet` (bool): If true, runs Matugen with `-q` to reduce stdout noise.
 
-Config file
+## Config file
 
 Tsumiki ships a Matugen config template at `assets/matugen/config.toml`. The service uses `~/.config/tsumiki/assets/matugen/config.toml` by default. If you want a custom config file, edit that path in the service or copy the template and adjust it.
 
@@ -59,14 +58,14 @@ mat.generate_sync('/home/user/Pictures/wallpaper.jpg')
 mat.generate('/home/user/Pictures/wallpaper.jpg')  # async
 ```
 
-Troubleshooting
+## Troubleshooting
 
 - Ensure the `matugen` binary is installed and on `PATH`.
 - Ensure the `wallpaper` path exists and is accessible.
 - If you see caching or stale values, restart Tsumiki to force regeneration.
 - If you get import/cache issues after code edits, remove `*.pyc` and `__pycache__` directories and restart.
 
-Notes
+## Notes
 
 - Matugen produces color variables that are consumed by `styles/theme.scss` when Tsumiki compiles CSS. Editing the Matugen config or wallpaper requires regenerating the palette and recompiling CSS.
 - The service emits signals (`colors_generated` and `generation_failed`) that other parts of Tsumiki can listen to for live updates.

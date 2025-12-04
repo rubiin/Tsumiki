@@ -21,7 +21,7 @@ jobs:
         with:
           repository: ${{ github.repository }}.wiki
           token: ${{ secrets.TOKEN_GITHUB }}
-          path: ./wiki
+          path: ./wiki5
 
       - name: Copy doc.md to wiki Home
         run: |
@@ -31,4 +31,13 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add Home.md
           git commit -m "Auto-update Wiki from doc.md" || echo "No changes"
+          git push
+
+      - name: Copy doc.md to docs site
+        run: |
+          cp doc.md docs/src/content/docs/en/configuring/config.md
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/src/content/docs/en/configuring/config.md
+          git commit -m "Auto-update docs site from doc.md" || echo "No changes"
           git push
