@@ -1,8 +1,8 @@
 import os
-import subprocess
 
 from fabric.core.service import Property, Service, Signal
-from fabric.utils import exec_shell_command_async, logger
+from fabric.utils import exec_shell_command, exec_shell_command_async
+from loguru import logger
 
 import utils.functions as helpers
 from utils.colors import Colors
@@ -41,17 +41,15 @@ class MatugenService(Service):
         # Configuration with theme.json values as defaults
         self._enabled: bool = matugen_config.get("enabled", False)
         self._image_path: str = os.path.expanduser(matugen_config.get("image", ""))
-        self._scheme: str = matugen_config.get("scheme", "scheme-tonal-spot")
+        self._scheme: str = matugen_config.get("scheme", "tonal-spot")
         self._contrast: float = matugen_config.get("contrast", 0.0)
         self._mode: str = matugen_config.get("mode", "dark")
-        self._quiet: bool = matugen_config.get("quiet", True)
         self._config_path: str = os.path.expanduser(
             "~/.config/tsumiki/assets/matugen/config.toml"
         )
 
         logger.info(f"{Colors.INFO}Matugen service initialized")
 
-    # --- Properties ---
 
     @Property(bool, "read-write", default_value=False)
     def enabled(self) -> bool:
@@ -90,14 +88,14 @@ class MatugenService(Service):
     @scheme.setter
     def scheme(self, value: str):
         valid_schemes = [
-            "scheme-content",
-            "scheme-expressive",
-            "scheme-fidelity",
-            "scheme-fruit-salad",
-            "scheme-monochrome",
-            "scheme-neutral",
-            "scheme-rainbow",
-            "scheme-tonal-spot",
+            "content",
+            "expressive",
+            "fidelity",
+            "fruit-salad",
+            "monochrome",
+            "neutral",
+            "rainbow",
+            "tonal-spot",
         ]
         if value not in valid_schemes:
             logger.warning(
@@ -105,7 +103,7 @@ class MatugenService(Service):
                 f"Valid options: {', '.join(valid_schemes)}"
             )
             return
-        self._scheme = value
+        self._scheme = f"scheme-{value}"
 
     @Property(float, "read-write")
     def contrast(self) -> float:
@@ -135,15 +133,6 @@ class MatugenService(Service):
             return
         self._mode = value
 
-    @Property(bool, "read-write", default_value=True)
-    def quiet(self) -> bool:
-        """Whether to run in quiet mode (-q flag)."""
-        return self._quiet
-
-    @quiet.setter
-    def quiet(self, value: bool):
-        self._quiet = value
-
     @Property(str, "read-write")
     def config_path(self) -> str:
         """Path to the matugen config.toml file."""
@@ -153,48 +142,13 @@ class MatugenService(Service):
     def config_path(self, value: str):
         self._config_path = os.path.expanduser(value)
 
-    # --- Methods ---
-
-    def _build_command(self, image_path: str | None = None) -> list[str]:
-        """Build the matugen command with current settings."""
-        cmd = ["matugen", "image"]
-
-        if self._quiet:
-            cmd.append("-q")
-
-        # Use provided image path or fall back to stored one
-        img = image_path or self._image_path
-        if not img:
-            raise ValueError("No image path specified")
-
-        cmd.append(os.path.expanduser(img))
-
-        # Add scheme type
-        cmd.extend(["-t", self._scheme])
-
-        # Add contrast
-        cmd.extend(["--contrast", str(self._contrast)])
-
-        # Add mode
-        cmd.extend(["--mode", self._mode])
-
-        # Add config path if exists
-        if self._config_path and os.path.exists(self._config_path):
-            cmd.extend(["-c", self._config_path])
-
-        return cmd
-
     def generate(self, image_path: str | None = None) -> None:
-        """Generate colors from an image asynchronously.
-
-        Args:
-            image_path: Optional path to image. Uses self.image_path if not provided.
-        """
+        """Generate colors from an image asynchronously."""
         try:
-            cmd = self._build_command(image_path)
-            cmd_str = " ".join(cmd)
+            cmd = f"matugen image -q {image_path} -t {self._scheme}"
+            cmd += f" --mode {self._mode} --contrast {self._contrast}"
 
-            logger.info(f"{Colors.INFO}Running matugen: {cmd_str}")
+            logger.info(f"{Colors.INFO}Running matugen: {cmd}")
 
             def on_complete(result):
                 if result is not None:
@@ -207,7 +161,7 @@ class MatugenService(Service):
                     logger.error(f"{Colors.ERROR}{error_msg}")
                     self.emit("generation_failed", error_msg)
 
-            exec_shell_command_async(cmd_str, on_complete)
+            exec_shell_command_async(cmd, on_complete)
 
         except ValueError as e:
             error_msg = str(e)
@@ -219,35 +173,18 @@ class MatugenService(Service):
             self.emit("generation_failed", error_msg)
 
     def generate_sync(self, image_path: str | None = None) -> bool:
-        """Generate colors from an image synchronously.
-
-        Args:
-            image_path: Optional path to image. Uses self.image_path if not provided.
-
-        Returns:
-            True if successful, False otherwise.
-        """
+        """Generate colors from an image synchronously."""
         try:
-            cmd = self._build_command(image_path)
+            cmd = f"matugen image -q {image_path} -t {self._scheme}"
+            cmd += f" --mode {self._mode} --contrast {self._contrast}"
 
-            logger.info(f"{Colors.INFO}Running matugen: {' '.join(cmd)}")
+            logger.info(f"{Colors.INFO}Running matugen: {cmd}")
 
-            subprocess.run(
-                cmd,
-                capture_output=True,
-                text=True,
-                check=True,
-            )
-
+            exec_shell_command(cmd)
             logger.info(f"{Colors.OKGREEN}Matugen colors generated successfully")
             self.emit("colors_generated")
             return True
 
-        except subprocess.CalledProcessError as e:
-            error_msg = e.stderr or str(e)
-            logger.error(f"{Colors.ERROR}Matugen failed: {error_msg}")
-            self.emit("generation_failed", error_msg)
-            return False
         except ValueError as e:
             error_msg = str(e)
             logger.error(f"{Colors.ERROR}Matugen error: {error_msg}")
