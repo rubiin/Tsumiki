@@ -32,9 +32,6 @@ class MatugenService(Service):
 
         helpers.check_executable_exists("matugen")
 
-        # Ensure matugen config exists (copy from assets if needed)
-        helpers.ensure_matugen_config()
-
         # Load configuration from theme.json
         matugen_config = theme_config.get("matugen", {})
 
@@ -147,6 +144,7 @@ class MatugenService(Service):
         try:
             cmd = f"matugen image -q {image_path} -t {self._scheme}"
             cmd += f" --mode {self._mode} --contrast {self._contrast}"
+            cmd += f" --config {self._config_path}"
 
             logger.info(f"{Colors.INFO}Running matugen: {cmd}")
 
@@ -177,6 +175,7 @@ class MatugenService(Service):
         try:
             cmd = f"matugen image -q {image_path} -t {self._scheme}"
             cmd += f" --mode {self._mode} --contrast {self._contrast}"
+            cmd += f" --config {self._config_path}"
 
             logger.info(f"{Colors.INFO}Running matugen: {cmd}")
 
