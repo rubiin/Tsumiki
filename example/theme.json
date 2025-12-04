@@ -2,8 +2,8 @@
 	"name": "catpuccin-mocha",
 	"matugen": {
 		"enabled": true,
-		"wallpaper": "~/1.jpg",
-		"scheme": "tonal-spot",
+		"wallpaper": "~/2.jpg",
+		"scheme": "scheme-tonal-spot",
 		"mode": "dark",
 		"contrast": 0
 	},
@@ -554,7 +554,7 @@
 				"padding_x": "0.5em",
 				"padding_y": "0.5em",
 				"shadow": {
-					"enabled": true,
+					"enabled": false,
 					"offset": 0,
 					"blur": 0,
 					"spread": 0,
