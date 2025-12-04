@@ -250,7 +250,7 @@ class DateNotificationMenu(Box):
             self.clear_button = HoverButton(
                 name="clear-button",
                 v_align="center",
-                child=Box(children=(self.clear_icon,)),
+                child=self.clear_icon,
             )
 
             self.clear_button.connect(
