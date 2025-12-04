@@ -6,6 +6,7 @@ from fabric.utils import exec_shell_command_async, logger
 
 import utils.functions as helpers
 from utils.colors import Colors
+from utils.config import theme_config
 
 
 class MatugenService(Service):
@@ -31,12 +32,19 @@ class MatugenService(Service):
 
         helpers.check_executable_exists("matugen")
 
-        # Default configuration
-        self._image_path: str = ""
-        self._scheme: str = "scheme-tonal-spot"
-        self._contrast: float = 0.0
-        self._mode: str = "dark"
-        self._quality: bool = True  # -q flag for quiet mode
+        # Ensure matugen config exists (copy from assets if needed)
+        helpers.ensure_matugen_config()
+
+        # Load configuration from theme.json
+        matugen_config = theme_config.get("matugen", {})
+
+        # Configuration with theme.json values as defaults
+        self._enabled: bool = matugen_config.get("enabled", False)
+        self._image_path: str = os.path.expanduser(matugen_config.get("image", ""))
+        self._scheme: str = matugen_config.get("scheme", "scheme-tonal-spot")
+        self._contrast: float = matugen_config.get("contrast", 0.0)
+        self._mode: str = matugen_config.get("mode", "dark")
+        self._quiet: bool = matugen_config.get("quiet", True)
         self._config_path: str = os.path.expanduser(
             "~/.config/tsumiki/assets/matugen/config.toml"
         )
@@ -44,6 +52,15 @@ class MatugenService(Service):
         logger.info(f"{Colors.INFO}Matugen service initialized")
 
     # --- Properties ---
+
+    @Property(bool, "read-write")
+    def enabled(self) -> bool:
+        """Whether matugen is enabled."""
+        return self._enabled
+
+    @enabled.setter
+    def enabled(self, value: bool):
+        self._enabled = value
 
     @Property(str, "read-write")
     def image_path(self) -> str:
@@ -121,11 +138,11 @@ class MatugenService(Service):
     @Property(bool, "read-write")
     def quiet(self) -> bool:
         """Whether to run in quiet mode (-q flag)."""
-        return self._quality
+        return self._quiet
 
     @quiet.setter
     def quiet(self, value: bool):
-        self._quality = value
+        self._quiet = value
 
     @Property(str, "read-write")
     def config_path(self) -> str:
@@ -142,7 +159,7 @@ class MatugenService(Service):
         """Build the matugen command with current settings."""
         cmd = ["matugen", "image"]
 
-        if self._quality:
+        if self._quiet:
             cmd.append("-q")
 
         # Use provided image path or fall back to stored one
