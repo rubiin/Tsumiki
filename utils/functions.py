@@ -670,6 +670,7 @@ def check_executable_exists(executable_name):
             executable_name
         )  # Raise an error if the executable is not found and exit the application
 
+
 # Function to send a notification
 @cooldown(1)
 def send_notification(
