@@ -40,7 +40,7 @@ jobs:
           title: Configuration
           description: Tsumiki configuration options and widget settings
           ---
-          
+
           ' | cat - doc.md > docs/src/content/docs/en/configuring/config.md
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
