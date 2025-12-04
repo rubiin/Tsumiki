@@ -10,3 +10,50 @@ ${{name}}: {{value.default.rgba}};
 <* endfor *>
 
 
+/* Background Colors            */
+/* ---------------------------- */
+$background: $surface; // Primary background
+$background-alt: $surface_container; // Secondary/elevated background
+$background-dark: $surface_container_lowest; // Darkest background (popups, dropdowns)
+$bar-background: $surface_container_low; // Status bar background
+
+/* ---------------------------- */
+/* Text Colors                  */
+/* ---------------------------- */
+$text-main: $on_surface; // Primary text
+$text-secondary: $on_surface_variant; // Secondary text
+$text-muted: $outline; // Muted/placeholder text
+$text-disabled: $outline_variant; // Disabled text
+
+/* ---------------------------- */
+/* Surface Colors               */
+/* ---------------------------- */
+$surface-disabled: $surface_container_high; // Disabled element backgrounds
+$surface-neutral: $surface_container_highest; // Cards, panels, inputs
+$surface-highlight: $surface_bright; // Hover states, selections
+
+/* ---------------------------- */
+/* Accent Colors                */
+/* ---------------------------- */
+$accent-blue: $blue; // Primary accent, links, actions
+$accent-light-blue: $cyan; // Secondary blue accent
+$accent-purple: $magenta; // Tertiary accent
+$accent-lavender: $tertiary; // Subtle highlights
+$accent-pink: $magenta; // Decorative accent
+$accent-light: $primary_fixed; // Lightest accent
+
+/* ---------------------------- */
+/* Semantic Colors              */
+/* ---------------------------- */
+$accent-green: $green; // Success states
+$accent-teal: $primary; // Info states
+$accent-yellow: $yellow; // Warning states
+$accent-orange: $red; // Alert states
+$accent-red: $error; // Error/danger states
+
+/* ---------------------------- */
+/* UI Element Colors            */
+/* ---------------------------- */
+$shadow-color: $shadow; // Drop shadows
+$ws-active: $outline; // Active workspace indicator
+$ws-hover: $magenta; // Workspace hover state

@@ -29,7 +29,7 @@ def process_and_apply_css(app: Application):
         else:
             logger.exception(f"{Colors.ERROR}[Main]Failed to compile sass!")
             logger.exception(f"{Colors.ERROR}[Main] {output}")
-            from gi.repository import GLib
+
 
             GLib.idle_add(lambda: app.set_stylesheet_from_string(""))
 
