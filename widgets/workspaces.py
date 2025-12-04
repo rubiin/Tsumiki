@@ -3,14 +3,15 @@ from fabric.hyprland.widgets import HyprlandWorkspaces as Workspaces
 from fabric.utils import bulk_connect
 
 from shared.widget_container import BoxWidget
-from utils.functions import unique_list
+from utils.functions import get_distro_icon, unique_list
+from utils.widget_utils import nerd_font_icon
 
 
 class WorkSpacesWidget(BoxWidget):
     """A widget to display the current workspaces."""
 
     def __init__(self, **kwargs):
-        super().__init__(name="workspaces", **kwargs)
+        super().__init__(name="workspaces", spacing=1, **kwargs)
 
         config = self.config
         self.ignored_ws = {int(x) for x in unique_list(config.get("ignored", []))}
@@ -20,9 +21,14 @@ class WorkSpacesWidget(BoxWidget):
         self.hide_unoccupied = config.get("hide_unoccupied", False)
         self.show_numbered = config.get("show_numbered", True)
 
+        self.icon = nerd_font_icon(
+            icon=get_distro_icon(),
+            props={"style_classes": ["panel-font-icon"]},
+        )
+
         # Create a HyperlandWorkspace widget to manage workspace buttons
         self.workspace = Workspaces(
-            name="workspaces",
+            name="workspaces_widget",
             spacing=4,
             # Create buttons for each workspace if occupied
             buttons=None
@@ -39,7 +45,7 @@ class WorkSpacesWidget(BoxWidget):
         )
 
         # Add the HyperlandWorkspace widget as a child
-        self.children = self.workspace
+        self.children = (self.icon, self.workspace)
 
     def _create_workspace_label(self, ws_id: int) -> str:
         return self.icon_map.get(str(ws_id), self.default_format.format(id=ws_id))

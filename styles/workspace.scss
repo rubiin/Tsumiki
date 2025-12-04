@@ -8,60 +8,27 @@ $workspace-transition: padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
 /** workspace switcher widget */
 
 #workspaces {
-  font-weight: 700;
-  padding: .19em 1em;
-  border: if(variable.$bar-widgets-workspaces-border-enabled, variable.$border, none);
-  border-radius: variable.$bar-widgets-workspaces-border-radius;
-  border-width: variable.$bar-widgets-workspaces-border-width;
 
-  &>button {
-    padding: variable.$bar-widgets-workspaces-pill-height variable.$bar-widgets-workspaces-pill-width;
-    transition: $workspace-transition;
-    border-radius: variable.$radius-large;
-    background-color: theme.$background;
+  .panel-font-icon {
+    font-size: 1.2rem;
+  }
 
-    label {
-      color: theme.$text-main;
-      transition: inherit;
-    }
+#workspaces_widget {
+    font-weight: 700;
+    padding: .19em 1em;
+    border: if(variable.$bar-widgets-workspaces-border-enabled, variable.$border, none);
+    border-radius: variable.$bar-widgets-workspaces-border-radius;
+    border-width: variable.$bar-widgets-workspaces-border-width;
 
-    &:hover {
-      background-color: theme.$ws-hover;
-
-      label {
-        color: theme.$background-dark;
-      }
-    }
-
-    &.active {
-      font-weight: 600;
-      min-width: 1.4rem;
+    &>button {
+      padding: variable.$bar-widgets-workspaces-pill-height variable.$bar-widgets-workspaces-pill-width;
       transition: $workspace-transition;
-      padding-left: variable.$bar-widgets-workspaces-pill-active_width;
-      padding-right: variable.$bar-widgets-workspaces-pill-active_width;
-      border: if(variable.$bar-widgets-workspaces-pill-border-enabled, variable.$border, none);
-      border-radius: variable.$bar-widgets-workspaces-pill-border-radius;
-      border-width: variable.$bar-widgets-workspaces-pill-border-width;
-
-
-
-    }
-
-    &.unoccupied {
-      opacity: .5;
-
-      &:hover {
-        opacity: 1;
-      }
-    }
-
-    &.occupied {
-      opacity: 1;
-      background-color: rgba(theme.$text-main, 0.15);
+      border-radius: variable.$radius-large;
+      background-color: theme.$background;
 
       label {
         color: theme.$text-main;
-        font-weight: 600;
+        transition: inherit;
       }
 
       &:hover {
@@ -69,6 +36,46 @@ $workspace-transition: padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
 
         label {
           color: theme.$background-dark;
+        }
+      }
+
+      &.active {
+        font-weight: 600;
+        min-width: 1.4rem;
+        transition: $workspace-transition;
+        padding-left: variable.$bar-widgets-workspaces-pill-active_width;
+        padding-right: variable.$bar-widgets-workspaces-pill-active_width;
+        border: if(variable.$bar-widgets-workspaces-pill-border-enabled, variable.$border, none);
+        border-radius: variable.$bar-widgets-workspaces-pill-border-radius;
+        border-width: variable.$bar-widgets-workspaces-pill-border-width;
+
+
+
+      }
+
+      &.unoccupied {
+        opacity: .5;
+
+        &:hover {
+          opacity: 1;
+        }
+      }
+
+      &.occupied {
+        opacity: 1;
+        background-color: rgba(theme.$text-main, 0.15);
+
+        label {
+          color: theme.$text-main;
+          font-weight: 600;
+        }
+
+        &:hover {
+          background-color: theme.$ws-hover;
+
+          label {
+            color: theme.$background-dark;
+          }
         }
       }
     }
