@@ -1,13 +1,14 @@
 import os
 
 from fabric.core.service import Service, Signal
-from fabric.utils import exec_shell_command, exec_shell_command_async, logger
+from fabric.utils import exec_shell_command, exec_shell_command_async, get_relative_path
+from loguru import logger
 
 import utils.functions as helpers
 from utils.config import theme_config
 
 # Config path constant
-_CONFIG_PATH = os.path.expanduser("~/.config/tsumiki/assets/matugen/config.toml")
+_CONFIG_PATH = get_relative_path("../assets/matugen/config.toml")
 
 
 class MatugenService(Service):
@@ -47,9 +48,7 @@ class MatugenService(Service):
 
     def generate(self, image_path: str | None = None) -> None:
         """Generate colors from an image asynchronously."""
-        image_path = image_path or os.path.expanduser(
-            self._config.get("wallpaper", "")
-        )
+        image_path = image_path or os.path.expanduser(self._config.get("wallpaper", ""))
 
         if not os.path.exists(image_path):
             self.emit("generation_failed", f"Image not found: {image_path}")
@@ -69,9 +68,7 @@ class MatugenService(Service):
 
     def generate_sync(self, image_path: str | None = None) -> bool:
         """Generate colors from an image synchronously."""
-        image_path = image_path or os.path.expanduser(
-            self._config.get("wallpaper", "")
-        )
+        image_path = image_path or os.path.expanduser(self._config.get("wallpaper", ""))
 
         if not os.path.exists(image_path):
             self.emit("generation_failed", f"Image not found: {image_path}")
