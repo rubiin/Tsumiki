@@ -53,7 +53,7 @@ class MatugenService(Service):
 
     # --- Properties ---
 
-    @Property(bool, "read-write")
+    @Property(bool, "read-write", default_value=False)
     def enabled(self) -> bool:
         """Whether matugen is enabled."""
         return self._enabled
@@ -135,7 +135,7 @@ class MatugenService(Service):
             return
         self._mode = value
 
-    @Property(bool, "read-write")
+    @Property(bool, "read-write", default_value=True)
     def quiet(self) -> bool:
         """Whether to run in quiet mode (-q flag)."""
         return self._quiet
