@@ -369,10 +369,10 @@ $slider-height: 12px;
       }
 
       &.active {
-        background-color: theme.$accent-blue;
+        background-color: theme.$ws-hover;
 
         &:hover {
-          background-color: color.mix(theme.$accent-blue, black, 85%);
+          background-color: color.mix(theme.$ws-hover, black, 85%);
         }
 
         label {
@@ -413,22 +413,18 @@ $slider-height: 12px;
       }
 
       &.active button {
-        background-color: theme.$accent-blue;
+        background-color: theme.$ws-hover;
         color: color.mix(#000000, white, 8%);
         padding-left: common.toEm(1);
         padding-right: common.toEm(4);
 
         image, label {
-          background-color: theme.$accent-blue;
+          background-color: transparent;
           color: color.mix(#000000, white, 8%);
         }
 
         &:hover, &:active {
           background-color: color.mix(theme.$accent-blue, black, 90%);
-
-          image, label {
-            background-color: color.mix(theme.$accent-blue, black, 90%);
-          }
         }
       }
     }

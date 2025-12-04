@@ -36,8 +36,7 @@ class MatugenService(Service):
         matugen_config = theme_config.get("matugen", {})
 
         # Configuration with theme.json values as defaults
-        self._enabled: bool = matugen_config.get("enabled", False)
-        self._image_path: str = os.path.expanduser(matugen_config.get("image", ""))
+        self._image_path: str = os.path.expanduser(matugen_config.get("wallpaper", ""))
         self._scheme: str = matugen_config.get("scheme", "tonal-spot")
         self._contrast: float = matugen_config.get("contrast", 0.0)
         self._mode: str = matugen_config.get("mode", "dark")
@@ -46,15 +45,6 @@ class MatugenService(Service):
         )
 
         logger.info(f"{Colors.INFO}Matugen service initialized")
-
-    @Property(bool, "read-write", default_value=False)
-    def enabled(self) -> bool:
-        """Whether matugen is enabled."""
-        return self._enabled
-
-    @enabled.setter
-    def enabled(self, value: bool):
-        self._enabled = value
 
     @Property(str, "read-write")
     def image_path(self) -> str:
@@ -144,6 +134,12 @@ class MatugenService(Service):
         if image_path is None:
             image_path = self._image_path
 
+        if not os.path.exists(image_path):
+            error_msg = f"Image path does not exist: {image_path}"
+            logger.error(f"{Colors.ERROR}{error_msg}")
+            self.emit("generation_failed", error_msg)
+            return
+
         try:
             cmd = f"matugen image -q {image_path} -t {self._scheme}"
             cmd += f" --mode {self._mode} --contrast {self._contrast}"
@@ -178,6 +174,12 @@ class MatugenService(Service):
 
         if image_path is None:
             image_path = self._image_path
+
+        if not os.path.exists(image_path):
+            error_msg = f"Image path does not exist: {image_path}"
+            logger.error(f"{Colors.ERROR}{error_msg}")
+            self.emit("generation_failed", error_msg)
+            return False
 
         try:
             cmd = f"matugen image -q {image_path} -t {self._scheme}"
