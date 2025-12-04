@@ -1,3 +1,8 @@
+---
+title: Configuration
+description: Tsumiki configuration options and widget settings
+---
+
 # Tsumiki Configuration Documentation
 
 - **`$schema`**: `str` (default: "./tsumiki.schema.json")
