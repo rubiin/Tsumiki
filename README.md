@@ -60,6 +60,9 @@ The name Tsumiki (pronounced as su-me-ki) comes from the Japanese word "tsumiki"
 - 🎨 **Fully Themeable**
   Customize fonts, colors, layouts, and behavior using the power of Fabric.
 
+- 🎨 **Material You Theming**
+  Generate dynamic color schemes from your wallpaper using [Matugen](https://github.com/InioX/matugen). Configure in `theme.json` to automatically extract colors and apply Material You design.
+
 - ⚙️ **Highly Configurable**
   Control the positioning, behavior, and appearance of every widget and element. Tailor the experience to fit your exact needs.
 
@@ -118,6 +121,9 @@ kitty
 ### Optional
 
 ```sh
+
+## To generate Material You color schemes from wallpaper
+matugen
 
 ## To check for updates using the default pacman script in the updates module
 pacman-contrib
@@ -198,7 +204,7 @@ sudo pacman -S --noconfirm --needed pipewire playerctl dart-sass power-profiles-
 Using `yay` to install the required AUR packages:
 
 ```sh
-yay -S --needed	python-fabric-git gnome-bluetooth-3.0 python-rlottie-python python-pytomlpp slurp imagemagick tesseract tesseract-data-eng ttf-jetbrains-mono-nerd grimblast-git python-ijson glace-git
+yay -S --needed	python-fabric-git gnome-bluetooth-3.0 python-rlottie-python python-pytomlpp slurp imagemagick tesseract tesseract-data-eng ttf-jetbrains-mono-nerd grimblast-git python-ijson glace-git matugen-bin
 ```
 
 If you have something else besides `yay`, install with the respective aur helper.

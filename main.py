@@ -29,7 +29,6 @@ def process_and_apply_css(app: Application):
         else:
             logger.exception(f"{Colors.ERROR}[Main]Failed to compile sass!")
             logger.exception(f"{Colors.ERROR}[Main] {output}")
-            from gi.repository import GLib
 
             GLib.idle_add(lambda: app.set_stylesheet_from_string(""))
 
@@ -45,9 +44,17 @@ def main():
     general_options = widget_config.get("general", {})
     module_options = widget_config.get("modules", {})
 
-    helpers.ensure_directory(APP_DATA_DIRECTORY)
-    helpers.copy_theme(theme_config.get("name", "catppuccin-mocha"))
     helpers.check_executable_exists("sass")
+    helpers.ensure_directory(APP_DATA_DIRECTORY)
+
+    # Check if matugen is enabled and generate palette
+    matugen_config = theme_config.get("matugen", {})
+    if matugen_config.get("enabled", False):
+        from services import matugen_service
+
+        matugen_service.generate_sync()
+    else:
+        helpers.copy_theme(theme_config.get("name", "catppuccin-mocha"))
 
     helpers.set_process_name(APPLICATION_NAME)
 

@@ -1,0 +1,23 @@
+
+[config]
+# If set to enabled, it will check for updates when you run the matugen command, notifying you that an update is avaiable.
+# WARNING: Matugen needs to be compiled with the `update-informer` feature for this to work.
+version_check = false
+
+# The color which should be used as the source_color if no good color was found from an image.
+# Can be defined in any css format.
+# The cli flag will override this if used.
+fallback_color = "#ffbf9b"
+
+[config.custom_colors]
+red     = { color = "#FF0000", blend = true }
+green   = { color = "#00FF00", blend = true }
+yellow  = { color = "#FFFF00", blend = true }
+blue    = { color = "#0000FF", blend = true }
+magenta = { color = "#FF00FF", blend = true }
+cyan    = { color = "#00FFFF", blend = true }
+white   = { color = "#FFFFFF", blend = true }
+
+[templates.tsumiki]
+input_path = "~/.config/tsumiki/assets/matugen/matugen.scss"
+output_path = "~/.config/tsumiki/styles/theme.scss"

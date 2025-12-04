@@ -11,7 +11,7 @@
   border-width: variable.$bar-widgets-taskbar-border-width;
   font-style: normal;
   color: theme.$text-main;
-  background-color: theme.$background-dark;
+  background-color: theme.$bar-background;
 
   &-box {
     margin: 0 variable.$bar-widgets-taskbar-spacing;

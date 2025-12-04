@@ -125,14 +125,14 @@ class KanbanNote(EventBox):
         self.label.set_line_wrap_mode(Gtk.WrapMode.WORD)
 
         self.delete_btn = Button(
-            name="kanban-btn", child=Label(name="kanban-btn-neg", markup="")
+            name="kanban-btn",
+            child=Label(name="kanban-btn-neg", markup=""),
+            v_align="start",
         )
         self.delete_btn.connect("clicked", self.on_delete_clicked)
 
-        self.center_btn = CenterBox(orientation="v", start_children=[self.delete_btn])
-
         self.box.pack_start(self.label, True, True, 0)
-        self.box.pack_start(self.center_btn, False, False, 0)
+        self.box.pack_start(self.delete_btn, False, False, 0)
         self.add(self.box)
         self.show_all()
 

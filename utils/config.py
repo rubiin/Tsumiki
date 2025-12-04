@@ -93,7 +93,7 @@ class TsumikiConfig:
         """Generate SCSS settings file from theme config."""
         logger.info("[CONFIG] Applying css settings...")
 
-        css_styles = flatten_dict(exclude_keys(self.theme_config, ["name"]))
+        css_styles = flatten_dict(exclude_keys(self.theme_config, ["name", "matugen"]))
 
         # Use list comprehension and join for faster string building
         lines = [

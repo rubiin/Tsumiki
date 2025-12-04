@@ -1,5 +1,12 @@
 {
 	"name": "catpuccin-mocha",
+	"matugen": {
+		"enabled": true,
+		"wallpaper": "~/1.jpg",
+		"scheme": "tonal-spot",
+		"mode": "dark",
+		"contrast": 0
+	},
 	"font": {
 		"name": "JetBrainsMono Nerd Font Propo",
 		"size": "1rem",

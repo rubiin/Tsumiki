@@ -671,6 +671,39 @@ def check_executable_exists(executable_name):
         )  # Raise an error if the executable is not found and exit the application
 
 
+def ensure_matugen_config() -> bool:
+    """Ensure matugen config.toml exists in ~/.config/matugen/.
+
+    If the config doesn't exist, copies the template from assets folder.
+
+    Returns:
+        True if config exists or was successfully copied, False otherwise.
+    """
+    matugen_config_dir = os.path.expanduser("~/.config/matugen")
+    matugen_config_file = os.path.join(matugen_config_dir, "config.toml")
+    template_file = get_relative_path("../assets/matugen/config.toml")
+
+    # Check if config already exists
+    if os.path.exists(matugen_config_file):
+        logger.info(f"{Colors.INFO}Matugen config found at {matugen_config_file}")
+        return True
+
+    try:
+        # Create config directory if it doesn't exist
+        os.makedirs(matugen_config_dir, exist_ok=True)
+
+        # Copy template to config location
+        shutil.copy2(template_file, matugen_config_file)
+        logger.info(
+            f"{Colors.OKGREEN}Copied matugen config template to {matugen_config_file}"
+        )
+        return True
+
+    except OSError as e:
+        logger.error(f"{Colors.ERROR}Failed to copy matugen config: {e}")
+        return False
+
+
 # Function to send a notification
 @cooldown(1)
 def send_notification(

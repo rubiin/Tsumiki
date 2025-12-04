@@ -59,13 +59,13 @@
       background-color: theme.$text-main;
 
       #kanban-btn-label {
-        color: theme.$shadow-color;
+        color: theme.$background;
       }
     }
   }
 
   #kanban-btn {
-    background-color: theme.$shadow-color;
+    background-color: theme.$surface-disabled;
   }
 
   #kanban-btn-label,

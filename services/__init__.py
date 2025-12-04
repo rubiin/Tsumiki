@@ -43,6 +43,13 @@ def get_power_profiles_service():
     return _get_service("power_profiles", PowerProfiles)
 
 
+def get_matugen_service():
+    """Get the matugen service (lazy-loaded)."""
+    from .matugen import MatugenService
+
+    return _get_service("matugen", MatugenService)
+
+
 # Backward compatibility - these now trigger lazy loading on access
 class _LazyServiceProxy:
     """Proxy that lazily loads a service on first attribute access."""
@@ -69,3 +76,4 @@ audio_service = _LazyServiceProxy(get_audio_service)
 notification_service = _LazyServiceProxy(get_notification_service)
 bluetooth_service = _LazyServiceProxy(get_bluetooth_service)
 power_pfl_service = _LazyServiceProxy(get_power_profiles_service)
+matugen_service = _LazyServiceProxy(get_matugen_service)
