@@ -12,7 +12,7 @@ $slider-height: 12px;
 
 #dialog {
   &-wrapper {
-    background-color: theme.$background-dark;
+    background-color: theme.$background-alt;
     border-radius: variable.$radius;
     padding: 1rem 2.5rem;
     border: 1px solid theme.$accent-blue;
@@ -309,7 +309,7 @@ $slider-height: 12px;
           background-color: theme.$text-main;
 
           &>* {
-            color: theme.$background-dark;
+            color: theme.$background;
           }
         }
       }
@@ -327,7 +327,7 @@ $slider-height: 12px;
       #bluetooth-device-box.submenu-button {
         .submenu-button {
           padding: common.toEm(6);
-          background-color: theme.$background-dark;
+          background-color: theme.$surface-neutral;
 
           label {
             font-size: 11px;

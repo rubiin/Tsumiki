@@ -13,8 +13,8 @@
     padding: 10px;
 
     selection {
-      color: theme.$background-alt;
-      background-color: theme.$background;
+      color: theme.$background;
+      background-color: theme.$text-main;
     }
   }
 
@@ -33,7 +33,7 @@
 
       #close-label,
       #clear-label {
-        color: theme.$shadow-color;
+        color: theme.$background;
       }
     }
   }

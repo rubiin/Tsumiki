@@ -35,7 +35,7 @@ $workspace-transition: padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
         background-color: theme.$ws-hover;
 
         label {
-          color: theme.$background-dark;
+          color: theme.$background;
         }
       }
 
@@ -74,7 +74,7 @@ $workspace-transition: padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
           background-color: theme.$ws-hover;
 
           label {
-            color: theme.$background-dark;
+            color: theme.$background;
           }
         }
       }
