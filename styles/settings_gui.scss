@@ -1,0 +1,157 @@
+/* Settings GUI Styles */
+@use "theme";
+@use "variable";
+
+#settings-window {
+    background-color: theme.$background;
+    border-radius: variable.$radius;
+}
+
+#settings-sidebar {
+    min-width: 160px;
+    padding: 8px;
+    background-color: theme.$background-alt;
+    border-radius: variable.$radius 0 0 variable.$radius;
+}
+
+#settings-sidebar button {
+    padding: 10px 14px;
+    border-radius: variable.$radius;
+    background-color: transparent;
+    margin-bottom: 4px;
+}
+
+#settings-sidebar button:hover {
+    background-color: theme.$surface-highlight;
+}
+
+#settings-sidebar button:checked {
+    background-color: theme.$surface-disabled;
+}
+
+#settings-sidebar button:checked label {
+    color: theme.$accent-blue;
+}
+
+#settings-section-header {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: theme.$accent-blue;
+    margin-bottom: 10px;
+    margin-top: 16px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid theme.$accent-blue;
+    letter-spacing: 0.5px;
+}
+
+#settings-row {
+    padding: 6px 0;
+}
+
+#settings-reset-btn,
+#settings-close-btn,
+#settings-save-btn {
+    padding: 8px 16px;
+    border-radius: variable.$radius;
+    font-weight: 500;
+}
+
+#settings-reset-btn,
+#settings-close-btn {
+    background-color: transparent;
+    color: theme.$text-main;
+}
+
+#settings-reset-btn:hover,
+#settings-close-btn:hover {
+    background-color: theme.$surface-highlight;
+}
+
+#settings-save-btn {
+    background-color: theme.$accent-blue;
+    color: theme.$background;
+}
+
+#settings-save-btn:hover {
+    background-color: theme.$accent-teal;
+}
+
+#settings-save-btn:disabled {
+    opacity: 0.5;
+}
+
+/* Form controls */
+switch {
+    min-width: 44px;
+    min-height: 22px;
+    border-radius: 11px;
+    background-color: theme.$surface-disabled;
+    border: none;
+}
+
+switch:checked {
+    background-color: theme.$accent-blue;
+}
+
+switch slider {
+    min-width: 18px;
+    min-height: 18px;
+    border-radius: 9px;
+    background-color: white;
+    margin: 2px;
+}
+
+spinbutton {
+    border-radius: variable.$radius;
+    background-color: theme.$surface-neutral;
+    border: 1px solid theme.$surface-disabled;
+    color: theme.$text-main;
+    min-width: 80px;
+}
+
+spinbutton entry {
+    padding: 4px 8px;
+    background-color: transparent;
+    border: none;
+    color: theme.$text-main;
+}
+
+spinbutton button {
+    padding: 4px 8px;
+    background-color: transparent;
+    border: none;
+    color: theme.$text-main;
+}
+
+spinbutton button:hover {
+    background-color: theme.$surface-highlight;
+}
+
+combobox {
+    border-radius: variable.$radius;
+    background-color: theme.$surface-neutral;
+    border: 1px solid theme.$surface-disabled;
+    color: theme.$text-main;
+    min-width: 120px;
+}
+
+combobox button {
+    padding: 4px 10px;
+    background-color: transparent;
+}
+
+combobox:hover {
+    background-color: theme.$surface-highlight;
+}
+
+entry {
+    padding: 6px 10px;
+    border-radius: variable.$radius;
+    background-color: theme.$surface-neutral;
+    border: 1px solid theme.$surface-disabled;
+    color: theme.$text-main;
+}
+
+entry:focus {
+    border-color: theme.$accent-blue;
+}

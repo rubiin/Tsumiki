@@ -126,6 +126,7 @@ DEFAULT_CONFIG = {
             "mode": "circular",
             "graph_length": 4,
         },
+        "settings": {"icon": "\udb81\udc93", "tooltip": True, "label": False},
         "date_time": {
             "format": "%b %d %H:%M",
             "calendar": True,

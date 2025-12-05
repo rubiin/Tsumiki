@@ -105,6 +105,7 @@ LAZY_WIDGETS_LIST = {
     "quick_settings": "widgets.quick_settings.quick_settings.QuickSettingsButtonWidget",
     "recorder": "widgets.recorder.RecorderWidget",
     "screenshot": "widgets.screenshot.ScreenShotWidget",
+    "settings": "widgets.settings.SettingsWidget",
     "spacing": "widgets.utility_widgets.SpacingWidget",
     "stopwatch": "widgets.stopwatch.StopWatchWidget",
     "storage": "widgets.stats.StorageWidget",
