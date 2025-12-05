@@ -1,7 +1,7 @@
 import os
 
 from fabric import Application
-from fabric.utils import exec_shell_command, get_relative_path, logger
+from fabric.utils import exec_shell_command, get_relative_path, logger, monitor_file
 
 import utils.functions as helpers
 from utils.colors import Colors
@@ -128,14 +128,13 @@ def main():
         from utils.config_watcher import start_config_watching
 
         start_config_watching()
-        logger.info(f"{Colors.INFO}[Main] Config auto-reload enabled")
 
-    # if general_options.get("monitor_styles", False):
-    #     main_css_file = monitor_file(get_relative_path("styles"))
-    #     common_css_file = monitor_file(get_relative_path("styles/common"))
-    #     main_css_file.connect("changed", lambda *_: process_and_apply_css(app))
-    #     common_css_file.connect("changed", lambda *_: process_and_apply_css(app))
-    # else:
+    if general_options.get("monitor_styles", False):
+        main_css_file = monitor_file(get_relative_path("styles"))
+        common_css_file = monitor_file(get_relative_path("styles/common"))
+        main_css_file.connect("changed", lambda *_: process_and_apply_css(app))
+        common_css_file.connect("changed", lambda *_: process_and_apply_css(app))
+
     process_and_apply_css(app)
 
     logger.info(f"{Colors.INFO}[Main] Starting {APPLICATION_NAME}...")
