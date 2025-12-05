@@ -35,7 +35,9 @@ class BrightnessSlider(SettingSlider):
 
     @cooldown(0.1)
     def on_scale_move(self, _, __, moved_pos: float):
-        self.client.screen_brightness = moved_pos
+        # Convert percentage (0-100) to raw brightness value (0-max_screen)
+        raw_value = int((moved_pos / 100) * self.client.max_screen)
+        self.client.screen_brightness = raw_value
 
     def on_brightness_change(self, service: BrightnessService, _):
         brightness_percent = service.screen_brightness_percentage
