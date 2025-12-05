@@ -2,7 +2,7 @@
 
 from fabric.widgets.label import Label
 
-from modules.settings_gui import SettingsGUI
+from modules.settings_gui import open_settings
 from shared.widget_container import ButtonWidget
 from utils.widget_utils import nerd_font_icon
 
@@ -12,8 +12,6 @@ class SettingsWidget(ButtonWidget):
 
     def __init__(self, **kwargs):
         super().__init__(name="settings", **kwargs)
-
-        self._settings_window = None
 
         self.container_box.children = nerd_font_icon(
             icon=self.config.get("icon", "󰒓"),
@@ -28,11 +26,4 @@ class SettingsWidget(ButtonWidget):
         if self.config.get("tooltip", True):
             self.set_tooltip_text("Open Settings")
 
-        self.connect("clicked", self.on_click)
-
-    def on_click(self, *_):
-        """Open the settings window."""
-        if self._settings_window is None:
-            self._settings_window = SettingsGUI()
-
-        self._settings_window.toggle()
+        self.connect("clicked", lambda *_: open_settings())

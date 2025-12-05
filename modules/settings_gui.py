@@ -3,10 +3,8 @@ Settings GUI for Tsumiki
 Based on Ax-Shell's settings pattern - uses a regular Window with tabs.
 """
 
-import json
-
+from fabric.utils import exec_shell_command_async
 from fabric.widgets.box import Box
-from fabric.widgets.button import Button
 from fabric.widgets.entry import Entry
 from fabric.widgets.label import Label
 from fabric.widgets.scrolledwindow import ScrolledWindow
@@ -459,15 +457,11 @@ class SettingsGUI(Window):
             self.modified = False
             self.save_btn.set_sensitive(False)
 
-            from fabric.utils import exec_shell_command_async
-
             exec_shell_command_async(
                 'notify-send "Tsumiki" "Configuration saved"',
                 lambda _: None,
             )
         except Exception as e:
-            from fabric.utils import exec_shell_command_async
-
             exec_shell_command_async(
                 f'notify-send "Tsumiki" "Failed to save: {e}"',
                 lambda _: None,
