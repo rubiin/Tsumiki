@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.9.1](https://github.com/rubiin/Tsumiki/compare/v2.9.0...v2.9.1) (2025-12-05)
+
+
+### 🐛 Bug Fixes
+
+* closing animation for notifications ([3e4f478](https://github.com/rubiin/Tsumiki/commit/3e4f478fc61c78e14529ffce8bd5e3d5ed9d41e0))
+
 ## [2.9.0](https://github.com/rubiin/Tsumiki/compare/v2.8.1...v2.9.0) (2025-12-05)
 
 
