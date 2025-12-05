@@ -1,5 +1,53 @@
 # Changelog
 
+## [2.9.0](https://github.com/rubiin/Tsumiki/compare/v2.8.1...v2.9.0) (2025-12-05)
+
+
+### 🚀 New Features
+
+* add documentation for Matugen theming integration ([ebd1d7f](https://github.com/rubiin/Tsumiki/commit/ebd1d7f6851e34dae0b69985319a671e2833a159))
+* add GitHub Actions workflow for deploying documentation to GitHub Pages ([f47c923](https://github.com/rubiin/Tsumiki/commit/f47c923f7b1b842488f369f680b02754760de743))
+* add GitHub Actions workflow for syncing documentation and wiki updates ([6b55fdb](https://github.com/rubiin/Tsumiki/commit/6b55fdb769d6e4e82797cbdd398c982808974a02))
+* add matugen and few others ([#263](https://github.com/rubiin/Tsumiki/issues/263)) ([59dac83](https://github.com/rubiin/Tsumiki/commit/59dac836f2fd28847720b388597d1925a039353d))
+* add reusable mixins for widget handling and refactor stat widgets for improved structure ([310084a](https://github.com/rubiin/Tsumiki/commit/310084af6b592072c9f1dbb134db6315b6291203))
+* enable CSS file monitoring for automatic reloading in main application ([a172978](https://github.com/rubiin/Tsumiki/commit/a17297864403d1879b68c77815ceb93d118b0aa8))
+* enhance docs site update with metadata for configuration options ([33efb2e](https://github.com/rubiin/Tsumiki/commit/33efb2ebfd29bba0dd46529154a72896cbeaed9c))
+* enhance widget handling with additional methods and improved dynamic loading ([865719b](https://github.com/rubiin/Tsumiki/commit/865719b112e58e83e8754c679bd01e506581d505))
+* set site and base URL in Astro configuration ([5e5ae7a](https://github.com/rubiin/Tsumiki/commit/5e5ae7a84bcd5eecc617ccdf78f6f39852c0bd00))
+* update Node and pnpm versions in GitHub Actions workflow; enhance documentation for theme support ([8fd8e7f](https://github.com/rubiin/Tsumiki/commit/8fd8e7fce9b393d68dae5fb503ee0a6495fa15fe))
+* update wallpaper and color scheme in theme configuration; disable shadow for widgets ([b6225bf](https://github.com/rubiin/Tsumiki/commit/b6225bfba71b17b0e00af7b859bc4339e903c89a))
+
+
+### 🐛 Bug Fixes
+
+* correct widget list handling in CollapsibleGroupWidget to avoid falsy evaluation ([252520e](https://github.com/rubiin/Tsumiki/commit/252520e90c99c13bbb290dca1c03564dd377a7a2))
+* correct YAML formatting for docs site update ([a5f7931](https://github.com/rubiin/Tsumiki/commit/a5f79312f05504af0a0b40bab056c289612049fa))
+* ensure brightness percentage is calculated correctly; handle empty theme config ([e4b297c](https://github.com/rubiin/Tsumiki/commit/e4b297c0551ad3ab076a70014b3008be8459af1d))
+* update README for clarity in project description ([2d2acdd](https://github.com/rubiin/Tsumiki/commit/2d2acdd846c429b742b2b5c0089af3f00669efaa))
+
+
+### ⚙️ Chores
+
+* remove GitHub Actions workflow for deploying documentation; update site and base URL in Astro configuration ([716fd0d](https://github.com/rubiin/Tsumiki/commit/716fd0d718467147ccb1e9e8b2cf8e909da9daa4))
+
+
+### ♻️ Code Refactoring
+
+* add auto-hide feature to status bar with configurable timeout ([08d39aa](https://github.com/rubiin/Tsumiki/commit/08d39aa4be6f66c118476f2783fd5103fda5e0a6))
+* enhance workspace widget with icon support and improved layout ([bed1a87](https://github.com/rubiin/Tsumiki/commit/bed1a87500545f86a4fc58f9440d3c5336121e1b))
+* implement lazy initialization for overlay window in PopoverManager ([f4c43f3](https://github.com/rubiin/Tsumiki/commit/f4c43f3422f2119e9821ac04a9deefc608247ccc))
+* implement lazy loading for applications in AppUtils to optimize memory usage ([4106568](https://github.com/rubiin/Tsumiki/commit/4106568781cf44fadffe53f25d173ce634306406))
+* implement lazy loading for icon cache in IconResolver to improve performance ([1f4400a](https://github.com/rubiin/Tsumiki/commit/1f4400aebfae9a741591ffd054b02cf70a01f04b))
+* implement lazy loading for keyboard layout map to optimize memory usage ([e713a1c](https://github.com/rubiin/Tsumiki/commit/e713a1cb22165e366d04319cdad1f7ba304a0da6))
+* improve logging and streamline emoji data loading in EmojiPickerMenu ([302dc21](https://github.com/rubiin/Tsumiki/commit/302dc21bc88f440f7b4c1df4e6d9506cde1100da))
+* integrate StatDisplayMixin into widget classes for improved display handling ([f831fbe](https://github.com/rubiin/Tsumiki/commit/f831fbe099460f150d52a6dc0c4ac5606ba4b12b))
+* remove ensure_matugen_config function for cleaner code ([5253c68](https://github.com/rubiin/Tsumiki/commit/5253c68beacb7e2856b8886574bc0cfe5d0a2160))
+* remove unused __slots__ in PopoverMixin for cleaner code ([71a3331](https://github.com/rubiin/Tsumiki/commit/71a333197e719f06735d86e5c4ad68b0c36936c6))
+* remove unused Matugen class and associated files for cleaner code ([7ccd6ef](https://github.com/rubiin/Tsumiki/commit/7ccd6ef1bd987fdbb9e5e0fde6d8aea165a42daf))
+* replace cache with lru_cache in animator.py for memory efficiency; add MAX_IMAGE_CACHE in cliphist.py to limit image cache size ([7df0f7e](https://github.com/rubiin/Tsumiki/commit/7df0f7e660501aac34acf9c75a12114f2dfa20d8))
+* simplify docstrings in various classes for clarity and brevity ([f7074c4](https://github.com/rubiin/Tsumiki/commit/f7074c4385a2cb8d551d1c810ffa1606eeccd243))
+* update FAQ content for Tsumiki and improve clarity ([ea779a3](https://github.com/rubiin/Tsumiki/commit/ea779a3eeb418f437d5b7388dbe4e7f57649df2d))
+
 ## [2.8.1](https://github.com/rubiin/Tsumiki/compare/v2.10.0...v2.8.1) (2025-12-01)
 
 
