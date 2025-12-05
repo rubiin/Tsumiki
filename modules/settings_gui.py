@@ -5,6 +5,7 @@ Settings GUI for Tsumiki
 from fabric.utils import exec_shell_command_async
 from fabric.widgets.box import Box
 from fabric.widgets.entry import Entry
+from fabric.widgets.image import Image
 from fabric.widgets.label import Label
 from fabric.widgets.scrolledwindow import ScrolledWindow
 from fabric.widgets.stack import Stack
@@ -386,29 +387,32 @@ class SettingsGUI(Window):
 
     def _create_about_tab(self):
         """Create the about tab."""
-        vbox = Box(orientation="v", spacing=18, style="margin: 30px;")
+        from utils.constants import ASSETS_DIR
 
-        vbox.add(
-            Label(
-                markup="<b>Tsumiki</b>",
-                h_align="start",
-                style="font-size: 1.5em; margin-bottom: 8px;",
-            )
+        vbox = Box(orientation="v", spacing=18, style="margin: 30px;", h_align="center")
+
+        # Logo
+        logo = Image(
+            image_file=f"{ASSETS_DIR}/images/logo.png",
+            size=160,
+            h_align="center",
+            v_align="center"
         )
+        vbox.add(logo)
 
         vbox.add(
             Label(
                 label="A modular status bar for Hyprland, powered by Fabric.",
-                h_align="start",
+                h_align="center",
                 style="margin-bottom: 12px;",
             )
         )
 
-        repo_box = Box(orientation="h", spacing=6, h_align="start")
+        repo_box = Box(orientation="h", spacing=6, h_align="center")
         repo_box.add(Label(label="GitHub:", h_align="start"))
         repo_box.add(
             Label(
-                markup='<a href="https://github.com/rubiin/tsumiki">https://github.com/rubiin/tsumiki</a>'
+                markup='<a href="https://github.com/rubiin/tsumiki">rubiin/tsumiki</a>'
             )
         )
         vbox.add(repo_box)
