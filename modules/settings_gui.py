@@ -1,6 +1,5 @@
 """
 Settings GUI for Tsumiki
-Based on Ax-Shell's settings pattern - uses a regular Window with tabs.
 """
 
 from fabric.utils import exec_shell_command_async
@@ -66,10 +65,7 @@ class SettingsGUI(Window):
         )
 
         # Create tabs
-        self.tab_stack.add_titled(self._create_general_tab(), "general", "󰒓 General")
-        self.tab_stack.add_titled(self._create_modules_tab(), "modules", "󰒍 Modules")
-        self.tab_stack.add_titled(self._create_widgets_tab(), "widgets", "󰕰 Widgets")
-        self.tab_stack.add_titled(self._create_about_tab(), "about", "󰋽 About")
+        self._setup_tabs()
 
         # Tab switcher (sidebar)
         tab_switcher = Gtk.StackSwitcher()
@@ -109,6 +105,24 @@ class SettingsGUI(Window):
         # Connect close event
         self.connect("delete-event", self._on_delete)
 
+    def _setup_tabs(self):
+        """Setup all tabs in the stack."""
+        self.tab_stack.add_titled(self._create_general_tab(), "general", "󰒓 General")
+        self.tab_stack.add_titled(self._create_modules_tab(), "modules", "󰒍 Modules")
+        self.tab_stack.add_titled(self._create_widgets_tab(), "widgets", "󰕰 Widgets")
+        self.tab_stack.add_titled(self._create_about_tab(), "about", "󰋽 About")
+
+    def _refresh_tabs(self):
+        """Refresh all tab contents with current config."""
+        current_tab = self.tab_stack.get_visible_child_name()
+
+        for child in self.tab_stack.get_children():
+            self.tab_stack.remove(child)
+
+        self._setup_tabs()
+        self.tab_stack.set_visible_child_name(current_tab)
+        self.show_all()
+
     def _create_scrolled_container(self) -> tuple[ScrolledWindow, Box]:
         """Create a scrolled window with a vbox inside."""
         vbox = Box(orientation="v", spacing=15, style="margin: 15px;")
@@ -132,34 +146,27 @@ class SettingsGUI(Window):
             name="settings-section-header",
         )
 
-    def _create_setting_row(
-        self,
-        label_text: str,
-        widget,
-        tooltip: str = "",
-    ) -> Box:
-        """Create a row with label and control."""
-        row = Box(
-            orientation="h",
-            spacing=12,
-            name="settings-row",
-            h_expand=True,
-        )
-
-        label = Label(
-            label=label_text,
+    def _create_label(self, text: str) -> Label:
+        """Create a standard label for settings."""
+        return Label(
+            label=text.replace("_", " ").title(),
             h_align="start",
             v_align="center",
             h_expand=True,
         )
-        if tooltip:
-            label.set_tooltip_text(tooltip)
 
-        row.add(label)
-        row.add(widget)
-        return row
+    def _create_grid(self, margin_bottom: int = 0) -> Gtk.Grid:
+        """Create a standard grid for settings."""
+        return Gtk.Grid(
+            column_spacing=20,
+            row_spacing=8,
+            margin_start=10,
+            margin_top=5,
+            margin_bottom=margin_bottom,
+            column_homogeneous=False,
+        )
 
-    def _create_switch(self, active: bool, on_change=None) -> Gtk.Switch:
+    def _create_switch(self, active: bool, on_change=None) -> Gtk.Box:
         """Create a GTK switch."""
         switch_container = Gtk.Box(
             orientation=Gtk.Orientation.HORIZONTAL,
@@ -215,23 +222,11 @@ class SettingsGUI(Window):
 
         vbox.add(self._create_section_header("General Settings"))
 
-        grid = Gtk.Grid(
-            column_spacing=20,
-            row_spacing=10,
-            margin_start=10,
-            margin_top=5,
-            column_homogeneous=False,
-        )
+        grid = self._create_grid()
         vbox.add(grid)
 
         for row, (key, value) in enumerate(general.items()):
-            label = Label(
-                label=key.replace("_", " ").title(),
-                h_align="start",
-                v_align="center",
-                h_expand=True,
-            )
-            grid.attach(label, 0, row, 1, 1)
+            grid.attach(self._create_label(key), 0, row, 1, 1)
 
             if isinstance(value, bool):
                 widget = self._create_switch(
@@ -247,44 +242,35 @@ class SettingsGUI(Window):
 
         return scrolled
 
+    def _create_config_section(
+        self, vbox: Box, section_name: str, config_items: dict, path_prefix: str
+    ):
+        """Create a configuration section with grid of controls."""
+        vbox.add(self._create_section_header(section_name.replace("_", " ").title()))
+
+        grid = self._create_grid(margin_bottom=15)
+        vbox.add(grid)
+
+        row = 0
+        for key, value in config_items.items():
+            if isinstance(value, (dict, list)):
+                continue
+
+            grid.attach(self._create_label(key), 0, row, 1, 1)
+
+            path = f"{path_prefix}.{section_name}"
+            widget = self._create_control(path, key, value)
+            grid.attach(widget, 1, row, 1, 1)
+            row += 1
+
     def _create_modules_tab(self):
         """Create the modules settings tab."""
         scrolled, vbox = self._create_scrolled_container()
         modules = self.config.get("modules", {})
 
         for module_name, module_config in modules.items():
-            if not isinstance(module_config, dict):
-                continue
-
-            vbox.add(self._create_section_header(module_name.replace("_", " ").title()))
-
-            grid = Gtk.Grid(
-                column_spacing=20,
-                row_spacing=8,
-                margin_start=10,
-                margin_top=5,
-                margin_bottom=15,
-                column_homogeneous=False,
-            )
-            vbox.add(grid)
-
-            row = 0
-            for key, value in module_config.items():
-                if isinstance(value, (dict, list)):
-                    continue
-
-                label = Label(
-                    label=key.replace("_", " ").title(),
-                    h_align="start",
-                    v_align="center",
-                    h_expand=True,
-                )
-                grid.attach(label, 0, row, 1, 1)
-
-                path = f"modules.{module_name}"
-                widget = self._create_control(path, key, value)
-                grid.attach(widget, 1, row, 1, 1)
-                row += 1
+            if isinstance(module_config, dict):
+                self._create_config_section(vbox, module_name, module_config, "modules")
 
         return scrolled
 
@@ -294,38 +280,8 @@ class SettingsGUI(Window):
         widgets = self.config.get("widgets", {})
 
         for widget_name, widget_cfg in sorted(widgets.items()):
-            if not isinstance(widget_cfg, dict):
-                continue
-
-            vbox.add(self._create_section_header(widget_name.replace("_", " ").title()))
-
-            grid = Gtk.Grid(
-                column_spacing=20,
-                row_spacing=8,
-                margin_start=10,
-                margin_top=5,
-                margin_bottom=15,
-                column_homogeneous=False,
-            )
-            vbox.add(grid)
-
-            row = 0
-            for key, value in widget_cfg.items():
-                if isinstance(value, (dict, list)):
-                    continue
-
-                label = Label(
-                    label=key.replace("_", " ").title(),
-                    h_align="start",
-                    v_align="center",
-                    h_expand=True,
-                )
-                grid.attach(label, 0, row, 1, 1)
-
-                path = f"widgets.{widget_name}"
-                widget = self._create_control(path, key, value)
-                grid.attach(widget, 1, row, 1, 1)
-                row += 1
+            if isinstance(widget_cfg, dict):
+                self._create_config_section(vbox, widget_name, widget_cfg, "widgets")
 
         return scrolled
 
@@ -337,7 +293,7 @@ class SettingsGUI(Window):
                 lambda sw, _, p=path, k=key: self._update_config(p, k, sw.get_active()),
             )
         elif isinstance(value, int):
-            spin = self._create_spinbutton(
+            return self._create_spinbutton(
                 value,
                 0,
                 10000,
@@ -345,9 +301,7 @@ class SettingsGUI(Window):
                     p, k, int(sp.get_value())
                 ),
             )
-            return spin
         elif isinstance(value, str):
-            # Check for enum-like values
             enum_options = self._get_enum_options(key)
             if enum_options:
                 return self._create_combo(
@@ -357,16 +311,14 @@ class SettingsGUI(Window):
                         p, k, cb.get_active_text()
                     ),
                 )
-            else:
-                entry = Entry(text=value, h_expand=False)
-                entry.set_width_chars(15)
-                entry.connect(
-                    "changed",
-                    lambda e, p=path, k=key: self._update_config(p, k, e.get_text()),
-                )
-                return entry
-        else:
-            return Label(label=str(value), h_align="start")
+            entry = Entry(text=value, h_expand=False)
+            entry.set_width_chars(15)
+            entry.connect(
+                "changed",
+                lambda e, p=path, k=key: self._update_config(p, k, e.get_text()),
+            )
+            return entry
+        return Label(label=str(value), h_align="start")
 
     def _get_enum_options(self, key: str) -> list | None:
         """Get enum options for known keys."""
@@ -453,10 +405,8 @@ class SettingsGUI(Window):
         """Save configuration."""
         try:
             write_json_file(configuration.json_config_file, self.config)
-
             self.modified = False
             self.save_btn.set_sensitive(False)
-
             exec_shell_command_async(
                 'notify-send "Tsumiki" "Configuration saved"',
                 lambda _: None,
@@ -472,7 +422,7 @@ class SettingsGUI(Window):
         self.config = dict(widget_config)
         self.modified = False
         self.save_btn.set_sensitive(False)
-        # TODO: Refresh UI controls
+        self._refresh_tabs()
 
     def _on_close(self, *_):
         """Close the window."""
@@ -497,5 +447,4 @@ class SettingsGUI(Window):
 
 def open_settings():
     """Open the settings GUI."""
-    settings = SettingsGUI()
-    settings.toggle()
+    SettingsGUI().toggle()
