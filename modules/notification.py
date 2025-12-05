@@ -310,14 +310,10 @@ class NotificationWidget(EventBox):
         # Add the notification box to the EventBox
         self.add(self.notification_box)
 
-        # Destroy this widget once the notification is closed
+        # Stop timeout when closed (cleanup handled by NotificationRevealer)
         self._notification.connect(
             "closed",
-            lambda *_: (
-                parent.remove(self) if (parent := self.get_parent()) else None,  # type: ignore
-                self.stop_timeout(),
-                self.destroy(),
-            ),
+            lambda *_: self.stop_timeout(),
         )
 
         if self.config.get("auto_dismiss", False):
@@ -400,17 +396,10 @@ class NotificationWidget(EventBox):
             return False
 
         if self._is_dragging:
-            # Check if swipe threshold is met
             if abs(self._swipe_offset) >= _SWIPE_DISMISS_THRESHOLD:
-                # Dismiss notification
                 self._notification.close("dismissed-by-user")
-                self.stop_timeout()
             else:
-                # Reset position with animation
                 self._reset_swipe_position()
-        else:
-            # It was a tap, not a drag - could trigger default action here
-            pass
 
         # Reset drag state
         self._drag_start_x = None
@@ -460,13 +449,14 @@ class NotificationWidget(EventBox):
 
 
 class NotificationRevealer(Revealer):
-    """A widget to reveal a notification."""
+    """A widget to reveal a notification with open/close animations."""
 
     def __init__(self, config: dict, notification: Notification, **kwargs):
         self.notification_box = NotificationWidget(config, notification)
         self.timeout = config.get("timeout", 3000)
         self.notification_box.progress_timeout.max_value = self.timeout
         self._notification = notification
+        self._is_closing = False
 
         super().__init__(
             child=Box(
@@ -500,6 +490,7 @@ class NotificationRevealer(Revealer):
 
     def on_child_revealed(self, *_):
         if not self.get_child_revealed():
+            # Animation finished, now destroy
             self.destroy()
         else:
             if self.timeout > 0:
@@ -510,8 +501,11 @@ class NotificationRevealer(Revealer):
         notification: Notification,
         reason: NotificationCloseReason,
     ):
+        if self._is_closing:
+            return
+        self._is_closing = True
+        # Trigger close animation - destroy happens in on_child_revealed
         self.set_reveal_child(False)
-        self.destroy()
 
 
 class ActionButton(HoverButton):
