@@ -216,7 +216,11 @@ class SettingsGUI(Window):
         vbox.add(self._create_section_header("General Settings"))
 
         grid = Gtk.Grid(
-            column_spacing=20, row_spacing=10, margin_start=10, margin_top=5
+            column_spacing=20,
+            row_spacing=10,
+            margin_start=10,
+            margin_top=5,
+            column_homogeneous=False,
         )
         vbox.add(grid)
 
@@ -225,6 +229,7 @@ class SettingsGUI(Window):
                 label=key.replace("_", " ").title(),
                 h_align="start",
                 v_align="center",
+                h_expand=True,
             )
             grid.attach(label, 0, row, 1, 1)
 
@@ -236,7 +241,7 @@ class SettingsGUI(Window):
                     ),
                 )
             else:
-                widget = Label(label=str(value), h_align="start")
+                widget = Label(label=str(value), h_align="start", h_expand=True)
 
             grid.attach(widget, 1, row, 1, 1)
 
@@ -259,6 +264,7 @@ class SettingsGUI(Window):
                 margin_start=10,
                 margin_top=5,
                 margin_bottom=15,
+                column_homogeneous=False,
             )
             vbox.add(grid)
 
@@ -271,6 +277,7 @@ class SettingsGUI(Window):
                     label=key.replace("_", " ").title(),
                     h_align="start",
                     v_align="center",
+                    h_expand=True,
                 )
                 grid.attach(label, 0, row, 1, 1)
 
@@ -298,6 +305,7 @@ class SettingsGUI(Window):
                 margin_start=10,
                 margin_top=5,
                 margin_bottom=15,
+                column_homogeneous=False,
             )
             vbox.add(grid)
 
@@ -310,6 +318,7 @@ class SettingsGUI(Window):
                     label=key.replace("_", " ").title(),
                     h_align="start",
                     v_align="center",
+                    h_expand=True,
                 )
                 grid.attach(label, 0, row, 1, 1)
 
