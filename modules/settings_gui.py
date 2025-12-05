@@ -166,6 +166,11 @@ class SettingsGUI(Window):
             column_homogeneous=False,
         )
 
+    def _create_expander(self, label: str) -> Gtk.Expander:
+        """Create a GTK expander for nested settings."""
+        expander = Gtk.Expander(label=label, expanded=False, name="settings-expander")
+        return expander
+
     def _create_switch(self, active: bool, on_change=None) -> Gtk.Switch:
         """Create a GTK switch."""
         switch = Gtk.Switch(
@@ -234,33 +239,66 @@ class SettingsGUI(Window):
 
         return scrolled
 
+    def _create_nested_section(
+        self, container: Box, nested_name: str, nested_config: dict, path: str
+    ):
+        """Create an expandable section for nested config."""
+        expander = self._create_expander(nested_name.replace("_", " ").title())
+
+        inner_box = Box(orientation="v", spacing=4, style="margin-left: 20px;")
+        grid = self._create_grid()
+        inner_box.add(grid)
+
+        row = 0
+        for key, value in nested_config.items():
+            if isinstance(value, dict):
+                # Handle deeper nesting recursively
+                self._create_nested_section(inner_box, key, value, f"{path}.{key}")
+            elif isinstance(value, list):
+                continue  # Skip lists for now
+            else:
+                grid.attach(self._create_label(key), 0, row, 1, 1)
+                nested_path = f"{path}.{nested_name}"
+                widget = self._create_control(nested_path, key, value)
+                grid.attach(widget, 1, row, 1, 1)
+                row += 1
+
+        expander.add(inner_box)
+        container.add(expander)
+
     def _create_config_section(
         self, vbox: Box, section_name: str, config_items: dict, path_prefix: str
     ):
         """Create a configuration section with grid of controls."""
         vbox.add(self._create_section_header(section_name.replace("_", " ").title()))
 
+        section_box = Box(orientation="v", spacing=4)
         grid = self._create_grid(margin_bottom=15)
-        vbox.add(grid)
+        section_box.add(grid)
 
         row = 0
         for key, value in config_items.items():
-            if isinstance(value, (dict, list)):
-                continue
+            if isinstance(value, dict):
+                # Create expandable section for nested config
+                path = f"{path_prefix}.{section_name}"
+                self._create_nested_section(section_box, key, value, path)
+            elif isinstance(value, list):
+                continue  # Skip lists for now
+            else:
+                grid.attach(self._create_label(key), 0, row, 1, 1)
+                path = f"{path_prefix}.{section_name}"
+                widget = self._create_control(path, key, value)
+                grid.attach(widget, 1, row, 1, 1)
+                row += 1
 
-            grid.attach(self._create_label(key), 0, row, 1, 1)
-
-            path = f"{path_prefix}.{section_name}"
-            widget = self._create_control(path, key, value)
-            grid.attach(widget, 1, row, 1, 1)
-            row += 1
+        vbox.add(section_box)
 
     def _create_modules_tab(self):
         """Create the modules settings tab."""
         scrolled, vbox = self._create_scrolled_container()
         modules = self.config.get("modules", {})
 
-        for module_name, module_config in modules.items():
+        for module_name, module_config in sorted(modules.items()):
             if isinstance(module_config, dict):
                 self._create_config_section(vbox, module_name, module_config, "modules")
 
@@ -379,7 +417,7 @@ class SettingsGUI(Window):
         return vbox
 
     def _update_config(self, path: str, key: str, value):
-        """Update config value."""
+        """Update config value at any nesting level."""
         parts = path.split(".")
         target = self.config
 

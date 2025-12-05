@@ -12,25 +12,25 @@
     padding: 8px;
     background-color: theme.$background-alt;
     border-radius: variable.$radius 0 0 variable.$radius;
-}
 
-#settings-sidebar button {
-    padding: 10px 14px;
-    border-radius: variable.$radius;
-    background-color: transparent;
-    margin-bottom: 4px;
-}
+    button {
+        padding: 10px 14px;
+        border-radius: variable.$radius;
+        background-color: transparent;
+        margin-bottom: 4px;
 
-#settings-sidebar button:hover {
-    background-color: theme.$surface-highlight;
-}
+        &:hover {
+            background-color: theme.$surface-highlight;
+        }
 
-#settings-sidebar button:checked {
-    background-color: theme.$surface-disabled;
-}
+        &:checked {
+            background-color: theme.$surface-disabled;
 
-#settings-sidebar button:checked label {
-    color: theme.$accent-blue;
+            label {
+                color: theme.$accent-blue;
+            }
+        }
+    }
 }
 
 #settings-section-header {
@@ -45,60 +45,117 @@
 }
 
 #settings-row {
-    padding: 6px 0;
+    padding: 15px 0;
 }
 
-#settings-reset-btn,
-#settings-close-btn,
-#settings-save-btn {
-    padding: 8px 16px;
+grid {
+
+    >label {
+        margin-top: 4px;
+        margin-bottom: 4px;
+    }
+
+    >switch,
+    >spinbutton,
+    >combobox,
+    >entry {
+        margin-top: 4px;
+        margin-bottom: 4px;
+    }
+}
+
+#settings-expander {
+    margin: 8px 0;
+    padding: 4px 0;
+    border: 1px solid theme.$surface-highlight;
     border-radius: variable.$radius;
-    font-weight: 500;
+    background-color: theme.$background-alt;
+
+    >title {
+        padding: 8px 12px;
+        font-weight: 600;
+        font-size: 0.85rem;
+        color: theme.$text-secondary;
+        background-color: theme.$surface-neutral;
+        border-radius: variable.$radius variable.$radius 0 0;
+
+        &:hover {
+            background-color: theme.$surface-highlight;
+            color: theme.$text-main;
+        }
+
+        arrow {
+            color: theme.$text-muted;
+            min-width: 16px;
+            min-height: 16px;
+            -gtk-icon-source: -gtk-icontheme("pan-end-symbolic");
+        }
+    }
+
+    &:checked>title {
+        border-bottom: 1px solid theme.$surface-highlight;
+        border-radius: variable.$radius variable.$radius 0 0;
+
+        arrow {
+            -gtk-icon-source: -gtk-icontheme("pan-down-symbolic");
+        }
+    }
+
+    >box {
+        padding: 8px 12px;
+        margin-left: 8px;
+        border-left: 2px solid theme.$accent-blue;
+        background-color: theme.$background-dark;
+    }
 }
 
 #settings-reset-btn,
 #settings-close-btn {
+    padding: 8px 16px;
+    border-radius: variable.$radius;
+    font-weight: 500;
     background-color: transparent;
     color: theme.$text-main;
-}
 
-#settings-reset-btn:hover,
-#settings-close-btn:hover {
-    background-color: theme.$surface-highlight;
+    &:hover {
+        background-color: theme.$surface-highlight;
+    }
 }
 
 #settings-save-btn {
+    padding: 8px 16px;
+    border-radius: variable.$radius;
+    font-weight: 500;
     background-color: theme.$accent-blue;
     color: theme.$background;
+
+    &:hover {
+        background-color: theme.$accent-teal;
+    }
+
+    &:disabled {
+        opacity: 0.5;
+    }
 }
 
-#settings-save-btn:hover {
-    background-color: theme.$accent-teal;
-}
-
-#settings-save-btn:disabled {
-    opacity: 0.5;
-}
-
-/* Form controls */
 switch {
     min-width: 44px;
     min-height: 22px;
     border-radius: 11px;
     background-color: theme.$surface-disabled;
     border: none;
-}
 
-switch:checked {
-    background-color: theme.$accent-blue;
-}
+    &:checked {
+        background-color: theme.$accent-blue;
+    }
 
-switch slider {
-    min-width: 18px;
-    min-height: 18px;
-    border-radius: 9px;
-    background-color: white;
-    margin: 2px;
+    slider {
+        min-width: 18px;
+        min-height: 18px;
+        border-radius: 9px;
+        background-color: white;
+        margin: 2px;
+    }
 }
 
 spinbutton {
@@ -107,24 +164,24 @@ spinbutton {
     border: 1px solid theme.$surface-disabled;
     color: theme.$text-main;
     min-width: 80px;
-}
 
-spinbutton entry {
-    padding: 4px 8px;
-    background-color: transparent;
-    border: none;
-    color: theme.$text-main;
-}
+    entry {
+        padding: 4px 8px;
+        background-color: transparent;
+        border: none;
+        color: theme.$text-main;
+    }
 
-spinbutton button {
-    padding: 4px 8px;
-    background-color: transparent;
-    border: none;
-    color: theme.$text-main;
-}
+    button {
+        padding: 4px 8px;
+        background-color: transparent;
+        border: none;
+        color: theme.$text-main;
 
-spinbutton button:hover {
-    background-color: theme.$surface-highlight;
+        &:hover {
+            background-color: theme.$surface-highlight;
+        }
+    }
 }
 
 combobox {
@@ -133,15 +190,15 @@ combobox {
     border: 1px solid theme.$surface-disabled;
     color: theme.$text-main;
     min-width: 120px;
-}
 
-combobox button {
-    padding: 4px 10px;
-    background-color: transparent;
-}
+    button {
+        padding: 4px 10px;
+        background-color: transparent;
+    }
 
-combobox:hover {
-    background-color: theme.$surface-highlight;
+    &:hover {
+        background-color: theme.$surface-highlight;
+    }
 }
 
 entry {
@@ -150,8 +207,8 @@ entry {
     background-color: theme.$surface-neutral;
     border: 1px solid theme.$surface-disabled;
     color: theme.$text-main;
-}
 
-entry:focus {
-    border-color: theme.$accent-blue;
+    &:focus {
+        border-color: theme.$accent-blue;
+    }
 }
