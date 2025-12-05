@@ -166,27 +166,20 @@ class SettingsGUI(Window):
             column_homogeneous=False,
         )
 
-    def _create_switch(self, active: bool, on_change=None) -> Gtk.Box:
+    def _create_switch(self, active: bool, on_change=None) -> Gtk.Switch:
         """Create a GTK switch."""
-        switch_container = Gtk.Box(
-            orientation=Gtk.Orientation.HORIZONTAL,
-            halign=Gtk.Align.START,
-            valign=Gtk.Align.CENTER,
+        switch = Gtk.Switch(
+            active=active, halign=Gtk.Align.START, valign=Gtk.Align.CENTER
         )
-        switch = Gtk.Switch(active=active)
         if on_change:
             switch.connect("notify::active", on_change)
-        switch_container.add(switch)
-        return switch_container
+        return switch
 
-    def _create_combo(self, options: list, active: str, on_change=None) -> Gtk.Box:
+    def _create_combo(
+        self, options: list, active: str, on_change=None
+    ) -> Gtk.ComboBoxText:
         """Create a combo box."""
-        container = Gtk.Box(
-            orientation=Gtk.Orientation.HORIZONTAL,
-            halign=Gtk.Align.START,
-            valign=Gtk.Align.CENTER,
-        )
-        combo = Gtk.ComboBoxText()
+        combo = Gtk.ComboBoxText(halign=Gtk.Align.START, valign=Gtk.Align.CENTER)
         for opt in options:
             combo.append_text(opt)
         try:
@@ -195,8 +188,7 @@ class SettingsGUI(Window):
             combo.set_active(0)
         if on_change:
             combo.connect("changed", on_change)
-        container.add(combo)
-        return container
+        return combo
 
     def _create_spinbutton(
         self, value: int, min_val: int, max_val: int, on_change=None
