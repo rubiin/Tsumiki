@@ -67,8 +67,8 @@ class SettingsGUI(Window):
 
         # Create tabs
         self.tab_stack.add_titled(self._create_general_tab(), "general", "󰒓 General")
-        self.tab_stack.add_titled(self._create_modules_tab(), "modules", "󰕰 Modules")
-        self.tab_stack.add_titled(self._create_widgets_tab(), "widgets", "󰕰Widgets")
+        self.tab_stack.add_titled(self._create_modules_tab(), "modules", "󰒍 Modules")
+        self.tab_stack.add_titled(self._create_widgets_tab(), "widgets", "󰕰 Widgets")
         self.tab_stack.add_titled(self._create_about_tab(), "about", "󰋽 About")
 
         # Tab switcher (sidebar)
