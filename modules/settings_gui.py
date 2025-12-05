@@ -15,6 +15,7 @@ from fabric.widgets.window import Window
 from gi.repository import Gtk
 
 from utils.config import configuration, widget_config
+from utils.functions import write_json_file
 
 
 class SettingsGUI(Window):
@@ -452,8 +453,7 @@ class SettingsGUI(Window):
     def _on_save(self, *_):
         """Save configuration."""
         try:
-            with open(configuration.json_config_file, "w") as f:
-                json.dump(self.config, f, indent="\t")
+            write_json_file(configuration.json_config_file, self.config)
 
             self.modified = False
             self.save_btn.set_sensitive(False)
