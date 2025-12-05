@@ -14,6 +14,7 @@ from fabric.widgets.stack import Stack
 from fabric.widgets.window import Window
 from gi.repository import Gtk
 
+from shared.buttons import HoverButton
 from utils.config import configuration, widget_config
 from utils.functions import write_json_file
 
@@ -83,21 +84,21 @@ class SettingsGUI(Window):
         # Button box
         button_box = Box(orientation="h", spacing=10, h_align="end")
 
-        reset_btn = Button(
+        reset_btn = HoverButton(
             label="Reset",
             name="settings-reset-btn",
             on_clicked=self._on_reset,
         )
         button_box.add(reset_btn)
 
-        close_btn = Button(
+        close_btn = HoverButton(
             label="Close",
             name="settings-close-btn",
             on_clicked=self._on_close,
         )
         button_box.add(close_btn)
 
-        self.save_btn = Button(
+        self.save_btn = HoverButton(
             label="Apply & Save",
             name="settings-save-btn",
             on_clicked=self._on_save,
@@ -294,7 +295,7 @@ class SettingsGUI(Window):
         scrolled, vbox = self._create_scrolled_container()
         widgets = self.config.get("widgets", {})
 
-        for widget_name, widget_cfg in widgets.items():
+        for widget_name, widget_cfg in sorted(widgets.items()):
             if not isinstance(widget_cfg, dict):
                 continue
 
