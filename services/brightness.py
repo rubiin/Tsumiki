@@ -107,7 +107,10 @@ class BrightnessService(Service):
             value = max(0, min(value, self.max_screen))
         try:
             exec_brightnessctl_async(f"--device '{self.screen_device}' set {value}")
-            self.emit("brightness_changed", int((value / self.max_screen) * 100))
+            percentage = (
+                int((value / self.max_screen) * 100) if self.max_screen > 0 else 0
+            )
+            self.emit("brightness_changed", percentage)
             logger.info(
                 f"{Colors.INFO}Set screen brightness to {value} "
                 f"(out of {self.max_screen})"

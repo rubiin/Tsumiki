@@ -171,7 +171,7 @@ def read_json_file(file_path: str) -> Optional[dict | list]:
             return None
 
 
-def read_toml_file(file_path: str) -> dict:
+def read_toml_file(file_path: str) -> Optional[dict]:
     import pytomlpp as toml
 
     if not os.path.exists(file_path):

@@ -52,7 +52,7 @@ class TsumikiConfig:
         self.theme_config_file = f"{self.root_dir}/theme.json"
 
         self.config = self._load_config()
-        self.theme_config = read_json_file(file_path=self.theme_config_file)
+        self.theme_config = read_json_file(file_path=self.theme_config_file) or {}
 
         self._write_css_settings()
         self._initialized = True

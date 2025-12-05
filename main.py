@@ -10,6 +10,7 @@ from utils.constants import APP_DATA_DIRECTORY, APPLICATION_NAME
 
 def process_and_apply_css(app: Application):
     """Compile and apply CSS in background thread."""
+    from gi.repository import GLib
 
     @helpers.run_in_thread
     def _compile():
@@ -20,9 +21,6 @@ def process_and_apply_css(app: Application):
 
         if output == "":
             logger.info(f"{Colors.INFO}[Main] CSS applied")
-            # Apply CSS on main thread
-            from gi.repository import GLib
-
             GLib.idle_add(
                 lambda: app.set_stylesheet_from_file(get_relative_path("dist/main.css"))
             )
@@ -152,9 +150,8 @@ def main():
             )
             return False
 
-        window = filter(lambda w: w.get_name() == name, app.get_windows())
+        window = next((w for w in app.get_windows() if w.get_name() == name), None)
         if window:
-            window = next(window)
             window.toggle()
 
         return False
