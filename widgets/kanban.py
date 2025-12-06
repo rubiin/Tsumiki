@@ -61,10 +61,11 @@ class InlineEditor(Box):
         sw.set_min_content_height(50)
         sw.add(self.text_view)
 
-        self.button_box = Box(children=[confirm_btn, cancel_btn], spacing=4, h_align="center")
+        self.button_box = Box(children=[confirm_btn, cancel_btn], spacing=4)
+        self.center_box = CenterBox(center_children=[self.button_box], orientation="v")
 
         self.pack_start(sw, True, True, 0)
-        self.pack_start(self.button_box, False, False, 0)
+        self.pack_start(self.center_box, False, False, 0)
         self.show_all()
 
     def on_confirm(self, widget):

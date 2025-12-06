@@ -77,6 +77,9 @@ class QSToggleButton(Box, BaseWidget):
     ):
         self.pixel_size = pixel_size
 
+        # required for chevron button
+        self.box = Box()
+
         # Action button can hold an icon and a label NOTHING MORE
         self.action_icon = nerd_font_icon(
             icon=action_icon,
@@ -94,23 +97,23 @@ class QSToggleButton(Box, BaseWidget):
             h_expand=True,
         )
 
-        self._action_content = Box(
-            h_align="start",
-            v_align="center",
-            style_classes=["quicksettings-toggle-action-box"],
-            children=[self.action_icon, self.action_label],
-        )
-
         self.action_button = HoverButton(
             style_classes=["quicksettings-toggle-action"],
             on_clicked=self._action,
-            child=self._action_content,
         )
 
         self.action_button.set_size_request(170, 20)
 
-        # Container box for chevron button compatibility
-        self.box = Box(children=[self.action_button])
+        self.action_button.add(
+            Box(
+                h_align="start",
+                v_align="center",
+                style_classes=["quicksettings-toggle-action-box"],
+                children=[self.action_icon, self.action_label],
+            ),
+        )
+
+        self.box.add(self.action_button)
 
         super().__init__(
             name="quicksettings-togglebutton",

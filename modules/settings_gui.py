@@ -408,9 +408,7 @@ class SettingsGUI(Window):
             )
         )
 
-        repo_box = Box(
-            orientation="h", spacing=6, h_align="center", v_expand=True, v_align="start"
-        )
+        repo_box = Box(orientation="h", spacing=6, h_align="center")
         repo_box.add(Label(label="GitHub:", h_align="start"))
         repo_box.add(
             Label(
@@ -419,6 +417,7 @@ class SettingsGUI(Window):
         )
         vbox.add(repo_box)
 
+        vbox.add(Box(v_expand=True))
         return vbox
 
     def _update_config(self, path: str, key: str, value):

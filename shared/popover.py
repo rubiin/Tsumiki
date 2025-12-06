@@ -230,9 +230,8 @@ class Popover(Widget):
         # immediately (e.g., Gtk.Calendar())
         self._content.connect("draw", self.on_content_ready)
 
-        # Add content directly - apply name for styling
-        self._content.set_name("popover-content")
-        self._content_window.add(self._content)
+        # Add content to window
+        self._content_window.add(Box(name="popover-content", children=self._content))
 
         bulk_connect(
             self._content_window,
