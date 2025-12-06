@@ -73,15 +73,9 @@ class TagEntry(Box, BaseWidget):
         tag_box.connect("button-press-event", self.on_tag_clicked)
         tag_box.tag_text = text
 
-        # Container for the tag content
-        tag_container = Box(spacing=4)
-
-        # Tag label
-        label = Label(label=text)
-
-        # Pack widgets
-        tag_container.pack_start(label, False, False, 4)
-        tag_box.add(tag_container)
+        # Tag label - add directly without intermediate Box
+        label = Label(label=text, style="padding: 0 4px;")
+        tag_box.add(label)
 
         # Insert the tag before the entry
         position = len(self.get_children()) - 1  # Position before the entry

@@ -223,21 +223,12 @@ class EmojiPickerMenu(Box):
     def _bake_emoji_slot(self, emoji_char: str, emoji_info: dict, **kwargs) -> Button:
         button = Button(
             name="emoji-slot-button",
-            child=Box(
-                name="emoji-slot-box",
-                orientation="horizontal",
-                halign="center",
-                valign="center",
-                children=[
-                    Label(
-                        name="emoji-char-label",
-                        label=emoji_char,
-                        use_markup=True,
-                        v_align="center",
-                        h_align="center",
-                        css_name="emoji-char-label",
-                    ),
-                ],
+            child=Label(
+                name="emoji-char-label",
+                label=emoji_char,
+                use_markup=True,
+                v_align="center",
+                h_align="center",
             ),
             tooltip_text=emoji_info.get("name", "Unknown"),
             on_clicked=lambda *_: (

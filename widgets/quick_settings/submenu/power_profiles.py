@@ -24,13 +24,7 @@ class PowerProfileItem(HoverButton):
         active,
         **kwargs,
     ):
-        super().__init__(
-            style_classes=["submenu-button", "power-profile"],
-            **kwargs,
-        )
-        self.profile = profile
-        self.key = key
-        self.box = Box(
+        self._content_box = Box(
             orientation="h",
             spacing=10,
             children=(
@@ -49,7 +43,13 @@ class PowerProfileItem(HoverButton):
             ),
         )
 
-        self.add(self.box)
+        super().__init__(
+            style_classes=["submenu-button", "power-profile"],
+            child=self._content_box,
+            **kwargs,
+        )
+        self.profile = profile
+        self.key = key
 
         self.connect(
             "button-press-event",
@@ -63,7 +63,7 @@ class PowerProfileItem(HoverButton):
         return True
 
     def set_active(self, active: str):
-        style_context = self.box.get_style_context()
+        style_context = self._content_box.get_style_context()
         if self.key == active:
             style_context.add_class("active")
         else:

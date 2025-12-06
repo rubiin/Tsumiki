@@ -219,12 +219,15 @@ class Popover(Widget):
         # Get a window from the pool
         self._content_window = self._manager.get_popover_window()
 
+        # Apply styling name directly to content
+        self._content.set_name("popover-content")
+
         # Wrap content in Gtk.Revealer
         self._revealer = Revealer(
             transition_duration=self._animation_duration,
             transition_type=self._animation,
             child_revealed=False,
-            child=Box(name="popover-content", children=self._content),
+            child=self._content,
         )
 
         # Connect draw event to fix positioning
