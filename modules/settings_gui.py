@@ -13,7 +13,7 @@ from fabric.widgets.window import Window
 from gi.repository import Gtk
 
 from shared.buttons import HoverButton
-from utils.config import configuration, widget_config
+from utils.config import configuration, theme_config, widget_config
 from utils.constants import ASSETS_DIR
 from utils.functions import write_json_file
 from utils.types import (
@@ -55,6 +55,7 @@ class SettingsGUI(Window):
 
         self.set_resizable(False)
         self.config = dict(widget_config)
+        self.theme = dict(theme_config)
         self.modified = False
 
         # Main layout
@@ -124,6 +125,7 @@ class SettingsGUI(Window):
         self.tab_stack.add_titled(self._create_general_tab(), "general", "󰒓 General")
         self.tab_stack.add_titled(self._create_modules_tab(), "modules", "󰒍 Modules")
         self.tab_stack.add_titled(self._create_widgets_tab(), "widgets", "󰕰 Widgets")
+        self.tab_stack.add_titled(self._create_theme_tab(), "theme", "󰸌 Theme")
         self.tab_stack.add_titled(self._create_about_tab(), "about", "󰋽 About")
 
     def _refresh_tabs(self):
@@ -379,6 +381,179 @@ class SettingsGUI(Window):
         }
         return enums.get(key)
 
+    def _create_theme_tab(self):
+        """Create the theme settings tab."""
+        scrolled, vbox = self._create_scrolled_container()
+
+        # Main theme sections
+        self._create_theme_section(
+            vbox, "matugen", self.theme.get("matugen", {}), "theme"
+        )
+        self._create_theme_section(
+            vbox, "font", self.theme.get("font", {}), "theme"
+        )
+        self._create_theme_section(
+            vbox, "bar", self.theme.get("bar", {}), "theme"
+        )
+        self._create_theme_section(
+            vbox, "modules", self.theme.get("modules", {}), "theme"
+        )
+
+        return scrolled
+
+    def _create_theme_section(
+        self, container: Box, section_name: str, section_config: dict, path: str
+    ):
+        """Create a top-level section for theme config (no expander)."""
+        # Add section header
+        container.add(self._create_section_header(section_name.title()))
+
+        section_box = Box(orientation="v", spacing=4)
+        grid = self._create_grid(margin_bottom=15)
+        section_box.add(grid)
+
+        row = 0
+        for key, value in section_config.items():
+            if isinstance(value, dict):
+                # for individual modules
+                if section_name == "modules":
+                    self._create_theme_module_section(
+                        section_box, key, value, f"{path}.{section_name}"
+                    )
+                else:
+                    # Handle deeper nesting with expanders for other sections
+                    self._create_theme_nested_section(
+                        section_box, key, value, f"{path}.{section_name}"
+                    )
+            elif isinstance(value, list):
+                continue  # Skip lists for now
+            else:
+                grid.attach(self._create_label(key), 0, row, 1, 1)
+                nested_path = f"{path}.{section_name}"
+                widget = self._create_theme_control(nested_path, key, value)
+                grid.attach(widget, 1, row, 1, 1)
+                row += 1
+
+        container.add(section_box)
+
+    def _create_theme_module_section(
+        self, container: Box, module_name: str, module_config: dict, path: str
+    ):
+        """Create a module section within the modules section (no expander)."""
+        # Add module header
+        container.add(
+            self._create_section_header(module_name.replace("_", " ").title())
+        )
+
+        module_box = Box(orientation="v", spacing=4, style="margin-left: 20px;")
+        grid = self._create_grid(margin_bottom=10)
+        module_box.add(grid)
+
+        row = 0
+        for key, value in module_config.items():
+            if isinstance(value, dict):
+                # Handle deeper nesting with expanders (like shadow, border)
+                self._create_theme_nested_section(
+                    module_box, key, value, f"{path}.{module_name}"
+                )
+            elif isinstance(value, list):
+                continue  # Skip lists for now
+            else:
+                grid.attach(self._create_label(key), 0, row, 1, 1)
+                nested_path = f"{path}.{module_name}"
+                widget = self._create_theme_control(nested_path, key, value)
+                grid.attach(widget, 1, row, 1, 1)
+                row += 1
+
+        container.add(module_box)
+
+    def _create_theme_nested_section(
+        self, container: Box, section_name: str, section_config: dict, path: str
+    ):
+        """Create an expandable section for theme config."""
+        expander = self._create_expander(section_name.replace("_", " ").title())
+
+        inner_box = Box(orientation="v", spacing=4, style="margin-left: 20px;")
+        grid = self._create_grid()
+        inner_box.add(grid)
+
+        row = 0
+        for key, value in section_config.items():
+            if isinstance(value, dict):
+                # Handle deeper nesting recursively
+                self._create_theme_nested_section(
+                    inner_box, key, value, f"{path}.{section_name}"
+                )
+            elif isinstance(value, list):
+                continue  # Skip lists for now
+            else:
+                grid.attach(self._create_label(key), 0, row, 1, 1)
+                nested_path = f"{path}.{section_name}"
+                widget = self._create_theme_control(nested_path, key, value)
+                grid.attach(widget, 1, row, 1, 1)
+                row += 1
+
+        expander.add(inner_box)
+        container.add(expander)
+
+    def _create_theme_control(self, path: str, key: str, value) -> Gtk.Widget:
+        """Create appropriate control for a theme value."""
+        if isinstance(value, bool):
+            return self._create_switch(
+                value,
+                lambda sw, _, p=path, k=key: self._update_theme(p, k, sw.get_active()),
+            )
+        elif isinstance(value, int):
+            return self._create_spinbutton(
+                value,
+                0,
+                10000,
+                lambda sp, p=path, k=key: self._update_theme(
+                    p, k, int(sp.get_value())
+                ),
+            )
+        elif isinstance(value, str):
+            enum_options = self._get_theme_enum_options(key)
+            if enum_options:
+                return self._create_combo(
+                    enum_options,
+                    value,
+                    lambda cb, p=path, k=key: self._update_theme(
+                        p, k, cb.get_active_text()
+                    ),
+                )
+            entry = Entry(text=value, h_expand=False)
+            entry.set_width_chars(15)
+            entry.connect(
+                "changed",
+                lambda e, p=path, k=key: self._update_theme(p, k, e.get_text()),
+            )
+            return entry
+        return Label(label=str(value), h_align="start")
+
+    def _get_theme_enum_options(self, key: str) -> list | None:
+        """Get enum options for theme keys."""
+        # Add theme-specific enums if needed
+        theme_enums = {
+            # Add any theme-specific enums here
+        }
+        return theme_enums.get(key)
+
+    def _update_theme(self, path: str, key: str, value):
+        """Update theme value at any nesting level."""
+        parts = path.split(".")
+        target = self.theme
+
+        for part in parts[1:]:  # Skip 'theme' prefix
+            if part not in target:
+                target[part] = {}
+            target = target[part]
+
+        if target.get(key) != value:
+            target[key] = value
+            self.modified = True
+            self.save_btn.set_sensitive(True)
+
     def _create_about_tab(self):
         """Create the about tab."""
 
@@ -431,6 +606,7 @@ class SettingsGUI(Window):
         """Save configuration."""
         try:
             write_json_file(configuration.json_config_file, self.config)
+            write_json_file(configuration.theme_file, self.theme)
             self.modified = False
             self.save_btn.set_sensitive(False)
             exec_shell_command_async(
@@ -446,6 +622,7 @@ class SettingsGUI(Window):
     def _on_reset(self, *_):
         """Reset to saved config."""
         self.config = dict(widget_config)
+        self.theme = dict(theme_config)
         self.modified = False
         self.save_btn.set_sensitive(False)
         self._refresh_tabs()
