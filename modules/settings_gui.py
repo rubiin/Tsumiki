@@ -15,6 +15,18 @@ from gi.repository import Gtk
 from shared.buttons import HoverButton
 from utils.config import configuration, widget_config
 from utils.functions import write_json_file
+from utils.types import (
+    Anchor,
+    Bar_Location,
+    Data_Unit,
+    Dock_Behavior,
+    Layer,
+    Orientation,
+    Reveal_Animations,
+    Temperature_Unit,
+    Widget_Mode,
+    get_literal_values,
+)
 
 
 class SettingsGUI(Window):
@@ -354,34 +366,15 @@ class SettingsGUI(Window):
     def _get_enum_options(self, key: str) -> list | None:
         """Get enum options for known keys."""
         enums = {
-            "layer": ["top", "bottom", "overlay", "background"],
-            "anchor": [
-                "top",
-                "bottom",
-                "center",
-                "top-left",
-                "top-right",
-                "bottom-left",
-                "bottom-right",
-                "center-left",
-                "center-right",
-            ],
-            "location": ["top", "bottom", "left", "right"],
-            "orientation": ["horizontal", "vertical"],
-            "transition_type": [
-                "none",
-                "crossfade",
-                "slide-up",
-                "slide-down",
-                "slide-left",
-                "slide-right",
-            ],
-            "layout": ["list", "grid"],
-            "mode": ["label", "circular", "graph"],
-            "behavior": ["always", "intellihide", "autohide"],
-            "temperature_unit": ["celsius", "fahrenheit"],
-            "unit": ["gb", "mb", "percent"],
-            "clock_format": ["12h", "24h"],
+            "layer": get_literal_values(Layer),
+            "anchor": get_literal_values(Anchor),
+            "location": get_literal_values(Bar_Location),
+            "orientation": get_literal_values(Orientation),
+            "transition_type": get_literal_values(Reveal_Animations),
+            "mode": get_literal_values(Widget_Mode),
+            "behavior": get_literal_values(Dock_Behavior),
+            "temperature_unit": get_literal_values(Temperature_Unit),
+            "unit": get_literal_values(Data_Unit),
         }
         return enums.get(key)
 
