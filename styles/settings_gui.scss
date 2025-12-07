@@ -67,22 +67,14 @@ grid {
 #settings-expander {
     margin: 8px 0;
     padding: 4px 0;
-    border: 1px solid theme.$surface-highlight;
     border-radius: variable.$radius;
-    background-color: theme.$background-alt;
 
     >title {
         padding: 8px 12px;
         font-weight: 600;
         font-size: 0.85rem;
         color: theme.$text-secondary;
-        background-color: theme.$surface-neutral;
         border-radius: variable.$radius variable.$radius 0 0;
-
-        &:hover {
-            background-color: theme.$surface-highlight;
-            color: theme.$text-main;
-        }
 
         arrow {
             color: theme.$text-muted;
@@ -105,7 +97,6 @@ grid {
         padding: 8px 12px;
         margin-left: 8px;
         border-left: 2px solid theme.$accent-blue;
-        background-color: theme.$background-dark;
     }
 }
 
