@@ -342,7 +342,7 @@ class SettingsGUI(Window):
             return self._create_spinbutton(
                 value,
                 0,
-                10000,
+                100,
                 lambda sp, p=path, k=key: self._update_config(
                     p, k, int(sp.get_value())
                 ),
@@ -513,6 +513,10 @@ class SettingsGUI(Window):
                 ),
             )
         elif isinstance(value, str):
+            # Special handling for wallpaper field
+            if key == "wallpaper":
+                return self._create_wallpaper_picker(path, key, value)
+
             enum_options = self._get_theme_enum_options(key)
             if enum_options:
                 return self._create_combo(
@@ -530,6 +534,58 @@ class SettingsGUI(Window):
             )
             return entry
         return Label(label=str(value), h_align="start")
+
+    def _create_wallpaper_picker(self, path: str, key: str, value: str) -> Gtk.Widget:
+        """Create a wallpaper file picker control."""
+        # Create horizontal box for entry and button
+        hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
+
+        # Create entry for path
+        entry = Entry(text=value, h_expand=True)
+        entry.connect(
+            "changed",
+            lambda e, p=path, k=key: self._update_theme(p, k, e.get_text()),
+        )
+        hbox.pack_start(entry, True, True, 0)
+
+        # Create browse button
+        browse_btn = HoverButton(label="Browse...", name="settings-browse-btn")
+        browse_btn.connect("clicked", self._on_browse_wallpaper, entry, path, key)
+        hbox.pack_start(browse_btn, False, False, 0)
+
+        return hbox
+
+    def _on_browse_wallpaper(self, button, entry, path: str, key: str):
+        """Handle wallpaper file selection."""
+        dialog = Gtk.FileChooserDialog(
+            title="Select Wallpaper",
+            parent=self,
+            action=Gtk.FileChooserAction.OPEN,
+        )
+
+        # Add filters for image files
+        filter_images = Gtk.FileFilter()
+        filter_images.set_name("Image files")
+        filter_images.add_mime_type("image/*")
+        dialog.add_filter(filter_images)
+
+        filter_all = Gtk.FileFilter()
+        filter_all.set_name("All files")
+        filter_all.add_pattern("*")
+        dialog.add_filter(filter_all)
+
+        # Add buttons
+        dialog.add_button("Cancel", Gtk.ResponseType.CANCEL)
+        dialog.add_button("Select", Gtk.ResponseType.OK)
+
+        response = dialog.run()
+        if response == Gtk.ResponseType.OK:
+            filename = dialog.get_filename()
+            if filename:
+                entry.set_text(filename)
+                self._update_theme(path, key, filename)
+
+        dialog.destroy()
 
     def _get_theme_enum_options(self, key: str) -> list | None:
         """Get enum options for theme keys."""
