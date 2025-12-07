@@ -14,6 +14,7 @@ from gi.repository import Gtk
 
 from shared.buttons import HoverButton
 from utils.config import configuration, widget_config
+from utils.constants import ASSETS_DIR
 from utils.functions import write_json_file
 from utils.types import (
     Anchor,
@@ -380,7 +381,6 @@ class SettingsGUI(Window):
 
     def _create_about_tab(self):
         """Create the about tab."""
-        from utils.constants import ASSETS_DIR
 
         vbox = Box(orientation="v", spacing=18, style="margin: 30px;", h_align="center")
 
@@ -389,7 +389,7 @@ class SettingsGUI(Window):
             image_file=f"{ASSETS_DIR}/images/logo.png",
             size=160,
             h_align="center",
-            v_align="center"
+            v_align="center",
         )
         vbox.add(logo)
 

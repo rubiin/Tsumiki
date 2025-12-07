@@ -402,7 +402,7 @@ DEFAULT_CONFIG = {
             "max_actions": 5,
             "dismiss_on_hover": False,
             "sound_file": "notification4",
-            "persist": True
+            "persist": True,
         },
         "screen_corners": {
             "enabled": False,

@@ -13,6 +13,7 @@ def icon_name_to_icon(icon_name: str) -> str:
     icon_map = {"power-saver": "󰌪", "performance": "󰓅", "balanced": "󰒂"}
     return icon_map.get(icon_name, "󰌪")
 
+
 class PowerProfileItem(HoverButton):
     """A button to display the power profile."""
 
@@ -67,6 +68,7 @@ class PowerProfileItem(HoverButton):
             style_context.add_class("active")
         else:
             style_context.remove_class("active")
+
 
 class PowerProfileSubMenu(QuickSubMenu):
     """A submenu to display power profile options."""
