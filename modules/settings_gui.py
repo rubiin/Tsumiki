@@ -410,7 +410,6 @@ class SettingsGUI(Window):
         )
         vbox.add(repo_box)
 
-        vbox.add(Box(v_expand=True))
         return vbox
 
     def _update_config(self, path: str, key: str, value):
