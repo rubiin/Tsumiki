@@ -32,7 +32,6 @@ Add a `matugen` section to your `theme.json` (or edit the existing one). Example
   - `scheme-rainbow`
 - `mode` (string): `dark` or `light` output mode.
 - `contrast` (float): Contrast adjustment between -1.0 and 1.0.
-- `quiet` (bool): If true, runs Matugen with `-q` to reduce stdout noise.
 
 ## Config file
 

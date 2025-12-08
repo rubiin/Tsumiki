@@ -212,17 +212,17 @@ class SettingsGUI(Window):
         return combo
 
     def _create_spinbutton(
-        self, value: int, min_val: int, max_val: int, on_change=None
+        self, value, min_val, max_val, on_change=None, step=1, digits=0
     ) -> Gtk.SpinButton:
         """Create a spin button."""
         adj = Gtk.Adjustment(
             value=value,
             lower=min_val,
             upper=max_val,
-            step_increment=1,
-            page_increment=10,
+            step_increment=step,
+            page_increment=step * 10,
         )
-        spin = Gtk.SpinButton(adjustment=adj, climb_rate=1, digits=0)
+        spin = Gtk.SpinButton(adjustment=adj, climb_rate=1, digits=digits)
         spin.set_value(value)
         if on_change:
             spin.connect("value-changed", on_change)
@@ -512,12 +512,35 @@ class SettingsGUI(Window):
                     p, k, int(sp.get_value())
                 ),
             )
+        elif isinstance(value, float):
+            # Special handling for contrast (matugen field)
+            if key == "contrast":
+                return self._create_spinbutton(
+                    value,
+                    -1.0,
+                    1.0,
+                    lambda sp, p=path, k=key: self._update_theme(
+                        p, k, float(sp.get_value())
+                    ),
+                    step=0.1,
+                    digits=1,
+                )
+            return self._create_spinbutton(
+                value,
+                0.0,
+                100.0,
+                lambda sp, p=path, k=key: self._update_theme(
+                    p, k, float(sp.get_value())
+                ),
+                step=0.1,
+                digits=1,
+            )
         elif isinstance(value, str):
             # Special handling for wallpaper field
             if key == "wallpaper":
                 return self._create_wallpaper_picker(path, key, value)
 
-            enum_options = self._get_theme_enum_options(key)
+            enum_options = self._get_theme_enum_options(path, key)
             if enum_options:
                 return self._create_combo(
                     enum_options,
@@ -587,12 +610,31 @@ class SettingsGUI(Window):
 
         dialog.destroy()
 
-    def _get_theme_enum_options(self, key: str) -> list | None:
+    def _get_theme_enum_options(self, path: str, key: str) -> list | None:
         """Get enum options for theme keys."""
         # Add theme-specific enums if needed
         theme_enums = {
-            # Add any theme-specific enums here
+            "scheme": [
+                "scheme-tonal-spot",
+                "scheme-content",
+                "scheme-expressive",
+                "scheme-fidelity",
+                "scheme-fruit-salad",
+                "scheme-monochrome",
+                "scheme-neutral",
+                "scheme-rainbow",
+            ],
+            "mode": ["dark", "light"],
+            "widget_style": ["default", "flat", "shadow", "bordered", "leaf", "leaf-inverse"],
         }
+
+        # Handle nested bar style options
+        if path == "theme.bar.style":
+            if key == "panel":
+                return ["default", "floating", "scoop"]
+            elif key == "widget":
+                return ["default", "flat", "shadow", "bordered", "leaf", "leaf-inverse"]
+
         return theme_enums.get(key)
 
     def _update_theme(self, path: str, key: str, value):
