@@ -126,6 +126,7 @@ DEFAULT_CONFIG = {
             "mode": "circular",
             "graph_length": 4,
         },
+        "settings": {"icon": "\udb81\udc93", "tooltip": True, "label": False},
         "date_time": {
             "format": "%b %d %H:%M",
             "calendar": True,
@@ -401,7 +402,7 @@ DEFAULT_CONFIG = {
             "max_actions": 5,
             "dismiss_on_hover": False,
             "sound_file": "notification4",
-            "persist": True,  # TODO: implement this
+            "persist": True,
         },
         "screen_corners": {
             "enabled": False,

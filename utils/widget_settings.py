@@ -1,10 +1,20 @@
-from typing import Literal, TypedDict
+from typing import TypedDict
 
 from .types import (
     Anchor,
+    Bar_Location,
+    Data_Unit,
+    Dock_Behavior,
     Layer,
+    Orientation,
+    Osd_Type,
+    Power_Options,
+    Return_Type,
     Reveal_Animations,
+    Slider_Type,
     Temperature_Unit,
+    Title_Fallback,
+    Weather_Provider,
     Widget_Mode,
     Wind_Speed_Unit,
 )
@@ -41,7 +51,7 @@ PowerButton = TypedDict(
         "confirm": bool,
         "buttons": dict[
             dict[
-                Literal["shutdown", "reboot", "hibernate", "suspend", "lock", "logout"],
+                Power_Options,
                 str,
             ],
             str,
@@ -225,7 +235,7 @@ OSD = TypedDict(
         "play_sound": bool,
         "transition_type": Reveal_Animations,
         "transition_duration": int,
-        "osds": list[Literal["brightness", "volume", "microphone"]],
+        "osds": list[Osd_Type],
     },
 )
 
@@ -236,8 +246,8 @@ Dock = TypedDict(
     {
         "enabled": bool,
         "tooltip": bool,
-        "orientation": Literal["vertical", "horizontal"],
-        "behavior": Literal["always_show", "intellihide"],
+        "orientation": Orientation,
+        "behavior": Dock_Behavior,
         "icon_size": int,
         "preview_apps": bool,
         "preview_size": tuple[int, int],
@@ -262,7 +272,7 @@ AppLauncher = TypedDict(
 Bar = TypedDict(
     "Bar",
     {
-        "location": Literal["top", "bottom"],
+        "location": Bar_Location,
         "layer": Layer,
         "auto_hide": bool,
         "auto_hide_timeout": int,
@@ -327,7 +337,7 @@ Memory = TypedDict(
         "show_icon": bool,
         "icon": str,
         "graph_length": int,
-        "unit": Literal["kb", "mb", "gb", "tb"],
+        "unit": Data_Unit,
     },
 )
 
@@ -381,7 +391,7 @@ Storage = TypedDict(
         "icon": str,
         "path": str,
         "graph_length": int,
-        "unit": Literal["kb", "mb", "gb", "tb"],
+        "unit": Data_Unit,
     },
 )
 
@@ -409,7 +419,7 @@ WindowTitle = TypedDict(
         "truncation": bool,
         "truncation_size": int,
         "title_map": list[dict[str, str]],
-        "fallback": Literal["class", "title"],
+        "fallback": Title_Fallback,
     },
 )
 
@@ -455,6 +465,7 @@ Weather = TypedDict(
         "reveal_duration": int,
         "expanded": bool,
         "interval": int,
+        "provider": Weather_Provider,
     },
 )
 
@@ -530,7 +541,7 @@ CustomModule = TypedDict(
         "exec": str,
         "exec_on_event": bool,
         "interval": int,
-        "return_type": Literal["plain", "json"],
+        "return_type": Return_Type,
         "format": str,
         "max_length": int,
         "rotate": int,
@@ -632,7 +643,7 @@ ShortcutsConfig = TypedDict("Shortcuts", {"enabled": bool, "items": list[ShortCu
 ControlsConfig = TypedDict(
     "Controls",
     {
-        "sliders": list[Literal["brightness", "volume", "microphone"]],
+        "sliders": list[Slider_Type],
     },
 )
 

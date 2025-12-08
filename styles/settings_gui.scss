@@ -1,0 +1,204 @@
+/* Settings GUI Styles */
+@use "theme";
+@use "variable";
+
+#settings-window {
+    background-color: theme.$background;
+    border-radius: variable.$radius;
+}
+
+#settings-sidebar {
+    min-width: 160px;
+    padding: 8px;
+    background-color: theme.$background-alt;
+    border-radius: variable.$radius 0 0 variable.$radius;
+
+    button {
+        padding: 10px 14px;
+        border-radius: variable.$radius;
+        background-color: transparent;
+        margin-bottom: 4px;
+
+        &:hover {
+            background-color: theme.$surface-highlight;
+        }
+
+        &:checked {
+            background-color: theme.$surface-disabled;
+
+            label {
+                color: theme.$accent-blue;
+            }
+        }
+    }
+}
+
+#settings-section-header {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: theme.$accent-blue;
+    margin-bottom: 10px;
+    margin-top: 16px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid theme.$accent-blue;
+}
+
+#settings-row {
+    padding: 15px 0;
+}
+
+grid {
+
+    >label {
+        margin-top: 4px;
+        margin-bottom: 4px;
+    }
+
+    >switch,
+    >spinbutton,
+    >combobox,
+    >entry {
+        margin-top: 4px;
+        margin-bottom: 4px;
+    }
+}
+
+#settings-expander {
+    margin: 8px 0;
+    padding: 4px 0;
+    border-radius: variable.$radius;
+
+    >title {
+        padding: 8px 12px;
+        font-weight: 600;
+        font-size: 0.85rem;
+        color: theme.$text-secondary;
+        border-radius: variable.$radius variable.$radius 0 0;
+
+        arrow {
+            color: theme.$text-muted;
+            min-width: 16px;
+            min-height: 16px;
+            -gtk-icon-source: -gtk-icontheme("pan-end-symbolic");
+        }
+    }
+
+    &:checked>title {
+        border-bottom: 1px solid theme.$surface-highlight;
+        border-radius: variable.$radius variable.$radius 0 0;
+
+        arrow {
+            -gtk-icon-source: -gtk-icontheme("pan-down-symbolic");
+        }
+    }
+
+    >box {
+        padding: 8px 12px;
+        margin-left: 8px;
+        border-left: 2px solid theme.$accent-blue;
+    }
+}
+
+#settings-reset-btn,
+#settings-close-btn {
+    padding: 8px 16px;
+    border-radius: variable.$radius;
+    font-weight: 500;
+    background-color: transparent;
+    color: theme.$text-main;
+
+    &:hover {
+        background-color: theme.$surface-highlight;
+    }
+}
+
+#settings-save-btn {
+    padding: 8px 16px;
+    border-radius: variable.$radius;
+    font-weight: 500;
+    background-color: theme.$accent-blue;
+    color: theme.$background;
+
+    &:hover {
+        background-color: theme.$accent-teal;
+    }
+
+    &:disabled {
+        opacity: 0.5;
+    }
+}
+
+switch {
+    min-width: 44px;
+    min-height: 22px;
+    border-radius: 11px;
+    background-color: theme.$surface-disabled;
+    border: none;
+
+    &:checked {
+        background-color: theme.$accent-blue;
+    }
+
+    slider {
+        min-width: 18px;
+        min-height: 18px;
+        border-radius: 9px;
+        background-color: white;
+        margin: 2px;
+    }
+}
+
+spinbutton {
+    border-radius: variable.$radius;
+    background-color: theme.$surface-neutral;
+    border: 1px solid theme.$surface-disabled;
+    color: theme.$text-main;
+    min-width: 80px;
+
+    entry {
+        padding: 4px 8px;
+        background-color: transparent;
+        border: none;
+        color: theme.$text-main;
+    }
+
+    button {
+        padding: 4px 8px;
+        background-color: transparent;
+        border: none;
+        color: theme.$text-main;
+
+        &:hover {
+            background-color: theme.$surface-highlight;
+        }
+    }
+}
+
+combobox {
+    border-radius: variable.$radius;
+    background-color: theme.$surface-neutral;
+    border: 1px solid theme.$surface-disabled;
+    color: theme.$text-main;
+    min-width: 120px;
+
+    button {
+        padding: 4px 10px;
+        background-color: transparent;
+    }
+
+    &:hover {
+        background-color: theme.$surface-highlight;
+    }
+}
+
+entry {
+    padding: 6px 10px;
+    border-radius: variable.$radius;
+    background-color: theme.$surface-neutral;
+    border: 1px solid theme.$surface-disabled;
+    color: theme.$text-main;
+
+    &:focus {
+        border-color: theme.$accent-blue;
+    }
+}

@@ -19,32 +19,39 @@
 }
 
 /* General */
+
+/// Resets common CSS properties to their default/unset values
 %unset {
   outline: none;
   border: 0;
   box-shadow: none;
 }
 
+/// Adds a red debug border for troubleshooting layout issues
 %debug {
   border: 1px solid red;
 }
 
+/// Styles for clear/close icons with slight scaling and highlight effect
 %clear_icon {
   -gtk-icon-transform: scale(1.05);
   -gtk-icon-effect: highlight;
 }
 
+/// Base label styling with theme colors and font weight
 %label {
   @extend %unset;
   color: theme.$text-main;
   font-weight: variable.$font-weight;
 }
 
+/// Hover state styling for widgets with background transition
 %widget_hover {
   background-color: theme.$background;
   transition: border-color 400ms ease-in-out;
 }
 
+/// Base styling for desktop widgets with smooth color transitions
 %desktop-widget {
   transition: color .5s ease;
   color: theme.$text-main;
@@ -52,51 +59,62 @@
 }
 
 /* General Typography */
+
+/// Large title typography for major headings
 %large_title {
   font-weight: 600;
   font-size: 32px;
 }
 
+/// Primary title typography (largest)
 %title_1 {
   font-weight: 800;
   font-size: 27px;
 }
 
+/// Secondary title typography
 %title_2 {
   font-weight: 800;
   font-size: 20px;
 }
 
+/// Tertiary title typography
 %title_3 {
   font-weight: 700;
   font-size: 20px;
 }
 
+/// Quaternary title typography
 %title_4 {
   font-weight: 700;
   font-size: 18px;
 }
 
+/// Quinary title typography
 %title_5 {
   font-weight: 700;
   font-size: 16px;
 }
 
+/// General heading typography
 %heading {
   font-weight: 700;
   font-size: 14.6px;
 }
 
+/// Caption heading typography for smaller section headers
 %caption_heading {
   font-weight: 700;
   font-size: 13px;
 }
 
+/// Standard caption typography
 %caption {
   font-weight: 400;
   font-size: 12px;
 }
 
+/// Smaller text typography for fine details
 %smaller {
   font-weight: 400;
   font-size: 12px;
@@ -104,6 +122,13 @@
 
 
 
+/// Mixin for styling slider/progress bar widgets with customizable appearance
+/// @param {Length} $height - Height of the slider trough
+/// @param {Color} $highlight-color - Color for the filled portion
+/// @param {Boolean} $knob - Whether to show a draggable knob
+/// @param {Length} $radius - Border radius for rounded corners
+/// @param {Color} $slider-color - Background color of the slider trough
+/// @param {Length} $min-length - Minimum width of the slider
 @mixin slider(
   $height: 11px,
   $highlight-color: white,
@@ -169,6 +194,8 @@
   }
 }
 
+/// Mixin for floating/popover widget styling with shadow, border, and background
+/// @param {Length} $radius - Border radius for the widget corners
 @mixin floating-widget($radius: variable.$bar-menus-popover-border-radius) {
   @include module-shadow(
     variable.$bar-menus-popover-shadow-enabled,
@@ -205,6 +232,7 @@
   }
 }
 
+/// Mixin for styling toggle switch widgets
 @mixin switch {
   slider {
     background-color: theme.$background-dark;
@@ -218,6 +246,10 @@
   }
 }
 
+/// Mixin for adding consistent spacing between child elements in horizontal/vertical containers
+/// @param {Number} $multiplier - Multiplier for the base spacing value
+/// @param {Length} $spacing - Base spacing value to use
+/// @param {Boolean} $rec - Whether to apply spacing recursively to nested boxes
 @mixin spacing($multiplier: 1, $spacing: variable.$spacing, $rec: false) {
   &.horizontal>* {
     margin: 0 calc($spacing * $multiplier / 2);
@@ -273,6 +305,8 @@
 }
 
 
+/// Mixin for applying predefined widget style classes based on type
+/// @param {String} $type - The style type ('flat', 'shadow', 'bordered', 'leaf', 'leaf-inverse', or 'default')
 @mixin widget_style($type) {
   @if $type ==flat {
     @extend .flat;
