@@ -635,6 +635,10 @@ class SettingsGUI(Window):
             elif key == "widget":
                 return ["default", "flat", "shadow", "bordered", "leaf", "leaf-inverse"]
 
+        # Handle widget_style anywhere in the theme
+        if key == "widget_style":
+            return ["default", "flat", "shadow", "bordered", "leaf", "leaf-inverse"]
+
         return theme_enums.get(key)
 
     def _update_theme(self, path: str, key: str, value):
