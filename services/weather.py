@@ -344,12 +344,14 @@ class WeatherService(Service):
                 if now - os.path.getmtime(self.cache_file) < ttl:
                     with open(self.cache_file, "r") as f:
                         cached_data = json.load(f)
-                        # Check if cached provider matches current provider
+                        # Check if cached provider and location match current ones
                         cached_provider = cached_data.get("provider")
-                        if cached_provider == self.provider:
+                        cached_location = cached_data.get("cached_location")
+                        if (cached_provider == self.provider and
+                            cached_location == location):
                             return cached_data
                         else:
-                            # Provider mismatch, remove old cache
+                            # Provider or location mismatch, remove old cache
                             with suppress(Exception):
                                 os.remove(self.cache_file)
             except Exception:
@@ -357,8 +359,9 @@ class WeatherService(Service):
 
         weather = self.simple_weather_info(location)
         if weather:
-            # Add provider to cached data
+            # Add provider and location to cached data
             weather["provider"] = self.provider
+            weather["cached_location"] = location
             write_json_file(weather, self.cache_file)
 
         return weather
