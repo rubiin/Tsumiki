@@ -612,8 +612,8 @@ class SettingsGUI(Window):
 
     def _get_theme_enum_options(self, path: str, key: str) -> list | None:
         """Get enum options for theme keys."""
-        # Add theme-specific enums if needed
-        theme_enums = {
+        # Define all enum options
+        enum_options = {
             "scheme": [
                 "scheme-tonal-spot",
                 "scheme-content",
@@ -628,37 +628,21 @@ class SettingsGUI(Window):
             "widget_style": ["default", "flat", "shadow", "bordered", "leaf", "leaf-inverse"],
         }
 
-        # Handle nested bar style options
-        if path == "theme.bar.style":
-            if key == "panel":
-                return ["default", "floating", "scoop"]
-            elif key == "widget":
-                return ["default", "flat", "shadow", "bordered", "leaf", "leaf-inverse"]
+        # Define bar style options
+        bar_style_options = {
+            "panel": ["default", "floating", "scoop"],
+            "widget": ["default", "flat", "shadow", "bordered", "leaf", "leaf-inverse"],
+        }
 
-        # Handle widget_style anywhere in the theme
-        if key == "widget_style":
-            return ["default", "flat", "shadow", "bordered", "leaf", "leaf-inverse"]
+        # Check for bar style options
+        if path == "theme.bar.style" and key in bar_style_options:
+            return bar_style_options[key]
 
-        return theme_enums.get(key)
-
-    def _update_theme(self, path: str, key: str, value):
-        """Update theme value at any nesting level."""
-        parts = path.split(".")
-        target = self.theme
-
-        for part in parts[1:]:  # Skip 'theme' prefix
-            if part not in target:
-                target[part] = {}
-            target = target[part]
-
-        if target.get(key) != value:
-            target[key] = value
-            self.modified = True
-            self.save_btn.set_sensitive(True)
+        # Check for general enum options
+        return enum_options.get(key)
 
     def _create_about_tab(self):
         """Create the about tab."""
-
         vbox = Box(orientation="v", spacing=18, style="margin: 30px;", h_align="center")
 
         # Logo
@@ -689,20 +673,28 @@ class SettingsGUI(Window):
 
         return vbox
 
-    def _update_config(self, path: str, key: str, value):
-        """Update config value at any nesting level."""
+    def _update_nested_dict(self, target_dict: dict, path: str, key: str, value):
+        """Update a nested dictionary at any nesting level."""
         parts = path.split(".")
-        target = self.config
+        current = target_dict
 
-        for part in parts:
-            if part not in target:
-                target[part] = {}
-            target = target[part]
+        for part in parts[1:]:  # Skip the root prefix (theme/config)
+            if part not in current:
+                current[part] = {}
+            current = current[part]
 
-        if target.get(key) != value:
-            target[key] = value
+        if current.get(key) != value:
+            current[key] = value
             self.modified = True
             self.save_btn.set_sensitive(True)
+
+    def _update_theme(self, path: str, key: str, value):
+        """Update theme value at any nesting level."""
+        self._update_nested_dict(self.theme, path, key, value)
+
+    def _update_config(self, path: str, key: str, value):
+        """Update config value at any nesting level."""
+        self._update_nested_dict(self.config, path, key, value)
 
     def _on_save(self, *_):
         """Save configuration."""
