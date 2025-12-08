@@ -277,7 +277,7 @@ Updating to latest commit is fairly simple, just git pull the latest changes.
 | **updates**           | Widget that manages system updates, patches, and version upgrades.             |
 | **quick_settings**    | Displays panel for quickly accessing some settings like brightness, sound etc. |
 | **volume**            | Widget that controls the system’s audio volume.                                |
-| **weather**           | Widget that displays current weather information or forecasts.                 |
+| **weather**           | Widget that displays current weather information or forecasts. Supports multiple weather providers (Open-Meteo and wttr.in) with provider switching and location-based cache invalidation.                 |
 | **window_title**      | Widget that shows the title of the current window or application.              |
 | **workspaces**        | Widget that displays virtual desktops or workspaces.                           |
 | **world_clock**       | Widget that displays clock for various timezones.                              |
