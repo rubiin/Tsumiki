@@ -239,7 +239,9 @@ class WeatherMenu(Box, BaseWeatherWidget):
 
         self.children = (self.title_box, expander)
 
-        WeatherService().get_weather_async(
+        weather_service = WeatherService()
+        weather_service.set_provider(self.config.get("provider", "open-meteo"))
+        weather_service.get_weather_async(
             location=self.config.get("location", ""),
             ttl=self.config.get("interval", 3600),
             callback=self.update_data,
@@ -467,7 +469,9 @@ class WeatherWidget(ButtonWidget, BaseWeatherWidget):
             # Check if the update time is more than interval seconds ago
             return True  # Keep the repeater alive
 
-        WeatherService().get_weather_async(
+        weather_service = WeatherService()
+        weather_service.set_provider(self.config.get("provider", "open-meteo"))
+        weather_service.get_weather_async(
             location=self.config.get("location", ""),
             ttl=self.config.get("interval", 3600),
             callback=self.update_data,

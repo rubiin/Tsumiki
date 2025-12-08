@@ -996,6 +996,12 @@
 							"type": "number",
 							"default": 3600,
 							"description": "The interval at which to refresh the weather information."
+						},
+						"provider": {
+							"type": "string",
+							"enum": ["open-meteo", "wttr"],
+							"default": "open-meteo",
+							"description": "The weather API provider to use."
 						}
 					},
 					"required": [
@@ -1008,7 +1014,8 @@
 						"hover_reveal",
 						"reveal_duration",
 						"expanded",
-						"interval"
+						"interval",
+						"provider"
 					]
 				},
 				"window_title": {

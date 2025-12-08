@@ -348,9 +348,12 @@ def convert_bytes(
 
 
 # Function to check if the current time is between sunrise and sunset
-def check_if_day(sunrise_time, sunset_time, current_time: str | None = None) -> str:
-    time_format = "%I:%M %p"
-
+def check_if_day(
+    sunrise_time,
+    sunset_time,
+    current_time: str | None = None,
+    time_format: str = "%I:%M %p",
+) -> str:
     if current_time is None:
         current_time = datetime.now().strftime(time_format)
 

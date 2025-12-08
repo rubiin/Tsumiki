@@ -14,6 +14,7 @@ from .types import (
     Slider_Type,
     Temperature_Unit,
     Title_Fallback,
+    Weather_Provider,
     Widget_Mode,
     Wind_Speed_Unit,
 )
@@ -464,6 +465,7 @@ Weather = TypedDict(
         "reveal_duration": int,
         "expanded": bool,
         "interval": int,
+        "provider": Weather_Provider,
     },
 )
 

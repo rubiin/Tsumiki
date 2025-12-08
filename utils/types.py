@@ -22,6 +22,8 @@ Temperature_Unit = Literal["celsius", "fahrenheit"]
 
 Wind_Speed_Unit = Literal["mph", "kmh"]
 
+Weather_Provider = Literal["open-meteo", "wttr"]
+
 Keyboard_Mode = Literal["none", "exclusive", "on-demand"]
 
 

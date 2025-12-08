@@ -25,6 +25,7 @@ from utils.types import (
     Orientation,
     Reveal_Animations,
     Temperature_Unit,
+    Weather_Provider,
     Widget_Mode,
     get_literal_values,
 )
@@ -378,6 +379,7 @@ class SettingsGUI(Window):
             "behavior": get_literal_values(Dock_Behavior),
             "temperature_unit": get_literal_values(Temperature_Unit),
             "unit": get_literal_values(Data_Unit),
+            "provider": get_literal_values(Weather_Provider),
         }
         return enums.get(key)
 
@@ -389,12 +391,8 @@ class SettingsGUI(Window):
         self._create_theme_section(
             vbox, "matugen", self.theme.get("matugen", {}), "theme"
         )
-        self._create_theme_section(
-            vbox, "font", self.theme.get("font", {}), "theme"
-        )
-        self._create_theme_section(
-            vbox, "bar", self.theme.get("bar", {}), "theme"
-        )
+        self._create_theme_section(vbox, "font", self.theme.get("font", {}), "theme")
+        self._create_theme_section(vbox, "bar", self.theme.get("bar", {}), "theme")
         self._create_theme_section(
             vbox, "modules", self.theme.get("modules", {}), "theme"
         )
@@ -508,9 +506,7 @@ class SettingsGUI(Window):
                 value,
                 0,
                 10000,
-                lambda sp, p=path, k=key: self._update_theme(
-                    p, k, int(sp.get_value())
-                ),
+                lambda sp, p=path, k=key: self._update_theme(p, k, int(sp.get_value())),
             )
         elif isinstance(value, float):
             # Special handling for contrast (matugen field)
@@ -625,7 +621,14 @@ class SettingsGUI(Window):
                 "scheme-rainbow",
             ],
             "mode": ["dark", "light"],
-            "widget_style": ["default", "flat", "shadow", "bordered", "leaf", "leaf-inverse"],
+            "widget_style": [
+                "default",
+                "flat",
+                "shadow",
+                "bordered",
+                "leaf",
+                "leaf-inverse",
+            ],
         }
 
         # Define bar style options
