@@ -8,9 +8,11 @@ from typing import Callable, Optional
 import requests
 from fabric.core.service import Service
 from gi.repository import GLib
+from loguru import logger
 
 from utils.constants import WEATHER_CACHE_FILE
 from utils.functions import write_json_file
+from utils.thread import thread
 
 
 class WeatherService(Service):
@@ -329,7 +331,8 @@ class WeatherService(Service):
 
                 return weather_data
 
-            except Exception:
+            except Exception as e:
+                logger.error("Error fetching weather data: %s", e)
                 time.sleep(delay * (attempt + 1))
 
         return None
@@ -347,15 +350,27 @@ class WeatherService(Service):
                         # Check if cached provider and location match current ones
                         cached_provider = cached_data.get("provider")
                         cached_location = cached_data.get("cached_location")
-                        if (cached_provider == self.provider and
-                            cached_location == location):
+                        if (
+                            cached_provider == self.provider
+                            and cached_location == location
+                        ):
                             return cached_data
                         else:
                             # Provider or location mismatch, remove old cache
-                            with suppress(Exception):
+                            with suppress(OSError, PermissionError):
                                 os.remove(self.cache_file)
-            except Exception:
-                pass
+            except (json.JSONDecodeError, OSError, PermissionError) as e:
+                logger.warning(
+                    "Failed to read cache file, will fetch fresh data: %s", e
+                )
+                # Remove corrupted cache file
+                with suppress(OSError, PermissionError):
+                    os.remove(self.cache_file)
+            except Exception as e:
+                logger.error("Unexpected error reading cache: %s", e)
+                # Remove potentially corrupted cache file
+                with suppress(OSError, PermissionError):
+                    os.remove(self.cache_file)
 
         weather = self.simple_weather_info(location)
         if weather:
@@ -383,7 +398,6 @@ class WeatherService(Service):
         ttl: int = 3600,
         refresh: bool = False,
     ):
-        from utils.thread import thread
 
         thread(self._weather_worker, location, ttl, refresh, callback)
 
