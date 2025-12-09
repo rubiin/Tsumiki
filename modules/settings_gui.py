@@ -11,6 +11,7 @@ from fabric.widgets.scrolledwindow import ScrolledWindow
 from fabric.widgets.stack import Stack
 from fabric.widgets.window import Window
 from gi.repository import Gtk
+from loguru import logger
 
 from shared.buttons import HoverButton
 from utils.config import configuration, theme_config, widget_config
@@ -246,7 +247,7 @@ class SettingsGUI(Window):
                 widget = self._create_switch(
                     value,
                     lambda sw, _, k=key: self._update_config(
-                        "general", k, sw.get_active()
+                        "config.general", k, sw.get_active()
                     ),
                 )
             else:
@@ -317,7 +318,9 @@ class SettingsGUI(Window):
 
         for module_name, module_config in sorted(modules.items()):
             if isinstance(module_config, dict):
-                self._create_config_section(vbox, module_name, module_config, "modules")
+                self._create_config_section(
+                    vbox, module_name, module_config, "config.modules"
+                )
 
         return scrolled
 
@@ -328,7 +331,9 @@ class SettingsGUI(Window):
 
         for widget_name, widget_cfg in sorted(widgets.items()):
             if isinstance(widget_cfg, dict):
-                self._create_config_section(vbox, widget_name, widget_cfg, "widgets")
+                self._create_config_section(
+                    vbox, widget_name, widget_cfg, "config.widgets"
+                )
 
         return scrolled
 
@@ -693,17 +698,27 @@ class SettingsGUI(Window):
 
     def _update_theme(self, path: str, key: str, value):
         """Update theme value at any nesting level."""
+        logger.info(f"[SETTINGS] Updating theme: path={path}, key={key}, value={value}")
         self._update_nested_dict(self.theme, path, key, value)
 
     def _update_config(self, path: str, key: str, value):
         """Update config value at any nesting level."""
+        logger.info(
+            f"[SETTINGS] Updating config: path={path}, key={key}, value={value}"
+        )
         self._update_nested_dict(self.config, path, key, value)
 
     def _on_save(self, *_):
         """Save configuration."""
         try:
+            logger.info(f"[SETTINGS] Saving config to {configuration.json_config_file}")
+            logger.info(f"[SETTINGS] Config keys: {list(self.config.keys())}")
+            logger.info(f"[SETTINGS] Theme keys: {list(self.theme.keys())}")
+
             write_json_file(configuration.json_config_file, self.config)
-            write_json_file(configuration.theme_file, self.theme)
+            write_json_file(configuration.theme_config_file, self.theme)
+
+            logger.info("[SETTINGS] Configuration saved successfully")
             self.modified = False
             self.save_btn.set_sensitive(False)
             exec_shell_command_async(
@@ -711,6 +726,7 @@ class SettingsGUI(Window):
                 lambda _: None,
             )
         except Exception as e:
+            logger.error(f"[SETTINGS] Failed to save configuration: {e}")
             exec_shell_command_async(
                 f'notify-send "Tsumiki" "Failed to save: {e}"',
                 lambda _: None,

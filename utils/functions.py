@@ -706,8 +706,7 @@ def send_notification(
 
 
 # Function to write a JSON file
-@run_in_thread
-def write_json_file(data: dict, path: str):
+def write_json_file(path: str, data: dict):
     try:
         with open(path, "w") as f:
             json.dump(data, f, indent=4, ensure_ascii=False)
@@ -728,7 +727,7 @@ def ensure_file(path: str):
         if not file.query_exists(None):
             file.create(Gio.FileCreateFlags.NONE, None)
     except GLib.Error as e:
-        print(f"Failed to ensure file '{path}': {e.message}")
+        logger.error(f"Failed to ensure file '{path}': {e.message}")
 
 
 # Function to ensure the directory exists

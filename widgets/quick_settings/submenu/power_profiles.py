@@ -58,7 +58,6 @@ class PowerProfileItem(HoverButton):
         self.set_active(active)
 
     def _handle_click(self, *_):
-        print(f"Setting power profile to {self.profile}")
         power_pfl_service.active_profile = self.profile
         return True
 

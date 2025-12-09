@@ -88,7 +88,7 @@ class CustomNotifications(Notifications):
 
             # Write only if the validated data differs from what was originally loaded
             if valid_notifications != original_data:
-                write_json_file(valid_notifications, NOTIFICATION_CACHE_FILE)
+                write_json_file(NOTIFICATION_CACHE_FILE, valid_notifications)
                 logger.info(
                     f"{Colors.INFO}[Notification] Notifications written successfully."
                 )
@@ -268,7 +268,10 @@ class CustomNotifications(Notifications):
 
     def _persist_and_emit(self):
         """Persist notifications and emit relevant signals."""
-        write_json_file(self.all_notifications, NOTIFICATION_CACHE_FILE)
+        write_json_file(
+            NOTIFICATION_CACHE_FILE,
+            self.all_notifications,
+        )
         self.emit("notification_count", len(self.all_notifications))
 
     def clear_all_notifications(self):

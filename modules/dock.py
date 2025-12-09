@@ -435,7 +435,7 @@ class AppBar(Box):
 
     def _save_pinned_apps(self):
         """Save pinned apps to file."""
-        write_json_file(self.pinned_apps, PINNED_APPS_FILE)
+        write_json_file(PINNED_APPS_FILE, self.pinned_apps)
 
     def _pin_running_app(self, client: Glace.Client):
         app_id = client.get_app_id()

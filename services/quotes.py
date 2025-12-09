@@ -29,13 +29,11 @@ class QuotesService(Service):
 
     def __init__(
         self,
-        cache_file: str = QUOTES_CACHE_FILE,
     ):
         super().__init__()
         if hasattr(self, "_initialized"):
             return
         self._initialized = True
-        self.cache_file = cache_file
         self.api_url = "https://zenquotes.io/api/quotes/"
 
     def _make_session(self) -> requests.Session:
@@ -71,13 +69,13 @@ class QuotesService(Service):
     def get_quotes(self) -> Optional[dict]:
         quotes = None
 
-        if os.path.exists(self.cache_file):
-            quotes = read_json_file(self.cache_file)
+        if os.path.exists(QUOTES_CACHE_FILE):
+            quotes = read_json_file(QUOTES_CACHE_FILE)
             return random.choice(quotes) if quotes else None
 
         quotes = self.simple_quotes_info()
         if quotes:
-            write_json_file(quotes, self.cache_file)
+            write_json_file(QUOTES_CACHE_FILE, quotes)
 
         return random.choice(quotes) if quotes else None
 

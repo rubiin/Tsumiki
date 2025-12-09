@@ -38,7 +38,6 @@ class WeatherService(Service):
 
     def __init__(
         self,
-        cache_file: str = WEATHER_CACHE_FILE,
         api_url: str = "https://api.open-meteo.com/v1/forecast",
         geocode_url: str = "https://nominatim.openstreetmap.org/search",
         provider: str = "open-meteo",  # "open-meteo" or "wttr"
@@ -48,7 +47,6 @@ class WeatherService(Service):
         if hasattr(self, "_initialized"):
             return
         self._initialized = True
-        self.cache_file = cache_file
         self.api_url = api_url
         self.geocode_url = geocode_url
         self.provider = provider.lower()
@@ -342,10 +340,10 @@ class WeatherService(Service):
     ) -> Optional[dict]:
         now = time.time()
 
-        if not refresh and os.path.exists(self.cache_file):
+        if not refresh and os.path.exists(WEATHER_CACHE_FILE):
             try:
-                if now - os.path.getmtime(self.cache_file) < ttl:
-                    with open(self.cache_file, "r") as f:
+                if now - os.path.getmtime(WEATHER_CACHE_FILE) < ttl:
+                    with open(WEATHER_CACHE_FILE, "r") as f:
                         cached_data = json.load(f)
                         # Check if cached provider and location match current ones
                         cached_provider = cached_data.get("provider")
@@ -358,26 +356,26 @@ class WeatherService(Service):
                         else:
                             # Provider or location mismatch, remove old cache
                             with suppress(OSError, PermissionError):
-                                os.remove(self.cache_file)
+                                os.remove(WEATHER_CACHE_FILE)
             except (json.JSONDecodeError, OSError, PermissionError) as e:
                 logger.warning(
                     "Failed to read cache file, will fetch fresh data: %s", e
                 )
                 # Remove corrupted cache file
                 with suppress(OSError, PermissionError):
-                    os.remove(self.cache_file)
+                    os.remove(WEATHER_CACHE_FILE)
             except Exception as e:
                 logger.error("Unexpected error reading cache: %s", e)
                 # Remove potentially corrupted cache file
                 with suppress(OSError, PermissionError):
-                    os.remove(self.cache_file)
+                    os.remove(WEATHER_CACHE_FILE)
 
         weather = self.simple_weather_info(location)
         if weather:
             # Add provider and location to cached data
             weather["provider"] = self.provider
             weather["cached_location"] = location
-            write_json_file(weather, self.cache_file)
+            write_json_file(WEATHER_CACHE_FILE, weather)
 
         return weather
 
@@ -398,7 +396,6 @@ class WeatherService(Service):
         ttl: int = 3600,
         refresh: bool = False,
     ):
-
         thread(self._weather_worker, location, ttl, refresh, callback)
 
     def set_provider(self, provider: str):

@@ -112,7 +112,7 @@ class IconResolver:
         """Write cache to disk if dirty."""
         self._write_pending = False
         if self._cache_dirty:
-            write_json_file(self._icon_dict, ICON_CACHE_FILE)
+            write_json_file(ICON_CACHE_FILE, self._icon_dict)
             self._cache_dirty = False
             logger.info("[ICONS] Flushed icon cache to disk")
         return False  # Don't repeat
