@@ -875,7 +875,7 @@ class AppBar(Box):
             addr = str(client.get_hyprland_address())
             data.set(data.get_target(), 8, addr.encode())
         except Exception as e:
-            logger.warning(f"[Dock] Failed to get drag data: {e}")
+            logger.exception(f"[Dock] Failed to get drag data: {e}")
 
     def _on_drag_data_received(self, widget, context, x, y, data, info, time):
         """Handle drop - reorder the dock apps."""
@@ -988,7 +988,6 @@ class Dock(Window):
                 self.revealer.set_reveal_child(False)
         except json.JSONDecodeError as e:
             logger.exception(f"[Dock] Failed to parse workspace response: {e}")
-            return
 
     def _check_for_windows(self, *_):
         try:
@@ -1000,4 +999,3 @@ class Dock(Window):
             )
         except Exception as e:
             logger.exception(f"[Dock] Failed to get active workspace: {e}")
-            return

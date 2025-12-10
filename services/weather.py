@@ -62,7 +62,7 @@ class WeatherService(SingletonService):
                 lon = float(data[0]["longitude"])
                 return lat, lon
         except Exception as e:
-            logger.error("Error geocoding location", e)
+            logger.exception("Error geocoding location", e)
 
         return None
 
@@ -308,7 +308,7 @@ class WeatherService(SingletonService):
                 return weather_data
 
             except Exception as e:
-                logger.error("Error fetching weather data: %s", e)
+                logger.exception("Error fetching weather data: %s", e)
                 time.sleep(delay * (attempt + 1))
 
         return None
@@ -343,7 +343,7 @@ class WeatherService(SingletonService):
                 with suppress(OSError, PermissionError):
                     os.remove(WEATHER_CACHE_FILE)
             except Exception as e:
-                logger.error("Unexpected error reading cache: %s", e)
+                logger.exception("Unexpected error reading cache: %s", e)
                 # Remove potentially corrupted cache file
                 with suppress(OSError, PermissionError):
                     os.remove(WEATHER_CACHE_FILE)

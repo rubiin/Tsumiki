@@ -75,7 +75,6 @@ class KeyboardLayoutWidget(ButtonWidget):
             self.kb_label.set_label(label)
         except Exception as e:
             logger.exception(f"[Keyboard] Failed to parse keyboard data: {e}")
-            return
 
     def _get_keyboard(self):
         try:

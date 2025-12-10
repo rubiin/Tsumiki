@@ -61,7 +61,6 @@ class WindowCountWidget(ButtonWidget):
             logger.info(f"[WindowCount] Workspace: {data.get('id')} | Windows: {count}")
         except Exception as e:
             logger.exception(f"[WindowCount] Failed to parse workspace data: {e}")
-            return
 
     def _get_window_count(self, *_):
         """Get the number of windows in the active workspace."""
@@ -74,4 +73,3 @@ class WindowCountWidget(ButtonWidget):
             )
         except Exception as e:
             logger.exception(f"[WindowCount] Failed to get active workspace: {e}")
-            return

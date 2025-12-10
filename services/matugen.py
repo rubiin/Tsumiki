@@ -82,5 +82,6 @@ class MatugenService(SingletonService):
             self.emit("colors_generated")
             return True
         except Exception as e:
+            logger.exception(f"[Matugen] Color generation failed: {e}")
             self.emit("generation_failed", str(e))
             return False

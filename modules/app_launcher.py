@@ -255,7 +255,9 @@ class AppLauncher(PopupWindow):
                     self.viewport.remove(child)
             except (AttributeError, TypeError) as e:
                 # Log error and recreate grid as fallback
-                logger.warning(f"Warning: Grid clear failed ({e}), recreating viewport")
+                logger.exception(
+                    f"Warning: Grid clear failed ({e}), recreating viewport"
+                )
                 try:
                     self.viewport = Grid(
                         column_homogeneous=True,

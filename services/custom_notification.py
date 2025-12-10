@@ -205,7 +205,7 @@ class CustomNotifications(Notifications):
                 valid_notifications.append(notification)
             except Exception as e:
                 msg = f"[Notification] Removing invalid: {str(e)[:50]}"
-                logger.debug(msg)
+                logger.exception(msg)
                 invalid_id = notification.get("id", 0)
                 self.emit("notification-closed", invalid_id, "dismissed-by-limit")
                 invalid_count += 1

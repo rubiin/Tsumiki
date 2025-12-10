@@ -55,7 +55,6 @@ class SubMapWidget(ButtonWidget):
                 )
         except Exception as e:
             logger.exception(f"[Submap] Failed to parse submap data: {e}")
-            return
 
     def _get_submap(self, *_):
         try:

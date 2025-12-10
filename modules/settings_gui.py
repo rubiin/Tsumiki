@@ -710,7 +710,7 @@ class SettingsGUI(Window):
                 lambda _: None,
             )
         except Exception as e:
-            logger.error(f"[SETTINGS] Failed to save configuration: {e}")
+            logger.exception(f"[SETTINGS] Failed to save configuration: {e}")
             exec_shell_command_async(
                 f'notify-send "Tsumiki" "Failed to save: {e}"',
                 lambda _: None,

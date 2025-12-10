@@ -67,7 +67,6 @@ class BatteryService(SingletonService):
             return result.unpack() if result is not None else None
         except Exception as e:
             logger.exception(f"[Battery] Error retrieving '{property}': {e}")
-            return None
 
     def handle_property_change(self, *_):
         # You may filter which property changed by checking parameters[1]

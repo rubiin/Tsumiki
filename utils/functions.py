@@ -139,7 +139,7 @@ def _pillow_worker(image_path, callback, color_count, resize):
 
             GLib.idle_add(callback, palette)
     except Exception as e:
-        print(f"[ColorExtractor] Failed: {e}")
+        logger.exception(f"Error generating color palette: {e}")
         GLib.idle_add(callback, None)
 
 
@@ -711,7 +711,7 @@ def write_json_file(path: str, data: dict):
         with open(path, "w") as f:
             json.dump(data, f, indent=4, ensure_ascii=False)
     except Exception as e:
-        logger.warning(f"Failed to write json: {e}")
+        logger.exception(f"Failed to write json: {e}")
 
 
 # Function to ensure the file exists
@@ -727,7 +727,7 @@ def ensure_file(path: str):
         if not file.query_exists(None):
             file.create(Gio.FileCreateFlags.NONE, None)
     except GLib.Error as e:
-        logger.error(f"Failed to ensure file '{path}': {e.message}")
+        logger.exception(f"Failed to ensure file '{path}': {e.message}")
 
 
 # Function to ensure the directory exists
@@ -737,7 +737,7 @@ def ensure_directory(path: str):
         try:
             Gio.File.new_for_path(path).make_directory_with_parents(None)
         except GLib.Error as e:
-            print(f"Failed to create directory {path}: {e.message}")
+            logger.exception(f"Failed to create directory {path}: {e.message}")
 
 
 # Function to check if an app is running

@@ -1,9 +1,7 @@
 import importlib
 
 from fabric import Application
-from fabric.utils import (
-    exec_shell_command_async,
-)
+from fabric.utils import exec_shell_command_async, logger
 from fabric.widgets.box import Box
 from fabric.widgets.centerbox import CenterBox
 from fabric.widgets.eventbox import EventBox
@@ -329,7 +327,7 @@ class StatusBar(Window):
                 app.remove_window(bar)
                 bar.destroy()
             except Exception:
-                pass
+                logger.exception("Error removing old bar during hotplug handling")
 
         # Create new
         bars.clear()

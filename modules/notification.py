@@ -253,7 +253,7 @@ class NotificationWidget(EventBox):
                 del image_pixbuf
         except GLib.GError:
             # If the image is not available, use the symbolic icon
-            logger.warning(f"{Colors.WARNING}[Notification] Image not available.")
+            logger.exception(f"{Colors.WARNING}[Notification] Image not available.")
 
         # Create body label
         if is_long_content:

@@ -95,7 +95,7 @@ class CustomModuleWidget(ButtonWidget):
             try:
                 self._register_signal(sig)
             except Exception as e:
-                logger.warning(
+                logger.exception(
                     f"{Colors.WARNING}[CustomModule] Failed to register signal: {e}"
                 )
 
@@ -175,7 +175,7 @@ class CustomModuleWidget(ButtonWidget):
             invoke_repeater(100, read_output)
 
         except Exception as e:
-            logger.error(
+            logger.exception(
                 f"{Colors.ERROR}[CustomModule] Failed to start continuous command: {e}"
             )
 
