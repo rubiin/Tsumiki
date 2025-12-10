@@ -1,591 +1,591 @@
 {
-    "name": "catpuccin-mocha",
-    "matugen": {
-        "enabled": true,
-        "wallpaper": "~/2.jpg",
-        "scheme": "scheme-tonal-spot",
-        "mode": "dark",
-        "contrast": 0
-    },
-    "font": {
-        "name": "JetBrainsMono Nerd Font Propo",
-        "size": "1rem",
-        "weight": 600,
-        "style": "normal"
-    },
-    "border-radius": "10px",
-    "padding": "7pt",
-    "spacing": "12pt",
-    "border-width": "1px",
-    "modules": {
-        "app_launcher": {
-            "scaling": 100,
-            "opacity": 50,
-            "shadow": {
-                "enabled": false,
-                "offset": 0,
-                "blur": 0,
-                "spread": 0,
-                "opacity": 100
-            },
-            "padding_x": "8px",
-            "padding_y": "8px",
-            "margin_x": "8px",
-            "margin_y": "8px",
-            "border": {
-                "enabled": false,
-                "width": "1px",
-                "radius": "1.5rem"
-            }
-        },
-        "dock": {
-            "scaling": 100,
-            "opacity": 45,
-            "shadow": {
-                "enabled": false,
-                "offset": 0,
-                "blur": 0,
-                "spread": 0,
-                "opacity": 100
-            },
-            "padding_x": "8px",
-            "padding_y": "4px",
-            "margin_x": "8px",
-            "margin_y": "8px",
-            "border": {
-                "enabled": false,
-                "width": "1px",
-                "radius": "1.5rem"
-            }
-        },
-        "osd": {
-            "scaling": 100,
-            "opacity": 100,
-            "widget_style": "default",
-            "sliders": {
-                "height": "7px",
-                "knob_height": "8px",
-                "knob": false
-            },
-            "shadow": {
-                "enabled": false,
-                "offset": 0,
-                "blur": 0,
-                "spread": 0,
-                "opacity": 100
-            },
-            "padding_x": ".8em",
-            "padding_y": ".6em",
-            "margin_x": "0",
-            "margin_y": "1.25em",
-            "border": {
-                "enabled": false,
-                "width": "1px",
-                "radius": "16px"
-            }
-        },
-        "notification": {
-            "scaling": 100,
-            "opacity": 100,
-            "shadow": {
-                "enabled": false,
-                "offset": 0,
-                "blur": 0,
-                "spread": 0,
-                "opacity": 100
-            },
-            "padding_x": ".9em",
-            "padding_y": ".9em",
-            "margin_x": "0",
-            "margin_y": "1.25em",
-            "border": {
-                "enabled": false,
-                "width": "1px",
-                "radius": "16px"
-            }
-        },
-        "desktop_clock": {
-            "spacing": ".125em",
-            "border": {
-                "enabled": false,
-                "width": "1px",
-                "radius": "16px"
-            }
-        },
-        "desktop_quotes": {
-            "spacing": ".125em",
-            "border": {
-                "enabled": false,
-                "width": "1px",
-                "radius": "16px"
-            }
-        },
-        "activate_linux": {
-            "spacing": ".125em",
-            "border": {
-                "enabled": false,
-                "width": "1px",
-                "radius": "16px"
-            }
-        }
-    },
-    "bar": {
-        "scaling": 100,
-        "opacity": 70,
-        "style": {
-            "panel": "default",
-            "widget": "default"
-        },
-        "shadow": {
-            "enabled": false,
-            "offset": 0,
-            "blur": 0,
-            "spread": 0,
-            "opacity": 100
-        },
-        "padding_x": ".8em",
-        "padding_y": ".6em",
-        "margin_x": "0",
-        "margin_y": "1.25em",
-        "border": {
-            "enabled": true,
-            "width": "4px",
-            "radius": "16px"
-        },
-        "buttons": {
-            "scaling": 100,
-            "opacity": 100,
-            "hover_opacity": 90,
-            "padding_x": "0",
-            "padding_y": "1.25em",
-            "margin_x": "0",
-            "margin_y": "1.25em",
-            "shadow": {
-                "enabled": false,
-                "offset": 0,
-                "blur": 0,
-                "spread": 0,
-                "opacity": 100
-            }
-        },
-        "widgets": {
-            "divider": {
-                "size": " 2px",
-                "margin_x": "0",
-                "margin_y": "1.25em"
-            },
-            "spacing": {
-                "size": " 20px"
-            },
-            "cpu": {
-                "spacing": ".125em",
-                "icon_size": "12px",
-                "border": {
-                    "enabled": false,
-                    "width": "1px",
-                    "radius": "16px"
-                }
-            },
-            "cliphist": {
-                "spacing": ".125em",
-                "icon_size": "12px",
-                "border": {
-                    "enabled": false,
-                    "width": "1px",
-                    "radius": "16px"
-                }
-            },
-            "radio_player": {
-                "spacing": ".125em",
-                "icon_size": "12px",
-                "border": {
-                    "enabled": false,
-                    "width": "1px",
-                    "radius": "16px"
-                }
-            },
-            "kanban": {
-                "spacing": ".125em",
-                "icon_size": "12px",
-                "border": {
-                    "enabled": false,
-                    "width": "1px",
-                    "radius": "16px"
-                }
-            },
-            "emoji_picker": {
-                "spacing": ".125em",
-                "icon_size": "12px",
-                "border": {
-                    "enabled": false,
-                    "width": "1px",
-                    "radius": "16px"
-                }
-            },
-            "window_count": {
-                "spacing": ".125em",
-                "icon_size": "12px",
-                "border": {
-                    "enabled": false,
-                    "width": "1px",
-                    "radius": "16px"
-                }
-            },
-            "world_clock": {
-                "spacing": ".125em",
-                "icon_size": "12px",
-                "border": {
-                    "enabled": false,
-                    "width": "1px",
-                    "radius": "16px"
-                }
-            },
-            "memory": {
-                "spacing": ".125em",
-                "icon_size": "14px",
-                "border": {
-                    "enabled": false,
-                    "width": "1px",
-                    "radius": "16px"
-                }
-            },
-            "storage": {
-                "spacing": ".125em",
-                "icon_size": "14px",
-                "border": {
-                    "enabled": false,
-                    "width": "1px",
-                    "radius": "16px"
-                }
-            },
-            "network_usage": {
-                "spacing": ".125em",
-                "icon_size": "14px",
-                "border": {
-                    "enabled": false,
-                    "width": "1px",
-                    "radius": "16px"
-                }
-            },
-            "battery": {
-                "spacing": ".125em",
-                "icon_size": "14px",
-                "border": {
-                    "enabled": false,
-                    "width": "1px",
-                    "radius": "16px"
-                }
-            },
-            "bluetooth": {
-                "spacing": ".125em",
-                "icon_size": "12px",
-                "border": {
-                    "enabled": false,
-                    "width": "1px",
-                    "radius": "16px"
-                }
-            },
-            "brightness": {
-                "spacing": ".125em",
-                "icon_size": "14px",
-                "border": {
-                    "enabled": false,
-                    "width": "1px",
-                    "radius": "16px"
-                }
-            },
-            "cava": {
-                "spacing": ".125em",
-                "border": {
-                    "enabled": false,
-                    "width": "1px",
-                    "radius": "16px"
-                }
-            },
-            "click_counter": {
-                "spacing": ".125em",
-                "icon_size": "14px",
-                "border": {
-                    "enabled": false,
-                    "width": "1px",
-                    "radius": "16px"
-                }
-            },
-            "date_time": {
-                "spacing": ".125em",
-                "border": {
-                    "enabled": false,
-                    "width": "1px",
-                    "radius": "16px"
-                }
-            },
-            "hypridle": {
-                "spacing": ".125em",
-                "icon_size": "14px",
-                "border": {
-                    "enabled": false,
-                    "width": "1px",
-                    "radius": "16px"
-                }
-            },
-            "hyprpicker": {
-                "spacing": ".125em",
-                "icon_size": "14px",
-                "border": {
-                    "enabled": false,
-                    "width": "1px",
-                    "radius": "16px"
-                }
-            },
-            "hyprsunset": {
-                "spacing": ".125em",
-                "icon_size": "14px",
-                "border": {
-                    "enabled": false,
-                    "width": "1px",
-                    "radius": "16px"
-                }
-            },
-            "keyboard": {
-                "icon_size": "14px",
-                "spacing": ".125em",
-                "border": {
-                    "enabled": false,
-                    "width": "1px",
-                    "radius": "16px"
-                }
-            },
-            "language": {
-                "spacing": ".125em",
-                "icon_size": "14px",
-                "border": {
-                    "enabled": false,
-                    "width": "1px",
-                    "radius": "16px"
-                }
-            },
-            "microphone": {
-                "spacing": ".125em",
-                "icon_size": "14px",
-                "border": {
-                    "enabled": false,
-                    "width": "1px",
-                    "radius": "16px"
-                }
-            },
-            "mpris": {
-                "spacing": ".125em",
-                "icon_size": "14px",
-                "border": {
-                    "enabled": false,
-                    "width": "1px",
-                    "radius": "16px"
-                }
-            },
-            "ocr": {
-                "spacing": ".125em",
-                "icon_size": "14px",
-                "border": {
-                    "enabled": false,
-                    "width": "1px",
-                    "radius": "16px"
-                }
-            },
-            "overview": {
-                "spacing": ".125em",
-                "icon_size": "14px",
-                "border": {
-                    "enabled": false,
-                    "width": "1px",
-                    "radius": "16px"
-                }
-            },
-            "power": {
-                "spacing": ".125em",
-                "icon_size": "14px",
-                "border": {
-                    "enabled": false,
-                    "width": "1px",
-                    "radius": "16px"
-                }
-            },
-            "recorder": {
-                "spacing": ".125em",
-                "icon_size": "14px",
-                "border": {
-                    "enabled": false,
-                    "width": "1px",
-                    "radius": "16px"
-                }
-            },
-            "screenshot": {
-                "spacing": ".125em",
-                "icon_size": "14px",
-                "border": {
-                    "enabled": false,
-                    "width": "1px",
-                    "radius": "16px"
-                }
-            },
-            "stopwatch": {
-                "spacing": ".125em",
-                "icon_size": "14px",
-                "border": {
-                    "enabled": false,
-                    "width": "1px",
-                    "radius": "16px"
-                }
-            },
-            "submap": {
-                "spacing": ".125em",
-                "icon_size": "14px",
-                "border": {
-                    "enabled": false,
-                    "width": "1px",
-                    "radius": "16px"
-                }
-            },
-            "system_tray": {
-                "spacing": ".125em",
-                "border": {
-                    "enabled": false,
-                    "width": "1px",
-                    "radius": "16px"
-                }
-            },
-            "quick_settings": {
-                "spacing": ".125em",
-                "sliders": {
-                    "height": "7px",
-                    "knob_height": "8px",
-                    "knob": true
-                },
-                "border": {
-                    "enabled": false,
-                    "width": "1px",
-                    "radius": "16px"
-                }
-            },
-            "taskbar": {
-                "spacing": ".125em",
-                "border": {
-                    "enabled": false,
-                    "width": "1px",
-                    "radius": "16px"
-                }
-            },
-            "theme": {
-                "spacing": ".125em",
-                "icon_size": "14px",
-                "border": {
-                    "enabled": false,
-                    "width": "1px",
-                    "radius": "16px"
-                }
-            },
-            "updates": {
-                "spacing": ".125em",
-                "icon_size": "14px",
-                "border": {
-                    "enabled": false,
-                    "width": "1px",
-                    "radius": "16px"
-                }
-            },
-            "volume": {
-                "spacing": ".125em",
-                "icon_size": "14px",
-                "border": {
-                    "enabled": false,
-                    "width": "1px",
-                    "radius": "16px"
-                }
-            },
-            "weather": {
-                "spacing": ".125em",
-                "icon_size": "16px",
-                "border": {
-                    "enabled": false,
-                    "width": "1px",
-                    "radius": "16px"
-                }
-            },
-            "window_title": {
-                "spacing": ".125em",
-                "icon_size": "14px",
-                "border": {
-                    "enabled": false,
-                    "width": "1px",
-                    "radius": "16px"
-                }
-            },
-            "workspaces": {
-                "spacing": ".125em",
-                "pill": {
-                    "height": ".125em",
-                    "width": ".5em",
-                    "active_width": "1em",
-                    "border": {
-                        "enabled": false,
-                        "width": "2px",
-                        "radius": "16px"
-                    }
-                },
-                "border": {
-                    "enabled": false,
-                    "width": "1px",
-                    "radius": "16px"
-                }
-            }
-        },
-        "menus": {
-            "scaling": 100,
-            "opacity": 100,
-            "border": {
-                "enabled": false,
-                "width": "1px",
-                "radius": "16px"
-            },
-            "popover": {
-                "scaling": 100,
-                "opacity": 100,
-                "margin_x": "0",
-                "margin_y": "1.25em",
-                "padding_x": "0.5em",
-                "padding_y": "0.5em",
-                "shadow": {
-                    "enabled": false,
-                    "offset": 0,
-                    "blur": 0,
-                    "spread": 0,
-                    "opacity": 100
-                },
-                "border": {
-                    "enabled": false,
-                    "width": "1px",
-                    "radius": "1.5em"
-                },
-                "font-weight": 700
-            },
-            "tooltip": {
-                "scaling": 100,
-                "opacity": 100,
-                "border": {
-                    "enabled": false,
-                    "width": "1px",
-                    "radius": "1em"
-                },
-                "shadow": {
-                    "enabled": false,
-                    "offset": 0,
-                    "blur": 0,
-                    "spread": 0,
-                    "opacity": 100
-                },
-                "font-weight": 700,
-                "padding_x": ".25em",
-                "padding_y": ".125em"
-            }
-        }
-    }
+	"name": "catpuccin-mocha",
+	"matugen": {
+		"enabled": true,
+		"wallpaper": "~/2.jpg",
+		"scheme": "scheme-tonal-spot",
+		"mode": "dark",
+		"contrast": 0
+	},
+	"font": {
+		"name": "JetBrainsMono Nerd Font Propo",
+		"size": "1rem",
+		"weight": 600,
+		"style": "normal"
+	},
+	"border-radius": "10px",
+	"padding": "7pt",
+	"spacing": "12pt",
+	"border-width": "1px",
+	"modules": {
+		"app_launcher": {
+			"scaling": 100,
+			"opacity": 50,
+			"shadow": {
+				"enabled": false,
+				"offset": 0,
+				"blur": 0,
+				"spread": 0,
+				"opacity": 100
+			},
+			"padding_x": "8px",
+			"padding_y": "8px",
+			"margin_x": "8px",
+			"margin_y": "8px",
+			"border": {
+				"enabled": false,
+				"width": "1px",
+				"radius": "1.5rem"
+			}
+		},
+		"dock": {
+			"scaling": 100,
+			"opacity": 45,
+			"shadow": {
+				"enabled": false,
+				"offset": 0,
+				"blur": 0,
+				"spread": 0,
+				"opacity": 100
+			},
+			"padding_x": "8px",
+			"padding_y": "4px",
+			"margin_x": "8px",
+			"margin_y": "8px",
+			"border": {
+				"enabled": false,
+				"width": "1px",
+				"radius": "1.5rem"
+			}
+		},
+		"osd": {
+			"scaling": 100,
+			"opacity": 100,
+			"widget_style": "default",
+			"sliders": {
+				"height": "7px",
+				"knob_height": "8px",
+				"knob": false
+			},
+			"shadow": {
+				"enabled": false,
+				"offset": 0,
+				"blur": 0,
+				"spread": 0,
+				"opacity": 100
+			},
+			"padding_x": ".8em",
+			"padding_y": ".6em",
+			"margin_x": "0",
+			"margin_y": "1.25em",
+			"border": {
+				"enabled": false,
+				"width": "1px",
+				"radius": "16px"
+			}
+		},
+		"notification": {
+			"scaling": 100,
+			"opacity": 100,
+			"shadow": {
+				"enabled": false,
+				"offset": 0,
+				"blur": 0,
+				"spread": 0,
+				"opacity": 100
+			},
+			"padding_x": ".9em",
+			"padding_y": ".9em",
+			"margin_x": "0",
+			"margin_y": "1.25em",
+			"border": {
+				"enabled": false,
+				"width": "1px",
+				"radius": "16px"
+			}
+		},
+		"desktop_clock": {
+			"spacing": ".125em",
+			"border": {
+				"enabled": false,
+				"width": "1px",
+				"radius": "16px"
+			}
+		},
+		"desktop_quotes": {
+			"spacing": ".125em",
+			"border": {
+				"enabled": false,
+				"width": "1px",
+				"radius": "16px"
+			}
+		},
+		"activate_linux": {
+			"spacing": ".125em",
+			"border": {
+				"enabled": false,
+				"width": "1px",
+				"radius": "16px"
+			}
+		}
+	},
+	"bar": {
+		"scaling": 100,
+		"opacity": 70,
+		"style": {
+			"panel": "default",
+			"widget": "default"
+		},
+		"shadow": {
+			"enabled": false,
+			"offset": 0,
+			"blur": 0,
+			"spread": 0,
+			"opacity": 100
+		},
+		"padding_x": ".8em",
+		"padding_y": ".6em",
+		"margin_x": "0",
+		"margin_y": "1.25em",
+		"border": {
+			"enabled": true,
+			"width": "4px",
+			"radius": "16px"
+		},
+		"buttons": {
+			"scaling": 100,
+			"opacity": 100,
+			"hover_opacity": 90,
+			"padding_x": "0",
+			"padding_y": "1.25em",
+			"margin_x": "0",
+			"margin_y": "1.25em",
+			"shadow": {
+				"enabled": false,
+				"offset": 0,
+				"blur": 0,
+				"spread": 0,
+				"opacity": 100
+			}
+		},
+		"widgets": {
+			"divider": {
+				"size": " 2px",
+				"margin_x": "0",
+				"margin_y": "1.25em"
+			},
+			"spacing": {
+				"size": " 20px"
+			},
+			"cpu": {
+				"spacing": ".125em",
+				"icon_size": "12px",
+				"border": {
+					"enabled": false,
+					"width": "1px",
+					"radius": "16px"
+				}
+			},
+			"cliphist": {
+				"spacing": ".125em",
+				"icon_size": "12px",
+				"border": {
+					"enabled": false,
+					"width": "1px",
+					"radius": "16px"
+				}
+			},
+			"radio_player": {
+				"spacing": ".125em",
+				"icon_size": "12px",
+				"border": {
+					"enabled": false,
+					"width": "1px",
+					"radius": "16px"
+				}
+			},
+			"kanban": {
+				"spacing": ".125em",
+				"icon_size": "12px",
+				"border": {
+					"enabled": false,
+					"width": "1px",
+					"radius": "16px"
+				}
+			},
+			"emoji_picker": {
+				"spacing": ".125em",
+				"icon_size": "12px",
+				"border": {
+					"enabled": false,
+					"width": "1px",
+					"radius": "16px"
+				}
+			},
+			"window_count": {
+				"spacing": ".125em",
+				"icon_size": "12px",
+				"border": {
+					"enabled": false,
+					"width": "1px",
+					"radius": "16px"
+				}
+			},
+			"world_clock": {
+				"spacing": ".125em",
+				"icon_size": "12px",
+				"border": {
+					"enabled": false,
+					"width": "1px",
+					"radius": "16px"
+				}
+			},
+			"memory": {
+				"spacing": ".125em",
+				"icon_size": "14px",
+				"border": {
+					"enabled": false,
+					"width": "1px",
+					"radius": "16px"
+				}
+			},
+			"storage": {
+				"spacing": ".125em",
+				"icon_size": "14px",
+				"border": {
+					"enabled": false,
+					"width": "1px",
+					"radius": "16px"
+				}
+			},
+			"network_usage": {
+				"spacing": ".125em",
+				"icon_size": "14px",
+				"border": {
+					"enabled": false,
+					"width": "1px",
+					"radius": "16px"
+				}
+			},
+			"battery": {
+				"spacing": ".125em",
+				"icon_size": "14px",
+				"border": {
+					"enabled": false,
+					"width": "1px",
+					"radius": "16px"
+				}
+			},
+			"bluetooth": {
+				"spacing": ".125em",
+				"icon_size": "12px",
+				"border": {
+					"enabled": false,
+					"width": "1px",
+					"radius": "16px"
+				}
+			},
+			"brightness": {
+				"spacing": ".125em",
+				"icon_size": "14px",
+				"border": {
+					"enabled": false,
+					"width": "1px",
+					"radius": "16px"
+				}
+			},
+			"cava": {
+				"spacing": ".125em",
+				"border": {
+					"enabled": false,
+					"width": "1px",
+					"radius": "16px"
+				}
+			},
+			"click_counter": {
+				"spacing": ".125em",
+				"icon_size": "14px",
+				"border": {
+					"enabled": false,
+					"width": "1px",
+					"radius": "16px"
+				}
+			},
+			"date_time": {
+				"spacing": ".125em",
+				"border": {
+					"enabled": false,
+					"width": "1px",
+					"radius": "16px"
+				}
+			},
+			"hypridle": {
+				"spacing": ".125em",
+				"icon_size": "14px",
+				"border": {
+					"enabled": false,
+					"width": "1px",
+					"radius": "16px"
+				}
+			},
+			"hyprpicker": {
+				"spacing": ".125em",
+				"icon_size": "14px",
+				"border": {
+					"enabled": false,
+					"width": "1px",
+					"radius": "16px"
+				}
+			},
+			"hyprsunset": {
+				"spacing": ".125em",
+				"icon_size": "14px",
+				"border": {
+					"enabled": false,
+					"width": "1px",
+					"radius": "16px"
+				}
+			},
+			"keyboard": {
+				"icon_size": "14px",
+				"spacing": ".125em",
+				"border": {
+					"enabled": false,
+					"width": "1px",
+					"radius": "16px"
+				}
+			},
+			"language": {
+				"spacing": ".125em",
+				"icon_size": "14px",
+				"border": {
+					"enabled": false,
+					"width": "1px",
+					"radius": "16px"
+				}
+			},
+			"microphone": {
+				"spacing": ".125em",
+				"icon_size": "14px",
+				"border": {
+					"enabled": false,
+					"width": "1px",
+					"radius": "16px"
+				}
+			},
+			"mpris": {
+				"spacing": ".125em",
+				"icon_size": "14px",
+				"border": {
+					"enabled": false,
+					"width": "1px",
+					"radius": "16px"
+				}
+			},
+			"ocr": {
+				"spacing": ".125em",
+				"icon_size": "14px",
+				"border": {
+					"enabled": false,
+					"width": "1px",
+					"radius": "16px"
+				}
+			},
+			"overview": {
+				"spacing": ".125em",
+				"icon_size": "14px",
+				"border": {
+					"enabled": false,
+					"width": "1px",
+					"radius": "16px"
+				}
+			},
+			"power": {
+				"spacing": ".125em",
+				"icon_size": "14px",
+				"border": {
+					"enabled": false,
+					"width": "1px",
+					"radius": "16px"
+				}
+			},
+			"recorder": {
+				"spacing": ".125em",
+				"icon_size": "14px",
+				"border": {
+					"enabled": false,
+					"width": "1px",
+					"radius": "16px"
+				}
+			},
+			"screenshot": {
+				"spacing": ".125em",
+				"icon_size": "14px",
+				"border": {
+					"enabled": false,
+					"width": "1px",
+					"radius": "16px"
+				}
+			},
+			"stopwatch": {
+				"spacing": ".125em",
+				"icon_size": "14px",
+				"border": {
+					"enabled": false,
+					"width": "1px",
+					"radius": "16px"
+				}
+			},
+			"submap": {
+				"spacing": ".125em",
+				"icon_size": "14px",
+				"border": {
+					"enabled": false,
+					"width": "1px",
+					"radius": "16px"
+				}
+			},
+			"system_tray": {
+				"spacing": ".125em",
+				"border": {
+					"enabled": false,
+					"width": "1px",
+					"radius": "16px"
+				}
+			},
+			"quick_settings": {
+				"spacing": ".125em",
+				"sliders": {
+					"height": "7px",
+					"knob_height": "8px",
+					"knob": true
+				},
+				"border": {
+					"enabled": false,
+					"width": "1px",
+					"radius": "16px"
+				}
+			},
+			"taskbar": {
+				"spacing": ".125em",
+				"border": {
+					"enabled": false,
+					"width": "1px",
+					"radius": "16px"
+				}
+			},
+			"theme": {
+				"spacing": ".125em",
+				"icon_size": "14px",
+				"border": {
+					"enabled": false,
+					"width": "1px",
+					"radius": "16px"
+				}
+			},
+			"updates": {
+				"spacing": ".125em",
+				"icon_size": "14px",
+				"border": {
+					"enabled": false,
+					"width": "1px",
+					"radius": "16px"
+				}
+			},
+			"volume": {
+				"spacing": ".125em",
+				"icon_size": "14px",
+				"border": {
+					"enabled": false,
+					"width": "1px",
+					"radius": "16px"
+				}
+			},
+			"weather": {
+				"spacing": ".125em",
+				"icon_size": "16px",
+				"border": {
+					"enabled": false,
+					"width": "1px",
+					"radius": "16px"
+				}
+			},
+			"window_title": {
+				"spacing": ".125em",
+				"icon_size": "14px",
+				"border": {
+					"enabled": false,
+					"width": "1px",
+					"radius": "16px"
+				}
+			},
+			"workspaces": {
+				"spacing": ".125em",
+				"pill": {
+					"height": ".125em",
+					"width": ".5em",
+					"active_width": "1em",
+					"border": {
+						"enabled": false,
+						"width": "2px",
+						"radius": "16px"
+					}
+				},
+				"border": {
+					"enabled": false,
+					"width": "1px",
+					"radius": "16px"
+				}
+			}
+		},
+		"menus": {
+			"scaling": 100,
+			"opacity": 100,
+			"border": {
+				"enabled": false,
+				"width": "1px",
+				"radius": "16px"
+			},
+			"popover": {
+				"scaling": 100,
+				"opacity": 100,
+				"margin_x": "0",
+				"margin_y": "1.25em",
+				"padding_x": "0.5em",
+				"padding_y": "0.5em",
+				"shadow": {
+					"enabled": false,
+					"offset": 0,
+					"blur": 0,
+					"spread": 0,
+					"opacity": 100
+				},
+				"border": {
+					"enabled": false,
+					"width": "1px",
+					"radius": "1.5em"
+				},
+				"font-weight": 700
+			},
+			"tooltip": {
+				"scaling": 100,
+				"opacity": 100,
+				"border": {
+					"enabled": false,
+					"width": "1px",
+					"radius": "1em"
+				},
+				"shadow": {
+					"enabled": false,
+					"offset": 0,
+					"blur": 0,
+					"spread": 0,
+					"opacity": 100
+				},
+				"font-weight": 700,
+				"padding_x": ".25em",
+				"padding_y": ".125em"
+			}
+		}
+	}
 }
