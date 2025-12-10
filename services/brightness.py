@@ -1,26 +1,21 @@
 import os
 
-from fabric.core.service import Property, Service, Signal
+from fabric.core.service import Property, Signal
 from fabric.utils import exec_shell_command_async, logger, monitor_file
 from gi.repository import GLib
 
 import utils.functions as helpers
 from utils.colors import Colors
 
+from .base import SingletonService
+
 
 def exec_brightnessctl_async(args: str):
     exec_shell_command_async(f"brightnessctl {args}", lambda _: None)
 
 
-class BrightnessService(Service):
+class BrightnessService(SingletonService):
     """Service to manage screen brightness levels."""
-
-    _instance = None
-
-    def __new__(cls):
-        if cls._instance is None:
-            cls._instance = super().__new__(cls)
-        return cls._instance
 
     @Signal
     def brightness_changed(self, value: int) -> None:

@@ -1,31 +1,21 @@
 import os
 import random
-import threading
 import time
 from typing import Callable, Optional
 
 import requests
-from fabric.core.service import Service
 from gi.repository import GLib
 
 from utils.constants import QUOTES_CACHE_FILE
 from utils.functions import read_json_file, write_json_file
 
+from .base import SingletonService
 
-class QuotesService(Service):
+
+class QuotesService(SingletonService):
     """Lightweight singleton to fetch and cache quotes from ZenQuotes API."""
 
     __slots__ = ("api_url", "cache_file")  # prevents __dict__ memory
-
-    _instance = None
-    _lock = threading.Lock()
-
-    def __new__(cls, *args, **kwargs):
-        if cls._instance is None:
-            with cls._lock:
-                if cls._instance is None:
-                    cls._instance = super().__new__(cls)
-        return cls._instance
 
     def __init__(
         self,

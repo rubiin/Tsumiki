@@ -1,10 +1,12 @@
 from typing import Literal
 
-from fabric import Service, Signal
+from fabric import Signal
 from fabric.utils import logger
 from gi.repository import Gio
 
 from utils.dbus_helper import GioDBusHelper
+
+from .base import SingletonService
 
 DeviceState = {
     0: "UNKNOWN",
@@ -17,19 +19,12 @@ DeviceState = {
 }
 
 
-class BatteryService(Service):
+class BatteryService(SingletonService):
     """Service to interact with UPower via GIO D-Bus"""
 
     @Signal
     def changed(self) -> None:
         """Signal emitted when battery changes."""
-
-    _instance = None
-
-    def __new__(cls):
-        if cls._instance is None:
-            cls._instance = super().__new__(cls)
-        return cls._instance
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

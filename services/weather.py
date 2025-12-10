@@ -1,12 +1,10 @@
 import json
 import os
-import threading
 import time
 from contextlib import suppress
 from typing import Callable, Optional
 
 import requests
-from fabric.core.service import Service
 from fabric.utils import logger
 from gi.repository import GLib
 
@@ -14,8 +12,10 @@ from utils.constants import WEATHER_CACHE_FILE
 from utils.functions import write_json_file
 from utils.thread import thread
 
+from .base import SingletonService
 
-class WeatherService(Service):
+
+class WeatherService(SingletonService):
     """Lightweight singleton to fetch and cache weather from Open-Meteo or wttr.in."""
 
     __slots__ = (
@@ -25,16 +25,6 @@ class WeatherService(Service):
         "provider",
         "wttr_url_template",
     )  # prevents __dict__ memory
-
-    _instance = None
-    _lock = threading.Lock()
-
-    def __new__(cls, *args, **kwargs):
-        if cls._instance is None:
-            with cls._lock:
-                if cls._instance is None:
-                    cls._instance = super().__new__(cls)
-        return cls._instance
 
     def __init__(
         self,

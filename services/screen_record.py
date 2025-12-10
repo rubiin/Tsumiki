@@ -3,7 +3,7 @@ import subprocess
 import tempfile
 from datetime import datetime
 
-from fabric.core.service import Property, Service, Signal
+from fabric.core.service import Property, Signal
 from fabric.utils import exec_shell_command, exec_shell_command_async, logger
 from gi.repository import Gio, GLib
 
@@ -11,19 +11,14 @@ import utils.functions as helpers
 from utils.constants import APPLICATION_NAME, ASSETS_DIR
 from utils.icons import symbolic_icons
 
+from .base import SingletonService
 
-class ScreenRecorderService(Service):
+
+class ScreenRecorderService(SingletonService):
     """Service to handle screen recording"""
 
     @Signal
     def recording(self, value: bool) -> None: ...
-
-    _instance = None
-
-    def __new__(cls):
-        if cls._instance is None:
-            cls._instance = super().__new__(cls)
-        return cls._instance
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

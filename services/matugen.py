@@ -1,6 +1,6 @@
 import os
 
-from fabric.core.service import Service, Signal
+from fabric.core.service import Signal
 from fabric.utils import (
     exec_shell_command,
     exec_shell_command_async,
@@ -11,19 +11,14 @@ from fabric.utils import (
 import utils.functions as helpers
 from utils.config import theme_config
 
+from .base import SingletonService
+
 # Config path constant
 _CONFIG_PATH = get_relative_path("../assets/matugen/config.toml")
 
 
-class MatugenService(Service):
+class MatugenService(SingletonService):
     """Service to generate Material You color schemes using Matugen."""
-
-    _instance = None
-
-    def __new__(cls):
-        if cls._instance is None:
-            cls._instance = super().__new__(cls)
-        return cls._instance
 
     @Signal
     def colors_generated(self) -> None:

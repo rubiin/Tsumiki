@@ -10,6 +10,8 @@ from gi.repository import Gio
 from utils.constants import NETWORK_RECENCY_THRESHOLD_SECONDS
 from utils.exceptions import NetworkManagerNotFoundError
 
+from .base import SingletonService
+
 try:
     gi.require_version("NM", "1.0")
     from gi.repository import NM
@@ -433,15 +435,8 @@ class Ethernet(Service):
         self.emit("changed")
 
 
-class NetworkService(Service):
+class NetworkService(SingletonService):
     """A service to manage network devices"""
-
-    _instance = None
-
-    def __new__(cls):
-        if cls._instance is None:
-            cls._instance = super().__new__(cls)
-        return cls._instance
 
     @Signal
     def device_ready(self) -> None: ...
