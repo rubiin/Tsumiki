@@ -18,25 +18,15 @@ from .base import SingletonService
 class WeatherService(SingletonService):
     """Lightweight singleton to fetch and cache weather from Open-Meteo or wttr.in."""
 
-    __slots__ = (
-        "api_url",
-        "cache_file",
-        "geocode_url",
-        "provider",
-        "wttr_url_template",
-    )  # prevents __dict__ memory
-
     def __init__(
         self,
         api_url: str = "https://api.open-meteo.com/v1/forecast",
-        geocode_url: str = "https://nominatim.openstreetmap.org/search",
+        geocode_url: str = "https://geocoding-api.open-meteo.com/v1/search",
         provider: str = "open-meteo",  # "open-meteo" or "wttr"
         wttr_url_template: str = "https://wttr.in/{location}?format=j1",
     ):
         super().__init__()
-        if hasattr(self, "_initialized"):
-            return
-        self._initialized = True
+
         self.api_url = api_url
         self.geocode_url = geocode_url
         self.provider = provider.lower()
@@ -58,11 +48,7 @@ class WeatherService(SingletonService):
     def _geocode_location(self, location: str) -> Optional[tuple[float, float]]:
         """Convert location name to latitude and longitude using Nominatim."""
         session = self._make_session()
-        params = {
-            "q": location,
-            "format": "json",
-            "limit": 1,
-        }
+        params = {"name": location, "count": 10, "language": "en", "format": "json"}
 
         try:
             response = session.get(self.geocode_url, params=params, timeout=10)
@@ -70,11 +56,11 @@ class WeatherService(SingletonService):
             data = response.json()
 
             if data:
-                lat = float(data[0]["lat"])
-                lon = float(data[0]["lon"])
+                lat = float(data[0]["latitude"])
+                lon = float(data[0]["longitude"])
                 return lat, lon
-        except Exception:
-            pass
+        except Exception as e:
+            print("Error geocoding location", e)
 
         return None
 
@@ -218,6 +204,7 @@ class WeatherService(SingletonService):
 
         # First, geocode the location
         coords = self._geocode_location(location)
+        logger.info(f"[Weather] Geocoded '{location}' to coordinates: {coords}")
         if not coords:
             return None
 

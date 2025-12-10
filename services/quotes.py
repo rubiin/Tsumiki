@@ -21,9 +21,6 @@ class QuotesService(SingletonService):
         self,
     ):
         super().__init__()
-        if hasattr(self, "_initialized"):
-            return
-        self._initialized = True
         self.api_url = "https://zenquotes.io/api/quotes/"
 
     def _make_session(self) -> requests.Session:
