@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.10.1](https://github.com/rubiin/Tsumiki/compare/v2.10.0...v2.10.1) (2025-12-10)
+
+
+### 🐛 Bug Fixes
+
+* replace logger warnings with exceptions for better error handling across multiple modules ([869d683](https://github.com/rubiin/Tsumiki/commit/869d683716f238334cf16909511e03c4af2dea3e))
+* update geocoding error handling and improve logging in WeatherService ([17fc542](https://github.com/rubiin/Tsumiki/commit/17fc54218796dfdb65612ab89ebec7ac09f6fa8b))
+
+
+### ♻️ Code Refactoring
+
+* remove redundant initialization check and update geocode parameters in WeatherService ([96255f2](https://github.com/rubiin/Tsumiki/commit/96255f2390f4783e50ccabf6eff018b7c498a8d9))
+
 ## [2.10.0](https://github.com/rubiin/Tsumiki/compare/v2.9.0...v2.10.0) (2025-12-10)
 
 
