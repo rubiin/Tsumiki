@@ -112,7 +112,8 @@ grid {
     }
 }
 
-#settings-save-btn {
+
+#settings-save-btn , #settings-browse-btn {
     padding: 8px 16px;
     border-radius: variable.$radius;
     font-weight: 500;
@@ -126,6 +127,11 @@ grid {
     &:disabled {
         opacity: 0.5;
     }
+}
+
+#settings-browse-btn{
+    background-color: theme.$surface-disabled;
+    color: theme.$text-main;
 }
 
 switch {
