@@ -56,7 +56,7 @@ Title_Fallback = Literal["class", "title"]
 # Theme enums
 Theme_Scheme = Literal[
     "scheme-tonal-spot",
-    "scheme-content", 
+    "scheme-content",
     "scheme-expressive",
     "scheme-fidelity",
     "scheme-fruit-salad",
@@ -69,7 +69,7 @@ Theme_Mode = Literal["dark", "light"]
 
 Widget_Style = Literal[
     "default",
-    "flat", 
+    "flat",
     "shadow",
     "bordered",
     "leaf",
@@ -78,7 +78,9 @@ Widget_Style = Literal[
 
 Bar_Panel_Style = Literal["default", "floating", "scoop"]
 
-Bar_Widget_Style = Literal["default", "flat", "shadow", "bordered", "leaf", "leaf-inverse"]
+Bar_Widget_Style = Literal[
+    "default", "flat", "shadow", "bordered", "leaf", "leaf-inverse"
+]
 
 
 # Helper function to extract values from Literal types

@@ -7,8 +7,8 @@ from typing import Callable, Optional
 
 import requests
 from fabric.core.service import Service
+from fabric.utils import logger
 from gi.repository import GLib
-from loguru import logger
 
 from utils.constants import WEATHER_CACHE_FILE
 from utils.functions import write_json_file

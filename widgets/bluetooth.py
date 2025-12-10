@@ -11,7 +11,6 @@ class BlueToothWidget(ButtonWidget):
 
     def __init__(self, **kwargs):
         super().__init__(name="bluetooth", **kwargs)
-        self.bluetooth_client = BluetoothClient()
 
         self.icons = text_icons["bluetooth"]
 
@@ -28,6 +27,7 @@ class BlueToothWidget(ButtonWidget):
             self.bt_label = Label(label="On", style_classes=["panel-text"])
             self.container_box.add(self.bt_label)
 
+        self.bluetooth_client = BluetoothClient()
         self.bluetooth_client.connect("changed", self.update_bluetooth_status)
 
         self.update_bluetooth_status()

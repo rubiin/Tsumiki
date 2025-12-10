@@ -2,7 +2,7 @@
 Settings GUI for Tsumiki
 """
 
-from fabric.utils import exec_shell_command_async
+from fabric.utils import exec_shell_command_async, logger
 from fabric.widgets.box import Box
 from fabric.widgets.entry import Entry
 from fabric.widgets.image import Image
@@ -11,7 +11,6 @@ from fabric.widgets.scrolledwindow import ScrolledWindow
 from fabric.widgets.stack import Stack
 from fabric.widgets.window import Window
 from gi.repository import Gtk
-from loguru import logger
 
 from shared.buttons import HoverButton
 from utils.config import configuration, theme_config, widget_config

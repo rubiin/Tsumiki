@@ -1,8 +1,12 @@
 import os
 
 from fabric.core.service import Service, Signal
-from fabric.utils import exec_shell_command, exec_shell_command_async, get_relative_path
-from loguru import logger
+from fabric.utils import (
+    exec_shell_command,
+    exec_shell_command_async,
+    get_relative_path,
+    logger,
+)
 
 import utils.functions as helpers
 from utils.config import theme_config
