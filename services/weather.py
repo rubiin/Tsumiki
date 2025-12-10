@@ -55,12 +55,14 @@ class WeatherService(SingletonService):
             response.raise_for_status()
             data = response.json()
 
+            data = data.get("results", [])
+
             if data:
                 lat = float(data[0]["latitude"])
                 lon = float(data[0]["longitude"])
                 return lat, lon
         except Exception as e:
-            print("Error geocoding location", e)
+            logger.error("Error geocoding location", e)
 
         return None
 
@@ -204,7 +206,6 @@ class WeatherService(SingletonService):
 
         # First, geocode the location
         coords = self._geocode_location(location)
-        logger.info(f"[Weather] Geocoded '{location}' to coordinates: {coords}")
         if not coords:
             return None
 
