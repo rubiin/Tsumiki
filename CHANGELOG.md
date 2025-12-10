@@ -1,5 +1,28 @@
 # Changelog
 
+## [2.10.0](https://github.com/rubiin/Tsumiki/compare/v2.9.0...v2.10.0) (2025-12-10)
+
+
+### 🚀 New Features
+
+* add settings GUI and corresponding widget ([#265](https://github.com/rubiin/Tsumiki/issues/265)) ([3ee74a3](https://github.com/rubiin/Tsumiki/commit/3ee74a31b72439df5b88858138163ab9c1ffc640))
+
+
+### 🐛 Bug Fixes
+
+* closing animation for notifications ([3e4f478](https://github.com/rubiin/Tsumiki/commit/3e4f478fc61c78e14529ffce8bd5e3d5ed9d41e0))
+* combine styles for save and browse buttons in settings GUI ([596e0db](https://github.com/rubiin/Tsumiki/commit/596e0dbf3f5632e9fc664e1737e4425253d5acff))
+* correct parameters in write_json_file calls and improve logging in various modules ([4b4fe09](https://github.com/rubiin/Tsumiki/commit/4b4fe09f108efd006fda2a8191ba72e43b7d3c25))
+* enhance weather widget description to include support for multiple providers ([200e736](https://github.com/rubiin/Tsumiki/commit/200e73653d657151119e833384a1f41dc2ccf825))
+* improve error handling and logging in weather data fetching ([1baa824](https://github.com/rubiin/Tsumiki/commit/1baa82468784d3a3b5469cb855db03cae12c907b))
+* remove redundant logging in configuration save method ([8475523](https://github.com/rubiin/Tsumiki/commit/8475523d3fc7eea70175de81c1f0e829bc9f6cf9))
+* unify logger imports across multiple modules ([5a2fbda](https://github.com/rubiin/Tsumiki/commit/5a2fbdabe42eb59d2d7827f99c678350fde97e71))
+
+
+### ♻️ Code Refactoring
+
+* implement Singleton pattern for service classes ([78c66dc](https://github.com/rubiin/Tsumiki/commit/78c66dcb06e0760e1734545b1e9458f4e16c58b8))
+
 ## [2.9.0](https://github.com/rubiin/Tsumiki/compare/v2.8.1...v2.9.0) (2025-12-05)
 
 
