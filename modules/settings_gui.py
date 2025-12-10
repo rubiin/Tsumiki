@@ -711,10 +711,6 @@ class SettingsGUI(Window):
     def _on_save(self, *_):
         """Save configuration."""
         try:
-            logger.info(f"[SETTINGS] Saving config to {configuration.json_config_file}")
-            logger.info(f"[SETTINGS] Config keys: {list(self.config.keys())}")
-            logger.info(f"[SETTINGS] Theme keys: {list(self.theme.keys())}")
-
             write_json_file(configuration.json_config_file, self.config)
             write_json_file(configuration.theme_config_file, self.theme)
 
