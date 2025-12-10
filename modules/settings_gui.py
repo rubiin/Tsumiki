@@ -20,14 +20,19 @@ from utils.functions import write_json_file
 from utils.types import (
     Anchor,
     Bar_Location,
+    Bar_Panel_Style,
+    Bar_Widget_Style,
     Data_Unit,
     Dock_Behavior,
     Layer,
     Orientation,
     Reveal_Animations,
     Temperature_Unit,
+    Theme_Mode,
+    Theme_Scheme,
     Weather_Provider,
     Widget_Mode,
+    Widget_Style,
     get_literal_values,
 )
 
@@ -615,31 +620,15 @@ class SettingsGUI(Window):
         """Get enum options for theme keys."""
         # Define all enum options
         enum_options = {
-            "scheme": [
-                "scheme-tonal-spot",
-                "scheme-content",
-                "scheme-expressive",
-                "scheme-fidelity",
-                "scheme-fruit-salad",
-                "scheme-monochrome",
-                "scheme-neutral",
-                "scheme-rainbow",
-            ],
-            "mode": ["dark", "light"],
-            "widget_style": [
-                "default",
-                "flat",
-                "shadow",
-                "bordered",
-                "leaf",
-                "leaf-inverse",
-            ],
+            "scheme": get_literal_values(Theme_Scheme),
+            "mode": get_literal_values(Theme_Mode),
+            "widget_style": get_literal_values(Widget_Style),
         }
 
         # Define bar style options
         bar_style_options = {
-            "panel": ["default", "floating", "scoop"],
-            "widget": ["default", "flat", "shadow", "bordered", "leaf", "leaf-inverse"],
+            "panel": get_literal_values(Bar_Panel_Style),
+            "widget": get_literal_values(Bar_Widget_Style),
         }
 
         # Check for bar style options

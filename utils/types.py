@@ -53,6 +53,34 @@ Slider_Type = Literal["brightness", "volume", "microphone"]
 Title_Fallback = Literal["class", "title"]
 
 
+# Theme enums
+Theme_Scheme = Literal[
+    "scheme-tonal-spot",
+    "scheme-content", 
+    "scheme-expressive",
+    "scheme-fidelity",
+    "scheme-fruit-salad",
+    "scheme-monochrome",
+    "scheme-neutral",
+    "scheme-rainbow",
+]
+
+Theme_Mode = Literal["dark", "light"]
+
+Widget_Style = Literal[
+    "default",
+    "flat", 
+    "shadow",
+    "bordered",
+    "leaf",
+    "leaf-inverse",
+]
+
+Bar_Panel_Style = Literal["default", "floating", "scoop"]
+
+Bar_Widget_Style = Literal["default", "flat", "shadow", "bordered", "leaf", "leaf-inverse"]
+
+
 # Helper function to extract values from Literal types
 def get_literal_values(literal_type) -> list[str]:
     """Extract the string values from a Literal type."""
