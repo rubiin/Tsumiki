@@ -5,7 +5,9 @@ from fabric.utils import exec_shell_command, get_relative_path, logger, monitor_
 from gi.repository import GLib
 
 import utils.functions as helpers
+from modules.bar import StatusBar
 from utils.colors import Colors
+from utils.config import theme_config, widget_config
 from utils.constants import APP_DATA_DIRECTORY, APPLICATION_NAME
 
 
@@ -36,8 +38,6 @@ def process_and_apply_css(app: Application):
 def main():
     """Main function to run the application."""
     # Defer config loading until main() is called
-    from modules.bar import StatusBar
-    from utils.config import theme_config, widget_config
 
     general_options = widget_config.get("general", {})
     module_options = widget_config.get("modules", {})

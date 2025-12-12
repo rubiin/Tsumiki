@@ -54,7 +54,7 @@ class MatugenService(SingletonService):
             return
 
         cmd = self._build_cmd(image_path)
-        logger.info(f"[Matugen] Running: {cmd}")
+        logger.info("[Matugen] Generating colors")
 
         def on_complete(result):
             if result is not None:
@@ -74,7 +74,7 @@ class MatugenService(SingletonService):
             return False
 
         cmd = self._build_cmd(image_path)
-        logger.info(f"[Matugen] Running: {cmd}")
+        logger.info("[Matugen] Generating colors")
 
         try:
             exec_shell_command(cmd)
