@@ -2,6 +2,7 @@ import os
 
 from fabric import Application
 from fabric.utils import exec_shell_command, get_relative_path, logger, monitor_file
+from gi.repository import GLib
 
 import utils.functions as helpers
 from utils.colors import Colors
@@ -10,7 +11,6 @@ from utils.constants import APP_DATA_DIRECTORY, APPLICATION_NAME
 
 def process_and_apply_css(app: Application):
     """Compile and apply CSS in background thread."""
-    from gi.repository import GLib
 
     @helpers.run_in_thread
     def _compile():
@@ -69,6 +69,8 @@ def main():
 
     if module_options.get("overview", {}).get("enabled", False):
         from modules.overview import OverViewOverlay
+
+        print("Adding overview")
 
         app.add_window(OverViewOverlay(widget_config))
 
