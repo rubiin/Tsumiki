@@ -61,7 +61,7 @@ The name Tsumiki (pronounced as su-me-ki) comes from the Japanese word "tsumiki"
   Customize fonts, colors, layouts, and behavior using the power of Fabric.
 
 - 🎨 **Material You Theming**
-  Generate dynamic color schemes from your wallpaper using [Matugen](https://github.com/InioX/matugen). Configure in `theme.json` to automatically extract colors and apply Material You design.
+  Generate dynamic color schemes from your wallpaper using [Matugen](https://github.com/InioX/matugen). Configure in `theme.toml` to automatically extract colors and apply Material You design.
 
 - ⚙️ **Highly Configurable**
   Control the positioning, behavior, and appearance of every widget and element. Tailor the experience to fit your exact needs.
@@ -300,7 +300,7 @@ Be sure to kill other notifications daemon that you may be running. You can kill
 Kill the app with `pkill tsumiki`. Run `init.sh -start`. This should show some logs. If it shows like `ModuleNotFoundError`, run `pip install -r requirements.txt`. If this does not solve the issue, do report a bug with screenshot of the log.
 
 ### 4. **Sass compilation error or UI not rendering?**
-Your `theme.json` may be incorrect or outdated. You can copy the latest `theme.json` from the `example/` directory. Be aware that this will overwrite any custom changes you've made.
+Your `theme.toml` may be incorrect or outdated. You can copy the latest `theme.toml` from the `example/` directory. Be aware that this will overwrite any custom changes you've made.
 
 
 ### 5. **No Icons?**

@@ -245,7 +245,7 @@ def copy_theme(theme: str):
 
 # Function to update the theme configuration
 def update_theme_config(theme_name: str):
-    """Update the theme.json file with the new theme name."""
+    """Update the theme.toml file with the new theme name."""
     try:
         theme_config_file = get_relative_path("../theme.toml")
 
