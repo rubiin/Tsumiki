@@ -92,7 +92,7 @@ When creating a new widget:
 - Add the widget name to the enum list in `tsumiki.schema.json` for validation
 - Add default configuration in `utils/constants.py` under `DEFAULT_CONFIG["widgets"]`
 - Also add the schema definitions in `tsumiki.schema.json` for autocompletions
-- Update example configuration in `example/config.json` to demonstrate usage
+- Update example configuration in `example/config.toml` to demonstrate usage
 - Add widget documentation to the README.md widgets table
 - Run `python doc_gen.py` to generate the documentation for the widgets
 

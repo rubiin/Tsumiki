@@ -187,6 +187,19 @@ def read_toml_file(file_path: str) -> Optional[dict]:
         return None
 
 
+@run_in_thread
+def write_toml_file(path: str, data: dict) -> Optional[dict]:
+    import pytomlpp as toml
+
+    try:
+        with open(path, "w") as f:
+            toml.dump(data, f)
+
+    except Exception as e:
+        logger.exception(f"Failed to write toml: {e}")
+        return None
+
+
 # support for multiple monitors
 def for_monitors(widget: Gtk.Widget) -> list[Gtk.Widget]:
     n = Gdk.Display.get_default().get_n_monitors() if Gdk.Display.get_default() else 1
@@ -234,10 +247,10 @@ def copy_theme(theme: str):
 def update_theme_config(theme_name: str):
     """Update the theme.json file with the new theme name."""
     try:
-        theme_config_file = get_relative_path("../theme.json")
+        theme_config_file = get_relative_path("../theme.toml")
 
         # Read current theme config
-        config = read_json_file(theme_config_file)
+        config = read_toml_file(theme_config_file)
 
         if config is None:
             return
@@ -247,7 +260,7 @@ def update_theme_config(theme_name: str):
 
         # Write back to file
 
-        write_json_file(config, theme_config_file)
+        write_toml_file(theme_config_file, config)
 
         logger.info(f"{Colors.INFO}[Theme] Updated theme config to {theme_name}")
     except Exception as e:
@@ -705,7 +718,7 @@ def send_notification(
     return True
 
 
-# Function to write a JSON file
+@run_in_thread
 def write_json_file(path: str, data: dict):
     try:
         with open(path, "w") as f:

@@ -13,7 +13,7 @@ from utils.constants import APPLICATION_NAME
 
 # Constants
 _RESTART_DELAY_MS = 1500
-_CONFIG_FILES = frozenset(("config.json", "config.toml", "theme.json"))
+_CONFIG_FILES = frozenset(("config.toml", "theme.toml"))
 
 
 class ConfigWatcher:

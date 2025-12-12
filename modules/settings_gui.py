@@ -15,7 +15,7 @@ from gi.repository import Gtk
 from shared.buttons import HoverButton
 from utils.config import configuration, theme_config, widget_config
 from utils.constants import ASSETS_DIR
-from utils.functions import write_json_file
+from utils.functions import write_toml_file
 from utils.types import (
     Anchor,
     Bar_Location,
@@ -699,8 +699,10 @@ class SettingsGUI(Window):
     def _on_save(self, *_):
         """Save configuration."""
         try:
-            write_json_file(configuration.json_config_file, self.config)
-            write_json_file(configuration.theme_config_file, self.theme)
+            write_toml_file(configuration.toml_config_file, self.config)
+
+            # TODO: only write changed files
+            write_toml_file(configuration.theme_config_file, self.theme)
 
             logger.info("[SETTINGS] Configuration saved successfully")
             self.modified = False
