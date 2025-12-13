@@ -301,6 +301,11 @@ $toggler-radius: variable.$radius * 1.4;
 
         .panel-font-icon {
           font-size: 16px;
+          background-color: transparent;
+        }
+
+        .panel-text {
+          background-color: transparent;
         }
 
         &.active {
