@@ -1,5 +1,7 @@
 # ruff: noqa: E501
 
+import re
+
 from fabric.utils import get_relative_path
 from gi.repository import GLib
 
@@ -127,7 +129,7 @@ DEFAULT_CONFIG = {
             "mode": "circular",
             "graph_length": 4,
         },
-        "settings": {"icon": "\udb81\udc93", "tooltip": True, "label": False},
+        "settings": {"icon": "󰒓", "tooltip": True, "label": False},
         "date_time": {
             "format": "%b %d %H:%M",
             "calendar": True,
@@ -1318,3 +1320,10 @@ NAMED_COLORS = {
     "yellow",
     "yellow green",
 }
+
+
+# Common regexes and small constant sets shared across modules
+NEWLINE_RE = re.compile(r"\r?\n")
+
+# Suffixes used when normalizing application/window class names
+NORMALIZE_SUFFIXES = frozenset((".bin", ".exe", ".so", "-bin", "-gtk"))
