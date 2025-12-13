@@ -417,6 +417,50 @@ scrolledwindow {
 }
 
 
+#dialog {
+  &-wrapper {
+    background-color: theme.$background-alt;
+    border-radius: variable.$radius;
+    padding: 1rem 2.5rem;
+    border: 1px solid theme.$accent-blue;
+  }
+
+  &-title {
+    @extend %title_2;
+    margin: 1rem;
+  }
+
+  &-body {
+    margin: 1rem;
+    @extend %caption_heading;
+  }
+
+  &-buttons-box {
+    margin: 1rem;
+    margin-top: 2.5rem;
+  }
+
+  &-button {
+    @extend %caption_heading;
+    padding: 0.5rem 2.5rem;
+    border-radius: variable.$radius;
+    background-color: theme.$background;
+    color: theme.$text-main;
+    margin: 0 1rem;
+
+    &:nth-child(1):hover {
+      background-color: #4caf50;
+      color: theme.$background;
+    }
+
+    &:nth-child(2):hover {
+      background-color: #e53935;
+      color: theme.$background;
+    }
+  }
+}
+
+
 .buttons {
   &-basic {
     border-radius: 20px;
