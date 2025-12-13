@@ -67,11 +67,12 @@ class BrightnessWidget(EventBoxWidget):
     def on_scroll(self, _, event):
         # Adjust the brightness based on the scroll direction
         val_y = event.delta_y
+        step_size = self.config.get("step_size", 5)
 
         if val_y > 0:
-            self.brightness_service.screen_brightness += self.config.get("step_size", 5)
+            self.brightness_service.screen_brightness += step_size
         else:
-            self.brightness_service.screen_brightness -= self.config.get("step_size", 5)
+            self.brightness_service.screen_brightness -= step_size
 
     def on_brightness_changed(self, *_):
         normalized_brightness = helpers.convert_to_percent(
