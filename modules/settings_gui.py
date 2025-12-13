@@ -2,7 +2,7 @@
 Settings GUI for Tsumiki
 """
 
-from fabric.utils import exec_shell_command_async, logger
+from fabric.utils import logger
 from fabric.widgets.box import Box
 from fabric.widgets.entry import Entry
 from fabric.widgets.image import Image
@@ -15,7 +15,7 @@ from gi.repository import Gtk
 from shared.buttons import HoverButton
 from utils.config import configuration, theme_config, widget_config
 from utils.constants import ASSETS_DIR
-from utils.functions import write_toml_file
+from utils.functions import send_notification, write_toml_file
 from utils.types import (
     Anchor,
     Bar_Location,
@@ -518,8 +518,7 @@ class SettingsGUI(Window):
         grid = self._create_grid()
         inner_box.add(grid)
 
-        row = 0
-        for key, value in section_config.items():
+        for row, (key, value) in enumerate(section_config.items()):
             if isinstance(value, dict):
                 # Handle deeper nesting recursively
                 self._create_theme_nested_section(
@@ -532,7 +531,6 @@ class SettingsGUI(Window):
                 nested_path = f"{path}.{section_name}"
                 widget = self._create_theme_control(nested_path, key, value)
                 grid.attach(widget, 1, row, 1, 1)
-                row += 1
 
         expander.add(inner_box)
         container.add(expander)
@@ -741,16 +739,10 @@ class SettingsGUI(Window):
             logger.info("[SETTINGS] Configuration saved successfully")
             self.modified = False
             self.save_btn.set_sensitive(False)
-            exec_shell_command_async(
-                'notify-send "Tsumiki" "Configuration saved"',
-                lambda _: None,
-            )
+            send_notification("Tsumiki", "Configuration saved")
         except Exception as e:
             logger.exception(f"[SETTINGS] Failed to save configuration: {e}")
-            exec_shell_command_async(
-                f'notify-send "Tsumiki" "Failed to save: {e}"',
-                lambda _: None,
-            )
+            send_notification("Tsumiki", f"Failed to save: {e}")
 
     def _on_reset(self, *_):
         """Reset to saved config."""
