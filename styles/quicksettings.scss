@@ -148,23 +148,27 @@ $toggler-radius: variable.$radius * 1.4;
       }
     }
 
+
+  @mixin setting-slider($min-length) {
+    @include common.slider($highlight-color: theme.$accent-blue,
+      $knob: variable.$bar-widgets-quick_settings-sliders-knob,
+      $min-length: $min-length,
+      $height: variable.$bar-widgets-quick_settings-sliders-height );
+
+    &.overamplified trough highlight {
+      background-color: theme.$accent-red;
+    }
+
+    &.muted trough highlight,
+    &.muted slider {
+      background-color: theme.$surface-disabled;
+    }
+  }
     .slider-box-long {
       @extend %slider-box-base;
 
       #setting-slider {
-        @include common.slider($highlight-color: theme.$accent-blue,
-          $knob: variable.$bar-widgets-quick_settings-sliders-knob,
-          $min-length: 320px,
-          $height: variable.$bar-widgets-quick_settings-sliders-height );
-
-        &.overamplified trough highlight {
-          background-color: theme.$accent-red;
-        }
-
-        &.muted trough highlight,
-        &.muted slider {
-          background-color: theme.$surface-disabled;
-        }
+        @include setting-slider(320px);
       }
     }
 
@@ -172,19 +176,7 @@ $toggler-radius: variable.$radius * 1.4;
       @extend %slider-box-base;
 
       #setting-slider {
-        @include common.slider($highlight-color: theme.$accent-blue,
-          $knob: variable.$bar-widgets-quick_settings-sliders-knob,
-          $min-length: 250px,
-          $height: variable.$bar-widgets-quick_settings-sliders-height );
-
-        &.overamplified trough highlight {
-          background-color: theme.$accent-red;
-        }
-
-        &.muted trough highlight,
-        &.muted slider {
-          background-color: theme.$surface-disabled;
-        }
+        @include setting-slider(250px);
       }
     }
 
@@ -194,19 +186,7 @@ $toggler-radius: variable.$radius * 1.4;
       padding: common.toEm(10);
 
       #setting-slider {
-        @include common.slider($highlight-color: theme.$accent-blue,
-          $knob: variable.$bar-widgets-quick_settings-sliders-knob,
-          $min-length: 180px,
-          $height: variable.$bar-widgets-quick_settings-sliders-height );
-
-        &.overamplified trough highlight {
-          background-color: theme.$accent-red;
-        }
-
-        &.muted trough highlight,
-        &.muted slider {
-          background-color: theme.$surface-disabled;
-        }
+        @include setting-slider(180px);
       }
     }
 
