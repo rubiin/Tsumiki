@@ -8,6 +8,23 @@ $slider-height: 12px;
 $toggler-radius: variable.$radius * 1.4;
 
 
+@mixin setting-slider($min-length) {
+  @include common.slider($highlight-color: theme.$accent-blue,
+    $knob: variable.$bar-widgets-quick_settings-sliders-knob,
+    $min-length: $min-length,
+    $height: variable.$bar-widgets-quick_settings-sliders-height );
+
+  &.overamplified trough highlight {
+    background-color: theme.$accent-red;
+  }
+
+  &.muted trough highlight,
+  &.muted slider {
+    background-color: theme.$surface-disabled;
+  }
+}
+
+
 #quick_settings {
   border-radius: variable.$bar-widgets-quick_settings-border-radius;
   border: if(variable.$bar-widgets-quick_settings-border-enabled, variable.$border, none);
@@ -149,21 +166,7 @@ $toggler-radius: variable.$radius * 1.4;
     }
 
 
-  @mixin setting-slider($min-length) {
-    @include common.slider($highlight-color: theme.$accent-blue,
-      $knob: variable.$bar-widgets-quick_settings-sliders-knob,
-      $min-length: $min-length,
-      $height: variable.$bar-widgets-quick_settings-sliders-height );
 
-    &.overamplified trough highlight {
-      background-color: theme.$accent-red;
-    }
-
-    &.muted trough highlight,
-    &.muted slider {
-      background-color: theme.$surface-disabled;
-    }
-  }
     .slider-box-long {
       @extend %slider-box-base;
 
@@ -248,7 +251,7 @@ $toggler-radius: variable.$radius * 1.4;
         }
       }
 
-      #wifi-ap-button.submenu-button {
+      .submenu-button#wifi-ap-button {
         padding: common.toEm(7) 0;
 
         &:hover {
@@ -258,8 +261,8 @@ $toggler-radius: variable.$radius * 1.4;
 
 
 
-      #bluetooth-device-box.submenu-button {
-        .submenu-button {
+      #bluetooth-device-box {
+        &.submenu-button {
           padding: common.toEm(6);
           background-color: theme.$surface-neutral;
 
@@ -285,35 +288,35 @@ $toggler-radius: variable.$radius * 1.4;
 
     // this is for buttons like hypridle
 
-    #quicksettings-togglebutton.quicksettings-toggler {
-      background-color: theme.$background;
-      border-radius: $toggler-radius;
-      @extend %caption_heading;
-      padding: common.toEm(3) 0;
-      padding-left: common.toEm(10);
-
-      .panel-font-icon {
-        font-size: 16px;
-      }
-
-      &.active {
-        background-color: theme.$ws-hover;
-
-        &:hover {
-          background-color: color.mix(theme.$ws-hover, black, 85%);
-        }
-
-        label {
-          color: color.mix(#000000, white, 8%);
-        }
-
-        image {
-          color: color.mix(#000000, white, 8%);
-        }
-      }
-    }
-
     #quicksettings-togglebutton {
+      &.quicksettings-toggler {
+        background-color: theme.$background;
+        border-radius: $toggler-radius;
+        @extend %caption_heading;
+        padding: common.toEm(3) 0;
+        padding-left: common.toEm(10);
+
+        .panel-font-icon {
+          font-size: 16px;
+        }
+
+        &.active {
+          background-color: theme.$ws-hover;
+
+          &:hover {
+            background-color: color.mix(theme.$ws-hover, black, 85%);
+          }
+
+          label {
+            color: color.mix(#000000, white, 8%);
+          }
+
+          image {
+            color: color.mix(#000000, white, 8%);
+          }
+        }
+      }
+
       .toggle-revealer {
         border-radius: 0 $toggler-radius $toggler-radius 0;
         padding: common.toEm(10) common.toEm(5);
@@ -327,15 +330,6 @@ $toggler-radius: variable.$radius * 1.4;
         label {
           background-color: theme.$background;
           color: theme.$text-main;
-        }
-
-        &:hover {
-          background-color: theme.$background;
-
-          image,
-          label {
-            background-color: theme.$background;
-          }
         }
 
         &:active {
