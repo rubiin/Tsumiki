@@ -129,6 +129,7 @@ class SettingsGUI(Window):
     def _setup_tabs(self):
         """Setup all tabs in the stack."""
         self.tab_stack.add_titled(self._create_general_tab(), "general", "󰒓 General")
+        self.tab_stack.add_titled(self._create_layout_tab(), "layout", "󰉯 Layout")
         self.tab_stack.add_titled(self._create_modules_tab(), "modules", "󰒍 Modules")
         self.tab_stack.add_titled(self._create_widgets_tab(), "widgets", "󰕰 Widgets")
         self.tab_stack.add_titled(self._create_theme_tab(), "theme", "󰸌 Theme")
@@ -325,6 +326,39 @@ class SettingsGUI(Window):
                 self._create_config_section(
                     vbox, module_name, module_config, "config.modules"
                 )
+
+        return scrolled
+
+    def _create_layout_tab(self):
+        """Create the layout settings tab showing sections like left/middle/right."""
+        scrolled, vbox = self._create_scrolled_container()
+        layout = self.config.get("layout", {})
+
+        vbox.add(self._create_section_header("Layout"))
+
+        grid = self._create_grid()
+        vbox.add(grid)
+
+        row = 0
+        for section_name, items in layout.items():
+            grid.attach(self._create_label(section_name), 0, row, 1, 1)
+
+            if isinstance(items, list):
+                text = ", ".join(str(x) for x in items)
+                entry = Entry(text=text, h_expand=False)
+                entry.set_width_chars(40)
+
+                def on_changed(e, p="config.layout", k=section_name):
+                    raw = e.get_text() or ""
+                    arr = [s.strip() for s in raw.split(",") if s.strip()]
+                    self._update_config(p, k, arr)
+
+                entry.connect("changed", on_changed)
+                grid.attach(entry, 1, row, 1, 1)
+            else:
+                grid.attach(Label(label=str(items), h_align="start"), 1, row, 1, 1)
+
+            row += 1
 
         return scrolled
 
