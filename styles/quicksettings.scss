@@ -174,7 +174,7 @@ $toggler-radius: variable.$radius * 1.4;
       @extend %slider-box-base;
 
       #setting-slider {
-        @include setting-slider(320px);
+        @include setting-slider(variable.$slider-long);
       }
     }
 
@@ -182,7 +182,7 @@ $toggler-radius: variable.$radius * 1.4;
       @extend %slider-box-base;
 
       #setting-slider {
-        @include setting-slider(250px);
+        @include setting-slider(variable.$slider-medium);
       }
     }
 
@@ -192,7 +192,7 @@ $toggler-radius: variable.$radius * 1.4;
       padding: common.toEm(10);
 
       #setting-slider {
-        @include setting-slider(180px);
+        @include setting-slider(variable.$slider-short);
       }
     }
 
@@ -329,11 +329,7 @@ $toggler-radius: variable.$radius * 1.4;
         background-color: theme.$background;
         color: theme.$text-main;
 
-        image,
-        label {
-          background-color: theme.$background;
-          color: theme.$text-main;
-        }
+        @include common.image-label-colors(theme.$background, theme.$text-main);
 
         &:active {
           background-color: theme.$background-alt;
@@ -351,11 +347,7 @@ $toggler-radius: variable.$radius * 1.4;
         padding-left: common.toEm(1);
         padding-right: common.toEm(4);
 
-        image,
-        label {
-          background-color: transparent;
-          color: color.mix(#000000, white, 8%);
-        }
+        @include common.image-label-colors(transparent, color.mix(#000000, white, 8%));
 
         &:hover,
         &:active {

@@ -333,3 +333,24 @@
     @extend .default;
   }
 }
+
+/// Mixin to set image and label background/color consistently
+@mixin image-label-colors($bg: theme.$background, $color: theme.$text-main) {
+  image,
+  label {
+    background-color: $bg;
+    color: $color;
+  }
+}
+
+/// Mixin for nerd icon sizing used in multiple files
+@mixin nerd-icon($size: null, $spacing: null) {
+  #nerd-icon.panel-font-icon {
+    @if $size {
+      font-size: $size;
+    }
+    @if $spacing {
+      margin-right: $spacing;
+    }
+  }
+}
