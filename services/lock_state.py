@@ -4,6 +4,7 @@ import threading
 
 from fabric.core.service import Property, Signal
 from gi.repository import GLib
+from fabric.utils import logger
 
 from .base import SingletonService
 
@@ -44,7 +45,7 @@ class LockStateService(SingletonService):
         """Monitor loop that checks lock states periodically."""
         while not self._stop_monitoring.is_set():
             self._check_lock_states()
-            self._stop_monitoring.wait(0.1)  # Wait 500ms or until stopped
+            self._stop_monitoring.wait(0.1)  # Wait 100ms or until stopped
 
     def _check_lock_states(self):
         """Check current lock states using hyprctl."""
@@ -62,8 +63,8 @@ class LockStateService(SingletonService):
                         self._update_caps(caps)
                         self._update_num(num)
                         break
-        except (subprocess.TimeoutExpired, json.JSONDecodeError, KeyError):
-            pass  # Ignore errors
+        except (subprocess.TimeoutExpired, json.JSONDecodeError, KeyError) as e:
+            logger.error(f"CapsLock polling error: {e}")
 
     def _update_caps(self, state: bool):
         """Update caps lock state and emit signal if changed."""
