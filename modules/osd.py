@@ -11,7 +11,6 @@ from gi.repository import GLib, GObject
 
 from services import audio_service
 from services.brightness import BrightnessService
-from services.lock_state import LockStateService
 from shared.widget_container import BaseWidget
 from utils.icons import symbolic_icons
 from utils.types import Keyboard_Mode
@@ -258,57 +257,6 @@ class MicrophoneOSDContainer(GenericOSDContainer):
         self.icon.set_from_icon_name(icon_name, self.icon_size)
 
 
-class KeyboardOSDContainer(GenericOSDContainer):
-    """A widget to display the OSD for keyboard locks."""
-
-    __gsignals__: ClassVar = {
-        "lock-changed": (GObject.SignalFlags.RUN_FIRST, None, ()),
-    }
-
-    def __init__(self, config: dict, **kwargs):
-        super().__init__(
-            config=config,
-            **kwargs,
-        )
-        self.config = config
-
-        self.label = Label(name="keyboard-label", h_align="center", h_expand=True)
-
-        self.scale.destroy()  # Remove the scale from GenericOSDContainer
-        self.children = (self.icon, self.label)
-
-        self.lock_state = LockStateService()
-        self.lock_state.start_monitoring()
-
-        bulk_connect(
-            self.lock_state,
-            {
-                "caps_changed": self.on_caps_changed,
-                "num_changed": self.on_num_changed,
-            },
-        )
-
-        # Initial state
-        self.update_lock("capslock", False)
-        self.update_lock("numlock", False)
-
-    def on_caps_changed(self, _, state):
-        self.update_lock("capslock", state)
-        self.emit("lock-changed")
-
-    def on_num_changed(self, _, state):
-        self.update_lock("numlock", state)
-        self.emit("lock-changed")
-
-    def update_lock(self, lock_type, state):
-        self.label.set_label(f"{lock_type} {'On' if state else 'Off'}")
-
-        icon_state = "on" if state else "off"
-        self.icon.set_from_icon_name(
-            f"{lock_type}-{icon_state}-symbolic", self.icon_size
-        )
-
-
 class OSDContainer(Window):
     """A widget to display the OSD for audio and brightness."""
 
@@ -334,9 +282,6 @@ class OSDContainer(Window):
         if "microphone" in osds:
             self.microphone_container = MicrophoneOSDContainer(config=self.config)
             self.microphone_container.connect("mic-changed", self.show_microphone)
-        if "keyboard" in osds:
-            self.keyboard_container = KeyboardOSDContainer(config=self.config)
-            self.keyboard_container.connect("lock-changed", self.show_keyboard)
 
         self.timeout = self.config.get("timeout", 3000)
 
@@ -368,20 +313,15 @@ class OSDContainer(Window):
     def show_microphone(self, *_):
         self.show_box(box_to_show="microphone")
 
-    def show_keyboard(self, *_):
-        self.show_box(box_to_show="keyboard")
-
     def show_box(
-        self, box_to_show: Literal["audio", "brightness", "microphone", "keyboard"]
+        self, box_to_show: Literal["audio", "brightness", "microphone"]
     ):
         if box_to_show == "audio":
             child_to_show = self.audio_container
         elif box_to_show == "brightness":
             child_to_show = self.brightness_container
-        elif box_to_show == "microphone":
-            child_to_show = self.microphone_container
         else:
-            child_to_show = self.keyboard_container
+            child_to_show = self.microphone_container
 
         if self.revealer.get_child() != child_to_show:
             if self.revealer.get_child():
