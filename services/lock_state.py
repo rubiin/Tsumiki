@@ -1,10 +1,9 @@
 import json
-import subprocess
 import threading
 
 from fabric.core.service import Property, Signal
+from fabric.utils import exec_shell_command, logger
 from gi.repository import GLib
-from fabric.utils import logger
 
 from .base import SingletonService
 
@@ -50,11 +49,9 @@ class LockStateService(SingletonService):
     def _check_lock_states(self):
         """Check current lock states using hyprctl."""
         try:
-            result = subprocess.run(
-                ["hyprctl", "devices", "-j"], capture_output=True, text=True, timeout=1
-            )
-            if result.returncode == 0:
-                devices = json.loads(result.stdout)
+            result = exec_shell_command("hyprctl -j devices")
+            if result:
+                devices = json.loads(result)
                 # Find main keyboard
                 for keyboard in devices.get("keyboards", []):
                     if keyboard.get("main", False):
