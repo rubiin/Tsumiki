@@ -2307,7 +2307,7 @@
 							"minItems": 1,
 							"items": {
 								"type": "string",
-								"enum": ["brightness", "volume", "microphone"]
+								"enum": ["brightness", "volume", "microphone", "keyboard"]
 							},
 							"default": ["brightness", "volume"],
 							"description": "List of OSDs to enable"
