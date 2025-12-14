@@ -63,7 +63,7 @@ class LockStateService(SingletonService):
                         self._update_caps(caps)
                         self._update_num(num)
                         break
-        except (subprocess.TimeoutExpired, json.JSONDecodeError, KeyError) as e:
+        except Exception as e:
             logger.error(f"CapsLock polling error: {e}")
 
     def _update_caps(self, state: bool):
