@@ -335,11 +335,9 @@
 }
 
 /// Mixin to set image and label background/color consistently
-@mixin image-label-colors($bg: theme.$background, $color: theme.$text-main) {
-  image {
-    background-color: $bg;
-  }
-  label {
+@mixin image-label-colors($color: theme.$text-main) {
+
+  image,label {
     color: $color;
   }
 }

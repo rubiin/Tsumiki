@@ -80,7 +80,7 @@
 .panel-button.active {
   background-color: theme.$accent-blue;
 
-  @include mixins.image-label-colors(theme.$background-dark, theme.$background-dark);
+  @include mixins.image-label-colors(theme.$background-dark);
 
 }
 
