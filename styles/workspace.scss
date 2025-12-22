@@ -24,7 +24,7 @@ $workspace-transition: padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
       padding: variable.$bar-widgets-workspaces-pill-height variable.$bar-widgets-workspaces-pill-width;
       transition: $workspace-transition;
       border-radius: variable.$radius-large;
-      background-color: theme.$background;
+      background-color: theme.$magenta;
 
       label {
         color: theme.$text-main;
@@ -48,9 +48,6 @@ $workspace-transition: padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
         border: if(variable.$bar-widgets-workspaces-pill-border-enabled, variable.$border, none);
         border-radius: variable.$bar-widgets-workspaces-pill-border-radius;
         border-width: variable.$bar-widgets-workspaces-pill-border-width;
-
-
-
       }
 
       &.unoccupied {
