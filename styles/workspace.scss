@@ -1,6 +1,7 @@
 @use "theme";
 @use "common";
 @use "variable";
+@use "sass:color";
 
 $workspace-transition: padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
   background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -13,7 +14,7 @@ $workspace-transition: padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
     font-size: 1.2rem;
   }
 
-#workspaces_widget {
+  #workspaces_widget {
     font-weight: 700;
     padding: .19em 1em;
     border: if(variable.$bar-widgets-workspaces-border-enabled, variable.$border, none);
@@ -24,18 +25,18 @@ $workspace-transition: padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
       padding: variable.$bar-widgets-workspaces-pill-height variable.$bar-widgets-workspaces-pill-width;
       transition: $workspace-transition;
       border-radius: variable.$radius-large;
-      background-color: theme.$ws-hover;
+      background-color: theme.$surface-disabled;
 
       label {
-        color: theme.$background;
+        color: theme.$text-main;
         transition: inherit;
       }
 
       &:hover {
-        background-color: theme.$accent-lavender;
+        background-color: theme.$ws-hover;
 
         label {
-          color: theme.$text-main;
+          color: theme.$background;
         }
       }
 
@@ -48,6 +49,9 @@ $workspace-transition: padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
         border: if(variable.$bar-widgets-workspaces-pill-border-enabled, variable.$border, none);
         border-radius: variable.$bar-widgets-workspaces-pill-border-radius;
         border-width: variable.$bar-widgets-workspaces-pill-border-width;
+
+
+
       }
 
       &.unoccupied {
