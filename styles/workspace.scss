@@ -24,18 +24,18 @@ $workspace-transition: padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
       padding: variable.$bar-widgets-workspaces-pill-height variable.$bar-widgets-workspaces-pill-width;
       transition: $workspace-transition;
       border-radius: variable.$radius-large;
-      background-color: theme.$magenta;
+      background-color: theme.$ws-hover;
 
       label {
-        color: theme.$text-main;
+        color: theme.$background;
         transition: inherit;
       }
 
       &:hover {
-        background-color: theme.$ws-hover;
+        background-color: theme.$accent-lavender;
 
         label {
-          color: theme.$background;
+          color: theme.$text-main;
         }
       }
 
