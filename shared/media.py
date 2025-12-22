@@ -498,6 +498,9 @@ class PlayerBox(Box):
             self.update_colors(self.fallback_cover_path)
 
     def on_accent_color(self, palette):
+
+        if palette is None:
+            return
         default_color = (255, 0, 0)  # fallback color
 
         base_color = palette[0] if palette else default_color
