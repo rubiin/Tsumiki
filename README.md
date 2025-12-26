@@ -191,23 +191,45 @@ This will launch the environment or bar as defined in your project.
 
 If you prefer to have more control over the installation process, you can install the required dependencies manually and then run the `init.sh -start` script.
 
-#### Step 1: Install `pacman` Packages
+#### Step 1: Install pacman and AUR Packages
 
-Run the following command to install the required system packages:
-
-```sh
-sudo pacman -S --noconfirm --needed pipewire playerctl dart-sass power-profiles-daemon networkmanager brightnessctl pkgconf wf-recorder kitty python pacman-contrib gtk3 cairo gtk-layer-shell libgirepository noto-fonts-emoji gobject-introspection gobject-introspection-runtime python-pip python-gobject python-psutil python-cairo python-loguru libnotify cliphist python-requests satty nvtop
-```
-
-#### Step 2: Install AUR Packages
-
-Using `yay` to install the required AUR packages:
+Using `yay` to install the required packages:
 
 ```sh
-yay -S --needed	python-fabric-git gnome-bluetooth-3.0 python-rlottie-python python-pytomlpp slurp imagemagick tesseract tesseract-data-eng ttf-jetbrains-mono-nerd grimblast-git python-ijson glace-git matugen-bin
+yay -S --needed	pipewire playerctl dart-sass power-profiles-daemon networkmanager brightnessctl pkgconf wf-recorder kitty python pacman-contrib gtk3 cairo gtk-layer-shell libgirepository noto-fonts-emoji gobject-introspection gobject-introspection-runtime libnotify cliphist satty nvtop gnome-bluetooth-3.0 slurp imagemagick tesseract tesseract-data-eng ttf-jetbrains-mono-nerd grimblast-git glace-git matugen-bin
 ```
 
 If you have something else besides `yay`, install with the respective aur helper.
+
+#### Step 2: Install Python Dependencies
+
+You can install the required Python libraries either inside a virtual environment (recommended) or system-wide.
+
+##### Using a Virtual Environment (Recommended)
+It is highly recommended to use a virtual environment to avoid potential dependency conflicts.
+
+First, create the virtual environment:
+```sh
+python3 -m venv .venv
+```
+
+Next, activate it:
+```sh
+source .venv/bin/activate
+```
+If you are a fish user, use `source .venv/bin/activate.fish`.
+
+Finally, install the dependencies from requirements.txt:
+
+```sh
+pip install -r requirements.txt
+```
+
+##### Using the Package Manager (System-wide)
+If you prefer a system-wide installation, you can use pacman to install the Python packages:
+```sh
+sudo pacman -S --needed python-pip python-gobject python-psutil python-cairo python-loguru python-requests python-fabric-git python-rlottie-python python-pytomlpp python-ijson
+```
 
 #### Step 3: Run the `init.sh -start` Script
 
