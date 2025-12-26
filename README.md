@@ -214,7 +214,7 @@ source .venv/bin/activate
 ```
 If you are a fish user, use `source .venv/bin/activate.fish`
 
-Then install from `requirements.txt` assuming you are inside the virtual environment 
+Then install from `requirements.txt` assuming you are inside the virtual environment
 
 ```sh
 pip install -r requirements.txt
