@@ -196,31 +196,37 @@ If you prefer to have more control over the installation process, you can instal
 Using `yay` to install the required packages:
 
 ```sh
-yay -S --needed	 pipewire playerctl dart-sass power-profiles-daemon networkmanager brightnessctl pkgconf wf-recorder kitty python pacman-contrib gtk3 cairo gtk-layer-shell libgirepository noto-fonts-emoji gobject-introspection gobject-introspection-runtime libnotify cliphist satty nvtop gnome-bluetooth-3.0 slurp imagemagick tesseract tesseract-data-eng ttf-jetbrains-mono-nerd grimblast-git glace-git matugen-bin
+yay -S --needed	pipewire playerctl dart-sass power-profiles-daemon networkmanager brightnessctl pkgconf wf-recorder kitty python pacman-contrib gtk3 cairo gtk-layer-shell libgirepository noto-fonts-emoji gobject-introspection gobject-introspection-runtime libnotify cliphist satty nvtop gnome-bluetooth-3.0 slurp imagemagick tesseract tesseract-data-eng ttf-jetbrains-mono-nerd grimblast-git glace-git matugen-bin
 ```
 
 If you have something else besides `yay`, install with the respective aur helper.
 
-#### Step 2a: Install required python libraries inside virtual environment (recommended)
-It is hightly recommended to configure virtual environment as to avoid potential dependency issues. If you want to install system wide anyway, jump to step 2b.
+#### Step 2: Install Python Dependencies
 
+You can install the required Python libraries either inside a virtual environment (recommended) or system-wide.
+
+##### Using a Virtual Environment (Recommended)
+It is highly recommended to use a virtual environment to avoid potential dependency conflicts.
+
+First, create the virtual environment:
 ```sh
 python3 -m venv .venv
 ```
 
-Activate it with this command
+Next, activate it:
 ```sh
 source .venv/bin/activate
 ```
-If you are a fish user, use `source .venv/bin/activate.fish`
+If you are a fish user, use `source .venv/bin/activate.fish`.
 
-Then install from `requirements.txt` assuming you are inside the virtual environment
+Finally, install the dependencies from requirements.txt:
 
 ```sh
 pip install -r requirements.txt
 ```
 
-#### Step 2b: Install required python libraries with package manager
+##### Using the Package Manager (System-wide)
+If you prefer a system-wide installation, you can use pacman to install the Python packages:
 ```sh
 sudo pacman -S --needed python-pip python-gobject python-psutil python-cairo python-loguru python-requests python-fabric-git python-rlottie-python python-pytomlpp python-ijson
 ```
