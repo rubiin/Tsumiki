@@ -1,241 +1,40 @@
-@use "sass:color";
-
-/*
-* Css Colors
-* Generated with Matugen
-*/
-
-
-$background: rgba(25, 18, 12, 1);
-
-$blue: rgba(206, 189, 254, 1);
-
-$blue_container: rgba(76, 62, 118, 1);
-
-$blue_source: rgba(0, 0, 255, 1);
-
-$blue_value: rgba(0, 0, 255, 1);
-
-$cyan: rgba(132, 213, 196, 1);
-
-$cyan_container: rgba(0, 80, 69, 1);
-
-$cyan_source: rgba(0, 255, 255, 1);
-
-$cyan_value: rgba(0, 255, 255, 1);
-
-$error: rgba(255, 180, 171, 1);
-
-$error_container: rgba(147, 0, 10, 1);
-
-$green: rgba(183, 208, 133, 1);
-
-$green_container: rgba(58, 77, 16, 1);
-
-$green_source: rgba(0, 255, 0, 1);
-
-$green_value: rgba(0, 255, 0, 1);
-
-$inverse_on_surface: rgba(55, 47, 40, 1);
-
-$inverse_primary: rgba(134, 82, 25, 1);
-
-$inverse_surface: rgba(239, 224, 213, 1);
-
-$magenta: rgba(252, 176, 213, 1);
-
-$magenta_container: rgba(108, 51, 83, 1);
-
-$magenta_source: rgba(255, 0, 255, 1);
-
-$magenta_value: rgba(255, 0, 255, 1);
-
-$on_background: rgba(239, 224, 213, 1);
-
-$on_blue: rgba(53, 39, 94, 1);
-
-$on_blue_container: rgba(232, 221, 255, 1);
-
-$on_cyan: rgba(0, 56, 47, 1);
-
-$on_cyan_container: rgba(159, 242, 224, 1);
-
-$on_error: rgba(105, 0, 5, 1);
-
-$on_error_container: rgba(255, 218, 214, 1);
-
-$on_green: rgba(37, 54, 0, 1);
-
-$on_green_container: rgba(211, 236, 158, 1);
-
-$on_magenta: rgba(82, 29, 60, 1);
-
-$on_magenta_container: rgba(255, 216, 232, 1);
-
-$on_primary: rgba(75, 40, 0, 1);
-
-$on_primary_container: rgba(255, 220, 191, 1);
-
-$on_primary_fixed: rgba(45, 22, 0, 1);
-
-$on_primary_fixed_variant: rgba(106, 59, 1, 1);
-
-$on_red: rgba(84, 33, 5, 1);
-
-$on_red_container: rgba(255, 219, 205, 1);
-
-$on_secondary: rgba(65, 44, 24, 1);
-
-$on_secondary_container: rgba(255, 220, 191, 1);
-
-$on_secondary_fixed: rgba(41, 24, 6, 1);
-
-$on_secondary_fixed_variant: rgba(89, 66, 45, 1);
-
-$on_surface: rgba(239, 224, 213, 1);
-
-$on_surface_variant: rgba(213, 195, 182, 1);
-
-$on_tertiary: rgba(43, 52, 15, 1);
-
-$on_tertiary_container: rgba(221, 232, 179, 1);
-
-$on_tertiary_fixed: rgba(23, 30, 0, 1);
-
-$on_tertiary_fixed_variant: rgba(65, 75, 36, 1);
-
-$on_white: rgba(0, 54, 61, 1);
-
-$on_white_container: rgba(158, 239, 253, 1);
-
-$on_yellow: rgba(59, 47, 0, 1);
-
-$on_yellow_container: rgba(252, 225, 134, 1);
-
-$outline: rgba(158, 142, 129, 1);
-
-$outline_variant: rgba(81, 68, 58, 1);
-
-$primary: rgba(253, 184, 118, 1);
-
-$primary_container: rgba(106, 59, 1, 1);
-
-$primary_fixed: rgba(255, 220, 191, 1);
-
-$primary_fixed_dim: rgba(253, 184, 118, 1);
-
-$red: rgba(255, 181, 149, 1);
-
-$red_container: rgba(113, 54, 25, 1);
-
-$red_source: rgba(255, 0, 0, 1);
-
-$red_value: rgba(255, 0, 0, 1);
-
-$scrim: rgba(0, 0, 0, 1);
-
-$secondary: rgba(226, 192, 164, 1);
-
-$secondary_container: rgba(89, 66, 45, 1);
-
-$secondary_fixed: rgba(255, 220, 191, 1);
-
-$secondary_fixed_dim: rgba(226, 192, 164, 1);
-
-$shadow: rgba(0, 0, 0, 1);
-
-$source_color: rgba(189, 136, 85, 1);
-
-$surface: rgba(25, 18, 12, 1);
-
-$surface_bright: rgba(64, 56, 48, 1);
-
-$surface_container: rgba(38, 30, 24, 1);
-
-$surface_container_high: rgba(49, 40, 34, 1);
-
-$surface_container_highest: rgba(60, 51, 44, 1);
-
-$surface_container_low: rgba(33, 26, 20, 1);
-
-$surface_container_lowest: rgba(19, 13, 7, 1);
-
-$surface_dim: rgba(25, 18, 12, 1);
-
-$surface_tint: rgba(253, 184, 118, 1);
-
-$surface_variant: rgba(81, 68, 58, 1);
-
-$tertiary: rgba(193, 204, 153, 1);
-
-$tertiary_container: rgba(65, 75, 36, 1);
-
-$tertiary_fixed: rgba(221, 232, 179, 1);
-
-$tertiary_fixed_dim: rgba(193, 204, 153, 1);
-
-$white: rgba(130, 211, 224, 1);
-
-$white_container: rgba(0, 79, 88, 1);
-
-$white_source: rgba(255, 255, 255, 1);
-
-$white_value: rgba(255, 255, 255, 1);
-
-$yellow: rgba(222, 197, 110, 1);
-
-$yellow_container: rgba(85, 69, 0, 1);
-
-$yellow_source: rgba(255, 255, 0, 1);
-
-$yellow_value: rgba(255, 255, 0, 1);
-
-
-
-/* Background Colors            */
 /* ---------------------------- */
-$background: $surface; // Primary background
-$background-alt: $surface_container; // Secondary/elevated background
-$background-dark: $surface_container_lowest; // Darkest background (popups, dropdowns)
-$bar-background: $surface_container_low; // Status bar background
+/* Base Colors                  */
+/* ---------------------------- */
+$background: #1e1e2e; // Main background
+$background-alt: #181825; // Secondary background
+$background-dark: #11111b; // Darkest background
 
-/* ---------------------------- */
-/* Text Colors                  */
-/* ---------------------------- */
-$text-main: $on_surface; // Primary text
-$text-secondary: $on_surface_variant; // Secondary text
-$text-muted: $outline; // Muted/placeholder text
-$text-disabled: $outline_variant; // Disabled text
+/* Text Colors */
+$text-main: #cdd6f4; // Primary text color
+$text-secondary: #bac2de; // Secondary text color
+$text-muted: #a6adc8; // Tertiary text, muted
 
-/* ---------------------------- */
-/* Surface Colors               */
-/* ---------------------------- */
-$surface-disabled: $surface_container_high; // Disabled element backgrounds
-$surface-neutral: $surface_container_highest; // Cards, panels, inputs
-$surface-highlight: $surface_bright; // Hover states, selections
+/* Surface Colors */
+$surface-disabled: #313244; // Background for disabled items
+$surface-neutral: #45475a; // Neutral surface for cards, panels
+$surface-highlight: #585b70; // Selection and highlights
 
-/* ---------------------------- */
-/* Accent Colors                */
-/* ---------------------------- */
-$accent-blue: $blue; // Primary accent, links, actions
-$accent-light-blue: $cyan; // Secondary blue accent
-$accent-purple: $magenta; // Tertiary accent
-$accent-lavender: $tertiary; // Subtle highlights
-$accent-pink: $magenta; // Decorative accent
-$accent-light: $primary_fixed; // Lightest accent
+/* Accent Colors */
+$accent-light: #f5e0dc; // Lightest accent (Rosewater)
+$accent-pink: #f5c2e7; // Pink accent
+$accent-purple: #cba6f7; // Mauve accent
+$accent-red: #f38ba8; // Red for errors and warnings
+$accent-orange: #fab387; // Orange for warnings and alerts
+$accent-yellow: #f9e2af; // Yellow for highlights
+$accent-green: #a6e3a1; // Green for success
+$accent-teal: #94e2d5; // Teal for information
+$accent-blue: #89b4fa; // Blue for links and actions
+$accent-light-blue: #89dceb; // Sky blue accent
+$accent-lavender: #b4befe; // Lavender for subtle highlights
 
-/* ---------------------------- */
-/* Semantic Colors              */
-/* ---------------------------- */
-$accent-green: $green; // Success states
-$accent-teal: $primary; // Info states
-$accent-yellow: $yellow; // Warning states
-$accent-orange: $red; // Alert states
-$accent-red: $error; // Error/danger states
+/* Overlay Colors */
+$text-disabled: #6c7086; // Text for disabled elements
+$text-muted-light: #7f849c; // Light-muted text for hints
+$text-muted-dark: #9399b2; // Dark-muted text
 
-/* ---------------------------- */
-/* UI Element Colors            */
-/* ---------------------------- */
-$shadow-color: $shadow; // Drop shadows
-$ws-active: $outline; // Active workspace indicator
-$ws-hover: $primary; // Workspace hover state
+/* Additional UI Elements */
+$bar-background: rgb(36, 35, 35);
+$shadow-color: rgba(0, 0, 0, 0.6);
+$ws-active: $text-muted;
+$ws-hover: $accent-pink;
