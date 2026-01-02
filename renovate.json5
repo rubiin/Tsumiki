@@ -11,6 +11,10 @@
         "pip_requirements"
     ],
     "packageRules": [
+    {
+      "matchPackageNames": ["PyGObject"],
+      "enabled": false
+    },
         {
             "matchManagers": [
                 "pip_requirements"
