@@ -345,22 +345,22 @@ Add these rules to your `hyprland.conf` to make blur and other effects work prop
 layerrule = blur true,match:namespace ^tsumiki-notifications$
 layerrule = xray 0,match:namespace ^tsumiki-notifications$
 layerrule = blur_popups true,match:namespace ^tsumiki-notifications$
-layerrule = ignore_alpha 0,match:namespace ^tsumiki-notifications$
+layerrule = ignore_alpha 0.004,match:namespace ^tsumiki-notifications$
 layerrule = no_anim true,match:namespace ^tsumiki-notifications$
 layerrule = blur true,match:namespace ^fabric$
-layerrule = ignore_alpha 0,match:namespace ^fabric$
+layerrule = ignore_alpha 0.004,match:namespace ^fabric$
 layerrule = xray 0,match:namespace ^fabric$
 layerrule = blur_popups true,match:namespace ^fabric$
 layerrule = blur true,match:namespace ^tsumiki$
 layerrule = xray 0,match:namespace ^tsumiki$
 layerrule = blur_popups true,match:namespace ^tsumiki$
-layerrule = ignore_alpha 0,match:namespace ^tsumiki$
+layerrule = ignore_alpha 0.004,match:namespace ^tsumiki$
 layerrule = blur true,match:namespace gtk-layer-shell
-layerrule = ignore_alpha 0,match:namespace gtk-layer-shell
+layerrule = ignore_alpha 0.004,match:namespace gtk-layer-shell
 layerrule = blur true,match:namespace ^launcher$
 layerrule = xray 0,match:namespace ^launcher$
 layerrule = blur_popups true,match:namespace ^launcher$
-layerrule = ignore_alpha 0,match:namespace ^launcher$
+layerrule = ignore_alpha 0.004,match:namespace ^launcher$
 layerrule = animation popin,match:namespace ^launcher$
 ```
 
