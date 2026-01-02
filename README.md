@@ -342,26 +342,26 @@ to install all the required packages and dependencies. Additionally, you can als
 Add these rules to your `hyprland.conf` to make blur and other effects work properly
 
 ```conf
-layerrule = blur, ^tsumiki-notifications$
-layerrule = xray 0, ^tsumiki-notifications$
-layerrule = blurpopups, ^tsumiki-notifications$
-layerrule = ignorezero, ^tsumiki-notifications$
-layerrule = noanim , ^tsumiki-notifications$
-layerrule = blur, ^fabric$
-layerrule = ignorezero, ^fabric$
-layerrule = xray 0, ^fabric$
-layerrule = blurpopups, ^fabric$
-layerrule = blur, ^tsumiki$
-layerrule = xray 0, ^tsumiki$
-layerrule = blurpopups, ^tsumiki$
-layerrule = ignorezero, ^tsumiki$
-layerrule = blur ,gtk-layer-shell
-layerrule = ignorezero ,gtk-layer-shell
-layerrule = blur, ^launcher$
-layerrule = xray 0, ^launcher$
-layerrule = blurpopups, ^launcher$
-layerrule = ignorezero, ^launcher$
-layerrule = animation popin, ^launcher$
+layerrule = blur true,match:namespace ^tsumiki-notifications$
+layerrule = xray 0,match:namespace ^tsumiki-notifications$
+layerrule = blur_popups true,match:namespace ^tsumiki-notifications$
+layerrule = ignore_alpha 0,match:namespace ^tsumiki-notifications$
+layerrule = no_anim true,match:namespace ^tsumiki-notifications$
+layerrule = blur true,match:namespace ^fabric$
+layerrule = ignore_alpha 0,match:namespace ^fabric$
+layerrule = xray 0,match:namespace ^fabric$
+layerrule = blur_popups true,match:namespace ^fabric$
+layerrule = blur true,match:namespace ^tsumiki$
+layerrule = xray 0,match:namespace ^tsumiki$
+layerrule = blur_popups true,match:namespace ^tsumiki$
+layerrule = ignore_alpha 0,match:namespace ^tsumiki$
+layerrule = blur true,match:namespace gtk-layer-shell
+layerrule = ignore_alpha 0,match:namespace gtk-layer-shell
+layerrule = blur true,match:namespace ^launcher$
+layerrule = xray 0,match:namespace ^launcher$
+layerrule = blur_popups true,match:namespace ^launcher$
+layerrule = ignore_alpha 0,match:namespace ^launcher$
+layerrule = animation popin,match:namespace ^launcher$
 ```
 
 ## Contributing
