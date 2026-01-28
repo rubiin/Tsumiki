@@ -33,6 +33,7 @@ ASSETS_DIR = get_relative_path("../assets/")
 
 WALLPAPER_DIR = f"{HOME_DIR}/Pictures/Wallpapers"
 WALLPAPER_THUMBS_DIR = f"{WALLPAPER_DIR}/.thumbs"
+WALLPAPER_BLURRED_DIR = f"{WALLPAPER_DIR}/.blurred"
 
 LOG_DIR = f"{GLib.get_user_state_dir()}/{APPLICATION_NAME}/logs"
 LOG_FILE = f"{LOG_DIR}/{APPLICATION_NAME}.log"

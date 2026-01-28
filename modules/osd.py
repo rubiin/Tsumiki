@@ -313,9 +313,7 @@ class OSDContainer(Window):
     def show_microphone(self, *_):
         self.show_box(box_to_show="microphone")
 
-    def show_box(
-        self, box_to_show: Literal["audio", "brightness", "microphone"]
-    ):
+    def show_box(self, box_to_show: Literal["audio", "brightness", "microphone"]):
         if box_to_show == "audio":
             child_to_show = self.audio_container
         elif box_to_show == "brightness":
