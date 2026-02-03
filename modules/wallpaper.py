@@ -13,8 +13,8 @@ from gi.repository import Gtk
 from shared.buttons import HoverButton
 from shared.popup import PopupWindow
 from utils.constants import WALLPAPER_DIR, WALLPAPER_THUMBS_DIR
-from utils.functions import ensure_directory
 from utils.decorators import run_in_thread
+from utils.functions import ensure_directory
 
 
 class ImageButton(HoverButton):

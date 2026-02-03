@@ -2,7 +2,6 @@ import math
 import subprocess
 from pathlib import Path
 
-from shared.animator import Animator
 from fabric.widgets.box import Box
 from fabric.widgets.image import Image
 from fabric.widgets.revealer import Revealer
@@ -11,6 +10,7 @@ from fabric.widgets.wayland import WaylandWindow
 from PIL import Image as PILImage
 from PIL import ImageFilter, ImageOps
 
+from shared.animator import Animator
 from utils.constants import WALLPAPER_BLURRED_DIR, WALLPAPER_DIR, WALLPAPER_THUMBS_DIR
 
 SCREEN_SIZE = (1920, 1080)
@@ -235,4 +235,3 @@ class Bgselector(WaylandWindow):
         else:
             self.revealer.reveal()
             self.set_keyboard_mode("exclusive")
-

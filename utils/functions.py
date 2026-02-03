@@ -28,9 +28,9 @@ from gi.repository import Gdk, GdkPixbuf, Gio, GLib, Gtk
 
 from .colors import Colors
 from .constants import NAMED_COLORS
+from .decorators import run_in_thread, thread
 from .exceptions import ExecutableNotFoundError
 from .icons import text_icons
-from .decorators import run_in_thread, thread
 
 gi.require_versions({"Gtk": "3.0", "Gdk": "3.0", "GdkPixbuf": "2.0"})
 
