@@ -30,7 +30,7 @@ from .colors import Colors
 from .constants import NAMED_COLORS
 from .exceptions import ExecutableNotFoundError
 from .icons import text_icons
-from .thread import run_in_thread, thread
+from .decorators import run_in_thread, thread
 
 gi.require_versions({"Gtk": "3.0", "Gdk": "3.0", "GdkPixbuf": "2.0"})
 

@@ -74,6 +74,6 @@ class QuotesService(SingletonService):
         self,
         callback: Callable[[Optional[dict]], None],
     ):
-        from utils.thread import thread
+        from utils.decorators import thread
 
         thread(self._quotes_worker, callback)

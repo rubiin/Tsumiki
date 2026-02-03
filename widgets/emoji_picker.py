@@ -12,7 +12,7 @@ from gi.repository import Gdk, Gio, GLib
 from shared.mixins import PopoverMixin
 from shared.widget_container import ButtonWidget
 from utils.constants import ASSETS_DIR
-from utils.thread import run_in_thread
+from utils.decorators import run_in_thread
 from utils.widget_utils import nerd_font_icon
 
 
