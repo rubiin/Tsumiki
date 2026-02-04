@@ -179,10 +179,13 @@ styles/theme.scss
 todo.md
 
 config.json.bak
+config.toml.bak
 
 # User configuration files (use example versions as templates)
 config.json
+config.toml
 theme.json
+theme.toml
 .face
 
 # End of https://www.toptal.com/developers/gitignore/api/python

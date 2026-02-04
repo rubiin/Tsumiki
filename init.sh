@@ -112,24 +112,24 @@ copy_config_files() {
 		exit 1
 	}
 
-	if [ ! -f config.json ]; then
-		if [ -f example/config.json ]; then
-			log_warning "⚠️  config.json not found. Copying from example..."
-			cp example/config.json config.json
-			log_success "✅ config.json copied successfully."
+	if [ ! -f config.toml ]; then
+		if [ -f example/config.toml ]; then
+			log_warning "⚠️  config.toml not found. Copying from example..."
+			cp example/config.toml config.toml
+			log_success "✅ config.toml copied successfully."
 		else
-			log_error "❌ example/config.json not found. Cannot create default config."
+			log_error "❌ example/config.toml not found. Cannot create default config."
 			exit 1
 		fi
 	fi
 
-	if [ ! -f theme.json ]; then
-		if [ -f example/theme.json ]; then
-			log_warning "⚠️  theme.json not found. Copying from example..."
-			cp example/theme.json theme.json
-			log_success "✅ theme.json copied successfully."
+	if [ ! -f theme.toml ]; then
+		if [ -f example/theme.toml ]; then
+			log_warning "⚠️  theme.toml not found. Copying from example..."
+			cp example/theme.toml theme.toml
+			log_success "✅ theme.toml copied successfully."
 		else
-			log_error "❌ example/theme.json not found. Cannot create default theme."
+			log_error "❌ example/theme.toml not found. Cannot create default theme."
 			exit 1
 		fi
 	fi
