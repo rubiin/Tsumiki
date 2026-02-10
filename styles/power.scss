@@ -14,9 +14,7 @@
   border-width: variable.$bar-widgets-power-border-width;
 
 
-  #nerd-icon.panel-font-icon {
-    font-size: variable.$bar-widgets-power-icon_size;
-  }
+  @include common.nerd-icon(variable.$bar-widgets-power-icon_size, null);
 }
 
 #power-button-menu {

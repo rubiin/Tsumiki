@@ -147,11 +147,10 @@ For a cohesive theme:
    - Ensure text colors have good contrast
 
 4. **Test the theme**:
-   - Update `theme.json` with your theme name:
-     ```json
-     {
-       "name": "my-theme"
-     }
+   - Update `theme.toml` with your theme name:
+     ```toml
+     [theme]
+     name = "my-theme"
      ```
    - Restart Tsumiki or trigger a theme reload
 

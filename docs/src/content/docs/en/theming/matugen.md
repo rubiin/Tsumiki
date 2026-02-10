@@ -5,16 +5,15 @@ description: Making Tsumiki use Matugen to generate Material You color palettes 
 
 This explains how Tsumiki integrates with Matugen to generate Material You color palettes from a wallpaper or image, and how to control it.
 
-Add a `matugen` section to your `theme.json` (or edit the existing one). Example:
+Add a `matugen` section to your `theme.toml` (or edit the existing one). Example:
 
-```json
-"matugen": {
-  "enabled": true,
-  "wallpaper": "~/Pictures/wallpaper.jpg",
-  "scheme": "scheme-tonal-spot",
-  "mode": "dark",
-  "contrast": 0.0
-}
+```toml
+[matugen]
+enabled = true
+wallpaper = "~/Pictures/wallpaper.jpg"
+scheme = "scheme-tonal-spot"
+mode = "dark"
+contrast = 0.0
 ```
 
 ## Fields
@@ -85,4 +84,4 @@ m = MatugenService()
 m.generate_sync('~/Pictures/wallpaper.jpg')
 ```
 
-That's it — enable `matugen` in `theme.json`, ensure `matugen` is installed, and Tsumiki will pick up the generated palette on startup or when you trigger the service manually.
+That's it — enable `matugen` in `theme.toml`, ensure `matugen` is installed, and Tsumiki will pick up the generated palette on startup or when you trigger the service manually.
