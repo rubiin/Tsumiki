@@ -1,6 +1,7 @@
 @use "theme";
 @use "common";
 @use "variable";
+@use "sass:color";
 
 $workspace-transition: padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
   background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -13,7 +14,7 @@ $workspace-transition: padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
     font-size: 1.2rem;
   }
 
-#workspaces_widget {
+  #workspaces_widget {
     font-weight: 700;
     padding: .19em 1em;
     border: if(variable.$bar-widgets-workspaces-border-enabled, variable.$border, none);
@@ -24,7 +25,7 @@ $workspace-transition: padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
       padding: variable.$bar-widgets-workspaces-pill-height variable.$bar-widgets-workspaces-pill-width;
       transition: $workspace-transition;
       border-radius: variable.$radius-large;
-      background-color: theme.$background;
+      background-color: theme.$surface-disabled;
 
       label {
         color: theme.$text-main;

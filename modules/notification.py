@@ -137,6 +137,7 @@ class NotificationWidget(EventBox):
             min_value=0,
             max_value=1,
             radius_color=True,
+            invert=True,
         )
 
         self.notification_box = Box(

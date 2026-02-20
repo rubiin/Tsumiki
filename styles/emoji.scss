@@ -114,8 +114,5 @@
   border: if(variable.$bar-widgets-emoji_picker-border-enabled, variable.$border, none);
   border-width: variable.$bar-widgets-emoji_picker-border-width;
 
-  #nerd-icon.panel-font-icon {
-    font-size: variable.$bar-widgets-emoji_picker-icon_size;
-    margin-right: variable.$bar-widgets-emoji_picker-spacing;
-  }
+  @include common.nerd-icon(variable.$bar-widgets-emoji_picker-icon_size, variable.$bar-widgets-emoji_picker-spacing);
 }

@@ -55,11 +55,12 @@ class VolumeWidget(EventBoxWidget):
     def on_scroll(self, _, event):
         # Adjust the volume based on the scroll direction
         val_y = event.delta_y
+        step_size = self.config.get("step_size", 5)
 
         if val_y > 0:
-            self.audio.speaker.volume += self.config.get("step_size", 5)
+            self.audio.speaker.volume += step_size
         else:
-            self.audio.speaker.volume -= self.config.get("step_size", 5)
+            self.audio.speaker.volume -= step_size
 
     def on_speaker_changed(self, *_):
         # Update the progress bar value based on the speaker volume

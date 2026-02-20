@@ -5,60 +5,34 @@
 
 $slider-height: 12px;
 
+$toggler-radius: variable.$radius * 1.4;
 
-#list-box-row {
-  margin-bottom: 10px;
-}
 
-#dialog {
-  &-wrapper {
-    background-color: theme.$background-alt;
-    border-radius: variable.$radius;
-    padding: 1rem 2.5rem;
-    border: 1px solid theme.$accent-blue;
+@mixin setting-slider($min-length) {
+  @include common.slider($highlight-color: theme.$accent-blue,
+    $knob: variable.$bar-widgets-quick_settings-sliders-knob,
+    $min-length: $min-length,
+    $height: variable.$bar-widgets-quick_settings-sliders-height );
+
+  &.overamplified trough highlight {
+    background-color: theme.$accent-red;
   }
 
-  &-title {
-    @extend %title_2;
-    margin: 1rem;
-  }
-
-  &-body {
-    margin: 1rem;
-    @extend %caption_heading;
-  }
-
-  &-buttons-box {
-    margin: 1rem;
-    margin-top: 2.5rem;
-  }
-
-  &-button {
-    @extend %caption_heading;
-    padding: 0.5rem 2.5rem;
-    border-radius: variable.$radius;
-    background-color: theme.$background;
-    color: theme.$text-main;
-    margin: 0 1rem;
-
-    &:nth-child(1):hover {
-      background-color: #4caf50;
-      color: theme.$background;
-    }
-
-    &:nth-child(2):hover {
-      background-color: #e53935;
-      color: theme.$background;
-    }
+  &.muted trough highlight,
+  &.muted slider {
+    background-color: theme.$surface-disabled;
   }
 }
+
 
 #quick_settings {
   border-radius: variable.$bar-widgets-quick_settings-border-radius;
   border: if(variable.$bar-widgets-quick_settings-border-enabled, variable.$border, none);
   border-width: variable.$bar-widgets-quick_settings-border-width;
-
 }
+
+
+/************** QUICKSETTINGS MENU **************/
 
 #quicksettings-menu {
   min-width: variable.$quicksettings-width;
@@ -129,7 +103,7 @@ $slider-height: 12px;
     }
 
     .quicksettings-toggle-action {
-      border-radius: variable.$radius-large 0 0 variable.$radius-large;
+      border-radius: $toggler-radius 0 0 $toggler-radius;
 
       min-height: 35px;
 
@@ -194,23 +168,13 @@ $slider-height: 12px;
       }
     }
 
+
+
     .slider-box-long {
       @extend %slider-box-base;
 
       #setting-slider {
-        @include common.slider($highlight-color: theme.$accent-blue,
-          $knob: variable.$bar-widgets-quick_settings-sliders-knob,
-          $min-length: 320px,
-          $height: variable.$bar-widgets-quick_settings-sliders-height );
-
-        &.overamplified trough highlight {
-          background-color: theme.$accent-red;
-        }
-
-        &.muted trough highlight,
-        &.muted slider {
-          background-color: theme.$surface-disabled;
-        }
+        @include setting-slider(variable.$slider-long);
       }
     }
 
@@ -218,19 +182,7 @@ $slider-height: 12px;
       @extend %slider-box-base;
 
       #setting-slider {
-        @include common.slider($highlight-color: theme.$accent-blue,
-          $knob: variable.$bar-widgets-quick_settings-sliders-knob,
-          $min-length: 250px,
-          $height: variable.$bar-widgets-quick_settings-sliders-height );
-
-        &.overamplified trough highlight {
-          background-color: theme.$accent-red;
-        }
-
-        &.muted trough highlight,
-        &.muted slider {
-          background-color: theme.$surface-disabled;
-        }
+        @include setting-slider(variable.$slider-medium);
       }
     }
 
@@ -240,19 +192,7 @@ $slider-height: 12px;
       padding: common.toEm(10);
 
       #setting-slider {
-        @include common.slider($highlight-color: theme.$accent-blue,
-          $knob: variable.$bar-widgets-quick_settings-sliders-knob,
-          $min-length: 180px,
-          $height: variable.$bar-widgets-quick_settings-sliders-height );
-
-        &.overamplified trough highlight {
-          background-color: theme.$accent-red;
-        }
-
-        &.muted trough highlight,
-        &.muted slider {
-          background-color: theme.$surface-disabled;
-        }
+        @include setting-slider(variable.$slider-short);
       }
     }
 
@@ -314,7 +254,7 @@ $slider-height: 12px;
         }
       }
 
-      #wifi-ap-button.submenu-button {
+      .submenu-button#wifi-ap-button {
         padding: common.toEm(7) 0;
 
         &:hover {
@@ -324,8 +264,8 @@ $slider-height: 12px;
 
 
 
-      #bluetooth-device-box.submenu-button {
-        .submenu-button {
+      #bluetooth-device-box {
+        &.submenu-button {
           padding: common.toEm(6);
           background-color: theme.$surface-neutral;
 
@@ -347,66 +287,60 @@ $slider-height: 12px;
       }
     }
 
-    #quicksettings-togglebutton {
-      .toggle-revealer {
-        border-radius: 0 variable.$radius-large variable.$radius-large 0;
-        padding: common.toEm(10) common.toEm(5);
-        //  border-left: 1px solid color.mix(theme.$surface-disabled, white, 10%);
-      }
-    }
+
 
     // this is for buttons like hypridle
 
-    #quicksettings-togglebutton.quicksettings-toggler {
-      background-color: theme.$background;
-      border-radius: variable.$radius-large;
-      @extend %caption_heading;
-      padding: common.toEm(3) 0;
-      padding-left: common.toEm(10);
-
-      .panel-font-icon {
-        font-size: 16px;
-      }
-
-      &.active {
-        background-color: theme.$ws-hover;
-
-        &:hover {
-          background-color: color.mix(theme.$ws-hover, black, 85%);
-        }
-
-        label {
-          color: color.mix(#000000, white, 8%);
-        }
-
-        image {
-          color: color.mix(#000000, white, 8%);
-        }
-      }
-    }
-
     #quicksettings-togglebutton {
+      &.quicksettings-toggler {
+        background-color: theme.$background;
+        border-radius: $toggler-radius;
+        @extend %caption_heading;
+        padding: common.toEm(3) 0;
+        padding-left: common.toEm(10);
+
+        .panel-font-icon {
+          font-size: 16px;
+          background-color: transparent;
+        }
+
+        .panel-text {
+          background-color: transparent;
+        }
+
+        &.active {
+          background-color: theme.$ws-hover;
+
+          &:hover {
+            background-color: color.mix(theme.$ws-hover, black, 85%);
+          }
+
+          label {
+            color: color.mix(#000000, white, 8%);
+          }
+
+          image {
+            color: color.mix(#000000, white, 8%);
+          }
+        }
+      }
+
+      .toggle-revealer {
+        border-radius: 0 $toggler-radius $toggler-radius 0;
+        padding: common.toEm(10) common.toEm(5);
+      }
+
       button {
         background-color: theme.$background;
         color: theme.$text-main;
 
-        image, label {
-          background-color: theme.$background;
-          color: theme.$text-main;
-        }
-
-        &:hover {
-          background-color: theme.$background;
-
-          image, label {
-            background-color: theme.$background;
-          }
-        }
+        @include common.image-label-colors(theme.$text-main);
 
         &:active {
           background-color: theme.$background-alt;
 
-          image, label {
+          image,
+          label {
             background-color: theme.$background-alt;
           }
         }
@@ -418,12 +352,10 @@ $slider-height: 12px;
         padding-left: common.toEm(1);
         padding-right: common.toEm(4);
 
-        image, label {
-          background-color: transparent;
-          color: color.mix(#000000, white, 8%);
-        }
+        @include common.image-label-colors(color.mix(#000000, white, 8%));
 
-        &:hover, &:active {
+        &:hover,
+        &:active {
           background-color: color.mix(theme.$accent-blue, black, 90%);
         }
       }
