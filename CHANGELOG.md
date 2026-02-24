@@ -1,5 +1,31 @@
 # Changelog
 
+## [2.10.1](https://github.com/rubiin/Tsumiki/compare/v2.10.0...v2.10.1) (2026-02-24)
+
+
+### 🐛 Bug Fixes
+
+* replace logger warnings with exceptions for better error handling across multiple modules ([869d683](https://github.com/rubiin/Tsumiki/commit/869d683716f238334cf16909511e03c4af2dea3e))
+* update geocoding error handling and improve logging in WeatherService ([17fc542](https://github.com/rubiin/Tsumiki/commit/17fc54218796dfdb65612ab89ebec7ac09f6fa8b))
+
+
+### 📚 Documentation
+
+* clarify manual installation instructions ([#271](https://github.com/rubiin/Tsumiki/issues/271)) ([7d4d0cb](https://github.com/rubiin/Tsumiki/commit/7d4d0cbf35aaeeda86c37c789b5866d98abf44e8))
+
+
+### ⚙️ Chores
+
+* **deps:** update all non-major dependencies ([#268](https://github.com/rubiin/Tsumiki/issues/268)) ([2b0b4f9](https://github.com/rubiin/Tsumiki/commit/2b0b4f91e508dc2708ecd08d1a0f3025f6579e63))
+* **deps:** update all non-major dependencies ([#276](https://github.com/rubiin/Tsumiki/issues/276)) ([98308a4](https://github.com/rubiin/Tsumiki/commit/98308a4b0baae8f832525561fa17c1ba40a9965e))
+* **deps:** update dependency pillow to v12.1.1 [security] ([#282](https://github.com/rubiin/Tsumiki/issues/282)) ([6a117a9](https://github.com/rubiin/Tsumiki/commit/6a117a9b7c56adf0daaaa99f147c4383f1b71a3a))
+* **deps:** update dependency psutil to v7.2.2 ([#280](https://github.com/rubiin/Tsumiki/issues/280)) ([f1e3d43](https://github.com/rubiin/Tsumiki/commit/f1e3d438975944e13b9597288b5bc204e4b7e8e4))
+
+
+### ♻️ Code Refactoring
+
+* remove redundant initialization check and update geocode parameters in WeatherService ([96255f2](https://github.com/rubiin/Tsumiki/commit/96255f2390f4783e50ccabf6eff018b7c498a8d9))
+
 ## [2.10.0](https://github.com/rubiin/Tsumiki/compare/v2.9.0...v2.10.0) (2025-12-10)
 
 
