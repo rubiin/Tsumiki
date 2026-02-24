@@ -1,5 +1,4 @@
 import os
-import re
 import tempfile
 import urllib.parse
 import urllib.request
@@ -26,7 +25,7 @@ from services.mpris import MprisPlayer, MprisPlayerManager
 from shared.animator import cubic_bezier
 from shared.buttons import HoverButton
 from shared.circle_image import CircularImage
-from utils.constants import APP_DATA_DIRECTORY, ASSETS_DIR
+from utils.constants import APP_DATA_DIRECTORY, ASSETS_DIR, NEWLINE_RE
 from utils.functions import (
     ensure_directory,
     get_simple_palette_threaded,
@@ -42,10 +41,6 @@ from utils.widget_utils import (
 )
 
 gi.require_versions({"GObject": "2.0"})
-
-
-# Pre-compiled regex for newline replacement
-_NEWLINE_RE = re.compile(r"\r?\n")
 
 
 class PlayerBoxStack(Box):
@@ -250,7 +245,7 @@ class PlayerBox(Box):
             self.track_title,
             "label",
             GObject.BindingFlags.DEFAULT,
-            lambda _, x: _NEWLINE_RE.sub(" ", x)
+            lambda _, x: NEWLINE_RE.sub(" ", x)
             if x != "" and x is not None
             else "No Title",  # type: ignore
         )
@@ -259,7 +254,7 @@ class PlayerBox(Box):
             self.track_artist,
             "label",
             GObject.BindingFlags.DEFAULT,
-            lambda _, x: _NEWLINE_RE.sub(" ", x)
+            lambda _, x: NEWLINE_RE.sub(" ", x)
             if x != "" and x is not None
             else "No Artist",  # type: ignore
         )
@@ -269,7 +264,7 @@ class PlayerBox(Box):
             self.track_album,
             "label",
             GObject.BindingFlags.DEFAULT,
-            lambda _, x: _NEWLINE_RE.sub(" ", x)
+            lambda _, x: NEWLINE_RE.sub(" ", x)
             if x != "" and x is not None
             else "No Album",  # type: ignore
         )
@@ -503,6 +498,8 @@ class PlayerBox(Box):
             self.update_colors(self.fallback_cover_path)
 
     def on_accent_color(self, palette):
+        if palette is None:
+            return
         default_color = (255, 0, 0)  # fallback color
 
         base_color = palette[0] if palette else default_color

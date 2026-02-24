@@ -8,7 +8,6 @@ from .functions import (
     deep_merge,
     exclude_keys,
     flatten_dict,
-    read_json_file,
     read_toml_file,
     run_in_thread,
     validate_widgets,
@@ -26,7 +25,6 @@ class TsumikiConfig:
     __slots__ = (
         "_initialized",
         "config",
-        "json_config_file",
         "root_dir",
         "theme_config",
         "theme_config_file",
@@ -44,33 +42,27 @@ class TsumikiConfig:
         if getattr(self, "_initialized", False):
             return
 
-        # TODO: always read from .config/tsumuki/config.json
+        # TODO: always read from .config/tsumuki/config.toml
         self.root_dir = get_relative_path("..")
 
-        self.json_config_file = f"{self.root_dir}/config.json"
         self.toml_config_file = f"{self.root_dir}/config.toml"
-        self.theme_config_file = f"{self.root_dir}/theme.json"
+        self.theme_config_file = f"{self.root_dir}/theme.toml"
 
         self.config = self._load_config()
-        self.theme_config = read_json_file(file_path=self.theme_config_file) or {}
+        self.theme_config = read_toml_file(file_path=self.theme_config_file) or {}
 
         self._write_css_settings()
         self._initialized = True
 
     def _load_config(self) -> BarConfig:
         """Load and merge configuration from JSON or TOML file."""
-        check_json = os.path.exists(self.json_config_file)
         check_toml = os.path.exists(self.toml_config_file)
 
-        if not check_json and not check_toml:
-            raise FileNotFoundError("Please provide either a json or toml config.")
+        if not check_toml:
+            raise FileNotFoundError("Please provide toml config.")
 
         # Prefer JSON over TOML
-        parsed_data = (
-            read_json_file(file_path=self.json_config_file)
-            if check_json
-            else read_toml_file(file_path=self.toml_config_file)
-        )
+        parsed_data = read_toml_file(file_path=self.toml_config_file)
 
         validate_widgets(parsed_data, DEFAULT_CONFIG)
 

@@ -1,7 +1,6 @@
 from fabric.utils import get_desktop_applications
 
-# Frozenset for O(1) suffix lookup
-_NORMALIZE_SUFFIXES = frozenset((".bin", ".exe", ".so", "-bin", "-gtk"))
+from utils.constants import NORMALIZE_SUFFIXES
 
 
 class AppUtils:
@@ -59,7 +58,7 @@ class AppUtils:
         normalized = class_name.lower()
 
         # Check suffixes using frozenset
-        for suffix in _NORMALIZE_SUFFIXES:
+        for suffix in NORMALIZE_SUFFIXES:
             if normalized.endswith(suffix):
                 return normalized[: -len(suffix)]
 

@@ -1,5 +1,7 @@
 # ruff: noqa: E501
 
+import re
+
 from fabric.utils import get_relative_path
 from gi.repository import GLib
 
@@ -31,6 +33,7 @@ ASSETS_DIR = get_relative_path("../assets/")
 
 WALLPAPER_DIR = f"{HOME_DIR}/Pictures/Wallpapers"
 WALLPAPER_THUMBS_DIR = f"{WALLPAPER_DIR}/.thumbs"
+WALLPAPER_BLURRED_DIR = f"{WALLPAPER_DIR}/.blurred"
 
 LOG_DIR = f"{GLib.get_user_state_dir()}/{APPLICATION_NAME}/logs"
 LOG_FILE = f"{LOG_DIR}/{APPLICATION_NAME}.log"
@@ -127,7 +130,7 @@ DEFAULT_CONFIG = {
             "mode": "circular",
             "graph_length": 4,
         },
-        "settings": {"icon": "\udb81\udc93", "tooltip": True, "label": False},
+        "settings": {"icon": "󰒓", "tooltip": True, "label": False},
         "date_time": {
             "format": "%b %d %H:%M",
             "calendar": True,
@@ -1318,3 +1321,10 @@ NAMED_COLORS = {
     "yellow",
     "yellow green",
 }
+
+
+# Common regexes and small constant sets shared across modules
+NEWLINE_RE = re.compile(r"\r?\n")
+
+# Suffixes used when normalizing application/window class names
+NORMALIZE_SUFFIXES = frozenset((".bin", ".exe", ".so", "-bin", "-gtk"))

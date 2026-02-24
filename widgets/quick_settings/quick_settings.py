@@ -170,6 +170,7 @@ class QuickSettingsMenu(Box):
             style_classes=["uptime"],
             v_align="center",
             h_align="start",
+            tooltip_text="System Uptime",
         )
 
         self.user_box = Grid(

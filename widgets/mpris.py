@@ -1,5 +1,3 @@
-import re
-
 from fabric.utils import logger
 from fabric.widgets.box import Box
 from fabric.widgets.label import Label
@@ -9,9 +7,7 @@ from shared.media import PlayerBoxStack
 from shared.mixins import PopoverMixin
 from shared.widget_container import ButtonWidget
 from utils.colors import Colors
-
-# Pre-compiled regex for newline replacement
-_NEWLINE_RE = re.compile(r"\r?\n")
+from utils.constants import NEWLINE_RE
 
 
 class MprisWidget(ButtonWidget, PopoverMixin):
@@ -57,7 +53,7 @@ class MprisWidget(ButtonWidget, PopoverMixin):
         )
 
     def get_current(self):
-        bar_label = _NEWLINE_RE.sub(" ", self.player.title)
+        bar_label = NEWLINE_RE.sub(" ", self.player.title)
 
         truncated_info = (
             bar_label

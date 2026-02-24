@@ -2,7 +2,7 @@
 Settings GUI for Tsumiki
 """
 
-from fabric.utils import exec_shell_command_async, logger
+from fabric.utils import logger
 from fabric.widgets.box import Box
 from fabric.widgets.entry import Entry
 from fabric.widgets.image import Image
@@ -15,7 +15,7 @@ from gi.repository import Gtk
 from shared.buttons import HoverButton
 from utils.config import configuration, theme_config, widget_config
 from utils.constants import ASSETS_DIR
-from utils.functions import write_json_file
+from utils.functions import send_notification, write_toml_file
 from utils.types import (
     Anchor,
     Bar_Location,
@@ -129,6 +129,7 @@ class SettingsGUI(Window):
     def _setup_tabs(self):
         """Setup all tabs in the stack."""
         self.tab_stack.add_titled(self._create_general_tab(), "general", "󰒓 General")
+        self.tab_stack.add_titled(self._create_layout_tab(), "layout", "󰉯 Layout")
         self.tab_stack.add_titled(self._create_modules_tab(), "modules", "󰒍 Modules")
         self.tab_stack.add_titled(self._create_widgets_tab(), "widgets", "󰕰 Widgets")
         self.tab_stack.add_titled(self._create_theme_tab(), "theme", "󰸌 Theme")
@@ -328,6 +329,39 @@ class SettingsGUI(Window):
 
         return scrolled
 
+    def _create_layout_tab(self):
+        """Create the layout settings tab showing sections like left/middle/right."""
+        scrolled, vbox = self._create_scrolled_container()
+        layout = self.config.get("layout", {})
+
+        vbox.add(self._create_section_header("Layout"))
+
+        grid = self._create_grid()
+        vbox.add(grid)
+
+        row = 0
+        for section_name, items in layout.items():
+            grid.attach(self._create_label(section_name), 0, row, 1, 1)
+
+            if isinstance(items, list):
+                text = ", ".join(str(x) for x in items)
+                entry = Entry(text=text, h_expand=False)
+                entry.set_width_chars(40)
+
+                def on_changed(e, p="config.layout", k=section_name):
+                    raw = e.get_text() or ""
+                    arr = [s.strip() for s in raw.split(",") if s.strip()]
+                    self._update_config(p, k, arr)
+
+                entry.connect("changed", on_changed)
+                grid.attach(entry, 1, row, 1, 1)
+            else:
+                grid.attach(Label(label=str(items), h_align="start"), 1, row, 1, 1)
+
+            row += 1
+
+        return scrolled
+
     def _create_widgets_tab(self):
         """Create the widgets settings tab."""
         scrolled, vbox = self._create_scrolled_container()
@@ -484,8 +518,7 @@ class SettingsGUI(Window):
         grid = self._create_grid()
         inner_box.add(grid)
 
-        row = 0
-        for key, value in section_config.items():
+        for row, (key, value) in enumerate(section_config.items()):
             if isinstance(value, dict):
                 # Handle deeper nesting recursively
                 self._create_theme_nested_section(
@@ -498,7 +531,6 @@ class SettingsGUI(Window):
                 nested_path = f"{path}.{section_name}"
                 widget = self._create_theme_control(nested_path, key, value)
                 grid.attach(widget, 1, row, 1, 1)
-                row += 1
 
         expander.add(inner_box)
         container.add(expander)
@@ -699,22 +731,18 @@ class SettingsGUI(Window):
     def _on_save(self, *_):
         """Save configuration."""
         try:
-            write_json_file(configuration.json_config_file, self.config)
-            write_json_file(configuration.theme_config_file, self.theme)
+            write_toml_file(configuration.toml_config_file, self.config)
+
+            # TODO: only write changed files
+            write_toml_file(configuration.theme_config_file, self.theme)
 
             logger.info("[SETTINGS] Configuration saved successfully")
             self.modified = False
             self.save_btn.set_sensitive(False)
-            exec_shell_command_async(
-                'notify-send "Tsumiki" "Configuration saved"',
-                lambda _: None,
-            )
+            send_notification("Tsumiki", "Configuration saved")
         except Exception as e:
             logger.exception(f"[SETTINGS] Failed to save configuration: {e}")
-            exec_shell_command_async(
-                f'notify-send "Tsumiki" "Failed to save: {e}"',
-                lambda _: None,
-            )
+            send_notification("Tsumiki", f"Failed to save: {e}")
 
     def _on_reset(self, *_):
         """Reset to saved config."""

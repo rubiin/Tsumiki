@@ -9,8 +9,8 @@ from fabric.utils import logger
 from gi.repository import GLib
 
 from utils.constants import WEATHER_CACHE_FILE
+from utils.decorators import thread
 from utils.functions import write_json_file
-from utils.thread import thread
 
 from .base import SingletonService
 
