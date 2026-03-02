@@ -20,14 +20,14 @@ repos:
 
   # Ruff for linting, formatting, and import sorting
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.15.2
+    rev: v0.15.4
     hooks:
       - id: ruff
         args: ["--fix"]
 
   # isort for import sorting
   - repo: https://github.com/PyCQA/isort
-    rev: 8.0.0
+    rev: 8.0.1
     hooks:
       - id: isort
         args: ["--profile", "black"]
