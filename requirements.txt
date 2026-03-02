@@ -1,6 +1,6 @@
 click==8.3.1
 fabric @ git+https://github.com/Fabric-Development/fabric.git
-ijson==3.4.0.post0
+ijson==3.5.0
 loguru==0.7.3
 pillow==12.1.1
 psutil==7.2.2
