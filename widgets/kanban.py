@@ -1,7 +1,7 @@
 import typing
 
 import gi
-from fabric.utils import Gdk, Gtk, bulk_connect, logger
+from fabric.utils import Gdk, GLib, Gtk, bulk_connect, logger
 from fabric.widgets.box import Box
 from fabric.widgets.button import Button
 from fabric.widgets.centerbox import CenterBox
@@ -9,7 +9,6 @@ from fabric.widgets.eventbox import EventBox
 from fabric.widgets.grid import Grid
 from fabric.widgets.label import Label
 from fabric.widgets.scrolledwindow import ScrolledWindow
-from fabric.utils import GLib
 from gi.repository import GObject
 
 from shared.list import ListBox

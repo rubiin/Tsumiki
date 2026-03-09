@@ -19,6 +19,7 @@ from fabric.utils import (
     FormattedString,
     Gdk,
     GdkPixbuf,
+    GLib,
     Gtk,
     cooldown,
     exec_shell_command,
@@ -27,7 +28,6 @@ from fabric.utils import (
     invoke_repeater,
     logger,
 )
-from fabric.utils import GLib
 from gi.repository import Gio
 
 from .colors import Colors

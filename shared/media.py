@@ -6,6 +6,7 @@ from functools import partial
 
 import gi
 from fabric.utils import (
+    GLib,
     bulk_connect,
     cooldown,
     invoke_repeater,
@@ -19,7 +20,6 @@ from fabric.widgets.label import Label
 from fabric.widgets.overlay import Overlay
 from fabric.widgets.scale import Scale
 from fabric.widgets.stack import Stack
-from fabric.utils import GLib
 from gi.repository import GObject
 
 from services.mpris import MprisPlayer, MprisPlayerManager

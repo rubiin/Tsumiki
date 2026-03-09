@@ -4,7 +4,7 @@ import threading
 
 from fabric import Signal
 from fabric.notifications import Notification, Notifications, NotificationSerializedData
-from fabric.utils import GLib, GdkPixbuf, logger
+from fabric.utils import GdkPixbuf, GLib, logger
 
 from utils.colors import Colors
 from utils.constants import (

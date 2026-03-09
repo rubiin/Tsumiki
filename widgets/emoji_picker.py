@@ -1,13 +1,12 @@
 import os
 
 import ijson
-from fabric.utils import Gdk, logger, remove_handler
+from fabric.utils import Gdk, GLib, logger, remove_handler
 from fabric.widgets.box import Box
 from fabric.widgets.button import Button
 from fabric.widgets.entry import Entry
 from fabric.widgets.label import Label
 from fabric.widgets.stack import Stack
-from fabric.utils import GLib
 from gi.repository import Gio
 
 from shared.mixins import PopoverMixin
