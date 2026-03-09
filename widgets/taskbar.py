@@ -50,9 +50,11 @@ class TaskBarWidget(BoxWidget):
                 "notify::app-id": lambda *_: self.on_app_id(
                     client, client_image, client_button
                 ),
-                "notify::activated": lambda *_: client_button.add_style_class("active")
-                if client.get_activated()
-                else client_button.remove_style_class("active"),
+                "notify::activated": lambda *_: (
+                    client_button.add_style_class("active")
+                    if client.get_activated()
+                    else client_button.remove_style_class("active")
+                ),
                 "close": lambda *_: self.remove(client_button),
             },
         )

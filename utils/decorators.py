@@ -1,7 +1,7 @@
 from collections.abc import Callable
 from concurrent.futures import ThreadPoolExecutor
 
-from gi.repository import GLib
+from fabric.utils import GLib
 
 # Create a shared thread pool
 thread_pool = ThreadPoolExecutor(max_workers=4)

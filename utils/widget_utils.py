@@ -3,15 +3,13 @@ from numbers import Number
 from time import sleep
 from typing import Literal
 
-import cairo  # For rendering the drag preview
 import gi
 import psutil
-from fabric.utils import bulk_connect
+from fabric.utils import Gdk, GdkPixbuf, GLib, bulk_connect
 from fabric.widgets.image import Image
 from fabric.widgets.label import Label
 from fabric.widgets.scale import ScaleMark
 from fabric.widgets.widget import Widget
-from gi.repository import Gdk, GdkPixbuf, GLib
 
 from shared.animated.scale import AnimatedScale
 

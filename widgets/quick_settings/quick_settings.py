@@ -1,13 +1,12 @@
 import os
 
 import gi
-from fabric.utils import bulk_connect, invoke_repeater, logger
+from fabric.utils import GLib, Gtk, bulk_connect, invoke_repeater, logger
 from fabric.widgets.box import Box
 from fabric.widgets.centerbox import CenterBox
 from fabric.widgets.grid import Grid
 from fabric.widgets.image import Image
 from fabric.widgets.label import Label
-from gi.repository import GLib, Gtk
 
 import utils.functions as helpers
 from services import (

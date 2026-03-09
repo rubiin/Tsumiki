@@ -1,7 +1,7 @@
 import time
 
+from fabric.utils import GLib
 from fabric.widgets.label import Label
-from gi.repository import GLib
 
 from shared.widget_container import ButtonWidget
 from utils.widget_utils import nerd_font_icon

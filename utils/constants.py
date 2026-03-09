@@ -2,8 +2,7 @@
 
 import re
 
-from fabric.utils import get_relative_path
-from gi.repository import GLib
+from fabric.utils import GLib, get_relative_path
 
 # constants
 

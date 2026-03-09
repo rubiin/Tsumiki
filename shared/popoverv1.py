@@ -1,7 +1,8 @@
 import contextlib
 
+from fabric.utils import Gtk
 from fabric.widgets.wayland import WaylandWindow
-from gi.repository import Gtk, GtkLayerShell
+from gi.repository import GtkLayerShell
 
 from utils.monitors import HyprlandWithMonitors
 

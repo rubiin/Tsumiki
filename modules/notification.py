@@ -5,6 +5,9 @@ from fabric.notifications import (
     NotificationCloseReason,
 )
 from fabric.utils import (
+    Gdk,
+    GdkPixbuf,
+    GLib,
     bulk_connect,
     invoke_repeater,
     logger,
@@ -20,7 +23,6 @@ from fabric.widgets.overlay import Overlay
 from fabric.widgets.revealer import Revealer
 from fabric.widgets.wayland import WaylandWindow as Window
 from fabric.widgets.widget import Widget
-from gi.repository import Gdk, GdkPixbuf, GLib
 
 import utils.constants as constants
 import utils.functions as helpers

@@ -19,7 +19,8 @@ from fabric.widgets.label import Label
 from fabric.widgets.overlay import Overlay
 from fabric.widgets.scale import Scale
 from fabric.widgets.stack import Stack
-from gi.repository import GLib, GObject
+from fabric.utils import GLib
+from gi.repository import GObject
 
 from services.mpris import MprisPlayer, MprisPlayerManager
 from shared.animator import cubic_bezier
@@ -245,18 +246,18 @@ class PlayerBox(Box):
             self.track_title,
             "label",
             GObject.BindingFlags.DEFAULT,
-            lambda _, x: NEWLINE_RE.sub(" ", x)
-            if x != "" and x is not None
-            else "No Title",  # type: ignore
+            lambda _, x: (
+                NEWLINE_RE.sub(" ", x) if x != "" and x is not None else "No Title"
+            ),  # type: ignore
         )
         self.player.bind_property(
             "artist",
             self.track_artist,
             "label",
             GObject.BindingFlags.DEFAULT,
-            lambda _, x: NEWLINE_RE.sub(" ", x)
-            if x != "" and x is not None
-            else "No Artist",  # type: ignore
+            lambda _, x: (
+                NEWLINE_RE.sub(" ", x) if x != "" and x is not None else "No Artist"
+            ),  # type: ignore
         )
 
         self.player.bind_property(
@@ -264,9 +265,9 @@ class PlayerBox(Box):
             self.track_album,
             "label",
             GObject.BindingFlags.DEFAULT,
-            lambda _, x: NEWLINE_RE.sub(" ", x)
-            if x != "" and x is not None
-            else "No Album",  # type: ignore
+            lambda _, x: (
+                NEWLINE_RE.sub(" ", x) if x != "" and x is not None else "No Album"
+            ),  # type: ignore
         )
 
         self.track_info = Box(

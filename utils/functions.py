@@ -17,6 +17,9 @@ import psutil
 from fabric import Application
 from fabric.utils import (
     FormattedString,
+    Gdk,
+    GdkPixbuf,
+    Gtk,
     cooldown,
     exec_shell_command,
     exec_shell_command_async,
@@ -24,7 +27,8 @@ from fabric.utils import (
     invoke_repeater,
     logger,
 )
-from gi.repository import Gdk, GdkPixbuf, Gio, GLib, Gtk
+from fabric.utils import GLib
+from gi.repository import Gio
 
 from .colors import Colors
 from .constants import NAMED_COLORS

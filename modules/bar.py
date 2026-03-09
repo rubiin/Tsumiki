@@ -1,13 +1,12 @@
 import importlib
 
 from fabric import Application
-from fabric.utils import exec_shell_command_async, logger
+from fabric.utils import GLib, exec_shell_command_async, logger
 from fabric.widgets.box import Box
 from fabric.widgets.centerbox import CenterBox
 from fabric.widgets.eventbox import EventBox
 from fabric.widgets.revealer import Revealer
 from fabric.widgets.wayland import WaylandWindow as Window
-from gi.repository import GLib
 
 from utils.constants import ASSETS_DIR
 from utils.widget_settings import BarConfig

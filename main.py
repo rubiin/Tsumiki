@@ -1,8 +1,13 @@
 import os
 
 from fabric import Application
-from fabric.utils import exec_shell_command, get_relative_path, logger, monitor_file
-from gi.repository import GLib
+from fabric.utils import (
+    GLib,
+    exec_shell_command,
+    get_relative_path,
+    logger,
+    monitor_file,
+)
 
 import utils.functions as helpers
 from modules.bar import StatusBar

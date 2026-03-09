@@ -4,7 +4,7 @@ import time
 from typing import Callable, Optional
 
 import requests
-from gi.repository import GLib
+from fabric.utils import GLib
 
 from utils.constants import QUOTES_CACHE_FILE
 from utils.functions import read_json_file, write_json_file

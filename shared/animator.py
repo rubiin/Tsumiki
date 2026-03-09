@@ -6,8 +6,7 @@ from typing import Protocol, cast
 
 import gi
 from fabric.core.service import Property, Service, Signal
-from fabric.utils import clamp
-from gi.repository import GLib, Gtk
+from fabric.utils import GLib, Gtk, clamp
 
 gi.require_versions({"Gtk": "3.0"})
 

@@ -1,12 +1,11 @@
 import gi
 from fabric.bluetooth.service import BluetoothClient, BluetoothDevice
-from fabric.utils import bulk_connect
+from fabric.utils import Gtk, bulk_connect
 from fabric.widgets.box import Box
 from fabric.widgets.button import Button
 from fabric.widgets.centerbox import CenterBox
 from fabric.widgets.label import Label
 from fabric.widgets.scrolledwindow import ScrolledWindow
-from gi.repository import Gtk
 
 from services import bluetooth_service
 from shared.buttons import HoverButton, QSChevronButton, ScanButton

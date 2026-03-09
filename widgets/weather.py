@@ -2,13 +2,12 @@ import time
 from datetime import datetime
 
 import gi
-from fabric.utils import cooldown, invoke_repeater, logger
+from fabric.utils import Gtk, cooldown, invoke_repeater, logger
 from fabric.widgets.box import Box
 from fabric.widgets.grid import Grid
 from fabric.widgets.label import Label
 from fabric.widgets.revealer import Revealer
 from fabric.widgets.svg import Svg
-from gi.repository import Gtk
 
 from services.weather import WeatherService
 from shared.widget_container import ButtonWidget

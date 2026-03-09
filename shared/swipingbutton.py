@@ -1,6 +1,6 @@
 from fabric.core.service import Signal
+from fabric.utils import Gdk
 from fabric.widgets.button import Button
-from gi.repository import Gdk
 
 
 class SwipeButton(Button):

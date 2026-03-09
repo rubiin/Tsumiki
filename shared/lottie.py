@@ -2,9 +2,8 @@ from typing import Literal
 
 import cairo
 import gi
-from fabric.utils import remove_handler
+from fabric.utils import GLib, Gtk, remove_handler
 from fabric.widgets.widget import Widget
-from gi.repository import GLib, Gtk
 from rlottie_python.rlottie_wrapper import LottieAnimation
 
 from .widget_container import BaseWidget
