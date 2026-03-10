@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.10.2](https://github.com/rubiin/Tsumiki/compare/v2.10.1...v2.10.2) (2026-03-10)
+
+
+### ⚙️ Chores
+
+* **deps:** update dependency ijson to v3.5.0 ([#285](https://github.com/rubiin/Tsumiki/issues/285)) ([4ca37b3](https://github.com/rubiin/Tsumiki/commit/4ca37b387175b124a3e85b5cbc2eeaadc1685f10))
+
 ## [2.10.1](https://github.com/rubiin/Tsumiki/compare/v2.10.0...v2.10.1) (2026-02-24)
 
 
