@@ -1,5 +1,4 @@
-from fabric.utils import GLib
-from gi.repository import Gio
+from fabric.utils import Gio, GLib
 
 
 class GioDBusHelper:

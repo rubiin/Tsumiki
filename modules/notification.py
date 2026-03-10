@@ -1,4 +1,3 @@
-import gi
 from fabric.notifications import (
     Notification,
     NotificationAction,
@@ -33,8 +32,6 @@ from utils.colors import Colors
 from utils.icons import text_icons
 from utils.widget_settings import BarConfig
 from utils.widget_utils import get_icon, nerd_font_icon
-
-gi.require_versions({"Gdk": "3.0", "GdkPixbuf": "2.0"})
 
 # Swipe threshold for dismissing notifications (normalized: 0.0 to 1.0)
 _SWIPE_DISMISS_THRESHOLD = 0.35

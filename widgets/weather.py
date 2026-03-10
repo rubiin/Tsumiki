@@ -1,7 +1,6 @@
 import time
 from datetime import datetime
 
-import gi
 from fabric.utils import Gtk, cooldown, invoke_repeater, logger
 from fabric.widgets.box import Box
 from fabric.widgets.grid import Grid
@@ -17,8 +16,6 @@ from utils.icons import weather_icons
 from utils.widget_utils import (
     nerd_font_icon,
 )
-
-gi.require_versions({"Gtk": "3.0"})
 
 
 class BaseWeatherWidget:

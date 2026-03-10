@@ -1,6 +1,5 @@
 import os
 
-import gi
 from fabric.utils import GLib, Gtk, bulk_connect, invoke_repeater, logger
 from fabric.widgets.box import Box
 from fabric.widgets.centerbox import CenterBox
@@ -39,8 +38,6 @@ from .togglers import (
     HyprIdleQuickSetting,
     NotificationQuickSetting,
 )
-
-gi.require_versions({"Gtk": "3.0"})
 
 
 class QuickSettingsButtonBox(Box):

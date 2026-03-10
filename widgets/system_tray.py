@@ -1,6 +1,5 @@
 import os
 
-import gi
 from fabric.system_tray.service import SystemTray as SystemTrayService
 from fabric.system_tray.service import SystemTrayItem as SystemTrayItemService
 from fabric.utils import (
@@ -19,8 +18,6 @@ from shared.buttons import HoverButton
 from shared.widget_container import ButtonWidget
 from utils.icons import text_icons
 from utils.widget_utils import nerd_font_icon
-
-gi.require_versions({"Gtk": "3.0", "GdkPixbuf": "2.0", "Gdk": "3.0"})
 
 
 class BaseSystemTray:

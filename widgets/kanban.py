@@ -1,6 +1,5 @@
 import typing
 
-import gi
 from fabric.utils import Gdk, GLib, Gtk, bulk_connect, logger
 from fabric.widgets.box import Box
 from fabric.widgets.button import Button
@@ -17,8 +16,6 @@ from shared.widget_container import ButtonWidget
 from utils.constants import KANBAN_FILE
 from utils.functions import read_json_file, write_json_file
 from utils.widget_utils import create_surface_from_widget, nerd_font_icon
-
-gi.require_versions({"Gtk": "3.0", "GObject": "2.0", "Gdk": "3.0"})
 
 
 class InlineEditor(Box):

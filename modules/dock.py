@@ -1,6 +1,5 @@
 import json
 
-import gi
 from fabric.hyprland.widgets import get_hyprland_connection
 from fabric.utils import Gdk, GLib, Gtk, bulk_connect, logger, truncate
 from fabric.widgets.box import Box
@@ -21,8 +20,6 @@ from utils.constants import PINNED_APPS_FILE
 from utils.functions import read_json_file, write_json_file
 from utils.icon_resolver import IconResolver
 from utils.widget_settings import BarConfig
-
-gi.require_versions({"Glace": "0.1", "Gtk": "3.0"})
 
 # DnD target for dock app reordering
 DOCK_DND_TARGET = [Gtk.TargetEntry.new("dock-app", Gtk.TargetFlags.SAME_APP, 0)]

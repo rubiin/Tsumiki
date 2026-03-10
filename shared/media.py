@@ -4,7 +4,6 @@ import urllib.parse
 import urllib.request
 from functools import partial
 
-import gi
 from fabric.utils import (
     GLib,
     bulk_connect,
@@ -40,8 +39,6 @@ from utils.widget_utils import (
     nerd_font_icon,
     setup_cursor_hover,
 )
-
-gi.require_versions({"GObject": "2.0"})
 
 
 class PlayerBoxStack(Box):

@@ -1,4 +1,3 @@
-import gi
 from fabric.utils import bulk_connect
 from fabric.widgets.button import Button
 from fabric.widgets.image import Image
@@ -6,8 +5,6 @@ from gi.repository import Glace
 
 from shared.widget_container import BoxWidget
 from utils.icon_resolver import IconResolver
-
-gi.require_versions({"Gtk": "3.0", "GdkPixbuf": "2.0", "Glace": "0.1"})
 
 
 class TaskBarWidget(BoxWidget):

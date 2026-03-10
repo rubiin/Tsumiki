@@ -1,6 +1,5 @@
 from typing import ClassVar
 
-import gi
 from fabric.hyprland.service import HyprlandEvent
 from fabric.hyprland.widgets import get_hyprland_connection
 from fabric.utils import Gdk, GLib, bulk_connect, logger
@@ -8,10 +7,6 @@ from fabric.widgets.box import Box
 from fabric.widgets.wayland import WaylandWindow
 from fabric.widgets.widget import Widget
 from gi.repository import GObject, GtkLayerShell
-
-gi.require_versions(
-    {"Gtk": "3.0", "Gdk": "3.0", "GtkLayerShell": "0.1", "GObject": "2.0"}
-)
 
 
 class PopoverManager:

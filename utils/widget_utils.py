@@ -3,9 +3,8 @@ from numbers import Number
 from time import sleep
 from typing import Literal
 
-import gi
 import psutil
-from fabric.utils import Gdk, GdkPixbuf, GLib, bulk_connect
+from fabric.utils import Gdk, GdkPixbuf, GLib, bulk_connect, cairo
 from fabric.widgets.image import Image
 from fabric.widgets.label import Label
 from fabric.widgets.scale import ScaleMark
@@ -17,9 +16,6 @@ from .config import widget_config
 from .icons import symbolic_icons, text_icons
 
 storage_config = widget_config.get("widgets", {}).get("storage", {})
-
-
-gi.require_versions({"Gtk": "3.0", "Gdk": "3.0", "GdkPixbuf": "2.0"})
 
 
 # Function to get the system stats using psutil

@@ -338,8 +338,7 @@ class SettingsGUI(Window):
         grid = self._create_grid()
         vbox.add(grid)
 
-        row = 0
-        for section_name, items in layout.items():
+        for row, (section_name, items) in enumerate(layout.items()):
             grid.attach(self._create_label(section_name), 0, row, 1, 1)
 
             if isinstance(items, list):
@@ -356,8 +355,6 @@ class SettingsGUI(Window):
                 grid.attach(entry, 1, row, 1, 1)
             else:
                 grid.attach(Label(label=str(items), h_align="start"), 1, row, 1, 1)
-
-            row += 1
 
         return scrolled
 

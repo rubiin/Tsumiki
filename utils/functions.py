@@ -12,7 +12,6 @@ from functools import lru_cache
 from io import BytesIO
 from typing import Any, Callable, Iterable, Literal, Optional
 
-import gi
 import psutil
 from fabric import Application
 from fabric.utils import (
@@ -35,8 +34,6 @@ from .constants import NAMED_COLORS
 from .decorators import run_in_thread, thread
 from .exceptions import ExecutableNotFoundError
 from .icons import text_icons
-
-gi.require_versions({"Gtk": "3.0", "Gdk": "3.0", "GdkPixbuf": "2.0"})
 
 # Pre-compiled regex patterns for color validation
 _HEX_COLOR_RE = re.compile(r"^#(?:[a-fA-F0-9]{3,4}|[a-fA-F0-9]{6,8})$")

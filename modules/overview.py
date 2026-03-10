@@ -1,6 +1,5 @@
 import json
 
-import gi
 from fabric.hyprland.widgets import get_hyprland_connection
 from fabric.utils import Gdk, GdkPixbuf, Gtk, bulk_connect, logger
 from fabric.widgets.box import Box
@@ -16,9 +15,6 @@ from utils.app import AppUtils
 from utils.icon_resolver import IconResolver
 from utils.widget_settings import BarConfig
 from utils.widget_utils import create_surface_from_widget
-
-gi.require_versions({"Gtk": "3.0", "Gdk": "3.0", "GdkPixbuf": "2.0"})
-
 
 SCALE = 0.14
 TARGET = [Gtk.TargetEntry.new("text/plain", Gtk.TargetFlags.SAME_APP, 0)]

@@ -1,4 +1,3 @@
-import gi
 from fabric.bluetooth.service import BluetoothClient, BluetoothDevice
 from fabric.utils import Gtk, bulk_connect
 from fabric.widgets.box import Box
@@ -13,8 +12,6 @@ from shared.list import ListBox
 from shared.submenu import QuickSubMenu
 from utils.icons import text_icons
 from utils.widget_utils import nerd_font_icon
-
-gi.require_versions({"Gtk": "3.0"})
 
 
 class BluetoothDeviceBox(CenterBox):
