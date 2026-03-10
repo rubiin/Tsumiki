@@ -1,11 +1,10 @@
 import json
-import os
 import time
 from contextlib import suppress
 from typing import Callable, Optional
 
 import requests
-from fabric.utils import GLib, logger
+from fabric.utils import GLib, logger, os
 
 from utils.constants import WEATHER_CACHE_FILE
 from utils.decorators import thread

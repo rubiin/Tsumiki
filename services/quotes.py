@@ -1,10 +1,9 @@
-import os
 import random
 import time
 from typing import Callable, Optional
 
 import requests
-from fabric.utils import GLib
+from fabric.utils import GLib, os
 
 from utils.constants import QUOTES_CACHE_FILE
 from utils.functions import read_json_file, write_json_file

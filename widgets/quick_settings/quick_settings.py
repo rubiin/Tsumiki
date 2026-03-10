@@ -1,6 +1,4 @@
-import os
-
-from fabric.utils import GLib, Gtk, bulk_connect, invoke_repeater, logger
+from fabric.utils import GLib, Gtk, bulk_connect, invoke_repeater, logger, os
 from fabric.widgets.box import Box
 from fabric.widgets.centerbox import CenterBox
 from fabric.widgets.grid import Grid

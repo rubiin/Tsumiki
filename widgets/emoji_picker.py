@@ -1,7 +1,5 @@
-import os
-
 import ijson
-from fabric.utils import Gdk, GLib, logger, remove_handler
+from fabric.utils import Gdk, GLib, logger, os, remove_handler
 from fabric.widgets.box import Box
 from fabric.widgets.button import Button
 from fabric.widgets.entry import Entry

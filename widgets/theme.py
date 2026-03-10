@@ -1,7 +1,6 @@
-import os
 import threading
 
-from fabric.utils import get_relative_path
+from fabric.utils import get_relative_path, os
 
 from shared.widget_container import ButtonWidget
 from utils.config import theme_config

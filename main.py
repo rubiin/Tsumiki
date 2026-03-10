@@ -1,5 +1,3 @@
-import os
-
 from fabric import Application
 from fabric.utils import (
     GLib,
@@ -7,6 +5,7 @@ from fabric.utils import (
     get_relative_path,
     logger,
     monitor_file,
+    os,
 )
 
 import utils.functions as helpers

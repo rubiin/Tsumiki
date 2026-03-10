@@ -1,4 +1,3 @@
-import os
 import tempfile
 import urllib.parse
 import urllib.request
@@ -6,10 +5,12 @@ from functools import partial
 
 from fabric.utils import (
     GLib,
+    GObject,
     bulk_connect,
     cooldown,
     invoke_repeater,
     logger,
+    os,
 )
 from fabric.widgets.box import Box
 from fabric.widgets.button import Button
@@ -19,7 +20,6 @@ from fabric.widgets.label import Label
 from fabric.widgets.overlay import Overlay
 from fabric.widgets.scale import Scale
 from fabric.widgets.stack import Stack
-from gi.repository import GObject
 
 from services.mpris import MprisPlayer, MprisPlayerManager
 from shared.animator import cubic_bezier

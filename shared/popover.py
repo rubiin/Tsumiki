@@ -2,11 +2,11 @@ from typing import ClassVar
 
 from fabric.hyprland.service import HyprlandEvent
 from fabric.hyprland.widgets import get_hyprland_connection
-from fabric.utils import Gdk, GLib, bulk_connect, logger
+from fabric.utils import Gdk, GLib, GObject, bulk_connect, logger
 from fabric.widgets.box import Box
 from fabric.widgets.wayland import WaylandWindow
 from fabric.widgets.widget import Widget
-from gi.repository import GObject, GtkLayerShell
+from gi.repository import GtkLayerShell
 
 
 class PopoverManager:

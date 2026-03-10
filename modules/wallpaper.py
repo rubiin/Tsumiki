@@ -1,8 +1,7 @@
 import mimetypes
-import os
 
 from fabric.core.service import Signal
-from fabric.utils import Gtk, exec_shell_command_async, logger
+from fabric.utils import Gtk, exec_shell_command_async, logger, os
 from fabric.widgets.box import Box
 from fabric.widgets.grid import Grid
 from fabric.widgets.image import Image

@@ -1,10 +1,9 @@
 import math
-import os
 import threading
 
 from fabric import Signal
 from fabric.notifications import Notification, Notifications, NotificationSerializedData
-from fabric.utils import GdkPixbuf, GLib, logger
+from fabric.utils import GdkPixbuf, GLib, logger, os
 
 from utils.colors import Colors
 from utils.constants import (

@@ -1,7 +1,6 @@
-import os
 import re
 
-from fabric.utils import GdkPixbuf, GLib, Gtk, logger
+from fabric.utils import GdkPixbuf, GLib, Gtk, logger, os
 
 from utils.functions import read_json_file, write_json_file
 

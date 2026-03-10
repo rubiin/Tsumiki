@@ -1,7 +1,5 @@
-import os
-
 from fabric.core.service import Property, Signal
-from fabric.utils import GLib, exec_shell_command_async, logger, monitor_file
+from fabric.utils import GLib, exec_shell_command_async, logger, monitor_file, os
 
 import utils.functions as helpers
 from utils.colors import Colors

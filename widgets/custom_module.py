@@ -1,5 +1,4 @@
 import json
-import os
 import signal
 import subprocess
 
@@ -10,6 +9,7 @@ from fabric.utils import (
     exec_shell_command_async,
     invoke_repeater,
     logger,
+    os,
 )
 from fabric.widgets.label import Label
 

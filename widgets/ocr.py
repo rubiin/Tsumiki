@@ -1,7 +1,6 @@
-import os
 import subprocess
 
-from fabric.utils import Gdk, Gtk, exec_shell_command_async
+from fabric.utils import Gdk, Gtk, exec_shell_command_async, os
 from fabric.widgets.label import Label
 
 from shared.widget_container import ButtonWidget

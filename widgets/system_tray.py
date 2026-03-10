@@ -1,5 +1,3 @@
-import os
-
 from fabric.system_tray.service import SystemTray as SystemTrayService
 from fabric.system_tray.service import SystemTrayItem as SystemTrayItemService
 from fabric.utils import (
@@ -9,6 +7,7 @@ from fabric.utils import (
     Gtk,
     bulk_connect,
     logger,
+    os,
 )
 from fabric.widgets.box import Box
 from fabric.widgets.grid import Grid

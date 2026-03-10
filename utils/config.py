@@ -1,7 +1,6 @@
 import json
-import os
 
-from fabric.utils import get_relative_path, logger
+from fabric.utils import get_relative_path, logger, os
 
 from .constants import DEFAULT_CONFIG
 from .functions import (

@@ -1,7 +1,6 @@
 import ctypes
 import html
 import json
-import os
 import re
 import shutil
 import subprocess
@@ -26,6 +25,7 @@ from fabric.utils import (
     get_relative_path,
     invoke_repeater,
     logger,
+    os,
 )
 from gi.repository import Gio
 
