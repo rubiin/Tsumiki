@@ -1,16 +1,9 @@
-import os
-import re
-
-import gi
-from fabric.utils import logger
-from gi.repository import GdkPixbuf, GLib, Gtk
+from fabric.utils import GdkPixbuf, GLib, Gtk, logger, os, re
 
 from utils.functions import read_json_file, write_json_file
 
 from .constants import ICON_CACHE_FILE
 from .icons import symbolic_icons
-
-gi.require_versions({"Gtk": "3.0", "GdkPixbuf": "2.0"})
 
 # Pre-compiled regex for splitting app_id
 _APP_ID_SPLIT_RE = re.compile(r"-|\.|_|\s")

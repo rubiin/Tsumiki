@@ -1,15 +1,10 @@
 from typing import Literal
 
-import cairo
-import gi
-from fabric.utils import remove_handler
+from fabric.utils import GLib, Gtk, cairo, remove_handler
 from fabric.widgets.widget import Widget
-from gi.repository import GLib, Gtk
 from rlottie_python.rlottie_wrapper import LottieAnimation
 
 from .widget_container import BaseWidget
-
-gi.require_versions({"Gtk": "3.0"})
 
 
 class LottieAnimationWidget(Gtk.DrawingArea, BaseWidget):

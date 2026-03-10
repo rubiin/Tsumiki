@@ -1,13 +1,9 @@
-import os
-
-import gi
-from fabric.utils import bulk_connect, invoke_repeater, logger
+from fabric.utils import GLib, Gtk, bulk_connect, invoke_repeater, logger, os
 from fabric.widgets.box import Box
 from fabric.widgets.centerbox import CenterBox
 from fabric.widgets.grid import Grid
 from fabric.widgets.image import Image
 from fabric.widgets.label import Label
-from gi.repository import GLib, Gtk
 
 import utils.functions as helpers
 from services import (
@@ -40,8 +36,6 @@ from .togglers import (
     HyprIdleQuickSetting,
     NotificationQuickSetting,
 )
-
-gi.require_versions({"Gtk": "3.0"})
 
 
 class QuickSettingsButtonBox(Box):
@@ -170,6 +164,7 @@ class QuickSettingsMenu(Box):
             style_classes=["uptime"],
             v_align="center",
             h_align="start",
+            tooltip_text="System Uptime",
         )
 
         self.user_box = Grid(

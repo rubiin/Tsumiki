@@ -1,8 +1,7 @@
 import json
 
-import gi
 from fabric.hyprland.widgets import get_hyprland_connection
-from fabric.utils import bulk_connect, logger, truncate
+from fabric.utils import Gdk, GLib, Gtk, bulk_connect, logger, truncate
 from fabric.widgets.box import Box
 from fabric.widgets.button import Button
 from fabric.widgets.centerbox import CenterBox
@@ -11,7 +10,7 @@ from fabric.widgets.image import Image
 from fabric.widgets.revealer import Revealer
 from fabric.widgets.separator import Separator
 from fabric.widgets.wayland import WaylandWindow as Window
-from gi.repository import Gdk, Glace, GLib, Gtk
+from gi.repository import Glace
 
 from modules.app_launcher import AppLauncher
 from shared.popoverv1 import PopOverWindow
@@ -21,8 +20,6 @@ from utils.constants import PINNED_APPS_FILE
 from utils.functions import read_json_file, write_json_file
 from utils.icon_resolver import IconResolver
 from utils.widget_settings import BarConfig
-
-gi.require_versions({"Glace": "0.1", "Gtk": "3.0"})
 
 # DnD target for dock app reordering
 DOCK_DND_TARGET = [Gtk.TargetEntry.new("dock-app", Gtk.TargetFlags.SAME_APP, 0)]
@@ -215,9 +212,11 @@ class AppBar(Box):
 
             self.popup_revealer.connect(
                 "notify::child-revealed",
-                lambda *_: self.popup.set_visible(False)
-                if not self.popup_revealer.child_revealed
-                else None,
+                lambda *_: (
+                    self.popup.set_visible(False)
+                    if not self.popup_revealer.child_revealed
+                    else None
+                ),
             )
 
     def _close_popup(self, *_):
@@ -826,9 +825,11 @@ class AppBar(Box):
                 "notify::app-id": lambda *_: self.on_app_id(
                     client, client_button, client_image
                 ),
-                "notify::activated": lambda *_: client_button.add_style_class("active")
-                if client.get_activated()
-                else client_button.remove_style_class("active"),
+                "notify::activated": lambda *_: (
+                    client_button.add_style_class("active")
+                    if client.get_activated()
+                    else client_button.remove_style_class("active")
+                ),
                 "close": lambda *_: (self.remove(box), box.destroy()),
             },
         )

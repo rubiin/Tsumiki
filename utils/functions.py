@@ -1,38 +1,39 @@
 import ctypes
 import html
 import json
-import os
 import re
 import shutil
 import subprocess
-import time
 from collections import Counter
 from datetime import datetime
 from functools import lru_cache
 from io import BytesIO
 from typing import Any, Callable, Iterable, Literal, Optional
 
-import gi
 import psutil
 from fabric import Application
 from fabric.utils import (
     FormattedString,
+    Gdk,
+    GdkPixbuf,
+    GLib,
+    Gtk,
     cooldown,
     exec_shell_command,
     exec_shell_command_async,
     get_relative_path,
     invoke_repeater,
     logger,
+    os,
+    time,
 )
-from gi.repository import Gdk, GdkPixbuf, Gio, GLib, Gtk
+from gi.repository import Gio
 
 from .colors import Colors
 from .constants import NAMED_COLORS
+from .decorators import run_in_thread, thread
 from .exceptions import ExecutableNotFoundError
 from .icons import text_icons
-from .thread import run_in_thread, thread
-
-gi.require_versions({"Gtk": "3.0", "Gdk": "3.0", "GdkPixbuf": "2.0"})
 
 # Pre-compiled regex patterns for color validation
 _HEX_COLOR_RE = re.compile(r"^#(?:[a-fA-F0-9]{3,4}|[a-fA-F0-9]{6,8})$")
@@ -187,6 +188,19 @@ def read_toml_file(file_path: str) -> Optional[dict]:
         return None
 
 
+@run_in_thread
+def write_toml_file(path: str, data: dict) -> Optional[dict]:
+    import pytomlpp as toml
+
+    try:
+        with open(path, "w") as f:
+            toml.dump(data, f)
+
+    except Exception as e:
+        logger.exception(f"Failed to write toml: {e}")
+        return None
+
+
 # support for multiple monitors
 def for_monitors(widget: Gtk.Widget) -> list[Gtk.Widget]:
     n = Gdk.Display.get_default().get_n_monitors() if Gdk.Display.get_default() else 1
@@ -232,12 +246,12 @@ def copy_theme(theme: str):
 
 # Function to update the theme configuration
 def update_theme_config(theme_name: str):
-    """Update the theme.json file with the new theme name."""
+    """Update the theme.toml file with the new theme name."""
     try:
-        theme_config_file = get_relative_path("../theme.json")
+        theme_config_file = get_relative_path("../theme.toml")
 
         # Read current theme config
-        config = read_json_file(theme_config_file)
+        config = read_toml_file(theme_config_file)
 
         if config is None:
             return
@@ -247,7 +261,7 @@ def update_theme_config(theme_name: str):
 
         # Write back to file
 
-        write_json_file(config, theme_config_file)
+        write_toml_file(theme_config_file, config)
 
         logger.info(f"{Colors.INFO}[Theme] Updated theme config to {theme_name}")
     except Exception as e:
@@ -705,7 +719,7 @@ def send_notification(
     return True
 
 
-# Function to write a JSON file
+@run_in_thread
 def write_json_file(path: str, data: dict):
     try:
         with open(path, "w") as f:

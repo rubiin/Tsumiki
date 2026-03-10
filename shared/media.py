@@ -1,16 +1,16 @@
-import os
-import re
 import tempfile
 import urllib.parse
 import urllib.request
 from functools import partial
 
-import gi
 from fabric.utils import (
+    GLib,
+    GObject,
     bulk_connect,
     cooldown,
     invoke_repeater,
     logger,
+    os,
 )
 from fabric.widgets.box import Box
 from fabric.widgets.button import Button
@@ -20,13 +20,12 @@ from fabric.widgets.label import Label
 from fabric.widgets.overlay import Overlay
 from fabric.widgets.scale import Scale
 from fabric.widgets.stack import Stack
-from gi.repository import GLib, GObject
 
 from services.mpris import MprisPlayer, MprisPlayerManager
 from shared.animator import cubic_bezier
 from shared.buttons import HoverButton
 from shared.circle_image import CircularImage
-from utils.constants import APP_DATA_DIRECTORY, ASSETS_DIR
+from utils.constants import APP_DATA_DIRECTORY, ASSETS_DIR, NEWLINE_RE
 from utils.functions import (
     ensure_directory,
     get_simple_palette_threaded,
@@ -40,12 +39,6 @@ from utils.widget_utils import (
     nerd_font_icon,
     setup_cursor_hover,
 )
-
-gi.require_versions({"GObject": "2.0"})
-
-
-# Pre-compiled regex for newline replacement
-_NEWLINE_RE = re.compile(r"\r?\n")
 
 
 class PlayerBoxStack(Box):
@@ -250,18 +243,18 @@ class PlayerBox(Box):
             self.track_title,
             "label",
             GObject.BindingFlags.DEFAULT,
-            lambda _, x: _NEWLINE_RE.sub(" ", x)
-            if x != "" and x is not None
-            else "No Title",  # type: ignore
+            lambda _, x: (
+                NEWLINE_RE.sub(" ", x) if x != "" and x is not None else "No Title"
+            ),  # type: ignore
         )
         self.player.bind_property(
             "artist",
             self.track_artist,
             "label",
             GObject.BindingFlags.DEFAULT,
-            lambda _, x: _NEWLINE_RE.sub(" ", x)
-            if x != "" and x is not None
-            else "No Artist",  # type: ignore
+            lambda _, x: (
+                NEWLINE_RE.sub(" ", x) if x != "" and x is not None else "No Artist"
+            ),  # type: ignore
         )
 
         self.player.bind_property(
@@ -269,9 +262,9 @@ class PlayerBox(Box):
             self.track_album,
             "label",
             GObject.BindingFlags.DEFAULT,
-            lambda _, x: _NEWLINE_RE.sub(" ", x)
-            if x != "" and x is not None
-            else "No Album",  # type: ignore
+            lambda _, x: (
+                NEWLINE_RE.sub(" ", x) if x != "" and x is not None else "No Album"
+            ),  # type: ignore
         )
 
         self.track_info = Box(
@@ -503,6 +496,8 @@ class PlayerBox(Box):
             self.update_colors(self.fallback_cover_path)
 
     def on_accent_color(self, palette):
+        if palette is None:
+            return
         default_color = (255, 0, 0)  # fallback color
 
         base_color = palette[0] if palette else default_color

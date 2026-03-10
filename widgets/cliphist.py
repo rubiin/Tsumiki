@@ -1,25 +1,19 @@
-import os
-import re
 import tempfile
 from urllib.parse import unquote, urlparse
 
-import gi
-from fabric.utils import logger, remove_handler
+from fabric.utils import Gdk, GdkPixbuf, GLib, Gtk, logger, os, re, remove_handler
 from fabric.widgets.box import Box
 from fabric.widgets.button import Button
 from fabric.widgets.entry import Entry
 from fabric.widgets.image import Image
 from fabric.widgets.label import Label
 from fabric.widgets.scrolledwindow import ScrolledWindow
-from gi.repository import Gdk, GdkPixbuf, Gio, GLib, Gtk
+from gi.repository import Gio
 
 from shared.list import ListBox
 from shared.mixins import PopoverMixin
 from shared.widget_container import ButtonWidget
 from utils.widget_utils import nerd_font_icon
-
-gi.require_versions({"Gdk": "3.0", "GdkPixbuf": "2.0"})
-
 
 # Pre-compiled regex for HTML image tag detection
 _HTML_IMG_RE = re.compile(r"^\s*<img\s+")

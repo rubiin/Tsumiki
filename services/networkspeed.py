@@ -1,4 +1,4 @@
-import re
+from fabric.utils import re
 
 # Pre-compiled regex patterns for interface filtering
 _FIELDS_RE = re.compile(r"\W+")

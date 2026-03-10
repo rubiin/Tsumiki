@@ -1,8 +1,5 @@
-import math
-
-import gi
 from fabric.notifications import Notification
-from fabric.utils import bulk_connect, logger
+from fabric.utils import GdkPixbuf, GLib, Gtk, bulk_connect, logger, math
 from fabric.widgets.box import Box
 from fabric.widgets.button import Button
 from fabric.widgets.datetime import DateTime
@@ -10,7 +7,6 @@ from fabric.widgets.label import Label
 from fabric.widgets.revealer import Revealer
 from fabric.widgets.scrolledwindow import ScrolledWindow
 from fabric.widgets.separator import Separator
-from gi.repository import GdkPixbuf, GLib, Gtk
 
 import utils.constants as constants
 import utils.functions as helpers
@@ -23,8 +19,6 @@ from shared.widget_container import ButtonWidget
 from utils.colors import Colors
 from utils.icons import text_icons
 from utils.widget_utils import get_icon, nerd_font_icon
-
-gi.require_versions({"Gtk": "3.0", "GdkPixbuf": "2.0"})
 
 
 class DateMenuNotification(Box):

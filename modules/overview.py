@@ -1,8 +1,7 @@
 import json
 
-import gi
 from fabric.hyprland.widgets import get_hyprland_connection
-from fabric.utils import bulk_connect, logger
+from fabric.utils import Gdk, GdkPixbuf, Gtk, bulk_connect, logger
 from fabric.widgets.box import Box
 from fabric.widgets.button import Button
 from fabric.widgets.eventbox import EventBox
@@ -10,16 +9,12 @@ from fabric.widgets.grid import Grid
 from fabric.widgets.image import Image
 from fabric.widgets.label import Label
 from fabric.widgets.overlay import Overlay
-from gi.repository import Gdk, GdkPixbuf, Gtk
 
 from shared.popup import PopupWindow
 from utils.app import AppUtils
 from utils.icon_resolver import IconResolver
 from utils.widget_settings import BarConfig
 from utils.widget_utils import create_surface_from_widget
-
-gi.require_versions({"Gtk": "3.0", "Gdk": "3.0", "GdkPixbuf": "2.0"})
-
 
 SCALE = 0.14
 TARGET = [Gtk.TargetEntry.new("text/plain", Gtk.TargetFlags.SAME_APP, 0)]
@@ -89,12 +84,13 @@ class HyprlandWindowButton(Button):
             tooltip_text=title,
             size=size,
             on_clicked=self.on_click,
-            on_button_press_event=lambda _,
-            event: self._hyprland_connection.send_command(
-                f"/dispatch closewindow address:{address}"
-            )
-            if event.button == 3
-            else None,
+            on_button_press_event=lambda _, event: (
+                self._hyprland_connection.send_command(
+                    f"/dispatch closewindow address:{address}"
+                )
+                if event.button == 3
+                else None
+            ),
             on_drag_data_get=lambda _s, _c, data, *_: data.set_text(
                 address, len(address)
             ),
@@ -204,13 +200,10 @@ class WorkspaceEventBox(EventBox):
                 v_expand=True,
                 label=f"{workspace_id}",
             ),
-            on_drag_data_received=lambda _w,
-            _c,
-            _x,
-            _y,
-            data,
-            *_: self._hyprland_connection.send_command(
-                f"/dispatch movetoworkspacesilent {workspace_id},address:{data.get_data().decode()}"  # noqa: E501
+            on_drag_data_received=lambda _w, _c, _x, _y, data, *_: (
+                self._hyprland_connection.send_command(
+                    f"/dispatch movetoworkspacesilent {workspace_id},address:{data.get_data().decode()}"  # noqa: E501
+                )
             ),
         )
         self.drag_dest_set(

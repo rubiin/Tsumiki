@@ -1,9 +1,8 @@
-from fabric.utils import bulk_connect
+from fabric.utils import Gdk, bulk_connect
 from fabric.widgets.box import Box
 from fabric.widgets.entry import Entry
 from fabric.widgets.eventbox import EventBox
 from fabric.widgets.label import Label
-from gi.repository import Gdk
 
 from .widget_container import BaseWidget
 

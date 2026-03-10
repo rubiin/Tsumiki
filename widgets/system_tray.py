@@ -1,23 +1,22 @@
-import os
-
-import gi
 from fabric.system_tray.service import SystemTray as SystemTrayService
 from fabric.system_tray.service import SystemTrayItem as SystemTrayItemService
 from fabric.utils import (
+    Gdk,
+    GdkPixbuf,
+    GLib,
+    Gtk,
     bulk_connect,
     logger,
+    os,
 )
 from fabric.widgets.box import Box
 from fabric.widgets.grid import Grid
 from fabric.widgets.image import Image
-from gi.repository import Gdk, GdkPixbuf, GLib, Gtk
 
 from shared.buttons import HoverButton
 from shared.widget_container import ButtonWidget
 from utils.icons import text_icons
 from utils.widget_utils import nerd_font_icon
-
-gi.require_versions({"Gtk": "3.0", "GdkPixbuf": "2.0", "Gdk": "3.0"})
 
 
 class BaseSystemTray:

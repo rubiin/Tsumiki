@@ -1,11 +1,11 @@
 from typing import Literal
 
+from fabric.utils import Gdk, GLib
 from fabric.widgets.box import Box
 from fabric.widgets.eventbox import EventBox
 from fabric.widgets.revealer import Revealer
 from fabric.widgets.wayland import WaylandWindow as Window
 from fabric.widgets.widget import Widget
-from gi.repository import Gdk, GLib
 
 from utils.monitors import HyprlandWithMonitors
 from utils.types import Anchor, Keyboard_Mode, Layer
@@ -50,17 +50,21 @@ class PopupRevealer(EventBox):
             child=child,
             transition_type=transition_type,
             transition_duration=transition_duration,
-            notify_child_revealed=lambda revealer, _: [
-                revealer.hide(),
-                popup_window.set_visible(False),
-            ]
-            if not revealer.fully_revealed
-            else None,
-            notify_reveal_child=lambda revealer, _: [
-                popup_window.set_visible(True),
-            ]
-            if revealer.child_revealed
-            else None,
+            notify_child_revealed=lambda revealer, _: (
+                [
+                    revealer.hide(),
+                    popup_window.set_visible(False),
+                ]
+                if not revealer.fully_revealed
+                else None
+            ),
+            notify_reveal_child=lambda revealer, _: (
+                [
+                    popup_window.set_visible(True),
+                ]
+                if revealer.child_revealed
+                else None
+            ),
         )
         super().__init__(
             style=decorations,

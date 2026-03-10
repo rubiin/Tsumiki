@@ -4,12 +4,8 @@
 from functools import lru_cache
 from typing import Protocol, cast
 
-import gi
 from fabric.core.service import Property, Service, Signal
-from fabric.utils import clamp
-from gi.repository import GLib, Gtk
-
-gi.require_versions({"Gtk": "3.0"})
+from fabric.utils import GLib, Gtk, clamp
 
 
 # Use lru_cache with bounded size to prevent unbounded memory growth

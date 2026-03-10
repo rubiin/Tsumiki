@@ -1,20 +1,18 @@
 import mimetypes
-import os
 
 from fabric.core.service import Signal
-from fabric.utils import exec_shell_command_async, logger
+from fabric.utils import Gtk, exec_shell_command_async, logger, os
 from fabric.widgets.box import Box
 from fabric.widgets.grid import Grid
 from fabric.widgets.image import Image
 from fabric.widgets.label import Label
 from fabric.widgets.scrolledwindow import ScrolledWindow
-from gi.repository import Gtk
 
 from shared.buttons import HoverButton
 from shared.popup import PopupWindow
 from utils.constants import WALLPAPER_DIR, WALLPAPER_THUMBS_DIR
+from utils.decorators import run_in_thread
 from utils.functions import ensure_directory
-from utils.thread import run_in_thread
 
 
 class ImageButton(HoverButton):

@@ -1,11 +1,17 @@
 import json
-import os
 import signal
 import subprocess
 
-from fabric.utils import bulk_connect, exec_shell_command_async, invoke_repeater, logger
+from fabric.utils import (
+    Gdk,
+    GLib,
+    bulk_connect,
+    exec_shell_command_async,
+    invoke_repeater,
+    logger,
+    os,
+)
 from fabric.widgets.label import Label
-from gi.repository import Gdk, GLib
 
 from shared.widget_container import ButtonWidget
 from utils.colors import Colors
