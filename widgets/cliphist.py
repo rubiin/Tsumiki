@@ -1,8 +1,7 @@
-import re
 import tempfile
 from urllib.parse import unquote, urlparse
 
-from fabric.utils import Gdk, GdkPixbuf, GLib, Gtk, logger, os, remove_handler
+from fabric.utils import Gdk, GdkPixbuf, GLib, Gtk, logger, os, re, remove_handler
 from fabric.widgets.box import Box
 from fabric.widgets.button import Button
 from fabric.widgets.entry import Entry

@@ -1,7 +1,5 @@
-import math
-
 from fabric.notifications import Notification
-from fabric.utils import GdkPixbuf, GLib, Gtk, bulk_connect, logger
+from fabric.utils import GdkPixbuf, GLib, Gtk, bulk_connect, logger, math
 from fabric.widgets.box import Box
 from fabric.widgets.button import Button
 from fabric.widgets.datetime import DateTime

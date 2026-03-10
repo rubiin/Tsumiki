@@ -1,8 +1,6 @@
 # ruff: noqa: E501
 
-import re
-
-from fabric.utils import GLib, get_relative_path
+from fabric.utils import GLib, get_relative_path, re
 
 # constants
 

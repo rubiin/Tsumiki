@@ -1,10 +1,9 @@
 import subprocess
-import time
 from typing import Any, Literal
 
 import gi
 from fabric.core.service import Property, Service, Signal
-from fabric.utils import Gio, bulk_connect, logger
+from fabric.utils import Gio, bulk_connect, logger, time
 
 from utils.constants import NETWORK_RECENCY_THRESHOLD_SECONDS
 from utils.exceptions import NetworkManagerNotFoundError

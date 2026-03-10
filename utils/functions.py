@@ -4,7 +4,6 @@ import json
 import re
 import shutil
 import subprocess
-import time
 from collections import Counter
 from datetime import datetime
 from functools import lru_cache
@@ -26,6 +25,7 @@ from fabric.utils import (
     invoke_repeater,
     logger,
     os,
+    time,
 )
 from gi.repository import Gio
 

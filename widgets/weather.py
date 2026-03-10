@@ -1,7 +1,6 @@
-import time
 from datetime import datetime
 
-from fabric.utils import Gtk, cooldown, invoke_repeater, logger
+from fabric.utils import Gtk, cooldown, invoke_repeater, logger, time
 from fabric.widgets.box import Box
 from fabric.widgets.grid import Grid
 from fabric.widgets.label import Label

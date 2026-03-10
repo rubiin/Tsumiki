@@ -1,7 +1,7 @@
-import math
 import subprocess
 from pathlib import Path
 
+from fabric.utils import math
 from fabric.widgets.box import Box
 from fabric.widgets.image import Image
 from fabric.widgets.revealer import Revealer

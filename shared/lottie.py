@@ -1,7 +1,6 @@
 from typing import Literal
 
-import cairo
-from fabric.utils import GLib, Gtk, remove_handler
+from fabric.utils import GLib, Gtk, cairo, remove_handler
 from fabric.widgets.widget import Widget
 from rlottie_python.rlottie_wrapper import LottieAnimation
 

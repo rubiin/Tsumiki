@@ -1,8 +1,7 @@
-import math
 from typing import Iterable, Literal
 
 from fabric.core.service import Property
-from fabric.utils import Gdk, GdkPixbuf, Gtk, cairo
+from fabric.utils import Gdk, GdkPixbuf, Gtk, cairo, math
 from fabric.widgets.widget import Widget
 
 from .widget_container import BaseWidget

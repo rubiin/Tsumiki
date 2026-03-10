@@ -1,6 +1,4 @@
-import time
-
-from fabric.utils import GLib
+from fabric.utils import GLib, time
 from fabric.widgets.label import Label
 
 from shared.widget_container import ButtonWidget

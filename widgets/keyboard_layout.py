@@ -1,7 +1,5 @@
-import re
-
 from fabric.hyprland.widgets import HyprlandEvent, get_hyprland_connection
-from fabric.utils import logger
+from fabric.utils import logger, re
 from fabric.widgets.label import Label
 
 from shared.widget_container import ButtonWidget
