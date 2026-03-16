@@ -38,8 +38,6 @@ repos:
       - id: biome-check
         exclude: |
                     (?x)^(
-                        config.json|
-                        example/config.json|
                         assets/icons/recording.json |
                         assets/matugen/tsumiki.css
                     )$

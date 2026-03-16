@@ -1,10 +1,12 @@
-import gi
 from fabric.notifications import (
     Notification,
     NotificationAction,
     NotificationCloseReason,
 )
 from fabric.utils import (
+    Gdk,
+    GdkPixbuf,
+    GLib,
     bulk_connect,
     invoke_repeater,
     logger,
@@ -20,7 +22,6 @@ from fabric.widgets.overlay import Overlay
 from fabric.widgets.revealer import Revealer
 from fabric.widgets.wayland import WaylandWindow as Window
 from fabric.widgets.widget import Widget
-from gi.repository import Gdk, GdkPixbuf, GLib
 
 import utils.constants as constants
 import utils.functions as helpers
@@ -31,8 +32,6 @@ from utils.colors import Colors
 from utils.icons import text_icons
 from utils.widget_settings import BarConfig
 from utils.widget_utils import get_icon, nerd_font_icon
-
-gi.require_versions({"Gdk": "3.0", "GdkPixbuf": "2.0"})
 
 # Swipe threshold for dismissing notifications (normalized: 0.0 to 1.0)
 _SWIPE_DISMISS_THRESHOLD = 0.35
@@ -137,6 +136,7 @@ class NotificationWidget(EventBox):
             min_value=0,
             max_value=1,
             radius_color=True,
+            invert=True,
         )
 
         self.notification_box = Box(

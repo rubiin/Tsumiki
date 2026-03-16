@@ -54,10 +54,10 @@ If this does not solve the issue, report a bug with a screenshot of the log.
 <summary id="sass-error">Sass compilation error or UI not rendering?</summary>
 <div>
 
-Your `theme.json` may be incorrect or outdated. You can copy the latest `theme.json` from the `example/` directory:
+Your `theme.toml` may be incorrect or outdated. You can copy the latest `theme.toml` from the `example/` directory:
 
 ```sh
-cp example/theme.json theme.json
+cp example/theme.toml theme.toml
 ```
 
 Be aware that this will overwrite any custom changes you've made.

@@ -1,216 +1,91 @@
 "$schema" = "./tsumiki.schema.json"
 
 [widgets.app_launcher_button]
-tooltip = true
 icon = "view-app-grid-symbolic"
 icon_size = 20
+tooltip = true
+
+[widgets.cliphist]
+icon = ""
+label = false
+tooltip = true
+
+[widgets.emoji_picker]
+icon = ""
+label = false
+tooltip = true
+per_row = 9
+per_column = 4
+
+[widgets.kanban]
+icon = "󱞁"
+label = false
+tooltip = true
 
 [widgets.battery]
+full_battery_level = 100
+hide_label_when_full = true
+hide_when_missing = true
 label = true
 tooltip = true
 icon_size = 14
-hide_label_when_full = true
-hide_when_missing = true
 
-  [widgets.battery.notifications]
-  low_threshold = 10
-  full_battery = false
-  low_battery = false
-  charging = false
-
-[widgets.overview_button]
-icon = "󰡃"
-tooltip = true
-label = false
-
-[widgets.power]
-icon = "󰐥"
-tooltip = true
-items_per_row = 3
-icon_size = 100
-show_icon = true
-label = false
-confirm = true
-
-  [widgets.power.buttons]
-  shutdown = "systemctl poweroff"
-  reboot = "systemctl reboot"
-  hibernate = "systemctl hibernate"
-  suspend = "systemctl suspend"
-  lock = "loginctl lock-session"
-  logout = "loginctl terminate-user $USER"
-
-[widgets.recorder]
-path = "Videos/Screencasting"
-audio = true
-tooltip = true
-delayed = false
-delayed_timeout = 5_000
-
-[widgets.screenshot]
-path = "Pictures/Screenshots"
-tooltip = true
-label = false
-annotation = false
-capture_sound = false
-icon = "󰄀"
-delayed = false
-delayed_timeout = 5_000
-
-[widgets.network_usage]
-upload_icon = ""
-download_icon = ""
-tooltip = true
-upload = true
-download = true
-upload_threshold = 100
-download_threshold = 1_024
-kb_digits = 0
-mb_digits = 2
-
-[widgets.settings]
-icon = "󰒓"
-tooltip = true
-label = false
+[widgets.battery.notifications]
+low_threshold = 10
+full_battery = false
+low_battery = false
+charging = false
 
 [widgets.quick_settings]
 hover_reveal = false
 
-  [widgets.quick_settings.user]
-  avatar = "~/.face"
-  name = "system"
-  distro_icon = true
+[widgets.quick_settings.user]
+avatar = "~/.face"
+name = "system"
+distro_icon = true
 
-  [widgets.quick_settings.controls]
-  sliders = [ "brightness", "volume" ]
+[widgets.quick_settings.controls]
+sliders = ["brightness", "volume"]
 
-  [widgets.quick_settings.media]
-  enabled = true
-  ignore = [ ]
-  truncation_size = 30
-  show_album = true
-  show_artist = true
-  show_time = true
-  show_time_tooltip = true
+[widgets.quick_settings.media]
+enabled = true
+ignore = []
+truncation_size = 30
+show_album = true
+show_artist = true
+show_time = true
+show_time_tooltip = true
 
-  [widgets.quick_settings.shortcuts]
-  enabled = true
+[widgets.quick_settings.shortcuts]
+enabled = true
 
-    [[widgets.quick_settings.shortcuts.items]]
-    icon = ""
-    label = "Terminal"
-    command = "kitty"
-    tooltip = "Open terminal"
-    icon_size = 18
+[[widgets.quick_settings.shortcuts.items]]
+icon = ""
+label = "Terminal"
+command = "kitty"
+tooltip = "Open terminal"
+icon_size = 18
 
-    [[widgets.quick_settings.shortcuts.items]]
-    icon = ""
-    label = "Browser"
-    command = "firefox"
-    tooltip = "Launch Firefox"
-    icon_size = 18
+[[widgets.quick_settings.shortcuts.items]]
+icon = ""
+label = "Browser"
+command = "firefox"
+tooltip = "Launch Firefox"
+icon_size = 18
 
-    [[widgets.quick_settings.shortcuts.items]]
-    icon = ""
-    label = "Spotify"
-    command = "spotify"
-    tooltip = "Launch Spotify"
-    icon_size = 18
+[[widgets.quick_settings.shortcuts.items]]
+icon = ""
+label = "Spotify"
+command = "spotify"
+tooltip = "Launch Spotify"
+icon_size = 18
 
-    [[widgets.quick_settings.shortcuts.items]]
-    icon = ""
-    label = "Code"
-    command = "code"
-    tooltip = "Launch Code"
-    icon_size = 18
-
-[widgets.stopwatch]
-stopped_icon = "󱫞"
-running_icon = "󱫠"
-
-[widgets.storage]
-path = "/"
-show_icon = true
-icon = "󰋊"
-mode = "label"
-tooltip = true
-graph_length = 4
-unit = "gb"
-
-[widgets.system_tray]
-icon_size = 16
-ignored = [ ]
-hidden = [ ]
-hide_when_empty = false
-
-[widgets.taskbar]
-icon_size = 22
-ignored = [ ]
-tooltip = true
-
-[widgets.theme_switcher]
-icon = ""
-notify = false
-
-[widgets.updates]
-show_icon = true
-available_icon = "󰏗"
-no_updates_icon = "󰏖"
-hover_reveal = true
-reveal_duration = 500
-os = "arch"
-terminal = "kitty"
-auto_hide = false
-interval = 3_600
-pad_zero = false
-tooltip = true
-label = true
-flatpak = true
-snap = false
-brew = false
-
-[widgets.volume]
-label = true
-tooltip = true
-step_size = 5
-
-[widgets.hyprpicker]
-icon = ""
-tooltip = true
-label = false
-show_icon = true
-quiet = false
-
-[widgets.weather]
-location = "kathmandu"
-label = true
-tooltip = true
-temperature_unit = "celsius"
-label_format = "{temperature} {condition}"
-wind_speed_unit = "kmh"
-hover_reveal = true
-reveal_duration = 500
-expanded = true
-interval = 3_600
-
-[widgets.window_title]
-icon = true
-tooltip = true
-truncation = true
-truncation_size = 50
-mappings = true
-title_map = [ ]
-fallback = "class"
-
-[widgets.workspaces]
-count = 10
-hide_unoccupied = true
-show_numbered = true
-default_label_format = "{id}"
-ignored = [ -99 ]
-reverse_scroll = false
-empty_scroll = false
-icon_map = { }
+[[widgets.quick_settings.shortcuts.items]]
+icon = ""
+label = "Code"
+command = "code"
+tooltip = "Launch Code"
+icon_size = 18
 
 [widgets.bluetooth]
 label = true
@@ -221,9 +96,19 @@ label = true
 tooltip = true
 step_size = 5
 
+[widgets.wallpaper]
+icon = "󰸉"
+label = false
+tooltip = true
+
 [widgets.cava]
 bars = 10
 color = "#89b4fa"
+
+[widgets.overview_button]
+icon = "󰡃"
+tooltip = true
+label = false
 
 [widgets.click_counter]
 count = 0
@@ -231,12 +116,12 @@ count = 0
 [widgets.cpu]
 show_icon = true
 icon = ""
-mode = "label"
 tooltip = true
-temperature_unit = "celsius"
 round = true
+temperature_unit = "celsius"
 show_unit = true
 sensor = "acpitz"
+mode = "label"
 graph_length = 4
 
 [widgets.gpu]
@@ -246,6 +131,11 @@ tooltip = true
 mode = "circular"
 graph_length = 4
 
+[widgets.settings]
+icon = "󰒓"
+tooltip = true
+label = false
+
 [widgets.date_time]
 format = "%b %d %H:%M"
 calendar = true
@@ -253,16 +143,26 @@ clock_format = "24h"
 hover_reveal = false
 reveal_duration = 500
 
-  [widgets.date_time.notification]
-  enabled = true
-  count = true
-  hide_count_on_zero = true
+[widgets.date_time.notification]
+enabled = true
+count = true
+hide_count_on_zero = true
+
+[widgets.divider]
+size = 2
 
 [widgets.hypridle]
 enabled_icon = ""
 disabled_icon = ""
 label = true
 tooltip = true
+
+[widgets.hyprpicker]
+icon = ""
+tooltip = true
+label = false
+quiet = false
+show_icon = true
 
 [widgets.hyprsunset]
 temperature = "2800k"
@@ -280,31 +180,208 @@ show_icon = false
 [widgets.window_count]
 icon = ""
 label_format = "[{count}]"
+hide_when_zero = true
 tooltip = true
 show_icon = false
-hide_when_zero = true
 
 [widgets.language]
-truncation_size = 2
-tooltip = true
 icon = ""
+tooltip = true
+truncation_size = 2
 show_icon = false
+
+[[widgets.widget_groups]]
+widgets = ["updates", "battery"]
+spacing = 4
+style_classes = ["bordered"]
+
+[[widgets.widget_groups]]
+widgets = ["quick_settings", "cpu"]
+spacing = 0
+style_classes = ["compact"]
 
 [widgets.memory]
 show_icon = true
 icon = ""
+tooltip = true
+mode = "label"
+graph_length = 4
+unit = "gb"
+
+[widgets.network_usage]
+upload_icon = ""
+download_icon = ""
+tooltip = true
+upload = true
+download = true
+upload_threshold = 100
+download_threshold = 1_024
+kb_digits = 0
+mb_digits = 2
+
+[widgets.microphone]
+label = false
+tooltip = true
+show_icon = true
+
+[widgets.mpris]
+truncation_size = 10
+tooltip = false
+
+[widgets.ocr]
+icon = "󰐳"
+tooltip = true
+label = false
+show_icon = true
+quiet = false
+
+[widgets.power]
+icon = "󰐥"
+tooltip = true
+items_per_row = 3
+icon_size = 100
+show_icon = true
+label = false
+confirm = true
+
+[widgets.power.buttons]
+shutdown = "systemctl poweroff"
+reboot = "systemctl reboot"
+hibernate = "systemctl hibernate"
+suspend = "systemctl suspend"
+lock = "loginctl lock-session"
+logout = "loginctl terminate-user $USER"
+
+[widgets.recorder]
+path = "Videos/Screencasting"
+tooltip = true
+audio = true
+delayed = false
+delayed_timeout = 5_000
+
+[widgets.screenshot]
+path = "Pictures/Screenshots"
+icon = "󰄀"
+tooltip = true
+annotation = false
+delayed = false
+delayed_timeout = 5_000
+label = false
+capture_sound = false
+
+[widgets.stopwatch]
+stopped_icon = "󱫞"
+running_icon = "󱫠"
+
+[widgets.storage]
+path = "/"
+show_icon = true
+icon = "󰋊"
 mode = "label"
 tooltip = true
 graph_length = 4
 unit = "gb"
 
-[widgets.cliphist]
-icon = ""
+[widgets.submap]
+icon = "󰌌"
+label = true
+tooltip = true
+show_icon = false
+hide_on_default = false
+
+[widgets.system_tray]
+icon_size = 16
+ignored = []
+hidden = []
+hide_when_empty = false
+
+[widgets.taskbar]
+icon_size = 22
+ignored = []
+tooltip = true
+
+[widgets.theme_switcher]
+icon = ""
+notify = false
+
+[widgets.updates]
+show_icon = true
+available_icon = "󰏗"
+no_updates_icon = "󰏖"
+os = "arch"
+hover_reveal = true
+reveal_duration = 500
+interval = 3_600
+tooltip = true
+terminal = "kitty"
+pad_zero = false
+label = true
+auto_hide = false
+flatpak = true
+snap = false
+brew = false
+
+[widgets.volume]
+label = true
+tooltip = true
+step_size = 5
+
+[widgets.weather]
+location = "kathmandu"
+label = true
+label_format = "{temperature} {condition}"
+tooltip = true
+expanded = true
+temperature_unit = "celsius"
+wind_speed_unit = "kmh"
+interval = 3_600
+hover_reveal = true
+reveal_duration = 500
+provider = "open-meteo"
+
+[widgets.window_title]
+icon = true
+truncation = true
+truncation_size = 50
+tooltip = true
+mappings = true
+title_map = []
+fallback = "class"
+
+[widgets.workspaces]
+count = 10
+hide_unoccupied = true
+ignored = [-99]
+reverse_scroll = false
+show_numbered = true
+empty_scroll = false
+default_label_format = "{id}"
+icon_map = {}
+
+[widgets.world_clock]
+icon = "󰃰"
+use_24hr = true
+show_icon = true
+timezones = ["America/New_York", "Asia/Tokyo"]
+
+[widgets.custom_button_group]
+spacing = 4
+
+[[widgets.custom_button_group.buttons]]
+command = "firefox"
+icon = "󰈹"
+label_text = "Firefox"
+tooltip_text = "Open Firefox Browser"
+show_icon = true
 label = false
 tooltip = true
 
-[widgets.kanban]
-icon = "󱞁"
+[[widgets.custom_button_group.buttons]]
+command = "spotify"
+icon = ""
+label_text = "Spotify"
+tooltip_text = "Open Spotify"
+show_icon = true
 label = false
 tooltip = true
 
@@ -321,63 +398,6 @@ transition_type = "crossfade"
 transition_duration = 300
 title = "Keybinds"
 
-[widgets.emoji_picker]
-icon = ""
-label = false
-tooltip = true
-per_row = 9
-per_column = 4
-
-[widgets.submap]
-icon = "󰌌"
-label = true
-tooltip = true
-show_icon = false
-hide_on_default = false
-
-[widgets.microphone]
-label = false
-tooltip = true
-show_icon = true
-
-[widgets.ocr]
-icon = "󰐳"
-tooltip = true
-label = false
-show_icon = true
-quiet = false
-
-[widgets.mpris]
-truncation_size = 10
-tooltip = false
-
-[widgets.world_clock]
-icon = "󰃰"
-show_icon = true
-use_24hr = true
-timezones = [ "America/New_York", "Asia/Tokyo" ]
-
-[widgets.custom_button_group]
-spacing = 4
-
-  [[widgets.custom_button_group.buttons]]
-  command = "firefox"
-  icon = "󰈹"
-  label_text = "Firefox"
-  tooltip_text = "Open Firefox Browser"
-  show_icon = true
-  label = false
-  tooltip = true
-
-  [[widgets.custom_button_group.buttons]]
-  command = "spotify"
-  icon = ""
-  label_text = "Spotify"
-  tooltip_text = "Open Spotify"
-  show_icon = true
-  label = false
-  tooltip = true
-
 [[widgets.custom_module]]
 exec = "pamixer --get-volume"
 format = "󰕾 {}%"
@@ -387,49 +407,38 @@ on_scroll_down = "pamixer -d 5"
 exec_on_event = true
 
 [layout]
-left_section = [ "workspaces", "window_title" ]
-middle_section = [ "date_time", "weather" ]
+left_section = ["workspaces", "window_title"]
+middle_section = ["date_time", "weather"]
 right_section = [
   "settings",
   "@collapsible:0",
   "@group:0",
   "system_tray",
-  "power"
+  "power",
 ]
 
 [[widget_groups]]
-widgets = [ "quick_settings", "updates", "battery" ]
+widgets = ["quick_settings", "updates", "battery"]
 spacing = 2
-style_classes = [ "compact" ]
+style_classes = ["compact"]
 
 [[widget_groups]]
-widgets = [ "quick_settings" ]
+widgets = ["quick_settings"]
 spacing = 0
-style_classes = [ "compact" ]
+style_classes = ["compact"]
 
 [[collapsible_groups]]
-widgets = [ "ocr", "screenshot", "recorder" ]
+widgets = ["ocr", "screenshot", "recorder"]
 spacing = 4
 icon = "󰒓"
 tooltip = "Utility Tools"
-style_classes = [ "utility-tools" ]
+style_classes = ["utility-tools"]
 
 [modules.bar]
 layer = "background"
 auto_hide = false
 auto_hide_timeout = 3_000
 location = "top"
-
-[modules.app_launcher]
-enabled = true
-tooltip = false
-icon_size = 40
-ignored = [ ]
-anchor = "center"
-width = 280
-height = 320
-layout = "list"
-grid_columns = 3
 
 [modules.overview]
 enabled = false
@@ -438,42 +447,47 @@ anchor = "center"
 transition_type = "crossfade"
 transition_duration = 350
 
-[modules.cheatsheet]
-enabled = true
-layer = "top"
-anchor = "center"
-transition_type = "crossfade"
-transition_duration = 350
-
-[modules.notification]
-enabled = true
-dnd_on_screencast = true
-anchor = "top-right"
-max_lines = 4
-max_expanded_lines = 20
-auto_dismiss = true
-ignored = [ ]
-timeout = 3_000
-max_actions = 3
-play_sound = false
-per_app_limits = { }
-sound_file = "notification4"
-transition_type = "slide-left"
-transition_duration = 350
-persist = true
-dismiss_on_hover = false
-
 [modules.osd]
 enabled = true
 timeout = 3_000
+anchor = "bottom-center"
+orientation = "horizontal"
+percentage = true
 icon_size = 28
+play_sound = false
 transition_type = "slide-up"
 transition_duration = 500
+osds = ["brightness", "volume"]
+
+[modules.app_launcher]
+enabled = true
+tooltip = true
+icon_size = 40
+ignored = []
+anchor = "center"
+width = 280
+height = 320
+layout = "list"
+grid_columns = 3
+
+[modules.notification]
+enabled = true
+anchor = "top-right"
+auto_dismiss = true
+dnd_on_screencast = true
+ignored = []
+timeout = 3_000
+max_count = 200
+transition_type = "slide-left"
+transition_duration = 350
+per_app_limits = {}
 play_sound = false
-orientation = "horizontal"
-anchor = "bottom-center"
-percentage = true
-osds = [ "brightness", "volume" ]
+max_actions = 3
+dismiss_on_hover = false
+sound_file = "notification4"
+persist = true
+max_lines = 4
+max_expanded_lines = 20
 
 [modules.screen_corners]
 enabled = false
@@ -481,25 +495,26 @@ size = 20
 
 [modules.dock]
 enabled = true
-orientation = "horizontal"
-tooltip = false
-behavior = "intellihide"
+ignored_apps = []
 icon_size = 40
+behavior = "intellihide"
+tooltip = false
+layer = "top"
+show_when_no_windows = false
 preview_apps = true
+preview_size = [200, 130]
 group_apps = true
 truncation_size = 20
-preview_size = [ 200, 130 ]
-show_when_no_windows = false
-ignored = [ ]
+orientation = "horizontal"
 always_show_focused = true
 hide_special_workspace_apps = false
-layer = "top"
+ignored = []
 
 [modules.desktop_clock]
 enabled = false
+layer = "bottom"
 anchor = "bottom-right"
 date_format = "%A, %d %B %Y"
-layer = "bottom"
 time_format = "%H:%M"
 
 [modules.desktop_quotes]
@@ -513,9 +528,20 @@ enabled = false
 anchor = "bottom-right"
 layer = "bottom"
 
+[modules.cheatsheet]
+enabled = true
+layer = "top"
+anchor = "center"
+transition_type = "crossfade"
+transition_duration = 350
+
 [general]
 check_updates = false
 debug = false
 monitor_styles = false
 auto_reload = true
 multi_monitor = false
+
+[activate_linux]
+enabled = true
+layer = "top"

@@ -1,16 +1,13 @@
 import json
-import os
-import time
 from contextlib import suppress
 from typing import Callable, Optional
 
 import requests
-from fabric.utils import logger
-from gi.repository import GLib
+from fabric.utils import GLib, logger, os, time
 
 from utils.constants import WEATHER_CACHE_FILE
+from utils.decorators import thread
 from utils.functions import write_json_file
-from utils.thread import thread
 
 from .base import SingletonService
 

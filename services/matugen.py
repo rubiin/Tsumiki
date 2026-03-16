@@ -1,11 +1,10 @@
-import os
-
 from fabric.core.service import Signal
 from fabric.utils import (
     exec_shell_command,
     exec_shell_command_async,
     get_relative_path,
     logger,
+    os,
 )
 
 import utils.functions as helpers
@@ -54,7 +53,7 @@ class MatugenService(SingletonService):
             return
 
         cmd = self._build_cmd(image_path)
-        logger.info(f"[Matugen] Running: {cmd}")
+        logger.info("[Matugen] Generating colors")
 
         def on_complete(result):
             if result is not None:
@@ -74,7 +73,7 @@ class MatugenService(SingletonService):
             return False
 
         cmd = self._build_cmd(image_path)
-        logger.info(f"[Matugen] Running: {cmd}")
+        logger.info("[Matugen] Generating colors")
 
         try:
             exec_shell_command(cmd)

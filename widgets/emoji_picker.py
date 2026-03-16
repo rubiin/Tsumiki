@@ -1,18 +1,16 @@
-import os
-
 import ijson
-from fabric.utils import logger, remove_handler
+from fabric.utils import Gdk, GLib, logger, os, remove_handler
 from fabric.widgets.box import Box
 from fabric.widgets.button import Button
 from fabric.widgets.entry import Entry
 from fabric.widgets.label import Label
 from fabric.widgets.stack import Stack
-from gi.repository import Gdk, Gio, GLib
+from gi.repository import Gio
 
 from shared.mixins import PopoverMixin
 from shared.widget_container import ButtonWidget
 from utils.constants import ASSETS_DIR
-from utils.thread import run_in_thread
+from utils.decorators import run_in_thread
 from utils.widget_utils import nerd_font_icon
 
 

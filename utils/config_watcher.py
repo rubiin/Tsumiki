@@ -2,18 +2,17 @@
 Simple configuration file watcher for auto-reloading Tsumiki when config files change.
 """
 
-import os
 import subprocess
 
-from fabric.utils import get_relative_path, logger
-from gi.repository import Gio, GLib
+from fabric.utils import GLib, get_relative_path, logger, os
+from gi.repository import Gio
 
 from utils.colors import Colors
 from utils.constants import APPLICATION_NAME
 
 # Constants
 _RESTART_DELAY_MS = 1500
-_CONFIG_FILES = frozenset(("config.json", "config.toml", "theme.json"))
+_CONFIG_FILES = frozenset(("config.toml", "theme.toml"))
 
 
 class ConfigWatcher:

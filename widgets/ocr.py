@@ -1,17 +1,12 @@
-import os
 import subprocess
 
-import gi
-from fabric.utils import exec_shell_command_async
+from fabric.utils import Gdk, Gtk, exec_shell_command_async, os
 from fabric.widgets.label import Label
-from gi.repository import Gdk, Gtk
 
 from shared.widget_container import ButtonWidget
 from utils.constants import ASSETS_DIR
 from utils.functions import ttl_lru_cache
 from utils.widget_utils import nerd_font_icon
-
-gi.require_versions({"Gtk": "3.0", "Gdk": "3.0"})
 
 
 class OCRWidget(ButtonWidget):

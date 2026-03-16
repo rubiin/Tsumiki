@@ -1,15 +1,10 @@
-import math
 from typing import Iterable, Literal
 
-import cairo
-import gi
 from fabric.core.service import Property
+from fabric.utils import Gdk, GdkPixbuf, Gtk, cairo, math
 from fabric.widgets.widget import Widget
-from gi.repository import Gdk, GdkPixbuf, Gtk
 
 from .widget_container import BaseWidget
-
-gi.require_versions({"Gtk": "3.0", "Gdk": "3.0", "GdkPixbuf": "2.0"})
 
 
 class CircularImage(Gtk.DrawingArea, BaseWidget):

@@ -1,8 +1,7 @@
 from typing import Literal
 
 from fabric import Signal
-from fabric.utils import logger
-from gi.repository import Gio
+from fabric.utils import Gio, logger
 
 from utils.dbus_helper import GioDBusHelper
 

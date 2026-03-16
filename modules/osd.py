@@ -1,13 +1,11 @@
 from typing import ClassVar, Literal
 
-import gi
-from fabric.utils import bulk_connect, cooldown, remove_handler
+from fabric.utils import GLib, GObject, bulk_connect, cooldown, remove_handler
 from fabric.widgets.box import Box
 from fabric.widgets.image import Image
 from fabric.widgets.label import Label
 from fabric.widgets.revealer import Revealer
 from fabric.widgets.wayland import WaylandWindow as Window
-from gi.repository import GLib, GObject
 
 from services import audio_service
 from services.brightness import BrightnessService
@@ -20,8 +18,6 @@ from utils.widget_utils import (
     get_audio_icon_name,
     get_brightness_icon_name,
 )
-
-gi.require_versions({"GObject": "2.0"})
 
 
 class GenericOSDContainer(Box, BaseWidget):

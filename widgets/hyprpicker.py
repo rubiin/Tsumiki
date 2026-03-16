@@ -1,8 +1,5 @@
-import os
-
-from fabric.utils import exec_shell_command_async
+from fabric.utils import Gdk, exec_shell_command_async, os
 from fabric.widgets.label import Label
-from gi.repository import Gdk
 
 from shared.widget_container import ButtonWidget
 from utils.constants import ASSETS_DIR
