@@ -6,7 +6,7 @@ pillow==12.1.1
 psutil==7.2.2
 pycairo==1.29.0
 PyGObject==3.50.0
-PyGObject-stubs==2.16.0
+PyGObject-stubs==2.17.0
 pytomlpp==1.1.0
 qrcode==8.2
 requests==2.32.5
