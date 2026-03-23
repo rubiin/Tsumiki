@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.10.2](https://github.com/rubiin/Tsumiki/compare/v2.10.1...v2.10.2) (2026-03-23)
+
+
+### ⚙️ Chores
+
+* **deps:** update dependency ijson to v3.5.0 ([#285](https://github.com/rubiin/Tsumiki/issues/285)) ([4ca37b3](https://github.com/rubiin/Tsumiki/commit/4ca37b387175b124a3e85b5cbc2eeaadc1685f10))
+* **deps:** update dependency pygobject-stubs to v2.17.0 ([#290](https://github.com/rubiin/Tsumiki/issues/290)) ([7397ca9](https://github.com/rubiin/Tsumiki/commit/7397ca9fe83c98108a7a06b0c2e1303b9f5ef50c))
+
 ## [2.10.1](https://github.com/rubiin/Tsumiki/compare/v2.10.0...v2.10.1) (2026-02-24)
 
 
