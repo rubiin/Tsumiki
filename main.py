@@ -74,7 +74,7 @@ def main():
     if module_options.get("overview", {}).get("enabled", False):
         from modules.overview import OverViewOverlay
 
-        print("Adding overview")
+        logger.info("[Main] Adding overview module")
 
         app.add_window(OverViewOverlay(widget_config))
 
