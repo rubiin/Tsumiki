@@ -42,6 +42,7 @@ class MatugenService(SingletonService):
         return (
             f"matugen image -q {image_path} -t {scheme} "
             f"--mode {mode} --contrast {contrast} --config {_CONFIG_PATH}"
+            f"--source-color-index 0"
         )
 
     def generate(self, image_path: str | None = None) -> None:
