@@ -1,4 +1,4 @@
-"$schema" = "./tsumiki.schema.json"
+"$schema" = "https://raw.githubusercontent.com/rubiin/Tsumiki/refs/heads/master/tsumiki.schema.json"
 
 [widgets.app_launcher_button]
 icon = "view-app-grid-symbolic"
