@@ -3,8 +3,14 @@ import tempfile
 from datetime import datetime
 
 from fabric.core.service import Property, Signal
-from fabric.utils import GLib, exec_shell_command, exec_shell_command_async, logger, os
-from gi.repository import Gio
+from fabric.utils import (
+    Gio,
+    GLib,
+    exec_shell_command,
+    exec_shell_command_async,
+    logger,
+    os,
+)
 
 import utils.functions as helpers
 from utils.constants import APPLICATION_NAME, ASSETS_DIR

@@ -217,7 +217,7 @@ install_packages() {
 		python-loguru
 		libnotify
 		cliphist
-		python-requests
+		python-httpx
 		satty
 		nvtop
 	)

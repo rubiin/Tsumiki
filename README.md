@@ -228,7 +228,7 @@ pip install -r requirements.txt
 ##### Using the Package Manager (System-wide)
 If you prefer a system-wide installation, you can use pacman to install the Python packages:
 ```sh
-sudo pacman -S --needed python-pip python-gobject python-psutil python-cairo python-loguru python-requests python-fabric-git python-rlottie-python python-pytomlpp python-ijson
+sudo pacman -S --needed python-pip python-gobject python-psutil python-cairo python-loguru python-httpx python-fabric-git python-rlottie-python python-pytomlpp python-ijson
 ```
 
 #### Step 3: Run the `init.sh -start` Script

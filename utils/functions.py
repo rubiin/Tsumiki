@@ -1,7 +1,5 @@
+import atexit
 import ctypes
-
-# NOTE: For max performance/memory: ensure explicit resource cleanup
-#  (files, subprocesses, threads) and batch/debounce expensive operations where possible
 import html
 import json
 import re
@@ -11,7 +9,7 @@ from collections import Counter
 from datetime import datetime
 from functools import lru_cache
 from io import BytesIO
-from typing import Any, Callable, Iterable, Literal, Optional
+from typing import Any, Callable, Iterable, List, Literal, Optional, TypeVar
 
 import psutil
 from fabric import Application
@@ -19,6 +17,7 @@ from fabric.utils import (
     FormattedString,
     Gdk,
     GdkPixbuf,
+    Gio,
     GLib,
     Gtk,
     cooldown,
@@ -30,13 +29,54 @@ from fabric.utils import (
     os,
     time,
 )
-from gi.repository import Gio
 
 from .colors import Colors
 from .constants import NAMED_COLORS
 from .decorators import run_in_thread, thread
 from .exceptions import ExecutableNotFoundError
 from .icons import text_icons
+
+_TEMP_PATHS = set()
+
+
+def register_temp_resource(path: str):
+    _TEMP_PATHS.add(path)
+
+
+def cleanup_temp_resources():
+    """Remove all registered temp files/directories."""
+    for path in list(_TEMP_PATHS):
+        try:
+            if os.path.isdir(path):
+                shutil.rmtree(path)
+            elif os.path.isfile(path):
+                os.remove(path)
+            _TEMP_PATHS.remove(path)
+        except Exception as e:
+            logger.warning(f"Failed to cleanup temp resource {path}: {e}")
+
+
+atexit.register(cleanup_temp_resources)
+
+T = TypeVar("T")
+U = TypeVar("U")
+
+
+def batch_process(
+    items: Iterable[T], batch_size: int, func: Callable[[List[T]], List[U]]
+) -> List[U]:
+    """Process items in batches for efficiency."""
+    result = []
+    batch = []
+    for item in items:
+        batch.append(item)
+        if len(batch) == batch_size:
+            result.extend(func(batch))
+            batch = []
+    if batch:
+        result.extend(func(batch))
+    return result
+
 
 # Pre-compiled regex patterns for color validation
 _HEX_COLOR_RE = re.compile(r"^#(?:[a-fA-F0-9]{3,4}|[a-fA-F0-9]{6,8})$")

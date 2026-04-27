@@ -1,14 +1,13 @@
 import tempfile
 from urllib.parse import unquote, urlparse
 
-from fabric.utils import Gdk, GdkPixbuf, GLib, Gtk, logger, os, re, remove_handler
+from fabric.utils import Gdk, GdkPixbuf, Gio, GLib, Gtk, logger, os, re, remove_handler
 from fabric.widgets.box import Box
 from fabric.widgets.button import Button
 from fabric.widgets.entry import Entry
 from fabric.widgets.image import Image
 from fabric.widgets.label import Label
 from fabric.widgets.scrolledwindow import ScrolledWindow
-from gi.repository import Gio
 
 from shared.list import ListBox
 from shared.mixins import PopoverMixin
