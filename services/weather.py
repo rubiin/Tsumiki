@@ -2,7 +2,7 @@ import json
 from contextlib import suppress
 from typing import Callable, Optional
 
-import requests
+import httpx
 from fabric.utils import GLib, logger, os, time
 
 from utils.constants import WEATHER_CACHE_FILE
@@ -29,11 +29,10 @@ class WeatherService(SingletonService):
         self.provider = provider.lower()
         self.wttr_url_template = wttr_url_template
 
-    def _make_session(self) -> requests.Session:
+    def _make_session(self) -> httpx.Client:
         """Create a throwaway session to avoid holding state in memory."""
-        session = requests.Session()
-        session.headers.update(
-            {
+        session = httpx.Client(
+            headers={
                 "User-Agent": (
                     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
                     "(KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3"
@@ -46,21 +45,17 @@ class WeatherService(SingletonService):
         """Convert location name to latitude and longitude using Nominatim."""
         session = self._make_session()
         params = {"name": location, "count": 10, "language": "en", "format": "json"}
-
         try:
-            response = session.get(self.geocode_url, params=params, timeout=10)
+            response = session.get(self.geocode_url, params=params, timeout=10.0)
             response.raise_for_status()
             data = response.json()
-
             data = data.get("results", [])
-
             if data:
                 lat = float(data[0]["latitude"])
                 lon = float(data[0]["longitude"])
                 return lat, lon
         except Exception as e:
             logger.exception("Error geocoding location", e)
-
         return None
 
     def _map_weather_code(self, code: int) -> int:
@@ -168,12 +163,12 @@ class WeatherService(SingletonService):
         """Fetch weather data from wttr.in API."""
         session = self._make_session()
         url = self.wttr_url_template.format(
-            location=requests.utils.quote(location.title())
+            location=httpx.utils.quote(location.title())
         )
 
         for attempt in range(retries):
             try:
-                response = session.get(url, timeout=10)
+                response = session.get(url, timeout=10.0)
                 response.raise_for_status()
                 data = response.json()
 
@@ -220,7 +215,7 @@ class WeatherService(SingletonService):
 
         for attempt in range(retries):
             try:
-                response = session.get(self.api_url, params=params, timeout=10)
+                response = session.get(self.api_url, params=params, timeout=10.0)
                 response.raise_for_status()
                 data = response.json()
 

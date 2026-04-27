@@ -1,4 +1,7 @@
 import ctypes
+
+# NOTE: For max performance/memory: ensure explicit resource cleanup
+#  (files, subprocesses, threads) and batch/debounce expensive operations where possible
 import html
 import json
 import re

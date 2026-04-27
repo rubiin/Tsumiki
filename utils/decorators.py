@@ -1,13 +1,22 @@
+import atexit
+import os
 from collections.abc import Callable
 from concurrent.futures import ThreadPoolExecutor
+from typing import Any, TypeVar
 
 from fabric.utils import GLib
 
-# Create a shared thread pool
-thread_pool = ThreadPoolExecutor(max_workers=4)
+# Auto-tune max_workers based on CPU count, fallback to 4
+_cpu_count = os.cpu_count() or 4
+thread_pool = ThreadPoolExecutor(max_workers=_cpu_count)
+
+# Ensure thread pool is properly shutdown on exit
+atexit.register(thread_pool.shutdown)
+
+T = TypeVar("T")
 
 
-def thread(target: Callable, *args, **kwargs):
+def thread(target: Callable[..., T], *args: Any, **kwargs: Any) -> Any:
     """
     Submit the given function to the thread pool.
     Returns a Future instead of a Thread.
@@ -15,12 +24,13 @@ def thread(target: Callable, *args, **kwargs):
     return thread_pool.submit(target, *args, **kwargs)
 
 
-def run_in_thread(func: Callable) -> Callable:
+def run_in_thread(func: Callable[..., T]) -> Callable[..., Any]:
     """
     Decorator to run the decorated function in the thread pool.
+    Returns a Future.
     """
 
-    def wrapper(*args, **kwargs):
+    def wrapper(*args: Any, **kwargs: Any) -> Any:
         return thread(func, *args, **kwargs)
 
     return wrapper
@@ -28,15 +38,17 @@ def run_in_thread(func: Callable) -> Callable:
 
 def debounce(ms: int):
     """
-    Debounce a function.
-    Useful for preventing UI flickering during fast typing.
+    Debounce a method. Useful for preventing UI flickering during fast typing.
+    Cleans up timers on object deletion.
     """
 
     def decorator(func: Callable):
         timer_id_attr = f"_debounce_timer_{func.__name__}"
 
         def wrapper(self, *args, **kwargs):
-            if existing_timer := getattr(self, timer_id_attr, None):
+            # Remove existing timer if present
+            existing_timer = getattr(self, timer_id_attr, None)
+            if existing_timer:
                 GLib.source_remove(existing_timer)
 
             def timeout_cb():
@@ -46,4 +58,13 @@ def debounce(ms: int):
 
             setattr(self, timer_id_attr, GLib.timeout_add(ms, timeout_cb))
 
+        # Clean up timer on object deletion
+        def cleanup(self):
+            existing_timer = getattr(self, timer_id_attr, None)
+            if existing_timer:
+                GLib.source_remove(existing_timer)
+
+        wrapper._debounce_cleanup = cleanup
         return wrapper
+
+    return decorator

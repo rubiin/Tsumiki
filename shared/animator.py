@@ -7,16 +7,23 @@ from typing import Protocol, cast
 from fabric.core.service import Property, Service, Signal
 from fabric.utils import GLib, Gtk, clamp
 
-
 # Use lru_cache with bounded size to prevent unbounded memory growth
 # Progress values are floats with many decimal places, so cache can grow large
+
+
+def _round_floats(*args, precision=4):
+    return tuple(round(a, precision) if isinstance(a, float) else a for a in args)
+
+
 @lru_cache(maxsize=512)
 def lerp(start: float, end: float, progress: float) -> float:
+    start, end, progress = _round_floats(start, end, progress)
     return start + (end - start) * progress
 
 
 @lru_cache(maxsize=256)
 def steps(n: int, progress: float, start_jump: bool = False) -> float:
+    n, progress = _round_floats(n, progress)
     if start_jump:
         return min(int(progress * n), n - 1) / (n - 1) if n > 1 else 0.0
     return min(int(progress * n + 1e-10), n) / n
@@ -26,6 +33,7 @@ def steps(n: int, progress: float, start_jump: bool = False) -> float:
 def cubic_bezier(
     x1: float, y1: float, x2: float, y2: float, progress: float, epsilon=1e-6
 ) -> float:
+    x1, y1, x2, y2, progress, epsilon = _round_floats(x1, y1, x2, y2, progress, epsilon)
     # implementation yanked off of the internet, don't blame me about anything.
     # Fast-path boundaries to avoid overshoot and unnecessary work
     if progress <= 0.0 or progress >= 1.0:
