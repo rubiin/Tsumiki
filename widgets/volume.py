@@ -1,3 +1,5 @@
+import contextlib
+
 from fabric.utils import cooldown
 from fabric.widgets.circularprogressbar import CircularProgressBar
 from fabric.widgets.label import Label
@@ -18,6 +20,8 @@ class VolumeWidget(EventBoxWidget):
             events=["scroll", "smooth-scroll", "enter-notify-event"],
             **kwargs,
         )
+        self._speaker = None
+        self._speaker_volume_handler_id = None
 
         # Initialize the audio service
         self.audio = audio_service
@@ -64,13 +68,22 @@ class VolumeWidget(EventBoxWidget):
 
     def on_speaker_changed(self, *_):
         # Update the progress bar value based on the speaker volume
-        if not self.audio.speaker:
+        speaker = self.audio.speaker
+        if not speaker:
             return
 
-        if self.config.get("tooltip", False):
-            self.set_tooltip_text(self.audio.speaker.description)
+        if self._speaker and self._speaker_volume_handler_id is not None:
+            with contextlib.suppress(Exception):
+                self._speaker.disconnect(self._speaker_volume_handler_id)
+            self._speaker_volume_handler_id = None
 
-        self.audio.speaker.connect("notify::volume", self.update_volume)
+        if self.config.get("tooltip", False):
+            self.set_tooltip_text(speaker.description)
+
+        self._speaker = speaker
+        self._speaker_volume_handler_id = speaker.connect(
+            "notify::volume", self.update_volume
+        )
         self.update_volume()
 
     # Mute and unmute the speaker
@@ -83,13 +96,22 @@ class VolumeWidget(EventBoxWidget):
             ) if current_stream.muted else self.update_volume()
 
     def update_volume(self, *_):
-        if self.audio.speaker:
-            volume = round(self.audio.speaker.volume)
-            self.progress_bar.set_value(volume / 100)
+        speaker = self.audio.speaker
+        if not speaker:
+            return
 
-            if self.config.get("label", True):
-                self.volume_label.set_text(f"{volume}%")
+        volume = round(speaker.volume)
+        self.progress_bar.set_value(volume / 100)
 
-        self.icon.set_text(
-            get_audio_icon_name(volume, self.audio.speaker.muted)["icon_text"]
-        )
+        if self.config.get("label", True):
+            self.volume_label.set_text(f"{volume}%")
+
+        self.icon.set_text(get_audio_icon_name(volume, speaker.muted)["icon_text"])
+
+    def destroy(self):
+        if self._speaker and self._speaker_volume_handler_id is not None:
+            with contextlib.suppress(Exception):
+                self._speaker.disconnect(self._speaker_volume_handler_id)
+            self._speaker_volume_handler_id = None
+        self._speaker = None
+        return super().destroy()

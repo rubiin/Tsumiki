@@ -11,6 +11,7 @@ from fabric.utils import (
     invoke_repeater,
     logger,
     os,
+    remove_handler,
 )
 from fabric.widgets.label import Label
 
@@ -35,13 +36,16 @@ class CustomModuleWidget(ButtonWidget):
     """A Waybar-compatible custom module widget."""
 
     __slots__ = (
+        "_actual_signal",
         "_exec_cmd",
         "_exec_on_event",
         "_format_str",
         "_interval",
         "_last_class",
         "_max_len",
+        "_original_signal_handler",
         "_process",
+        "_repeater_handler_id",
         "_signal_handler_id",
         "icon",
         "module_config",
@@ -61,6 +65,9 @@ class CustomModuleWidget(ButtonWidget):
         self._process: subprocess.Popen | None = None
         self._last_class: str | None = None
         self._signal_handler_id: int | None = None
+        self._actual_signal: int | None = None
+        self._original_signal_handler = None
+        self._repeater_handler_id: int | None = None
 
         # Cache frequently accessed config values
         self._exec_cmd = self.module_config.get("exec")
@@ -112,7 +119,9 @@ class CustomModuleWidget(ButtonWidget):
         """Register a Unix signal handler to trigger updates."""
         # SIGRTMIN is typically 34, we add the user-specified offset
         actual_signal = signal.SIGRTMIN + sig_num
+        self._original_signal_handler = signal.getsignal(actual_signal)
         signal.signal(actual_signal, lambda *_: self._execute_command())
+        self._actual_signal = actual_signal
         self._signal_handler_id = sig_num
 
     def _start_execution(self):
@@ -125,7 +134,9 @@ class CustomModuleWidget(ButtonWidget):
 
         if self._interval > 0:
             self._execute_command()
-            invoke_repeater(self._interval * 1000, self._periodic_execute)
+            self._repeater_handler_id = invoke_repeater(
+                self._interval * 1000, self._periodic_execute
+            )
             return
 
         # One-shot or continuous execution
@@ -326,6 +337,18 @@ class CustomModuleWidget(ButtonWidget):
 
     def destroy(self):
         """Clean up resources."""
+        if self._repeater_handler_id:
+            remove_handler(self._repeater_handler_id)
+            self._repeater_handler_id = None
+
+        if (
+            self._actual_signal is not None
+            and self._original_signal_handler is not None
+        ):
+            signal.signal(self._actual_signal, self._original_signal_handler)
+            self._actual_signal = None
+            self._original_signal_handler = None
+
         if self._process:
             self._process.terminate()
             try:

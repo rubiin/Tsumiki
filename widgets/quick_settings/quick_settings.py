@@ -1,3 +1,5 @@
+import contextlib
+
 from fabric.utils import GLib, Gtk, bulk_connect, invoke_repeater, logger, os
 from fabric.widgets.box import Box
 from fabric.widgets.centerbox import CenterBox
@@ -395,6 +397,10 @@ class QuickSettingsButtonWidget(ButtonWidget):
         super().__init__(name="quick_settings", **kwargs)
 
         self._timeout_id = None
+        self._active_wifi = None
+        self._wifi_changed_handler_id = None
+        self._active_speaker = None
+        self._speaker_volume_handler_id = None
         self.panel_icon_size = 16
 
         self.audio_service = audio_service
@@ -473,9 +479,27 @@ class QuickSettingsButtonWidget(ButtonWidget):
                     wifi.icon_name,
                     self.panel_icon_size,
                 )
-                wifi.connect("changed", self.update_wifi_status)
+                if (
+                    self._active_wifi
+                    and self._wifi_changed_handler_id is not None
+                    and self._active_wifi != wifi
+                ):
+                    with contextlib.suppress(Exception):
+                        self._active_wifi.disconnect(self._wifi_changed_handler_id)
+                    self._wifi_changed_handler_id = None
+
+                if self._wifi_changed_handler_id is None:
+                    self._wifi_changed_handler_id = wifi.connect(
+                        "changed", self.update_wifi_status
+                    )
+                    self._active_wifi = wifi
         else:
             ethernet = self.network_service.ethernet_device
+            if self._active_wifi and self._wifi_changed_handler_id is not None:
+                with contextlib.suppress(Exception):
+                    self._active_wifi.disconnect(self._wifi_changed_handler_id)
+                self._wifi_changed_handler_id = None
+                self._active_wifi = None
             if ethernet:
                 self.network_icon.set_from_icon_name(
                     ethernet.icon_name,
@@ -490,10 +514,26 @@ class QuickSettingsButtonWidget(ButtonWidget):
 
     def on_speaker_changed(self, *_):
         # Update the progress bar value based on the speaker volume
-        if not self.audio_service.speaker:
+        speaker = self.audio_service.speaker
+        if not speaker:
             return
 
-        self.audio_service.speaker.connect("notify::volume", self.update_volume)
+        if (
+            self._active_speaker
+            and self._speaker_volume_handler_id is not None
+            and self._active_speaker != speaker
+        ):
+            with contextlib.suppress(Exception):
+                self._active_speaker.disconnect(self._speaker_volume_handler_id)
+            self._speaker_volume_handler_id = None
+
+        if self._speaker_volume_handler_id is None:
+            self._speaker_volume_handler_id = speaker.connect(
+                "notify::volume", self.update_volume
+            )
+            self._active_speaker = speaker
+
+        self.update_volume()
 
     def check_mute(self, *_):
         if not self.audio_service.speaker:
@@ -537,3 +577,18 @@ class QuickSettingsButtonWidget(ButtonWidget):
                 symbolic_icons["brightness"]["indicator"],
                 self.panel_icon_size,
             )
+
+    def destroy(self):
+        if self._active_wifi and self._wifi_changed_handler_id is not None:
+            with contextlib.suppress(Exception):
+                self._active_wifi.disconnect(self._wifi_changed_handler_id)
+            self._wifi_changed_handler_id = None
+        self._active_wifi = None
+
+        if self._active_speaker and self._speaker_volume_handler_id is not None:
+            with contextlib.suppress(Exception):
+                self._active_speaker.disconnect(self._speaker_volume_handler_id)
+            self._speaker_volume_handler_id = None
+        self._active_speaker = None
+
+        return super().destroy()

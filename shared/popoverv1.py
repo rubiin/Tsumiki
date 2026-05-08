@@ -24,6 +24,8 @@ class PopOverWindow(WaylandWindow):
         self._pointing_widget = pointing_to
         self._hyprland = HyprlandWithMonitors()
         self._base_margin = self.extract_margin(margin)
+        self._pointing_handler_id: int | None = None
+        self._window_handler_id: int | None = None
         self.margin = self._base_margin.values()
 
         self.connect("notify::visible", self.do_update_handlers)
@@ -39,28 +41,43 @@ class PopOverWindow(WaylandWindow):
         return round(x / 2), round(y / 2)
 
     def set_pointing_to(self, widget: Gtk.Widget | None):
-        if self._pointing_widget:
-            with contextlib.suppress(Exception):
-                self._pointing_widget.disconnect_by_func(self.do_handle_size_allocate)
+        self._disconnect_size_allocate_handlers()
         self._pointing_widget = widget
         return self.do_update_handlers()
 
+    def _disconnect_size_allocate_handlers(self):
+        if self._pointing_widget and self._pointing_handler_id is not None:
+            with contextlib.suppress(Exception):
+                self._pointing_widget.disconnect(self._pointing_handler_id)
+        self._pointing_handler_id = None
+
+        if self._window_handler_id is not None:
+            with contextlib.suppress(Exception):
+                self.disconnect(self._window_handler_id)
+        self._window_handler_id = None
+
     def do_update_handlers(self, *_):
         if not self._pointing_widget:
+            self._disconnect_size_allocate_handlers()
             return
 
         if not self.get_visible():
-            try:
-                self._pointing_widget.disconnect_by_func(self.do_handle_size_allocate)
-                self.disconnect_by_func(self.do_handle_size_allocate)
-            except Exception:
-                pass
+            self._disconnect_size_allocate_handlers()
             return
 
-        self._pointing_widget.connect("size-allocate", self.do_handle_size_allocate)
-        self.connect("size-allocate", self.do_handle_size_allocate)
+        self._disconnect_size_allocate_handlers()
+        self._pointing_handler_id = self._pointing_widget.connect(
+            "size-allocate", self.do_handle_size_allocate
+        )
+        self._window_handler_id = self.connect(
+            "size-allocate", self.do_handle_size_allocate
+        )
 
         return self.do_handle_size_allocate()
+
+    def destroy(self):
+        self._disconnect_size_allocate_handlers()
+        return super().destroy()
 
     def do_handle_size_allocate(self, *_):
         return self.do_reposition(self.do_calculate_edges())
