@@ -69,12 +69,19 @@ class CustomNotifications(Notifications):
                 logger.info(f"{Colors.INFO}[Notification] Cache file is empty.")
                 return
 
-            original_data.reverse()
+            if not isinstance(original_data, list):
+                logger.warning(
+                    f"{Colors.WARNING}[Notification] Invalid cache format, resetting"
+                )
+                write_json_file(NOTIFICATION_CACHE_FILE, [])
+                return
+
+            loaded_data = list(reversed(original_data))
 
             valid_notifications = []
             highest_id = self._count
 
-            for notification in original_data:
+            for notification in loaded_data:
                 try:
                     self._deserialize_notification(notification)
                     valid_notifications.append(notification)
@@ -84,7 +91,7 @@ class CustomNotifications(Notifications):
                     logger.exception(f"{Colors.INFO}{msg}")
 
             # Write only if the validated data differs from what was originally loaded
-            if valid_notifications != original_data:
+            if valid_notifications != loaded_data:
                 write_json_file(NOTIFICATION_CACHE_FILE, valid_notifications)
                 logger.info(
                     f"{Colors.INFO}[Notification] Notifications written successfully."
@@ -95,6 +102,7 @@ class CustomNotifications(Notifications):
 
             del valid_notifications
             del original_data
+            del loaded_data
 
         except (KeyError, ValueError, IndexError) as e:
             logger.exception(f"{Colors.INFO}[Notification] {e}")

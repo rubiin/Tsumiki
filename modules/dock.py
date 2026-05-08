@@ -326,6 +326,7 @@ class AppBar(Box):
             client.close()
         except Exception:
             # If that fails, try to get the app_id and use hyprctl to kill the window
+            app_id = None
             try:
                 app_id = client.get_app_id()
                 if app_id:
@@ -334,7 +335,7 @@ class AppBar(Box):
                         f"closewindow class:{app_id}", lambda _: None
                     )
             except Exception:
-                logger.exception(f"[Dock] Failed to close client {client.get_app_id()}")
+                logger.exception(f"[Dock] Failed to close client {app_id}")
 
     def _make_item(self, label: str, callback):
         mi = Gtk.MenuItem(label=label)
