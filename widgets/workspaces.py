@@ -1,10 +1,26 @@
 from fabric.core.widgets import WorkspaceButton
-from fabric.hyprland.widgets import HyprlandWorkspaces as Workspaces
-from fabric.utils import bulk_connect
+from fabric.utils import bulk_connect, logger
 
 from shared.widget_container import BoxWidget
-from utils.functions import get_distro_icon, unique_list
+from utils.functions import get_distro_icon, get_window_manager_backend, unique_list
 from utils.widget_utils import nerd_font_icon
+
+
+def _resolve_workspaces_class(backend: str):
+    if backend in {"i3", "sway"}:
+        try:
+            from fabric.i3.widgets import I3Workspaces
+
+            return I3Workspaces
+        except Exception:
+            logger.warning(
+                "[workspaces] I3Workspaces unavailable; "
+                "falling back to HyprlandWorkspaces"
+            )
+
+    from fabric.hyprland.widgets import HyprlandWorkspaces
+
+    return HyprlandWorkspaces
 
 
 class WorkSpacesWidget(BoxWidget):
@@ -12,6 +28,9 @@ class WorkSpacesWidget(BoxWidget):
 
     def __init__(self, **kwargs):
         super().__init__(name="workspaces", spacing=1, **kwargs)
+
+        backend = get_window_manager_backend()
+        workspace_cls = _resolve_workspaces_class(backend)
 
         config = self.config
         self.ignored_ws = {int(x) for x in unique_list(config.get("ignored", []))}
@@ -27,7 +46,7 @@ class WorkSpacesWidget(BoxWidget):
         )
 
         # Create a HyperlandWorkspace widget to manage workspace buttons
-        self.workspace = Workspaces(
+        self.workspace = workspace_cls(
             name="workspaces_widget",
             spacing=4,
             # Create buttons for each workspace if occupied

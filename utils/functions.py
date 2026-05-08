@@ -94,6 +94,31 @@ _BYTES_FACTORS = {"kb": 1, "mb": 2, "gb": 3, "tb": 4}
 _WHITE = (255, 255, 255)
 
 
+def get_window_manager_backend() -> Literal["hyprland", "sway", "i3"]:
+    """Detect the current compositor/window-manager backend from session env vars."""
+
+    desktop_markers = " ".join(
+        filter(
+            None,
+            [
+                os.environ.get("XDG_CURRENT_DESKTOP", ""),
+                os.environ.get("XDG_SESSION_DESKTOP", ""),
+                os.environ.get("DESKTOP_SESSION", ""),
+            ],
+        )
+    ).lower()
+
+    if os.environ.get("SWAYSOCK") or "sway" in desktop_markers:
+        return "sway"
+    if os.environ.get("I3SOCK") or "i3" in desktop_markers:
+        return "i3"
+    if os.environ.get("HYPRLAND_INSTANCE_SIGNATURE") or "hyprland" in desktop_markers:
+        return "hyprland"
+
+    # Keep existing behavior as default.
+    return "hyprland"
+
+
 # Function to execute a shell command synchronously with formatted string
 def formatted_exec_shell_command(
     unformatted_cmd: str, **kwargs
