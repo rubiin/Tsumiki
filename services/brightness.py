@@ -22,6 +22,7 @@ class BrightnessService(SingletonService):
         super().__init__(**kwargs)
 
         helpers.check_executable_exists("brightnessctl")
+        self._screen_brightness_cache = -1
 
         # Discover screen backlight device
         try:
@@ -46,10 +47,7 @@ class BrightnessService(SingletonService):
 
             self.screen_monitor.connect(
                 "changed",
-                lambda _, file, *args: self.emit(
-                    "brightness_changed",
-                    round(int(file.load_bytes()[0].get_data())),
-                ),
+                self._on_screen_brightness_file_changed,
             )
 
             logger.info(
@@ -69,6 +67,14 @@ class BrightnessService(SingletonService):
         self.kbd_backlight_path = f"/sys/class/leds/{self.kbd}" if self.kbd else ""
         self.max_kbd = self._read_max_brightness(self.kbd_backlight_path)
 
+    def _on_screen_brightness_file_changed(self, _, file, *args):
+        try:
+            brightness = int(file.load_bytes()[0].get_data())
+            self._screen_brightness_cache = brightness
+            self.emit("brightness_changed", brightness)
+        except Exception as e:
+            logger.warning(f"{Colors.WARNING}Failed to read brightness update: {e}")
+
     def _read_max_brightness(self, path: str) -> int:
         max_brightness_path = os.path.join(path, "max_brightness")
         if os.path.exists(max_brightness_path):
@@ -81,10 +87,16 @@ class BrightnessService(SingletonService):
         if not self.screen_backlight_path:
             logger.warning(f"{Colors.WARNING}Cannot get brightness: no screen device.")
             return -1
+
+        if self._screen_brightness_cache >= 0:
+            return self._screen_brightness_cache
+
         brightness_path = os.path.join(self.screen_backlight_path, "brightness")
         if os.path.exists(brightness_path):
             with open(brightness_path, "r") as f:
-                return int(f.readline())
+                brightness = int(f.readline())
+                self._screen_brightness_cache = brightness
+                return brightness
         logger.warning(
             f"{Colors.WARNING}Brightness file does not exist: {brightness_path}"
         )
@@ -99,6 +111,7 @@ class BrightnessService(SingletonService):
             value = max(0, min(value, self.max_screen))
         try:
             exec_brightnessctl_async(f"--device '{self.screen_device}' set {value}")
+            self._screen_brightness_cache = value
             percentage = (
                 int((value / self.max_screen) * 100) if self.max_screen > 0 else 0
             )

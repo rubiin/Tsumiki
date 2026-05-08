@@ -1,6 +1,7 @@
 import json
 import signal
 import subprocess
+import threading
 
 from fabric.utils import (
     Gdk,
@@ -154,6 +155,9 @@ class CustomModuleWidget(ButtonWidget):
         if not self._exec_cmd:
             return
 
+        if self._process and self._process.poll() is None:
+            return
+
         exec_cmd = os.path.expanduser(self._exec_cmd)
 
         try:
@@ -164,21 +168,25 @@ class CustomModuleWidget(ButtonWidget):
                 stderr=subprocess.PIPE,
                 text=True,
             )
+            process = self._process
 
-            def read_output():
-                if self._process and self._process.stdout:
-                    line = self._process.stdout.readline()
-                    if line:
-                        GLib.idle_add(self._handle_output, line.strip())
-                        return True
-                    else:
-                        # Process ended, restart if configured
-                        restart = self.module_config.get("restart_interval", 0)
-                        if restart > 0:
-                            GLib.timeout_add(restart * 1000, self._start_continuous)
-                return False
+            def read_output_loop():
+                if not process or not process.stdout:
+                    return
 
-            invoke_repeater(100, read_output)
+                for line in process.stdout:
+                    if not line:
+                        break
+                    GLib.idle_add(self._handle_output, line.strip())
+
+                # Process ended, restart if configured
+                restart = self.module_config.get("restart_interval", 0)
+                if restart > 0:
+                    GLib.idle_add(
+                        lambda: GLib.timeout_add(restart * 1000, self._start_continuous)
+                    )
+
+            threading.Thread(target=read_output_loop, daemon=True).start()
 
         except Exception as e:
             logger.exception(
@@ -320,5 +328,9 @@ class CustomModuleWidget(ButtonWidget):
         """Clean up resources."""
         if self._process:
             self._process.terminate()
+            try:
+                self._process.wait(timeout=1)
+            except subprocess.TimeoutExpired:
+                self._process.kill()
             self._process = None
         super().destroy()

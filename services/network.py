@@ -134,15 +134,17 @@ class Wifi(Service):
         try:
             # List all saved connections
             result = subprocess.check_output(
-                "nmcli connection show", shell=True, text=True
+                ["nmcli", "-g", "NAME", "connection", "show"],
+                text=True,
             )
 
             # Find connection ID that matches SSID
-            for line in result.splitlines():
-                if ssid in line:
-                    connection_id = line.split()[0]
+            for connection_id in (line.strip() for line in result.splitlines()):
+                if not connection_id:
+                    continue
+                if connection_id == ssid:
                     subprocess.check_call(
-                        f"nmcli connection delete id '{connection_id}'", shell=True
+                        ["nmcli", "connection", "delete", "id", connection_id]
                     )
                     logger.info(
                         f"[NetworkService] Deleted saved connection: {connection_id}"
@@ -156,6 +158,9 @@ class Wifi(Service):
 
         except subprocess.CalledProcessError as e:
             logger.exception(f"[NetworkService] Error forgetting connection: {e}")
+            return False
+        except FileNotFoundError:
+            logger.exception("[NetworkService] nmcli not found")
             return False
 
     def connect_network(

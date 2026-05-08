@@ -20,15 +20,27 @@ storage_config = widget_config.get("widgets", {}).get("storage", {})
 
 # Function to get the system stats using psutil
 def stats_poll(fabricator):
+    cpu_freq = None
+    temperature = {}
+    disk = psutil.disk_usage(storage_config.get("path", "/"))
+    ticks = 0
+
     while True:
+        if ticks % 2 == 0:
+            cpu_freq = psutil.cpu_freq()
+            temperature = psutil.sensors_temperatures()
+            disk = psutil.disk_usage(storage_config.get("path", "/"))
+
+        virtual_memory = psutil.virtual_memory()
         yield {
             "cpu_usage": round(psutil.cpu_percent(), 1),
-            "cpu_freq": psutil.cpu_freq(),
-            "temperature": psutil.sensors_temperatures(),
-            "ram_usage": round(psutil.virtual_memory().percent, 1),
-            "memory": psutil.virtual_memory(),
-            "disk": psutil.disk_usage(storage_config.get("path", "/")),
+            "cpu_freq": cpu_freq,
+            "temperature": temperature,
+            "ram_usage": round(virtual_memory.percent, 1),
+            "memory": virtual_memory,
+            "disk": disk,
         }
+        ticks += 1
         sleep(1)
 
 

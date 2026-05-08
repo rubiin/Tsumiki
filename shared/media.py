@@ -186,6 +186,7 @@ class PlayerBox(Box):
         # Setup
         self.player: MprisPlayer = player
         self.fallback_cover_path = f"{ASSETS_DIR}/images/disk.png"
+        self._last_temp_art_path: str | None = None
 
         self.image_size = 120
 
@@ -547,11 +548,24 @@ class PlayerBox(Box):
         try:
             parsed = urllib.parse.urlparse(arturl)
             suffix = os.path.splitext(parsed.path)[1] or ".png"
-            with urllib.request.urlopen(arturl) as response:
+            with urllib.request.urlopen(arturl, timeout=5) as response:
                 data = response.read()
+
+            old_temp_path = self._last_temp_art_path
             with tempfile.NamedTemporaryFile(delete=False, suffix=suffix) as temp_file:
                 temp_file.write(data)
                 local_arturl = temp_file.name
+            self._last_temp_art_path = local_arturl
+
+            if (
+                old_temp_path
+                and old_temp_path != local_arturl
+                and os.path.exists(old_temp_path)
+            ):
+                try:
+                    os.remove(old_temp_path)
+                except OSError:
+                    logger.debug(f"[Media] Failed to remove temp file: {old_temp_path}")
         except Exception:
             local_arturl = self.fallback_cover_path
         GLib.idle_add(self._update_image, local_arturl)

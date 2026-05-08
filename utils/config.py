@@ -62,6 +62,9 @@ class TsumikiConfig:
 
         # Prefer JSON over TOML
         parsed_data = read_toml_file(file_path=self.toml_config_file)
+        if parsed_data is None:
+            logger.warning("[CONFIG] Failed to parse config.toml, using defaults")
+            parsed_data = {}
 
         validate_widgets(parsed_data, DEFAULT_CONFIG)
 

@@ -94,6 +94,9 @@ class ConfigWatcher:
             )
         except Exception as e:
             logger.exception(f"{Colors.ERROR}[ConfigWatcher] Failed to restart: {e}")
+        finally:
+            # Allow future file changes to schedule another restart attempt.
+            self._restart_pending = False
 
         return False  # Don't repeat
 
