@@ -1,3 +1,4 @@
+import contextlib
 from typing import ClassVar
 
 from fabric.hyprland.service import HyprlandEvent
@@ -112,6 +113,12 @@ class PopoverManager:
         self.active_popover = popover
         self.overlay.show()
 
+    def clear_active_popover(self, popover):
+        """Clear active popover only if it matches the current one."""
+        if self.active_popover == popover:
+            self.active_popover = None
+            self.overlay.hide()
+
 
 @GObject.Signal(
     flags=GObject.SignalFlags.RUN_LAST, return_type=GObject.TYPE_NONE, arg_types=()
@@ -147,6 +154,8 @@ class Popover(Widget):
         self._content_window = None
         self._content = content
         self._visible = False
+        self._draw_handler_id = None
+        self._focus_out_timeout_id = None
 
         # Use weak reference to avoid circular reference issues
         self._manager = PopoverManager()
@@ -166,15 +175,22 @@ class Popover(Widget):
     def on_key_press(self, widget, event):
         if event.keyval == Gdk.KEY_Escape and self._manager.active_popover:
             self._manager.active_popover.hide_popover()
+            return True
+        return False
 
     def open(self, *_):
         if not self._content_window:
             try:
-                self._create_popover()
+                created = self._create_popover()
             except Exception as e:
                 logger.exception(f"Could not create popover! Error: {e}")
+                return
+
+            if not created:
+                return
         else:
             self._manager.activate_popover(self)
+            self.set_position()
             self._content_window.show()
             self._visible = True
 
@@ -212,18 +228,28 @@ class Popover(Widget):
         return False
 
     def on_content_ready(self, widget, event):
+        if self._draw_handler_id is not None:
+            with contextlib.suppress(Exception):
+                self._content.disconnect(self._draw_handler_id)
+            self._draw_handler_id = None
         self.set_position()
 
     def _create_popover(self):
         if self._content is None and self._content_factory is not None:
             self._content = self._content_factory()
 
+        if self._content is None:
+            logger.warning(
+                "Could not create popover content: no content or content factory"
+            )
+            return False
+
         # Get a window from the pool
         self._content_window = self._manager.get_popover_window()
 
         # This is a hack to fix wrong positioning for widgets that are not rendered
         # immediately (e.g., Gtk.Calendar())
-        self._content.connect("draw", self.on_content_ready)
+        self._draw_handler_id = self._content.connect("draw", self.on_content_ready)
 
         # Add content to window
         self._content_window.add(Box(name="popover-content", children=self._content))
@@ -239,20 +265,39 @@ class Popover(Widget):
         self._manager.activate_popover(self)
         self._content_window.show()
         self._visible = True
+        return True
 
     def on_popover_focus_out(self, widget, event):
         # This helps with keyboard focus issues
-        GLib.timeout_add(100, self.hide_popover)
+        if self._focus_out_timeout_id is not None:
+            GLib.source_remove(self._focus_out_timeout_id)
+        self._focus_out_timeout_id = GLib.timeout_add(100, self._hide_after_focus_out)
         return False
+
+    def _hide_after_focus_out(self):
+        self._focus_out_timeout_id = None
+        return self.hide_popover()
 
     def hide_popover(self):
         if not self._visible or not self._content_window:
             return False
 
+        if self._focus_out_timeout_id is not None:
+            GLib.source_remove(self._focus_out_timeout_id)
+            self._focus_out_timeout_id = None
+
         self._content_window.hide()
-        self._manager.overlay.hide()
+        self._manager.clear_active_popover(self)
         self._visible = False
 
         self.emit("popover-closed")
 
         return False
+
+    def hide(self, *_):
+        """Compatibility helper for code paths that expect Gtk-like hide()."""
+        return self.hide_popover()
+
+    def get_visible(self):
+        """Compatibility helper for mixins that query visibility."""
+        return self._visible
