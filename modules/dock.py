@@ -56,6 +56,7 @@ class MultiDotIndicator(Gtk.DrawingArea):
     def on_draw(self, area, cr):
         alloc = self.get_allocation()
         radius = self._size / 2 - 1
+        cr.set_source_rgb(1.0, 1.0, 1.0)  # white dot
 
         for i in range(self._count):
             if self._orientation == "vertical":
@@ -66,7 +67,6 @@ class MultiDotIndicator(Gtk.DrawingArea):
                 cy = alloc.height / 2
 
             cr.arc(cx, cy, radius, 0, 2 * 3.14)
-            cr.set_source_rgb(1.0, 1.0, 1.0)  # white dot
             cr.fill()
 
 
@@ -102,7 +102,9 @@ class AppBar(Box):
         "_manager",
         "_parent",
         "_pinned_app_buttons",
+        "_popup_close_timer",
         "_preview_image",
+        "_running_app_count",
         "app_identifiers",
         "app_launcher",
         "app_util",
@@ -117,6 +119,7 @@ class AppBar(Box):
         "popup_revealer",
         "preview_size",
         "separator",
+        "truncation_size",
     )
 
     def on_launcher_clicked(self, *_):
@@ -151,6 +154,8 @@ class AppBar(Box):
 
         # Track grouped apps: app_id -> {box, button, indicator, clients: []}
         self._app_groups = {}
+        self._popup_close_timer = None
+        self._running_app_count = 0
 
         # Determine orientation for boxes
         is_vertical = self.orientation == "vertical"
@@ -220,6 +225,7 @@ class AppBar(Box):
             )
 
     def _close_popup(self, *_):
+        self._popup_close_timer = None
         self.popup_revealer.unreveal()
         return False
 
@@ -468,8 +474,10 @@ class AppBar(Box):
             self._update_preview_image(client, client_button)
 
     def on_leave_notify_event(self, client: Glace.Client, client_button: Button):
-        if self.config.get("preview_apps", True):
-            GLib.timeout_add(100, self._close_popup)
+        if self.config.get("preview_apps", False):
+            if self._popup_close_timer is not None:
+                GLib.source_remove(self._popup_close_timer)
+            self._popup_close_timer = GLib.timeout_add(100, self._close_popup)
 
     def _on_group_enter(self, app_id: str, client_button: Button):
         """Handle hover on a grouped app - show preview of first/active window."""
@@ -540,6 +548,8 @@ class AppBar(Box):
             self.remove(box)
             box.destroy()
             del self._app_groups[app_id]
+            if not self._app_groups:
+                self.separator.set_visible(False)
         else:
             # Update the indicator count
             group["indicator"].set_count(len(group["clients"]))
@@ -831,10 +841,18 @@ class AppBar(Box):
                     if client.get_activated()
                     else client_button.remove_style_class("active")
                 ),
-                "close": lambda *_: (self.remove(box), box.destroy()),
+                "close": lambda *_: (
+                    self.remove(box),
+                    box.destroy(),
+                    setattr(self, "_running_app_count", self._running_app_count - 1),
+                    self.separator.set_visible(
+                        bool(self._app_groups) or self._running_app_count > 0
+                    ),
+                ),
             },
         )
 
+        self._running_app_count += 1
         self.add(box)
 
         if len(self.pinned_apps) > 0 and not self.separator.get_visible():
@@ -982,13 +1000,14 @@ class Dock(Window):
         if not self._app_bar._is_dragging:
             self.revealer.set_reveal_child(False)
 
-    def _handle_workspace_response(self, data: dict):
+    def _handle_workspace_response(self, data: str):
         try:
-            if data.get("windows", 0) == 0:
+            parsed = json.loads(data)
+            if parsed.get("windows", 0) == 0:
                 self.revealer.set_reveal_child(True)
             else:
                 self.revealer.set_reveal_child(False)
-        except json.JSONDecodeError as e:
+        except (json.JSONDecodeError, AttributeError) as e:
             logger.exception(f"[Dock] Failed to parse workspace response: {e}")
 
     def _check_for_windows(self, *_):
