@@ -78,6 +78,7 @@ class LottieAnimationWidget(Gtk.DrawingArea, BaseWidget):
 
         self.set_size_request(self.width, self.height)
         self.connect("draw", self.draw)
+        self.connect("destroy", lambda *_: self.stop_play())
         if draw_frame is not None:
             self.on_update()
 
@@ -86,6 +87,8 @@ class LottieAnimationWidget(Gtk.DrawingArea, BaseWidget):
 
     def play_loop(self):
         self.do_loop = True
+        if self.timeout is not None:
+            remove_handler(self.timeout)
         self.timeout = GLib.timeout_add(self.timeout_delay, self.on_update)
 
     def draw(self, _: Gtk.DrawingArea, ctx: cairo.Context):
@@ -119,16 +122,24 @@ class LottieAnimationWidget(Gtk.DrawingArea, BaseWidget):
         if self.do_reverse and self.curr_frame <= self.end_frame:
             self.is_playing = self.do_loop
             self.curr_frame = self.anim_total_frames
+            if not self.do_loop:
+                self.timeout = None
             return self.do_loop
         elif not self.do_reverse and self.curr_frame >= self.end_frame:
             self.is_playing = self.do_loop
             self.curr_frame = 0 if self.do_loop else self.curr_frame
+            if not self.do_loop:
+                self.timeout = None
             return self.do_loop
         self.curr_frame += -1 if self.do_reverse else 1
         return True
 
     def stop_play(self):
-        remove_handler(self.timeout)
+        if self.timeout is not None:
+            remove_handler(self.timeout)
+            self.timeout = None
+        self.is_playing = False
+        self.do_loop = False
 
     def play_animation(
         self,
@@ -149,5 +160,7 @@ class LottieAnimationWidget(Gtk.DrawingArea, BaseWidget):
         self.end_frame = (
             end_frame if end_frame else 0 if self.do_reverse else self.anim_total_frames
         )
+        if self.timeout is not None:
+            remove_handler(self.timeout)
         # self.curr_frame = self.anim_total_frames if self.is_reverse else 0
         self.timeout = GLib.timeout_add(self.timeout_delay, self.on_update)

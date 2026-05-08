@@ -8,7 +8,6 @@ from fabric.utils import (
     GObject,
     bulk_connect,
     cooldown,
-    invoke_repeater,
     logger,
     os,
 )
@@ -198,6 +197,7 @@ class PlayerBox(Box):
         self.exit = False
         self.angle_direction = 1
         self.skipped = False
+        self._seekbar_timer_id: int | None = None
 
         self.image_box = CircularImage(
             size=self.image_size, image_file=self.fallback_cover_path
@@ -426,13 +426,20 @@ class PlayerBox(Box):
             self.length_label.set_label(self.length_str(self.player.length))
             self.seek_bar.set_range(0, duration)
 
-        invoke_repeater(1000, self._move_seekbar)
+        self._stop_seekbar_timer()
+        self._seekbar_timer_id = GLib.timeout_add(1000, self._move_seekbar)
+
+    def _stop_seekbar_timer(self):
+        if self._seekbar_timer_id is not None:
+            GLib.source_remove(self._seekbar_timer_id)
+            self._seekbar_timer_id = None
 
     def _set_notify_value(self, p, *_):
         self.image_box.angle = self.angle_direction * p.value
 
     def on_player_exit(self, _, value):
         self.exit = value
+        self._stop_seekbar_timer()
         self.destroy()
 
     def on_player_next(self, *_):
@@ -573,12 +580,27 @@ class PlayerBox(Box):
 
     def _move_seekbar(self, *_):
         if self.player is None or self.exit:
+            self._seekbar_timer_id = None
             return False
 
         self.position_label.set_label(self.length_str(self.player.position))
         self.seek_bar.set_value(self.player.position)
 
         return True
+
+    def destroy(self):
+        self._stop_seekbar_timer()
+        # Best-effort cleanup of the latest downloaded artwork temp file.
+        if self._last_temp_art_path and os.path.exists(self._last_temp_art_path):
+            try:
+                os.remove(self._last_temp_art_path)
+            except OSError:
+                logger.debug(
+                    f"[Media] Failed to remove temp file: {self._last_temp_art_path}"
+                )
+            finally:
+                self._last_temp_art_path = None
+        super().destroy()
 
     @cooldown(0.1)
     def on_scale_move(self, scale: Scale, event, pos: int):

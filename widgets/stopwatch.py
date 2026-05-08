@@ -27,8 +27,14 @@ class StopWatchWidget(ButtonWidget):
         self.container_box.children = (self.icon, self.time_label)
 
         self.connect("clicked", self.on_click)
+        self.connect("destroy", self._on_destroy)
 
         self.timeout_id = GLib.timeout_add(100, self.update_time)
+
+    def _on_destroy(self, *_):
+        if self.timeout_id is not None:
+            GLib.source_remove(self.timeout_id)
+            self.timeout_id = None
 
     # stop or run on click
     def on_click(self, *_):
