@@ -1,11 +1,5 @@
-from fabric.hyprland.widgets import HyprlandLanguage
 from fabric.utils import FormattedString, logger, truncate
 from fabric.widgets.label import Label
-
-try:
-    from fabric.i3.widgets import I3Language
-except Exception:
-    I3Language = None
 
 from shared.widget_container import ButtonWidget
 from utils.functions import get_window_manager_backend
@@ -20,16 +14,7 @@ class LanguageWidget(ButtonWidget):
 
         backend = get_window_manager_backend()
 
-        if backend == "sway" and I3Language is not None:
-            language_widget = I3Language
-        elif backend == "i3":
-            language_widget = None
-            logger.warning(
-                "[language] i3 does not expose keyboard layout change events; "
-                "showing fallback label"
-            )
-        else:
-            language_widget = HyprlandLanguage
+        language_widget = self._resolve_backend_class(backend)
 
         if language_widget is None:
             self.lang = Label(
@@ -60,3 +45,18 @@ class LanguageWidget(ButtonWidget):
 
         if self.config.get("tooltip", False):
             self.set_tooltip_text(f"Language: {self.lang.get_label()}")
+
+    def _resolve_backend_class(self, backend: str):
+        if backend == "sway":
+            from fabric.i3.widgets import I3Language
+
+            return I3Language
+        elif backend == "i3":
+            logger.warning(
+                "[language] i3 does not expose keyboard layout change events; "
+                "showing fallback label"
+            )
+        else:
+            from fabric.hyprland.widgets import HyprlandLanguage
+
+            return HyprlandLanguage

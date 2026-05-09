@@ -1,10 +1,4 @@
-from fabric.hyprland.widgets import HyprlandActiveWindow
 from fabric.utils import FormattedString, logger, re, truncate
-
-try:
-    from fabric.i3.widgets import I3ActiveWindow
-except Exception:
-    I3ActiveWindow = None
 
 from shared.widget_container import ButtonWidget
 from utils.constants import WINDOW_TITLE_MAP
@@ -31,18 +25,10 @@ class WindowTitleWidget(ButtonWidget):
         super().__init__(name="window_title", **kwargs)
 
         backend = get_window_manager_backend()
-        active_window_cls = HyprlandActiveWindow
-        if backend in {"i3", "sway"}:
-            if I3ActiveWindow is not None:
-                active_window_cls = I3ActiveWindow
-            else:
-                logger.warning(
-                    "[window_title] I3ActiveWindow unavailable"
-                    "falling back to HyprlandActiveWindow"
-                )
+        active_window = self._resolve_backend_class(backend)
 
         # Create an ActiveWindow widget to track the active window
-        self.active_window = active_window_cls(
+        self.active_window = active_window(
             name="window",
             formatter=FormattedString(
                 "{ get_title(win_title, win_class) }",
@@ -88,3 +74,19 @@ class WindowTitleWidget(ButtonWidget):
         )
         fallback = truncate(fallback, trunc_size) if trunc else fallback
         return f"󰣆 {fallback}"
+
+    def _resolve_backend_class(self, backend: str):
+        if backend in {"i3", "sway"}:
+            try:
+                from fabric.i3.widgets import I3ActiveWindow
+
+                return I3ActiveWindow
+            except Exception:
+                logger.warning(
+                    "[window_title] I3ActiveWindow unavailable; "
+                    "falling back to HyprlandActiveWindow"
+                )
+
+        from fabric.hyprland.widgets import ActiveWindow
+
+        return ActiveWindow

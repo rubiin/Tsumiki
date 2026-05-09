@@ -30,7 +30,7 @@ class WorkSpacesWidget(BoxWidget):
         super().__init__(name="workspaces", spacing=1, **kwargs)
 
         backend = get_window_manager_backend()
-        workspace_cls = _resolve_workspaces_class(backend)
+        workspace = self._resolve_backend_class(backend)
 
         config = self.config
         self.ignored_ws = {int(x) for x in unique_list(config.get("ignored", []))}
@@ -46,7 +46,7 @@ class WorkSpacesWidget(BoxWidget):
         )
 
         # Create a HyperlandWorkspace widget to manage workspace buttons
-        self.workspace = workspace_cls(
+        self.workspace = workspace(
             name="workspaces_widget",
             spacing=4,
             # Create buttons for each workspace if occupied
@@ -68,6 +68,22 @@ class WorkSpacesWidget(BoxWidget):
 
     def _create_workspace_label(self, ws_id: int) -> str:
         return self.icon_map.get(str(ws_id), self.default_format.format(id=ws_id))
+
+    def _resolve_backend_class(self, backend: str):
+        if backend in {"i3", "sway"}:
+            try:
+                from fabric.i3.widgets import I3Workspaces
+
+                return I3Workspaces
+            except Exception:
+                logger.warning(
+                    "[workspaces] I3Workspaces unavailable; "
+                    "falling back to HyprlandWorkspaces"
+                )
+
+        from fabric.hyprland.widgets import HyprlandWorkspaces
+
+        return HyprlandWorkspaces
 
     def _update_empty_state(self, button: WorkspaceButton, *_):
         style_context = button.get_style_context()
