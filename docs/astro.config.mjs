@@ -23,7 +23,7 @@ export default defineConfig({
 				{
 					icon: "github",
 					label: "GitHub",
-					href: "https://github.com/rubiin/Tsumiki",
+					href: "https://github.com/rubiin/tsumiki",
 				},
 				{
 					icon: "discord",

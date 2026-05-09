@@ -1,10 +1,10 @@
 <p align="center"><img src="assets/images/tsumiki.png" align="centre" width="420" height="360"/></p>
 <h1 align="center"><img src="https://raw.githubusercontent.com/JaKooLit/Telegram-Animated-Emojis/refs/heads/main/Activity/Sparkles.webp"/ height=35> Tsumiki <img src="https://raw.githubusercontent.com/JaKooLit/Telegram-Animated-Emojis/refs/heads/main/Activity/Sparkles.webp"/ height=35></h1>
 <p align="center">
- <a href="https://github.com/rubiin/Tsumiki/blob/master/LICENSE"><img alt="GitHub" src="https://img.shields.io/github/license/rubiin/Tsumiki"></a>
+ <a href="https://github.com/rubiin/tsumiki/blob/master/LICENSE"><img alt="GitHub" src="https://img.shields.io/github/license/rubiin/tsumiki"></a>
   <a href='http://makeapullrequest.com'><img alt='PRs Welcome' src='https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=shields'/></a>
-  <img alt="GitHub commit activity" src="https://img.shields.io/github/commit-activity/m/rubiin/Tsumiki"/>
-  <img alt="GitHub closed issues" src="https://img.shields.io/github/issues-closed/rubiin/Tsumiki"/>
+  <img alt="GitHub commit activity" src="https://img.shields.io/github/commit-activity/m/rubiin/tsumiki"/>
+  <img alt="GitHub closed issues" src="https://img.shields.io/github/issues-closed/rubiin/tsumiki"/>
   <img alt="discord" src="https://img.shields.io/discord/1200448076620501063" />
 </p>
 
@@ -157,7 +157,7 @@ nvtop
 - Clone this repository:
 
 ```sh
-git clone https://github.com/rubiin/Tsumiki.git ~/.config/tsumiki
+git clone https://github.com/rubiin/tsumiki.git ~/.config/tsumiki
 ```
 
 - Run the following command to install the required packages for particular os, few of them are already installed if you have a working system:
@@ -169,7 +169,7 @@ You can choose one of three installation methods: **Curl Install**, **Automated 
 ### Option 1: One-Line Curl Install
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/rubiin/Tsumiki/master/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/rubiin/tsumiki/master/install.sh | bash
 ```
 
 This bootstrap script will:
@@ -180,7 +180,7 @@ This bootstrap script will:
 To also start Tsumiki immediately:
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/rubiin/Tsumiki/master/install.sh | bash -s -- --start
+curl -fsSL https://raw.githubusercontent.com/rubiin/tsumiki/master/install.sh | bash -s -- --start
 ```
 
 ### Option 2: Automated Setup Using `init.sh -setup`
@@ -275,7 +275,7 @@ Updating to latest commit is fairly simple, just git pull the latest changes.
 
 > **Note**: make sure to keep the config safe just in case
 
-## Check [wiki](https://github.com/rubiin/Tsumiki/wiki) for configuring individual widgets
+## Check [wiki](https://github.com/rubiin/tsumiki/wiki) for configuring individual widgets
 
 ## **Available Modules**
 
@@ -425,11 +425,11 @@ Thanks for making this project a little bit more awesome! 🚀
 
 ## Star History
 
-<a href="https://star-history.com/#rubiin/Tsumiki&Timeline">
+<a href="https://star-history.com/#rubiin/tsumiki&Timeline">
  <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=rubiin/Tsumiki&type=Timeline&theme=dark" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=rubiin/Tsumiki&type=Timeline" />
-   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=rubiin/Tsumiki&type=Timeline" />
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=rubiin/tsumiki&type=Timeline&theme=dark" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=rubiin/tsumiki&type=Timeline" />
+   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=rubiin/tsumiki&type=Timeline" />
  </picture>
 </a>
 
@@ -443,21 +443,21 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <table>
   <tbody>
     <tr>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/PixelKhaos"><img src="https://avatars.githubusercontent.com/u/5213174?v=4?s=100" width="100px;" alt="Robin Seger"/><br /><sub><b>Robin Seger</b></sub></a><br /><a href="https://github.com/rubiin/Tsumiki/commits?author=PixelKhaos" title="Code">💻</a> <a href="#design-PixelKhaos" title="Design">🎨</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://zaap.bio/Axenide"><img src="https://avatars.githubusercontent.com/u/66109459?v=4?s=100" width="100px;" alt="Adriano Tisera"/><br /><sub><b>Adriano Tisera</b></sub></a><br /><a href="https://github.com/rubiin/Tsumiki/commits?author=Axenide" title="Code">💻</a> <a href="https://github.com/rubiin/Tsumiki/issues?q=author%3AAxenide" title="Bug reports">🐛</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Anshul-007"><img src="https://avatars.githubusercontent.com/u/81582218?v=4?s=100" width="100px;" alt="Anshul J."/><br /><sub><b>Anshul J.</b></sub></a><br /><a href="https://github.com/rubiin/Tsumiki/commits?author=Anshul-007" title="Code">💻</a> <a href="https://github.com/rubiin/Tsumiki/issues?q=author%3AAnshul-007" title="Bug reports">🐛</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/S4NKALP"><img src="https://avatars.githubusercontent.com/u/98226895?v=4?s=100" width="100px;" alt="Sankalp Tharu"/><br /><sub><b>Sankalp Tharu</b></sub></a><br /><a href="https://github.com/rubiin/Tsumiki/commits?author=S4NKALP" title="Code">💻</a> <a href="https://github.com/rubiin/Tsumiki/issues?q=author%3AS4NKALP" title="Bug reports">🐛</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/keepo-dot"><img src="https://avatars.githubusercontent.com/u/201014163?v=4?s=100" width="100px;" alt="Keepo"/><br /><sub><b>Keepo</b></sub></a><br /><a href="https://github.com/rubiin/Tsumiki/commits?author=keepo-dot" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://evrenos-dev.vercel.app/"><img src="https://avatars.githubusercontent.com/u/138004078?v=4?s=100" width="100px;" alt="Sayeed Mahmood Evrenos"/><br /><sub><b>Sayeed Mahmood Evrenos</b></sub></a><br /><a href="https://github.com/rubiin/Tsumiki/issues?q=author%3AEvren-os" title="Bug reports">🐛</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="http://xeyossr.github.io"><img src="https://avatars.githubusercontent.com/u/113219171?v=4?s=100" width="100px;" alt="xeyossr"/><br /><sub><b>xeyossr</b></sub></a><br /><a href="https://github.com/rubiin/Tsumiki/commits?author=xeyossr" title="Documentation">📖</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/PixelKhaos"><img src="https://avatars.githubusercontent.com/u/5213174?v=4?s=100" width="100px;" alt="Robin Seger"/><br /><sub><b>Robin Seger</b></sub></a><br /><a href="https://github.com/rubiin/tsumiki/commits?author=PixelKhaos" title="Code">💻</a> <a href="#design-PixelKhaos" title="Design">🎨</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://zaap.bio/Axenide"><img src="https://avatars.githubusercontent.com/u/66109459?v=4?s=100" width="100px;" alt="Adriano Tisera"/><br /><sub><b>Adriano Tisera</b></sub></a><br /><a href="https://github.com/rubiin/tsumiki/commits?author=Axenide" title="Code">💻</a> <a href="https://github.com/rubiin/tsumiki/issues?q=author%3AAxenide" title="Bug reports">🐛</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Anshul-007"><img src="https://avatars.githubusercontent.com/u/81582218?v=4?s=100" width="100px;" alt="Anshul J."/><br /><sub><b>Anshul J.</b></sub></a><br /><a href="https://github.com/rubiin/tsumiki/commits?author=Anshul-007" title="Code">💻</a> <a href="https://github.com/rubiin/tsumiki/issues?q=author%3AAnshul-007" title="Bug reports">🐛</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/S4NKALP"><img src="https://avatars.githubusercontent.com/u/98226895?v=4?s=100" width="100px;" alt="Sankalp Tharu"/><br /><sub><b>Sankalp Tharu</b></sub></a><br /><a href="https://github.com/rubiin/tsumiki/commits?author=S4NKALP" title="Code">💻</a> <a href="https://github.com/rubiin/tsumiki/issues?q=author%3AS4NKALP" title="Bug reports">🐛</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/keepo-dot"><img src="https://avatars.githubusercontent.com/u/201014163?v=4?s=100" width="100px;" alt="Keepo"/><br /><sub><b>Keepo</b></sub></a><br /><a href="https://github.com/rubiin/tsumiki/commits?author=keepo-dot" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://evrenos-dev.vercel.app/"><img src="https://avatars.githubusercontent.com/u/138004078?v=4?s=100" width="100px;" alt="Sayeed Mahmood Evrenos"/><br /><sub><b>Sayeed Mahmood Evrenos</b></sub></a><br /><a href="https://github.com/rubiin/tsumiki/issues?q=author%3AEvren-os" title="Bug reports">🐛</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="http://xeyossr.github.io"><img src="https://avatars.githubusercontent.com/u/113219171?v=4?s=100" width="100px;" alt="xeyossr"/><br /><sub><b>xeyossr</b></sub></a><br /><a href="https://github.com/rubiin/tsumiki/commits?author=xeyossr" title="Documentation">📖</a></td>
     </tr>
     <tr>
-      <td align="center" valign="top" width="14.28%"><a href="https://dimflix-official.github.io/"><img src="https://avatars.githubusercontent.com/u/112165977?v=4?s=100" width="100px;" alt="DIMFLIX"/><br /><sub><b>DIMFLIX</b></sub></a><br /><a href="https://github.com/rubiin/Tsumiki/issues?q=author%3ADIMFLIX-OFFICIAL" title="Bug reports">🐛</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/jhakonen"><img src="https://avatars.githubusercontent.com/u/1950698?v=4?s=100" width="100px;" alt="Janne Hakonen"/><br /><sub><b>Janne Hakonen</b></sub></a><br /><a href="https://github.com/rubiin/Tsumiki/commits?author=jhakonen" title="Code">💻</a> <a href="https://github.com/rubiin/Tsumiki/issues?q=author%3Ajhakonen" title="Bug reports">🐛</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/fdev31"><img src="https://avatars.githubusercontent.com/u/238622?v=4?s=100" width="100px;" alt="Fabien Devaux"/><br /><sub><b>Fabien Devaux</b></sub></a><br /><a href="https://github.com/rubiin/Tsumiki/issues?q=author%3Afdev31" title="Bug reports">🐛</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/sudo-Tiz"><img src="https://avatars.githubusercontent.com/u/72883092?v=4?s=100" width="100px;" alt="Tiz"/><br /><sub><b>Tiz</b></sub></a><br /><a href="https://github.com/rubiin/Tsumiki/commits?author=sudo-Tiz" title="Code">💻</a> <a href="https://github.com/rubiin/Tsumiki/issues?q=author%3Asudo-Tiz" title="Bug reports">🐛</a> <a href="https://github.com/rubiin/Tsumiki/commits?author=sudo-Tiz" title="Documentation">📖</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/N1xev"><img src="https://avatars.githubusercontent.com/u/104609053?v=4?s=100" width="100px;" alt="Alaa Elsamouly"/><br /><sub><b>Alaa Elsamouly</b></sub></a><br /><a href="https://github.com/rubiin/Tsumiki/commits?author=N1xev" title="Documentation">📖</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/muhchaudhary"><img src="https://avatars.githubusercontent.com/u/61593188?v=4?s=100" width="100px;" alt="Muhammad Ahmad Chaudhary"/><br /><sub><b>Muhammad Ahmad Chaudhary</b></sub></a><br /><a href="https://github.com/rubiin/Tsumiki/issues?q=author%3Amuhchaudhary" title="Bug reports">🐛</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://dimflix-official.github.io/"><img src="https://avatars.githubusercontent.com/u/112165977?v=4?s=100" width="100px;" alt="DIMFLIX"/><br /><sub><b>DIMFLIX</b></sub></a><br /><a href="https://github.com/rubiin/tsumiki/issues?q=author%3ADIMFLIX-OFFICIAL" title="Bug reports">🐛</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/jhakonen"><img src="https://avatars.githubusercontent.com/u/1950698?v=4?s=100" width="100px;" alt="Janne Hakonen"/><br /><sub><b>Janne Hakonen</b></sub></a><br /><a href="https://github.com/rubiin/tsumiki/commits?author=jhakonen" title="Code">💻</a> <a href="https://github.com/rubiin/tsumiki/issues?q=author%3Ajhakonen" title="Bug reports">🐛</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/fdev31"><img src="https://avatars.githubusercontent.com/u/238622?v=4?s=100" width="100px;" alt="Fabien Devaux"/><br /><sub><b>Fabien Devaux</b></sub></a><br /><a href="https://github.com/rubiin/tsumiki/issues?q=author%3Afdev31" title="Bug reports">🐛</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/sudo-Tiz"><img src="https://avatars.githubusercontent.com/u/72883092?v=4?s=100" width="100px;" alt="Tiz"/><br /><sub><b>Tiz</b></sub></a><br /><a href="https://github.com/rubiin/tsumiki/commits?author=sudo-Tiz" title="Code">💻</a> <a href="https://github.com/rubiin/tsumiki/issues?q=author%3Asudo-Tiz" title="Bug reports">🐛</a> <a href="https://github.com/rubiin/tsumiki/commits?author=sudo-Tiz" title="Documentation">📖</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/N1xev"><img src="https://avatars.githubusercontent.com/u/104609053?v=4?s=100" width="100px;" alt="Alaa Elsamouly"/><br /><sub><b>Alaa Elsamouly</b></sub></a><br /><a href="https://github.com/rubiin/tsumiki/commits?author=N1xev" title="Documentation">📖</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/muhchaudhary"><img src="https://avatars.githubusercontent.com/u/61593188?v=4?s=100" width="100px;" alt="Muhammad Ahmad Chaudhary"/><br /><sub><b>Muhammad Ahmad Chaudhary</b></sub></a><br /><a href="https://github.com/rubiin/tsumiki/issues?q=author%3Amuhchaudhary" title="Bug reports">🐛</a></td>
     </tr>
   </tbody>
 </table>

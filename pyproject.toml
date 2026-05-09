@@ -126,8 +126,8 @@ line-ending = "auto"
 
 
 [project.urls]
-"Website" = "https://github.com/rubiin/Tsumiki/wiki"
-"Documentation" = "https://github.com/rubiin/Tsumiki/wiki"
-"Source" = "https://github.com/rubiin/Tsumiki"
-"Bug Tracker" = "https://github.com/rubiin/Tsumiki/issues"
-"Changelog" = "https://github.com/rubiin/Tsumiki/blob/master/CHANGELOG.md"
+"Website" = "https://github.com/rubiin/tsumiki/wiki"
+"Documentation" = "https://github.com/rubiin/tsumiki/wiki"
+"Source" = "https://github.com/rubiin/tsumiki"
+"Bug Tracker" = "https://github.com/rubiin/tsumiki/issues"
+"Changelog" = "https://github.com/rubiin/tsumiki/blob/master/CHANGELOG.md"
