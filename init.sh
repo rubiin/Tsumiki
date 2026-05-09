@@ -211,30 +211,21 @@ install_packages() {
 		gobject-introspection
 		gobject-introspection-runtime
 		python-pip
-		python-gobject
-		python-psutil
-		python-cairo
-		python-loguru
 		libnotify
 		cliphist
-		python-httpx
 		satty
 		nvtop
 	)
 
 	# Install packages from AUR using yay
 	aur_deps=(
-		python-fabric-git
 		gnome-bluetooth-3.0
-		python-rlottie-python
-		python-pytomlpp
 		slurp
 		imagemagick
 		tesseract
 		tesseract-data-eng
 		ttf-jetbrains-mono-nerd
 		grimblast-git
-		python-ijson
 		glace-git
 		matugen-bin
 	)
