@@ -249,8 +249,6 @@ Dock = TypedDict(
         "orientation": Orientation,
         "behavior": Dock_Behavior,
         "icon_size": int,
-        "preview_apps": bool,
-        "preview_size": tuple[int, int],
         "show_when_no_windows": bool,
         "group_apps": bool,
         "truncation_size": int,

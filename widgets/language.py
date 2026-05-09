@@ -25,7 +25,8 @@ class LanguageWidget(ButtonWidget):
         elif backend == "i3":
             language_widget = None
             logger.warning(
-                "[language] i3 does not expose keyboard layout change events; showing fallback label"
+                "[language] i3 does not expose keyboard layout change events; "
+                "showing fallback label"
             )
         else:
             language_widget = HyprlandLanguage

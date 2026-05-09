@@ -37,7 +37,8 @@ class WindowTitleWidget(ButtonWidget):
                 active_window_cls = I3ActiveWindow
             else:
                 logger.warning(
-                    "[window_title] I3ActiveWindow unavailable; falling back to HyprlandActiveWindow"
+                    "[window_title] I3ActiveWindow unavailable"
+                    "falling back to HyprlandActiveWindow"
                 )
 
         # Create an ActiveWindow widget to track the active window

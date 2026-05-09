@@ -417,11 +417,6 @@ DEFAULT_CONFIG = {
             "tooltip": False,
             "layer": "top",
             "show_when_no_windows": False,
-            "preview_apps": True,  # this is to enable the preview of apps in the dock
-            "preview_size": [
-                200,
-                130,
-            ],
             "group_apps": True,
             "truncation_size": 20,
             "orientation": "horizontal",
