@@ -33,7 +33,7 @@ class PopupRevealer(EventBox):
 
     def __init__(
         self,
-        popup_window: Window,
+        popup_window: "PopupWindow",
         decorations: str = "padding: 1px;",
         name: str | None = None,
         child: Widget | None = None,
@@ -200,7 +200,7 @@ def make_layout(anchor: str, name: str, popup: PopupRevealer, **kwargs) -> Box:
                 ]
             )
         case _:
-            return None
+            return make_layout(anchor="top-right", name=name, popup=popup, **kwargs)
 
 
 class PopupWindow(Window):
@@ -244,7 +244,7 @@ class PopupWindow(Window):
         self.reveal_child = PopupRevealer(
             popup_window=self,
             child=child,
-            transition_type=transition_type,
+            transition_type=transition_type or "slide-down",
             transition_duration=transition_duration,
             decorations=decorations,
             name=name,
@@ -266,58 +266,52 @@ class PopupWindow(Window):
             ),
             on_key_release_event=self.on_key_release,
         )
+        self.set_property("pass-through", not self.enable_inhibitor)
+
+    def _set_popup_visible(self, visible: bool):
+        if visible and not self.popup_visible:
+            self.reveal_child.revealer.set_visible(True)
+
+        self.popup_visible = visible
+        self.reveal_child.revealer.set_reveal_child(visible)
 
     def on_key_release(self, _, event_key: Gdk.EventKey):
         if event_key.keyval == Gdk.KEY_Escape:
-            self.popup_visible = False
-            self.reveal_child.revealer.set_reveal_child(self.popup_visible)
+            self._set_popup_visible(False)
 
     def on_inhibit_click(self, *_):
-        self.popup_visible = False
-        self.reveal_child.revealer.set_reveal_child(self.popup_visible)
+        self._set_popup_visible(False)
 
     def toggle_popup(self, monitor: bool = False):
         if monitor:
             curr_monitor = self.hyprland_monitor.get_current_gdk_monitor_id()
-            self.monitor = curr_monitor
             if self.monitor_number != curr_monitor and self.popup_visible:
                 self.monitor_number = curr_monitor
                 return
 
             self.monitor_number = curr_monitor
 
-        if not self.popup_visible:
-            self.reveal_child.revealer.set_visible(True)
-
-        self.set_property("pass-through", not self.enable_inhibitor)
-        self.popup_visible = not self.popup_visible
-        self.reveal_child.revealer.set_reveal_child(self.popup_visible)
+        self._set_popup_visible(not self.popup_visible)
 
     def toggle(self):
         return self.toggle_popup()
 
     def popup_timeout(self):
-        curr_monitor = self.hyprland_monitor.get_current_gdk_monitor_id()
-        self.monitor = curr_monitor
-
-        if not self.popup_visible:
-            self.reveal_child.revealer.set_visible(True)
         if self.popup_running:
             self.current_timeout = 0
             return
-        self.popup_visible = True
-        self.reveal_child.revealer.set_reveal_child(self.popup_visible)
+
+        self.current_timeout = 0
+        self._set_popup_visible(True)
         self.popup_running = True
 
         def popup_func():
             if self.current_timeout >= self.timeout:
-                self.popup_visible = False
-                self.reveal_child.revealer.set_reveal_child(self.popup_visible)
+                self._set_popup_visible(False)
                 self.current_timeout = 0
                 self.popup_running = False
                 return False
             self.current_timeout += 500
             return True
 
-        self.set_property("pass-through", not self.enable_inhibitor)
         GLib.timeout_add(500, popup_func)
