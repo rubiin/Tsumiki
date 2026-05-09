@@ -29,6 +29,7 @@ from fabric.utils import (
     os,
     time,
 )
+from fabric.widgets.window import Window
 
 from .colors import Colors
 from .constants import NAMED_COLORS
@@ -94,7 +95,7 @@ _BYTES_FACTORS = {"kb": 1, "mb": 2, "gb": 3, "tb": 4}
 _WHITE = (255, 255, 255)
 
 
-def get_display_server_window():
+def get_display_server_window() -> Window:
     """Detect the current display server from session env vars."""
 
     desktop_markers = os.environ.get("XDG_SESSION_TYPE", "").lower()

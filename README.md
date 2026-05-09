@@ -164,9 +164,26 @@ git clone https://github.com/rubiin/Tsumiki.git ~/.config/tsumiki
 
 ## Installation
 
-You can choose one of two installation methods: **Automated Setup** or **Manual Setup**.
+You can choose one of three installation methods: **Curl Install**, **Automated Setup**, or **Manual Setup**.
 
-### Option 1: Automated Setup Using `init.sh -setup`
+### Option 1: One-Line Curl Install
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/rubiin/Tsumiki/master/install.sh | bash
+```
+
+This bootstrap script will:
+
+- Clone or update Tsumiki in `~/.config/tsumiki`
+- Run `./init.sh -install -setup`
+
+To also start Tsumiki immediately:
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/rubiin/Tsumiki/master/install.sh | bash -s -- --start
+```
+
+### Option 2: Automated Setup Using `init.sh -setup`
 
 1.  **Run the `init.sh -setup` script** to automatically setup the virtual environment and install all the required packages and dependencies (both `pacman` and AUR packages):
 
@@ -187,7 +204,7 @@ This script will:
 
 This will launch the environment or bar as defined in your project.
 
-### Option 2: Manual Setup (Install Dependencies First)
+### Option 3: Manual Setup (Install Dependencies First)
 
 If you prefer to have more control over the installation process, you can install the required dependencies manually and then run the `init.sh -start` script.
 

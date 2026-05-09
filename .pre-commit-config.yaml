@@ -41,10 +41,10 @@ repos:
                         assets/icons/recording.json |
                         assets/matugen/tsumiki.css
                     )$
-  - repo: https://github.com/gitleaks/gitleaks
-    rev: v8.30.1
+  - repo: https://github.com/betterleaks/betterleaks
+    rev: v1.2.0
     hooks:
-      - id: gitleaks
+      - id: betterleaks
 
 
 default_stages: [pre-commit]
