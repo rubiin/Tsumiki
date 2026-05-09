@@ -254,8 +254,8 @@ install_packages() {
 }
 
 usage() {
-	log_error "❌ Usage: $0 [OPTION]..."
-	log_info "ℹ️  Execute one or more operations in sequence."
+	log_info "Usage: $0 [OPTION]..."
+	log_info "Execute one or more operations in sequence."
 	log_success "✅ Available options:"
 	log_success "  ▶️  -start         Start the bar"
 	log_success "  🔄  -d             Enable detached mode (run in background)"
@@ -285,6 +285,11 @@ kill_existing() {
 }
 
 check_prerequisites
+
+if [ "$#" -eq 0 ]; then
+	usage
+	exit 0
+fi
 
 for arg in "$@"; do
 	case "$arg" in
