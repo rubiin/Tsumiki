@@ -4,11 +4,13 @@ from fabric.utils import Gdk, GLib
 from fabric.widgets.box import Box
 from fabric.widgets.eventbox import EventBox
 from fabric.widgets.revealer import Revealer
-from fabric.widgets.wayland import WaylandWindow as Window
 from fabric.widgets.widget import Widget
 
+from utils.functions import get_display_server_window
 from utils.monitors import HyprlandWithMonitors
 from utils.types import Anchor, Keyboard_Mode, Layer
+
+Window = get_display_server_window()
 
 
 class Padding(EventBox):

@@ -4,10 +4,12 @@ from fabric.utils import bulk_connect
 from fabric.widgets.box import Box
 from fabric.widgets.button import Button
 from fabric.widgets.eventbox import EventBox
-from fabric.widgets.wayland import WaylandWindow as Window
 from fabric.widgets.widget import Widget
 
 from utils.config import widget_config
+from utils.functions import get_display_server_window
+
+Window = get_display_server_window()
 
 
 class BaseWidget(Widget):

@@ -87,6 +87,6 @@ class WindowTitleWidget(ButtonWidget):
                     "falling back to HyprlandActiveWindow"
                 )
 
-        from fabric.hyprland.widgets import ActiveWindow
+        from fabric.hyprland.widgets import HyprlandActiveWindow
 
-        return ActiveWindow
+        return HyprlandActiveWindow

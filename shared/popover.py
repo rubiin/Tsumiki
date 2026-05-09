@@ -5,9 +5,12 @@ from fabric.hyprland.service import HyprlandEvent
 from fabric.hyprland.widgets import get_hyprland_connection
 from fabric.utils import Gdk, GLib, GObject, bulk_connect, logger
 from fabric.widgets.box import Box
-from fabric.widgets.wayland import WaylandWindow
 from fabric.widgets.widget import Widget
 from gi.repository import GtkLayerShell
+
+from utils.functions import get_display_server_window
+
+Window = get_display_server_window()
 
 
 class PopoverManager:
@@ -37,7 +40,7 @@ class PopoverManager:
     def overlay(self):
         """Lazily create the overlay window on first access."""
         if self._overlay is None:
-            self._overlay = WaylandWindow(
+            self._overlay = Window(
                 name="popover-overlay",
                 style_classes=["popover-overlay"],
                 title="tsumiki",
@@ -79,7 +82,7 @@ class PopoverManager:
         if self.available_windows:
             return self.available_windows.pop()
 
-        window = WaylandWindow(
+        window = Window(
             type="popup",
             layer="overlay",
             name="popover-window",

@@ -20,7 +20,6 @@ from fabric.widgets.grid import Grid
 from fabric.widgets.label import Label
 from fabric.widgets.overlay import Overlay
 from fabric.widgets.revealer import Revealer
-from fabric.widgets.wayland import WaylandWindow as Window
 from fabric.widgets.widget import Widget
 
 import utils.constants as constants
@@ -29,12 +28,16 @@ from services import notification_service
 from shared.buttons import HoverButton
 from shared.circle_image import CircularImage
 from utils.colors import Colors
+from utils.functions import get_display_server_window
 from utils.icons import text_icons
 from utils.widget_settings import BarConfig
 from utils.widget_utils import get_icon, nerd_font_icon
 
 # Swipe threshold for dismissing notifications (normalized: 0.0 to 1.0)
 _SWIPE_DISMISS_THRESHOLD = 0.35
+
+
+Window = get_display_server_window()
 
 
 class NotificationPopup(Window):

@@ -94,6 +94,21 @@ _BYTES_FACTORS = {"kb": 1, "mb": 2, "gb": 3, "tb": 4}
 _WHITE = (255, 255, 255)
 
 
+def get_display_server_window():
+    """Detect the current display server from session env vars."""
+
+    desktop_markers = os.environ.get("XDG_SESSION_TYPE", "").lower()
+
+    if "wayland" in desktop_markers:
+        from fabric.widgets.wayland import WaylandWindow
+
+        return WaylandWindow
+    else:
+        from fabric.widgets.x11 import X11Window
+
+        return X11Window
+
+
 def get_window_manager_backend() -> Literal["hyprland", "sway", "i3"]:
     """Detect the current compositor/window-manager backend from session env vars."""
 

@@ -1,8 +1,10 @@
 from fabric.widgets.box import Box
 from fabric.widgets.datetime import DateTime
-from fabric.widgets.wayland import WaylandWindow as Window
 
+from utils.functions import get_display_server_window
 from utils.widget_settings import BarConfig
+
+Window = get_display_server_window()
 
 
 class DesktopClock(Window):
