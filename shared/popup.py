@@ -74,133 +74,57 @@ class PopupRevealer(EventBox):
         )
 
 
-def make_layout(anchor: str, name: str, popup: PopupRevealer, **kwargs) -> Box:
-    match anchor:
-        case "center-left":
-            return Box(
-                children=[
-                    Box(
-                        orientation="vertical",
-                        children=[
-                            Padding(name=name, **kwargs),
-                            popup,
-                            Padding(name=name, **kwargs),
-                        ],
-                    ),
-                    Padding(name=name, **kwargs),
-                ]
-            )
+# Maps anchor name -> (vertical position, horizontal alignment, inner h_expand)
+# v_pos: "top" | "center" | "bottom"
+# h_align: "left" | "center" | "right"
+# inner_h_expand: True | False | None (omit kwarg)
+_ANCHOR_LAYOUT: dict[str, tuple[str, str, bool | None]] = {
+    "center-left": ("center", "left", None),
+    "center": ("center", "center", None),
+    "center-right": ("center", "right", None),
+    "top": ("top", "center", None),
+    "top-right": ("top", "right", False),
+    "top-center": ("top", "center", False),
+    "top-left": ("top", "left", False),
+    "bottom-left": ("bottom", "left", False),
+    "bottom-center": ("bottom", "center", False),
+    "bottom-right": ("bottom", "right", True),
+}
 
-        case "center":
-            return Box(
-                children=[
-                    Padding(name=name, **kwargs),
-                    Box(
-                        orientation="vertical",
-                        children=[
-                            Padding(name=name, **kwargs),
-                            popup,
-                            Padding(name=name, **kwargs),
-                        ],
-                    ),
-                    Padding(name=name, **kwargs),
-                ]
-            )
-        case "center-right":
-            return Box(
-                children=[
-                    Padding(name=name, **kwargs),
-                    Box(
-                        orientation="vertical",
-                        children=[
-                            Padding(name=name, **kwargs),
-                            popup,
-                            Padding(name=name, **kwargs),
-                        ],
-                    ),
-                ]
-            )
-        case "top":
-            return Box(
-                children=[
-                    Padding(name=name, **kwargs),
-                    Box(
-                        orientation="vertical",
-                        children=[popup, Padding(name=name, **kwargs)],
-                    ),
-                    Padding(name=name, **kwargs),
-                ]
-            )
-        case "top-right":
-            return Box(
-                children=[
-                    Padding(name=name, **kwargs),
-                    Box(
-                        h_expand=False,
-                        orientation="vertical",
-                        children=[popup, Padding(name=name, **kwargs)],
-                    ),
-                ]
-            )
-        case "top-center":
-            return Box(
-                children=[
-                    Padding(name=name, **kwargs),
-                    Box(
-                        h_expand=False,
-                        orientation="vertical",
-                        children=[popup, Padding(name=name, **kwargs)],
-                    ),
-                    Padding(name=name, **kwargs),
-                ]
-            )
-        case "top-left":
-            return Box(
-                children=[
-                    Box(
-                        h_expand=False,
-                        orientation="vertical",
-                        children=[popup, Padding(name=name, **kwargs)],
-                    ),
-                    Padding(name=name, **kwargs),
-                ]
-            )
-        case "bottom-left":
-            return Box(
-                children=[
-                    Box(
-                        h_expand=False,
-                        orientation="vertical",
-                        children=[Padding(name=name, **kwargs), popup],
-                    ),
-                    Padding(name=name, **kwargs),
-                ]
-            )
-        case "bottom-center":
-            return Box(
-                children=[
-                    Padding(name=name, **kwargs),
-                    Box(
-                        h_expand=False,
-                        orientation="vertical",
-                        children=[Padding(name=name, **kwargs), popup],
-                    ),
-                    Padding(name=name, **kwargs),
-                ]
-            )
-        case "bottom-right":
-            return Box(
-                children=[
-                    Padding(name=name, **kwargs),
-                    Box(
-                        h_expand=True,
-                        orientation="vertical",
-                        children=[Padding(name=name, **kwargs), popup],
-                    ),
-                ]
-            )
-        case _:
-            return make_layout(anchor="top-right", name=name, popup=popup, **kwargs)
+
+def _make_v_column(
+    v_pos: str, name: str, popup: "PopupRevealer", h_expand: bool | None, **pad_kwargs
+) -> Box:
+    pad = lambda: Padding(name=name, **pad_kwargs)
+    if v_pos == "top":
+        children = [popup, pad()]
+    elif v_pos == "bottom":
+        children = [pad(), popup]
+    else:
+        children = [pad(), popup, pad()]
+    kw: dict = {"orientation": "vertical", "children": children}
+    if h_expand is not None:
+        kw["h_expand"] = h_expand
+    return Box(**kw)
+
+
+def make_layout(anchor: str, name: str, popup: "PopupRevealer", **kwargs) -> Box:
+    spec = _ANCHOR_LAYOUT.get(anchor)
+    if spec is None:
+        return make_layout(anchor="top-right", name=name, popup=popup, **kwargs)
+
+    v_pos, h_align, inner_h_expand = spec
+    pad = lambda: Padding(name=name, **kwargs)
+    inner = _make_v_column(v_pos, name, popup, inner_h_expand, **kwargs)
+
+    if h_align == "left":
+        h_children = [inner, pad()]
+    elif h_align == "right":
+        h_children = [pad(), inner]
+    else:
+        h_children = [pad(), inner, pad()]
+
+    return Box(children=h_children)
 
 
 class PopupWindow(Window):

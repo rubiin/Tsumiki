@@ -155,8 +155,7 @@ class NotificationWidget(EventBox):
         max_collapsed_lines = self.config.get("max_lines", 4)
         max_expanded_lines = self.config.get("max_expanded_lines", 20)
         is_long_content = (
-            body_text.count("\n") + 1 > max_collapsed_lines
-            or len(body_text) > 150
+            body_text.count("\n") + 1 > max_collapsed_lines or len(body_text) > 150
         )
 
         header = self._build_header(

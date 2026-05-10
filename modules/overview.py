@@ -20,6 +20,29 @@ SCALE = 0.14
 TARGET = [Gtk.TargetEntry.new("text/plain", Gtk.TargetFlags.SAME_APP, 0)]
 
 
+def _resolve_icon_pixbuf(
+    icon_resolver: IconResolver,
+    app_id: str,
+    size: int,
+    desktop_app=None,
+) -> GdkPixbuf.Pixbuf | None:
+    """Resolve icon pixbuf with desktop-app -> resolver -> fallback chain."""
+    pixbuf = None
+    if desktop_app:
+        pixbuf = desktop_app.get_icon_pixbuf(size=size)
+    if not pixbuf:
+        pixbuf = icon_resolver.get_icon_pixbuf(app_id, size)
+    if not pixbuf:
+        pixbuf = icon_resolver.get_icon_pixbuf(
+            "application-x-executable-symbolic", size
+        )
+    if not pixbuf:
+        pixbuf = icon_resolver.get_icon_pixbuf("image-missing", size)
+    if pixbuf and (pixbuf.get_width() != size or pixbuf.get_height() != size):
+        pixbuf = pixbuf.scale_simple(size, size, GdkPixbuf.InterpType.BILINEAR)
+    return pixbuf
+
+
 class HyprlandWindowButton(Button):
     """A button to show a window in the overview."""
 
@@ -47,36 +70,9 @@ class HyprlandWindowButton(Button):
 
         # Enhanced icon resolution using desktop apps
         desktop_app = AppUtils().find_app(app_id)
-
-        # Get icon using improved method with fallbacks
-        icon_pixbuf = None
-        if desktop_app:
-            icon_pixbuf = desktop_app.get_icon_pixbuf(size=icon_size_main)
-
-        if not icon_pixbuf:
-            # Fallback to IconResolver
-            icon_pixbuf = self.icon_resolver.get_icon_pixbuf(app_id, icon_size_main)
-
-        if not icon_pixbuf:
-            # Additional fallbacks for common apps
-            icon_pixbuf = self.icon_resolver.get_icon_pixbuf(
-                "application-x-executable-symbolic", icon_size_main
-            )
-            if not icon_pixbuf:
-                icon_pixbuf = self.icon_resolver.get_icon_pixbuf(
-                    "image-missing", icon_size_main
-                )
-
-        # Ensure icon is scaled to the correct size
-        if icon_pixbuf and (
-            icon_pixbuf.get_width() != icon_size_main
-            or icon_pixbuf.get_height() != icon_size_main
-        ):
-            icon_pixbuf = icon_pixbuf.scale_simple(
-                icon_size_main,
-                icon_size_main,
-                GdkPixbuf.InterpType.BILINEAR,
-            )
+        icon_pixbuf = _resolve_icon_pixbuf(
+            self.icon_resolver, app_id, icon_size_main, desktop_app
+        )
 
         super().__init__(
             name="overview-client-box",
@@ -125,36 +121,9 @@ class HyprlandWindowButton(Button):
     def update_image(self, image):
         # Compute overlay icon size dynamically.
         icon_size_overlay = int(min(self.size) * 0.5)  # adjust factor as needed
-
-        # Enhanced icon resolution for overlay
-        icon_pixbuf = None
-        if hasattr(self, "desktop_app") and self.desktop_app:
-            icon_pixbuf = self.desktop_app.get_icon_pixbuf(size=icon_size_overlay)
-
-        if not icon_pixbuf:
-            icon_pixbuf = self.icon_resolver.get_icon_pixbuf(
-                self.app_id, icon_size_overlay
-            )
-
-        if not icon_pixbuf:
-            icon_pixbuf = self.icon_resolver.get_icon_pixbuf(
-                "application-x-executable-symbolic", icon_size_overlay
-            )
-            if not icon_pixbuf:
-                icon_pixbuf = self.icon_resolver.get_icon_pixbuf(
-                    "image-missing", icon_size_overlay
-                )
-
-        # Ensure icon is scaled to the correct size
-        if icon_pixbuf and (
-            icon_pixbuf.get_width() != icon_size_overlay
-            or icon_pixbuf.get_height() != icon_size_overlay
-        ):
-            icon_pixbuf = icon_pixbuf.scale_simple(
-                icon_size_overlay,
-                icon_size_overlay,
-                GdkPixbuf.InterpType.BILINEAR,
-            )
+        icon_pixbuf = _resolve_icon_pixbuf(
+            self.icon_resolver, self.app_id, icon_size_overlay, self.desktop_app
+        )
 
         self.set_image(
             Overlay(
