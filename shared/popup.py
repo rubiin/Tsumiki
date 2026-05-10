@@ -95,7 +95,9 @@ _ANCHOR_LAYOUT: dict[str, tuple[str, str, bool | None]] = {
 def _make_v_column(
     v_pos: str, name: str, popup: "PopupRevealer", h_expand: bool | None, **pad_kwargs
 ) -> Box:
-    pad = lambda: Padding(name=name, **pad_kwargs)
+    def pad():
+        return Padding(name=name, **pad_kwargs)
+
     if v_pos == "top":
         children = [popup, pad()]
     elif v_pos == "bottom":
@@ -114,7 +116,10 @@ def make_layout(anchor: str, name: str, popup: "PopupRevealer", **kwargs) -> Box
         return make_layout(anchor="top-right", name=name, popup=popup, **kwargs)
 
     v_pos, h_align, inner_h_expand = spec
-    pad = lambda: Padding(name=name, **kwargs)
+
+    def pad():
+        return Padding(name=name, **kwargs)
+
     inner = _make_v_column(v_pos, name, popup, inner_h_expand, **kwargs)
 
     if h_align == "left":

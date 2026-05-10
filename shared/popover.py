@@ -237,26 +237,21 @@ class Popover(Widget):
             self._draw_handler_id = None
         self.set_position()
 
-    def _create_popover(self):
+    def _resolve_content(self) -> bool:
+        """Ensure content is available, creating via factory if needed."""
         if self._content is None and self._content_factory is not None:
             self._content = self._content_factory()
-
         if self._content is None:
             logger.warning(
                 "Could not create popover content: no content or content factory"
             )
             return False
+        return True
 
-        # Get a window from the pool
-        self._content_window = self._manager.get_popover_window()
-
-        # This is a hack to fix wrong positioning for widgets that are not rendered
-        # immediately (e.g., Gtk.Calendar())
+    def _wire_popover_handlers(self):
+        """Connect draw + focus/key handlers to the content window."""
+        # Hack to fix wrong positioning for widgets not rendered immediately
         self._draw_handler_id = self._content.connect("draw", self.on_content_ready)
-
-        # Add content to window
-        self._content_window.add(Box(name="popover-content", children=self._content))
-
         bulk_connect(
             self._content_window,
             {
@@ -265,9 +260,20 @@ class Popover(Widget):
             },
         )
 
+    def _activate_popover(self):
+        """Register with manager, show window, mark visible."""
         self._manager.activate_popover(self)
         self._content_window.show()
         self._visible = True
+
+    def _create_popover(self):
+        if not self._resolve_content():
+            return False
+
+        self._content_window = self._manager.get_popover_window()
+        self._content_window.add(Box(name="popover-content", children=self._content))
+        self._wire_popover_handlers()
+        self._activate_popover()
         return True
 
     def on_popover_focus_out(self, widget, event):
