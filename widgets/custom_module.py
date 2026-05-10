@@ -32,20 +32,220 @@ _SCROLL_HANDLERS = {
 }
 
 
+class CustomModulePresenter:
+    """Formats and applies command output to widget UI."""
+
+    def __init__(self, module_config: dict, text_label: Label, icon, host_widget):
+        self._config = module_config
+        self._text_label = text_label
+        self._icon = icon
+        self._host_widget = host_widget
+        self._format_str = module_config.get("format", "{}")
+        self._max_len = module_config.get("max_length", 0)
+        self._last_class: str | None = None
+
+    def handle_output(self, output: str):
+        if not output:
+            return
+
+        stripped = output.strip()
+        return_type = self._config.get("return_type", "plain")
+        if return_type == "json" or stripped.startswith("{"):
+            self._handle_json_output(stripped)
+            return
+        self._handle_text_output(stripped)
+
+    def _format_text(self, text: str) -> str:
+        display_text = (
+            self._format_str.replace("{}", str(text))
+            if "{}" in self._format_str
+            else text
+        )
+        if self._max_len > 0 and len(display_text) > self._max_len:
+            display_text = display_text[: self._max_len] + "…"
+        return display_text
+
+    def _update_icon(self, alt: str | None, percentage: int | None):
+        if not self._icon:
+            return
+
+        format_icons = self._config.get("format_icons", {})
+        if not format_icons:
+            return
+
+        icon = None
+        if alt and alt in format_icons:
+            icon = format_icons[alt]
+        elif percentage is not None:
+            for key, val in format_icons.items():
+                if isinstance(key, str) and key.isdigit() and percentage >= int(key):
+                    icon = val
+
+        if icon:
+            self._icon.set_label(icon)
+
+    def _handle_json_output(self, output: str):
+        try:
+            data = json.loads(output)
+            text = data.get("text", "")
+            alt = data.get("alt", "")
+            percentage = data.get("percentage")
+            self._text_label.set_label(self._format_text(text))
+
+            if self._config.get("tooltip", True):
+                tooltip = data.get("tooltip", "")
+                if tooltip:
+                    self._host_widget.set_tooltip_markup(tooltip)
+                else:
+                    self._host_widget.set_tooltip_text("")
+
+            new_class = data.get("class")
+            if new_class != self._last_class:
+                if self._last_class:
+                    self._host_widget.remove_style_class(self._last_class)
+                if new_class:
+                    self._host_widget.add_style_class(new_class)
+                self._last_class = new_class
+
+            self._update_icon(alt, percentage)
+
+        except json.JSONDecodeError as err:
+            logger.warning(f"{Colors.WARNING}[CustomModule] Invalid JSON output: {err}")
+            self._handle_text_output(output)
+
+    def _handle_text_output(self, output: str):
+        self._text_label.set_label(self._format_text(output))
+
+
+class CustomModuleExecutor:
+    """Owns command lifecycle, timers, process streaming, and signal cleanup."""
+
+    def __init__(self, module_config: dict, on_output):
+        self._config = module_config
+        self._on_output = on_output
+        self._exec_cmd = module_config.get("exec")
+        self._interval = module_config.get("interval", 0)
+        self._process: subprocess.Popen | None = None
+        self._repeater_handler_id: int | None = None
+        self._actual_signal: int | None = None
+        self._original_signal_handler = None
+
+    def register_signal(self, sig_num: int):
+        actual_signal = signal.SIGRTMIN + sig_num
+        self._original_signal_handler = signal.getsignal(actual_signal)
+
+        def on_signal(*_):
+            self.execute_once()
+
+        signal.signal(actual_signal, on_signal)
+        self._actual_signal = actual_signal
+
+    def start(self):
+        if not self._exec_cmd:
+            logger.warning(
+                f"{Colors.WARNING}[CustomModule] No 'exec' command specified"
+            )
+            return
+
+        if self._interval > 0:
+            self.execute_once()
+            self._repeater_handler_id = invoke_repeater(
+                self._interval * 1000,
+                self._periodic_execute,
+            )
+            return
+
+        if self._config.get("restart_interval", 0) > 0:
+            self._start_continuous()
+            return
+
+        self.execute_once()
+
+    def execute_once(self):
+        if not self._exec_cmd:
+            return
+        exec_shell_command_async(
+            os.path.expanduser(self._exec_cmd),
+            self._on_output,
+        )
+
+    def _periodic_execute(self, *_) -> bool:
+        self.execute_once()
+        return True
+
+    def _start_continuous(self):
+        if not self._exec_cmd:
+            return
+        if self._process and self._process.poll() is None:
+            return
+
+        try:
+            self._process = subprocess.Popen(
+                os.path.expanduser(self._exec_cmd),
+                shell=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                text=True,
+            )
+            process = self._process
+            self._start_reader_thread(process)
+        except Exception as err:
+            logger.exception(
+                ""
+                f"{Colors.ERROR}[CustomModule] "
+                f"Failed to start continuous command: {err}"
+            )
+
+    def _start_reader_thread(self, process: subprocess.Popen | None):
+        def read_output_loop():
+            if not process or not process.stdout:
+                return
+
+            for line in process.stdout:
+                if not line:
+                    break
+                GLib.idle_add(self._on_output, line.strip())
+
+            restart = self._config.get("restart_interval", 0)
+            if restart > 0:
+                GLib.idle_add(self._schedule_restart, restart)
+
+        threading.Thread(target=read_output_loop, daemon=True).start()
+
+    def _schedule_restart(self, restart_interval: int):
+        GLib.timeout_add(restart_interval * 1000, self._start_continuous)
+        return False
+
+    def cleanup(self):
+        if self._repeater_handler_id:
+            remove_handler(self._repeater_handler_id)
+            self._repeater_handler_id = None
+
+        if (
+            self._actual_signal is not None
+            and self._original_signal_handler is not None
+        ):
+            signal.signal(self._actual_signal, self._original_signal_handler)
+            self._actual_signal = None
+            self._original_signal_handler = None
+
+        if not self._process:
+            return
+        self._process.terminate()
+        try:
+            self._process.wait(timeout=1)
+        except subprocess.TimeoutExpired:
+            self._process.kill()
+        self._process = None
+
+
 class CustomModuleWidget(ButtonWidget):
     """A Waybar-compatible custom module widget."""
 
     __slots__ = (
-        "_actual_signal",
-        "_exec_cmd",
         "_exec_on_event",
-        "_format_str",
-        "_interval",
-        "_last_class",
-        "_max_len",
-        "_original_signal_handler",
-        "_process",
-        "_repeater_handler_id",
+        "_executor",
+        "_presenter",
         "_signal_handler_id",
         "icon",
         "module_config",
@@ -62,18 +262,9 @@ class CustomModuleWidget(ButtonWidget):
 
         # Use passed config or get from widget_config
         self.module_config = config or self.config
-        self._process: subprocess.Popen | None = None
-        self._last_class: str | None = None
         self._signal_handler_id: int | None = None
-        self._actual_signal: int | None = None
-        self._original_signal_handler = None
-        self._repeater_handler_id: int | None = None
 
         # Cache frequently accessed config values
-        self._exec_cmd = self.module_config.get("exec")
-        self._interval = self.module_config.get("interval", 0)
-        self._format_str = self.module_config.get("format", "{}")
-        self._max_len = self.module_config.get("max_length", 0)
         self._exec_on_event = self.module_config.get("exec_on_event", False)
 
         icon = self.module_config.get("format_icons", {}).get("default")
@@ -103,6 +294,17 @@ class CustomModuleWidget(ButtonWidget):
             },
         )
 
+        self._presenter = CustomModulePresenter(
+            self.module_config,
+            self.text_label,
+            self.icon,
+            self,
+        )
+        self._executor = CustomModuleExecutor(
+            self.module_config,
+            self._presenter.handle_output,
+        )
+
         # Register signal handler for external updates (like waybar's signal feature)
         sig = self.module_config.get("signal")
         if sig and isinstance(sig, int):
@@ -117,175 +319,36 @@ class CustomModuleWidget(ButtonWidget):
 
     def _register_signal(self, sig_num: int):
         """Register a Unix signal handler to trigger updates."""
-        # SIGRTMIN is typically 34, we add the user-specified offset
-        actual_signal = signal.SIGRTMIN + sig_num
-        self._original_signal_handler = signal.getsignal(actual_signal)
-        signal.signal(actual_signal, lambda *_: self._execute_command())
-        self._actual_signal = actual_signal
+        self._executor.register_signal(sig_num)
         self._signal_handler_id = sig_num
 
     def _start_execution(self):
-        """Start the command execution based on configuration."""
-        if not self._exec_cmd:
-            logger.warning(
-                f"{Colors.WARNING}[CustomModule] No 'exec' command specified"
-            )
-            return
-
-        if self._interval > 0:
-            self._execute_command()
-            self._repeater_handler_id = invoke_repeater(
-                self._interval * 1000, self._periodic_execute
-            )
-            return
-
-        # One-shot or continuous execution
-        restart_interval = self.module_config.get("restart_interval", 0)
-        if restart_interval > 0:
-            self._start_continuous()
-        else:
-            self._execute_command()
-
-    def _periodic_execute(self, *_) -> bool:
-        """Called periodically by invoke_repeater."""
-        self._execute_command()
-        return True
+        """Start command execution via executor."""
+        self._executor.start()
 
     def _execute_command(self):
         """Execute the configured command asynchronously."""
-        if not self._exec_cmd:
-            return
-
-        exec_shell_command_async(
-            os.path.expanduser(self._exec_cmd),
-            self._handle_output,
-        )
-
-    def _start_continuous(self):
-        """Start a continuous/streaming command."""
-        if not self._exec_cmd:
-            return
-
-        if self._process and self._process.poll() is None:
-            return
-
-        exec_cmd = os.path.expanduser(self._exec_cmd)
-
-        try:
-            self._process = subprocess.Popen(
-                exec_cmd,
-                shell=True,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-                text=True,
-            )
-            process = self._process
-
-            def read_output_loop():
-                if not process or not process.stdout:
-                    return
-
-                for line in process.stdout:
-                    if not line:
-                        break
-                    GLib.idle_add(self._handle_output, line.strip())
-
-                # Process ended, restart if configured
-                restart = self.module_config.get("restart_interval", 0)
-                if restart > 0:
-                    GLib.idle_add(
-                        lambda: GLib.timeout_add(restart * 1000, self._start_continuous)
-                    )
-
-            threading.Thread(target=read_output_loop, daemon=True).start()
-
-        except Exception as e:
-            logger.exception(
-                f"{Colors.ERROR}[CustomModule] Failed to start continuous command: {e}"
-            )
+        self._executor.execute_once()
 
     def _handle_output(self, output: str):
         """Handle command output (plain text or JSON)."""
-        if not output:
-            return
-
-        output = output.strip()
-        return_type = self.module_config.get("return_type", "plain")
-
-        if return_type == "json" or output.startswith("{"):
-            self._handle_json_output(output)
-        else:
-            self._handle_text_output(output)
+        self._presenter.handle_output(output)
 
     def _format_text(self, text: str) -> str:
         """Apply format string and max_length to text."""
-        display_text = (
-            self._format_str.replace("{}", str(text))
-            if "{}" in self._format_str
-            else text
-        )
-        if self._max_len > 0 and len(display_text) > self._max_len:
-            display_text = display_text[: self._max_len] + "…"
-        return display_text
+        return self._presenter._format_text(text)
 
     def _update_icon(self, alt: str | None, percentage: int | None):
         """Update icon based on alt or percentage."""
-        if not self.icon:
-            return
-
-        format_icons = self.module_config.get("format_icons", {})
-        if not format_icons:
-            return
-
-        icon = None
-        if alt and alt in format_icons:
-            icon = format_icons[alt]
-        elif percentage is not None:
-            # Find icon for percentage ranges
-            for key, val in format_icons.items():
-                if isinstance(key, str) and key.isdigit() and percentage >= int(key):
-                    icon = val
-
-        if icon:
-            self.icon.set_label(icon)
+        self._presenter._update_icon(alt, percentage)
 
     def _handle_json_output(self, output: str):
         """Parse Waybar-compatible JSON output."""
-        try:
-            data = json.loads(output)
-
-            text = data.get("text", "")
-            alt = data.get("alt", "")
-            percentage = data.get("percentage")
-
-            self.text_label.set_label(self._format_text(text))
-
-            # Tooltip
-            if self.module_config.get("tooltip", True):
-                tooltip = data.get("tooltip", "")
-                self.set_tooltip_markup(tooltip) if tooltip else self.set_tooltip_text(
-                    ""
-                )
-
-            # CSS class
-            new_class = data.get("class")
-            if new_class != self._last_class:
-                if self._last_class:
-                    self.remove_style_class(self._last_class)
-                if new_class:
-                    self.add_style_class(new_class)
-                self._last_class = new_class
-
-            # Update icon based on alt or percentage
-            self._update_icon(alt, percentage)
-
-        except json.JSONDecodeError as e:
-            logger.warning(f"{Colors.WARNING}[CustomModule] Invalid JSON output: {e}")
-            self._handle_text_output(output)
+        self._presenter._handle_json_output(output)
 
     def _handle_text_output(self, output: str):
         """Handle plain text output."""
-        self.text_label.set_label(self._format_text(output))
+        self._presenter._handle_text_output(output)
 
     def _on_button_press(self, widget, event) -> bool:
         """Handle button press events."""
@@ -337,23 +400,5 @@ class CustomModuleWidget(ButtonWidget):
 
     def destroy(self):
         """Clean up resources."""
-        if self._repeater_handler_id:
-            remove_handler(self._repeater_handler_id)
-            self._repeater_handler_id = None
-
-        if (
-            self._actual_signal is not None
-            and self._original_signal_handler is not None
-        ):
-            signal.signal(self._actual_signal, self._original_signal_handler)
-            self._actual_signal = None
-            self._original_signal_handler = None
-
-        if self._process:
-            self._process.terminate()
-            try:
-                self._process.wait(timeout=1)
-            except subprocess.TimeoutExpired:
-                self._process.kill()
-            self._process = None
+        self._executor.cleanup()
         super().destroy()
