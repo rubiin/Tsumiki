@@ -320,22 +320,33 @@ class AppBar(Box):
             clients.append(client)
         return clients
 
-    def _sync_clients(self):
+    def _capture_client_snapshot(
+        self,
+    ) -> tuple[list[NativeClient], dict[str, NativeClient]]:
         clients = self._list_visible_clients()
-        self._clients_by_address = {
+        clients_by_address = {
             client.get_address_str(): client
             for client in clients
             if client.get_address_str()
         }
+        return clients, clients_by_address
 
+    def _reconcile_clients(self, clients: list[NativeClient]):
         if self._group_apps:
             self._sync_grouped_clients(clients)
         else:
             self._sync_ungrouped_clients(clients)
 
+    def _update_separator_visibility(self):
         self.separator.set_visible(
             bool(self._app_groups) or self._running_app_count > 0
         )
+
+    def _sync_clients(self):
+        clients, clients_by_address = self._capture_client_snapshot()
+        self._clients_by_address = clients_by_address
+        self._reconcile_clients(clients)
+        self._update_separator_visibility()
 
     def _populate_pinned_apps(self, apps: list):
         """Initial population of pinned apps (only called once at startup)."""
@@ -506,25 +517,33 @@ class AppBar(Box):
 
         return items
 
-    def _show_menu(self, client: NativeClient):
-        """Show the context menu for a single client."""
+    def _render_context_menu(self, menu_spec: dict):
+        """Render a context menu from a declarative specification."""
         self._init_menu()
 
-        # Instance with submenu
+        for instance in menu_spec.get("instances", []):
+            item = Gtk.MenuItem(label=instance["label"])
+            item.set_submenu(self._build_client_submenu(instance["client"]))
+            self.menu.add(item)
+
+        common_items = menu_spec.get("common_items", [])
+        if common_items:
+            self.menu.add(Gtk.SeparatorMenuItem())
+            for item in common_items:
+                self.menu.add(item)
+
+        self.menu.show_all()
+
+    def _show_menu(self, client: NativeClient):
+        """Show the context menu for a single client."""
         title = truncate(
             client.get_title() or client.get_app_id() or "", self.truncation_size
         )
-        instance_item = Gtk.MenuItem(label=title)
-        instance_item.set_submenu(self._build_client_submenu(client))
-        self.menu.add(instance_item)
-
-        self.menu.add(Gtk.SeparatorMenuItem())
-
-        # Common items (Close All, Pin/Unpin, New Window)
-        for item in self._build_common_menu_items(client):
-            self.menu.add(item)
-
-        self.menu.show_all()
+        menu_spec = {
+            "instances": [{"label": title, "client": client}],
+            "common_items": self._build_common_menu_items(client),
+        }
+        self._render_context_menu(menu_spec)
 
     def _save_pinned_apps(self):
         """Save pinned apps to file."""
@@ -564,8 +583,8 @@ class AppBar(Box):
         except Exception:
             return None
 
-    def _create_app_group(self, app_id: str, clients: list[NativeClient]):
-        """Create a new app group for the given app id."""
+    def _build_group_ui(self, app_id: str, clients: list[NativeClient]) -> dict:
+        """Build grouped app UI widgets and return group state."""
         is_vertical = self.orientation == "vertical"
         indicator_orientation = "vertical" if is_vertical else "horizontal"
 
@@ -576,7 +595,6 @@ class AppBar(Box):
             spacing=3,
             orientation=indicator_orientation,
         )
-
         client_button = self._bake_button(image=client_image)
 
         if is_vertical:
@@ -600,8 +618,8 @@ class AppBar(Box):
                 ],
             )
 
-        # Store group info
-        self._app_groups[app_id] = {
+        box._dock_app_id = app_id
+        return {
             "box": box,
             "button": client_button,
             "indicator": indicator,
@@ -609,43 +627,48 @@ class AppBar(Box):
             "clients": clients,
         }
 
-        box._dock_app_id = app_id
+    def _activate_group(self, app_id: str):
+        clients = self._app_groups.get(app_id, {}).get("clients", [])
+        if len(clients) == 1:
+            clients[0].activate()
+            return
+        if len(clients) <= 1:
+            return
 
-        # Handle click - cycle through windows or activate single window
-        def on_click(*_):
+        active_idx = -1
+        for i, client in enumerate(clients):
+            if client.get_activated():
+                active_idx = i
+                break
+        next_idx = (active_idx + 1) % len(clients)
+        clients[next_idx].activate()
+
+    def _wire_group_events(self, app_id: str, group: dict):
+        client_button = group["button"]
+
+        def on_button_press(_widget, event):
+            if event.button != 3:
+                return False
             clients = self._app_groups.get(app_id, {}).get("clients", [])
-            if len(clients) == 1:
-                clients[0].activate()
-            elif len(clients) > 1:
-                # Find current active and activate next
-                active_idx = -1
-                for i, c in enumerate(clients):
-                    if c.get_activated():
-                        active_idx = i
-                        break
-                next_idx = (active_idx + 1) % len(clients)
-                clients[next_idx].activate()
+            if clients:
+                self._show_group_menu(app_id, clients)
+                self.menu.popup_at_pointer(event)
+            return True
 
-        # Handle button press/release
-        def on_button_press(w, e):
-            if e.button == 3:
-                clients = self._app_groups.get(app_id, {}).get("clients", [])
-                if clients:
-                    self._show_group_menu(app_id, clients)
-                    self.menu.popup_at_pointer(e)
-                return True
-            return False
-
-        def on_button_release(w, e):
-            if e.button == 1 and not self._is_dragging:
-                on_click()
+        def on_button_release(_widget, event):
+            if event.button == 1 and not self._is_dragging:
+                self._activate_group(app_id)
                 return True
             return False
 
         client_button.connect("button-press-event", on_button_press)
         client_button.connect("button-release-event", on_button_release)
 
-        # Set up drag
+    def _wire_group_dnd(self, group: dict):
+        box = group["box"]
+        client_button = group["button"]
+        client_image = group["image"]
+
         client_button.drag_source_set(
             start_button_mask=Gdk.ModifierType.BUTTON1_MASK,
             targets=DOCK_DND_TARGET,
@@ -654,16 +677,19 @@ class AppBar(Box):
         client_button.connect("drag-begin", self._on_drag_begin, box, client_image)
         client_button.connect("drag-end", self._on_drag_end, box)
 
-        box.drag_dest_set(
-            Gtk.DestDefaults.ALL,
-            DOCK_DND_TARGET,
-            Gdk.DragAction.MOVE,
-        )
+        box.drag_dest_set(Gtk.DestDefaults.ALL, DOCK_DND_TARGET, Gdk.DragAction.MOVE)
         box.connect("drag-data-received", self._on_drag_data_received)
 
+    def _create_app_group(self, app_id: str, clients: list[NativeClient]):
+        """Create a new app group for the given app id."""
+        group = self._build_group_ui(app_id, clients)
+        self._app_groups[app_id] = group
+
+        self._wire_group_events(app_id, group)
+        self._wire_group_dnd(group)
         self._refresh_group_visuals(app_id)
 
-        self.add(box)
+        self.add(group["box"])
 
         if len(self.pinned_apps) > 0 and not self.separator.get_visible():
             self.separator.set_visible(True)
@@ -775,34 +801,60 @@ class AppBar(Box):
         self._running_app_count += 1
         self.add(box)
 
-    def _sync_ungrouped_clients(self, clients: list[NativeClient]):
+    def _clear_grouped_clients(self):
         for app_id in list(self._app_groups):
             group = self._app_groups.pop(app_id)
             self.remove(group["box"])
             group["box"].destroy()
 
-        target_addresses = {
-            client.get_address_str() for client in clients if client.get_address_str()
-        }
+    def _diff_ungrouped_clients(
+        self, clients: list[NativeClient]
+    ) -> tuple[list[str], list[NativeClient], list[NativeClient]]:
+        target_by_address = {}
+        for client in clients:
+            address = client.get_address_str()
+            if address:
+                target_by_address[address] = client
 
-        for address in list(self._running_app_boxes):
-            if address in target_addresses:
+        remove_addresses = [
+            address
+            for address in self._running_app_boxes
+            if address not in target_by_address
+        ]
+
+        add_clients = []
+        update_clients = []
+        for address, client in target_by_address.items():
+            if address in self._running_app_boxes:
+                update_clients.append(client)
+            else:
+                add_clients.append(client)
+
+        return remove_addresses, add_clients, update_clients
+
+    def _apply_ungrouped_removals(self, remove_addresses: list[str]):
+        for address in remove_addresses:
+            entry = self._running_app_boxes.pop(address, None)
+            if not entry:
                 continue
-            entry = self._running_app_boxes.pop(address)
             self.remove(entry["box"])
             entry["box"].destroy()
             self._running_app_count -= 1
 
-        for client in clients:
+    def _apply_ungrouped_additions(self, add_clients: list[NativeClient]):
+        for client in add_clients:
+            self._add_ungrouped_client(client)
+
+    def _apply_ungrouped_updates(self, update_clients: list[NativeClient]):
+        for client in update_clients:
             address = client.get_address_str()
             if not address:
                 continue
 
-            if address not in self._running_app_boxes:
-                self._add_ungrouped_client(client)
+            entry = self._running_app_boxes.get(address)
+            if not entry:
                 continue
 
-            entry = self._running_app_boxes[address]
             entry["client"] = client
             entry["image"].set_from_pixbuf(
                 self.icon_resolver.get_icon_pixbuf(client.get_app_id(), self.icon_size)
@@ -811,6 +863,7 @@ class AppBar(Box):
                 client.get_title() if self.config.get("tooltip", True) else None
             )
 
+    def _apply_ungrouped_active_styles(self):
         for entry in self._running_app_boxes.values():
             client = entry["client"]
             if client.get_activated():
@@ -818,24 +871,34 @@ class AppBar(Box):
             else:
                 entry["button"].remove_style_class("active")
 
+    def _sync_ungrouped_clients(self, clients: list[NativeClient]):
+        self._clear_grouped_clients()
+
+        remove_addresses, add_clients, update_clients = self._diff_ungrouped_clients(
+            clients
+        )
+
+        self._apply_ungrouped_removals(remove_addresses)
+        self._apply_ungrouped_additions(add_clients)
+        self._apply_ungrouped_updates(update_clients)
+        self._apply_ungrouped_active_styles()
+
     def _show_group_menu(self, app_id: str, clients: list):
         """Show context menu for a grouped app (multiple windows)."""
-        self._init_menu()
-
-        # Add each instance with its submenu
-        for client in clients:
-            title = truncate(client.get_title() or app_id, self.truncation_size)
-            instance_item = Gtk.MenuItem(label=title)
-            instance_item.set_submenu(self._build_client_submenu(client))
-            self.menu.add(instance_item)
-
-        self.menu.add(Gtk.SeparatorMenuItem())
-
-        # Common items (Close All, Pin/Unpin, New Window)
-        for item in self._build_common_menu_items(clients[0], clients):
-            self.menu.add(item)
-
-        self.menu.show_all()
+        menu_spec = {
+            "instances": [
+                {
+                    "label": truncate(
+                        client.get_title() or app_id,
+                        self.truncation_size,
+                    ),
+                    "client": client,
+                }
+                for client in clients
+            ],
+            "common_items": self._build_common_menu_items(clients[0], clients),
+        }
+        self._render_context_menu(menu_spec)
 
     def _on_button_press(self, widget, event, address: str):
         """Handle button press - right click shows menu."""
