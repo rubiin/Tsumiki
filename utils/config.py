@@ -60,7 +60,6 @@ class TsumikiConfig:
         if not check_toml:
             raise FileNotFoundError("Please provide toml config.")
 
-        # Prefer JSON over TOML
         parsed_data = read_toml_file(file_path=self.toml_config_file)
         if parsed_data is None:
             logger.warning("[CONFIG] Failed to parse config.toml, using defaults")
