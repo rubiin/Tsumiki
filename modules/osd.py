@@ -123,9 +123,12 @@ class AudioOSDContainer(GenericOSDContainer):
             **kwargs,
         )
         self.audio_service = audio_service
+        self._speaker = None
+        self._speaker_handler_id: int | None = None
 
         self.previous_volume = None
         self.previous_muted = None
+        self._effective_muted = None
 
         self.config = config
 
@@ -136,46 +139,69 @@ class AudioOSDContainer(GenericOSDContainer):
                 "changed": self.check_mute,
             },
         )
+        self.on_speaker_changed()
 
     @cooldown(0.1)
     def check_mute(self, *_):
-        if not self.audio_service.speaker:
+        speaker = self.audio_service.speaker
+        if not speaker:
             return
 
-        current_muted = self.audio_service.speaker.muted
+        current_muted = speaker.muted
         if self.previous_muted is None or current_muted != self.previous_muted:
             self.previous_muted = current_muted
             self.update_icon()
-            self.scale.add_style_class("muted")
+            self.scale.toggle_css_class("muted", current_muted)
             self.emit("volume-changed")
 
     def on_speaker_changed(self, *_):
-        if speaker := self.audio_service.speaker:
-            speaker.connect("notify::volume", self.update_volume)
+        if self._speaker and self._speaker_handler_id is not None:
+            self._speaker.disconnect(self._speaker_handler_id)
+
+        self._speaker_handler_id = None
+        self.previous_volume = None
+        self.previous_muted = None
+        self._effective_muted = None
+        self._speaker = self.audio_service.speaker
+
+        if self._speaker:
+            self._speaker_handler_id = self._speaker.connect(
+                "notify::volume", self.update_volume
+            )
+            self.update_volume(self._speaker)
 
     @cooldown(0.1)
-    def update_volume(self, speaker, *_):
-        if not self.audio_service.speaker:
+    def update_volume(self, *_):
+        speaker = self.audio_service.speaker
+        if not speaker:
             return
 
-        speaker.handler_block_by_func(self.update_volume)
-        volume = round(self.audio_service.speaker.volume)
+        volume = round(speaker.volume)
+        current_muted = speaker.muted
+        volume_changed = self.previous_volume is None or volume != self.previous_volume
+        muted_changed = (
+            self.previous_muted is None or current_muted != self.previous_muted
+        )
 
-        if self.previous_volume is None or volume != self.previous_volume:
-            is_over_amplified = volume > 100
+        if volume_changed or muted_changed:
             self.previous_volume = volume
+            self.previous_muted = current_muted
 
-            self.scale.toggle_css_class("overamplified", is_over_amplified)
+            is_muted = speaker.muted or volume == 0
 
-            if self.audio_service.speaker.muted or volume == 0:
+            self.scale.toggle_css_class("overamplified", volume > 100)
+
+            if self._effective_muted is None or is_muted != self._effective_muted:
+                self._effective_muted = is_muted
+                self.scale.toggle_css_class("muted", is_muted)
+
+            if is_muted:
                 self.update_icon()
             else:
-                self.scale.remove_style_class("muted")
                 self.update_icon(volume)
+
             self.update_values(volume)
             self.emit("volume-changed")
-
-        speaker.handler_unblock_by_func(self.update_volume)
 
     def update_icon(self, volume=0):
         icon_name = get_audio_icon_name(volume, self.audio_service.speaker.muted)[
@@ -195,9 +221,12 @@ class MicrophoneOSDContainer(GenericOSDContainer):
             **kwargs,
         )
         self.audio_service = audio_service
+        self._microphone = None
+        self._microphone_handler_id: int | None = None
 
         self.previous_volume = None
         self.previous_muted = None
+        self._effective_muted = None
 
         self.config = config
 
@@ -208,41 +237,67 @@ class MicrophoneOSDContainer(GenericOSDContainer):
                 "changed": self.check_mute,
             },
         )
+        self.on_microphone_changed()
 
     @cooldown(0.1)
     def check_mute(self, *_):
-        if not self.audio_service.microphone:
+        microphone = self.audio_service.microphone
+        if not microphone:
             return
 
-        current_muted = self.audio_service.microphone.muted
+        current_muted = microphone.muted
         if self.previous_muted is None or current_muted != self.previous_muted:
             self.previous_muted = current_muted
             self.update_icon()
-            self.scale.add_style_class("muted")
+            self.scale.toggle_css_class("muted", current_muted)
             self.emit("mic-changed")
 
     def on_microphone_changed(self, *_):
-        if microphone := self.audio_service.microphone:
-            microphone.connect("notify::volume", self.update_volume)
+        if self._microphone and self._microphone_handler_id is not None:
+            self._microphone.disconnect(self._microphone_handler_id)
+
+        self._microphone_handler_id = None
+        self.previous_volume = None
+        self.previous_muted = None
+        self._effective_muted = None
+        self._microphone = self.audio_service.microphone
+
+        if self._microphone:
+            self._microphone_handler_id = self._microphone.connect(
+                "notify::volume", self.update_volume
+            )
+            self.update_volume()
 
     @cooldown(0.1)
     def update_volume(self, *_):
-        if not self.audio_service.microphone:
+        microphone = self.audio_service.microphone
+        if not microphone:
             return
 
-        volume = round(self.audio_service.microphone.volume)
+        volume = round(microphone.volume)
+        current_muted = microphone.muted
+        volume_changed = self.previous_volume is None or volume != self.previous_volume
+        muted_changed = (
+            self.previous_muted is None or current_muted != self.previous_muted
+        )
 
-        if self.previous_volume is None or volume != self.previous_volume:
-            is_over_amplified = volume > 100
+        if volume_changed or muted_changed:
             self.previous_volume = volume
+            self.previous_muted = current_muted
 
-            self.scale.toggle_css_class("overamplified", is_over_amplified)
+            is_muted = microphone.muted or volume == 0
 
-            if self.audio_service.microphone.muted or volume == 0:
+            self.scale.toggle_css_class("overamplified", volume > 100)
+
+            if self._effective_muted is None or is_muted != self._effective_muted:
+                self._effective_muted = is_muted
+                self.scale.toggle_css_class("muted", is_muted)
+
+            if is_muted:
                 self.update_icon()
             else:
-                self.scale.remove_style_class("muted")
                 self.update_icon(volume)
+
             self.update_values(volume)
             self.emit("mic-changed")
 

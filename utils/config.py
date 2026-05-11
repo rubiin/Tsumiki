@@ -41,7 +41,6 @@ class TsumikiConfig:
         if getattr(self, "_initialized", False):
             return
 
-
         self.root_dir = get_relative_path("..")
 
         self.toml_config_file = f"{self.root_dir}/config.toml"
