@@ -1,6 +1,7 @@
 import contextlib
 from typing import ClassVar
 
+from fabric import Signal
 from fabric.hyprland.service import HyprlandEvent
 from fabric.hyprland.widgets import get_hyprland_connection
 from fabric.utils import Gdk, GLib, GObject, bulk_connect, logger
@@ -123,14 +124,20 @@ class PopoverManager:
             self.overlay.hide()
 
 
-@GObject.Signal(
-    flags=GObject.SignalFlags.RUN_LAST, return_type=GObject.TYPE_NONE, arg_types=()
+@Signal(
+    name="popover-opened",
+    flags=GObject.SignalFlags.RUN_LAST,
+    rtype=GObject.TYPE_NONE,
+    arg_types=(),
 )
 def popover_opened(widget: Widget): ...
 
 
-@GObject.Signal(
-    flags=GObject.SignalFlags.RUN_LAST, return_type=GObject.TYPE_NONE, arg_types=()
+@Signal(
+    name="popover-closed",
+    flags=GObject.SignalFlags.RUN_LAST,
+    rtype=GObject.TYPE_NONE,
+    arg_types=(),
 )
 def popover_closed(widget: Widget): ...
 
