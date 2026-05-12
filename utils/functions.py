@@ -664,15 +664,57 @@ def _validate_special_widget(
 
 
 def _validate_regular_widget(
-    widget_spec: str, default_config: dict, section: str
+    widget_spec: str,
+    parsed_data: dict,
+    default_config: dict,
+    section: str,
 ) -> None:
     """Validate regular widget reference."""
+    if _has_named_custom_module(widget_spec, parsed_data):
+        return
+
     widgets_list = default_config.get("widgets", {})
     if widget_spec not in widgets_list:
         raise ValueError(
             f"Invalid widget '{widget_spec}' in section {section}. "
             "Please check the widget name."
         )
+
+
+def _has_named_custom_module(widget_spec: str, parsed_data: dict) -> bool:
+    """Check if widget spec points to a named custom module."""
+    if not widget_spec.startswith("custom/"):
+        return False
+
+    widgets_config = parsed_data.get("widgets", {})
+    if not isinstance(widgets_config, dict):
+        return False
+
+    # Shape 1: widgets["custom/hello-world"]
+    direct = widgets_config.get(widget_spec)
+    if isinstance(direct, dict):
+        return True
+
+    custom_name = widget_spec.split("/", 1)[1] if "/" in widget_spec else widget_spec
+    custom_module = widgets_config.get("custom_module", {})
+
+    # Shape 2: widgets.custom_module["hello-world"]
+    if isinstance(custom_module, dict):
+        return isinstance(
+            custom_module.get(custom_name) or custom_module.get(widget_spec),
+            dict,
+        )
+
+    # Shape 3 (compat): [[widgets.custom_module]] with optional `name`
+    if isinstance(custom_module, list):
+        return any(
+            isinstance(item, dict)
+            and isinstance(item.get("name"), str)
+            and item.get("name") in (custom_name, widget_spec)
+            for item in custom_module
+        )
+
+    return False
 
 
 def validate_widget_reference(
@@ -697,7 +739,7 @@ def validate_widget_reference(
             )
     else:
         # Regular widget validation
-        _validate_regular_widget(widget_spec, default_config, section)
+        _validate_regular_widget(widget_spec, parsed_data, default_config, section)
 
 
 def validate_widgets(parsed_data, default_config):

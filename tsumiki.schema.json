@@ -137,6 +137,11 @@
 						"type": "string",
 						"pattern": "^@custom_module:\\d+$",
 						"description": "Specifies a custom module by index (e.g., @custom_module:0). Runs external commands like Waybar."
+					},
+					{
+						"type": "string",
+						"pattern": "^custom\\/.+$",
+						"description": "Specifies a named custom module (e.g., custom/hello-world)."
 					}
 				]
 			}

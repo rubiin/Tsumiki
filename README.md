@@ -288,6 +288,7 @@ Updating to latest commit is fairly simple, just git pull the latest changes.
 | **click_counter**     | Widget tracks the number of mouse clicks.                                      |
 | **cliphist**          | Widget for the clipboard history.                                              |
 | **custom_button_group** | Widget that defines a group of customizable buttons for executing shell commands. Buttons are not displayed as a group but can be individually placed anywhere in the layout using `@custom_button:0`, `@custom_button:1`, etc. Each button can have custom icons, labels, tooltips, and execute different commands when clicked. |
+| **custom_module**     | Widget that runs shell commands and renders output. Supports indexed placement via `@custom_module:0` and named placement via `custom/<name>` (example: `custom/hello-world`). |
 | **cpu**               | Widget displays CPU usage and performance statistics.                          |
 | **date_time**         | A menu displaying the current date and notifications.                          |
 | **divider (utility)** | Widget separates sections in a user interface for better organization.         |
@@ -318,6 +319,18 @@ Updating to latest commit is fairly simple, just git pull the latest changes.
 | **volume**            | Widget that controls the system’s audio volume.                                |
 | **weather**           | Widget that displays current weather information or forecasts. Supports multiple weather providers (Open-Meteo and wttr.in) with provider switching and location-based cache invalidation.                 |
 | **window_title**      | Widget that shows the title of the current window or application.              |
+
+### Named Custom Widget Example
+
+```toml
+[widgets."custom/hello-world"]
+format = "Greeting: {}"
+exec = "echo 'Hello World'"
+interval = 3600
+
+[layout]
+right_section = ["custom/hello-world", "system_tray", "power"]
+```
 | **workspaces**        | Widget that displays virtual desktops or workspaces.                           |
 | **world_clock**       | Widget that displays clock for various timezones.                              |
 

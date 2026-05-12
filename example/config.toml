@@ -1,4 +1,4 @@
-"$schema" = "https://raw.githubusercontent.com/rubiin/Tsumiki/refs/heads/master/tsumiki.schema.json"
+"$schema" = "../tsumiki.schema.json"
 
 [widgets.app_launcher_button]
 icon = "view-app-grid-symbolic"
@@ -406,10 +406,16 @@ on_scroll_up = "pamixer -i 5"
 on_scroll_down = "pamixer -d 5"
 exec_on_event = true
 
+[widgets."custom/hello-world"]
+format = "Greeting: {}"
+exec = "echo 'Hello World'"
+interval = 3_600
+
 [layout]
 left_section = ["workspaces", "window_title"]
 middle_section = ["date_time", "weather"]
 right_section = [
+  "custom/hello-world",
   "settings",
   "@collapsible:0",
   "@group:0",
