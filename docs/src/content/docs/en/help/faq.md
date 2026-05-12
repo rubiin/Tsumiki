@@ -4,14 +4,14 @@ description: Frequently asked questions about Tsumiki
 ---
 
 :::tip
-Hyprland related questions should be referenced to [Hyprland Wiki](https://wiki.hyprland.org)
+For Hyprland-specific behavior, check the [Hyprland Wiki](https://wiki.hyprland.org).
 :::
 
 <details>
 <summary id="system-tray">Cannot see system tray?</summary>
 <div>
 
-Be sure to kill any bars that you may be running. You can kill other bars with:
+Another bar may still be running. Stop it first:
 
 ```sh
 pkill bar-name
@@ -24,7 +24,7 @@ pkill bar-name
 <summary id="notifications">Cannot see notifications?</summary>
 <div>
 
-Be sure to kill other notification daemons that you may be running. You can kill other daemons with:
+Another notification daemon may be handling notifications. Stop common daemons:
 
 ```sh
 pkill -f "mako|dunst|waybar"
@@ -37,15 +37,20 @@ pkill -f "mako|dunst|waybar"
 <summary id="bar">Cannot see bar?</summary>
 <div>
 
-Kill the app with `pkill tsumiki`. Run `init.sh -start`. This should show some logs.
+Restart Tsumiki from the project root and inspect output:
 
-If it shows `ModuleNotFoundError`, run:
+```sh
+pkill tsumiki
+tsu -start
+```
+
+If you see `ModuleNotFoundError`, install dependencies:
 
 ```sh
 pip install -r requirements.txt
 ```
 
-If this does not solve the issue, report a bug with a screenshot of the log.
+If the issue continues, open an issue and include logs.
 
 </div>
 </details>
@@ -54,13 +59,13 @@ If this does not solve the issue, report a bug with a screenshot of the log.
 <summary id="sass-error">Sass compilation error or UI not rendering?</summary>
 <div>
 
-Your `theme.toml` may be incorrect or outdated. You can copy the latest `theme.toml` from the `example/` directory:
+Your `theme.toml` may be outdated or invalid. Reset it from the example:
 
 ```sh
 cp example/theme.toml theme.toml
 ```
 
-Be aware that this will overwrite any custom changes you've made.
+This overwrites custom values.
 
 </div>
 </details>
@@ -69,7 +74,7 @@ Be aware that this will overwrite any custom changes you've made.
 <summary id="no-icons">No Icons?</summary>
 <div>
 
-Make sure your icon theme has the required icons. One of the recommended icon themes is `Tela Circle`.
+Use an icon theme with broad coverage. `Tela Circle` is a common choice.
 
 </div>
 </details>
@@ -78,15 +83,19 @@ Make sure your icon theme has the required icons. One of the recommended icon th
 <summary id="import-error">ImportError: cannot import XX</summary>
 <div>
 
-This error usually occurs when the required module/package is not installed or cannot be found. Make sure you have all the necessary dependencies installed.
+This usually means a required dependency is missing.
 
-You can run:
+Install runtime and Python dependencies:
 
 ```sh
-./init.sh -install
+tsu -setup
 ```
 
-to install all the required packages and dependencies. Additionally, you can also manually install the package. Follow the instructions in the Installation section of the README.
+or:
+
+```sh
+pip install -r requirements.txt
+```
 
 </div>
 </details>
@@ -95,7 +104,7 @@ to install all the required packages and dependencies. Additionally, you can als
 <summary id="blur-effects">How to enable blur and effects?</summary>
 <div>
 
-Add these rules to your `hyprland.conf` to make blur and other effects work properly:
+Add these `layerrule` entries to `hyprland.conf`:
 
 ```sh
 layerrule = blur, ^tsumiki-notifications$
@@ -127,7 +136,7 @@ layerrule = animation popin, ^launcher$
 <summary id="updating">How do I update Tsumiki?</summary>
 <div>
 
-Updating to the latest commit is fairly simple, just git pull the latest changes:
+Pull the latest changes:
 
 ```sh
 cd ~/.config/tsumiki
@@ -135,7 +144,7 @@ git pull
 ```
 
 :::note
-Make sure to keep your config safe just in case
+Keep a backup of `config.toml` and `theme.toml` before major updates.
 :::
 
 </div>

@@ -3,7 +3,7 @@ title: Post Installation
 description: Things you should do after installing Tsumiki
 ---
 
-Add these rules to your hyprland.conf to make blur and other effects work properly
+After installing Tsumiki, add these Hyprland layer rules so blur and popup effects render correctly.
 
 ```bash
 layerrule = blur, ^tsumiki-notifications$
@@ -27,3 +27,9 @@ layerrule = blurpopups, ^launcher$
 layerrule = ignorezero, ^launcher$
 layerrule = animation popin, ^launcher$
 ```
+
+## Next Steps
+
+1. Restart Hyprland or reload your config.
+2. Start Tsumiki with `tsu -start`.
+3. If visuals still look wrong, check [FAQ](/en/help/faq).

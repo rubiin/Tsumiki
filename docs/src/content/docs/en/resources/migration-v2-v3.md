@@ -5,9 +5,9 @@ sidebar:
   order: 2
 ---
 
-import { Steps, Aside } from "@astrojs/starlight/components";
+import { Steps } from "@astrojs/starlight/components";
 
-This guide covers every breaking change between Tsumiki v2 and v3 and explains how to update your configuration.
+This guide covers the main breaking changes between v2 and v3 and how to migrate safely.
 
 ---
 
@@ -17,9 +17,9 @@ This guide covers every breaking change between Tsumiki v2 and v3 and explains h
 |---|---|
 | Config format | JSON5 no longer supported — use TOML |
 | Power profile | `power_profile` option removed from `general` |
-| Dock config | Restructured under `[widgets.dock.behavior]` |
-| Bar auto-hide | Moved to `[general]` |
-| Widget groups | Renamed from `widget_groups` to `collapsible_groups` |
+| Dock config | Dock settings live under `[modules.dock]` |
+| Bar auto-hide | Bar auto-hide is configured under `[modules.bar]` |
+| Group sections | Use top-level `[[widget_groups]]` and `[[collapsible_groups]]` |
 | `all_visible` param | Removed from widget constructors |
 
 ---
@@ -30,26 +30,13 @@ This guide covers every breaking change between Tsumiki v2 and v3 and explains h
 
 ### 1. Convert your config file format
 
-JSON5 is no longer supported. If you used a `.json5` config, convert it to TOML (recommended).
+JSON5 is no longer supported. Use TOML.
 
-**Before (v2):** `~/.config/tsumiki/config.json`
+**Before (v2):** `~/.config/tsumiki/config.json5`
 
 **After (v3):** `~/.config/tsumiki/config.toml`
 
-A quick conversion using `python-toml`:
-
-```sh
-python3 -c "
-import json, sys
-with open('config.json') as f:
-    data = json.load(f)          # json must already be valid json
-import tomllib, tomli_w
-with open('config.toml', 'wb') as f:
-    tomli_w.dump(data, f)
-"
-```
-
-Or copy the example config and re-apply your customizations:
+Fastest path is to copy the latest example and re-apply your custom values:
 
 ```sh
 cp ~/.config/tsumiki/example/config.toml ~/.config/tsumiki/config.toml
@@ -57,66 +44,67 @@ cp ~/.config/tsumiki/example/config.toml ~/.config/tsumiki/config.toml
 
 ### 2. Remove `power_profile` from general settings
 
-The `power_profile` key is no longer recognized. Delete it from your `[general]` section.
+The `power_profile` key is no longer used. Remove it from `[general]`.
 
 ```toml
-# Before (v2) — remove this line
 [general]
-power_profile = "balanced"   # ← delete
-
-# After (v3)
-[general]
-# (no power_profile key)
+# remove this key if present
+# power_profile = "balanced"
 ```
 
 ### 3. Update dock configuration
 
-Dock behavior options are now nested under `[widgets.dock.behavior]`.
+Dock options are configured under `[modules.dock]`.
 
 ```toml
 # Before (v2)
-[widgets.dock]
+[modules.dock]
 show_when_no_windows = true
 icon_size = 28
+behavior = "intellihide"
 
 # After (v3)
-[widgets.dock]
+[modules.dock]
 icon_size = 28
-
-[widgets.dock.behavior]
 show_when_no_windows = true
+behavior = "intellihide"
 ```
 
-### 4. Add bar auto-hide if you use it
+### 4. Configure bar auto-hide in `[modules.bar]`
 
-Auto-hide was added in v2.9.0. If you want it, add it to `[general]`:
+If you use bar auto-hide, set it in `[modules.bar]`:
 
 ```toml
-[general]
+[modules.bar]
 auto_hide = true          # hide bar after timeout
 auto_hide_timeout = 3000  # milliseconds
 ```
 
 ### 5. Update widget groups syntax
 
-If you used `widget_groups`, the option is now `collapsible_groups` and each entry requires `style_classes` to be a list:
+`widget_groups` and `collapsible_groups` are separate sections.
+Keep both if you need both behaviors.
 
 ```toml
-# Before (v2)
-[[widgets.widget_groups]]
-widgets = ["updates", "battery"]
-spacing = 4
-
-# After (v3)
-[[widgets.collapsible_groups]]
+# Widget group (inline group)
+[[widget_groups]]
 widgets = ["updates", "battery"]
 spacing = 4
 style_classes = ["bordered"]
+
+# Collapsible group (toggleable group)
+[[collapsible_groups]]
+widgets = ["ocr", "screenshot", "recorder"]
+spacing = 4
+icon = "󰒓"
+tooltip = "Utility Tools"
+style_classes = ["utility-tools"]
 ```
 
-### 6. Add new required sections for new widgets
+### 6. Add widget sections you plan to use
 
-Several widgets added in v2 may not be present in old configs. Add them if you want to use them, or they will use defaults.
+Older configs may be missing sections for newer widgets.
+Add the ones you actually use, for example:
 
 ```toml
 [widgets.settings]
@@ -130,24 +118,25 @@ label = false
 tooltip = true
 
 [widgets.overview_button]
-icon = "󱃬"
+icon = "󰡃"
 tooltip = true
 label = false
 ```
 
 ### 7. Update Matugen theming (if used)
 
-Matugen integration moved to its own section in `theme.toml`. Copy the latest example:
+Matugen config now lives in `theme.toml` under `[matugen]`.
+Start from the latest theme example:
 
 ```sh
 cp ~/.config/tsumiki/example/theme.toml ~/.config/tsumiki/theme.toml
 ```
 
-Then re-apply your colour overrides. See the [Theming guide](/en/theming/overview) for full details.
+Then re-apply your custom colors.
 
 ### 8. Update Hyprland layer rules
 
-The process name changed. Ensure your `hyprland.conf` uses `tsumiki`:
+Ensure your `hyprland.conf` targets `tsumiki`:
 
 ```sh
 layerrule = blur, ^tsumiki$
@@ -164,8 +153,8 @@ layerrule = ignorezero, ^tsumiki$
 
 | Feature | Status |
 |---|---|
-| Cheatsheet module | Removed — configure keybinds in `[general.keybinds]` instead |
-| `always_occluded` dock option | Removed — use `[widgets.dock.behavior]` instead |
+| Cheatsheet module | Configure in `[modules.cheatsheet]` |
+| `always_occluded` dock option | Removed — use `[modules.dock]` behavior options |
 | `all_visible` widget parameter | Removed — visibility is now derived automatically |
 | `CircleImage` class (internal) | Renamed to `CircularImage` |
 
@@ -173,13 +162,13 @@ layerrule = ignorezero, ^tsumiki$
 
 ## New features in v3
 
-These are opt-in and not required for existing configs to work, but worth adopting:
+These are optional but recommended:
 
 - **Settings GUI** — in-app settings editor (`[widgets.settings]`)
 - **Multi-monitor support** — configure per-monitor bars
 - **Swipe-to-dismiss** notifications
 - **Notification battery alerts** — configure under `[widgets.battery.notifications]`
-- **Custom module** — run arbitrary scripts and show output in the bar (`[widgets.custom_module]`)
+- **Custom widget entries** — add script-backed widgets via `[widgets."custom/<name>"]`
 - **Matugen palette theming** — auto-generate colours from your wallpaper
 
 ---

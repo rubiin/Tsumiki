@@ -3,9 +3,9 @@ title: Theming with Matugen
 description: Making Tsumiki use Matugen to generate Material You color palettes from images
 ---
 
-This explains how Tsumiki integrates with Matugen to generate Material You color palettes from a wallpaper or image, and how to control it.
+Tsumiki can use Matugen to generate a Material You palette from your wallpaper.
 
-Add a `matugen` section to your `theme.toml` (or edit the existing one). Example:
+Add or update this section in `theme.toml`:
 
 ```toml
 [matugen]
@@ -18,9 +18,9 @@ contrast = 0.0
 
 ## Fields
 
-- `enabled` (bool): If true, Tsumiki will attempt to generate a palette at startup when the service is available.
-- `wallpaper` (string): Path to the image used to extract colors. Can be an absolute path or `~` expansion.
-- `scheme` (string): Matugen scheme identifier. Common choices:
+- `enabled` (`bool`): generate palette on startup when possible.
+- `wallpaper` (`string`): path to image source. Supports `~`.
+- `scheme` (`string`): Matugen scheme identifier. Common values:
   - `scheme-tonal-spot` (default)
   - `scheme-content`
   - `scheme-expressive`
@@ -29,24 +29,29 @@ contrast = 0.0
   - `scheme-monochrome`
   - `scheme-neutral`
   - `scheme-rainbow`
-- `mode` (string): `dark` or `light` output mode.
-- `contrast` (float): Contrast adjustment between -1.0 and 1.0.
+- `mode` (`string`): `dark` or `light`.
+- `contrast` (`float`): between `-1.0` and `1.0`.
 
-## Config file
+## Config Template Path
 
-Tsumiki ships a Matugen config template at `assets/matugen/config.toml`. The service uses `~/.config/tsumiki/assets/matugen/config.toml` by default. If you want a custom config file, edit that path in the service or copy the template and adjust it.
+Tsumiki ships a template at `assets/matugen/config.toml`.
+By default, the service uses:
 
-Running Matugen
+`~/.config/tsumiki/assets/matugen/config.toml`
 
-- Automatic: When `matugen.enabled` is true, Tsumiki's startup code will call the Matugen service and generate the palette before compiling CSS.
+If you need custom behavior, copy that file and adjust it.
 
-- Manual (shell): You can run Matugen directly from the command line (Matugen must be installed):
+## Running Matugen
+
+- Automatic: When `matugen.enabled = true`, Tsumiki runs Matugen during startup.
+
+- Manual (shell):
 
 ```bash
 matugen image -q ~/Pictures/wallpaper.jpg -t scheme-tonal-spot --mode dark --contrast 0.0 --config ~/.config/tsumiki/assets/matugen/config.toml
 ```
 
-- Manual (from inside Tsumiki/python): use the service exposed by the app (when running inside the Tsumiki environment):
+- Manual (Python service):
 
 ```python
 from services.matugen import MatugenService
@@ -60,23 +65,23 @@ mat.generate('/home/user/Pictures/wallpaper.jpg')  # async
 
 - Ensure the `matugen` binary is installed and on `PATH`.
 - Ensure the `wallpaper` path exists and is accessible.
-- If you see caching or stale values, restart Tsumiki to force regeneration.
-- If you get import/cache issues after code edits, remove `*.pyc` and `__pycache__` directories and restart.
+- If colors look stale, restart Tsumiki and regenerate.
+- If imports/cache become inconsistent after local edits, clear `*.pyc` and `__pycache__`.
 
 ## Notes
 
-- Matugen produces color variables that are consumed by `styles/theme.scss` when Tsumiki compiles CSS. Editing the Matugen config or wallpaper requires regenerating the palette and recompiling CSS.
-- The service emits signals (`colors_generated` and `generation_failed`) that other parts of Tsumiki can listen to for live updates.
+Matugen produces color variables consumed by `styles/theme.scss` during CSS compilation.
+When you change wallpaper or Matugen config, regenerate and recompile styles.
 
-Examples
+## Quick Example
 
-1) Quick one-liner (generate and recompile CSS manually):
+Generate palette and recompile in one command:
 
 ```bash
 matugen image ~/Pictures/wallpaper.jpg -t scheme-tonal-spot --mode dark --contrast 0.0 --config ~/.config/tsumiki/assets/matugen/config.toml && ./init.sh -recompile
 ```
 
-2) Interactive (Python REPL within Tsumiki venv):
+Interactive (Python REPL within Tsumiki environment):
 
 ```py
 from services.matugen import MatugenService
@@ -84,4 +89,4 @@ m = MatugenService()
 m.generate_sync('~/Pictures/wallpaper.jpg')
 ```
 
-That's it — enable `matugen` in `theme.toml`, ensure `matugen` is installed, and Tsumiki will pick up the generated palette on startup or when you trigger the service manually.
+Enable `matugen` in `theme.toml`, ensure `matugen` is installed, and Tsumiki will generate colors on startup or when you run the service manually.
