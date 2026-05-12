@@ -247,7 +247,7 @@ def update_theme_config(theme_name: str):
 
         # Write back to file
 
-        write_json_file(config, theme_config_file)
+        write_json_file(theme_config_file, config)
 
         logger.info(f"{Colors.INFO}[Theme] Updated theme config to {theme_name}")
     except Exception as e:

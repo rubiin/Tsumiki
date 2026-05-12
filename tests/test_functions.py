@@ -1,3 +1,6 @@
+import json
+import os
+import tempfile
 import unittest
 
 from utils.functions import (
@@ -19,6 +22,7 @@ from utils.functions import (
     tint_color,
     unique_list,
     uptime,
+    write_json_file,
 )
 
 
@@ -168,6 +172,24 @@ class FunctionsTest(unittest.TestCase):
         # Tint factor 0.5 => halfway to white
         self.assertEqual(tint_color((0, 0, 0), 0.5), (127, 127, 127))
         self.assertEqual(tint_color((100, 100, 100), 0.5), (177, 177, 177))
+
+    def test_write_json_file(self):
+        # Test that write_json_file correctly accepts (path, data) arguments
+        with tempfile.NamedTemporaryFile(mode="w", delete=False, suffix=".json") as f:
+            temp_path = f.name
+
+        try:
+            test_data = {"theme": "catppuccin", "version": 1}
+            write_json_file(temp_path, test_data)
+
+            # Verify the file was written correctly
+            self.assertTrue(os.path.exists(temp_path))
+            with open(temp_path, "r") as f:
+                loaded_data = json.load(f)
+            self.assertEqual(loaded_data, test_data)
+        finally:
+            if os.path.exists(temp_path):
+                os.unlink(temp_path)
 
 
 if __name__ == "__main__":
