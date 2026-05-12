@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.11.0](https://github.com/rubiin/tsumiki/compare/v2.10.2...v2.11.0) (2026-05-09)
+
+
+### 🚀 New Features
+
+* add Tsumiki curl installer script ([16c0d16](https://github.com/rubiin/tsumiki/commit/16c0d16c71433ca956adeec4f80dca235a8c14c4))
+
 ## [2.10.2](https://github.com/rubiin/Tsumiki/compare/v2.10.1...v2.10.2) (2026-05-05)
 
 
