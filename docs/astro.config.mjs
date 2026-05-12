@@ -2,25 +2,9 @@
 import starlight from "@astrojs/starlight";
 import { defineConfig } from "astro/config";
 
-const repository = process.env.GITHUB_REPOSITORY?.split("/")[1];
-const owner = process.env.GITHUB_REPOSITORY_OWNER;
-const isActions = process.env.GITHUB_ACTIONS === "true";
-const isUserSite =
-	repository &&
-	owner &&
-	repository.toLowerCase() === `${owner.toLowerCase()}.github.io`;
-
 // https://astro.build/config
 export default defineConfig({
-	...(isActions && owner
-		? {
-				site: `https://${owner}.github.io`,
-				base:
-					repository && !isUserSite
-						? `/${repository}`
-						: "/",
-			}
-		: {}),
+	site: "https://tsumikii.pages.dev",
 	integrations: [
 		starlight({
 			title: "Tsumiki",
