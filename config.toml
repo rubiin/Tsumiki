@@ -1,4 +1,4 @@
-"$schema" = "./tsumiki.schema.json"
+"$schema" = "https://raw.githubusercontent.com/rubiin/Tsumiki/refs/heads/master/tsumiki.schema.json"
 
 [widgets.app_launcher_button]
 icon = "view-app-grid-symbolic"
@@ -21,13 +21,6 @@ per_column = 4
 icon = "󱞁"
 label = false
 tooltip = true
-
-
-[widgets."custom/hello-world"]
-format = "Greeting: {}"
-exec = "sh -c 'echo $((RANDOM % 1000))'"
-interval = 1
-
 
 [widgets.battery]
 full_battery_level = 100
@@ -405,7 +398,7 @@ transition_type = "crossfade"
 transition_duration = 300
 title = "Keybinds"
 
-[[widgets.custom_widget]]
+[[widgets.custom_module]]
 exec = "pamixer --get-volume"
 format = "󰕾 {}%"
 interval = 1
