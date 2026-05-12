@@ -141,7 +141,7 @@
 					{
 						"type": "string",
 						"pattern": "^custom\\/.+$",
-						"description": "Specifies a named custom module (e.g., custom/hello-world)."
+						"description": "Specifies a named custom widget (e.g., custom/hello-world)."
 					}
 				]
 			}
