@@ -39,7 +39,7 @@ def _get_config_value(module_config: dict, *keys: str, default=None):
     return default
 
 
-class CustomModulePresenter:
+class CustomWidgetPresenter:
     """Formats and applies command output to widget UI."""
 
     def __init__(self, module_config: dict, text_label: Label, icon, host_widget):
@@ -144,7 +144,7 @@ class CustomModulePresenter:
             self._update_icon(alt, percentage)
 
         except json.JSONDecodeError as err:
-            logger.warning(f"{Colors.WARNING}[CustomModule] Invalid JSON output: {err}")
+            logger.warning(f"{Colors.WARNING}[CustomWidget] Invalid JSON output: {err}")
             self._handle_text_output(output)
 
     def _handle_text_output(self, output: str):
@@ -154,7 +154,7 @@ class CustomModulePresenter:
             self._host_widget.set_tooltip_text(self._format_tooltip(str(output)))
 
 
-class CustomModuleExecutor:
+class CustomWidgetExecutor:
     """Owns command lifecycle, timers, process streaming, and signal cleanup."""
 
     def __init__(self, module_config: dict, on_output):
@@ -180,7 +180,7 @@ class CustomModuleExecutor:
     def start(self):
         if not self._exec_cmd:
             logger.warning(
-                f"{Colors.WARNING}[CustomModule] No 'exec' command specified"
+                f"{Colors.WARNING}[CustomWidget] No 'exec' command specified"
             )
             return
 
@@ -229,7 +229,7 @@ class CustomModuleExecutor:
         except Exception as err:
             logger.exception(
                 ""
-                f"{Colors.ERROR}[CustomModule] "
+                f"{Colors.ERROR}[CustomWidget] "
                 f"Failed to start continuous command: {err}"
             )
 
@@ -276,8 +276,8 @@ class CustomModuleExecutor:
         self._process = None
 
 
-class CustomModuleWidget(ButtonWidget):
-    """A Waybar-compatible custom module widget."""
+class CustomWidget(ButtonWidget):
+    """A Waybar-compatible custom widget."""
 
     __slots__ = (
         "_exec_on_event",
@@ -291,7 +291,7 @@ class CustomModuleWidget(ButtonWidget):
 
     def __init__(
         self,
-        widget_name: str = "custom_module",
+        widget_name: str = "custom_widget",
         config: dict | None = None,
         **kwargs,
     ):
@@ -336,13 +336,13 @@ class CustomModuleWidget(ButtonWidget):
             },
         )
 
-        self._presenter = CustomModulePresenter(
+        self._presenter = CustomWidgetPresenter(
             self.module_config,
             self.text_label,
             self.icon,
             self,
         )
-        self._executor = CustomModuleExecutor(
+        self._executor = CustomWidgetExecutor(
             self.module_config,
             self._presenter.handle_output,
         )
@@ -354,7 +354,7 @@ class CustomModuleWidget(ButtonWidget):
                 self._register_signal(sig)
             except Exception as e:
                 logger.exception(
-                    f"{Colors.WARNING}[CustomModule] Failed to register signal: {e}"
+                    f"{Colors.WARNING}[CustomWidget] Failed to register signal: {e}"
                 )
 
         self._start_execution()

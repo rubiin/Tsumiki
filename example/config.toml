@@ -398,13 +398,6 @@ transition_type = "crossfade"
 transition_duration = 300
 title = "Keybinds"
 
-[[widgets.custom_module]]
-exec = "pamixer --get-volume"
-format = "󰕾 {}%"
-interval = 1
-on_scroll_up = "pamixer -i 5"
-on_scroll_down = "pamixer -d 5"
-exec_on_event = true
 
 [widgets."custom/hello-world"]
 format = "Greeting: {}"

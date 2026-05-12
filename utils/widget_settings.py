@@ -532,9 +532,9 @@ Custom_Button_Group = TypedDict(
     },
 )
 
-# Custom Module configuration (Waybar-compatible)
-CustomModule = TypedDict(
-    "CustomModule",
+# Custom Widget configuration (Waybar-compatible)
+CustomWidgetConfig = TypedDict(
+    "CustomWidgetConfig",
     {
         "exec": str,
         "exec_on_event": bool,
@@ -542,8 +542,10 @@ CustomModule = TypedDict(
         "return_type": Return_Type,
         "format": str,
         "max_length": int,
+        "min_length": int,
         "rotate": int,
         "tooltip": bool,
+        "tooltip_format": str,
         "on_click": str,
         "on_click_right": str,
         "on_click_middle": str,
@@ -724,7 +726,7 @@ class Widgets(TypedDict):
     keyboard: Keyboard
     language: Language
     custom_button_group: Custom_Button_Group
-    custom_module: list[CustomModule]
+    custom_widget: list[CustomWidgetConfig]
     gpu: Gpu
     memory: Memory
     microphone: MicroPhone

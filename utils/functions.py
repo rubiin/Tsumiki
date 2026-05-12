@@ -87,7 +87,7 @@ _RGBA_RE = re.compile(r"^rgba\(\s*(\d{1,3}%?\s*,\s*){3}(0|1|0?\.\d+)\s*\)$")
 # Pre-computed constants
 _NAMED_COLORS_SET = frozenset(NAMED_COLORS)
 _SPECIAL_WIDGET_TYPES = frozenset(
-    ("custom_button", "group", "collapsible", "custom_module")
+    ("custom_button", "group", "collapsible", "custom_widget")
 )
 _GROUP_TYPES = ("widget_groups", "collapsible_groups")
 _URGENCY_LEVELS = frozenset(("low", "normal", "critical"))
@@ -616,8 +616,8 @@ def _get_config_collection(parsed_data: dict, widget_type: str) -> list:
         return parsed_data.get("widget_groups", [])
     if widget_type == "collapsible":
         return parsed_data.get("collapsible_groups", [])
-    if widget_type == "custom_module":
-        return parsed_data.get("widgets", {}).get("custom_module", [])
+    if widget_type == "custom_widget":
+        return parsed_data.get("widgets", {}).get("custom_widget", [])
     return []
 
 
@@ -650,7 +650,7 @@ _COLLECTION_NAMES = {
     "custom_button": "custom button",
     "group": "widget group",
     "collapsible": "collapsible group",
-    "custom_module": "custom module",
+    "custom_widget": "custom widget",
 }
 
 
@@ -670,7 +670,7 @@ def _validate_regular_widget(
     section: str,
 ) -> None:
     """Validate regular widget reference."""
-    if _has_named_custom_module(widget_spec, parsed_data):
+    if _has_named_custom_widget(widget_spec, parsed_data):
         return
 
     widgets_list = default_config.get("widgets", {})
@@ -681,8 +681,8 @@ def _validate_regular_widget(
         )
 
 
-def _has_named_custom_module(widget_spec: str, parsed_data: dict) -> bool:
-    """Check if widget spec points to a named custom module."""
+def _has_named_custom_widget(widget_spec: str, parsed_data: dict) -> bool:
+    """Check if widget spec points to a named custom widget."""
     if not widget_spec.startswith("custom/"):
         return False
 
@@ -696,22 +696,22 @@ def _has_named_custom_module(widget_spec: str, parsed_data: dict) -> bool:
         return True
 
     custom_name = widget_spec.split("/", 1)[1] if "/" in widget_spec else widget_spec
-    custom_module = widgets_config.get("custom_module", {})
+    custom_widget = widgets_config.get("custom_widget", {})
 
-    # Shape 2: widgets.custom_module["hello-world"]
-    if isinstance(custom_module, dict):
+    # Shape 2: widgets.custom_widget["hello-world"]
+    if isinstance(custom_widget, dict):
         return isinstance(
-            custom_module.get(custom_name) or custom_module.get(widget_spec),
+            custom_widget.get(custom_name) or custom_widget.get(widget_spec),
             dict,
         )
 
-    # Shape 3 (compat): [[widgets.custom_module]] with optional `name`
-    if isinstance(custom_module, list):
+    # Shape 3 (compat): [[widgets.custom_widget]] with optional `name`
+    if isinstance(custom_widget, list):
         return any(
             isinstance(item, dict)
             and isinstance(item.get("name"), str)
             and item.get("name") in (custom_name, widget_spec)
-            for item in custom_module
+            for item in custom_widget
         )
 
     return False

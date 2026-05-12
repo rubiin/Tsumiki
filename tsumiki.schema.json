@@ -135,8 +135,8 @@
 					},
 					{
 						"type": "string",
-						"pattern": "^@custom_module:\\d+$",
-						"description": "Specifies a custom module by index (e.g., @custom_module:0). Runs external commands like Waybar."
+						"pattern": "^@custom_widget:\\d+$",
+						"description": "Specifies a custom widget by index (e.g., @custom_widget:0). Runs external commands like Waybar."
 					},
 					{
 						"type": "string",
@@ -1772,9 +1772,9 @@
 					},
 					"required": ["buttons", "spacing"]
 				},
-				"custom_module": {
+				"custom_widget": {
 					"type": "array",
-					"description": "Waybar-compatible custom modules that run external commands",
+					"description": "Waybar-compatible custom widgets that run external commands",
 					"items": {
 						"type": "object",
 						"properties": {
@@ -1810,6 +1810,12 @@
 								"default": 0,
 								"description": "Maximum text length (0 = no limit)"
 							},
+							"min_length": {
+								"type": "integer",
+								"minimum": 0,
+								"default": 0,
+								"description": "Minimum text length (pads with spaces)"
+							},
 							"rotate": {
 								"type": "integer",
 								"default": 0,
@@ -1819,6 +1825,10 @@
 								"type": "boolean",
 								"default": true,
 								"description": "Show tooltip"
+							},
+							"tooltip_format": {
+								"type": "string",
+								"description": "Tooltip format string where {} is replaced with tooltip/output text"
 							},
 							"on_click": {
 								"type": "string",

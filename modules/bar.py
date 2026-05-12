@@ -83,7 +83,7 @@ LAZY_WIDGETS_LIST = {
     "cliphist": "widgets.cliphist.ClipHistoryWidget",
     "collapsible_group": "shared.collapsible_group.CollapsibleGroupWidget",
     "cpu": "widgets.stats.CpuWidget",
-    "custom_module": "widgets.custom_module.CustomModuleWidget",
+    "custom_widget": "widgets.custom_widget.CustomWidget",
     "date_time": "widgets.datetime_menu.DateTimeWidget",
     "divider": "widgets.utility_widgets.DividerWidget",
     "emoji_picker": "widgets.emoji_picker.EmojiPickerWidget",
