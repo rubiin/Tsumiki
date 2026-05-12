@@ -3,6 +3,7 @@ import html
 import json
 import os
 import re
+import shlex
 import shutil
 import subprocess
 import time
@@ -37,7 +38,7 @@ gi.require_versions({"Gtk": "3.0", "Gdk": "3.0", "GdkPixbuf": "2.0"})
 # Pre-compiled regex patterns for color validation
 _HEX_COLOR_RE = re.compile(r"^#(?:[a-fA-F0-9]{3,4}|[a-fA-F0-9]{6,8})$")
 _RGB_RE = re.compile(r"^rgb\(\s*(\d{1,3}%?\s*,\s*){2}\d{1,3}%?\s*\)$")
-_RGBA_RE = re.compile(r"^rgba\(\s*(\d{1,3}%?\s*,\s*){3}(0|1|0?\.\d+)\s*\)$")
+_RGBA_RE = re.compile(r"^rgba\(\s*(\d{1,3}%?\s*,\s*){3}(0|1(\.0+)?|0?\.\d+)\s*\)$")
 
 # Pre-computed constants
 _NAMED_COLORS_SET = frozenset(NAMED_COLORS)
@@ -85,7 +86,8 @@ def mix_colors(color1, color2, ratio=0.5) -> tuple[int, int, int]:
     r = int(color1[0] * (1 - ratio) + color2[0] * ratio)
     g = int(color1[1] * (1 - ratio) + color2[1] * ratio)
     b = int(color1[2] * (1 - ratio) + color2[2] * ratio)
-    return (r, g, b)
+    # Clamp RGB values to valid range [0, 255]
+    return (max(0, min(255, r)), max(0, min(255, g)), max(0, min(255, b)))
 
 
 # Function to tint a color by mixing it with white
@@ -131,7 +133,7 @@ def _pillow_worker(image_path, callback, color_count, resize):
 
         with Image.open(image_path) as img:
             img = img.convert("RGB")
-            img.thumbnail((resize, resize), Image.LANCZOS)  # Fast, in-place resize
+            img.thumbnail((resize, resize), Image.Resampling.LANCZOS)  # Fast, in-place resize
             pixels = img.getdata()
 
             most_common = Counter(pixels).most_common(color_count)
@@ -163,12 +165,12 @@ def read_json_file(file_path: str) -> Optional[dict | list]:
         logger.exception(f"JSON file {file_path} does not exist.")
         return None
 
-    with open(file_path, "r") as file:
-        try:
+    try:
+        with open(file_path, "r") as file:
             return json.load(file)
-        except json.JSONDecodeError as e:
-            logger.exception(f"Failed to read JSON file {file_path}: {e}")
-            return None
+    except (OSError, json.JSONDecodeError) as e:
+        logger.exception(f"Failed to read JSON file {file_path}: {e}")
+        return None
 
 
 def read_toml_file(file_path: str) -> Optional[dict]:
@@ -188,7 +190,7 @@ def read_toml_file(file_path: str) -> Optional[dict]:
 
 
 # support for multiple monitors
-def for_monitors(widget: Gtk.Widget) -> list[Gtk.Widget]:
+def for_monitors(widget: Callable[[int], Gtk.Widget]) -> list[Gtk.Widget]:
     n = Gdk.Display.get_default().get_n_monitors() if Gdk.Display.get_default() else 1
     return [widget(i) for i in range(n)]
 
@@ -200,8 +202,10 @@ def ttl_lru_cache(seconds_to_live: int, maxsize: int = 128):
         def inner(__ttl, *args, **kwargs):
             return func(*args, **kwargs)
 
+        # Guard against division by zero
+        ttl = max(1, seconds_to_live)
         return lambda *args, **kwargs: inner(
-            time.time() // seconds_to_live, *args, **kwargs
+            time.time() // ttl, *args, **kwargs
         )
 
     return wrapper
@@ -353,7 +357,7 @@ def check_if_day(
     sunset_time,
     current_time: str | None = None,
     time_format: str = "%I:%M %p",
-) -> str:
+) -> bool:
     if current_time is None:
         current_time = datetime.now().strftime(time_format)
 
@@ -487,7 +491,7 @@ def toggle_command(command: str, full_command: str):
         kill_process(command)
     else:
         subprocess.Popen(
-            full_command.split(" "),
+            shlex.split(full_command),
             stdin=subprocess.DEVNULL,  # No input stream
             stdout=subprocess.DEVNULL,  # Optionally discard the output
             stderr=subprocess.DEVNULL,  # Optionally discard the error output
@@ -639,9 +643,14 @@ def make_qrcode(text: str, size: int = 200) -> GdkPixbuf.Pixbuf:
 
     # Load into GTK Pixbuf
     loader = GdkPixbuf.PixbufLoader.new_with_type("png")
-    loader.write(buffer.read())
-    loader.close()
-    pixbuf = loader.get_pixbuf()
+    try:
+        loader.write(buffer.read())
+        loader.close()
+        pixbuf = loader.get_pixbuf()
+    finally:
+        # Ensure loader is always closed to prevent native memory leak
+        if not loader.is_closed():
+            loader.close()
 
     # Scale Pixbuf to the desired size
     scaled_pixbuf = pixbuf.scale_simple(size, size, GdkPixbuf.InterpType.BILINEAR)
@@ -687,22 +696,28 @@ def send_notification(
     notification = Gio.Notification.new(title)
     notification.set_body(body)
 
-    # Set the urgency level if provided
-    if urgency in _URGENCY_LEVELS:
-        notification.set_urgent(urgency)
+    # Map urgency to Gio.NotificationPriority
+    priority_map = {
+        "low": Gio.NotificationPriority.LOW,
+        "normal": Gio.NotificationPriority.NORMAL,
+        "critical": Gio.NotificationPriority.HIGH,
+    }
+    if urgency in priority_map:
+        notification.set_priority(priority_map[urgency])
 
     # Set the icon if provided
     if icon:
         notification.set_icon(Gio.ThemedIcon.new(icon))
 
-    # Optionally, set the application name
-    notification.set_title(app_name)
-
     application = Gio.Application.get_default()
 
-    # Send the notification to the application
-    application.send_notification(None, notification)
-    return True
+    # Send the notification if application is initialized
+    if application is not None:
+        application.send_notification(None, notification)
+        return True
+
+    logger.warning(f"{Colors.WARNING}[Notification] Application not initialized, cannot send notification")
+    return False
 
 
 # Function to write a JSON file
@@ -725,7 +740,8 @@ def ensure_file(path: str):
             parent.make_directory_with_parents(None)
 
         if not file.query_exists(None):
-            file.create(Gio.FileCreateFlags.NONE, None)
+            stream = file.create(Gio.FileCreateFlags.NONE, None)
+            stream.close()  # Close file handle to prevent resource leak
     except GLib.Error as e:
         logger.exception(f"Failed to ensure file '{path}': {e.message}")
 
