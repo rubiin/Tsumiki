@@ -415,7 +415,7 @@ exec_on_event = true
 
 [layout]
 left_section = ["workspaces", "window_title"]
-middle_section = ["date_time", "weather","custom/hello-world"]
+middle_section = ["date_time", "weather"]
 right_section = [
   "@collapsible:0",
   "@group:0",
