@@ -643,14 +643,19 @@ def make_qrcode(text: str, size: int = 200) -> GdkPixbuf.Pixbuf:
 
     # Load into GTK Pixbuf
     loader = GdkPixbuf.PixbufLoader.new_with_type("png")
+    closed = False
     try:
         loader.write(buffer.read())
         loader.close()
+        closed = True
         pixbuf = loader.get_pixbuf()
     finally:
         # Ensure loader is always closed to prevent native memory leak
-        if not loader.is_closed():
-            loader.close()
+        if not closed:
+            try:
+                loader.close()
+            except GLib.Error:
+                pass
 
     # Scale Pixbuf to the desired size
     scaled_pixbuf = pixbuf.scale_simple(size, size, GdkPixbuf.InterpType.BILINEAR)
