@@ -35,24 +35,23 @@ export default defineConfig({
 			sidebar: [
 				{
 					label: "🚀 Getting Started",
-					autogenerate: { directory: "getting-started" },
+					items: [{ autogenerate: { directory: "getting-started" } }],
 				},
 				{
 					label: "🛠️ Configuring",
-					autogenerate: { directory: "configuring" },
+					items: [{ autogenerate: { directory: "configuring" } }],
 				},
-
 				{
 					label: "🎨 Theming",
-					autogenerate: { directory: "theming" },
+					items: [{ autogenerate: { directory: "theming" } }],
 				},
 				{
 					label: "📚 Resources",
-					autogenerate: { directory: "resources" },
+					items: [{ autogenerate: { directory: "resources" } }],
 				},
 				{
 					label: "👥 Help",
-					autogenerate: { directory: "help" },
+					items: [{ autogenerate: { directory: "help" } }],
 				},
 			],
 		}),
