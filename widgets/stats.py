@@ -1,4 +1,5 @@
 import json
+from time import monotonic
 
 from fabric.utils import exec_shell_command_async
 from fabric.widgets.label import Label
@@ -14,7 +15,30 @@ from utils.widget_utils import (
 )
 
 
-class CpuWidget(ButtonWidget, StatDisplayMixin):
+class FabricatorBoundWidget(ButtonWidget):
+    """Button widget with safe util_fabricator signal lifecycle."""
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self._util_changed_handler_id = None
+        self.connect("destroy", self._disconnect_fabricator)
+
+    def _bind_fabricator_changed(self, callback):
+        self._util_changed_handler_id = util_fabricator.connect("changed", callback)
+
+    def _disconnect_fabricator(self, *_):
+        if self._util_changed_handler_id is None:
+            return
+
+        try:
+            util_fabricator.disconnect(self._util_changed_handler_id)
+        except Exception:
+            pass
+        finally:
+            self._util_changed_handler_id = None
+
+
+class CpuWidget(FabricatorBoundWidget, StatDisplayMixin):
     """A widget to display the current CPU usage."""
 
     _stat_icon = "󰕸"
@@ -39,7 +63,7 @@ class CpuWidget(ButtonWidget, StatDisplayMixin):
         self.setup_stat_display(self.container_box)
 
         # Set up a fabricator to call the update_label method when the CPU usage changes
-        util_fabricator.connect("changed", self._update_ui)
+        self._bind_fabricator_changed(self._update_ui)
 
     def set_cpu_name(self, cpu_name: str):
         self.cpu_name = cpu_name.strip()
@@ -91,7 +115,7 @@ class CpuWidget(ButtonWidget, StatDisplayMixin):
         return True
 
 
-class GpuWidget(ButtonWidget, StatDisplayMixin):
+class GpuWidget(FabricatorBoundWidget, StatDisplayMixin):
     """A widget to display the current GPU usage."""
 
     _stat_icon = "󰕸"
@@ -111,17 +135,33 @@ class GpuWidget(ButtonWidget, StatDisplayMixin):
         self.setup_stat_display(self.container_box)
 
         # Set up a fabricator to call the update_label method when the CPU usage changes
-        util_fabricator.connect("changed", self._update_ui)
+        self._bind_fabricator_changed(self._update_ui)
 
         # Cache for GPU stats to avoid blocking main thread
         self._gpu_stats = None
+        self._gpu_request_in_flight = False
+        self._last_gpu_poll = 0.0
+        self._gpu_poll_interval = float(self.config.get("poll_interval", 2.5))
 
     def _update_ui(self, *_):
+        if self._gpu_request_in_flight:
+            return True
+
+        now = monotonic()
+        if (now - self._last_gpu_poll) < self._gpu_poll_interval:
+            return True
+
+        self._gpu_request_in_flight = True
+        self._last_gpu_poll = now
+
         # Fetch GPU stats asynchronously to avoid blocking
-        exec_shell_command_async(
-            "nvtop -s",
-            self._on_gpu_stats_received,
-        )
+        try:
+            exec_shell_command_async(
+                "nvtop -s",
+                self._on_gpu_stats_received,
+            )
+        except Exception:
+            self._gpu_request_in_flight = False
         return True
 
     def _on_gpu_stats_received(self, value: str):
@@ -132,6 +172,8 @@ class GpuWidget(ButtonWidget, StatDisplayMixin):
                 stats = stats[0]
         except (json.JSONDecodeError, Exception):
             return
+        finally:
+            self._gpu_request_in_flight = False
 
         frequency = stats.get("gpu_clock", "0 MHz")
         usage_str = stats.get("mem_util", "0").strip("%")
@@ -163,7 +205,7 @@ class GpuWidget(ButtonWidget, StatDisplayMixin):
         return True
 
 
-class MemoryWidget(ButtonWidget, StatDisplayMixin):
+class MemoryWidget(FabricatorBoundWidget, StatDisplayMixin):
     """A widget to display the current memory usage."""
 
     _stat_icon = "󰕸"
@@ -183,7 +225,7 @@ class MemoryWidget(ButtonWidget, StatDisplayMixin):
         self.setup_stat_display(self.container_box)
 
         # Set up a fabricator to call the update_label method  at specified intervals
-        util_fabricator.connect("changed", self._update_ui)
+        self._bind_fabricator_changed(self._update_ui)
 
     def _update_ui(self, _, value: dict):
         # Get the current memory usage
@@ -213,7 +255,7 @@ class MemoryWidget(ButtonWidget, StatDisplayMixin):
         return f"{self.get_used()}/{self.get_total()}"
 
 
-class StorageWidget(ButtonWidget, StatDisplayMixin):
+class StorageWidget(FabricatorBoundWidget, StatDisplayMixin):
     """A widget to display the current storage usage."""
 
     _stat_icon = "󰕸"
@@ -233,7 +275,7 @@ class StorageWidget(ButtonWidget, StatDisplayMixin):
         self.setup_stat_display(self.container_box)
 
         # Set up a fabricator to call the update_label method at specified intervals
-        util_fabricator.connect("changed", self._update_ui)
+        self._bind_fabricator_changed(self._update_ui)
 
     def _update_ui(self, _, value: dict):
         # Get the current disk usage
@@ -261,7 +303,7 @@ class StorageWidget(ButtonWidget, StatDisplayMixin):
         return f"{self.get_used()}/{self.get_total()}"
 
 
-class NetworkUsageWidget(ButtonWidget):
+class NetworkUsageWidget(FabricatorBoundWidget):
     """A widget to display the current network usage."""
 
     def __init__(
@@ -318,7 +360,7 @@ class NetworkUsageWidget(ButtonWidget):
         self.client = NetworkSpeed()
 
         # Set up a fabricator to call the update_label method at specified intervals
-        util_fabricator.connect("changed", self._update_ui)
+        self._bind_fabricator_changed(self._update_ui)
 
     def format_speed(self, speed: float):
         speed_bps = max(float(speed), 0.0)

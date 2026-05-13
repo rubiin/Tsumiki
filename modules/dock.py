@@ -1,7 +1,7 @@
 import json
 
 from fabric.hyprland.widgets import get_hyprland_connection
-from fabric.utils import Gdk, Gtk, bulk_connect, logger, truncate
+from fabric.utils import Gdk, GLib, Gtk, bulk_connect, logger, truncate
 from fabric.widgets.box import Box
 from fabric.widgets.button import Button
 from fabric.widgets.centerbox import CenterBox
@@ -22,6 +22,7 @@ Window = get_display_server_window()
 
 # DnD target for dock app reordering
 DOCK_DND_TARGET = [Gtk.TargetEntry.new("dock-app", Gtk.TargetFlags.SAME_APP, 0)]
+DOCK_SYNC_DEBOUNCE_MS = 60
 
 
 def _normalize_address(address: str | None) -> str | None:
@@ -173,6 +174,8 @@ class AppBar(Box):
         "_pinned_app_buttons",
         "_running_app_boxes",
         "_running_app_count",
+        "_sync_in_progress",
+        "_sync_scheduled_id",
         "app_launcher",
         "config",
         "icon_resolver",
@@ -227,6 +230,8 @@ class AppBar(Box):
         self._running_app_boxes = {}
         self._active_address = None
         self._running_app_count = 0
+        self._sync_scheduled_id = None
+        self._sync_in_progress = False
 
         # Determine orientation for boxes
         is_vertical = self.orientation == "vertical"
@@ -272,11 +277,13 @@ class AppBar(Box):
                 "event::openwindow": self._on_hyprland_event,
                 "event::closewindow": self._on_hyprland_event,
                 "event::movewindow": self._on_hyprland_event,
-                "event::activewindow": self._on_hyprland_event,
-                "event::activewindowv2": self._on_hyprland_event,
+                "event::activewindow": self._on_active_window_event,
+                "event::activewindowv2": self._on_active_window_event,
                 "event::windowtitle": self._on_hyprland_event,
             },
         )
+
+        self.connect("destroy", self._on_destroy)
 
         if self._hyprland_connection.ready:
             self._sync_clients()
@@ -284,10 +291,59 @@ class AppBar(Box):
             self._hyprland_connection.connect("event::ready", self._on_hyprland_ready)
 
     def _on_hyprland_ready(self, *_):
-        self._sync_clients()
+        self._schedule_sync_clients(delay_ms=0)
 
     def _on_hyprland_event(self, *_):
+        self._schedule_sync_clients()
+
+    def _on_active_window_event(self, *_):
+        if not self._clients_by_address:
+            self._schedule_sync_clients(delay_ms=0)
+            return
+
+        active_address = self._get_active_address()
+        if active_address == self._active_address:
+            return
+
+        self._active_address = active_address
+
+        for address, client in self._clients_by_address.items():
+            client.set_activated(address == active_address)
+
+        if self._group_apps:
+            for group in self._app_groups.values():
+                if any(c.get_activated() for c in group["clients"]):
+                    group["button"].add_style_class("active")
+                else:
+                    group["button"].remove_style_class("active")
+                if self.config.get("tooltip", True) and group["clients"]:
+                    active = next(
+                        (c for c in group["clients"] if c.get_activated()),
+                        group["clients"][0],
+                    )
+                    group["button"].set_tooltip_text(active.get_title())
+        else:
+            self._apply_ungrouped_active_styles()
+
+    def _schedule_sync_clients(self, delay_ms: int = DOCK_SYNC_DEBOUNCE_MS):
+        if self._sync_scheduled_id is not None:
+            return
+
+        if delay_ms <= 0:
+            self._sync_clients()
+            return
+
+        self._sync_scheduled_id = GLib.timeout_add(delay_ms, self._run_scheduled_sync)
+
+    def _run_scheduled_sync(self):
+        self._sync_scheduled_id = None
         self._sync_clients()
+        return False
+
+    def _on_destroy(self, *_):
+        if self._sync_scheduled_id is not None:
+            GLib.source_remove(self._sync_scheduled_id)
+            self._sync_scheduled_id = None
 
     def _get_active_address(self) -> str | None:
         try:
@@ -347,10 +403,18 @@ class AppBar(Box):
         )
 
     def _sync_clients(self):
-        clients, clients_by_address = self._capture_client_snapshot()
-        self._clients_by_address = clients_by_address
-        self._reconcile_clients(clients)
-        self._update_separator_visibility()
+        if self._sync_in_progress:
+            self._schedule_sync_clients()
+            return
+
+        self._sync_in_progress = True
+        try:
+            clients, clients_by_address = self._capture_client_snapshot()
+            self._clients_by_address = clients_by_address
+            self._reconcile_clients(clients)
+            self._update_separator_visibility()
+        finally:
+            self._sync_in_progress = False
 
     def _populate_pinned_apps(self, apps: list):
         """Initial population of pinned apps (only called once at startup)."""

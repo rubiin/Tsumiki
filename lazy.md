@@ -1,77 +1,41 @@
-I’ll scan for eager service/widget initialization and heavy imports, then map concrete lazy-load candidates with low-risk refactor ideas. I’m starting with targeted searches across module bootstrap paths and shared service access patterns.
 
-I’m running a fast read-only search to locate current lazy-loading mechanisms and the main startup hot paths so we can spot what is still eagerly loaded.
+1. High: signal/listener leak risk on bar hotplug recreation
+- Evidence: stats widgets register global fabricator listeners in multiple constructors, but there is no disconnect path when bars/widgets are destroyed: stats.py, stats.py, stats.py, stats.py, stats.py.
+- Hotplug recreates bars/widgets repeatedly: bar.py, bar.py.
+- Root cause: global poll stream keeps running forever (widget_utils.py, widget_utils.py, widget_utils.py); callbacks can accumulate across recreate cycles and increase CPU/work each tick.
+- Impact: memory growth (retained widget callbacks), duplicate UI updates, rising CPU over time.
 
-Searched for regex `lazy|Lazy|_LazyServiceProxy|lazyload|lazy_load` (`**/*.py`), 48 results
+2. High: expensive subprocess storm in GPU widget
+- Evidence: each fabricator changed event triggers nvtop subprocess spawn: stats.py, stats.py.
+- Poll cadence is ~1s from shared stats stream: widget_utils.py.
+- Impact: continuous process creation, possible overlap if nvtop call latency exceeds interval, elevated CPU and scheduler overhead.
 
-Searched for regex `import .*services|from services import|from modules import|get_hyprland_connection` (`**/*.py`), 36 results
+3. High: dock does full Hyprland snapshot/reconcile on very chatty events
+- Evidence: all these events trigger full sync: dock.py, dock.py, dock.py, dock.py, dock.py, dock.py.
+- Full sync path does j/activewindow + j/clients JSON roundtrips and rebuild/restyle work: dock.py, dock.py, dock.py, dock.py, dock.py.
+- Additional cost from repeated icon pixbuf resolution during refresh/update: dock.py, dock.py.
+- Impact: noticeable UI jank under frequent title/activity changes, unnecessary CPU and IPC load.
 
-Searched for files matching `**/modules/**/*.py`, 17 matches
+4. Medium: popover lifecycle cleanup appears incomplete; pooling path is unused
+- Evidence: popover manager defines window pool return API, but no caller exists: popover.py.
+- Popover creation always grabs window and attaches content: popover.py, popover.py, popover.py.
+- Hide only hides/marks inactive, does not return window to pool or clear content bindings: popover.py, popover.py.
+- Impact: long-lived hidden windows/content and handlers can persist longer than intended, especially across widget churn.
 
-I found existing lazy-loading infrastructure already in place for widgets and services, so next I’m checking startup entry points and module constructors to identify what is still eagerly instantiated and worth deferring.
+5. Medium: clipboard cleanup relies on destructor, which is unreliable for GTK/GObject lifetimes
+- Evidence: temp dir and cache cleanup in destructor only: cliphist.py, cliphist.py, cliphist.py, temp dir created at cliphist.py.
+- Impact: temp directories/resources may remain until process exit or never be reclaimed promptly.
 
-Read [](file:///home/devina/.config/tsumiki/main.py)
+6. Medium: network service has avoidable runtime overhead and callback bug
+- Evidence: debug print on every speed notify: network.py.
+- Evidence: lambda closes over loop variable names in notifier wiring: network.py, network.py. This likely reports only the last property name, causing noisy/incorrect update behavior.
+- Impact: unnecessary stdout churn and potentially wrong notification fanout.
 
-Read [](file:///home/devina/.config/tsumiki/modules/bar.py#1-1), lines 1 to 260
+7. Low: bar auto-hide timer has no explicit destroy-time cancel path
+- Evidence: timer set/cancel helpers exist (bar.py, bar.py), but no destroy override guaranteeing cleanup before bar.py destroy path.
+- Impact: usually short-lived, but can leave pending callbacks during teardown/recreate windows.
 
-Read [](file:///home/devina/.config/tsumiki/services/__init__.py)
+Assumptions and gaps
+- This is static code audit, not runtime profile. I have not run heap snapshots, perf tracing, or long-session soak tests.
+- Highest-confidence issues are the stats listener accumulation risk, GPU subprocess frequency, and dock full-snapshot sync frequency.
 
-I confirmed startup already lazily imports most widgets/services; now I’m auditing module internals for eager object creation that still happens even when features aren’t used.
-
-Read [](file:///home/devina/.config/tsumiki/modules/osd.py)
-
-Read [](file:///home/devina/.config/tsumiki/widgets/quick_settings/quick_settings.py#1-1), lines 1 to 320
-
-Read [](file:///home/devina/.config/tsumiki/modules/overview.py#1-1), lines 1 to 260
-
-Read [](file:///home/devina/.config/tsumiki/modules/dock.py#1-1), lines 1 to 340
-
-Read [](file:///home/devina/.config/tsumiki/widgets/quick_settings/quick_settings.py#320-320), lines 320 to 595
-
-I’ve pinpointed likely hotspots in quick settings and dock; next I’m doing a quick cross-file scan for eagerly created services/managers to produce a concrete lazy-loading checklist.
-
-Searched for regex `=\s*(NetworkService|BrightnessService|MprisPlayerManager|AppUtils|get_hyprland_connection)\(` (`**/*.py`), 25 results
-
-Searched for regex `from modules\.app_launcher import AppLauncher|from services\.network import NetworkService|from services\.brightness import BrightnessService` (`**/*.py`), 9 results
-
-Read [](file:///home/devina/.config/tsumiki/modules/notification.py#1-1), lines 1 to 240
-
-Read [](file:///home/devina/.config/tsumiki/widgets/datetime_menu.py#1-1), lines 1 to 260
-
-Read [](file:///home/devina/.config/tsumiki/utils/icons.py#1-1), lines 1 to 260
-
-Searched for regex `^[A-Za-z_][A-Za-z0-9_]*\s*=\s*[A-Z][A-Za-z0-9_]*\(` (`**/*.py`), 96 results
-
-Read [](file:///home/devina/.config/tsumiki/utils/config.py)
-
-Read [](file:///home/devina/.config/tsumiki/utils/decorators.py)
-
-Read [](file:///home/devina/.config/tsumiki/modules/app_launcher.py#1-1), lines 1 to 260
-
-Read [](file:///home/devina/.config/tsumiki/widgets/mpris.py)
-
-Searched for regex `AppUtils\(|invoke_repeater\(|exec_shell_command_async\(|send_command\("j/` (`**/*.py`), 59 results
-
-I’ve finished the scan and found several concrete lazy-load opportunities, mostly in quick settings, dock, and global utility initialization. I’ll now summarize them by impact with exact file locations and what to defer.
-
-Audit complete. You already have solid lazy-loading in place for widgets and core services:
-- bar.py uses lazy widget class imports.
-- __init__.py uses lazy service proxies.
-
-Best remaining lazy-load targets:
-
-
-
-5. Global config singleton loads config and writes SCSS at import time
-- config.py
-- Why: importing this module triggers disk I/O and background work immediately.
-- Lazyload idea: instantiate configuration inside main startup path only, expose getter instead of module-global object.
-
-
-
-Skeptical note:
-- Not everything should be lazy. For always-visible widgets (for example dock when enabled), delaying too much can cause first-interaction jank. The best wins are where objects are initialized before user can ever use them (quick settings services, module-level imports, global config/thread pool side effects).
-
-If you want, I can implement the top 2 with lowest risk first:
-1. quick settings deferred service init
-2. dock deferred AppLauncher import
