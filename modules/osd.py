@@ -1,13 +1,11 @@
-from typing import ClassVar, Literal
+from typing import Literal
 
-from fabric.utils import GLib, GObject, bulk_connect, cooldown, remove_handler
+from fabric.utils import GLib, remove_handler
 from fabric.widgets.box import Box
 from fabric.widgets.image import Image
 from fabric.widgets.label import Label
 from fabric.widgets.revealer import Revealer
 
-from services import audio_service
-from services.brightness import BrightnessService
 from shared.widget_container import BaseWidget
 from utils.functions import get_display_server_window
 from utils.icons import symbolic_icons
@@ -15,8 +13,6 @@ from utils.types import Keyboard_Mode
 from utils.widget_settings import BarConfig
 from utils.widget_utils import (
     create_scale,
-    get_audio_icon_name,
-    get_brightness_icon_name,
 )
 
 Window = get_display_server_window()
@@ -75,241 +71,6 @@ class GenericOSDContainer(Box, BaseWidget):
             self.level.set_label(f"{round_value}%")
 
 
-class BrightnessOSDContainer(GenericOSDContainer):
-    """A widget to display the OSD for brightness."""
-
-    __gsignals__: ClassVar = {
-        "brightness-changed": (GObject.SignalFlags.RUN_FIRST, None, (int,))
-    }
-
-    def __init__(self, config: dict, **kwargs):
-        super().__init__(
-            config=config,
-            **kwargs,
-        )
-        self.brightness_service = BrightnessService()
-        self.config = config
-
-        self.update_brightness()
-        self.brightness_service.connect(
-            "brightness_changed", self.on_brightness_changed
-        )
-
-    @cooldown(0.1)
-    def update_brightness(self):
-        brightness_percent = self.brightness_service.screen_brightness_percentage
-        self.update_values(brightness_percent)
-        self.update_icon(int(brightness_percent))
-
-    def update_icon(self, current_brightness: int):
-        icon_name = get_brightness_icon_name(current_brightness)["icon"]
-        self.icon.set_from_icon_name(icon_name, self.icon_size)
-
-    def on_brightness_changed(self, *_):
-        self.update_brightness()
-        self.emit("brightness-changed", 0)
-
-
-class AudioOSDContainer(GenericOSDContainer):
-    """A widget to display the OSD for audio."""
-
-    __gsignals__: ClassVar = {
-        "volume-changed": (GObject.SignalFlags.RUN_FIRST, None, ())
-    }
-
-    def __init__(self, config: dict, **kwargs):
-        super().__init__(
-            config=config,
-            **kwargs,
-        )
-        self.audio_service = audio_service
-        self._speaker = None
-        self._speaker_handler_id: int | None = None
-
-        self.previous_volume = None
-        self.previous_muted = None
-        self._effective_muted = None
-
-        self.config = config
-
-        bulk_connect(
-            self.audio_service,
-            {
-                "notify::speaker": self.on_speaker_changed,
-                "changed": self.check_mute,
-            },
-        )
-        self.on_speaker_changed()
-
-    @cooldown(0.1)
-    def check_mute(self, *_):
-        speaker = self.audio_service.speaker
-        if not speaker:
-            return
-
-        current_muted = speaker.muted
-        if self.previous_muted is None or current_muted != self.previous_muted:
-            self.previous_muted = current_muted
-            self.update_icon()
-            self.scale.toggle_css_class("muted", current_muted)
-            self.emit("volume-changed")
-
-    def on_speaker_changed(self, *_):
-        if self._speaker and self._speaker_handler_id is not None:
-            self._speaker.disconnect(self._speaker_handler_id)
-
-        self._speaker_handler_id = None
-        self.previous_volume = None
-        self.previous_muted = None
-        self._effective_muted = None
-        self._speaker = self.audio_service.speaker
-
-        if self._speaker:
-            self._speaker_handler_id = self._speaker.connect(
-                "notify::volume", self.update_volume
-            )
-            self.update_volume(self._speaker)
-
-    @cooldown(0.1)
-    def update_volume(self, *_):
-        speaker = self.audio_service.speaker
-        if not speaker:
-            return
-
-        volume = round(speaker.volume)
-        current_muted = speaker.muted
-        volume_changed = self.previous_volume is None or volume != self.previous_volume
-        muted_changed = (
-            self.previous_muted is None or current_muted != self.previous_muted
-        )
-
-        if volume_changed or muted_changed:
-            self.previous_volume = volume
-            self.previous_muted = current_muted
-
-            is_muted = speaker.muted or volume == 0
-
-            self.scale.toggle_css_class("overamplified", volume > 100)
-
-            if self._effective_muted is None or is_muted != self._effective_muted:
-                self._effective_muted = is_muted
-                self.scale.toggle_css_class("muted", is_muted)
-
-            if is_muted:
-                self.update_icon()
-            else:
-                self.update_icon(volume)
-
-            self.update_values(volume)
-            self.emit("volume-changed")
-
-    def update_icon(self, volume=0):
-        icon_name = get_audio_icon_name(volume, self.audio_service.speaker.muted)[
-            "icon"
-        ]
-        self.icon.set_from_icon_name(icon_name, self.icon_size)
-
-
-class MicrophoneOSDContainer(GenericOSDContainer):
-    """A widget to display the OSD for microphone."""
-
-    __gsignals__: ClassVar = {"mic-changed": (GObject.SignalFlags.RUN_FIRST, None, ())}
-
-    def __init__(self, config: dict, **kwargs):
-        super().__init__(
-            config=config,
-            **kwargs,
-        )
-        self.audio_service = audio_service
-        self._microphone = None
-        self._microphone_handler_id: int | None = None
-
-        self.previous_volume = None
-        self.previous_muted = None
-        self._effective_muted = None
-
-        self.config = config
-
-        bulk_connect(
-            self.audio_service,
-            {
-                "notify::microphone": self.on_microphone_changed,
-                "changed": self.check_mute,
-            },
-        )
-        self.on_microphone_changed()
-
-    @cooldown(0.1)
-    def check_mute(self, *_):
-        microphone = self.audio_service.microphone
-        if not microphone:
-            return
-
-        current_muted = microphone.muted
-        if self.previous_muted is None or current_muted != self.previous_muted:
-            self.previous_muted = current_muted
-            self.update_icon()
-            self.scale.toggle_css_class("muted", current_muted)
-            self.emit("mic-changed")
-
-    def on_microphone_changed(self, *_):
-        if self._microphone and self._microphone_handler_id is not None:
-            self._microphone.disconnect(self._microphone_handler_id)
-
-        self._microphone_handler_id = None
-        self.previous_volume = None
-        self.previous_muted = None
-        self._effective_muted = None
-        self._microphone = self.audio_service.microphone
-
-        if self._microphone:
-            self._microphone_handler_id = self._microphone.connect(
-                "notify::volume", self.update_volume
-            )
-            self.update_volume()
-
-    @cooldown(0.1)
-    def update_volume(self, *_):
-        microphone = self.audio_service.microphone
-        if not microphone:
-            return
-
-        volume = round(microphone.volume)
-        current_muted = microphone.muted
-        volume_changed = self.previous_volume is None or volume != self.previous_volume
-        muted_changed = (
-            self.previous_muted is None or current_muted != self.previous_muted
-        )
-
-        if volume_changed or muted_changed:
-            self.previous_volume = volume
-            self.previous_muted = current_muted
-
-            is_muted = microphone.muted or volume == 0
-
-            self.scale.toggle_css_class("overamplified", volume > 100)
-
-            if self._effective_muted is None or is_muted != self._effective_muted:
-                self._effective_muted = is_muted
-                self.scale.toggle_css_class("muted", is_muted)
-
-            if is_muted:
-                self.update_icon()
-            else:
-                self.update_icon(volume)
-
-            self.update_values(volume)
-            self.emit("mic-changed")
-
-    def update_icon(self, volume=0):
-        icon_name = (
-            symbolic_icons["audio"]["mic"]["muted"]
-            if volume == 0 or self.audio_service.microphone.muted
-            else symbolic_icons["audio"]["mic"]["high"]
-        )
-        self.icon.set_from_icon_name(icon_name, self.icon_size)
-
-
 class OSDContainer(Window):
     """A widget to display the OSD for audio and brightness."""
 
@@ -325,14 +86,20 @@ class OSDContainer(Window):
         osds = self.config.get("osds", ["brightness", "volume"])
 
         if "volume" in osds:
+            from .osds.audio import AudioOSDContainer
+
             self.audio_container = AudioOSDContainer(config=self.config)
             self.audio_container.connect("volume-changed", self.show_audio)
         if "brightness" in osds:
+            from .osds.brightness import BrightnessOSDContainer
+
             self.brightness_container = BrightnessOSDContainer(config=self.config)
             self.brightness_container.connect(
                 "brightness-changed", self.show_brightness
             )
         if "microphone" in osds:
+            from .osds.microphone import MicrophoneOSDContainer
+
             self.microphone_container = MicrophoneOSDContainer(config=self.config)
             self.microphone_container.connect("mic-changed", self.show_microphone)
 
