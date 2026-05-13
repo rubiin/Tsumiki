@@ -1,3 +1,4 @@
+import shutil
 import tempfile
 from urllib.parse import unquote, urlparse
 
@@ -112,6 +113,7 @@ class ClipHistoryMenu(Box):
         )
 
         self.add(self.history_box)
+        self.connect("destroy", self._on_destroy)
         self.open()  # Load items when the widget is created
 
     def on_icon_press(self, entry, icon_pos, event):
@@ -646,14 +648,31 @@ class ClipHistoryMenu(Box):
             return True
         return False
 
+    def _cleanup_resources(self):
+        """Best-effort cleanup for timers, caches, and temporary resources."""
+        if self._search_timer_id > 0:
+            remove_handler(self._search_timer_id)
+            self._search_timer_id = 0
+
+        if self._arranger_handler:
+            remove_handler(self._arranger_handler)
+            self._arranger_handler = 0
+
+        self.viewport.remove_all()
+        self.clipboard_items.clear()
+        self.image_cache.clear()
+
+        if hasattr(self, "tmp_dir") and self.tmp_dir and os.path.exists(self.tmp_dir):
+            shutil.rmtree(self.tmp_dir, ignore_errors=True)
+            self.tmp_dir = ""
+
+    def _on_destroy(self, *_):
+        self._cleanup_resources()
+
     def __del__(self):
         """Clean up temporary files on destruction"""
         try:
-            if hasattr(self, "tmp_dir") and os.path.exists(self.tmp_dir):
-                import shutil
-
-                shutil.rmtree(self.tmp_dir)
-            self.image_cache.clear()
+            self._cleanup_resources()
         except Exception as e:
             logger.exception(f"Error cleaning up temporary files: {e}")
 

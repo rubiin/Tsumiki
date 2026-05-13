@@ -215,6 +215,8 @@ class StatusBar(Window):
             **kwargs,
         )
 
+        self.connect("destroy", self._on_destroy)
+
         # Start auto-hide timer if enabled
         if self._auto_hide:
             self._start_hide_timer()
@@ -256,6 +258,10 @@ class StatusBar(Window):
             self.revealer.set_reveal_child(False)
         self._hide_timer_id = None
         return False  # Don't repeat the timeout
+
+    def _on_destroy(self, *_):
+        """Ensure no pending hide timer survives teardown."""
+        self._cancel_hide_timer()
 
     def make_layout(self, config: BarConfig):
         """assigns the three sections their respective widgets"""
