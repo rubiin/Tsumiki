@@ -45,6 +45,14 @@ class BaseSystemTray:
                 icon_name = item.icon_name
                 icon_theme = item.icon_theme
 
+                # Some tray items expose no icon name; use stable fallback.
+                if not icon_name:
+                    return Gtk.IconTheme.get_default().load_icon(
+                        "image-missing",
+                        icon_size,
+                        Gtk.IconLookupFlags.FORCE_SIZE,
+                    )
+
                 logger.info(
                     f"""[SystemTray] Resolving icon: {icon_name}, size: {icon_size},
                     theme path: {icon_theme}"""
@@ -78,7 +86,7 @@ class BaseSystemTray:
                             icon_size,
                             Gtk.IconLookupFlags.FORCE_SIZE,
                         )
-        except GLib.Error:
+        except (GLib.Error, TypeError, ValueError):
             # Fallback to 'image-missing' icon
             return Gtk.IconTheme.get_default().load_icon(
                 "image-missing",
