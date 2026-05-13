@@ -10,7 +10,6 @@ from fabric.widgets.image import Image
 from fabric.widgets.revealer import Revealer
 from fabric.widgets.separator import Separator
 
-from modules.app_launcher import AppLauncher
 from utils.app import AppUtils
 from utils.config import widget_config
 from utils.constants import PINNED_APPS_FILE
@@ -191,6 +190,7 @@ class AppBar(Box):
     def on_launcher_clicked(self, *_):
         """Toggle the app launcher visibility."""
         if self.app_launcher is None:
+            from modules.app_launcher import AppLauncher
             self.app_launcher = AppLauncher(widget_config)
         self.app_launcher.toggle()
 

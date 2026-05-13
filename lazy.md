@@ -66,10 +66,7 @@ Best remaining lazy-load targets:
 - Why: NetworkService and BrightnessService start even if user never opens quick settings.
 - Lazyload idea: instantiate these in show_popover or first icon refresh, then cache.
 
-2. Dock imports AppLauncher eagerly at module import
-- dock.py
-- Why: pulls launcher code even if launcher button is never clicked.
-- Lazyload idea: move import into on_launcher_clicked, similar to existing lazy instance creation at dock.py.
+
 
 3. Dock and overview build full app registries immediately
 - dock.py
@@ -83,11 +80,7 @@ Best remaining lazy-load targets:
 - Why: importing this module triggers disk I/O and background work immediately.
 - Lazyload idea: instantiate configuration inside main startup path only, expose getter instead of module-global object.
 
-6. Overview creates many hyprland connections per window button/workspace widget
-- overview.py
-- overview.py
-- Why: repeated connection retrieval/usage objects.
-- Lazyload idea: pass one shared connection from menu/container into child objects.
+
 
 7. Large weather icon map is always imported with general icon utilities
 - icons.py
