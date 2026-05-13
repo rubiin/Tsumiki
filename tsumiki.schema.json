@@ -457,15 +457,10 @@
 				"network_usage": {
 					"type": "object",
 					"properties": {
-						"upload_icon": {
+						"format": {
 							"type": "string",
-							"default": "",
-							"description": "The icon displayed for upload activity."
-						},
-						"download_icon": {
-							"type": "string",
-							"default": "",
-							"description": "The icon displayed for download activity."
+							"default": "{upload}  / {download} ",
+							"description": "The format string for displaying network usage."
 						},
 						"tooltip": {
 							"type": "boolean",
@@ -504,11 +499,8 @@
 						}
 					},
 					"required": [
-						"upload_icon",
-						"download_icon",
 						"tooltip",
-						"upload",
-						"download",
+						"format",
 						"upload_threshold",
 						"download_threshold",
 						"kb_digits",

@@ -201,11 +201,8 @@ DEFAULT_CONFIG = {
             "unit": "gb",
         },
         "network_usage": {
-            "upload_icon": "",
-            "download_icon": "",
             "tooltip": True,
-            "upload": True,
-            "download": True,
+            "format": " {upload}  {download}",
             "upload_threshold": 100,
             "download_threshold": 1024,
             "kb_digits": 0,

@@ -209,11 +209,8 @@ graph_length = 4
 unit = "gb"
 
 [widgets.network_usage]
-upload_icon = ""
-download_icon = ""
 tooltip = true
-upload = true
-download = true
+format = "{upload}   {download} "
 upload_threshold = 100
 download_threshold = 1_024
 kb_digits = 0

@@ -10,7 +10,6 @@ from shared.mixins import StatDisplayMixin
 from shared.widget_container import ButtonWidget
 from utils.icons import text_icons
 from utils.widget_utils import (
-    nerd_font_icon,
     util_fabricator,
 )
 
@@ -315,8 +314,8 @@ class NetworkUsageWidget(FabricatorBoundWidget):
             **kwargs,
         )
 
-        show_download = self.config.get("download", True)
-        show_upload = self.config.get("upload", False)
+        self.label_format: str = self.config.get("format", "")
+
         # Thresholds (in bytes/s)
         self.download_threshold = self.config.get("download_threshold", 0)
         self.upload_threshold = self.config.get("upload_threshold", 0)
@@ -325,37 +324,11 @@ class NetworkUsageWidget(FabricatorBoundWidget):
         self.kb_digits = self.config.get("kb_digits", 0)
         self.mb_digits = self.config.get("mb_digits", 2)
 
-        self.upload_icon = nerd_font_icon(
-            icon=self.config.get("upload_icon", "󰕸"),
-            props={"style_classes": ["panel-font-icon"], "visible": show_upload},
+        self.network_label = Label(
+            name="download_label", label="0 MB", style_classes=["panel-text"]
         )
 
-        self.upload_label = Label(
-            name="upload_label",
-            label="0 MB",
-            style_classes=["panel-text"],
-            visible=show_upload,
-            style="margin-right: 10px;",
-        )
-
-        self.download_icon = nerd_font_icon(
-            icon=self.config.get("download_icon", "󰕸"),
-            props={"style_classes": ["panel-font-icon"], "visible": show_download},
-        )
-
-        self.download_label = Label(
-            name="download_label",
-            label="0 MB",
-            style_classes=["panel-text"],
-            visible=show_download,
-        )
-
-        self.container_box.children = (
-            self.upload_icon,
-            self.upload_label,
-            self.download_icon,
-            self.download_label,
-        )
+        self.container_box.children = [self.network_label]
 
         self.client = NetworkSpeed()
 
@@ -380,12 +353,17 @@ class NetworkUsageWidget(FabricatorBoundWidget):
         upload_speed = network_speed.get("upload", 0)
 
         upload_display = upload_speed if upload_speed >= self.upload_threshold else 0
+
         download_display = (
             download_speed if download_speed >= self.download_threshold else 0
         )
 
-        self.upload_label.set_label(self.format_speed(upload_display))
-        self.download_label.set_label(self.format_speed(download_display))
+        self.network_label.set_label(
+            self.label_format.format(
+                upload=self.format_speed(upload_display),
+                download=self.format_speed(download_display),
+            )
+        )
 
         if self.config.get("tooltip", False):
             tooltip_text = (

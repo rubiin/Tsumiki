@@ -368,10 +368,7 @@ NetworkUsage = TypedDict(
     "NetworkUsage",
     {
         **BaseConfig.__annotations__,
-        "upload_icon": str,
-        "download_icon": str,
-        "download": bool,
-        "upload": bool,
+        "format": str,
         "upload_threshold": int,
         "download_threshold": int,
         "kb_digits": int,
