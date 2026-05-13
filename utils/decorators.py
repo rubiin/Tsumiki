@@ -2,6 +2,7 @@ import atexit
 import os
 from collections.abc import Callable
 from concurrent.futures import ThreadPoolExecutor
+from time import monotonic
 from typing import Any, TypeVar
 
 from fabric.utils import GLib
@@ -65,6 +66,28 @@ def debounce(ms: int):
                 GLib.source_remove(existing_timer)
 
         wrapper._debounce_cleanup = cleanup
+        return wrapper
+
+    return decorator
+
+
+def rate_limit(ms: int, skipped_return: Any = None):
+    """Rate-limit a method so it runs at most once every ``ms`` milliseconds."""
+
+    interval = ms / 1000.0
+
+    def decorator(func: Callable):
+        last_run_attr = f"_rate_limit_last_{func.__name__}"
+
+        def wrapper(self, *args, **kwargs):
+            now = monotonic()
+            last_run = getattr(self, last_run_attr, 0.0)
+            if now - last_run < interval:
+                return skipped_return
+
+            setattr(self, last_run_attr, now)
+            return func(self, *args, **kwargs)
+
         return wrapper
 
     return decorator
