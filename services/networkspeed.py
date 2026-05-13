@@ -1,9 +1,9 @@
 from time import monotonic
 
+import psutil
 from fabric.utils import re
 
-# Pre-compiled regex patterns for interface filtering
-_FIELDS_RE = re.compile(r"\W+")
+# Pre-compiled regex pattern for interface filtering
 _VIRTUAL_IFACE_RE = re.compile(r"^(ifb|lxdbr|virbr|br|vnet|tun|tap)[0-9]+$")
 
 
@@ -31,27 +31,18 @@ class NetworkSpeed:
         self.last_sample_time = 0.0
 
     def get_network_speed(self):
-        # Read /proc/net/dev directly instead of spawning subprocess
+        # Read counters from psutil for all interfaces.
         try:
-            with open("/proc/net/dev", "r") as f:
-                lines = f.readlines()
-        except OSError:
+            interface_counters = psutil.net_io_counters(pernic=True)
+        except Exception:
             return {"download": 0.0, "upload": 0.0}
 
         total_down_bytes = 0
         total_up_bytes = 0
 
-        for line in lines:
-            fields = _FIELDS_RE.split(line.strip())
-            if len(fields) <= 2:
-                continue
-
-            interface = fields[0]
-            try:
-                current_interface_down_bytes = int(fields[1])
-                current_interface_up_bytes = int(fields[9])
-            except (ValueError, IndexError):
-                continue
+        for interface, counters in interface_counters.items():
+            current_interface_down_bytes = int(counters.bytes_recv)
+            current_interface_up_bytes = int(counters.bytes_sent)
 
             # Skip loopback and virtual interfaces or interfaces with invalid byte count
             if (
