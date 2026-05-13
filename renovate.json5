@@ -8,7 +8,9 @@
         "config:recommended"
     ],
     "enabledManagers": [
-        "pip_requirements"
+        "pip_requirements",
+        "npm",
+        "github-actions"
     ],
     "packageRules": [
     {
