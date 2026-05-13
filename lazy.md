@@ -68,12 +68,6 @@ Best remaining lazy-load targets:
 
 
 
-3. Dock and overview build full app registries immediately
-- dock.py
-- overview.py
-- Why: AppUtils scans desktop apps; this can be expensive on startup.
-- Lazyload idea: defer AppUtils construction until first window list render or first unknown app id.
-
 
 5. Global config singleton loads config and writes SCSS at import time
 - config.py

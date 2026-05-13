@@ -55,6 +55,7 @@ class HyprlandWindowButton(Button):
         size,
         transform: int = 0,
         hyprland_connection=None,
+        app_util=None,
     ):
         self.transform = transform % 4
         self.size = size if transform in [0, 2] else (size[1], size[0])
@@ -70,7 +71,9 @@ class HyprlandWindowButton(Button):
         icon_size_main = int(min(self.size) * 0.5)  # adjust factor as needed
 
         # Enhanced icon resolution using desktop apps
-        desktop_app = AppUtils().find_app(app_id)
+        if app_util is None:
+            app_util = AppUtils()
+        desktop_app = app_util.find_app(app_id)
         icon_pixbuf = _resolve_icon_pixbuf(
             self.icon_resolver, app_id, icon_size_main, desktop_app
         )
@@ -148,7 +151,12 @@ class HyprlandWindowButton(Button):
 class WorkspaceEventBox(EventBox):
     """A widget to show a workspace in the overview."""
 
-    def __init__(self, workspace_id: int, fixed: Gtk.Fixed | None = None, hyprland_connection=None):
+    def __init__(
+        self,
+        workspace_id: int,
+        fixed: Gtk.Fixed | None = None,
+        hyprland_connection=None,
+    ):
         self.fixed = fixed
 
         screen = Gdk.Screen.get_default()
@@ -195,11 +203,7 @@ class OverviewMenu(Box):
         self.clients: dict[str, HyprlandWindowButton] = {}
 
         self._hyprland_connection = get_hyprland_connection()
-
-        # Initialize app registry for better icon resolution
-        self.app_util = AppUtils()
-        self._all_apps = self.app_util.all_applications
-        self.app_identifiers = self.app_util.app_identifiers
+        self._app_util = None  # Lazy-load on first access
         self._app_cache_dirty = False
 
         # Remove the window_class_aliases dictionary completely
@@ -216,12 +220,17 @@ class OverviewMenu(Box):
 
         self.update()
 
+    @property
+    def app_util(self) -> AppUtils:
+        """Lazy-load AppUtils on first access."""
+        if self._app_util is None:
+            self._app_util = AppUtils()
+        return self._app_util
+
     def _refresh_app_cache_if_needed(self):
         """Only refresh app cache when a new window appears with unknown app_id."""
-        if self._app_cache_dirty:
-            self.app_util.refresh()
-            self._all_apps = self.app_util.all_applications
-            self.app_identifiers = self.app_util.app_identifiers
+        if self._app_cache_dirty and self._app_util is not None:
+            self._app_util.refresh()
             self._app_cache_dirty = False
 
     def update(self, signal_update=False):
@@ -272,6 +281,7 @@ class OverviewMenu(Box):
                     size=(client["size"][0] * SCALE, client["size"][1] * SCALE),
                     transform=monitors[client["monitor"]][2],
                     hyprland_connection=self._hyprland_connection,
+                    app_util=self.app_util,
                 )
                 if client["workspace"]["id"] not in self.workspace_boxes:
                     self.workspace_boxes[client["workspace"]["id"]] = Gtk.Fixed.new()

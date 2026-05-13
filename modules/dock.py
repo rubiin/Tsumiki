@@ -162,8 +162,8 @@ class AppBar(Box):
 
     __slots__ = (
         "_active_address",
-        "_all_apps",
         "_app_groups",
+        "_app_util",
         "_clients_by_address",
         "_dragging_box",
         "_group_apps",
@@ -173,9 +173,7 @@ class AppBar(Box):
         "_pinned_app_buttons",
         "_running_app_boxes",
         "_running_app_count",
-        "app_identifiers",
         "app_launcher",
-        "app_util",
         "config",
         "icon_resolver",
         "icon_size",
@@ -186,6 +184,13 @@ class AppBar(Box):
         "separator",
         "truncation_size",
     )
+
+    @property
+    def app_util(self) -> AppUtils:
+        """Lazy-load AppUtils on first access."""
+        if self._app_util is None:
+            self._app_util = AppUtils()
+        return self._app_util
 
     def on_launcher_clicked(self, *_):
         """Toggle the app launcher visibility."""
@@ -205,9 +210,7 @@ class AppBar(Box):
         self._is_dragging = False
         self._dragging_box = None  # Track which box is being dragged
 
-        self.app_util = AppUtils()
-        self._all_apps = self.app_util.all_applications
-        self.app_identifiers = self.app_util.app_identifiers
+        self._app_util = None  # Lazy-load on first use
 
         self.config = parent.config
         self.menu = None
