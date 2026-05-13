@@ -60,13 +60,6 @@ Audit complete. You already have solid lazy-loading in place for widgets and cor
 
 Best remaining lazy-load targets:
 
-1. Quick settings panel services are eagerly created on widget init
-- quick_settings.py
-- quick_settings.py
-- Why: NetworkService and BrightnessService start even if user never opens quick settings.
-- Lazyload idea: instantiate these in show_popover or first icon refresh, then cache.
-
-
 
 
 5. Global config singleton loads config and writes SCSS at import time
@@ -75,11 +68,6 @@ Best remaining lazy-load targets:
 - Lazyload idea: instantiate configuration inside main startup path only, expose getter instead of module-global object.
 
 
-
-7. Large weather icon map is always imported with general icon utilities
-- icons.py
-- Why: very large weather dictionary is loaded even when weather widget is not used.
-- Lazyload idea: split weather mappings into a weather-only module loaded by weather widget.
 
 Skeptical note:
 - Not everything should be lazy. For always-visible widgets (for example dock when enabled), delaying too much can cause first-interaction jank. The best wins are where objects are initialized before user can ever use them (quick settings services, module-level imports, global config/thread pool side effects).

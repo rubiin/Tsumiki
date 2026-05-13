@@ -196,6 +196,7 @@ class AppBar(Box):
         """Toggle the app launcher visibility."""
         if self.app_launcher is None:
             from modules.app_launcher import AppLauncher
+
             self.app_launcher = AppLauncher(widget_config)
         self.app_launcher.toggle()
 

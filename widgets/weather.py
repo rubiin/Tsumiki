@@ -11,7 +11,7 @@ from services.weather import WeatherService
 from shared.widget_container import ButtonWidget
 from utils.constants import ASSETS_DIR
 from utils.functions import check_if_day
-from utils.icons import weather_icons
+from utils.weather_icons import weather_icons
 from utils.widget_utils import (
     nerd_font_icon,
 )
