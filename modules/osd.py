@@ -102,6 +102,11 @@ class OSDContainer(Window):
 
             self.microphone_container = MicrophoneOSDContainer(config=self.config)
             self.microphone_container.connect("mic-changed", self.show_microphone)
+        if "lockkeys" in osds:
+            from .osds.lockkeys import LockkeysOSDContainer
+
+            self.lockkeys_container = LockkeysOSDContainer(config=self.config)
+            self.lockkeys_container.connect("locks-changed", self.show_lockkeys)
 
         self.timeout = self.config.get("timeout", 3000)
 
@@ -133,13 +138,20 @@ class OSDContainer(Window):
     def show_microphone(self, *_):
         self.show_box(box_to_show="microphone")
 
-    def show_box(self, box_to_show: Literal["audio", "brightness", "microphone"]):
+    def show_lockkeys(self, *_):
+        self.show_box(box_to_show="lockkeys")
+
+    def show_box(
+        self, box_to_show: Literal["audio", "brightness", "microphone", "lockkeys"]
+    ):
         if box_to_show == "audio":
             child_to_show = self.audio_container
         elif box_to_show == "brightness":
             child_to_show = self.brightness_container
-        else:
+        elif box_to_show == "microphone":
             child_to_show = self.microphone_container
+        else:
+            child_to_show = self.lockkeys_container
 
         if self.revealer.get_child() != child_to_show:
             if self.revealer.get_child():

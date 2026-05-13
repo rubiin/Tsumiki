@@ -382,6 +382,7 @@ DEFAULT_CONFIG = {
             "transition_type": "slide-up",
             "transition_duration": 500,
             "osds": ["brightness", "volume"],
+            "poll_interval": 200,
         },
         "app_launcher": {
             "enabled": False,

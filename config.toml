@@ -456,7 +456,7 @@ icon_size = 28
 play_sound = false
 transition_type = "slide-up"
 transition_duration = 500
-osds = ["brightness", "volume"]
+osds = ["brightness", "volume","lockkeys"]
 
 [modules.app_launcher]
 enabled = true
