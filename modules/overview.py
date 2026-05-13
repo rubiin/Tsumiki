@@ -54,6 +54,7 @@ class HyprlandWindowButton(Button):
         app_id: str,
         size,
         transform: int = 0,
+        hyprland_connection=None,
     ):
         self.transform = transform % 4
         self.size = size if transform in [0, 2] else (size[1], size[0])
@@ -62,7 +63,7 @@ class HyprlandWindowButton(Button):
         self.title = title
         self.window: Box = window
         self.icon_resolver = IconResolver()
-        self._hyprland_connection = get_hyprland_connection()
+        self._hyprland_connection = hyprland_connection or get_hyprland_connection()
 
         # Compute dynamic icon sizes based on the button size.
         # Using the minimum dimension of the button for scaling.
@@ -147,14 +148,14 @@ class HyprlandWindowButton(Button):
 class WorkspaceEventBox(EventBox):
     """A widget to show a workspace in the overview."""
 
-    def __init__(self, workspace_id: int, fixed: Gtk.Fixed | None = None):
+    def __init__(self, workspace_id: int, fixed: Gtk.Fixed | None = None, hyprland_connection=None):
         self.fixed = fixed
 
         screen = Gdk.Screen.get_default()
         current_width = screen.get_width()
         current_height = screen.get_height()
 
-        self._hyprland_connection = get_hyprland_connection()
+        self._hyprland_connection = hyprland_connection or get_hyprland_connection()
 
         super().__init__(
             name="overview-workspace-bg",
@@ -270,6 +271,7 @@ class OverviewMenu(Box):
                     app_id=client["initialClass"],
                     size=(client["size"][0] * SCALE, client["size"][1] * SCALE),
                     transform=monitors[client["monitor"]][2],
+                    hyprland_connection=self._hyprland_connection,
                 )
                 if client["workspace"]["id"] not in self.workspace_boxes:
                     self.workspace_boxes[client["workspace"]["id"]] = Gtk.Fixed.new()
@@ -285,6 +287,7 @@ class OverviewMenu(Box):
             overlay = WorkspaceEventBox(
                 w_id,
                 self.workspace_boxes.get(w_id, None),
+                hyprland_connection=self._hyprland_connection,
             )
             overviews.append(overlay)
 
