@@ -364,6 +364,10 @@ use_24hr = true
 show_icon = true
 timezones = ["America/New_York", "Asia/Tokyo"]
 
+[widgets.privacy]
+tooltip = true
+hide_when_inactive = true
+
 [widgets.custom_button_group]
 spacing = 4
 

@@ -267,24 +267,21 @@
 					"required": ["icon", "tooltip", "label"]
 				},
 				"privacy": {
-									"type": "object",
-									"properties": {
-										"tooltip": {
-											"type": "boolean",
-											"default": true,
-											"description": "Determines whether to show the tooltip."
-										},
-										"hide_when_inactive": {
-											"type": "boolean",
-											"default": false,
-											"description": "Determines whether to hide the widget when inactive."
-										}
-									},
-									"required": [
-										"tooltip",
-										"hide_when_inactive"
-									]
-								},
+					"type": "object",
+					"properties": {
+						"tooltip": {
+							"type": "boolean",
+							"default": true,
+							"description": "Determines whether to show the tooltip."
+						},
+						"hide_when_inactive": {
+							"type": "boolean",
+							"default": false,
+							"description": "Determines whether to hide the widget when inactive."
+						}
+					},
+					"required": ["tooltip", "hide_when_inactive"]
+				},
 				"power": {
 					"type": "object",
 					"properties": {
@@ -2342,7 +2339,7 @@
 							"minItems": 1,
 							"items": {
 								"type": "string",
-								"enum": ["brightness", "volume", "microphone","lockkeys"]
+								"enum": ["brightness", "volume", "microphone", "lockkeys"]
 							},
 							"default": ["brightness", "volume"],
 							"description": "List of OSDs to enable"
