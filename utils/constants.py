@@ -244,6 +244,10 @@ DEFAULT_CONFIG = {
                 "logout": "loginctl terminate-user $USER",
             },
         },
+        "privacy": {
+            "tooltip": True,
+            "hide_when_inactive": True,
+        },
         "recorder": {
             "path": "Videos/Screencasting",
             "tooltip": True,

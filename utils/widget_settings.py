@@ -689,6 +689,15 @@ Recording = TypedDict(
     },
 )
 
+# Privacy configuration
+Privacy = TypedDict(
+    "Privacy",
+    {
+        "tooltip": bool,
+        "hide_when_inactive": bool,
+    },
+)
+
 # ScreenShot configuration
 ScreenShot = TypedDict(
     "ScreenShot",
@@ -736,6 +745,7 @@ class Widgets(TypedDict):
     overview_button: Overview_Button
     wallpaper: WallPaper
     power: PowerButton
+    privacy: Privacy
     quick_settings: QuickSettings
     recorder: Recording
     screenshot: ScreenShot

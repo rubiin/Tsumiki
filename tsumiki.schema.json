@@ -114,7 +114,8 @@
 							"quick_settings",
 							"world_clock",
 							"theme_switcher",
-							"wallpaper"
+							"wallpaper",
+							"privacy"
 						],
 						"description": "Specifies the widget to display."
 					},
@@ -265,6 +266,25 @@
 					},
 					"required": ["icon", "tooltip", "label"]
 				},
+				"privacy": {
+									"type": "object",
+									"properties": {
+										"tooltip": {
+											"type": "boolean",
+											"default": true,
+											"description": "Determines whether to show the tooltip."
+										},
+										"hide_when_inactive": {
+											"type": "boolean",
+											"default": false,
+											"description": "Determines whether to hide the widget when inactive."
+										}
+									},
+									"required": [
+										"tooltip",
+										"hide_when_inactive"
+									]
+								},
 				"power": {
 					"type": "object",
 					"properties": {

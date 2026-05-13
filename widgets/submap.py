@@ -58,6 +58,7 @@ class SubMapWidget(ButtonWidget):
 
     def _get_submap(self, *_):
         try:
+            # TODO use the data from the event
             self._hyprland_connection.send_command_async(
                 "submap",
                 lambda res, *_: self._handle_reply(res.reply.decode().strip("\n")),
