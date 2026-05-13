@@ -60,7 +60,9 @@ class CustomModulePresenter:
             "min-length",
             default=0,
         )
-        self._tooltip_enabled = _get_config_value(module_config, "tooltip", default=True)
+        self._tooltip_enabled = _get_config_value(
+            module_config, "tooltip", default=True
+        )
         self._tooltip_format = _get_config_value(
             module_config,
             "tooltip_format",

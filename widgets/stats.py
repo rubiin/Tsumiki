@@ -275,7 +275,7 @@ class NetworkUsageWidget(ButtonWidget):
 
         show_download = self.config.get("download", True)
         show_upload = self.config.get("upload", False)
-        # Thresholds (in bytes/ms)
+        # Thresholds (in bytes/s)
         self.download_threshold = self.config.get("download_threshold", 0)
         self.upload_threshold = self.config.get("upload_threshold", 0)
 
@@ -320,9 +320,8 @@ class NetworkUsageWidget(ButtonWidget):
         # Set up a fabricator to call the update_label method at specified intervals
         util_fabricator.connect("changed", self._update_ui)
 
-    def format_speed(self, speed: int):
-        # speed is in bytes/ms, so *1000 = bytes/s
-        speed_bps = speed * 1000
+    def format_speed(self, speed: float):
+        speed_bps = max(float(speed), 0.0)
         if speed_bps < 1024:
             return f"{speed_bps:.0f} B/s"
         elif speed_bps < 1024 * 1024:
@@ -338,15 +337,13 @@ class NetworkUsageWidget(ButtonWidget):
         download_speed = network_speed.get("download", 0)
         upload_speed = network_speed.get("upload", 0)
 
-        if upload_speed >= self.upload_threshold:
-            self.upload_label.set_label(self.format_speed(upload_speed))
-        else:
-            self.upload_label.set_label("")
+        upload_display = upload_speed if upload_speed >= self.upload_threshold else 0
+        download_display = (
+            download_speed if download_speed >= self.download_threshold else 0
+        )
 
-        if download_speed >= self.download_threshold:
-            self.download_label.set_label(self.format_speed(download_speed))
-        else:
-            self.download_label.set_label("")
+        self.upload_label.set_label(self.format_speed(upload_display))
+        self.download_label.set_label(self.format_speed(download_display))
 
         if self.config.get("tooltip", False):
             tooltip_text = (
