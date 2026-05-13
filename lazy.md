@@ -77,10 +77,6 @@ Best remaining lazy-load targets:
 - Why: AppUtils scans desktop apps; this can be expensive on startup.
 - Lazyload idea: defer AppUtils construction until first window list render or first unknown app id.
 
-4. Global ThreadPoolExecutor is created at import time
-- decorators.py
-- Why: thread pool starts even if threading helpers are unused.
-- Lazyload idea: create pool on first thread/run_in_thread call.
 
 5. Global config singleton loads config and writes SCSS at import time
 - config.py

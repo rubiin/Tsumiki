@@ -9,10 +9,17 @@ from fabric.utils import GLib
 
 # Auto-tune max_workers based on CPU count, fallback to 4
 _cpu_count = os.cpu_count() or 4
-thread_pool = ThreadPoolExecutor(max_workers=_cpu_count)
+thread_pool: ThreadPoolExecutor | None = None
 
-# Ensure thread pool is properly shutdown on exit
-atexit.register(thread_pool.shutdown)
+
+def _get_thread_pool() -> ThreadPoolExecutor:
+    """Lazy-initialize thread pool on first use."""
+    global thread_pool
+    if thread_pool is None:
+        thread_pool = ThreadPoolExecutor(max_workers=_cpu_count)
+        atexit.register(thread_pool.shutdown)
+    return thread_pool
+
 
 T = TypeVar("T")
 
@@ -22,7 +29,7 @@ def thread(target: Callable[..., T], *args: Any, **kwargs: Any) -> Any:
     Submit the given function to the thread pool.
     Returns a Future instead of a Thread.
     """
-    return thread_pool.submit(target, *args, **kwargs)
+    return _get_thread_pool().submit(target, *args, **kwargs)
 
 
 def run_in_thread(func: Callable[..., T]) -> Callable[..., Any]:
