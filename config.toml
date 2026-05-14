@@ -494,6 +494,13 @@ low = 3000
 normal = 8000
 critical = 15000
 
+[modules.notification.persist]
+enabled = true
+low = true
+normal = true
+critical = true
+max_count = 200
+
 [modules.screen_corners]
 enabled = false
 size = 20

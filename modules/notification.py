@@ -52,6 +52,8 @@ class NotificationPopup(Window):
 
         self.ignored_apps = helpers.unique_list(self.config.get("ignored", []))
 
+        self.persist = self.config.get("persist", {})
+
         if self.config.get("play_sound", False):
             self.sound_file = f"{constants.ASSETS_DIR}/sounds/{self.config.get('sound_file', 'notification4')}.mp3"  # noqa: E501
 
@@ -90,9 +92,16 @@ class NotificationPopup(Window):
             f"{Colors.OKGREEN}{notification.app_name}"
         )
 
-        if self.config.get("persist", True):
+        if self.persist.get("enabled", True):
+            if notification.urgency == 0 and not self.persist.get("low", True):
+                return
+            if notification.urgency == 1 and not self.persist.get("normal", True):
+                return
+            if notification.urgency == 2 and not self.persist.get("critical", True):
+                return
+
             self._server.cache_notification(
-                self.widget_config, notification, self.config.get("max_count", 3)
+                self.widget_config, notification, self.persist.get("max_count", 100)
             )
 
         if self.config.get("play_sound", False):

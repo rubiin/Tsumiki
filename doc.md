@@ -88,6 +88,10 @@
     - **`tooltip`**: `bool` (default: true)
     - **`mode`**: `str` (default: "circular")
     - **`graph_length`**: `int` (default: 4)
+  - **`settings`**: `object`
+    - **`icon`**: `str` (default: "󰒓")
+    - **`tooltip`**: `bool` (default: true)
+    - **`label`**: `bool` (default: false)
   - **`date_time`**: `object`
     - **`format`**: `str` (default: "%b %d %H:%M")
     - **`calendar`**: `bool` (default: true)
@@ -145,11 +149,8 @@
     - **`graph_length`**: `int` (default: 4)
     - **`unit`**: `str` (default: "gb")
   - **`network_usage`**: `object`
-    - **`upload_icon`**: `str` (default: "")
-    - **`download_icon`**: `str` (default: "")
     - **`tooltip`**: `bool` (default: true)
-    - **`upload`**: `bool` (default: true)
-    - **`download`**: `bool` (default: true)
+    - **`format`**: `str` (default: " {upload}  {download}")
     - **`upload_threshold`**: `int` (default: 100)
     - **`download_threshold`**: `int` (default: 1024)
     - **`kb_digits`**: `int` (default: 0)
@@ -182,6 +183,9 @@
       - **`suspend`**: `str` (default: "systemctl suspend")
       - **`lock`**: `str` (default: "loginctl lock-session")
       - **`logout`**: `str` (default: "loginctl terminate-user $USER")
+  - **`privacy`**: `object`
+    - **`tooltip`**: `bool` (default: true)
+    - **`hide_when_inactive`**: `bool` (default: true)
   - **`recorder`**: `object`
     - **`path`**: `str` (default: "Videos/Screencasting")
     - **`tooltip`**: `bool` (default: true)
@@ -290,8 +294,8 @@
 - **`modules`**: `object`
   - **`bar`**: `object`
     - **`layer`**: `str` (default: "top")
-    - **`auto_hide`**: `bool` (default: false) - Whether the bar should auto-hide after inactivity
-    - **`auto_hide_timeout`**: `int` (default: 3000) - Time in milliseconds before the bar auto-hides
+    - **`auto_hide`**: `bool` (default: false)
+    - **`auto_hide_timeout`**: `int` (default: 3000)
     - **`location`**: `str` (default: "top")
   - **`overview`**: `object`
     - **`enabled`**: `bool` (default: false)
@@ -310,6 +314,7 @@
     - **`transition_type`**: `str` (default: "slide-up")
     - **`transition_duration`**: `int` (default: 500)
     - **`osds`**: `list[str]` (default: ["brightness", "volume"])
+    - **`poll_interval`**: `int` (default: 200)
   - **`app_launcher`**: `object`
     - **`enabled`**: `bool` (default: false)
     - **`tooltip`**: `bool` (default: true)
@@ -320,16 +325,24 @@
     - **`auto_dismiss`**: `bool` (default: true)
     - **`dnd_on_screencast`**: `bool` (default: false)
     - **`ignored`**: `list` (default: [])
-    - **`timeout`**: `int` (default: 3000)
-    - **`max_count`**: `int` (default: 200)
+    - **`respect_expire`**: `bool` (default: true)
+    - **`timeout`**: `object`
+      - **`low`**: `int` (default: 3000)
+      - **`normal`**: `int` (default: 8000)
+      - **`critical`**: `int` (default: 15000)
     - **`transition_type`**: `str` (default: "slide-left")
     - **`transition_duration`**: `int` (default: 350)
     - **`per_app_limits`**: `object`
     - **`play_sound`**: `bool` (default: false)
-    - **`max_actions`**: `int` (default: 5)
+    - **`max_actions`**: `int` (default: 3)
     - **`dismiss_on_hover`**: `bool` (default: false)
     - **`sound_file`**: `str` (default: "notification4")
-    - **`persist`**: `bool` (default: true)
+    - **`persist`**: `object`
+      - **`enabled`**: `bool` (default: true)
+      - **`max_count`**: `int` (default: 200)
+      - **`low`**: `bool` (default: true)
+      - **`normal`**: `bool` (default: true)
+      - **`critical`**: `bool` (default: true)
   - **`screen_corners`**: `object`
     - **`enabled`**: `bool` (default: false)
     - **`size`**: `int` (default: 20)
@@ -341,6 +354,13 @@
     - **`tooltip`**: `bool` (default: false)
     - **`layer`**: `str` (default: "top")
     - **`show_when_no_windows`**: `bool` (default: false)
+    - **`group_apps`**: `bool` (default: true)
+    - **`truncation_size`**: `int` (default: 20)
+    - **`orientation`**: `str` (default: "horizontal")
+    - **`always_show_focused`**: `bool` (default: true)
+    - **`show_launcher`**: `bool` (default: true)
+    - **`launcher_position`**: `str` (default: "first")
+    - **`hide_special_workspace_apps`**: `bool` (default: false)
   - **`desktop_clock`**: `object`
     - **`enabled`**: `bool` (default: false)
     - **`layer`**: `str` (default: "bottom")
@@ -361,6 +381,5 @@
   - **`check_updates`**: `bool` (default: false)
   - **`debug`**: `bool` (default: true)
   - **`monitor_styles`**: `bool` (default: true)
-  - **`location`**: `str` (default: "top")
   - **`auto_reload`**: `bool` (default: true)
   - **`multi_monitor`**: `bool` (default: false)

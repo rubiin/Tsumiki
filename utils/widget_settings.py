@@ -143,6 +143,17 @@ Notification_Timeout = TypedDict(
 )
 
 
+Notification_Persist = TypedDict(
+    "Notification_Persist",
+    {
+        "enabled": bool,
+        "low": bool,
+        "normal": bool,
+        "critical": bool,
+        "max_count": int,
+    },
+)
+
 # Notification configuration
 Notification = TypedDict(
     "Notification",
@@ -155,10 +166,9 @@ Notification = TypedDict(
         "anchor": Anchor,
         "auto_dismiss": bool,
         "respect_expire": bool,
-        "persist": bool,
+        "persist": Notification_Persist,
         "play_sound": bool,
         "sound_file": str,
-        "max_count": int,
         "dismiss_on_hover": bool,
         "dnd_on_screencast": bool,
         "max_actions": int,

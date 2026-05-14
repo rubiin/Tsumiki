@@ -398,15 +398,20 @@ DEFAULT_CONFIG = {
             "ignored": [],
             "respect_expire": True,  # Whether to respect the expire timeout sent by the notification
             "timeout": {"low": 3000, "normal": 8000, "critical": 15000},
-            "max_count": 200,
             "transition_type": "slide-left",
             "transition_duration": 350,
             "per_app_limits": {},
             "play_sound": False,
-            "max_actions": 5,
+            "max_actions": 3,
             "dismiss_on_hover": False,
             "sound_file": "notification4",
-            "persist": True,
+            "persist": {
+                "enabled": True,
+                "max_count": 200,
+                "low": True,
+                "normal": True,
+                "critical": True,
+            },
         },
         "screen_corners": {
             "enabled": False,
