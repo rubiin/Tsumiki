@@ -206,28 +206,99 @@ class Popover(Widget):
 
         self.emit("popover-opened")
 
-    def _calculate_margins(self):
-        widget_allocation = self._point_to.get_allocation()
-        popover_size = self._content_window.get_size()
+    def _get_widget_monitor_coordinates(self):
+        allocation = self._point_to.get_allocation()
+        window = self._point_to.get_window()
+
+        relative_x = allocation.x
+        relative_y = allocation.y
+
+        toplevel = self._point_to.get_toplevel()
+        with contextlib.suppress(Exception):
+            translated = self._point_to.translate_coordinates(toplevel, 0, 0)
+            if translated is not None:
+                relative_x, relative_y = translated
+
+        origin_x = 0
+        origin_y = 0
+        if toplevel is not None:
+            with contextlib.suppress(Exception):
+                origin = toplevel.get_window().get_origin()
+                if isinstance(origin, tuple):
+                    if len(origin) == 3:
+                        _, origin_x, origin_y = origin
+                    elif len(origin) == 2:
+                        origin_x, origin_y = origin
 
         display = Gdk.Display.get_default()
         screen = display.get_default()
-        monitor_at_window = screen.get_monitor_at_window(self._point_to.get_window())
+        monitor_at_window = screen.get_monitor_at_window(window)
         monitor_geometry = monitor_at_window.get_geometry()
 
-        x = (
-            widget_allocation.x
-            + (widget_allocation.width / 2)
-            - (popover_size.width / 2)
+        layer_x = None
+        layer_y = None
+        if toplevel is not None:
+            with contextlib.suppress(Exception):
+                if GtkLayerShell.is_layer_window(toplevel):
+                    toplevel_allocation = toplevel.get_allocation()
+                    anchored_left = GtkLayerShell.get_anchor(
+                        toplevel, GtkLayerShell.Edge.LEFT
+                    )
+                    anchored_right = GtkLayerShell.get_anchor(
+                        toplevel, GtkLayerShell.Edge.RIGHT
+                    )
+                    anchored_top = GtkLayerShell.get_anchor(
+                        toplevel, GtkLayerShell.Edge.TOP
+                    )
+                    anchored_bottom = GtkLayerShell.get_anchor(
+                        toplevel, GtkLayerShell.Edge.BOTTOM
+                    )
+
+                    if anchored_left and anchored_right:
+                        layer_x = relative_x
+
+                    if anchored_bottom and not anchored_top:
+                        layer_y = (
+                            monitor_geometry.height
+                            - toplevel_allocation.height
+                            + relative_y
+                        )
+                    elif anchored_top and not anchored_bottom:
+                        layer_y = relative_y
+
+        widget_x = layer_x
+        if widget_x is None:
+            widget_x = origin_x + relative_x - monitor_geometry.x
+
+        widget_y = layer_y
+        if widget_y is None:
+            widget_y = origin_y + relative_y - monitor_geometry.y
+
+        return widget_x, widget_y, allocation, monitor_geometry
+
+    def _calculate_margins(self):
+        widget_x, widget_y, widget_allocation, monitor_geometry = (
+            self._get_widget_monitor_coordinates()
         )
-        y = widget_allocation.y - 5
+        popover_size = self._content_window.get_size()
+
+        x = widget_x + (widget_allocation.width / 2) - (popover_size.width / 2)
+        y = widget_y + widget_allocation.height + 5
+
+        if widget_y >= monitor_geometry.height / 2:
+            y = widget_y - popover_size.height - 5
 
         if x <= 0:
-            x = widget_allocation.x
+            x = widget_x
         elif x + popover_size.width >= monitor_geometry.width:
-            x = widget_allocation.x - popover_size.width + widget_allocation.width
+            x = widget_x - popover_size.width + widget_allocation.width
 
-        return [y, 0, 0, x]
+        if y <= 0:
+            y = 0
+        elif y + popover_size.height >= monitor_geometry.height:
+            y = max(monitor_geometry.height - popover_size.height, 0)
+
+        return [int(y), 0, 0, int(x)]
 
     def set_position(self, position: tuple[int, int, int, int] | None = None):
         if position is None:
