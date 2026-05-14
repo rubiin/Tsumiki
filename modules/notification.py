@@ -475,7 +475,7 @@ class NotificationRevealer(Revealer):
 
     def __init__(self, config: dict, notification: Notification, **kwargs):
         self.notification_box = NotificationWidget(config, notification)
-        self.timeout = config.get("timeout", 3000)
+        self.timeout = self.notification_box.get_timeout()
         self._notification = notification
         self._is_closing = False
 
