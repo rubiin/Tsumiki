@@ -2263,10 +2263,28 @@
 							"description": "Determines whether notifications are persisted to the notification history",
 							"default": true
 						},
+						"respect_expire": {
+							"type": "boolean",
+							"description": "Determines whether to respect the expire timeout sent by applications",
+							"default": true
+						},
 						"timeout": {
-							"type": "integer",
+							"type": "object",
 							"description": "Timeout in milliseconds before notifications are dismissed",
-							"default": 3000
+							"properties": {
+								"low": {
+									"type": "integer",
+									"default": 3000
+								},
+								"normal": {
+									"type": "integer",
+									"default": 8000
+								},
+								"critical": {
+									"type": "integer",
+									"default": 15000
+								}
+							}
 						},
 						"max_count": {
 							"type": "integer",

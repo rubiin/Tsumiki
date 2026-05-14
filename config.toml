@@ -474,9 +474,9 @@ grid_columns = 3
 enabled = true
 anchor = "top-right"
 auto_dismiss = true
+respect_expire = true
 dnd_on_screencast = true
 ignored = []
-timeout = 3_000
 max_count = 200
 transition_type = "slide-left"
 transition_duration = 350
@@ -488,6 +488,11 @@ sound_file = "notification4"
 persist = true
 max_lines = 4
 max_expanded_lines = 20
+
+[modules.notification.timeout]
+low = 3000
+normal = 8000
+critical = 15000
 
 [modules.screen_corners]
 enabled = false

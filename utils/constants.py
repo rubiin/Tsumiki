@@ -396,7 +396,8 @@ DEFAULT_CONFIG = {
             "auto_dismiss": True,
             "dnd_on_screencast": False,  # Enable Do Not Disturb mode when screencasting
             "ignored": [],
-            "timeout": 3000,
+            "respect_expire": True,  # Whether to respect the expire timeout sent by the notification
+            "timeout": {"low": 3000, "normal": 8000, "critical": 15000},
             "max_count": 200,
             "transition_type": "slide-left",
             "transition_duration": 350,

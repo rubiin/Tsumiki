@@ -433,11 +433,17 @@ class NotificationWidget(EventBox):
         self.resume_timeout()
 
     def get_timeout(self):
-        return (
-            self._notification.timeout
-            if self._notification.timeout != -1
-            else self.config.get("timeout", 3000)
-        )
+        if self.config.get("respect_expire", True) and self._notification.timeout != -1:
+            return self._notification.timeout
+
+        if isinstance(self.config.get("timeout"), dict):
+            urgency = self._notification.urgency
+            if urgency == 0:
+                return self.config["timeout"].get("low", 3000)
+            elif urgency == 1:
+                return self.config["timeout"].get("normal", 8000)
+            elif urgency == 2:
+                return self.config["timeout"].get("critical", 15000)
 
     def pause_timeout(self):
         self.stop_timeout()

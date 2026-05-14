@@ -133,6 +133,15 @@ StopWatch = TypedDict(
     },
 )
 
+Notification_Timeout = TypedDict(
+    "Notification_Timeout",
+    {
+        "low": int,
+        "normal": int,
+        "critical": int,
+    },
+)
+
 
 # Notification configuration
 Notification = TypedDict(
@@ -140,11 +149,12 @@ Notification = TypedDict(
     {
         "enabled": bool,
         "ignored": list[str],
-        "timeout": int,
+        "timeout": Notification_Timeout,
         "max_lines": int,
         "max_expanded_lines": int,
         "anchor": Anchor,
         "auto_dismiss": bool,
+        "respect_expire": bool,
         "persist": bool,
         "play_sound": bool,
         "sound_file": str,
