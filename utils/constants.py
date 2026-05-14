@@ -423,6 +423,8 @@ DEFAULT_CONFIG = {
             "truncation_size": 20,
             "orientation": "horizontal",
             "always_show_focused": True,
+            "show_launcher": True,
+            "launcher_position": "first",
             "hide_special_workspace_apps": False,
         },
         "desktop_clock": {

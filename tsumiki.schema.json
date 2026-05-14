@@ -2136,6 +2136,17 @@
 							"default": false,
 							"description": "Determines whether apps on special workspaces are hidden from the dock."
 						},
+						"launcher_position": {
+							"type": "string",
+							"enum": ["first", "last"],
+							"default": "first",
+							"description": "Position of the app launcher in the dock (first = first position)"
+						},
+						"show_launcher": {
+							"type": "boolean",
+							"default": false,
+							"description": "Determines whether the app launcher is shown in the dock."
+						},
 						"layer": {
 							"$ref": "#/definitions/layer",
 							"default": "top",

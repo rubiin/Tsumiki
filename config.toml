@@ -508,6 +508,8 @@ truncation_size = 20
 orientation = "horizontal"
 always_show_focused = true
 hide_special_workspace_apps = false
+show_launcher = true
+launcher_position = "last"
 ignored = []
 
 [modules.desktop_clock]

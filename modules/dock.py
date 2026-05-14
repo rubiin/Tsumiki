@@ -222,6 +222,9 @@ class AppBar(Box):
         self.icon_size = self.config.get("icon_size", 30)
         self.orientation = self.config.get("orientation", "horizontal")
         self._group_apps = self.config.get("group_apps", True)
+        self.show_launcher = self.config.get("show_launcher", True)
+        self.launcher_position = self.config.get("launcher_position", "first")
+
         self.truncation_size = self.config.get("truncation_size", 20)
 
         # Track grouped apps: app_id -> {box, button, indicator, clients: []}
@@ -236,24 +239,33 @@ class AppBar(Box):
         # Determine orientation for boxes
         is_vertical = self.orientation == "vertical"
         box_orientation = "vertical" if is_vertical else "horizontal"
-        launcher_style = "margin-bottom: 8px;" if is_vertical else "margin-right: 8px;"
-
-        launcher_button = Button(
-            style=launcher_style,
-            image=Image(
-                icon_name="view-app-grid-symbolic",
-                icon_size=self.icon_size,
-            ),
-            on_button_press_event=self.on_launcher_clicked,
-        )
 
         super().__init__(
             spacing=10,
             orientation=box_orientation,
             name="dock-bar",
             style_classes=["window-basic", "sleek-border", f"dock-{self.orientation}"],
-            children=[launcher_button],
         )
+
+        if self.show_launcher:
+            launcher_style = (
+                "margin-bottom: 8px;" if is_vertical else "margin-right: 8px;"
+            )
+
+            launcher_button = Button(
+                style=launcher_style,
+                image=Image(
+                    icon_name="view-app-grid-symbolic",
+                    icon_size=self.icon_size,
+                ),
+                on_button_press_event=self.on_launcher_clicked,
+            )
+            self.add(launcher_button)
+            self.separator = Separator(
+                orientation="horizontal" if is_vertical else "vertical", visible=False
+            )
+            self.add(self.separator)
+
         self.pinned_apps = read_json_file(PINNED_APPS_FILE) or []
         self.icon_resolver = IconResolver()
         self._hyprland_connection = get_hyprland_connection()
@@ -263,10 +275,6 @@ class AppBar(Box):
             spacing=7, orientation=box_orientation, **{pinned_align: "center"}
         )
         self.add(self.pinned_apps_container)
-        self.separator = Separator(
-            orientation="horizontal" if is_vertical else "vertical", visible=False
-        )
-        self.add(self.separator)
 
         self._pinned_app_buttons = {}  # app_id -> Button widget
         self._populate_pinned_apps(self.pinned_apps)

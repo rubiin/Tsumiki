@@ -248,6 +248,8 @@ Dock = TypedDict(
         "tooltip": bool,
         "orientation": Orientation,
         "behavior": Dock_Behavior,
+        "show_launcher": bool,
+        "launcher_position": str,
         "icon_size": int,
         "show_when_no_windows": bool,
         "group_apps": bool,

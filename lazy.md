@@ -14,4 +14,3 @@
 Assumptions and gaps
 - This is static code audit, not runtime profile. I have not run heap snapshots, perf tracing, or long-session soak tests.
 - Highest-confidence issues are the stats listener accumulation risk, GPU subprocess frequency, and dock full-snapshot sync frequency.
-
