@@ -5,14 +5,9 @@ interface Props {
 	dateLabel?: string;
 }
 
-const {
-	repo = "rubiin/tsumiki",
-	versionLabel,
-	dateLabel,
-} = Astro.props as Props;
+const { repo = "rubiin/tsumiki" } = Astro.props as Props;
 
-let tagName: string | null = null;
-let publishedAt: string | null = null;
+let _tagName: string | null = null;
 
 try {
 	const res = await fetch(
@@ -23,12 +18,14 @@ try {
 	);
 	if (res.ok) {
 		const data = await res.json();
-		tagName = data?.tag_name ?? null;
+		_tagName = data?.tag_name ?? null;
 		const rawDate = data?.published_at as string | undefined;
 		if (rawDate) {
 			const d = new Date(rawDate);
 			// ISO date (YYYY-MM-DD) for consistency with docs
-			publishedAt = isNaN(d.getTime()) ? null : d.toISOString().slice(0, 10);
+			publishedAt = Number.isNaN(d.getTime())
+				? null
+				: d.toISOString().slice(0, 10);
 		}
 	}
 } catch (err) {
