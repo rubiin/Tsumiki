@@ -12,6 +12,7 @@ from gi.repository import GtkLayerShell
 from utils.functions import get_display_server_window
 
 Window = get_display_server_window()
+POPOVER_BAR_GAP = -25
 
 
 class PopoverManager:
@@ -285,10 +286,10 @@ class Popover(Widget):
         popover_size = self._content_window.get_size()
 
         x = widget_x + (widget_allocation.width / 2) - (popover_size.width / 2)
-        y = widget_y + widget_allocation.height + 5
+        y = widget_y + widget_allocation.height + POPOVER_BAR_GAP
 
         if widget_y >= monitor_geometry.height / 2:
-            y = widget_y - popover_size.height - 5
+            y = widget_y - popover_size.height - POPOVER_BAR_GAP
 
         if self._enable_boundary_checking:
             if x <= 0:

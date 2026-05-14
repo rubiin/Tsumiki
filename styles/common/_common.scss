@@ -88,6 +88,8 @@
 #popover-content {
   @include mixins.floating-widget;
   @include mixins.spacing;
+  margin-top: 0;
+  margin-bottom: 0;
 }
 
 .panel-box {
