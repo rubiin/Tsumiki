@@ -156,6 +156,7 @@ class Popover(Widget):
         point_to,
         content_factory=None,
         content=None,
+        enable_boundary_checking=True,
     ):
         super().__init__()
 
@@ -163,6 +164,7 @@ class Popover(Widget):
         self._point_to = point_to
         self._content_window = None
         self._content = content
+        self._enable_boundary_checking = enable_boundary_checking
         self._visible = False
         self._draw_handler_id = None
         self._focus_out_timeout_id = None
@@ -288,15 +290,16 @@ class Popover(Widget):
         if widget_y >= monitor_geometry.height / 2:
             y = widget_y - popover_size.height - 5
 
-        if x <= 0:
-            x = widget_x
-        elif x + popover_size.width >= monitor_geometry.width:
-            x = widget_x - popover_size.width + widget_allocation.width
+        if self._enable_boundary_checking:
+            if x <= 0:
+                x = widget_x
+            elif x + popover_size.width >= monitor_geometry.width:
+                x = widget_x - popover_size.width + widget_allocation.width
 
-        if y <= 0:
-            y = 0
-        elif y + popover_size.height >= monitor_geometry.height:
-            y = max(monitor_geometry.height - popover_size.height, 0)
+            if y <= 0:
+                y = 0
+            elif y + popover_size.height >= monitor_geometry.height:
+                y = max(monitor_geometry.height - popover_size.height, 0)
 
         return [int(y), 0, 0, int(x)]
 
