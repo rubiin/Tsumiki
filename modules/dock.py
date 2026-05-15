@@ -8,7 +8,6 @@ from fabric.widgets.centerbox import CenterBox
 from fabric.widgets.eventbox import EventBox
 from fabric.widgets.image import Image
 from fabric.widgets.revealer import Revealer
-from fabric.widgets.separator import Separator
 
 from utils.app import AppUtils
 from utils.config import widget_config
@@ -260,10 +259,6 @@ class AppBar(Box):
                 on_button_press_event=self.on_launcher_clicked,
             )
             self.add(launcher_button)
-            self.separator = Separator(
-                orientation="horizontal" if is_vertical else "vertical", visible=False
-            )
-            self.add(self.separator)
 
         self.pinned_apps = read_json_file(PINNED_APPS_FILE) or []
         self.icon_resolver = IconResolver()
@@ -404,11 +399,6 @@ class AppBar(Box):
         else:
             self._sync_ungrouped_clients(clients)
 
-    def _update_separator_visibility(self):
-        self.separator.set_visible(
-            bool(self._app_groups) or self._running_app_count > 0
-        )
-
     def _sync_clients(self):
         if self._sync_in_progress:
             self._schedule_sync_clients()
@@ -419,7 +409,6 @@ class AppBar(Box):
             clients, clients_by_address = self._capture_client_snapshot()
             self._clients_by_address = clients_by_address
             self._reconcile_clients(clients)
-            self._update_separator_visibility()
         finally:
             self._sync_in_progress = False
 
@@ -765,9 +754,6 @@ class AppBar(Box):
         self._refresh_group_visuals(app_id)
 
         self.add(group["box"])
-
-        if len(self.pinned_apps) > 0 and not self.separator.get_visible():
-            self.separator.set_visible(True)
 
     def _refresh_group_visuals(self, app_id: str):
         group = self._app_groups.get(app_id)

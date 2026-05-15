@@ -12,6 +12,7 @@ padding_x = ".8em"
 padding_y = ".6em"
 scaling = 100
 
+
 [bar.border]
 enabled = true
 radius = "16px"
@@ -521,7 +522,7 @@ width = "1px"
 [modules.dock]
 margin_x = "8px"
 margin_y = "8px"
-opacity = 45
+opacity = 10
 padding_x = "8px"
 padding_y = "4px"
 scaling = 100
