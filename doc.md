@@ -381,5 +381,5 @@
   - **`check_updates`**: `bool` (default: false)
   - **`debug`**: `bool` (default: true)
   - **`monitor_styles`**: `bool` (default: true)
-  - **`auto_reload`**: `bool` (default: true)
+  - **`auto_restart`**: `bool` (default: true)
   - **`multi_monitor`**: `bool` (default: false)

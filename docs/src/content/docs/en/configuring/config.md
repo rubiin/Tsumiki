@@ -23,7 +23,7 @@ $schema = "./tsumiki.schema.json"
 
 [general]
 debug = false
-auto_reload = true
+auto_restart = true
 multi_monitor = false
 
 [layout]

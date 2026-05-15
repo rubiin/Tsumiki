@@ -551,5 +551,6 @@ transition_duration = 350
 check_updates = false
 debug = false
 monitor_styles = true
-auto_reload = true
+auto_restart = true
+restart_delay = 1500
 multi_monitor = false

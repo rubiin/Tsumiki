@@ -128,7 +128,7 @@ def main():
             logger.disable(log)
 
     # Start config file watching if enabled
-    if general_options.get("auto_reload", True):
+    if general_options.get("auto_restart", True):
         from utils.config_watcher import start_config_watching
 
         start_config_watching()

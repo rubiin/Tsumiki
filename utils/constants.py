@@ -456,7 +456,8 @@ DEFAULT_CONFIG = {
         "check_updates": False,
         "debug": True,
         "monitor_styles": True,
-        "auto_reload": True,
+        "auto_restart": True,
+        "restart_delay": 1500,
         "multi_monitor": False,
     },
 }

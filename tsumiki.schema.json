@@ -2717,9 +2717,15 @@
 					"type": "boolean",
 					"description": "Determines whether to check for updates on startup."
 				},
-				"auto_reload": {
+				"auto_restart": {
 					"type": "boolean",
 					"description": "Determines whether to automatically reload the application when configuration files change."
+				},
+				"restart_delay": {
+					"type": "integer",
+					"minimum": 1,
+					"default": 1500,
+					"description": "Debounce delay in milliseconds before restarting after a config content change."
 				},
 				"multi_monitor": {
 					"type": "boolean",

@@ -540,6 +540,7 @@ check_updates = false
 debug = false
 monitor_styles = false
 auto_reload = true
+restart_delay_ms = 1500
 multi_monitor = false
 
 [activate_linux]
