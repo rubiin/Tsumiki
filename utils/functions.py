@@ -34,7 +34,7 @@ from .colors import Colors
 from .constants import NAMED_COLORS
 from .decorators import run_in_thread, thread
 from .exceptions import ExecutableNotFoundError
-from .icons import text_nerd_icons
+from .icons import get_text_icon
 
 _TEMP_PATHS = set()
 
@@ -792,7 +792,7 @@ def get_distro_icon() -> str:
     distro_id = GLib.get_os_info("ID")
 
     # Search for the icon in the list
-    return text_nerd_icons["distro"].get(distro_id, "")
+    return get_text_icon(f"distro.{distro_id}") or ""
 
 
 # Function to check if an executable exists

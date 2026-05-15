@@ -7,7 +7,7 @@ from fabric.widgets.overlay import Overlay
 
 from services import audio_service
 from shared.widget_container import EventBoxWidget
-from utils.icons import text_nerd_icons
+from utils.icons import get_text_icon
 from utils.widget_utils import get_audio_icon_name, nerd_font_icon
 
 
@@ -34,7 +34,7 @@ class VolumeWidget(EventBoxWidget):
         )
 
         self.icon = nerd_font_icon(
-            icon=text_nerd_icons["volume"]["medium"],
+            icon=get_text_icon("volume.medium"),
             props={
                 "style_classes": ["panel-font-icon", "overlay-icon"],
             },
@@ -92,7 +92,7 @@ class VolumeWidget(EventBoxWidget):
         if current_stream:
             current_stream.muted = not current_stream.muted
             self.icon.set_text(
-                text_nerd_icons["volume"]["muted"]
+                get_text_icon("volume.muted")
             ) if current_stream.muted else self.update_volume()
 
     def update_volume(self, *_):

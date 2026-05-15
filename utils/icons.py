@@ -708,3 +708,14 @@ symbolic_icons = {
         "light": "light-mode-symbolic",
     },
 }
+
+
+def get_path(d, path, sep="."):
+    for key in path.split(sep):
+        d = d.get(key, {})
+    return d or None
+
+
+def get_text_icon(name):
+
+    return get_path(text_nerd_icons, name)

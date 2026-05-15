@@ -15,7 +15,7 @@ from fabric.widgets.image import Image
 
 from shared.buttons import HoverButton
 from shared.widget_container import ButtonWidget
-from utils.icons import text_nerd_icons
+from utils.icons import get_text_icon
 from utils.widget_utils import nerd_font_icon
 
 
@@ -174,7 +174,7 @@ class SystemTrayWidget(ButtonWidget, BaseSystemTray):
         self.icon_size = self.config.get("icon_size", 16)
 
         self.chevron_icon = nerd_font_icon(
-            icon=text_nerd_icons["chevron"]["down"],
+            icon=get_text_icon("chevron.down"),
             props={
                 "style_classes": ["panel-font-icon", "chevron-icon"],
             },
@@ -227,11 +227,11 @@ class SystemTrayWidget(ButtonWidget, BaseSystemTray):
 
         if visible:
             self.popup.hide()
-            self.chevron_icon.set_label(text_nerd_icons["chevron"]["down"])
+            self.chevron_icon.set_label(get_text_icon("chevron.down"))
 
         else:
             self.popup.open()
-            self.chevron_icon.set_label(text_nerd_icons["chevron"]["up"])
+            self.chevron_icon.set_label(get_text_icon("chevron.up"))
             self.add_style_class("active")
 
     def update_visibility(self):

@@ -4,7 +4,7 @@ from fabric.widgets.box import Box
 from services import audio_service
 from shared.buttons import HoverButton
 from shared.setting_scale import SettingSlider
-from utils.icons import text_nerd_icons
+from utils.icons import get_text_icon
 from utils.widget_utils import get_audio_icon_name, nerd_font_icon
 
 
@@ -29,7 +29,7 @@ class AudioSlider(SettingSlider):
 
         # Initialize with default values first
         super().__init__(
-            icon_name=text_nerd_icons["volume"]["high"],
+            icon_name=get_text_icon("volume.high"),
             start_value=0,
             pixel_size=20,
         )

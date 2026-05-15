@@ -10,7 +10,7 @@ from shared.buttons import QSChevronButton, ScanButton
 from shared.list import ListBox
 from shared.submenu import QuickSubMenu
 from utils.exceptions import NetworkManagerNotFoundError
-from utils.icons import text_nerd_icons
+from utils.icons import get_text_icon
 from utils.widget_utils import nerd_font_icon
 
 try:
@@ -21,11 +21,11 @@ except ValueError:
 
 
 icon_to_text_icons = {
-    "network-wireless-signal-excellent-symbolic": text_nerd_icons["wifi"]["strength_4"],
-    "network-wireless-signal-good-symbolic": text_nerd_icons["wifi"]["strength_3"],
-    "network-wireless-signal-ok-symbolic": text_nerd_icons["wifi"]["strength_2"],
-    "network-wireless-signal-weak-symbolic": text_nerd_icons["wifi"]["strength_1"],
-    "network-wireless-signal-none-symbolic": text_nerd_icons["wifi"]["strength_0"],
+    "network-wireless-signal-excellent-symbolic": get_text_icon("wifi.strength_4"),
+    "network-wireless-signal-good-symbolic": get_text_icon("wifi.strength_3"),
+    "network-wireless-signal-ok-symbolic": get_text_icon("wifi.strength_2"),
+    "network-wireless-signal-weak-symbolic": get_text_icon("wifi.strength_1"),
+    "network-wireless-signal-none-symbolic": get_text_icon("wifi.strength_0"),
 }
 
 
@@ -58,7 +58,7 @@ class WifiSubMenu(QuickSubMenu):
 
         super().__init__(
             title="Network",
-            title_icon=text_nerd_icons["wifi"]["generic"],
+            title_icon=get_text_icon("wifi.generic"),
             scan_button=self.scan_button,
             child=self.child,
             **kwargs,
@@ -152,7 +152,7 @@ class WifiSubMenu(QuickSubMenu):
             nerd_font_icon(
                 icon=icon_to_text_icons.get(
                     icon_name,
-                    text_nerd_icons["wifi"]["generic"],
+                    get_text_icon("wifi.generic"),
                 ),
                 props={
                     "style_classes": ["panel-font-icon"],
@@ -224,7 +224,7 @@ class WifiToggle(QSChevronButton):
 
     def __init__(self, submenu: QuickSubMenu, **kwargs):
         super().__init__(
-            action_icon=text_nerd_icons["wifi"]["generic"],
+            action_icon=get_text_icon("wifi.generic"),
             action_label=" Wifi Disabled",
             submenu=submenu,
             **kwargs,
@@ -251,7 +251,7 @@ class WifiToggle(QSChevronButton):
             self.action_icon.set_label(
                 icon_to_text_icons.get(
                     wifi.get_property("icon-name"),
-                    text_nerd_icons["wifi"]["generic"],
+                    get_text_icon("wifi.generic"),
                 ),
             )
 
@@ -262,7 +262,7 @@ class WifiToggle(QSChevronButton):
                 GObject.BindingFlags.DEFAULT,
                 lambda _, x: icon_to_text_icons.get(
                     x,
-                    text_nerd_icons["wifi"]["generic"],
+                    get_text_icon("wifi.generic"),
                 ),
             )
 
@@ -282,6 +282,6 @@ class WifiToggle(QSChevronButton):
         self.action_icon.set_label(
             icon_to_text_icons.get(
                 wifi.get_property("icon-name"),
-                text_nerd_icons["wifi"]["generic"],
+                get_text_icon("wifi.generic"),
             ),
         )

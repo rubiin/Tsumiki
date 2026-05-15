@@ -6,7 +6,7 @@ from fabric.widgets.overlay import Overlay
 import utils.functions as helpers
 from services.brightness import BrightnessService
 from shared.widget_container import EventBoxWidget
-from utils.icons import text_nerd_icons
+from utils.icons import get_text_icon
 from utils.widget_utils import get_brightness_icon_name, nerd_font_icon
 
 
@@ -37,7 +37,7 @@ class BrightnessWidget(EventBoxWidget):
         )
 
         self.icon = nerd_font_icon(
-            icon=text_nerd_icons["brightness"]["medium"],
+            icon=get_text_icon("brightness.medium"),
             props={
                 "style_classes": ["panel-font-icon", "overlay-icon"],
             },
