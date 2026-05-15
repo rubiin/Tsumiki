@@ -1,5 +1,5 @@
 import gi
-from fabric.utils import GObject, Gtk, logger
+from fabric.utils import GObject, Gtk, bulk_connect, logger
 from fabric.widgets.box import Box
 from fabric.widgets.button import Button
 from fabric.widgets.label import Label
@@ -233,11 +233,15 @@ class WifiToggle(QSChevronButton):
         wifi = client.wifi_device
 
         if wifi:
-            wifi.connect(
-                "notify::enabled",
-                lambda *_: self.set_active_style(wifi.get_property("enabled")),  # type: ignore
+            bulk_connect(
+                wifi,
+                {
+                    "notify::enabled": lambda *_: self.set_active_style(
+                        wifi.get_property("enabled")
+                    ),
+                    "changed": self.update_status,
+                },
             )
-            wifi.connect("changed", self.update_status)
 
             self.action_icon.set_label(
                 icon_to_text_icons.get(
