@@ -1,8 +1,8 @@
+from fabric.hyprland.widgets import HyprlandActiveWindow
 from fabric.utils import FormattedString, logger, re, truncate
 
 from shared.widget_container import ButtonWidget
 from utils.constants import WINDOW_TITLE_MAP
-from utils.functions import get_window_manager_backend
 
 # Pre-compile regex patterns from WINDOW_TITLE_MAP at module load
 _COMPILED_PATTERNS: dict[str, re.Pattern | None] = {}
@@ -24,8 +24,7 @@ class WindowTitleWidget(ButtonWidget):
     def __init__(self, **kwargs):
         super().__init__(name="window_title", **kwargs)
 
-        backend = get_window_manager_backend()
-        active_window = self._resolve_backend_class(backend)
+        active_window = HyprlandActiveWindow
 
         # Create an ActiveWindow widget to track the active window
         self.active_window = active_window(
@@ -74,19 +73,3 @@ class WindowTitleWidget(ButtonWidget):
         )
         fallback = truncate(fallback, trunc_size) if trunc else fallback
         return f"󰣆 {fallback}"
-
-    def _resolve_backend_class(self, backend: str):
-        if backend in {"i3", "sway"}:
-            try:
-                from fabric.i3.widgets import I3ActiveWindow
-
-                return I3ActiveWindow
-            except Exception:
-                logger.warning(
-                    "[window_title] I3ActiveWindow unavailable; "
-                    "falling back to HyprlandActiveWindow"
-                )
-
-        from fabric.hyprland.widgets import HyprlandActiveWindow
-
-        return HyprlandActiveWindow

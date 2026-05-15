@@ -1,8 +1,8 @@
-from fabric.utils import FormattedString, logger, truncate
+from fabric.hyprland.widgets import HyprlandLanguage
+from fabric.utils import FormattedString, truncate
 from fabric.widgets.label import Label
 
 from shared.widget_container import ButtonWidget
-from utils.functions import get_window_manager_backend
 from utils.widget_utils import nerd_font_icon
 
 
@@ -12,9 +12,7 @@ class LanguageWidget(ButtonWidget):
     def __init__(self, **kwargs):
         super().__init__(name="language", **kwargs)
 
-        backend = get_window_manager_backend()
-
-        language_widget = self._resolve_backend_class(backend)
+        language_widget = HyprlandLanguage
 
         if language_widget is None:
             self.lang = Label(
@@ -45,18 +43,3 @@ class LanguageWidget(ButtonWidget):
 
         if self.config.get("tooltip", False):
             self.set_tooltip_text(f"Language: {self.lang.get_label()}")
-
-    def _resolve_backend_class(self, backend: str):
-        if backend == "sway":
-            from fabric.i3.widgets import I3Language
-
-            return I3Language
-        elif backend == "i3":
-            logger.warning(
-                "[language] i3 does not expose keyboard layout change events; "
-                "showing fallback label"
-            )
-        else:
-            from fabric.hyprland.widgets import HyprlandLanguage
-
-            return HyprlandLanguage
