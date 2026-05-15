@@ -14,7 +14,6 @@ from typing import Any, Callable, Iterable, List, Literal, Optional, TypeVar
 import psutil
 from fabric import Application
 from fabric.utils import (
-    FormattedString,
     Gdk,
     GdkPixbuf,
     Gio,
@@ -139,20 +138,6 @@ def get_window_manager_backend() -> Literal["hyprland", "sway", "i3"]:
 
     # Keep existing behavior as default.
     return "hyprland"
-
-
-# Function to execute a shell command synchronously with formatted string
-def formatted_exec_shell_command(
-    unformatted_cmd: str, **kwargs
-) -> str | Literal[False]:
-    return exec_shell_command(FormattedString(unformatted_cmd).format(**kwargs))
-
-
-# Function to execute a shell command asynchronously with formatted string
-def formatted_exec_shell_command_async(
-    unformatted_cmd: str, **kwargs
-) -> tuple[Gio.Subprocess | None, Gio.DataInputStream]:
-    return exec_shell_command_async(FormattedString(unformatted_cmd).format(**kwargs))
 
 
 # Function to convert RGB to hex format
