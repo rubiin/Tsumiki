@@ -8,7 +8,7 @@ import utils.functions as helpers
 from services.networkspeed import NetworkSpeed
 from shared.mixins import StatDisplayMixin
 from shared.widget_container import ButtonWidget
-from utils.icons import text_icons
+from utils.icons import text_nerd_icons
 from utils.widget_utils import (
     util_fabricator,
 )
@@ -239,7 +239,7 @@ class MemoryWidget(FabricatorBoundWidget, StatDisplayMixin):
         # Update the tooltip with the memory usage details if enabled
         if self.config.get("tooltip", False):
             self.set_tooltip_text(
-                f"󰾆 {self.percent_used}%\n{text_icons['memory']} {self.ratio()}",
+                f"󰾆 {self.percent_used}%\n{text_nerd_icons['memory']} {self.ratio()}",
             )
 
         return True
@@ -287,7 +287,7 @@ class StorageWidget(FabricatorBoundWidget, StatDisplayMixin):
         # Update the tooltip with the storage usage details if enabled
         if self.config.get("tooltip", False):
             self.set_tooltip_text(
-                f"󰾆 {percent}%\n{text_icons['storage']} {self.ratio()}"
+                f"󰾆 {percent}%\n{text_nerd_icons['storage']} {self.ratio()}"
             )
 
         return True

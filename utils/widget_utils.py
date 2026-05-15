@@ -13,7 +13,7 @@ from fabric.widgets.widget import Widget
 from shared.animated.scale import AnimatedScale
 
 from .config import widget_config
-from .icons import symbolic_icons, text_icons
+from .icons import symbolic_icons, text_nerd_icons
 
 storage_config = widget_config.get("widgets", {}).get("storage", {})
 
@@ -205,22 +205,22 @@ def get_bar_graph(usage: Number | str) -> str:
 def get_brightness_icon_name(level: int) -> dict[Literal["icon_text", "icon"], str]:
     if level <= 0:
         return {
-            "icon_text": text_icons["brightness"]["off"],
+            "icon_text": text_nerd_icons["brightness"]["off"],
             "icon": symbolic_icons["brightness"]["off"],
         }
 
     if level <= 32:
         return {
-            "icon_text": text_icons["brightness"]["low"],
+            "icon_text": text_nerd_icons["brightness"]["low"],
             "icon": symbolic_icons["brightness"]["low"],
         }
     if level <= 66:
         return {
-            "icon_text": text_icons["brightness"]["medium"],
+            "icon_text": text_nerd_icons["brightness"]["medium"],
             "icon": symbolic_icons["brightness"]["medium"],
         }
     return {
-        "icon_text": text_icons["brightness"]["high"],
+        "icon_text": text_nerd_icons["brightness"]["high"],
         "icon": symbolic_icons["brightness"]["high"],
     }
 
@@ -277,6 +277,6 @@ def get_audio_icon_name(
         level = "overamplified"
 
     return {
-        "icon_text": text_icons["volume"][level],
+        "icon_text": text_nerd_icons["volume"][level],
         "icon": symbolic_icons["audio"]["volume"][level],
     }

@@ -5,7 +5,7 @@ from fabric.widgets.scale import Scale
 from shared.buttons import QSChevronButton
 from shared.submenu import QuickSubMenu
 from utils.functions import is_app_running, toggle_command
-from utils.icons import text_icons
+from utils.icons import text_nerd_icons
 from utils.widget_utils import (
     create_scale,
 )
@@ -29,7 +29,7 @@ class HyprSunsetSubMenu(QuickSubMenu):
 
         super().__init__(
             title="HyprSunset",
-            title_icon=text_icons["nightlight"]["enabled"],
+            title_icon=text_nerd_icons["nightlight"]["enabled"],
             name="hyprsunset-sub-menu",
             scan_button=self.scan_button,
             child=self.scale,
@@ -78,7 +78,7 @@ class HyprSunsetToggle(QSChevronButton):
 
     def __init__(self, submenu: QuickSubMenu, popup, **kwargs):
         super().__init__(
-            action_icon=text_icons["nightlight"]["disabled"],
+            action_icon=text_nerd_icons["nightlight"]["disabled"],
             pixel_size=20,
             action_label="Enabled",
             submenu=submenu,
@@ -104,10 +104,10 @@ class HyprSunsetToggle(QSChevronButton):
         self.is_running = is_app_running("hyprsunset")
 
         if self.is_running:
-            self.action_icon.set_label(text_icons["nightlight"]["enabled"])
+            self.action_icon.set_label(text_nerd_icons["nightlight"]["enabled"])
             self.action_label.set_label("Enabled")
             self.set_active_style(True)
         else:
-            self.action_icon.set_label(text_icons["nightlight"]["disabled"])
+            self.action_icon.set_label(text_nerd_icons["nightlight"]["disabled"])
             self.action_label.set_label("Disabled")
             self.set_active_style(False)

@@ -17,7 +17,7 @@ from shared.list import ListBox
 from shared.mixins import PopoverMixin
 from shared.widget_container import ButtonWidget
 from utils.colors import Colors
-from utils.icons import text_icons
+from utils.icons import text_nerd_icons
 from utils.widget_utils import get_icon, nerd_font_icon
 
 
@@ -67,7 +67,7 @@ class DateMenuNotification(Box):
             v_align="start",
             style_classes=["close-button"],
             child=nerd_font_icon(
-                icon=text_icons["ui"]["window_close"],
+                icon=text_nerd_icons["ui"]["window_close"],
                 props={
                     "style_classes": ["panel-font-icon", "close-icon"],
                 },
@@ -203,7 +203,7 @@ class DateNotificationMenu(Box):
                 visible=len(self.all_notifications) == 0,  # visible if no notifications
                 children=(
                     nerd_font_icon(
-                        icon=text_icons["notifications"]["checked"],
+                        icon=text_nerd_icons["notifications"]["checked"],
                         props={
                             "style_classes": ["panel-font-icon", "placeholder-icon"],
                         },
@@ -233,9 +233,9 @@ class DateNotificationMenu(Box):
 
             self.clear_icon = nerd_font_icon(
                 name="clear-icon",
-                icon=text_icons["trash"]["empty"]
+                icon=text_nerd_icons["trash"]["empty"]
                 if len(self.all_notifications) == 0
-                else text_icons["trash"]["full"],
+                else text_nerd_icons["trash"]["full"],
                 props={
                     "style_classes": ["panel-font-icon"],
                 },
@@ -330,7 +330,7 @@ class DateNotificationMenu(Box):
         self.notifications_listbox.remove_all()
 
         notification_service.clear_all_notifications()
-        self.clear_icon.set_label(text_icons["trash"]["empty"])
+        self.clear_icon.set_label(text_nerd_icons["trash"]["empty"])
 
     def _load_next_batch(self):
         """Load the next batch of notifications into the listbox."""
@@ -366,7 +366,7 @@ class DateNotificationMenu(Box):
 
     def on_clear_all_notifications(self, *_):
         """Handle clearing all notifications."""
-        self.clear_icon.set_label(text_icons["trash"]["empty"])
+        self.clear_icon.set_label(text_nerd_icons["trash"]["empty"])
         self.placeholder.set_visible(True)
         self.notifications_listbox.set_visible(False)
 
@@ -411,7 +411,7 @@ class DateNotificationMenu(Box):
         )
 
         self.clear_icon.set_label(
-            text_icons["trash"]["full"],
+            text_nerd_icons["trash"]["full"],
         )
 
         notification_item = self._bake_notification(
@@ -434,7 +434,7 @@ class DateTimeWidget(ButtonWidget, PopoverMixin):
 
         if notification_config.get("enabled", True):
             self.notification_indicator = nerd_font_icon(
-                icon=text_icons["notifications"]["noisy"],
+                icon=text_nerd_icons["notifications"]["noisy"],
                 name="notification-indicator",
                 props={
                     "style_classes": ["panel-font-icon"],
@@ -496,10 +496,10 @@ class DateTimeWidget(ButtonWidget, PopoverMixin):
     def on_dnd_switch(self, _, value, *args):
         if value:
             self.notification_indicator.set_label(
-                text_icons["notifications"]["silent"],
+                text_nerd_icons["notifications"]["silent"],
             )
 
         else:
             self.notification_indicator.set_label(
-                text_icons["notifications"]["noisy"],
+                text_nerd_icons["notifications"]["noisy"],
             )

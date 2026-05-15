@@ -2,7 +2,7 @@ from fabric.bluetooth import BluetoothClient
 from fabric.widgets.label import Label
 
 from shared.widget_container import ButtonWidget
-from utils.icons import text_icons
+from utils.icons import text_nerd_icons
 from utils.widget_utils import nerd_font_icon
 
 
@@ -12,7 +12,7 @@ class BlueToothWidget(ButtonWidget):
     def __init__(self, **kwargs):
         super().__init__(name="bluetooth", **kwargs)
 
-        self.icons = text_icons["bluetooth"]
+        self.icons = text_nerd_icons["bluetooth"]
 
         self.bluetooth_icon = nerd_font_icon(
             icon=self.icons["enabled"],

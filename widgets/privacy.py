@@ -5,7 +5,7 @@ from fabric.utils import GObject, bulk_connect
 
 from services import audio_service
 from shared.widget_container import ButtonWidget
-from utils.icons import text_icons
+from utils.icons import text_nerd_icons
 from utils.widget_utils import nerd_font_icon
 
 
@@ -84,14 +84,14 @@ class PrivacyWidget(ButtonWidget):
         if microphone:
             is_muted = microphone.muted
             if not is_muted:
-                mic_icon = text_icons.get("microphone", "🎤")
+                mic_icon = text_nerd_icons.get("microphone", "🎤")
                 self._add_privacy_icon(mic_icon, "Microphone active")
                 active_count += 1
             self.mic_muted = is_muted
 
         # Check screen recording
         if self.screencast_clients:
-            screen_icon = text_icons.get("screenrecorder", "🔴")
+            screen_icon = text_nerd_icons.get("screenrecorder", "🔴")
             client_names = ", ".join(self.screencast_clients.keys())
             tooltip = f"Screen recording: {client_names}"
             self._add_privacy_icon(screen_icon, tooltip)

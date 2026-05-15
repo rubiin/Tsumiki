@@ -1,7 +1,7 @@
 # ruff: noqa: E501
 
 
-text_icons = {
+text_nerd_icons = {
     "ui": {
         "window_close": "",
         "question": "",

@@ -32,7 +32,7 @@ from utils.functions import (
     rgb_to_css,
     tint_color,
 )
-from utils.icons import text_icons
+from utils.icons import text_nerd_icons
 from utils.widget_utils import (
     create_scale,
     nerd_font_icon,
@@ -317,23 +317,23 @@ class PlayerBox(Box):
         )
 
         self.skip_next_icon = nerd_font_icon(
-            icon=text_icons["mpris"]["next"],
+            icon=text_nerd_icons["mpris"]["next"],
             props={"style_classes": ["panel-font-icon", "player-icon"]},
         )
         self.skip_prev_icon = nerd_font_icon(
-            icon=text_icons["mpris"]["previous"],
+            icon=text_nerd_icons["mpris"]["previous"],
             props={"style_classes": ["panel-font-icon", "player-icon"]},
         )
         self.loop_icon = nerd_font_icon(
-            icon=text_icons["mpris"]["loop"],
+            icon=text_nerd_icons["mpris"]["loop"],
             props={"style_classes": ["panel-font-icon", "player-icon"]},
         )
         self.shuffle_icon = nerd_font_icon(
-            icon=text_icons["mpris"]["shuffle"],
+            icon=text_nerd_icons["mpris"]["shuffle"],
             props={"style_classes": ["panel-font-icon", "player-icon"]},
         )
         self.play_pause_icon = nerd_font_icon(
-            icon=text_icons["mpris"]["paused"],
+            icon=text_nerd_icons["mpris"]["paused"],
             props={"style_classes": ["panel-font-icon", "player-icon"]},
         )
 
@@ -487,12 +487,12 @@ class PlayerBox(Box):
 
         if status == "paused":
             self.play_pause_icon.set_label(
-                text_icons["mpris"]["playing"],
+                text_nerd_icons["mpris"]["playing"],
             )
 
         if status == "playing":
             self.play_pause_icon.set_label(
-                text_icons["mpris"]["paused"],
+                text_nerd_icons["mpris"]["paused"],
             )
 
     def _update_image(self, image_path):

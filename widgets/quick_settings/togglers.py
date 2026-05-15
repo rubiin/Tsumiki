@@ -4,7 +4,7 @@ from fabric.widgets.label import Label
 from services import notification_service
 from shared.button_toggle import CommandSwitcher
 from shared.buttons import HoverButton
-from utils.icons import text_icons
+from utils.icons import text_nerd_icons
 from utils.widget_utils import nerd_font_icon
 
 
@@ -64,7 +64,7 @@ class NotificationQuickSetting(HoverButton):
             label="Noisy",
         )
         self.notification_icon = nerd_font_icon(
-            icon=text_icons["notifications"]["noisy"],
+            icon=text_nerd_icons["notifications"]["noisy"],
             props={"style_classes": ["panel-font-icon"]},
         )
 
@@ -99,8 +99,8 @@ class NotificationQuickSetting(HoverButton):
 
         if value:
             self.notification_label.set_label("Quiet")
-            self.notification_icon.set_label(text_icons["notifications"]["silent"])
+            self.notification_icon.set_label(text_nerd_icons["notifications"]["silent"])
 
         else:
             self.notification_label.set_label("Noisy")
-            self.notification_icon.set_label(text_icons["notifications"]["noisy"])
+            self.notification_icon.set_label(text_nerd_icons["notifications"]["noisy"])

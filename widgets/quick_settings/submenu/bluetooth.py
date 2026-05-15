@@ -10,7 +10,7 @@ from services import bluetooth_service
 from shared.buttons import HoverButton, QSChevronButton, ScanButton
 from shared.list import ListBox
 from shared.submenu import QuickSubMenu
-from utils.icons import text_icons
+from utils.icons import text_nerd_icons
 from utils.widget_utils import nerd_font_icon
 
 
@@ -28,17 +28,17 @@ class BluetoothDeviceBox(CenterBox):
         self.device: BluetoothDevice = device
 
         self.icon_to_text_icon = {
-            "audio-headset": text_icons["ui"]["headset"],
-            "phone": text_icons["ui"]["phone"],
-            "audio-headphones": text_icons["ui"]["headphones"],
-            "keyboard": text_icons["ui"]["keyboard"],
-            "mouse": text_icons["ui"]["mouse"],
-            "audio-speakers": text_icons["ui"]["speakers"],
-            "camera": text_icons["ui"]["camera"],
-            "printer": text_icons["ui"]["printer"],
-            "tv": text_icons["ui"]["tv"],
-            "watch": text_icons["ui"]["watch"],
-            "bluetooth": text_icons["bluetooth"]["enabled"],
+            "audio-headset": text_nerd_icons["ui"]["headset"],
+            "phone": text_nerd_icons["ui"]["phone"],
+            "audio-headphones": text_nerd_icons["ui"]["headphones"],
+            "keyboard": text_nerd_icons["ui"]["keyboard"],
+            "mouse": text_nerd_icons["ui"]["mouse"],
+            "audio-speakers": text_nerd_icons["ui"]["speakers"],
+            "camera": text_nerd_icons["ui"]["camera"],
+            "printer": text_nerd_icons["ui"]["printer"],
+            "tv": text_nerd_icons["ui"]["tv"],
+            "watch": text_nerd_icons["ui"]["watch"],
+            "bluetooth": text_nerd_icons["bluetooth"]["enabled"],
         }
 
         self.connect_button = HoverButton(style_classes=["submenu-button"])
@@ -60,7 +60,7 @@ class BluetoothDeviceBox(CenterBox):
         self.add_start(
             nerd_font_icon(
                 icon=self.icon_to_text_icon.get(
-                    device.icon_name, text_icons["bluetooth"]["enabled"]
+                    device.icon_name, text_nerd_icons["bluetooth"]["enabled"]
                 ),
                 props={"style_classes": ["panel-font-icon"]},
             ),
@@ -151,7 +151,7 @@ class BluetoothSubMenu(QuickSubMenu):
 
         super().__init__(
             title="Bluetooth",
-            title_icon=text_icons["bluetooth"]["enabled"],
+            title_icon=text_nerd_icons["bluetooth"]["enabled"],
             scan_button=self.scan_button,
             child=self.child,
             **kwargs,
@@ -203,7 +203,7 @@ class BluetoothToggle(QSChevronButton):
     def __init__(self, submenu: QuickSubMenu, **kwargs):
         super().__init__(
             action_label="Enabled",
-            action_icon=text_icons["bluetooth"]["enabled"],
+            action_icon=text_nerd_icons["bluetooth"]["enabled"],
             submenu=submenu,
             **kwargs,
         )
@@ -230,11 +230,11 @@ class BluetoothToggle(QSChevronButton):
     def toggle_bluetooth(self, client: BluetoothClient, *_):
         if client.enabled:
             self.set_active_style(True)
-            self.action_icon.set_label(text_icons["bluetooth"]["enabled"])
+            self.action_icon.set_label(text_nerd_icons["bluetooth"]["enabled"])
             self.action_label.set_label("Enabled")
         else:
             self.set_active_style(False)
-            self.action_icon.set_label(text_icons["bluetooth"]["disabled"])
+            self.action_icon.set_label(text_nerd_icons["bluetooth"]["disabled"])
             self.action_label.set_label("Disabled")
 
     def new_device(self, client: BluetoothClient, address: str):
