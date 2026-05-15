@@ -152,7 +152,7 @@ def lazy_load_widget(widget_name: str, widgets_list):
 # Function to create a text icon label
 def nerd_font_icon(icon: str, props=None, name="nerd-icon") -> Label:
     label_props = {
-        "label": str(icon),  # Directly use the provided icon name
+        "markup": str(icon),  # Directly use the provided icon name
         "name": name,
         "h_align": "center",  # Align horizontally
         "v_align": "center",  # Align vertically
