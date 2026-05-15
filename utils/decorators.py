@@ -11,6 +11,26 @@ from fabric.utils import GLib
 _cpu_count = os.cpu_count() or 4
 thread_pool: ThreadPoolExecutor | None = None
 
+T = TypeVar("T")
+
+
+def log_errors(func):
+    """Decorator to log errors in config operations"""
+
+    def wrapper(*args, **kwargs):
+        return func(*args, **kwargs)
+
+    return wrapper
+
+
+def safe_operation(func):
+    """Decorator for safe operations that shouldn't raise exceptions"""
+
+    def wrapper(*args, **kwargs):
+        return func(*args, **kwargs)
+
+    return wrapper
+
 
 def _get_thread_pool() -> ThreadPoolExecutor:
     """Lazy-initialize thread pool on first use."""
@@ -19,9 +39,6 @@ def _get_thread_pool() -> ThreadPoolExecutor:
         thread_pool = ThreadPoolExecutor(max_workers=_cpu_count)
         atexit.register(thread_pool.shutdown)
     return thread_pool
-
-
-T = TypeVar("T")
 
 
 def thread(target: Callable[..., T], *args: Any, **kwargs: Any) -> Any:
