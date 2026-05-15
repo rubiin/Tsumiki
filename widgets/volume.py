@@ -77,7 +77,9 @@ class VolumeWidget(EventBoxWidget):
                 self._speaker.disconnect(self._speaker_volume_handler_id)
             self._speaker_volume_handler_id = None
 
-        if self.config.get("tooltip", False):
+        if self.config.get("tooltip", False) and self.general_config.get(
+            "tooltips", True
+        ):
             self.set_tooltip_text(speaker.description)
 
         self._speaker = speaker

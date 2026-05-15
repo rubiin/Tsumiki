@@ -105,13 +105,17 @@ class PrivacyWidget(ButtonWidget):
         # Update visibility and tooltip
         if active_count > 0:
             self.set_visible(True)
-            if self.config.get("tooltip", True):
+            if self.config.get("tooltip", True) and self.general_config.get(
+                "tooltips", True
+            ):
                 self.set_tooltip_text(self._get_tooltip())
         else:
             if self.config.get("hide_when_inactive", True):
                 self.set_visible(False)
             else:
-                if self.config.get("tooltip", True):
+                if self.config.get("tooltip", True) and self.general_config.get(
+                    "tooltips", True
+                ):
                     self.set_tooltip_text("No active privacy concerns")
 
         self.emit("privacy-changed")

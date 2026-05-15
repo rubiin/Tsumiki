@@ -72,5 +72,7 @@ class MprisWidget(ButtonWidget, PopoverMixin):
             "background-image: url('" + art_url + "');background-size: cover;"
         )
 
-        if self.config.get("tooltip", False):
+        if self.config.get("tooltip", False) and self.general_config.get(
+            "tooltips", True
+        ):
             self.set_tooltip_text(bar_label)

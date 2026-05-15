@@ -2713,6 +2713,11 @@
 					"description": "Determines whether to use monitor stylesheet.",
 					"default": false
 				},
+				"tooltips": {
+					"type": "boolean",
+					"description": "Determines whether to show tooltips.",
+					"default": false
+				},
 				"check_updates": {
 					"type": "boolean",
 					"description": "Determines whether to check for updates on startup."

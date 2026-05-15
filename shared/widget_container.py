@@ -59,6 +59,7 @@ class BoxWidget(Box, BaseWidget):
 
         widget_name = kwargs.get("name", "box")
         self.config = widget_config.get("widgets", {}).get(widget_name, {})
+        self.general_config: dict = widget_config.get("general", {})
 
 
 class EventBoxWidget(EventBox, BaseWidget):
@@ -72,6 +73,7 @@ class EventBoxWidget(EventBox, BaseWidget):
 
         widget_name = kwargs.get("name", "eventbox")
         self.config: dict = widget_config.get("widgets", {}).get(widget_name, {})
+        self.general_config: dict = widget_config.get("general", {})
         self.box = Box(style_classes=["panel-box"])
         self.add(
             self.box,
@@ -103,6 +105,7 @@ class ButtonWidget(Button, BaseWidget):
 
         widget_name = kwargs.get("name", "button")
         self.config: dict = widget_config.get("widgets", {}).get(widget_name, {})
+        self.general_config: dict = widget_config.get("general", {})
 
         self.container_box = Box(style_classes=["box"], spacing=6)
         self.add(self.container_box)

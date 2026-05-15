@@ -459,6 +459,7 @@ DEFAULT_CONFIG = {
         "auto_restart": True,
         "restart_delay": 1500,
         "multi_monitor": False,
+        "tooltips": True,
     },
 }
 

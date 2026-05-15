@@ -42,5 +42,7 @@ class BlueToothWidget(ButtonWidget):
         if self.config.get("label", True):
             self.bt_label.set_text(bt_status.capitalize())
 
-        if self.config.get("tooltip", False):
+        if self.config.get("tooltip", False) and self.general_config.get(
+            "tooltips", True
+        ):
             self.set_tooltip_text(f"Bluetooth is {bt_status}")

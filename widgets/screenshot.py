@@ -25,7 +25,9 @@ class ScreenShotWidget(ButtonWidget):
                 Label(label="screenshot", style_classes=["panel-text"])
             )
 
-        if self.config.get("tooltip", False):
+        if self.config.get("tooltip", False) and self.general_config.get(
+            "tooltips", True
+        ):
             self.set_tooltip_text("Screen Shot")
 
         self.connect("clicked", self.on_click)

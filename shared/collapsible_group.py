@@ -33,9 +33,6 @@ class CollapsibleGroupWidget(ButtonWidget):
         self._setup_button_content()
         self.connect("clicked", self.on_toggle_clicked)
 
-        if self.tooltip_text:
-            self.set_tooltip_text(self.tooltip_text)
-
     def _read_config(self):
         """Read configuration values from the config."""
         # Fix: Read config directly instead of from non-existent "group" key
@@ -148,5 +145,5 @@ class CollapsibleGroupWidget(ButtonWidget):
 
         self._setup_button_content()
 
-        if self.tooltip_text:
+        if self.general_config.get("tooltips", True):
             self.set_tooltip_text(self.tooltip_text)

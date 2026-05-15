@@ -328,6 +328,7 @@ General = TypedDict(
         "auto_restart": bool,
         "restart_delay": int,
         "multi_monitor": bool,
+        "tooltips": bool,
     },
 )
 
