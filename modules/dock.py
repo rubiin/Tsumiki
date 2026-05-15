@@ -14,8 +14,8 @@ from utils.app import AppUtils
 from utils.config import widget_config
 from utils.constants import PINNED_APPS_FILE
 from utils.functions import (
-    _normalize_address,
     get_display_server_window,
+    normalize_address,
     read_json_file,
     write_json_file,
 )
@@ -38,7 +38,7 @@ class NativeClient:
     def __init__(self, data: dict, hyprland_connection, active_address: str | None):
         self._data = data
         self._hyprland_connection = hyprland_connection
-        self._active = _normalize_address(data.get("address")) == active_address
+        self._active = normalize_address(data.get("address")) == active_address
 
     def get_app_id(self) -> str:
         return self._data.get("initialClass") or self._data.get("class") or ""
@@ -47,11 +47,11 @@ class NativeClient:
         return self._data.get("title") or self.get_app_id()
 
     def get_hyprland_address(self) -> int:
-        addr = _normalize_address(self._data.get("address"))
+        addr = normalize_address(self._data.get("address"))
         return int(addr, 16) if addr else 0
 
     def get_address_str(self) -> str | None:
-        return _normalize_address(self._data.get("address"))
+        return normalize_address(self._data.get("address"))
 
     def get_fullscreen(self) -> bool:
         return bool(self._data.get("fullscreen", False))
@@ -361,7 +361,7 @@ class AppBar(Box):
             )
         except Exception:
             return None
-        return _normalize_address(parsed.get("address"))
+        return normalize_address(parsed.get("address"))
 
     def _list_visible_clients(self) -> list[NativeClient]:
         try:

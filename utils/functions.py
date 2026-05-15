@@ -44,7 +44,7 @@ def register_temp_resource(path: str):
     _TEMP_PATHS.add(path)
 
 
-def _normalize_address(address: str | None) -> str | None:
+def normalize_address(address: str | None) -> str | None:
     if not address:
         return None
     return address if address.startswith("0x") else f"0x{address}"
