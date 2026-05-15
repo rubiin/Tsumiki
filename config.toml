@@ -477,7 +477,6 @@ auto_dismiss = true
 respect_expire = true
 dnd_on_screencast = true
 ignored = []
-max_count = 200
 transition_type = "slide-left"
 transition_duration = 350
 per_app_limits = {}
@@ -485,7 +484,6 @@ play_sound = false
 max_actions = 3
 dismiss_on_hover = false
 sound_file = "notification4"
-persist = true
 max_lines = 4
 max_expanded_lines = 20
 
