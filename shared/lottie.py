@@ -1,6 +1,6 @@
 from typing import Literal
 
-from fabric.utils import GLib, Gtk, cairo, remove_handler
+from fabric.utils import GLib, Gtk, bulk_connect, cairo, remove_handler
 from fabric.widgets.widget import Widget
 from rlottie_python.rlottie_wrapper import LottieAnimation
 
@@ -77,8 +77,15 @@ class LottieAnimationWidget(Gtk.DrawingArea, BaseWidget):
         )
 
         self.set_size_request(self.width, self.height)
-        self.connect("draw", self.draw)
-        self.connect("destroy", lambda *_: self.stop_play())
+
+        bulk_connect(
+            self,
+            {
+                "draw": self.draw,
+                "destroy": lambda *_: self.stop_play(),
+            },
+        )
+
         if draw_frame is not None:
             self.on_update()
 

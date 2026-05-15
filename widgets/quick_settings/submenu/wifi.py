@@ -126,8 +126,13 @@ class WifiSubMenu(QuickSubMenu):
     def on_device_ready(self, client: NetworkService):
         self.wifi_device = client.wifi_device
         if self.wifi_device:
-            self.wifi_device.connect("scanning", self.on_scan)
-            self.wifi_device.connect("changed", lambda *_: self.refresh_wifi_list())
+            bulk_connect(
+                self.wifi_device,
+                {
+                    "scanning": self.on_scan,
+                    "changed": lambda *_: self.refresh_wifi_list(),
+                },
+            )
 
     def build_wifi_options(self):
         self.refresh_wifi_list()

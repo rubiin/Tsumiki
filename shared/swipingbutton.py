@@ -1,5 +1,5 @@
 from fabric.core.service import Signal
-from fabric.utils import Gdk
+from fabric.utils import Gdk, bulk_connect
 from fabric.widgets.button import Button
 
 
@@ -20,9 +20,14 @@ class SwipeButton(Button):
         self._y_origin = None
         self._alloc = Gdk.Rectangle()
 
-        self.connect("button-press-event", self.on_button_press)
-        self.connect("motion-notify-event", self.on_motion_notify)
-        self.connect("button-release-event", self.on_button_release)
+        bulk_connect(
+            self,
+            {
+                "button-press-event": self.on_button_press,
+                "motion-notify-event": self.on_motion_notify,
+                "button-release-event": self.on_button_release,
+            },
+        )
 
     def do_size_allocate(self, allocation: Gdk.Rectangle):
         self._alloc = allocation
