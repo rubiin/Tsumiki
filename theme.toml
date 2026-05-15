@@ -7,7 +7,7 @@ spacing = "12pt"
 [bar]
 margin_x = "0"
 margin_y = "1.25em"
-opacity = 70
+opacity = 10
 padding_x = ".8em"
 padding_y = ".6em"
 scaling = 100
