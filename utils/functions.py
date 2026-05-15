@@ -44,6 +44,12 @@ def register_temp_resource(path: str):
     _TEMP_PATHS.add(path)
 
 
+def _normalize_address(address: str | None) -> str | None:
+    if not address:
+        return None
+    return address if address.startswith("0x") else f"0x{address}"
+
+
 def cleanup_temp_resources():
     """Remove all registered temp files/directories."""
     for path in list(_TEMP_PATHS):

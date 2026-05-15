@@ -13,7 +13,12 @@ from fabric.widgets.separator import Separator
 from utils.app import AppUtils
 from utils.config import widget_config
 from utils.constants import PINNED_APPS_FILE
-from utils.functions import get_display_server_window, read_json_file, write_json_file
+from utils.functions import (
+    _normalize_address,
+    get_display_server_window,
+    read_json_file,
+    write_json_file,
+)
 from utils.icon_resolver import IconResolver
 from utils.widget_settings import BarConfig
 
@@ -23,12 +28,6 @@ Window = get_display_server_window()
 # DnD target for dock app reordering
 DOCK_DND_TARGET = [Gtk.TargetEntry.new("dock-app", Gtk.TargetFlags.SAME_APP, 0)]
 DOCK_SYNC_DEBOUNCE_MS = 60
-
-
-def _normalize_address(address: str | None) -> str | None:
-    if not address:
-        return None
-    return address if address.startswith("0x") else f"0x{address}"
 
 
 class NativeClient:
