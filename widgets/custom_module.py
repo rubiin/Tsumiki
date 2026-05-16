@@ -223,7 +223,7 @@ class CustomModuleExecutor:
                 os.path.expanduser(self._exec_cmd),
                 shell=True,
                 stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
                 text=True,
             )
             process = self._process

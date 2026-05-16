@@ -30,11 +30,11 @@ Scope: static code scan for memory hogs and perf bottlenecks.
 
 ## Memory hog risks
 
-5. Custom module/widget may deadlock or grow buffers on stderr
+5. DONE: Custom module/widget may deadlock or grow buffers on stderr
 - Evidence: `widgets/custom_module.py:225`, `widgets/custom_module.py:226`, `widgets/custom_module.py:243`, `widgets/custom_widget.py:225`, `widgets/custom_widget.py:226`, `widgets/custom_widget.py:243`
 - Why hot: both stdout and stderr are piped, but reader thread drains stdout only. If command writes enough stderr, child can block; buffered data can grow.
 - Risk: stuck modules, memory growth, zombie-like behavior.
-- Fix direction: drain stderr in separate reader, merge stderr->stdout, or redirect stderr to DEVNULL/file.
+- Fix direction: DONE via stderr->stdout merge in continuous executors.
 
 6. Global util fabricator runs infinite stats loop once created
 - Evidence: `utils/widget_utils.py:28`, `utils/widget_utils.py:31`, `utils/widget_utils.py:44`, `utils/widget_utils.py:57`
@@ -42,11 +42,11 @@ Scope: static code scan for memory hogs and perf bottlenecks.
 - Risk: background CPU overhead even if stats widgets removed; extra sensor I/O.
 - Fix direction: reference-count subscribers and stop poller at zero; split fast vs slow metrics (temps/disk less frequent).
 
-7. Popover window pooling path not used on hide
+7. DONE: Popover window pooling path not used on hide
 - Evidence: `shared/popover.py:99`, `shared/popover.py:355`, `shared/popover.py:372`, `shared/popover.py:380`
 - Why hot: manager has `return_popover_window`, but hide path calls only `.hide()`. Windows/content can stay resident longer than needed.
 - Risk: retained hidden widgets/windows, memory creep across many popovers.
-- Fix direction: on close/destroy, detach content and return window to pool (or destroy) explicitly.
+- Fix direction: DONE by releasing popover window to manager pool on hide/destroy and disconnecting per-window handlers.
 
 ## Medium impact / situational
 
@@ -65,7 +65,7 @@ Scope: static code scan for memory hogs and perf bottlenecks.
 ## Quick wins first (best ROI)
 
 1. Raise lockkeys poll interval + disable polling when hidden.
-2. Fix stderr draining in custom module/widget executors.
+2. DONE: Fix stderr draining in custom module/widget executors.
 3. DONE: Add incremental update path for overview (avoid full rebuild).
 4. DONE: Split dock sync into lightweight active-window update vs full client refresh.
 5. Make util fabricator lifecycle-aware (start/stop based on subscribers).
