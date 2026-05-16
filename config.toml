@@ -541,7 +541,7 @@ anchor = "bottom-right"
 layer = "bottom"
 
 [modules.cheatsheet]
-enabled = true
+enabled = false
 layer = "top"
 anchor = "center"
 transition_type = "crossfade"

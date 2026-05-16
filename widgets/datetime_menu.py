@@ -64,6 +64,7 @@ class DateMenuNotification(Box):
             ),
         )
         close_button = Button(
+            name="close-button",
             v_align="start",
             style_classes=["close-button"],
             child=nerd_font_icon(

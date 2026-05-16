@@ -73,6 +73,7 @@
           #clear-icon {
             @extend %clear_icon;
             font-size: 13px;
+            color: theme.$background-dark;
           }
         }
       }
@@ -104,6 +105,13 @@
 
             .close-button {
               opacity: 1;
+
+                @extend %widget_hover;
+
+                label {
+                  color: theme.$background-dark;
+                }
+
             }
           }
 
