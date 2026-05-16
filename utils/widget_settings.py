@@ -83,6 +83,7 @@ SystemTray = TypedDict(
         "ignored": list[str],
         "hidden": list[str],
         "hide_when_empty": bool,
+        "tooltip": bool,
     },
 )
 

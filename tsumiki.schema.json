@@ -817,6 +817,11 @@
 							"type": "boolean",
 							"default": false,
 							"description": "Determines whether to hide the system tray when there are no visible icons."
+						},
+						"tooltip": {
+							"type": "boolean",
+							"default": true,
+							"description": "Determines whether to show the tooltip for the system tray icons."
 						}
 					},
 					"required": [

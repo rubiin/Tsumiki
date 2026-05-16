@@ -97,7 +97,7 @@ class BaseSystemTray:
     def _bake_item_button(self, item: SystemTrayItemService) -> HoverButton:
         button = HoverButton(style_classes=["flat"])
 
-        if self.tooltips_enabled:
+        if self.config.get("tooltip", True) and self.tooltips_enabled:
             button.set_tooltip_text(item.get_property("title") or "")
 
         button.connect(

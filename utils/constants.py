@@ -284,6 +284,7 @@ DEFAULT_CONFIG = {
             "ignored": [],
             "hidden": [],
             "hide_when_empty": False,
+            "tooltip": True,
         },
         "taskbar": {"icon_size": 22, "ignored": [], "tooltip": True},
         "theme_switcher": {

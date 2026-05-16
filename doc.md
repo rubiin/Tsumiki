@@ -223,6 +223,7 @@
     - **`ignored`**: `list` (default: [])
     - **`hidden`**: `list` (default: [])
     - **`hide_when_empty`**: `bool` (default: false)
+    - **`tooltip`**: `bool` (default: true)
   - **`taskbar`**: `object`
     - **`icon_size`**: `int` (default: 22)
     - **`ignored`**: `list` (default: [])
@@ -382,4 +383,6 @@
   - **`debug`**: `bool` (default: true)
   - **`monitor_styles`**: `bool` (default: true)
   - **`auto_restart`**: `bool` (default: true)
+  - **`restart_delay`**: `int` (default: 1500)
   - **`multi_monitor`**: `bool` (default: false)
+  - **`tooltips`**: `bool` (default: true)
