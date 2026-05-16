@@ -53,7 +53,7 @@ $accent-lavender: #b4befe;
 $bar-background: #242323;
 $shadow-color: rgba(0, 0, 0, 0.6);
 $ws-active: $text-muted;
-$ws-hover: $accent-pink;
+
 ```
 
 ## Enable Your Theme

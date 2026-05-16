@@ -311,10 +311,10 @@ $toggler-radius: variable.$radius * 1.4;
         }
 
         &.active {
-          background-color: theme.$ws-hover;
+          background-color: theme.$accent-purple;
 
           &:hover {
-            background-color: color.mix(theme.$ws-hover, black, 85%);
+            background-color: color.mix(theme.$accent-purple, black, 85%);
           }
 
           label {
@@ -349,7 +349,7 @@ $toggler-radius: variable.$radius * 1.4;
       }
 
       &.active button {
-        background-color: theme.$ws-hover;
+        background-color: theme.$accent-purple;
         color: color.mix(#000000, white, 8%);
         padding-left: common.toEm(1);
         padding-right: common.toEm(4);

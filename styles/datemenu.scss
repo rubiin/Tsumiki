@@ -167,6 +167,9 @@
       calendar {
         all: unset;
 
+        font-size: 14px;
+        padding: .28em;
+
         &.button {
           transition: 200ms;
           border-radius: variable.$radius;
@@ -179,28 +182,22 @@
 
         &:selected {
           box-shadow:
-            inset 0 -5px 0 0 color.mix(theme.$ws-active, transparent, 50%),
-            inset 0 0 0 1px theme.$ws-active;
+            inset 0 -5px 0 0 color.mix(theme.$accent-orange, transparent, 50%),
+            inset 0 0 0 1px theme.$accent-orange;
           border-radius: variable.$radius * .6;
+          font-weight: 900;
         }
 
-        &.header {
+        &.header , &.highlight{
           background-color: transparent;
-          border: 0;
-          color: theme.$ws-hover;
-        }
-
-        &.highlight {
-          background-color: transparent;
-          color: theme.$accent-teal;
+          color: theme.$accent-purple;
         }
 
         &:indeterminate {
           color: color.mix(theme.$text-main, transparent, 10%);
         }
 
-        font-size: .98em;
-        padding: .28em;
+
       }
     }
   }

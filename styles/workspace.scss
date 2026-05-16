@@ -33,7 +33,7 @@ $workspace-transition: padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
       }
 
       &:hover {
-        background-color: theme.$ws-hover;
+        background-color: theme.$accent-teal;
         label {
           color: theme.$background-dark;
         }
@@ -48,7 +48,7 @@ $workspace-transition: padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
         border: if(variable.$bar-widgets-workspaces-pill-border-enabled, variable.$border, none);
         border-radius: variable.$bar-widgets-workspaces-pill-border-radius;
         border-width: variable.$bar-widgets-workspaces-pill-border-width;
-        background-color: theme.$accent-teal;
+        background-color: theme.$accent-purple;
 
         label {
           color: theme.$background-dark;
