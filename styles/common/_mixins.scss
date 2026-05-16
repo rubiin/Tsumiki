@@ -47,7 +47,7 @@
 
 /// Hover state styling for widgets with background transition
 %widget_hover {
-  background-color: theme.$background;
+  background-color: theme.$accent-teal;
   transition: border-color 400ms ease-in-out;
 }
 

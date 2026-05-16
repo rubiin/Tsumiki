@@ -114,9 +114,14 @@
   @include mixins.widget_style(variable.$bar-style-widget);
 
   &:hover {
+
+    .panel-font-icon{
+      color: theme.$background-dark;
+    }
+
     @extend %widget_hover;
     opacity: variable.$bar-buttons-hover-opacity * .01;
-    color: color.mix(theme.$text-main, #000000, 96%);
+    color: theme.$background-dark;
   }
 }
 

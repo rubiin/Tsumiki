@@ -1,6 +1,6 @@
 @use "variable";
 @use "theme";
-
+@use "common";
 
 .panel-collapsible-group {
   background-color: theme.$background-alt;
@@ -18,12 +18,11 @@
     box-shadow: none;
 
     &:hover {
-      background: rgba(255, 255, 255, 0.1);
+      @extend %widget_hover;
+      color: theme.$background-dark;
     }
 
-    &:active {
-      background: rgba(255, 255, 255, 0.2);
-    }
+
   }
 
   .panel-module-group {
@@ -49,7 +48,8 @@
     color: theme.$text-main;
   }
 
-  &:hover {
-    background: theme.$surface-highlight;
-  }
+        &:hover {
+          @extend %widget_hover;
+          color: theme.$background-dark;
+        }
 }

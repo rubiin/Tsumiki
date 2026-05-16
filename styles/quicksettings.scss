@@ -72,6 +72,8 @@ $toggler-radius: variable.$radius * 1.4;
 
           &:hover {
             @extend %widget_hover;
+            color: theme.$background-dark;
+
           }
 
           &:last-child {
