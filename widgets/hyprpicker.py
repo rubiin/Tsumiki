@@ -28,9 +28,7 @@ class HyprPickerWidget(ButtonWidget):
 
         self.initialized = False
 
-        if self.config.get("tooltip", False) and self.general_config.get(
-            "tooltips", True
-        ):
+        if self.config.get("tooltip", False) and self.tooltips_enabled:
             self.set_tooltip_text("Pick a color")
 
     def lazy_init(self):

@@ -96,9 +96,7 @@ class BatteryWidget(ButtonWidget):
                 self.battery_label.hide()
 
         # Update the tooltip with the battery status details if enabled
-        if self.config.get("tooltip", False) and self.general_config.get(
-            "tooltips", True
-        ):
+        if self.config.get("tooltip", False) and self.tooltips_enabled:
             status_text = (
                 "󱠴 Status: Charging" if is_charging else "󱠴 Status: Discharging"
             )

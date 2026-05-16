@@ -16,9 +16,7 @@ class AppLauncherButton(ButtonWidget):
         icon_size = self.config.get("icon_size", 16)
 
         # Set tooltip
-        if self.config.get("tooltip", True) and self.general_config.get(
-            "tooltips", True
-        ):
+        if self.config.get("tooltip", True) and self.tooltips_enabled:
             self.set_tooltip_text("Open Application Launcher")
 
         # Create the button content

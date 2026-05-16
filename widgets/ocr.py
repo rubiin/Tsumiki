@@ -36,9 +36,7 @@ class OCRWidget(ButtonWidget):
         # Left click for OCR
         self.connect("button-press-event", self.on_button_press)
 
-        if self.config.get("tooltip", False) and self.general_config.get(
-            "tooltips", True
-        ):
+        if self.config.get("tooltip", False) and self.tooltips_enabled:
             self.set_tooltip_text("Left click to OCR, right click to select language")
 
     def lazy_init(self):

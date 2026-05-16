@@ -12,9 +12,7 @@ class ClickCounterWidget(ButtonWidget):
 
         self.connect("button-press-event", self.on_button_press)
 
-        if self.config.get("tooltip", True) and self.general_config.get(
-            "tooltips", True
-        ):
+        if self.config.get("tooltip", True) and self.tooltips_enabled:
             self.set_tooltip_text("Left-click to increment, right-click to reset")
 
     def _increment(self, *_):

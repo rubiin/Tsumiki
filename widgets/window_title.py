@@ -49,9 +49,7 @@ class WindowTitleWidget(ButtonWidget):
         custom_map = self.config.get("title_map", [])
         icon_enabled = self.config.get("icon", True)
 
-        if self.config.get("tooltip", True) and self.general_config.get(
-            "tooltips", True
-        ):
+        if self.config.get("tooltip", True) and self.tooltips_enabled:
             self.set_tooltip_text(win_title)
 
         win_title = truncate(win_title, trunc_size) if trunc else win_title

@@ -409,9 +409,7 @@ class WeatherWidget(ButtonWidget, BaseWeatherWidget):
             )
 
         # Update the tooltip with the city and weather condition if enabled
-        if self.config.get("tooltip", False) and self.general_config.get(
-            "tooltips", True
-        ):
+        if self.config.get("tooltip", False) and self.tooltips_enabled:
             tool_tip = f"{self.get_temperature()} {self.get_description()}"
             tool_tip += f"\n\n{weather_icon['quote']}"
 
