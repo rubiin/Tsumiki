@@ -12,7 +12,7 @@ from gi.repository import GtkLayerShell
 from utils.functions import get_display_server_window
 
 Window = get_display_server_window()
-POPOVER_BAR_GAP = -25
+POPOVER_BAR_GAP = -70
 
 
 class PopoverManager:
