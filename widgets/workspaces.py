@@ -14,13 +14,12 @@ class WorkSpacesWidget(BoxWidget):
 
         workspace = HyprlandWorkspaces
 
-        config = self.config
-        self.ignored_ws = {int(x) for x in unique_list(config.get("ignored", []))}
-        self.icon_map = config.get("icon_map", {})
-        self.default_format = config.get("default_label_format", "{id}")
-        self.workspace_count = config.get("count", 8)
-        self.hide_unoccupied = config.get("hide_unoccupied", False)
-        self.show_numbered = config.get("show_numbered", True)
+        self.ignored_ws = {int(x) for x in unique_list(self.config.get("ignored", []))}
+        self.icon_map = self.config.get("icon_map", {})
+        self.default_format = self.config.get("default_label_format", "{id}")
+        self.workspace_count = self.config.get("count", 8)
+        self.hide_unoccupied = self.config.get("hide_unoccupied", False)
+        self.show_numbered = self.config.get("show_numbered", True)
 
         self.icon = nerd_font_icon(
             icon=get_distro_icon(),

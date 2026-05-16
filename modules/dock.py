@@ -298,15 +298,32 @@ class AppBar(Box):
     def _on_hyprland_event(self, *_):
         self._schedule_sync_clients()
 
-    def _on_active_window_event(self, *_):
-        if not self._clients_by_address:
-            self._schedule_sync_clients(delay_ms=0)
-            return
+    def _extract_active_address_from_event(self, event) -> str | None:
+        data = getattr(event, "data", None)
+        if data is None:
+            return None
 
-        active_address = self._get_active_address()
-        if active_address == self._active_address:
-            return
+        if isinstance(data, str):
+            parts = [part.strip() for part in data.split(",") if part.strip()]
+        elif isinstance(data, (list, tuple)):
+            parts = []
+            for item in data:
+                if item is None:
+                    continue
+                if isinstance(item, str):
+                    parts.append(item.strip())
+                else:
+                    parts.append(str(item).strip())
+        else:
+            return None
 
+        for token in reversed(parts):
+            addr = normalize_address(token)
+            if addr:
+                return addr
+        return None
+
+    def _apply_active_state(self, active_address: str | None):
         self._active_address = active_address
 
         for address, client in self._clients_by_address.items():
@@ -326,6 +343,21 @@ class AppBar(Box):
                     group["button"].set_tooltip_text(active.get_title())
         else:
             self._apply_ungrouped_active_styles()
+
+    def _on_active_window_event(self, *_):
+        if not self._clients_by_address:
+            self._schedule_sync_clients(delay_ms=0)
+            return
+
+        event = _[1] if len(_) > 1 else None
+        active_address = self._extract_active_address_from_event(event)
+        if active_address is None:
+            active_address = self._get_active_address()
+
+        if active_address == self._active_address:
+            return
+
+        self._apply_active_state(active_address)
 
     def _schedule_sync_clients(self, delay_ms: int = DOCK_SYNC_DEBOUNCE_MS):
         if self._sync_scheduled_id is not None:
@@ -369,13 +401,17 @@ class AppBar(Box):
             logger.exception(f"[Dock] Failed to list clients: {e}")
             return []
 
-        self._active_address = self._get_active_address()
+        active_address = self._active_address
+        if active_address is None:
+            active_address = self._get_active_address()
+        self._active_address = active_address
+
         clients = []
         for item in raw_clients:
             if item.get("workspace", {}).get("id", -1) <= 0:
                 continue
 
-            client = NativeClient(item, self._hyprland_connection, self._active_address)
+            client = NativeClient(item, self._hyprland_connection, active_address)
             app_id = client.get_app_id()
             if not app_id or app_id in self.config.get("ignored_apps", []):
                 continue

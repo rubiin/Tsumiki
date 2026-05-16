@@ -1,7 +1,8 @@
 import json
+from contextlib import suppress
 
 from fabric.hyprland.widgets import get_hyprland_connection
-from fabric.utils import Gdk, GdkPixbuf, Gtk, bulk_connect, logger
+from fabric.utils import Gdk, GdkPixbuf, GLib, Gtk, bulk_connect, logger
 from fabric.widgets.box import Box
 from fabric.widgets.button import Button
 from fabric.widgets.eventbox import EventBox
@@ -199,8 +200,11 @@ class OverviewMenu(Box):
     def __init__(self, **kwargs):
         # Initialize as a Box instead of a PopupWindow.
         super().__init__(name="overview-menu", orientation="v", spacing=8, **kwargs)
-        self.workspace_boxes: dict[int, Box] = {}
+        self.workspace_boxes: dict[int, Gtk.Fixed] = {}
+        self.workspace_overlays: dict[int, WorkspaceEventBox] = {}
         self.clients: dict[str, HyprlandWindowButton] = {}
+        self._client_meta: dict[str, tuple] = {}
+        self._update_source_id: int | None = None
 
         self._hyprland_connection = get_hyprland_connection()
         self._app_util = None  # Lazy-load on first access
@@ -212,13 +216,38 @@ class OverviewMenu(Box):
         bulk_connect(
             self._hyprland_connection,
             {
-                "event::openwindow": self._update,
-                "event::closewindow": self._update,
-                "event::movewindow": self._update,
+                "event::openwindow": self._schedule_update,
+                "event::closewindow": self._schedule_update,
+                "event::movewindow": self._schedule_update,
             },
         )
 
+        self._init_grid()
         self.update()
+
+    def _init_grid(self):
+        self.grid = Grid(
+            row_spacing=7,
+            column_spacing=7,
+            column_homogeneous=True,
+            row_homogeneous=True,
+        )
+        self.children = self.grid
+
+        overlays = []
+        for w_id in range(1, 11):
+            fixed = Gtk.Fixed.new()
+            self.workspace_boxes[w_id] = fixed
+
+            overlay = WorkspaceEventBox(
+                w_id,
+                fixed,
+                hyprland_connection=self._hyprland_connection,
+            )
+            self.workspace_overlays[w_id] = overlay
+            overlays.append(overlay)
+
+        self.grid.attach_flow(children=overlays, columns=5)
 
     @property
     def app_util(self) -> AppUtils:
@@ -233,80 +262,136 @@ class OverviewMenu(Box):
             self._app_util.refresh()
             self._app_cache_dirty = False
 
+    def _schedule_update(self, *_):
+        if self._update_source_id is not None:
+            return
+        self._update_source_id = GLib.timeout_add(80, self._run_scheduled_update)
+
+    def _run_scheduled_update(self):
+        self._update_source_id = None
+        self.update(signal_update=True)
+        return False
+
+    def _create_client_button(
+        self, client: dict, monitor_info: tuple
+    ) -> HyprlandWindowButton:
+        return HyprlandWindowButton(
+            window=self,
+            title=client["title"],
+            address=client["address"],
+            app_id=client["initialClass"],
+            size=(client["size"][0] * SCALE, client["size"][1] * SCALE),
+            transform=monitor_info[2],
+            hyprland_connection=self._hyprland_connection,
+            app_util=self.app_util,
+        )
+
+    def _build_client_target(self, client: dict, monitors: dict) -> tuple | None:
+        workspace_id = client.get("workspace", {}).get("id", -1)
+        if workspace_id <= 0:
+            return None
+
+        monitor_id = client.get("monitor")
+        monitor_info = monitors.get(monitor_id)
+        if monitor_info is None:
+            return None
+
+        address = client.get("address")
+        if not address:
+            return None
+
+        x = abs(client["at"][0] - monitor_info[0]) * SCALE
+        y = abs(client["at"][1] - monitor_info[1]) * SCALE
+
+        meta = (
+            workspace_id,
+            x,
+            y,
+            client.get("title", ""),
+            client.get("initialClass", ""),
+            client.get("size", [0, 0])[0],
+            client.get("size", [0, 0])[1],
+            monitor_info[2],
+        )
+        return address, workspace_id, x, y, meta, monitor_info
+
+    def _remove_client(self, address: str):
+        button = self.clients.pop(address, None)
+        self._client_meta.pop(address, None)
+        if not button:
+            return
+
+        with suppress(Exception):
+            parent = button.get_parent()
+            if parent is not None:
+                parent.remove(button)
+        button.destroy()
+
+    def _upsert_client(
+        self,
+        address: str,
+        workspace_id: int,
+        x: float,
+        y: float,
+        meta: tuple,
+        client_data: dict,
+        monitor_info: tuple,
+    ):
+        existing = self.clients.get(address)
+        if existing is not None and self._client_meta.get(address) == meta:
+            return
+
+        if existing is not None:
+            self._remove_client(address)
+
+        button = self._create_client_button(client_data, monitor_info)
+        self.clients[address] = button
+        self._client_meta[address] = meta
+        self.workspace_boxes[workspace_id].put(button, x, y)
+
+    def _fetch_monitors(self) -> dict[int, tuple[int, int, int]]:
+        monitors_data = json.loads(
+            self._hyprland_connection.send_command("j/monitors").reply.decode().strip("\n")
+        )
+        return {
+            monitor["id"]: (monitor["x"], monitor["y"], monitor["transform"])
+            for monitor in monitors_data
+        }
+
+    def _fetch_clients(self) -> list[dict]:
+        return json.loads(
+            self._hyprland_connection.send_command("j/clients").reply.decode().strip("\n")
+        )
+
     def update(self, signal_update=False):
         # Only refresh app cache if needed (marked dirty by unknown app_id)
         self._refresh_app_cache_if_needed()
 
-        # Remove old clients and workspaces.
-        for client in self.clients.values():
-            client.destroy()
-        self.clients.clear()
+        try:
+            monitors = self._fetch_monitors()
+            raw_clients = self._fetch_clients()
+        except Exception as e:
+            logger.exception(f"[Overview] Failed to update snapshot: {e}")
+            return
 
-        for workspace in self.workspace_boxes.values():
-            workspace.destroy()
-        self.workspace_boxes.clear()
+        target_addresses = set()
+        for client in raw_clients:
+            target = self._build_client_target(client, monitors)
+            if target is None:
+                continue
 
-        # Create a new Box to hold the overview.
-        self.grid = Grid(
-            row_spacing=7,
-            column_spacing=7,
-            column_homogeneous=True,
-            row_homogeneous=True,
-        )
+            address, workspace_id, x, y, meta, monitor_info = target
+            target_addresses.add(address)
+            self._upsert_client(address, workspace_id, x, y, meta, client, monitor_info)
 
-        # Create two rows in this Box.
-        self.children = self.grid
-
-        monitors = {
-            monitor["id"]: (monitor["x"], monitor["y"], monitor["transform"])
-            for monitor in json.loads(
-                self._hyprland_connection.send_command("j/monitors")
-                .reply.decode()
-                .strip("\n")
-            )
-        }
-
-        for client in json.loads(
-            self._hyprland_connection.send_command("j/clients")
-            .reply.decode()
-            .strip("\n")
-        ):
-            # Exclude special workspaces.
-            if client["workspace"]["id"] > 0:
-                self.clients[client["address"]] = HyprlandWindowButton(
-                    window=self,
-                    title=client["title"],
-                    address=client["address"],
-                    app_id=client["initialClass"],
-                    size=(client["size"][0] * SCALE, client["size"][1] * SCALE),
-                    transform=monitors[client["monitor"]][2],
-                    hyprland_connection=self._hyprland_connection,
-                    app_util=self.app_util,
-                )
-                if client["workspace"]["id"] not in self.workspace_boxes:
-                    self.workspace_boxes[client["workspace"]["id"]] = Gtk.Fixed.new()
-                self.workspace_boxes[client["workspace"]["id"]].put(
-                    self.clients[client["address"]],
-                    abs(client["at"][0] - monitors[client["monitor"]][0]) * SCALE,
-                    abs(client["at"][1] - monitors[client["monitor"]][1]) * SCALE,
-                )
-
-        overviews = []
-
-        for w_id in range(1, 11):
-            overlay = WorkspaceEventBox(
-                w_id,
-                self.workspace_boxes.get(w_id, None),
-                hyprland_connection=self._hyprland_connection,
-            )
-            overviews.append(overlay)
-
-        # Lay out workspaces into fluid rows.
-        self.grid.attach_flow(children=overviews, columns=5)
+        stale_addresses = [
+            address for address in self.clients if address not in target_addresses
+        ]
+        for address in stale_addresses:
+            self._remove_client(address)
 
     def _update(self, *_):
-        logger.info(f"[Overview] Updating for :{_[1].name}")
-        self.update(signal_update=True)
+        self._schedule_update(*_)
 
 
 class OverViewOverlay(PopupWindow):
