@@ -95,8 +95,8 @@ $hover-transition: background .15s ease-in-out;
     &:hover {
       box-shadow: none;
       border: 0;
-      background-color: color.mix(theme.$text-main, transparent, 20%);
-      transition: $hover-transition;
+      @extend %widget_hover;
+      color: theme.$background-dark;
       .close-icon {
         @extend %clear_icon;
       }

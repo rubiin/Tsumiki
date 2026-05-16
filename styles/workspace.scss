@@ -34,9 +34,8 @@ $workspace-transition: padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
 
       &:hover {
         background-color: theme.$ws-hover;
-
         label {
-          color: theme.$background;
+          color: theme.$background-dark;
         }
       }
 
@@ -49,34 +48,10 @@ $workspace-transition: padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
         border: if(variable.$bar-widgets-workspaces-pill-border-enabled, variable.$border, none);
         border-radius: variable.$bar-widgets-workspaces-pill-border-radius;
         border-width: variable.$bar-widgets-workspaces-pill-border-width;
-
-
-
-      }
-
-      &.unoccupied {
-        opacity: .5;
-
-        &:hover {
-          opacity: 1;
-        }
-      }
-
-      &.occupied {
-        opacity: 1;
-        background-color: rgba(theme.$text-main, 0.15);
+        background-color: theme.$accent-teal;
 
         label {
-          color: theme.$text-main;
-          font-weight: 600;
-        }
-
-        &:hover {
-          background-color: theme.$ws-hover;
-
-          label {
-            color: theme.$background;
-          }
+          color: theme.$background-dark;
         }
       }
     }

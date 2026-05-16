@@ -67,7 +67,8 @@
         }
 
         &:hover {
-          background-color: theme.$background-alt;
+          @extend %widget_hover;
+          color: theme.$background-dark;
 
           #clear-icon {
             @extend %clear_icon;

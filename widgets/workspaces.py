@@ -1,6 +1,5 @@
 from fabric.core.widgets import WorkspaceButton
 from fabric.hyprland.widgets import HyprlandWorkspaces
-from fabric.utils import bulk_connect
 
 from shared.widget_container import BoxWidget
 from utils.functions import get_distro_icon, unique_list
@@ -52,22 +51,6 @@ class WorkSpacesWidget(BoxWidget):
     def _create_workspace_label(self, ws_id: int) -> str:
         return self.icon_map.get(str(ws_id), self.default_format.format(id=ws_id))
 
-    def _update_empty_state(self, button: WorkspaceButton, *_):
-        style_context = button.get_style_context()
-        has_unoccupied = style_context.has_class("unoccupied")
-        has_occupied = style_context.has_class("occupied")
-
-        if button.empty:
-            if not has_unoccupied:
-                button.add_style_class("unoccupied")
-            if has_occupied:
-                button.remove_style_class("occupied")
-        else:
-            if has_unoccupied:
-                button.remove_style_class("unoccupied")
-            if not has_occupied:
-                button.add_style_class("occupied")
-
     def _setup_button(self, ws_id: int) -> WorkspaceButton:
         button = WorkspaceButton(
             id=ws_id,
@@ -75,19 +58,4 @@ class WorkSpacesWidget(BoxWidget):
             visible=ws_id not in self.ignored_ws,
         )
 
-        # Only add empty state styling when showing all workspaces
-        if not self.hide_unoccupied:
-            # Connect to state changes
-            bulk_connect(
-                button,
-                {
-                    "notify::empty": lambda *args: self._update_empty_state(
-                        button, *args
-                    ),
-                    "notify::active": lambda *args: self._update_empty_state(
-                        button, *args
-                    ),
-                },
-            )
-            self._update_empty_state(button)
         return button
