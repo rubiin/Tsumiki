@@ -11,8 +11,8 @@ class HyprSunsetWidget(CommandSwitcher):
 
         super().__init__(
             command=self.command,
-            enabled_icon=self.config.get("enabled_icon", "󰕸"),
-            disabled_icon=self.config.get("disabled_icon", "󰕸"),
+            enabled_icon=self.config.get("enabled_icon"),
+            disabled_icon=self.config.get("disabled_icon"),
             label=self.config.get("label", "HyprSunset"),
             tooltip=self.config.get("tooltip", "Adjust screen temperature"),
             name="hyprsunset",

@@ -94,7 +94,11 @@ class MicrophoneSlider(SettingSlider):
         if parent and hasattr(parent, "mic_submenu"):
             is_visible = parent.mic_submenu.toggle_reveal()
 
-            self.chevron_icon.set_label("" if is_visible else "")
+            self.chevron_icon.set_label(
+                get_text_icon("chevron.down")
+                if is_visible
+                else get_text_icon("chevron.right")
+            )
 
     def on_mute_click(self, *_):
         if self.audio_stream:

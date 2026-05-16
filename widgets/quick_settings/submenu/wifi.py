@@ -191,9 +191,9 @@ class WifiSubMenu(QuickSubMenu):
         wifi_item = Gtk.ListBoxRow(visible=True)
 
         if is_active:
-            security_label = " " + security_label
+            security_label = f"{get_text_icon('tick')} " + security_label
             if self.wifi_device.get_ap_security(ap.get("active-ap")) != "unsecured":
-                security_label = security_label + ""
+                security_label = security_label + f" {get_text_icon('lock')}"
 
         ap_container.add(
             Label(

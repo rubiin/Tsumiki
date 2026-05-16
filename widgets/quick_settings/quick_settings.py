@@ -20,7 +20,7 @@ from shared.dialog import Dialog
 from shared.media import PlayerBoxStack
 from shared.widget_container import ButtonWidget
 from utils.constants import ASSETS_DIR
-from utils.icons import symbolic_icons
+from utils.icons import get_text_icon, symbolic_icons
 from utils.widget_utils import (
     get_audio_icon_name,
     get_brightness_icon_name,
@@ -162,7 +162,7 @@ class QuickSettingsMenu(Box):
         )
 
         uptime_label = Label(
-            label=f" {helpers.uptime()}",
+            label=f"{get_text_icon('hourglass')} {helpers.uptime()}",
             style_classes=["uptime"],
             v_align="center",
             h_align="start",

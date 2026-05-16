@@ -40,9 +40,6 @@ class FabricatorBoundWidget(ButtonWidget):
 class CpuWidget(FabricatorBoundWidget, StatDisplayMixin):
     """A widget to display the current CPU usage."""
 
-    _stat_icon = "󰕸"
-    _stat_name = "cpu"
-
     def __init__(
         self,
         **kwargs,
@@ -104,9 +101,9 @@ class CpuWidget(FabricatorBoundWidget, StatDisplayMixin):
 
             tooltip_text = (
                 f"{self.cpu_name}\n"
-                f" Temperature: {temp}\n"
-                f"󰾆 Utilization: {usage}\n"
-                f" Clock Speed: {freq_text}"
+                f"{get_text_icon('thermometer')} Temperature: {temp}\n"
+                f"{get_text_icon('powerprofiles.performance')} Utilization: {usage}\n"
+                f"{get_text_icon('cpu')} Clock Speed: {freq_text}"
             )
 
             self.set_tooltip_text(tooltip_text)
@@ -116,9 +113,6 @@ class CpuWidget(FabricatorBoundWidget, StatDisplayMixin):
 
 class GpuWidget(FabricatorBoundWidget, StatDisplayMixin):
     """A widget to display the current GPU usage."""
-
-    _stat_icon = "󰕸"
-    _stat_name = "gpu"
 
     def __init__(
         self,
@@ -207,9 +201,6 @@ class GpuWidget(FabricatorBoundWidget, StatDisplayMixin):
 class MemoryWidget(FabricatorBoundWidget, StatDisplayMixin):
     """A widget to display the current memory usage."""
 
-    _stat_icon = "󰕸"
-    _stat_name = "memory"
-
     def __init__(
         self,
         **kwargs,
@@ -256,9 +247,6 @@ class MemoryWidget(FabricatorBoundWidget, StatDisplayMixin):
 
 class StorageWidget(FabricatorBoundWidget, StatDisplayMixin):
     """A widget to display the current storage usage."""
-
-    _stat_icon = "󰕸"
-    _stat_name = "storage"
 
     def __init__(
         self,

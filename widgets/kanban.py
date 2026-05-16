@@ -14,6 +14,7 @@ from shared.mixins import PopoverMixin
 from shared.widget_container import ButtonWidget
 from utils.constants import KANBAN_FILE
 from utils.functions import read_json_file, write_json_file
+from utils.icons import get_text_icon
 from utils.widget_utils import create_surface_from_widget, nerd_font_icon
 
 
@@ -37,13 +38,15 @@ class InlineEditor(Box):
         self.text_view.connect("key-press-event", self.on_key_press)
 
         confirm_btn = Button(
-            name="kanban-btn", child=Label(name="kanban-btn-label", markup="")
+            name="kanban-btn",
+            child=Label(name="kanban-btn-label", markup=get_text_icon("ui.tick")),
         )
         confirm_btn.connect("clicked", self.on_confirm)
         confirm_btn.get_style_context().add_class("flat")
 
         cancel_btn = Button(
-            name="kanban-btn", child=Label(name="kanban-btn-neg", markup="")
+            name="kanban-btn",
+            child=Label(name="kanban-btn-neg", markup=get_text_icon("ui.window_close")),
         )
         cancel_btn.connect("clicked", self.on_cancel)
         cancel_btn.get_style_context().add_class("flat")

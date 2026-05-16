@@ -15,6 +15,8 @@ text_nerd_icons = {
         "camera": "",
         "speakers": "󰓃",
         "package": "",
+        "tick": "",
+        "lock": "",
     },
     "wifi": {
         "connected": "󰤨",
@@ -27,6 +29,10 @@ text_nerd_icons = {
         "strength_2": "󰤢",
         "strength_3": "󰤥",
         "strength_4": "󰤨",
+    },
+    "idle": {
+        "enabled": "",
+        "disabled": "",
     },
     "mpris": {
         "playing": "",
@@ -66,6 +72,8 @@ text_nerd_icons = {
     "thermometer": "",
     "recorder": "󰻂",
     "fallback": "",
+    "battery_low": "󰂎",
+    "hourglass": "",
     "powerprofiles": {"power-saver": "󰌪", "performance": "󰓅", "balanced": "󰒂"},
     "volume": {
         "overamplified": "󱄠",

@@ -40,8 +40,8 @@ class HyprIdleQuickSetting(QuickSettingToggler):
     def __init__(self, popup, **kwargs):
         super().__init__(
             command="hypridle",
-            enabled_icon="",
-            disabled_icon="",
+            enabled_icon=get_text_icon("idle.enabled"),
+            disabled_icon=get_text_icon("idle.disabled"),
             name="quicksettings-togglebutton",
             **kwargs,
         )

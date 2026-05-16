@@ -16,7 +16,7 @@ class ScreenShotWidget(ButtonWidget):
         self.recorder_service = None
 
         self.container_box.children = nerd_font_icon(
-            icon=self.config.get("icon", "󰕸"),
+            icon=self.config.get("icon"),
             props={"style_classes": ["panel-font-icon"]},
         )
 

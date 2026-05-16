@@ -29,7 +29,7 @@ class CustomButtonWidget(ButtonWidget):
 
         # Setup icon if specified
         if self.config.get("show_icon", True):
-            icon = self.config.get("icon", "󰕸")
+            icon = self.config.get("icon")
             if icon:
                 self.icon = nerd_font_icon(
                     icon=icon,

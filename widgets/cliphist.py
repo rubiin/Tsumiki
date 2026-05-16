@@ -685,7 +685,7 @@ class ClipHistoryWidget(ButtonWidget, PopoverMixin):
 
         self.container_box.add(
             nerd_font_icon(
-                icon=self.config.get("icon", "󰕸"),
+                icon=self.config.get("icon"),
                 props={"style_classes": ["panel-font-icon"]},
             )
         )

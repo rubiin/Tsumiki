@@ -4,7 +4,7 @@ from fabric.widgets.label import Label
 from services.battery import BatteryService
 from shared.widget_container import ButtonWidget
 from utils.functions import format_seconds_to_hours_minutes, send_notification
-from utils.icons import symbolic_icons
+from utils.icons import get_text_icon, symbolic_icons
 
 
 class BatteryWidget(ButtonWidget):
@@ -57,7 +57,7 @@ class BatteryWidget(ButtonWidget):
         if not is_present:
             if self.config.get("hide_when_missing", True):
                 self.set_visible(False)
-            self.set_tooltip_text("󰂎 No battery present")
+            self.set_tooltip_text(f"{get_text_icon('battery_low')} No battery present")
             if self.config.get("label", True):
                 self.battery_label.set_text("N/A")
             return True

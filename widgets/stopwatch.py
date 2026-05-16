@@ -52,7 +52,7 @@ class StopWatchWidget(ButtonWidget):
             self.running = True
             self.start_time = time.time() - self.elapsed_time
             self.icon.set_label(
-                self.config.get("running_icon", "󰕸"),
+                self.config.get("running_icon"),
             )
 
     def update_time(self):

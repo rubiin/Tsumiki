@@ -93,9 +93,6 @@ class StatDisplayMixin:
     common display modes: label, graph, and progress (circular).
     """
 
-    _stat_icon: str = "󰕸"
-    _stat_name: str = "stat"
-
     def setup_stat_display(self, container) -> None:
         """
         Setup the display mode (graph, progress, or label) based on config.

@@ -19,7 +19,7 @@ class WallpaperWidget(ButtonWidget):
 
         # Add icon
         self.container_box.children = nerd_font_icon(
-            icon=cfg.get("icon", "󰕸"),
+            icon=cfg.get("icon"),
             props={"style_classes": ["panel-font-icon"]},
         )
 
