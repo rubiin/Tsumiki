@@ -145,5 +145,5 @@ class CollapsibleGroupWidget(ButtonWidget):
 
         self._setup_button_content()
 
-        if self.general_config.get("tooltips", True):
+        if self.tooltips_enabled:
             self.set_tooltip_text(self.tooltip_text)
