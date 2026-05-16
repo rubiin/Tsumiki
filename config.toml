@@ -554,4 +554,4 @@ monitor_styles = true
 auto_restart = true
 restart_delay = 1500
 multi_monitor = false
-tooltips = true
+tooltips = false

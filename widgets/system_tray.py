@@ -95,9 +95,11 @@ class BaseSystemTray:
             )
 
     def _bake_item_button(self, item: SystemTrayItemService) -> HoverButton:
-        button = HoverButton(
-            style_classes=["flat"], tooltip_text=item.get_property("title")
-        )
+        button = HoverButton(style_classes=["flat"])
+
+        if self.tooltips_enabled:
+            button.set_tooltip_text(item.get_property("title") or "")
+
         button.connect(
             "button-press-event",
             lambda button, event: self.on_button_click(button, item, event),
@@ -198,7 +200,7 @@ class SystemTrayWidget(ButtonWidget, BaseSystemTray):
             },
         )
 
-        # # Load existing items
+        # Load existing items
         for item_id in self._watcher.items:
             self.on_item_added(self._watcher, item_id)
 

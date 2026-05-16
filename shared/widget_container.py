@@ -105,9 +105,7 @@ class ButtonWidget(Button, BaseWidget):
 
         widget_name = kwargs.get("name", "button")
         self.config: dict = widget_config.get("widgets", {}).get(widget_name, {})
-        self.tooltips_enabled = widget_config.get("general", {}).get(
-            "tooltips_enabled", True
-        )
+        self.tooltips_enabled = widget_config.get("general", {}).get("tooltips", True)
 
         self.container_box = Box(style_classes=["box"], spacing=6)
         self.add(self.container_box)
