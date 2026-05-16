@@ -351,7 +351,9 @@ class OverviewMenu(Box):
 
     def _fetch_monitors(self) -> dict[int, tuple[int, int, int]]:
         monitors_data = json.loads(
-            self._hyprland_connection.send_command("j/monitors").reply.decode().strip("\n")
+            self._hyprland_connection.send_command("j/monitors")
+            .reply.decode()
+            .strip("\n")
         )
         return {
             monitor["id"]: (monitor["x"], monitor["y"], monitor["transform"])
@@ -360,7 +362,9 @@ class OverviewMenu(Box):
 
     def _fetch_clients(self) -> list[dict]:
         return json.loads(
-            self._hyprland_connection.send_command("j/clients").reply.decode().strip("\n")
+            self._hyprland_connection.send_command("j/clients")
+            .reply.decode()
+            .strip("\n")
         )
 
     def update(self, signal_update=False):
