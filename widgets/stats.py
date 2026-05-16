@@ -320,6 +320,10 @@ class NetworkUsageWidget(FabricatorBoundWidget):
 
         self.client = NetworkSpeed()
 
+        # Cache and interval for network stats (interval in milliseconds)
+        self._last_network_poll = 0.0
+        self._network_poll_interval = float(self.config.get("interval", 2000)) / 1000.0
+
         # Set up a fabricator to call the update_label method at specified intervals
         self._bind_fabricator_changed(self._update_ui)
 
@@ -334,6 +338,12 @@ class NetworkUsageWidget(FabricatorBoundWidget):
 
     def _update_ui(self, *_):
         """Update the network usage label with the current network usage."""
+
+        now = monotonic()
+        if (now - self._last_network_poll) < self._network_poll_interval:
+            return True
+
+        self._last_network_poll = now
 
         network_speed = self.client.get_network_speed()
 

@@ -211,10 +211,11 @@ unit = "gb"
 [widgets.network_usage]
 tooltip = true
 format = "{upload}   {download} "
-upload_threshold = 100
+upload_threshold = 1_024
 download_threshold = 1_024
 kb_digits = 0
 mb_digits = 2
+interval = 2000
 
 [widgets.microphone]
 label = false

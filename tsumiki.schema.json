@@ -518,13 +518,18 @@
 						},
 						"kb_digits": {
 							"type": "number",
-							"default": 0,
+							"default": 2,
 							"description": "The number of digits to display for kilobytes."
 						},
 						"mb_digits": {
 							"type": "number",
 							"default": 2,
 							"description": "The number of digits to display for megabytes."
+						},
+						"interval": {
+							"type": "number",
+							"default": 2000,
+							"description": "The interval for updating network usage in milliseconds."
 						}
 					},
 					"required": [
@@ -533,7 +538,8 @@
 						"upload_threshold",
 						"download_threshold",
 						"kb_digits",
-						"mb_digits"
+						"mb_digits",
+						"interval"
 					]
 				},
 				"quick_settings": {

@@ -155,6 +155,7 @@
     - **`download_threshold`**: `int` (default: 1024)
     - **`kb_digits`**: `int` (default: 0)
     - **`mb_digits`**: `int` (default: 2)
+    - **`interval`**: `int` (default: 2000)
   - **`microphone`**: `object`
     - **`label`**: `bool` (default: false)
     - **`tooltip`**: `bool` (default: true)

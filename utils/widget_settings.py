@@ -396,6 +396,7 @@ NetworkUsage = TypedDict(
         "format": str,
         "upload_threshold": int,
         "download_threshold": int,
+        "interval": int,
         "kb_digits": int,
         "mb_digits": int,
     },

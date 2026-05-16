@@ -207,6 +207,7 @@ DEFAULT_CONFIG = {
             "download_threshold": 1024,
             "kb_digits": 0,
             "mb_digits": 2,
+            "interval": 2000,
         },
         "microphone": {
             "label": False,
