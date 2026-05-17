@@ -136,8 +136,21 @@ def main():
     if general_options.get("monitor_styles", False):
         main_css_file = monitor_file(get_relative_path("styles"))
         common_css_file = monitor_file(get_relative_path("styles/common"))
-        main_css_file.connect("changed", lambda *_: process_and_apply_css(app))
-        common_css_file.connect("changed", lambda *_: process_and_apply_css(app))
+        css_reload_timeout_id = 0
+        css_reload_debounce_ms = 200
+
+        def schedule_css_reload(*_):
+            nonlocal css_reload_timeout_id
+            if css_reload_timeout_id:
+                GLib.source_remove(css_reload_timeout_id)
+
+            css_reload_timeout_id = GLib.timeout_add(
+                css_reload_debounce_ms,
+                lambda: (process_and_apply_css(app), False),
+            )
+
+        main_css_file.connect("changed", schedule_css_reload)
+        common_css_file.connect("changed", schedule_css_reload)
 
     process_and_apply_css(app)
 
