@@ -1,0 +1,154 @@
+
+#breathe-box{
+
+.header-bar {
+    background-color: #181825;
+    border-bottom: 1px solid #313244;
+    padding: 6px 12px;
+  }
+
+  .title-label {
+    font-size: 15px;
+    font-weight: bold;
+    color: #cdd6f4;
+  }
+
+  .subtitle-label {
+    font-size: 11px;
+    color: #a6adc8;
+  }
+
+  .status-card {
+    background-color: #181825;
+    border-radius: 12px;
+    border: 1px solid #313244;
+  }
+
+  .phase-label {
+    font-size: 22px;
+    font-weight: bold;
+    color: #cdd6f4;
+  }
+
+  .countdown-label {
+    font-size: 32px;
+    font-weight: bold;
+    color: #89b4fa;
+  }
+
+  .info-label {
+    font-size: 12px;
+    color: #a6adc8;
+  }
+
+  .section-label {
+    font-size: 12px;
+    font-weight: bold;
+    color: #a6adc8;
+    letter-spacing: 1px;
+  }
+
+  .exercise-btn {
+    background-color: #181825;
+    border-radius: 10px;
+    border: 1px solid #313244;
+    color: #cdd6f4;
+    padding: 0;
+  }
+
+  .exercise-btn:hover {
+    background-color: #1e1e2e;
+    border-color: #89b4fa;
+  }
+
+  .exercise-btn.active {
+    background-color: #1e3a5f;
+    border-color: #89b4fa;
+  }
+
+  .exercise-name {
+    font-size: 13px;
+    font-weight: bold;
+    color: #cdd6f4;
+  }
+
+  .exercise-timing {
+    font-size: 11px;
+    color: #89b4fa;
+    font-family: monospace;
+  }
+
+  .exercise-desc {
+    font-size: 11px;
+    color: #6c7086;
+  }
+
+  .dur-spin {
+    background-color: #181825;
+    border-radius: 6px;
+    border: 1px solid #313244;
+    color: #a6adc8;
+    font-size: 14px;
+    padding: 6px;
+
+    entry {
+      background: none;
+      box-shadow: none;
+      border: none;
+      color: inherit;
+      padding: 0;
+    }
+
+    button {
+      background: #1e1e2e;
+      border: 1px solid #313244;
+      border-radius: 4px;
+      padding: 0 4px;
+      margin: 2px;
+      color: #a6adc8;
+
+      &:hover {
+        background-color: #313244;
+        color: #cdd6f4;
+      }
+    }
+  }
+
+  .start-btn {
+    background-color: #89b4fa;
+    border-radius: 8px;
+    border: none;
+    color: #1e1e2e;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 10px;
+  }
+
+  .start-btn:hover {
+    background-color: #b4befe;
+  }
+
+  .stop-btn {
+    background-color: #313244;
+    border-radius: 8px;
+    border: none;
+    color: #f38ba8;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 10px;
+  }
+
+  .stop-btn:hover {
+    background-color: #45475a;
+  }
+
+  .stop-btn:disabled {
+    background-color: #181825;
+    color: #45475a;
+  }
+
+  .hint-label {
+    font-size: 11px;
+    color: #585b70;
+  }
+}

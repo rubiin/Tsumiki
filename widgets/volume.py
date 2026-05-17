@@ -41,7 +41,7 @@ class VolumeWidget(EventBoxWidget):
         )
 
         # Create an event box to handle scroll events for volume control
-        self.box.add(
+        self.container_box.add(
             Overlay(child=self.progress_bar, overlays=self.icon, name="overlay"),
         )
 
@@ -53,7 +53,7 @@ class VolumeWidget(EventBoxWidget):
 
         if self.config.get("label", True):
             self.volume_label = Label(style_classes=["panel-text"])
-            self.box.add(self.volume_label)
+            self.container_box.add(self.volume_label)
 
     @cooldown(0.1)
     def on_scroll(self, _, event):

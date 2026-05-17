@@ -74,9 +74,9 @@ class EventBoxWidget(EventBox, BaseWidget):
         widget_name = kwargs.get("name", "eventbox")
         self.config: dict = widget_config.get("widgets", {}).get(widget_name, {})
         self.general_config: dict = widget_config.get("general", {})
-        self.box = Box(style_classes=["panel-box"])
+        self.container_box = Box(style_classes=["panel-box"])
         self.add(
-            self.box,
+            self.container_box,
         )
 
         if self.config.get("hover_reveal", True):

@@ -50,6 +50,11 @@ DEFAULT_CONFIG = {
             "label": False,
             "tooltip": True,
         },
+        "breathe": {
+            "icon": "",
+            "label": False,
+            "tooltip": True,
+        },
         "emoji_picker": {
             "icon": "",
             "label": False,

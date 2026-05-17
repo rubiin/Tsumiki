@@ -409,7 +409,7 @@ on_scroll_down = "pamixer -d 5"
 exec_on_event = true
 
 [layout]
-left_section = ["workspaces", "window_title","network_usage"]
+left_section = ["workspaces", "window_title","breathe"]
 middle_section = ["date_time", "weather"]
 right_section = [
   "@collapsible:0",

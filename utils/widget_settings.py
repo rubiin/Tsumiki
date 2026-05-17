@@ -737,12 +737,19 @@ ScreenShot = TypedDict(
     },
 )
 
+# Breathe configuration
+Breathe = TypedDict(
+    "Breathe",
+    {"tooltip": bool, "label": bool, "icon": str},
+)
+
 
 class Widgets(TypedDict):
     """Configuration for all widgets in the bar"""
 
     battery: Battery
     bluetooth: BlueTooth
+    breathe: Breathe
     brightness: Brightness
     cava: Cava
     click_counter: ClickCounter

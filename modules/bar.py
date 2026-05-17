@@ -80,6 +80,7 @@ LAZY_WIDGETS_LIST = {
     "brightness": "widgets.brightness.BrightnessWidget",
     "cava": "widgets.cava.CavaWidget",
     "click_counter": "widgets.click_counter.ClickCounterWidget",
+    "breathe": "widgets.breathing.BreatheWidget",
     "cliphist": "widgets.cliphist.ClipHistoryWidget",
     "collapsible_group": "shared.collapsible_group.CollapsibleGroupWidget",
     "cpu": "widgets.stats.CpuWidget",

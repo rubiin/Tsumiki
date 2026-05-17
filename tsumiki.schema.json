@@ -92,6 +92,7 @@
 							"bluetooth",
 							"brightness",
 							"cava",
+							"breathe",
 							"click_counter",
 							"cpu",
 							"date_time",
@@ -303,6 +304,30 @@
 					"required": [
 						"tooltip",
 						"hide_when_inactive"
+					]
+				},
+				"breathe": {
+					"type": "object",
+					"properties": {
+						"tooltip": {
+							"type": "boolean",
+							"default": true,
+							"description": "Determines whether to show the tooltip."
+						},
+						"label": {
+							"type": "boolean",
+							"default": false,
+							"description": "Determines whether to show the label."
+						},
+						"icon": {
+							"type": "string",
+							"description": "The icon"
+						}
+					},
+					"required": [
+						"tooltip",
+						"label",
+						"icon"
 					]
 				},
 				"power": {
