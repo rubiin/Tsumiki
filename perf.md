@@ -11,4 +11,3 @@ Scope: static code scan for memory hogs and perf bottlenecks.
 - Why hot: `while True` with 1s cadence; includes `psutil.sensors_temperatures()` and disk polling. Fabricator is singleton/lazy but effectively permanent after first use.
 - Risk: background CPU overhead even if stats widgets removed; extra sensor I/O.
 - Fix direction: reference-count subscribers and stop poller at zero; split fast vs slow metrics (temps/disk less frequent).
-
