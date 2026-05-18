@@ -15,10 +15,7 @@ export default defineConfig({
 	...(isActions && owner
 		? {
 				site: `https://${owner}.github.io`,
-				base:
-					repository && !isUserSite
-						? `/${repository}`
-						: "/",
+				base: repository && !isUserSite ? `/${repository}` : "/",
 			}
 		: {}),
 	integrations: [
