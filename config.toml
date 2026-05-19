@@ -364,7 +364,7 @@ timezones = ["America/New_York", "Asia/Tokyo"]
 
 [widgets.privacy]
 tooltip = true
-hide_when_inactive = true
+hide_when_inactive = false
 
 [widgets.custom_button_group]
 spacing = 4
@@ -412,6 +412,7 @@ exec_on_event = true
 left_section = ["workspaces", "window_title"]
 middle_section = ["date_time", "weather"]
 right_section = [
+  "privacy",
   "@collapsible:0",
   "@group:0",
   "system_tray",
@@ -555,4 +556,4 @@ monitor_styles = true
 auto_restart = true
 restart_delay = 1500
 multi_monitor = false
-tooltips = false
+tooltips = true

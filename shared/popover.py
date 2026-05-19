@@ -2,7 +2,6 @@ import contextlib
 from typing import ClassVar
 
 from fabric import Signal
-from fabric.hyprland.service import HyprlandEvent
 from fabric.hyprland.widgets import get_hyprland_connection
 from fabric.utils import Gdk, GLib, GObject, bulk_connect, logger
 from fabric.widgets.box import Box
@@ -69,12 +68,12 @@ class PopoverManager:
 
         return self._overlay
 
-    def on_monitor_change(self, _, event: HyprlandEvent):
+    def on_monitor_change(self, *_):
         if self.active_popover:
             self.active_popover.hide_popover()
         return True
 
-    def on_overlay_clicked(self, widget, event):
+    def on_overlay_clicked(self, *_):
         if self.active_popover:
             self.active_popover.hide_popover()
         return True

@@ -63,9 +63,7 @@ class KeyboardLayoutWidget(ButtonWidget):
 
             label = get_kblayout_map().get(layout, layout)
 
-            if self.config.get("tooltip", False) and self.general_config.get(
-                "tooltips", True
-            ):
+            if self.config.get("tooltip", False) and self.tooltips_enabled:
                 caps = "On" if main_kb["capsLock"] else "Off"
                 num = "On" if main_kb["numLock"] else "Off"
                 self.set_tooltip_text(

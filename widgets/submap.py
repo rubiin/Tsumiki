@@ -49,9 +49,7 @@ class SubMapWidget(ButtonWidget):
             if self.config.get("hide_on_default", False) and submap == "default":
                 self.hide()
 
-            if self.config.get("tooltip", False) and self.general_config.get(
-                "tooltips", True
-            ):
+            if self.config.get("tooltip", False) and self.tooltips_enabled:
                 self.set_tooltip_text(
                     f"Current submap: {submap}",
                 )

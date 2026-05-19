@@ -376,9 +376,7 @@ class WeatherWidget(ButtonWidget, BaseWeatherWidget):
         if data is None:
             self.weather_label.set_label("")
             self.weather_icon.set_label("")
-            if self.config.get("tooltip", False) and self.general_config.get(
-                "tooltips", True
-            ):
+            if self.config.get("tooltip", False) and self.tooltips_enabled:
                 self.set_tooltip_text("Error fetching weather data, try again later.")
             return
 

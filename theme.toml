@@ -435,6 +435,11 @@ enabled = false
 radius = "16px"
 width = "1px"
 
+[bar.widgets.privacy.border]
+enabled = false
+radius = "16px"
+width = "1px"
+
 [bar.widgets.workspaces]
 spacing = ".125em"
 

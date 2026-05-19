@@ -415,3 +415,10 @@
     variable.$bar-widgets-window_title-spacing
   );
 }
+
+
+#privacy {
+  @include mixins.bar-widget-style(variable.$bar-widgets-privacy-border-radius,
+    variable.$bar-widgets-privacy-border-enabled,
+    variable.$bar-widgets-privacy-border-width );
+}
