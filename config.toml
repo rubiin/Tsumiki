@@ -364,7 +364,7 @@ timezones = ["America/New_York", "Asia/Tokyo"]
 
 [widgets.privacy_indicator]
 tooltip = true
-hide_when_inactive = false
+hide_when_inactive = true
 
 [widgets.custom_button_group]
 spacing = 4

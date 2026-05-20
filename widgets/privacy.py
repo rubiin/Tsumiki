@@ -31,20 +31,26 @@ class PrivacyIndicatorWidget(ButtonWidget):
         camera = stat.get("camera", [])
         screen = stat.get("screen", [])
 
-        active = len(mic) > 0 or len(camera) > 0 or len(screen) > 0
-
-        if self.config.get("hide_when_inactive", False) and not active:
+        if (
+            self.config.get("hide_when_inactive", False)
+            and len(mic) == 0
+            and len(camera) == 0
+            and len(screen) == 0
+        ):
             self.hide()
-            self.container_box.hide()
-            self.set_tooltip_text("")
             return True
 
         # Always reset the icon row before re-rendering.
         for child in self.container_box.get_children():
             self.container_box.remove(child)
+        self.show()
 
-        if active:
-            self.show()
+        if len(mic) > 0:
+            self._add_privacy_icon("")  # Microphone icon
+        if len(camera) > 0:
+            self._add_privacy_icon("")  # Camera icon
+        if len(screen) > 0:
+            self._add_privacy_icon("")  # Screen recording icon
 
         if self.config.get("label", True) and self.tooltips_enabled:
             tooltip_text = []
