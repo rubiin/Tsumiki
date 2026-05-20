@@ -84,9 +84,6 @@ SystemTray = TypedDict(
         "hidden": list[str],
         "hide_when_empty": bool,
         "tooltip": bool,
-        "mic_ignored": list[str],
-        "cam_ignored": list[str],
-        "notify": bool,
     },
 )
 
@@ -721,7 +718,9 @@ Privacy = TypedDict(
     {
         "tooltip": bool,
         "hide_when_inactive": bool,
-        "mic_ignore": str,
+        "mic_ignored": list[str],
+        "cam_ignored": list[str],
+        "notify": bool,
     },
 )
 
