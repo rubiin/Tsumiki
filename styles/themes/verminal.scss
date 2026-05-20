@@ -34,11 +34,6 @@ $text-muted-light: #8f8f8f; // Light-muted text for hints (light gray)
 $text-muted-dark: #3c3c3c; // Dark-muted text (charcoal)
 
 /* Additional UI Elements */
-$bar-background: rgba(
-  45,
-  45,
-  45,
-  0.8
-); // Panel background (semi-transparent dark gray)
+$bar-background: rgba(45, 45, 45, 0.8); // Panel background (semi-transparent dark gray)
 $shadow-color: rgba(0, 0, 0, 0.6); // Shadow color (dark, soft shadows)
 $ws-active: $text-muted;

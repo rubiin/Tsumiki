@@ -3,7 +3,6 @@
 @use "common";
 @use "variable";
 
-
 #power-menu-overlay {
   background: rgba(0, 0, 0, 0.4);
 }
@@ -12,7 +11,6 @@
   border-radius: variable.$bar-widgets-power-border-radius;
   border: if(variable.$bar-widgets-power-border-enabled, variable.$border, none);
   border-width: variable.$bar-widgets-power-border-width;
-
 
   @include common.nerd-icon(variable.$bar-widgets-power-icon_size, null);
 }
@@ -27,7 +25,7 @@
   border-radius: 8px;
   text-decoration-color: theme.$text-main;
   color: theme.$text-main;
-  background-color: #1E1E1E;
+  background-color: #1e1e1e;
   background-repeat: no-repeat;
   background-position: center;
 
@@ -49,6 +47,5 @@
     background-color: #19191a;
     outline-style: none;
     color: theme.$text-secondary;
-
   }
 }

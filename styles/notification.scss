@@ -3,13 +3,13 @@
 @use "variable";
 @use "common";
 
-$hover-transition: background .15s ease-in-out;
+$hover-transition: background 0.15s ease-in-out;
 
 /* notification widget*/
 
 %notification_widget {
   padding: variable.$modules-notification-padding_y variable.$modules-notification-padding_x;
-  opacity: variable.$modules-notification-opacity * .01;
+  opacity: variable.$modules-notification-opacity * 0.01;
   color: theme.$text-main;
   border-radius: variable.$modules-notification-border-radius;
   background-color: theme.$background-alt;
@@ -85,7 +85,6 @@ $hover-transition: background .15s ease-in-out;
   .close-button {
     border-radius: variable.$radius-large;
 
-
     .close-icon {
       font-weight: 900;
       font-size: 12px;
@@ -133,7 +132,7 @@ $hover-transition: background .15s ease-in-out;
   }
 
   .critical {
-    box-shadow: inset 0 0 .15em 0 theme.$accent-red;
+    box-shadow: inset 0 0 0.15em 0 theme.$accent-red;
   }
 }
 
@@ -143,15 +142,13 @@ $hover-transition: background .15s ease-in-out;
   }
 }
 
-
 #datemenu-notification-box {
-
   @extend %notification_widget;
 
   #date-menu-notification-summary {
     font-size: 13.5px;
   }
   #date-menu-notification-body {
-    font-size: 13.5px
+    font-size: 13.5px;
   }
 }

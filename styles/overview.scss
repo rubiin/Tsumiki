@@ -3,9 +3,7 @@
 @use "common";
 @use "variable";
 
-
 #overview-menu {
-
   padding: 5px;
 }
 
@@ -14,8 +12,10 @@
   border: if(variable.$bar-widgets-overview-border-enabled, variable.$border, none);
   border-width: variable.$bar-widgets-overview-border-width;
 
-  @include common.nerd-icon(variable.$bar-widgets-overview-icon_size, variable.$bar-widgets-overview-spacing);
-
+  @include common.nerd-icon(
+    variable.$bar-widgets-overview-icon_size,
+    variable.$bar-widgets-overview-spacing
+  );
 }
 
 #overview-window {
@@ -56,7 +56,7 @@
 #overview-workspace-bg {
   background-color: color.mix(theme.$surface-disabled, transparent, 40%);
 
-  #overview-add-label{
+  #overview-add-label {
     font-size: 2rem;
     font-weight: 400;
     color: color.mix(theme.$text-main, black, 30%);

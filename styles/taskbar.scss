@@ -5,7 +5,6 @@
 /** taskbar widget **/
 
 #taskbar {
-
   border-radius: variable.$bar-widgets-taskbar-border-radius;
   border: if(variable.$bar-widgets-taskbar-border-enabled, variable.$border, none);
   border-width: variable.$bar-widgets-taskbar-border-width;

@@ -3,7 +3,6 @@
 @use "../theme.scss";
 @use "functions";
 
-
 #corner-container {
   min-width: 20px;
   min-height: 20px;
@@ -17,21 +16,17 @@
 #desktop-clock-box {
   margin: 0 15rem 15rem 15rem;
 
-  #clock>label {
+  #clock > label {
     font-size: 9rem;
     font-weight: 600;
     @extend %desktop-widget;
   }
 
-  #date>label {
+  #date > label {
     @extend %title_1;
     @extend %desktop-widget;
   }
 }
-
-
-
-
 
 #divider {
   min-width: variable.$bar-widgets-divider-size;
@@ -51,7 +46,6 @@
     variable.$bar-widgets-cpu-spacing
   );
 }
-
 
 #window_count {
   @include mixins.bar-widget-style(
@@ -115,7 +109,6 @@
   );
 }
 
-
 #brightness {
   @include mixins.bar-widget-style(
     variable.$bar-widgets-brightness-border-radius,
@@ -148,7 +141,6 @@
   border-radius: variable.$modules-desktop_clock-border-radius;
   border: if(variable.$modules-desktop_clock-border-enabled, variable.$border, none);
   border-width: variable.$modules-desktop_clock-border-width;
-
 }
 
 #activate_linux {
@@ -174,7 +166,6 @@
       font-size: 1.8rem;
     }
   }
-
 }
 
 #desktop_quotes {
@@ -191,7 +182,6 @@
       @extend %desktop-widget;
     }
   }
-
 }
 
 #hypridle {
@@ -254,7 +244,6 @@
   );
 }
 
-
 #world_clock {
   @include mixins.bar-widget-style(
     variable.$bar-widgets-world_clock-border-radius,
@@ -275,7 +264,7 @@
   );
 
   .cover {
-    min-height: .8em;
+    min-height: 0.8em;
     min-width: 3em;
     border-radius: variable.$radius;
     background-position: center;
@@ -284,13 +273,11 @@
   }
 }
 
-
 .mpris-box {
   background-color: theme.$background-alt;
   border-radius: variable.$radius;
   padding: 1rem;
 }
-
 
 #ocr {
   border-radius: variable.$bar-widgets-ocr-border-radius;
@@ -304,10 +291,10 @@
 
   // Menu styling
   menu#ocr-menu {
-    padding: .45em;
+    padding: 0.45em;
 
     menuitem {
-      padding: .25em 1em;
+      padding: 0.25em 1em;
       border-radius: variable.$radius;
 
       &:hover {
@@ -328,7 +315,6 @@
       }
     }
   }
-
 }
 
 #screenshot {
@@ -341,8 +327,6 @@
   );
 }
 
-
-
 #recorder {
   @include mixins.bar-widget-style(
     variable.$bar-widgets-recorder-border-radius,
@@ -352,7 +336,6 @@
     variable.$bar-widgets-recorder-spacing
   );
 }
-
 
 #stopwatch {
   @include mixins.bar-widget-style(
@@ -373,7 +356,6 @@
     variable.$bar-widgets-submap-spacing
   );
 }
-
 
 #theme_switcher {
   @include mixins.bar-widget-style(
@@ -405,7 +387,6 @@
   );
 }
 
-
 #window_title {
   @include mixins.bar-widget-style(
     variable.$bar-widgets-window_title-border-radius,
@@ -416,9 +397,10 @@
   );
 }
 
-
 #privacy_indicator {
-  @include mixins.bar-widget-style(variable.$bar-widgets-privacy-indicator-border-radius,
+  @include mixins.bar-widget-style(
+    variable.$bar-widgets-privacy-indicator-border-radius,
     variable.$bar-widgets-privacy-indicator-border-enabled,
-    variable.$bar-widgets-privacy-indicator-border-width );
+    variable.$bar-widgets-privacy-indicator-border-width
+  );
 }

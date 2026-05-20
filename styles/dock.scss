@@ -4,14 +4,14 @@
 @use "sass:color";
 
 #dock-bar {
-  $modules-dock-opacity-ratio: variable.$modules-dock-opacity * .01;
+  $modules-dock-opacity-ratio: variable.$modules-dock-opacity * 0.01;
   $transparency-value: (1 - $modules-dock-opacity-ratio) * 100%;
   background-color: color.mix(theme.$bar-background, transparent, $transparency-value);
   padding: variable.$modules-dock-padding_y variable.$modules-dock-padding_x;
   margin: variable.$modules-dock-margin_y variable.$modules-dock-margin_x;
   border: if(variable.$modules-dock-border-enabled, variable.$border, none);
   border-radius: variable.$modules-dock-border-radius;
-  transition: all .25s cubic-bezier(.5, .25, 0, 1);
+  transition: all 0.25s cubic-bezier(0.5, 0.25, 0, 1);
 
   @include common.module-shadow(
     variable.$modules-dock-shadow-enabled,
@@ -44,7 +44,6 @@
       min-height: 1.2px;
       min-width: unset;
     }
-
 
     // Make dot indicator overlay the button edge to keep consistent width
     > box > drawingarea:first-child {

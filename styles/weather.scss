@@ -10,11 +10,13 @@ $base_margin: common.toEm(4);
   border: if(variable.$bar-widgets-weather-border-enabled, variable.$border, none);
   border-width: variable.$bar-widgets-weather-border-width;
 
-  @include common.nerd-icon(variable.$bar-widgets-weather-icon_size, variable.$bar-widgets-weather-spacing);
+  @include common.nerd-icon(
+    variable.$bar-widgets-weather-icon_size,
+    variable.$bar-widgets-weather-spacing
+  );
 }
 
 .weather-menu {
-
   #weather-expander {
     arrow {
       color: theme.$text-main;
@@ -22,12 +24,10 @@ $base_margin: common.toEm(4);
   }
 
   #weather-header-grid {
-
     // header
     font-size: 11pt;
     color: white;
     font-weight: 500;
-
 
     .header-label {
       font-size: 0.87em;
@@ -47,10 +47,8 @@ $base_margin: common.toEm(4);
     .stats {
       @extend .header-label;
       margin: 0 10px 0 30px;
-
     }
   }
-
 
   #weather-separator {
     margin-top: 10px;

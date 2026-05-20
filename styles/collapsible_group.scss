@@ -21,8 +21,6 @@
       @extend %widget_hover;
       color: theme.$background-dark;
     }
-
-
   }
 
   .panel-module-group {
@@ -48,8 +46,8 @@
     color: theme.$text-main;
   }
 
-        &:hover {
-          @extend %widget_hover;
-          color: theme.$background-dark;
-        }
+  &:hover {
+    @extend %widget_hover;
+    color: theme.$background-dark;
+  }
 }

@@ -4,7 +4,6 @@
 @use "variable";
 
 #clip-menu {
-
   #search-entry {
     font-weight: bold;
     background-color: theme.$surface-disabled;
@@ -88,5 +87,8 @@
   border: if(variable.$bar-widgets-cliphist-border-enabled, variable.$border, none);
   border-width: variable.$bar-widgets-cliphist-border-width;
 
-  @include common.nerd-icon(variable.$bar-widgets-cliphist-icon_size, variable.$bar-widgets-cliphist-spacing);
+  @include common.nerd-icon(
+    variable.$bar-widgets-cliphist-icon_size,
+    variable.$bar-widgets-cliphist-spacing
+  );
 }

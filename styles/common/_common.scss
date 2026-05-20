@@ -5,12 +5,9 @@
 @use "../theme.scss";
 @use "../variable.scss";
 
-
-
 .flat {
   border-radius: 4px;
 }
-
 
 .shadow {
   @extend .flat;
@@ -35,7 +32,7 @@
 
 #panel {
   &-inner {
-    $bar-opacity-ratio: variable.$bar-opacity * .01;
+    $bar-opacity-ratio: variable.$bar-opacity * 0.01;
     $transparency-value: (1 - $bar-opacity-ratio) * 100%;
     background-color: color.mix(theme.$bar-background, transparent, $transparency-value);
     padding: variable.$bar-padding_y variable.$bar-padding_x;
@@ -48,21 +45,16 @@
       variable.$bar-shadow-opacity
     );
 
-  @if (variable.$bar-style-panel ==floating) {
-    margin: 1rem 1.5rem 0rem 1.5rem;
-    border-color: theme.$surface-disabled;
+    @if (variable.$bar-style-panel ==floating) {
+      margin: 1rem 1.5rem 0rem 1.5rem;
+      border-color: theme.$surface-disabled;
+    } @else if (variable.$bar-style-panel ==scoop) {
+      margin: 0rem 4.5rem;
+      border-radius: 0 0 variable.$radius * 2.2 variable.$radius * 2.2;
+    } @else {
+      border: none;
+    }
   }
-
-  @else if (variable.$bar-style-panel ==scoop) {
-    margin: 0rem 4.5rem;
-    border-radius: 0 0 variable.$radius * 2.2 variable.$radius * 2.2;
-  }
-
-  @else {
-    border: none;
-
-  }
-}
 }
 
 .floating {
@@ -81,9 +73,7 @@
   background-color: theme.$accent-blue;
 
   @include mixins.image-label-colors(theme.$background-dark);
-
 }
-
 
 #popover-content {
   @include mixins.floating-widget;
@@ -94,14 +84,13 @@
 
 .panel-box {
   border-radius: variable.$radius-large;
-  padding: .1em .9em;
+  padding: 0.1em 0.9em;
   color: theme.$text-main;
 }
 
-
 .panel-button {
   padding: variable.$bar-buttons-padding-x variable.$bar-buttons-padding-y;
-  opacity: variable.$bar-buttons-opacity * .01;
+  opacity: variable.$bar-buttons-opacity * 0.01;
 
   @include mixins.module-shadow(
     variable.$bar-buttons-shadow-enabled,
@@ -114,13 +103,12 @@
   @include mixins.widget_style(variable.$bar-style-widget);
 
   &:hover {
-
-    .panel-font-icon{
+    .panel-font-icon {
       color: theme.$background-dark;
     }
 
     @extend %widget_hover;
-    opacity: variable.$bar-buttons-hover-opacity * .01;
+    opacity: variable.$bar-buttons-hover-opacity * 0.01;
     color: theme.$background-dark;
   }
 }
@@ -146,13 +134,12 @@
   margin: 0 functions.toEm(6) 0 0;
 }
 
-
 tooltip {
   @extend %unset;
-  opacity: variable.$bar-menus-tooltip-opacity * .01;
+  opacity: variable.$bar-menus-tooltip-opacity * 0.01;
   background-color: theme.$background-dark;
   border-radius: variable.$bar-menus-tooltip-border-radius;
-  animation: tooltipShow .25s cubic-bezier(.5, .25, 0, 1);
+  animation: tooltipShow 0.25s cubic-bezier(0.5, 0.25, 0, 1);
   border: if(variable.$bar-menus-tooltip-border-enabled, variable.$border, none);
 
   @include mixins.module-shadow(
@@ -170,7 +157,7 @@ tooltip {
   }
 }
 
-tooltip>* {
+tooltip > * {
   padding: variable.$bar-menus-tooltip-padding-y variable.$bar-menus-tooltip-padding-x;
 }
 
@@ -183,9 +170,8 @@ menu {
   border: variable.$border;
 }
 
-
 menuitem {
-  transition: background-color 75ms cubic-bezier(0, 0, .2, 1);
+  transition: background-color 75ms cubic-bezier(0, 0, 0.2, 1);
   min-height: 30px;
   min-width: 40px;
   background-clip: border-box;
@@ -205,7 +191,7 @@ menuitem {
   }
 }
 
-menu>menuitem:hover {
+menu > menuitem:hover {
   background-color: theme.$surface-highlight;
 }
 
@@ -214,21 +200,20 @@ entry image.left {
   /* space between icon and text */
 }
 
-
-menu>arrow {
+menu > arrow {
   min-height: 16px;
   min-width: 16px;
   padding: functions.toEm(4);
   color: theme.$background-alt;
 }
 
-menu>arrow.top {
+menu > arrow.top {
   margin-top: 0;
   border-radius: 6px;
   -gtk-icon-source: -gtk-icontheme("pan-up-symbolic");
 }
 
-menu>arrow.bottom {
+menu > arrow.bottom {
   margin-top: 8px;
   margin-bottom: -12px;
   border-radius: 6px;
@@ -244,8 +229,8 @@ radio {
   background-color: theme.$text-main;
   border-radius: variable.$radius-large;
   transition:
-    all 75ms cubic-bezier(0, 0, .2, 1),
-    box-shadow 150ms cubic-bezier(0, 0, .2, 1);
+    all 75ms cubic-bezier(0, 0, 0.2, 1),
+    box-shadow 150ms cubic-bezier(0, 0, 0.2, 1);
 }
 
 check {
@@ -293,7 +278,7 @@ radio:indeterminate:active {
 }
 
 switch {
-  transition: all 75ms cubic-bezier(0, 0, .2, 1);
+  transition: all 75ms cubic-bezier(0, 0, 0.2, 1);
   margin: functions.toEm(4) 0;
   border-radius: variable.$radius-large;
   background-color: color.mix(theme.$background, white, 90%);
@@ -302,7 +287,7 @@ switch {
   color: transparent;
 
   slider {
-    transition: all 75ms cubic-bezier(0, 0, .2, 1);
+    transition: all 75ms cubic-bezier(0, 0, 0.2, 1);
     min-width: 12px;
     min-height: 12px;
     margin: functions.toEm(4);
@@ -318,7 +303,7 @@ switch {
   }
 
   &:disabled {
-    opacity: .5;
+    opacity: 0.5;
   }
 }
 
@@ -376,7 +361,6 @@ separator {
   background-color: theme.$surface-disabled;
 }
 
-
 scrolledwindow {
   scrollbar {
     background-color: theme.$surface-disabled;
@@ -390,21 +374,16 @@ scrolledwindow {
     min-width: 6px;
     min-height: 30px;
     background-color: theme.$background;
-
   }
 }
-
-
 
 #wallpaper-button {
   border-radius: 10px;
 
   &:hover {
     background-color: theme.$background-alt;
-
   }
 }
-
 
 .window-basic {
   background-color: theme.$background-alt;
@@ -412,14 +391,12 @@ scrolledwindow {
   padding: 10px;
 }
 
-
 .sleek-border {
   border-radius: 20px;
   border-style: solid;
   border-width: 0.3px;
   border-color: theme.$surface-disabled;
 }
-
 
 #dialog {
   &-wrapper {
@@ -464,7 +441,6 @@ scrolledwindow {
   }
 }
 
-
 .buttons {
   &-basic {
     border-radius: 20px;
@@ -475,9 +451,8 @@ scrolledwindow {
 
     &:hover {
       background-color: theme.$surface-highlight;
-      box-shadow: 0 0 5px -3px color.mix(theme.$text-main, transparent, 20%)
+      box-shadow: 0 0 5px -3px color.mix(theme.$text-main, transparent, 20%);
     }
-
   }
 
   &-transition {
@@ -492,10 +467,10 @@ scrolledwindow {
   color: theme.$text-main;
 }
 
-#popover-overlay ,#popover-window{
+#popover-overlay,
+#popover-window {
   background-color: transparent;
 }
-
 
 #setting-slider-scale {
   .overamplified trough highlight {

@@ -10,7 +10,8 @@
 /// @param {Number} $opacity - Shadow opacity (0-100)
 @mixin module-shadow($enabled, $offset, $blur, $spread, $opacity) {
   @if $enabled {
-    $shadow: 0 0 0 variable.$bar-border-width theme.$shadow-color,
+    $shadow:
+      0 0 0 variable.$bar-border-width theme.$shadow-color,
       $offset $blur $spread color.adjust(theme.$shadow-color, $alpha: calc($opacity * 0.01 - 1));
     box-shadow: $shadow;
   } @else {
@@ -53,7 +54,7 @@
 
 /// Base styling for desktop widgets with smooth color transitions
 %desktop-widget {
-  transition: color .5s ease;
+  transition: color 0.5s ease;
   color: theme.$text-main;
   font-family: "Jost*", sans-serif;
 }
@@ -120,8 +121,6 @@
   font-size: 12px;
 }
 
-
-
 /// Mixin for styling slider/progress bar widgets with customizable appearance
 /// @param {Length} $height - Height of the slider trough
 /// @param {Color} $highlight-color - Color for the filled portion
@@ -135,8 +134,7 @@
   $knob: false,
   $radius: variable.$radius,
   $slider-color: theme.$background-dark,
-  $min-length: "",
-
+  $min-length: ""
 ) {
   trough {
     transition: 200ms;
@@ -153,13 +151,12 @@
       min-height: $height;
 
       &:hover {
-        background-color: color.mix($highlight-color,
-            black, 80%);
+        background-color: color.mix($highlight-color, black, 80%);
       }
     }
   }
 
-  @if $min-length !="" {
+  @if $min-length != "" {
     scale {
       min-width: $min-length;
     }
@@ -178,14 +175,12 @@
       margin: -0.5em;
 
       &:hover {
-        background-color: color.mix(theme.$text-main,
-            black, 90%);
+        background-color: color.mix(theme.$text-main, black, 90%);
       }
     }
   }
 
   &:disabled {
-
     highlight,
     progress {
       background-color: color.mix(theme.$text-main, transparent, 60%);
@@ -205,7 +200,11 @@
     variable.$bar-menus-popover-shadow-opacity
   );
   margin: max(variable.$spacing, 8px);
-  border: if(variable.$bar-menus-popover-border-enabled, variable.$bar-menus-popover-border-width solid variable.$popover-border-color, none);
+  border: if(
+    variable.$bar-menus-popover-border-enabled,
+    variable.$bar-menus-popover-border-width solid variable.$popover-border-color,
+    none
+  );
   background-color: theme.$background-dark;
   color: theme.$text-main;
   border-radius: $radius;
@@ -219,7 +218,13 @@
 /// @param {Length} $border-width - Border width value
 /// @param {Length} $icon-size - Icon font size (optional)
 /// @param {Length} $spacing - Icon margin-right spacing (optional)
-@mixin bar-widget-style($border-radius, $border-enabled, $border-width, $icon-size: null, $spacing: null) {
+@mixin bar-widget-style(
+  $border-radius,
+  $border-enabled,
+  $border-width,
+  $icon-size: null,
+  $spacing: null
+) {
   border-radius: $border-radius;
   border: if($border-enabled, variable.$border, none);
   border-width: $border-width;
@@ -251,7 +256,7 @@
 /// @param {Length} $spacing - Base spacing value to use
 /// @param {Boolean} $rec - Whether to apply spacing recursively to nested boxes
 @mixin spacing($multiplier: 1, $spacing: variable.$spacing, $rec: false) {
-  &.horizontal>* {
+  &.horizontal > * {
     margin: 0 calc($spacing * $multiplier / 2);
 
     &:first-child {
@@ -263,7 +268,7 @@
     }
   }
 
-  &.vertical>* {
+  &.vertical > * {
     margin: calc($spacing * $multiplier / 2) 0;
 
     &:first-child {
@@ -277,7 +282,7 @@
 
   @if $rec {
     box {
-      &.horizontal>* {
+      &.horizontal > * {
         margin: 0 $spacing * $multiplier / 2;
 
         &:first-child {
@@ -289,7 +294,7 @@
         }
       }
 
-      &.vertical>* {
+      &.vertical > * {
         margin: $spacing * $multiplier / 2 0;
 
         &:first-child {
@@ -304,40 +309,28 @@
   }
 }
 
-
 /// Mixin for applying predefined widget style classes based on type
 /// @param {String} $type - The style type ('flat', 'shadow', 'bordered', 'leaf', 'leaf-inverse', or 'default')
 @mixin widget_style($type) {
   @if $type ==flat {
     @extend .flat;
-  }
-
-
-  @else if $type ==shadow {
+  } @else if $type ==shadow {
     @extend .shadow;
-  }
-
-  @else if $type ==bordered {
+  } @else if $type ==bordered {
     @extend .bordered;
-  }
-
-  @else if $type ==leaf {
+  } @else if $type ==leaf {
     @extend .leaf;
-  }
-
-  @else if $type ==leaf-inverse {
+  } @else if $type ==leaf-inverse {
     @extend .leaf-inverse;
-  }
-
-  @else {
+  } @else {
     @extend .default;
   }
 }
 
 /// Mixin to set image and label background/color consistently
 @mixin image-label-colors($color: theme.$text-main) {
-
-  image,label {
+  image,
+  label {
     color: $color;
   }
 }

@@ -3,7 +3,6 @@
 @use "variable";
 @use "common";
 
-
 button.launcher-button {
   border-radius: variable.$radius-large;
 
@@ -32,7 +31,6 @@ button.launcher-button {
 }
 
 #launcher {
-
   border: if(variable.$modules-app_launcher-border-enabled, variable.$border, none);
   border-width: variable.$modules-app_launcher-border-width;
 

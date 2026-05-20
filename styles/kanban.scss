@@ -3,9 +3,7 @@
 @use "common";
 @use "variable";
 
-
 #kanban-board {
-
   border: 4px solid theme.$surface-disabled;
   min-height: 400px;
   min-width: 600px;
@@ -30,11 +28,11 @@
   }
 
   #kanban-row {
-    &:first-child>*>* {
+    &:first-child > * > * {
       border-radius: 16px 16px 4px 4px;
     }
 
-    &:last-child>*>* {
+    &:last-child > * > * {
       border-radius: 4px 4px 16px 16px;
     }
   }
@@ -79,12 +77,13 @@
   }
 }
 
-
-
 #kanban {
   border-radius: variable.$bar-widgets-kanban-border-radius;
   border: if(variable.$bar-widgets-kanban-border-enabled, variable.$border, none);
   border-width: variable.$bar-widgets-kanban-border-width;
 
-  @include common.nerd-icon(variable.$bar-widgets-kanban-icon_size, variable.$bar-widgets-kanban-spacing);
+  @include common.nerd-icon(
+    variable.$bar-widgets-kanban-icon_size,
+    variable.$bar-widgets-kanban-spacing
+  );
 }

@@ -3,8 +3,6 @@
 @use "common";
 @use "variable";
 
-
-
 #emoji-menu {
   #search-entry {
     font-weight: bold;
@@ -12,7 +10,6 @@
     color: theme.$text-main;
     border-radius: 16px;
     padding: 10px;
-
 
     selection {
       color: theme.$background;
@@ -114,5 +111,8 @@
   border: if(variable.$bar-widgets-emoji_picker-border-enabled, variable.$border, none);
   border-width: variable.$bar-widgets-emoji_picker-border-width;
 
-  @include common.nerd-icon(variable.$bar-widgets-emoji_picker-icon_size, variable.$bar-widgets-emoji_picker-spacing);
+  @include common.nerd-icon(
+    variable.$bar-widgets-emoji_picker-icon_size,
+    variable.$bar-widgets-emoji_picker-spacing
+  );
 }

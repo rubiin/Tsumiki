@@ -4,7 +4,6 @@
 @use "variable";
 @use "common";
 
-
 %player_text {
   color: theme.$text-main;
   background-color: transparent;
@@ -12,13 +11,11 @@
 }
 
 #player-stack-button {
-
   border-radius: 5px;
   min-width: 7px;
   min-height: 7px;
   margin: 10px 3px;
   background-color: theme.$text-main;
-
 
   &:hover {
     background-color: #646464;
@@ -50,13 +47,16 @@
     min-height: $image_size;
   }
 
-  @include common.slider($min-length: $inner_player_width - 80, $height: 7px, $highlight-color: theme.$text-muted, $knob: variable.$bar-widgets-quick_settings-sliders-knob);
+  @include common.slider(
+    $min-length: $inner_player_width - 80,
+    $height: 7px,
+    $highlight-color: theme.$text-muted,
+    $knob: variable.$bar-widgets-quick_settings-sliders-knob
+  );
 
   #seek-bar {
     padding-top: 10px;
   }
-
-
 
   #inner-player-box {
     // background: linear-gradient(135deg, color.mix(theme.$background-alt, white, 80%), theme.$background-alt, #4b2353);
@@ -64,7 +64,7 @@
     margin-left: math.floor(calc($image_size / 2));
     min-width: $inner_player_width;
     min-height: $player_height;
-    opacity: .6;
+    opacity: 0.6;
   }
 
   #player-info-box {
@@ -133,5 +133,4 @@
       }
     }
   }
-
 }

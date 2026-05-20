@@ -8,12 +8,12 @@
     padding: 0;
     margin: 0;
 
-    >*:not(:first-child) {
+    > *:not(:first-child) {
       padding-right: variable.$padding * 1.5;
       padding-left: variable.$padding;
     }
 
-    >*:not(:last-child) {
+    > *:not(:last-child) {
       padding-right: variable.$padding;
       padding-left: variable.$padding * 1.5;
     }
