@@ -29,6 +29,13 @@ def get_notification_service():
     return _get_service("notification", CustomNotifications)
 
 
+def get_privacy_service():
+    """Get the notification service (lazy-loaded)."""
+    from .privacy import PrivacyService
+
+    return _get_service("privacy", PrivacyService)
+
+
 def get_bluetooth_service():
     """Get the bluetooth service (lazy-loaded)."""
     from fabric.bluetooth import BluetoothClient
@@ -77,3 +84,4 @@ notification_service = _LazyServiceProxy(get_notification_service)
 bluetooth_service = _LazyServiceProxy(get_bluetooth_service)
 power_pfl_service = _LazyServiceProxy(get_power_profiles_service)
 matugen_service = _LazyServiceProxy(get_matugen_service)
+privacy_service = _LazyServiceProxy(get_privacy_service)
