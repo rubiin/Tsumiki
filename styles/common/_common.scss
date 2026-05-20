@@ -492,13 +492,9 @@ scrolledwindow {
   color: theme.$text-main;
 }
 
-#popover-overlay {
-  background-color: rgba(0, 0, 0, 0.0);
-}
-
- #popover-window{
+#popover-overlay ,#popover-window{
   background-color: transparent;
- }
+}
 
 
 #setting-slider-scale {
