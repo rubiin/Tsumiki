@@ -417,8 +417,8 @@
 }
 
 
-#privacy {
-  @include mixins.bar-widget-style(variable.$bar-widgets-privacy-border-radius,
-    variable.$bar-widgets-privacy-border-enabled,
-    variable.$bar-widgets-privacy-border-width );
+#privacy_indicator {
+  @include mixins.bar-widget-style(variable.$bar-widgets-privacy-indicator-border-radius,
+    variable.$bar-widgets-privacy-indicator-border-enabled,
+    variable.$bar-widgets-privacy-indicator-border-width );
 }

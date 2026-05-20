@@ -362,7 +362,7 @@ use_24hr = true
 show_icon = true
 timezones = ["America/New_York", "Asia/Tokyo"]
 
-[widgets.privacy]
+[widgets.privacy_indicator]
 tooltip = true
 hide_when_inactive = false
 
@@ -412,7 +412,7 @@ exec_on_event = true
 left_section = ["workspaces", "window_title"]
 middle_section = ["date_time", "weather"]
 right_section = [
-  "privacy",
+  "privacy_indicator",
   "@collapsible:0",
   "@group:0",
   "system_tray",

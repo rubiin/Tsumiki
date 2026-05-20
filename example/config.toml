@@ -361,7 +361,7 @@ use_24hr = true
 show_icon = true
 timezones = ["America/New_York", "Asia/Tokyo"]
 
-[widgets.privacy]
+[widgets.privacy_indicator]
 tooltip = true
 hide_when_inactive = true
 

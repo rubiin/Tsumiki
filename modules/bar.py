@@ -103,7 +103,7 @@ LAZY_WIDGETS_LIST = {
     "overview_button": "widgets.overview_button.OverviewButtonWidget",
     "power": "widgets.power_button.PowerWidget",
     "quick_settings": "widgets.quick_settings.quick_settings.QuickSettingsButtonWidget",
-    "privacy": "widgets.privacy.PrivacyWidget",
+    "privacy_indicator": "widgets.privacy.PrivacyIndicatorWidget",
     "recorder": "widgets.recorder.RecorderWidget",
     "screenshot": "widgets.screenshot.ScreenShotWidget",
     "settings": "widgets.settings.SettingsWidget",

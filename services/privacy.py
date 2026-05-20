@@ -3,8 +3,10 @@ from pathlib import Path
 
 from fabric.utils import exec_shell_command, os, re
 
+from .base import SingletonService
 
-class PrivacyService:
+
+class PrivacyIndicatorService(SingletonService):
     """Detect applications using microphone, camera, or screen sharing."""
 
     SCREEN_SHARE_PATTERNS = (

@@ -31,9 +31,9 @@ def get_notification_service():
 
 def get_privacy_service():
     """Get the notification service (lazy-loaded)."""
-    from .privacy import PrivacyService
+    from .privacy import PrivacyIndicatorService
 
-    return _get_service("privacy", PrivacyService)
+    return _get_service("privacy", PrivacyIndicatorService)
 
 
 def get_bluetooth_service():

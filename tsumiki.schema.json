@@ -132,7 +132,7 @@
 							"world_clock",
 							"theme_switcher",
 							"wallpaper",
-							"privacy"
+							"privacy_indicator"
 						],
 						"description": "Specifies the widget to display."
 					},
@@ -287,7 +287,7 @@
 						"label"
 					]
 				},
-				"privacy": {
+				"privacy_indicator": {
 					"type": "object",
 					"properties": {
 						"tooltip": {

@@ -435,7 +435,7 @@ enabled = false
 radius = "16px"
 width = "1px"
 
-[bar.widgets.privacy.border]
+[bar.widgets.privacy_indicator.border]
 enabled = false
 radius = "16px"
 width = "1px"

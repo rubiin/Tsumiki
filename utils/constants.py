@@ -247,7 +247,7 @@ DEFAULT_CONFIG = {
                 "logout": "loginctl terminate-user $USER",
             },
         },
-        "privacy": {
+        "privacy_indicator": {
             "tooltip": True,
             "hide_when_inactive": True,
         },

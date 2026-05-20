@@ -712,9 +712,9 @@ Recording = TypedDict(
     },
 )
 
-# Privacy configuration
-Privacy = TypedDict(
-    "Privacy",
+# Privacy indicator configuration
+PrivacyIndicator = TypedDict(
+    "PrivacyIndicator",
     {
         "tooltip": bool,
         "hide_when_inactive": bool,
@@ -778,7 +778,7 @@ class Widgets(TypedDict):
     overview_button: Overview_Button
     wallpaper: WallPaper
     power: PowerButton
-    privacy: Privacy
+    privacy_indicator: PrivacyIndicator
     quick_settings: QuickSettings
     recorder: Recording
     screenshot: ScreenShot
