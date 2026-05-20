@@ -16,10 +16,6 @@ class PrivacyIndicatorWidget(ButtonWidget):
 
         self.service = privacy_service
 
-        self.screen_shared = False
-        self.camera_active = False
-        self.microphone_active = False
-
         invoke_repeater(1000, self.update_privacy_status)
 
     def update_privacy_status(self):
@@ -52,7 +48,7 @@ class PrivacyIndicatorWidget(ButtonWidget):
         if len(screen) > 0:
             self._add_privacy_icon("")  # Screen recording icon
 
-        if self.config.get("label", True) and self.tooltips_enabled:
+        if self.config.get("tooltip", True) and self.tooltips_enabled:
             tooltip_text = []
             if len(mic) > 0:
                 tooltip_text.append("Microphone active")

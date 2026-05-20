@@ -721,6 +721,7 @@ PrivacyIndicator = TypedDict(
         "mic_ignored": list[str],
         "cam_ignored": list[str],
         "notify": bool,
+        "modules": list[str],
     },
 )
 
