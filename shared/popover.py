@@ -288,7 +288,7 @@ class Popover(Widget):
         y = widget_y + widget_allocation.height + POPOVER_BAR_GAP
 
         if widget_y >= monitor_geometry.height / 2:
-            y = widget_y - popover_size.height - POPOVER_BAR_GAP
+            y = widget_y - popover_size.height + POPOVER_BAR_GAP * 0.2
 
         if self._enable_boundary_checking:
             if x <= 0:
