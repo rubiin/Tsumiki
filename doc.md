@@ -11,6 +11,10 @@
     - **`icon`**: `str` (default: "")
     - **`label`**: `bool` (default: false)
     - **`tooltip`**: `bool` (default: true)
+  - **`breathe`**: `object`
+    - **`icon`**: `str` (default: "")
+    - **`label`**: `bool` (default: false)
+    - **`tooltip`**: `bool` (default: true)
   - **`emoji_picker`**: `object`
     - **`icon`**: `str` (default: "")
     - **`label`**: `bool` (default: false)
@@ -184,7 +188,7 @@
       - **`suspend`**: `str` (default: "systemctl suspend")
       - **`lock`**: `str` (default: "loginctl lock-session")
       - **`logout`**: `str` (default: "loginctl terminate-user $USER")
-  - **`privacy`**: `object`
+  - **`privacy_indicator`**: `object`
     - **`tooltip`**: `bool` (default: true)
     - **`hide_when_inactive`**: `bool` (default: true)
   - **`recorder`**: `object`

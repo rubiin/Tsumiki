@@ -1,4 +1,4 @@
-from fabric.utils import invoke_repeater
+from fabric.utils import GLib, invoke_repeater
 
 from services import privacy_service
 from shared.widget_container import ButtonWidget
@@ -15,8 +15,14 @@ class PrivacyIndicatorWidget(ButtonWidget):
         super().__init__(name="privacy_indicator", **kwargs)
 
         self.service = privacy_service
+        self._privacy_repeater_id = None
 
-        invoke_repeater(1000, self.update_privacy_status)
+        GLib.timeout_add(3500, self._start_privacy_repeater)
+
+    def _start_privacy_repeater(self):
+        self.update_privacy_status()
+        self._privacy_repeater_id = invoke_repeater(1000, self.update_privacy_status)
+        return False
 
     def update_privacy_status(self):
         """Update the privacy status by querying the service and updating icons."""

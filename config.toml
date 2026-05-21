@@ -1,4 +1,4 @@
-"$schema" = "./tsumiki.schema.json"
+"$schema" = "https://raw.githubusercontent.com/rubiin/tsumiki/refs/heads/dev/tsumiki.schema.json"
 
 [widgets.app_launcher_button]
 icon = "view-app-grid-symbolic"
@@ -190,15 +190,6 @@ tooltip = true
 truncation_size = 2
 show_icon = false
 
-[[widgets.widget_groups]]
-widgets = ["updates", "battery"]
-spacing = 4
-style_classes = ["bordered"]
-
-[[widgets.widget_groups]]
-widgets = ["quick_settings", "cpu"]
-spacing = 0
-style_classes = ["compact"]
 
 [widgets.memory]
 show_icon = true
@@ -211,8 +202,8 @@ unit = "gb"
 [widgets.network_usage]
 tooltip = true
 format = "{upload}   {download} "
-upload_threshold = 1_024
-download_threshold = 1_024
+upload_threshold = 1024
+download_threshold = 1024
 kb_digits = 0
 mb_digits = 2
 interval = 2000
@@ -255,7 +246,7 @@ path = "Videos/Screencasting"
 tooltip = true
 audio = true
 delayed = false
-delayed_timeout = 5_000
+delayed_timeout = 5000
 
 [widgets.screenshot]
 path = "Pictures/Screenshots"
@@ -263,7 +254,7 @@ icon = "󰄀"
 tooltip = true
 annotation = false
 delayed = false
-delayed_timeout = 5_000
+delayed_timeout = 5000
 label = false
 capture_sound = false
 
@@ -309,7 +300,7 @@ no_updates_icon = "󰏖"
 os = "arch"
 hover_reveal = true
 reveal_duration = 500
-interval = 3_600
+interval = 3600
 tooltip = true
 terminal = "kitty"
 pad_zero = false
@@ -413,7 +404,6 @@ exec_on_event = true
 left_section = ["workspaces", "window_title"]
 middle_section = ["date_time", "weather"]
 right_section = [
-  "privacy_indicator",
   "@collapsible:0",
   "@group:0",
   "system_tray",
