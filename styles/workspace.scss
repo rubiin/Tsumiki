@@ -3,8 +3,7 @@
 @use "variable";
 @use "sass:color";
 
-$workspace-transition:
-  padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+$workspace-transition: padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
   background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 
 /** workspace switcher widget */
@@ -16,14 +15,13 @@ $workspace-transition:
 
   #workspaces_widget {
     font-weight: 700;
-    padding: 0.19em 1em;
+
     border: if(variable.$bar-widgets-workspaces-border-enabled, variable.$border, none);
     border-radius: variable.$bar-widgets-workspaces-border-radius;
     border-width: variable.$bar-widgets-workspaces-border-width;
 
-    & > button {
-      padding: variable.$bar-widgets-workspaces-pill-height
-        variable.$bar-widgets-workspaces-pill-width;
+    &>button {
+      padding: variable.$bar-widgets-workspaces-pill-height variable.$bar-widgets-workspaces-pill-width;
       transition: $workspace-transition;
       border-radius: variable.$radius-large;
       background-color: theme.$accent-orange;
@@ -35,6 +33,7 @@ $workspace-transition:
 
       &:hover {
         background-color: theme.$accent-teal;
+
         label {
           color: theme.$background-dark;
         }
@@ -56,5 +55,15 @@ $workspace-transition:
         }
       }
     }
+  }
+
+  .pill {
+    padding: 0.4em 1em;
+
+    border: 1px solid red;
+  }
+
+  .numbered {
+    padding: 0.19em 1em;
   }
 }

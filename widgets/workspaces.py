@@ -12,8 +12,6 @@ class WorkSpacesWidget(BoxWidget):
     def __init__(self, **kwargs):
         super().__init__(name="workspaces", spacing=1, **kwargs)
 
-        workspace = HyprlandWorkspaces
-
         self.ignored_ws = {int(x) for x in unique_list(self.config.get("ignored", []))}
         self.icon_map = self.config.get("icon_map", {})
         self.label_format = self.config.get("label_format", "{id}")
@@ -27,8 +25,9 @@ class WorkSpacesWidget(BoxWidget):
         )
 
         # Create a HyperlandWorkspace widget to manage workspace buttons
-        self.workspace = workspace(
+        self.workspace = HyprlandWorkspaces(
             name="workspaces_widget",
+            style_classes="numbered" if self.show_numbered else "pill",
             spacing=4,
             # Create buttons for each workspace if occupied
             buttons=None

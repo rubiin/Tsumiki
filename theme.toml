@@ -450,7 +450,7 @@ width = "1px"
 
 [bar.widgets.workspaces.pill]
 active_width = "1em"
-height = "0.125em"
+height = "1px"
 width = "0.5em"
 
 [bar.widgets.workspaces.pill.border]
