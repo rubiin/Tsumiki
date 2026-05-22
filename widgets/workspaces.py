@@ -16,7 +16,7 @@ class WorkSpacesWidget(BoxWidget):
 
         self.ignored_ws = {int(x) for x in unique_list(self.config.get("ignored", []))}
         self.icon_map = self.config.get("icon_map", {})
-        self.default_format = self.config.get("default_label_format", "{id}")
+        self.label_format = self.config.get("label_format", "{id}")
         self.workspace_count = self.config.get("count", 8)
         self.hide_unoccupied = self.config.get("hide_unoccupied", False)
         self.show_numbered = self.config.get("show_numbered", True)
@@ -48,7 +48,7 @@ class WorkSpacesWidget(BoxWidget):
         self.children = (self.icon, self.workspace)
 
     def _create_workspace_label(self, ws_id: int) -> str:
-        return self.icon_map.get(str(ws_id), self.default_format.format(id=ws_id))
+        return self.icon_map.get(str(ws_id), self.label_format.format(id=ws_id))
 
     def _setup_button(self, ws_id: int) -> WorkspaceButton:
         button = WorkspaceButton(

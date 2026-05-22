@@ -47,7 +47,9 @@ class CustomModulePresenter:
         self._text_label = text_label
         self._icon = icon
         self._host_widget = host_widget
-        self._format_str = _get_config_value(module_config, "format", default="{}")
+        self._format_str = _get_config_value(
+            module_config, "label_format", default="{}"
+        )
         self._max_len = _get_config_value(
             module_config,
             "max_length",

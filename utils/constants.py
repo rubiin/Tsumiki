@@ -134,7 +134,7 @@ DEFAULT_CONFIG = {
         },
         "settings": {"icon": "󰒓", "tooltip": True, "label": False},
         "date_time": {
-            "format": "%b %d %H:%M",
+            "date_format": "%b %d %H:%M",
             "calendar": True,
             "clock_format": "12h",
             "hover_reveal": False,
@@ -207,7 +207,7 @@ DEFAULT_CONFIG = {
         },
         "network_usage": {
             "tooltip": True,
-            "format": " {upload}  {download}",
+            "label_format": " {upload}  {download}",
             "upload_threshold": 100,
             "download_threshold": 1024,
             "kb_digits": 0,
@@ -346,7 +346,7 @@ DEFAULT_CONFIG = {
             "reverse_scroll": False,
             "show_numbered": True,
             "empty_scroll": False,
-            "default_label_format": "{id}",
+            "label_format": "{id}",
             "icon_map": {},
         },
         "world_clock": {

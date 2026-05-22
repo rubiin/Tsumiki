@@ -281,7 +281,7 @@
     - **`reverse_scroll`**: `bool` (default: false)
     - **`show_numbered`**: `bool` (default: true)
     - **`empty_scroll`**: `bool` (default: false)
-    - **`default_label_format`**: `str` (default: "{id}")
+    - **`label_format`**: `str` (default: "{id}")
     - **`icon_map`**: `object`
   - **`world_clock`**: `object`
     - **`icon`**: `str` (default: "󱉊'")

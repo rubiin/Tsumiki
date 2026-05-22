@@ -393,7 +393,7 @@ NetworkUsage = TypedDict(
     "NetworkUsage",
     {
         **BaseConfig.__annotations__,
-        "format": str,
+        "label_format": str,
         "upload_threshold": int,
         "download_threshold": int,
         "interval": int,
@@ -422,7 +422,7 @@ Workspaces = TypedDict(
     {
         "count": int,
         "hide_unoccupied": bool,
-        "default_label_format": str,
+        "label_format": str,
         "ignored": list[int],
         "icon_map": dict,
         "reverse_scroll": bool,
@@ -535,7 +535,7 @@ DateTimeNotification = TypedDict(
 DateTimeMenu = TypedDict(
     "DateTimeMenu",
     {
-        "format": str,
+        "date_format": str,
         "notification": DateTimeNotification,
         "calendar": bool,
         "hover_reveal": bool,
@@ -563,7 +563,7 @@ CustomWidgetConfig = TypedDict(
         "exec_on_event": bool,
         "interval": int,
         "return_type": Return_Type,
-        "format": str,
+        "label_format": str,
         "max_length": int,
         "min_length": int,
         "rotate": int,

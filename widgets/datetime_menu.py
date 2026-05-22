@@ -474,7 +474,7 @@ class DateTimeWidget(ButtonWidget, PopoverMixin):
         if self.config.get("hover_reveal", True):
             self.revealer = Revealer(
                 child=DateTime(
-                    self.config.get("format", "%m-%d %H:%M"), name="date-time"
+                    self.config.get("date_format", "%m-%d %H:%M"), name="date-time"
                 ),
                 transition_duration=self.config.get("reveal_duration", 500),
                 transition_type="slide_right",
@@ -482,7 +482,9 @@ class DateTimeWidget(ButtonWidget, PopoverMixin):
             self.container_box.add(self.revealer)
         else:
             self.container_box.add(
-                DateTime(self.config.get("format", "%m-%d %H:%M"), name="date-time")
+                DateTime(
+                    self.config.get("date_format", "%m-%d %H:%M"), name="date-time"
+                )
             )
 
         self.setup_popover(lambda: DateNotificationMenu(config=self.config))

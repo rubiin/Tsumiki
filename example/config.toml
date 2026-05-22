@@ -137,7 +137,7 @@ tooltip = true
 label = false
 
 [widgets.date_time]
-format = "%b %d %H:%M"
+date_format = "%b %d %H:%M"
 calendar = true
 clock_format = "24h"
 hover_reveal = false
@@ -209,7 +209,7 @@ graph_length = 4
 unit = "gb"
 
 [widgets.network_usage]
-format = "{upload  / {download} "
+label_format = "{upload  / {download} "
 tooltip = true
 upload_threshold = 100
 download_threshold = 1_024
@@ -401,7 +401,7 @@ title = "Keybinds"
 
 
 [widgets."custom/hello-world"]
-format = "Greeting: {}"
+label_format = "Greeting: {}"
 exec = "echo 'Hello World'"
 interval = 3_600
 

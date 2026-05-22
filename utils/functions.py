@@ -4,6 +4,7 @@ import html
 import json
 import re
 import shutil
+import string
 import subprocess
 from collections import Counter
 from datetime import datetime
@@ -733,6 +734,53 @@ def validate_widget_reference(
         _validate_regular_widget(widget_spec, parsed_data, default_config, section)
 
 
+# Maps (widget_name, config_key) -> frozenset of valid named format keys.
+# A value of None means only positional {} is valid (no named keys).
+_FORMAT_KEY_VALIDATORS: dict[tuple[str, str], frozenset[str] | None] = {
+    ("window_count", "label_format"): frozenset({"count"}),
+    ("weather", "label_format"): frozenset(
+        {"location", "temperature", "condition", "humidity", "wind_speed"}
+    ),
+    ("workspaces", "label_format"): frozenset({"id"}),
+    ("network_usage", "label_format"): frozenset({"upload", "download"}),
+}
+
+
+def _get_named_format_keys(fmt: str) -> set[str]:
+    """Return the set of named keys used in a Python format string."""
+    return {
+        field_name
+        for _, field_name, _, _ in string.Formatter().parse(fmt)
+        if field_name is not None and field_name != ""
+    }
+
+
+def validate_format_strings(parsed_data: dict) -> None:
+    """Warn when format strings in widget settings reference unknown keys."""
+    widgets = parsed_data.get("widgets", {})
+    for (widget_name, config_key), valid_keys in _FORMAT_KEY_VALIDATORS.items():
+        widget_cfg = widgets.get(widget_name, {})
+        if not isinstance(widget_cfg, dict):
+            continue
+        fmt = widget_cfg.get(config_key)
+        if not isinstance(fmt, str):
+            continue
+        try:
+            used = _get_named_format_keys(fmt)
+        except (ValueError, KeyError):
+            logger.warning(
+                f"[Config] widgets.{widget_name}.{config_key}: invalid format string"
+            )
+            continue
+        unknown = used - valid_keys
+        if unknown:
+            logger.warning(
+                f"[Config] widgets.{widget_name}.{config_key}: "
+                f"unknown key(s) {sorted(unknown)!r}. "
+                f"Valid keys: {sorted(valid_keys)!r}"
+            )
+
+
 def validate_widgets(parsed_data, default_config):
     """Validates the widgets defined in the layout configuration."""
     layout = parsed_data.get("layout", {})
@@ -755,6 +803,8 @@ def validate_widgets(parsed_data, default_config):
                         validate_widget_reference(
                             widget, parsed_data, default_config, f"{group_type}[{idx}]"
                         )
+
+    validate_format_strings(parsed_data)
 
 
 # Function to generate a QR code image

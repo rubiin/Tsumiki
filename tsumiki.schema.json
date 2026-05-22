@@ -511,7 +511,7 @@
 				"network_usage": {
 					"type": "object",
 					"properties": {
-						"format": {
+						"label_format": {
 							"type": "string",
 							"default": "{upload}  / {download} ",
 							"description": "The format string for displaying network usage."
@@ -559,7 +559,7 @@
 					},
 					"required": [
 						"tooltip",
-						"format",
+						"label_format",
 						"upload_threshold",
 						"download_threshold",
 						"kb_digits",
@@ -1213,7 +1213,7 @@
 							"default": true,
 							"description": "Show workspace numbers on the workspaces widget."
 						},
-						"default_label_format": {
+						"label_format": {
 							"type": "string",
 							"default": "{id}",
 							"description": "Format string for workspace labels."
@@ -1249,7 +1249,7 @@
 					"required": [
 						"count",
 						"hide_unoccupied",
-						"default_label_format",
+						"label_format",
 						"ignored",
 						"reverse_scroll",
 						"empty_scroll",
@@ -1431,7 +1431,7 @@
 				"date_time": {
 					"type": "object",
 					"properties": {
-						"format": {
+						"date_format": {
 							"type": "string",
 							"default": "%b %d %H:%M",
 							"description": "Date/time display format string."
@@ -1483,7 +1483,7 @@
 						}
 					},
 					"required": [
-						"format",
+						"date_format",
 						"calendar",
 						"clock_format",
 						"notification"
@@ -2014,7 +2014,7 @@
 								"default": "plain",
 								"description": "Output format: empty for plain text, 'json' for Waybar JSON protocol"
 							},
-							"format": {
+							"label_format": {
 								"type": "string",
 								"default": "{}",
 								"description": "Format string where {} is replaced with output"

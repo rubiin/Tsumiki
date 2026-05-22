@@ -302,7 +302,7 @@ class NetworkUsageWidget(FabricatorBoundWidget):
             **kwargs,
         )
 
-        self.label_format: str = self.config.get("format", "")
+        self.label_format: str = self.config.get("label_format", "")
 
         # Thresholds (in bytes/s)
         self.download_threshold = self.config.get("download_threshold", 0)
