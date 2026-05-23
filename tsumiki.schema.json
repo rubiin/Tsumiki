@@ -1208,10 +1208,11 @@
 							"default": true,
 							"description": "Hide workspaces that do not contain any windows."
 						},
-						"show_numbered": {
-							"type": "boolean",
-							"default": true,
-							"description": "Show workspace numbers on the workspaces widget."
+						"style": {
+							"type": "string",
+							"default": "numbered",
+							"enum": ["pill","numbered","icon"],
+							"description": "The display style for workspaces."
 						},
 						"label_format": {
 							"type": "string",
@@ -1252,8 +1253,7 @@
 						"label_format",
 						"ignored",
 						"reverse_scroll",
-						"empty_scroll",
-						"icon_map"
+						"empty_scroll"
 					]
 				},
 				"bluetooth": {

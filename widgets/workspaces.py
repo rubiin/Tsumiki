@@ -17,7 +17,7 @@ class WorkSpacesWidget(BoxWidget):
         self.label_format = self.config.get("label_format", "{id}")
         self.workspace_count = self.config.get("count", 8)
         self.hide_unoccupied = self.config.get("hide_unoccupied", False)
-        self.show_numbered = self.config.get("show_numbered", True)
+        self.style = self.config.get("style", "numbered")
 
         self.icon = nerd_font_icon(
             icon=get_distro_icon(),
@@ -27,7 +27,7 @@ class WorkSpacesWidget(BoxWidget):
         # Create a HyperlandWorkspace widget to manage workspace buttons
         self.workspace = HyprlandWorkspaces(
             name="workspaces_widget",
-            style_classes="numbered" if self.show_numbered else "pill",
+            style_classes=self.style,
             spacing=4,
             # Create buttons for each workspace if occupied
             buttons=None
@@ -52,7 +52,7 @@ class WorkSpacesWidget(BoxWidget):
     def _setup_button(self, ws_id: int) -> WorkspaceButton:
         button = WorkspaceButton(
             id=ws_id,
-            label=self._create_workspace_label(ws_id) if self.show_numbered else None,
+            label=self._create_workspace_label(ws_id) if self.style != "pill" else None,
             visible=ws_id not in self.ignored_ws,
         )
 

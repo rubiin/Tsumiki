@@ -97,7 +97,7 @@
     - **`tooltip`**: `bool` (default: true)
     - **`label`**: `bool` (default: false)
   - **`date_time`**: `object`
-    - **`format`**: `str` (default: "%b %d %H:%M")
+    - **`date_format`**: `str` (default: "%b %d %H:%M")
     - **`calendar`**: `bool` (default: true)
     - **`clock_format`**: `str` (default: "12h")
     - **`hover_reveal`**: `bool` (default: false)
@@ -154,7 +154,7 @@
     - **`unit`**: `str` (default: "gb")
   - **`network_usage`**: `object`
     - **`tooltip`**: `bool` (default: true)
-    - **`format`**: `str` (default: " {upload}  {download}")
+    - **`label_format`**: `str` (default: " {upload}  {download}")
     - **`upload_threshold`**: `int` (default: 100)
     - **`download_threshold`**: `int` (default: 1024)
     - **`kb_digits`**: `int` (default: 0)
@@ -279,7 +279,7 @@
     - **`hide_unoccupied`**: `bool` (default: true)
     - **`ignored`**: `list[int]` (default: [-99])
     - **`reverse_scroll`**: `bool` (default: false)
-    - **`show_numbered`**: `bool` (default: true)
+    - **`style`**: `str` (default: "numbered")
     - **`empty_scroll`**: `bool` (default: false)
     - **`label_format`**: `str` (default: "{id}")
     - **`icon_map`**: `object`
