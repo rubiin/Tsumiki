@@ -5,17 +5,15 @@ from fabric.widgets.box import Box
 from fabric.widgets.image import Image
 from fabric.widgets.label import Label
 from fabric.widgets.revealer import Revealer
+from fabric.widgets.wayland import WaylandWindow as Window
 
 from shared.widget_container import BaseWidget
-from utils.functions import get_display_server_window
 from utils.icons import symbolic_icons
 from utils.types import Keyboard_Mode
 from utils.widget_settings import BarConfig
 from utils.widget_utils import (
     create_scale,
 )
-
-Window = get_display_server_window()
 
 
 class GenericOSDContainer(Box, BaseWidget):

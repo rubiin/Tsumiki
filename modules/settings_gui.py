@@ -342,7 +342,7 @@ class SettingsGUI(Window):
             grid.attach(self._create_label(section_name), 0, row, 1, 1)
 
             if isinstance(items, list):
-                text = ", ".join(str(x) for x in items)
+                text = ", ".join([str(x) for x in items])
                 entry = Entry(text=text, h_expand=False)
                 entry.set_width_chars(40)
 

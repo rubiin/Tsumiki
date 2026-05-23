@@ -2,7 +2,6 @@ import atexit
 import ctypes
 import html
 import json
-import re
 import shutil
 import string
 import subprocess
@@ -29,19 +28,27 @@ from fabric.utils import (
     os,
     time,
 )
-from fabric.widgets.window import Window
 
 from .colors import Colors
-from .constants import NAMED_COLORS
+from .constants import (
+    BYTES_FACTORS,
+    GROUP_TYPES,
+    HEX_COLOR_RE,
+    NAMED_COLORS,
+    RGB_RE,
+    RGBA_RE,
+    SPECIAL_WIDGET_TYPES,
+    TEMP_PATHS,
+    URGENCY_LEVELS,
+    WHITE,
+)
 from .decorators import run_in_thread, thread
 from .exceptions import ExecutableNotFoundError
 from .icons import get_text_icon
 
-_TEMP_PATHS = set()
-
 
 def register_temp_resource(path: str):
-    _TEMP_PATHS.add(path)
+    TEMP_PATHS.add(path)
 
 
 def normalize_address(address: str | None) -> str | None:
@@ -52,13 +59,13 @@ def normalize_address(address: str | None) -> str | None:
 
 def cleanup_temp_resources():
     """Remove all registered temp files/directories."""
-    for path in list(_TEMP_PATHS):
+    for path in list(TEMP_PATHS):
         try:
             if os.path.isdir(path):
                 shutil.rmtree(path)
             elif os.path.isfile(path):
                 os.remove(path)
-            _TEMP_PATHS.remove(path)
+            TEMP_PATHS.remove(path)
         except Exception as e:
             logger.warning(f"Failed to cleanup temp resource {path}: {e}")
 
@@ -83,37 +90,6 @@ def batch_process(
     if batch:
         result.extend(func(batch))
     return result
-
-
-# Pre-compiled regex patterns for color validation
-_HEX_COLOR_RE = re.compile(r"^#(?:[a-fA-F0-9]{3,4}|[a-fA-F0-9]{6,8})$")
-_RGB_RE = re.compile(r"^rgb\(\s*(\d{1,3}%?\s*,\s*){2}\d{1,3}%?\s*\)$")
-_RGBA_RE = re.compile(r"^rgba\(\s*(\d{1,3}%?\s*,\s*){3}(0|1|0?\.\d+)\s*\)$")
-
-# Pre-computed constants
-_NAMED_COLORS_SET = frozenset(NAMED_COLORS)
-_SPECIAL_WIDGET_TYPES = frozenset(
-    ("custom_button", "group", "collapsible", "custom_widget")
-)
-_GROUP_TYPES = ("widget_groups", "collapsible_groups")
-_URGENCY_LEVELS = frozenset(("low", "normal", "critical"))
-_BYTES_FACTORS = {"kb": 1, "mb": 2, "gb": 3, "tb": 4}
-_WHITE = (255, 255, 255)
-
-
-def get_display_server_window() -> Window:
-    """Detect the current display server from session env vars."""
-
-    desktop_markers = os.environ.get("XDG_SESSION_TYPE", "").lower()
-
-    if "wayland" in desktop_markers:
-        from fabric.widgets.wayland import WaylandWindow
-
-        return WaylandWindow
-    else:
-        from fabric.widgets.x11 import X11Window
-
-        return X11Window
 
 
 def get_window_manager_backend() -> Literal["hyprland", "sway", "i3"]:
@@ -168,7 +144,7 @@ def mix_colors(color1, color2, ratio=0.5) -> tuple[int, int, int]:
 # Function to tint a color by mixing it with white
 def tint_color(color, tint_factor=1) -> tuple[int, int, int]:
     # tint_factor: 0 means original color, 1 means full white
-    return mix_colors(color, _WHITE, tint_factor)
+    return mix_colors(color, WHITE, tint_factor)
 
 
 def delayed_call(
@@ -433,7 +409,7 @@ def format_seconds_to_hours_minutes(secs: int) -> str:
 def convert_bytes(
     bytes: int, to: Literal["kb", "mb", "gb", "tb"], format_spec=".1f"
 ) -> str:
-    factor = _BYTES_FACTORS.get(to, 1)
+    factor = BYTES_FACTORS.get(to, 1)
     return f"{format(bytes / (1024**factor), format_spec)}{to.upper()}"
 
 
@@ -519,13 +495,13 @@ def convert_to_percent(
 def is_valid_gjs_color(color: str) -> bool:
     color_lower = color.strip().lower()
 
-    if color_lower in _NAMED_COLORS_SET:
+    if color_lower in NAMED_COLORS:
         return True
 
-    if _HEX_COLOR_RE.match(color):
+    if HEX_COLOR_RE.match(color):
         return True
 
-    return bool(_RGB_RE.match(color_lower) or _RGBA_RE.match(color_lower))
+    return bool(RGB_RE.match(color_lower) or RGBA_RE.match(color_lower))
 
 
 # Function to get the system uptime
@@ -723,7 +699,7 @@ def validate_widget_reference(
         widget_type, identifier = widget_spec[1:].split(":", 1)
 
         # Unified validation for all special widget types
-        if widget_type in _SPECIAL_WIDGET_TYPES:
+        if widget_type in SPECIAL_WIDGET_TYPES:
             _validate_special_widget(widget_type, identifier, parsed_data, section)
         else:
             raise ValueError(
@@ -794,7 +770,7 @@ def validate_widgets(parsed_data, default_config):
                 )
 
     # Validate widgets inside groups
-    for group_type in _GROUP_TYPES:
+    for group_type in GROUP_TYPES:
         groups = parsed_data.get(group_type, [])
         if isinstance(groups, list):
             for idx, group in enumerate(groups):
@@ -869,7 +845,7 @@ def send_notification(
     notification.set_body(body)
 
     # Set the urgency level if provided
-    if urgency in _URGENCY_LEVELS:
+    if urgency in URGENCY_LEVELS:
         notification.set_urgent(urgency)
 
     # Set the icon if provided

@@ -15,6 +15,22 @@ try:
 except ValueError:
     raise PlayerctlImportError()
 
+_PLAYBACK_STATUS_MAP = {
+    Playerctl.PlaybackStatus.PAUSED: "paused",
+    Playerctl.PlaybackStatus.PLAYING: "playing",
+    Playerctl.PlaybackStatus.STOPPED: "stopped",
+}
+_LOOP_STATUS_MAP = {
+    Playerctl.LoopStatus.NONE: "none",
+    Playerctl.LoopStatus.TRACK: "track",
+    Playerctl.LoopStatus.PLAYLIST: "playlist",
+}
+_LOOP_STATUS_REVERSE_MAP = {
+    "none": Playerctl.LoopStatus.NONE,
+    "track": Playerctl.LoopStatus.TRACK,
+    "playlist": Playerctl.LoopStatus.PLAYLIST,
+}
+
 
 class MprisPlayer(Service):
     """A service to manage a mpris player."""
@@ -172,27 +188,17 @@ class MprisPlayer(Service):
 
     @Property(str, "readable")
     def playback_status(self) -> str:
-        return {
-            Playerctl.PlaybackStatus.PAUSED: "paused",
-            Playerctl.PlaybackStatus.PLAYING: "playing",
-            Playerctl.PlaybackStatus.STOPPED: "stopped",
-        }.get(self._player.get_property("playback_status"), "unknown")  # type: ignore
+        return _PLAYBACK_STATUS_MAP.get(
+            self._player.get_property("playback_status"), "unknown"
+        )  # type: ignore
 
     @Property(str, "read-write")
     def loop_status(self) -> str:
-        return {
-            Playerctl.LoopStatus.NONE: "none",
-            Playerctl.LoopStatus.TRACK: "track",
-            Playerctl.LoopStatus.PLAYLIST: "playlist",
-        }.get(self._player.get_property("loop_status"), "unknown")  # type: ignore
+        return _LOOP_STATUS_MAP.get(self._player.get_property("loop_status"), "unknown")  # type: ignore
 
     @loop_status.setter
     def loop_status(self, status: str):
-        loop_status = {
-            "none": Playerctl.LoopStatus.NONE,
-            "track": Playerctl.LoopStatus.TRACK,
-            "playlist": Playerctl.LoopStatus.PLAYLIST,
-        }.get(status)
+        loop_status = _LOOP_STATUS_REVERSE_MAP.get(status)
         self._player.set_loop_status(loop_status) if loop_status else None
 
     @Property(bool, "readable", default_value=False)

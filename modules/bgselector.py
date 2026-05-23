@@ -6,12 +6,12 @@ from fabric.widgets.box import Box
 from fabric.widgets.image import Image
 from fabric.widgets.revealer import Revealer
 from fabric.widgets.scrolledwindow import ScrolledWindow
+from fabric.widgets.wayland import WaylandWindow as Window
 from PIL import Image as PILImage
 from PIL import ImageFilter, ImageOps
 
 from shared.animator import Animator
 from utils.constants import WALLPAPER_BLURRED_DIR, WALLPAPER_DIR, WALLPAPER_THUMBS_DIR
-from utils.functions import get_display_server_window
 
 SCREEN_SIZE = (1920, 1080)
 SPACING = 20
@@ -22,9 +22,6 @@ THUMBNAIL_SIZE = (
     math.ceil(SCREEN_SIZE[1] / 2),
 )
 SLOWNESS_FACTOR = 5.5
-
-
-Window = get_display_server_window()
 
 
 class Bgselector(Window):

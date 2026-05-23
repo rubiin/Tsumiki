@@ -2,11 +2,9 @@ from typing import Iterable
 
 from fabric.widgets.box import Box
 from fabric.widgets.shapes import Corner
+from fabric.widgets.wayland import WaylandWindow as Window
 
-from utils.functions import get_display_server_window
 from utils.widget_settings import BarConfig
-
-Window = get_display_server_window()
 
 
 class SideCorner(Box):

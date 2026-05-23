@@ -11,6 +11,67 @@ from utils.functions import write_json_file
 
 from .base import SingletonService
 
+_WEATHER_CODE_MAP = {
+    0: 113,
+    1: 116,
+    2: 119,
+    3: 122,
+    45: 143,
+    48: 143,
+    51: 176,
+    53: 176,
+    55: 176,
+    56: 182,
+    57: 182,
+    61: 293,
+    63: 302,
+    65: 308,
+    66: 281,
+    67: 284,
+    71: 338,
+    73: 371,
+    75: 395,
+    77: 371,
+    80: 353,
+    81: 356,
+    82: 359,
+    85: 368,
+    86: 395,
+    95: 389,
+    96: 392,
+    99: 395,
+}
+_WEATHER_DESCRIPTIONS = {
+    0: "Clear sky",
+    1: "Mainly clear",
+    2: "Partly cloudy",
+    3: "Overcast",
+    45: "Fog",
+    48: "Depositing rime fog",
+    51: "Light drizzle",
+    53: "Moderate drizzle",
+    55: "Dense drizzle",
+    56: "Light freezing drizzle",
+    57: "Dense freezing drizzle",
+    61: "Slight rain",
+    63: "Moderate rain",
+    65: "Heavy rain",
+    66: "Light freezing rain",
+    67: "Heavy freezing rain",
+    71: "Slight snow fall",
+    73: "Moderate snow fall",
+    75: "Heavy snow fall",
+    77: "Snow grains",
+    80: "Slight rain showers",
+    81: "Moderate rain showers",
+    82: "Violent rain showers",
+    85: "Slight snow showers",
+    86: "Heavy snow showers",
+    95: "Thunderstorm",
+    96: "Thunderstorm with slight hail",
+    99: "Thunderstorm with heavy hail",
+}
+
 
 class WeatherService(SingletonService):
     """Lightweight singleton to fetch and cache weather from Open-Meteo or wttr.in."""
@@ -60,38 +121,7 @@ class WeatherService(SingletonService):
 
     def _map_weather_code(self, code: int) -> int:
         """Map Open-Meteo weather codes to wttr.in compatible codes."""
-        # Open-Meteo weather codes to wttr.in mapping
-        mapping = {
-            0: 113,  # Clear sky
-            1: 116,  # Mainly clear -> Partly cloudy
-            2: 119,  # Partly cloudy
-            3: 122,  # Overcast
-            45: 143,  # Fog
-            48: 143,  # Depositing rime fog
-            51: 176,  # Light drizzle
-            53: 176,  # Moderate drizzle
-            55: 176,  # Dense drizzle
-            56: 182,  # Light freezing drizzle
-            57: 182,  # Dense freezing drizzle
-            61: 293,  # Slight rain
-            63: 302,  # Moderate rain
-            65: 308,  # Heavy rain
-            66: 281,  # Light freezing rain
-            67: 284,  # Heavy freezing rain
-            71: 338,  # Slight snow fall
-            73: 371,  # Moderate snow fall
-            75: 395,  # Heavy snow fall
-            77: 371,  # Snow grains
-            80: 353,  # Slight rain showers
-            81: 356,  # Moderate rain showers
-            82: 359,  # Violent rain showers
-            85: 368,  # Slight snow showers
-            86: 395,  # Heavy snow showers
-            95: 389,  # Thunderstorm
-            96: 392,  # Thunderstorm with slight hail
-            99: 395,  # Thunderstorm with heavy hail
-        }
-        return mapping.get(code, 113)  # Default to clear sky
+        return _WEATHER_CODE_MAP.get(code, 113)
 
     def _convert_to_12hr_format(self, time_24hr: str) -> str:
         """Convert 24-hour time format (HH:MM) to 12-hour format (HH:MM AM/PM)."""
@@ -113,37 +143,7 @@ class WeatherService(SingletonService):
 
     def _get_weather_description(self, code: int) -> str:
         """Get weather description from Open-Meteo weather code."""
-        descriptions = {
-            0: "Clear sky",
-            1: "Mainly clear",
-            2: "Partly cloudy",
-            3: "Overcast",
-            45: "Fog",
-            48: "Depositing rime fog",
-            51: "Light drizzle",
-            53: "Moderate drizzle",
-            55: "Dense drizzle",
-            56: "Light freezing drizzle",
-            57: "Dense freezing drizzle",
-            61: "Slight rain",
-            63: "Moderate rain",
-            65: "Heavy rain",
-            66: "Light freezing rain",
-            67: "Heavy freezing rain",
-            71: "Slight snow fall",
-            73: "Moderate snow fall",
-            75: "Heavy snow fall",
-            77: "Snow grains",
-            80: "Slight rain showers",
-            81: "Moderate rain showers",
-            82: "Violent rain showers",
-            85: "Slight snow showers",
-            86: "Heavy snow showers",
-            95: "Thunderstorm",
-            96: "Thunderstorm with slight hail",
-            99: "Thunderstorm with heavy hail",
-        }
-        return descriptions.get(code, "Clear sky")
+        return _WEATHER_DESCRIPTIONS.get(code, "Clear sky")
 
     def simple_weather_info(
         self, location: str, retries: int = 3, delay: float = 2.0

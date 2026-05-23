@@ -5,12 +5,10 @@ from fabric import Signal
 from fabric.hyprland.widgets import get_hyprland_connection
 from fabric.utils import Gdk, GLib, GObject, bulk_connect, logger
 from fabric.widgets.box import Box
+from fabric.widgets.wayland import WaylandWindow as Window
 from fabric.widgets.widget import Widget
 from gi.repository import GtkLayerShell
 
-from utils.functions import get_display_server_window
-
-Window = get_display_server_window()
 POPOVER_BAR_GAP = -70
 
 

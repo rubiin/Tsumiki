@@ -8,21 +8,18 @@ from fabric.widgets.centerbox import CenterBox
 from fabric.widgets.eventbox import EventBox
 from fabric.widgets.image import Image
 from fabric.widgets.revealer import Revealer
+from fabric.widgets.wayland import WaylandWindow as Window
 
 from utils.app import AppUtils
 from utils.config import widget_config
 from utils.constants import PINNED_APPS_FILE
 from utils.functions import (
-    get_display_server_window,
     normalize_address,
     read_json_file,
     write_json_file,
 )
 from utils.icon_resolver import IconResolver
 from utils.widget_settings import BarConfig
-
-Window = get_display_server_window()
-
 
 # DnD target for dock app reordering
 DOCK_DND_TARGET = [Gtk.TargetEntry.new("dock-app", Gtk.TargetFlags.SAME_APP, 0)]
