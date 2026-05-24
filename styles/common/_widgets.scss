@@ -45,6 +45,8 @@
     variable.$bar-widgets-cpu-icon_size,
     variable.$bar-widgets-cpu-spacing
   );
+
+  @include mixins.nerd-icon(variable.$bar-widgets-cpu-icon_size, variable.$bar-widgets-cpu-spacing);
 }
 
 #window_count {
@@ -55,6 +57,8 @@
     variable.$bar-widgets-cpu-icon_size,
     variable.$bar-widgets-cpu-spacing
   );
+
+  @include mixins.nerd-icon(variable.$bar-widgets-cpu-icon_size, variable.$bar-widgets-cpu-spacing);
 }
 
 #memory {
@@ -62,6 +66,11 @@
     variable.$bar-widgets-memory-border-radius,
     variable.$bar-widgets-memory-border-enabled,
     variable.$bar-widgets-memory-border-width,
+    variable.$bar-widgets-memory-icon_size,
+    variable.$bar-widgets-memory-spacing
+  );
+
+  @include mixins.nerd-icon(
     variable.$bar-widgets-memory-icon_size,
     variable.$bar-widgets-memory-spacing
   );
@@ -79,6 +88,11 @@
   #upload_label {
     margin-right: variable.$bar-widgets-network_usage-spacing;
   }
+
+  @include mixins.nerd-icon(
+    variable.$bar-widgets-network_usage-icon_size,
+    variable.$bar-widgets-network_usage-spacing
+  );
 }
 
 #storage {
@@ -86,6 +100,11 @@
     variable.$bar-widgets-storage-border-radius,
     variable.$bar-widgets-storage-border-enabled,
     variable.$bar-widgets-storage-border-width,
+    variable.$bar-widgets-storage-icon_size,
+    variable.$bar-widgets-storage-spacing
+  );
+
+  @include mixins.nerd-icon(
     variable.$bar-widgets-storage-icon_size,
     variable.$bar-widgets-storage-spacing
   );
@@ -98,13 +117,10 @@
     variable.$bar-widgets-battery-border-width
   );
 
-  .battery-icon {
-    font-size: 1.2em;
-  }
-
-  .panel-text{
-    margin-left: 2px;
-  }
+  @include mixins.nerd-icon(
+    variable.$bar-widgets-battery-icon_size,
+    variable.$bar-widgets-battery-spacing
+  );
 }
 
 #bluetooth {
@@ -115,6 +131,11 @@
     variable.$bar-widgets-bluetooth-icon_size,
     variable.$bar-widgets-bluetooth-spacing
   );
+
+  @include mixins.nerd-icon(
+    variable.$bar-widgets-bluetooth-icon_size,
+    variable.$bar-widgets-bluetooth-spacing
+  );
 }
 
 #brightness {
@@ -122,6 +143,11 @@
     variable.$bar-widgets-brightness-border-radius,
     variable.$bar-widgets-brightness-border-enabled,
     variable.$bar-widgets-brightness-border-width,
+    variable.$bar-widgets-brightness-icon_size,
+    variable.$bar-widgets-brightness-spacing
+  );
+
+  @include mixins.nerd-icon(
     variable.$bar-widgets-brightness-icon_size,
     variable.$bar-widgets-brightness-spacing
   );
@@ -140,6 +166,11 @@
     variable.$bar-widgets-click_counter-border-radius,
     variable.$bar-widgets-click_counter-border-enabled,
     variable.$bar-widgets-click_counter-border-width,
+    variable.$bar-widgets-click_counter-icon_size,
+    variable.$bar-widgets-click_counter-spacing
+  );
+
+  @include mixins.nerd-icon(
     variable.$bar-widgets-click_counter-icon_size,
     variable.$bar-widgets-click_counter-spacing
   );
@@ -200,6 +231,11 @@
     variable.$bar-widgets-hypridle-icon_size,
     variable.$bar-widgets-hypridle-spacing
   );
+
+  @include mixins.nerd-icon(
+    variable.$bar-widgets-hypridle-icon_size,
+    variable.$bar-widgets-hypridle-spacing
+  );
 }
 
 #hyprpicker {
@@ -207,6 +243,11 @@
     variable.$bar-widgets-hyprpicker-border-radius,
     variable.$bar-widgets-hyprpicker-border-enabled,
     variable.$bar-widgets-hyprpicker-border-width,
+    variable.$bar-widgets-hyprpicker-icon_size,
+    variable.$bar-widgets-hyprpicker-spacing
+  );
+
+  @include mixins.nerd-icon(
     variable.$bar-widgets-hyprpicker-icon_size,
     variable.$bar-widgets-hyprpicker-spacing
   );
@@ -220,6 +261,11 @@
     variable.$bar-widgets-hyprsunset-icon_size,
     variable.$bar-widgets-hyprsunset-spacing
   );
+
+  @include mixins.nerd-icon(
+    variable.$bar-widgets-hyprsunset-icon_size,
+    variable.$bar-widgets-hyprsunset-spacing
+  );
 }
 
 #keyboard {
@@ -227,6 +273,11 @@
     variable.$bar-widgets-keyboard-border-radius,
     variable.$bar-widgets-keyboard-border-enabled,
     variable.$bar-widgets-keyboard-border-width,
+    variable.$bar-widgets-keyboard-icon_size,
+    variable.$bar-widgets-keyboard-spacing
+  );
+
+  @include mixins.nerd-icon(
     variable.$bar-widgets-keyboard-icon_size,
     variable.$bar-widgets-keyboard-spacing
   );
@@ -240,6 +291,11 @@
     variable.$bar-widgets-language-icon_size,
     variable.$bar-widgets-language-spacing
   );
+
+  @include mixins.nerd-icon(
+    variable.$bar-widgets-language-icon_size,
+    variable.$bar-widgets-language_spacing
+  );
 }
 
 #microphone {
@@ -247,6 +303,11 @@
     variable.$bar-widgets-microphone-border-radius,
     variable.$bar-widgets-microphone-border-enabled,
     variable.$bar-widgets-microphone-border-width,
+    variable.$bar-widgets-microphone-icon_size,
+    variable.$bar-widgets-microphone-spacing
+  );
+
+  @include mixins.nerd-icon(
     variable.$bar-widgets-microphone-icon_size,
     variable.$bar-widgets-microphone-spacing
   );
@@ -260,6 +321,11 @@
     variable.$bar-widgets-world_clock-icon_size,
     variable.$bar-widgets-world_clock-spacing
   );
+
+  @include mixins.nerd-icon(
+    variable.$bar-widgets-world_clock-icon_size,
+    variable.$bar-widgets-world_clock-spacing
+  );
 }
 
 #mpris {
@@ -267,6 +333,11 @@
     variable.$bar-widgets-mpris-border-radius,
     variable.$bar-widgets-mpris-border-enabled,
     variable.$bar-widgets-mpris-border-width,
+    variable.$bar-widgets-mpris-icon_size,
+    variable.$bar-widgets-mpris-spacing
+  );
+
+  @include mixins.nerd-icon(
     variable.$bar-widgets-mpris-icon_size,
     variable.$bar-widgets-mpris-spacing
   );
@@ -291,6 +362,8 @@
   border-radius: variable.$bar-widgets-ocr-border-radius;
   border: if(variable.$bar-widgets-ocr-border-enabled, variable.$border, none);
   border-width: variable.$bar-widgets-ocr-border-width;
+
+  @include mixins.nerd-icon(variable.$bar-widgets-ocr-icon_size, variable.$bar-widgets-ocr-spacing);
 
   label {
     font-size: variable.$bar-widgets-ocr-icon_size;
@@ -333,6 +406,11 @@
     variable.$bar-widgets-screenshot-icon_size,
     variable.$bar-widgets-screenshot-spacing
   );
+
+  @include mixins.nerd-icon(
+    variable.$bar-widgets-screenshot-icon_size,
+    variable.$bar-widgets-screenshot-spacing
+  );
 }
 
 #recorder {
@@ -340,6 +418,11 @@
     variable.$bar-widgets-recorder-border-radius,
     variable.$bar-widgets-recorder-border-enabled,
     variable.$bar-widgets-recorder-border-width,
+    variable.$bar-widgets-recorder-icon_size,
+    variable.$bar-widgets-recorder-spacing
+  );
+
+  @include mixins.nerd-icon(
     variable.$bar-widgets-recorder-icon_size,
     variable.$bar-widgets-recorder-spacing
   );
@@ -353,6 +436,11 @@
     variable.$bar-widgets-stopwatch-icon_size,
     variable.$bar-widgets-stopwatch-spacing
   );
+
+  @include mixins.nerd-icon(
+    variable.$bar-widgets-stopwatch-icon_size,
+    variable.$bar-widgets-stopwatch-spacing
+  );
 }
 
 #submap {
@@ -360,6 +448,11 @@
     variable.$bar-widgets-submap-border-radius,
     variable.$bar-widgets-submap-border-enabled,
     variable.$bar-widgets-submap-border-width,
+    variable.$bar-widgets-submap-icon_size,
+    variable.$bar-widgets-submap-spacing
+  );
+
+  @include mixins.nerd-icon(
     variable.$bar-widgets-submap-icon_size,
     variable.$bar-widgets-submap-spacing
   );
@@ -373,6 +466,11 @@
     variable.$bar-widgets-theme-icon_size,
     variable.$bar-widgets-theme-spacing
   );
+
+  @include mixins.nerd-icon(
+    variable.$bar-widgets-theme-icon_size,
+    variable.$bar-widgets-theme-spacing
+  );
 }
 
 #updates {
@@ -380,6 +478,11 @@
     variable.$bar-widgets-updates-border-radius,
     variable.$bar-widgets-updates-border-enabled,
     variable.$bar-widgets-updates-border-width,
+    variable.$bar-widgets-updates-icon_size,
+    variable.$bar-widgets-updates-spacing
+  );
+
+  @include mixins.nerd-icon(
     variable.$bar-widgets-updates-icon_size,
     variable.$bar-widgets-updates-spacing
   );
@@ -393,6 +496,11 @@
     variable.$bar-widgets-volume-icon_size,
     variable.$bar-widgets-volume-spacing
   );
+
+  @include mixins.nerd-icon(
+    variable.$bar-widgets-volume-icon_size,
+    variable.$bar-widgets-volume-spacing
+  );
 }
 
 #window_title {
@@ -403,6 +511,11 @@
     variable.$bar-widgets-window_title-icon_size,
     variable.$bar-widgets-window_title-spacing
   );
+
+  @include mixins.nerd-icon(
+    variable.$bar-widgets-window_title-icon_size,
+    variable.$bar-widgets-window_title-spacing
+  );
 }
 
 #privacy_indicator {
@@ -410,5 +523,10 @@
     variable.$bar-widgets-privacy-indicator-border-radius,
     variable.$bar-widgets-privacy-indicator-border-enabled,
     variable.$bar-widgets-privacy-indicator-border-width
+  );
+
+  @include mixins.nerd-icon(
+    variable.$bar-widgets-privacy-indicator-icon_size,
+    variable.$bar-widgets-privacy-indicator-spacing
   );
 }

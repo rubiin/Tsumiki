@@ -95,7 +95,7 @@ panel = "default"
 widget = "default"
 
 [bar.widgets.battery]
-icon_size = "14px"
+icon_size = "17px"
 spacing = "0.125em"
 
 [bar.widgets.battery.border]
@@ -157,6 +157,7 @@ radius = "16px"
 width = "1px"
 
 [bar.widgets.date_time]
+icon_size = "12px"  # TODO: add this
 spacing = "0.125em"
 
 [bar.widgets.date_time.border]
@@ -435,12 +436,22 @@ enabled = false
 radius = "16px"
 width = "1px"
 
+
+[bar.widgets.privacy_indicator]
+icon_size = "12px"
+spacing = "0.125em"
+
+
+
+
 [bar.widgets.privacy_indicator.border]
 enabled = false
 radius = "16px"
 width = "1px"
 
+
 [bar.widgets.workspaces]
+icon_size = "12px"
 spacing = "0.125em"
 
 [bar.widgets.workspaces.border]

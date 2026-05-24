@@ -340,7 +340,7 @@ class WeatherWidget(ButtonWidget, BaseWeatherWidget):
         self.weather_icon = nerd_font_icon(
             icon="󱣶",
             props={
-                "style_classes": ["panel-font-icon"],
+                "style_classes": ["panel-font-icon", "weather-icon"],
             },
         )
         self.container_box.add(self.weather_icon)

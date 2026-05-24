@@ -10,9 +10,10 @@ $workspace-transition:
 /** workspace switcher widget */
 
 #workspaces {
-  .panel-font-icon {
-    font-size: 1.2rem;
-  }
+  @include common.nerd-icon(
+    variable.$bar-widgets-workspaces-icon_size,
+    variable.$bar-widgets-workspaces-spacing
+  );
 
   #workspaces_widget {
     font-weight: 700;
