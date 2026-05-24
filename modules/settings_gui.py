@@ -178,7 +178,7 @@ class SettingsGUI(Window):
             h_expand=True,
         )
 
-    def _create_grid(self, margin_bottom: int = 0) -> Gtk.Grid:
+    def _create_grid(self, margin_bottom: int = 0) -> Grid:
         """Create a standard grid for settings."""
         return Grid(
             column_spacing=20,
@@ -595,7 +595,7 @@ class SettingsGUI(Window):
     def _create_wallpaper_picker(self, path: str, key: str, value: str) -> Gtk.Widget:
         """Create a wallpaper file picker control."""
         # Create horizontal box for entry and button
-        hbox = Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
+        hbox = Box(orientation="h", spacing=6)
 
         # Create entry for path
         entry = Entry(text=value, h_expand=True)
