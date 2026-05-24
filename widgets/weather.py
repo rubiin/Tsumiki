@@ -16,6 +16,8 @@ from utils.widget_utils import (
     nerd_font_icon,
 )
 
+weather_service = WeatherService()
+
 
 class BaseWeatherWidget:
     """Base class for weather widgets."""
@@ -234,7 +236,6 @@ class WeatherMenu(Box, BaseWeatherWidget):
 
         self.children = (self.title_box, expander)
 
-        weather_service = WeatherService()
         weather_service.set_provider(self.config.get("provider", "open-meteo"))
         weather_service.get_weather_async(
             location=self.config.get("location", ""),
@@ -468,7 +469,6 @@ class WeatherWidget(ButtonWidget, BaseWeatherWidget):
             # Check if the update time is more than interval seconds ago
             return True  # Keep the repeater alive
 
-        weather_service = WeatherService()
         weather_service.set_provider(self.config.get("provider", "open-meteo"))
         weather_service.get_weather_async(
             location=self.config.get("location", ""),
