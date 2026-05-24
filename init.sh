@@ -76,24 +76,21 @@ ensure_venv() {
 
 setup_venv() {
 	ensure_venv setup
-	ensure_venv activate
 
 	log_info "📦 Installing Python dependencies..."
 	local pip_args=(-r requirements.txt)
+	local venv_python=.venv/bin/python
 
 	if [ "$FORCE_REINSTALL" = true ]; then
 		log_warning "🔄 Force reinstalling packages..."
 		pip_args=(--force-reinstall "${pip_args[@]}")
 	fi
 
-	pip install "${pip_args[@]}" || {
-		deactivate
+	"$venv_python" -m pip install "${pip_args[@]}" || {
 		die "❌ Failed to install packages from requirements.txt."
 	}
 
 	log_success "✅ Python dependencies installed successfully."
-
-	deactivate
 }
 
 copy_config_files() {
@@ -203,10 +200,10 @@ install_packages() {
 		exit 1
 	}
 
-	if command -v paru &>/dev/null; then
-		aur_helper="paru"
-	elif command -v yay &>/dev/null; then
+	if command -v yay &>/dev/null; then
 		aur_helper="yay"
+	elif command -v paru &>/dev/null; then
+		aur_helper="paru"
 	else
 		log_error "❌ AUR helper (yay or paru) not found. Please install one first."
 		log_warning "⚠️  You can manually install: python-fabric-git"
