@@ -5,6 +5,7 @@ Settings GUI for Tsumiki
 from fabric.utils import Gtk, logger
 from fabric.widgets.box import Box
 from fabric.widgets.entry import Entry
+from fabric.widgets.grid import Grid
 from fabric.widgets.image import Image
 from fabric.widgets.label import Label
 from fabric.widgets.scrolledwindow import ScrolledWindow
@@ -179,7 +180,7 @@ class SettingsGUI(Window):
 
     def _create_grid(self, margin_bottom: int = 0) -> Gtk.Grid:
         """Create a standard grid for settings."""
-        return Gtk.Grid(
+        return Grid(
             column_spacing=20,
             row_spacing=8,
             margin_start=10,
@@ -594,7 +595,7 @@ class SettingsGUI(Window):
     def _create_wallpaper_picker(self, path: str, key: str, value: str) -> Gtk.Widget:
         """Create a wallpaper file picker control."""
         # Create horizontal box for entry and button
-        hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
+        hbox = Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
 
         # Create entry for path
         entry = Entry(text=value, h_expand=True)
