@@ -720,6 +720,7 @@ _FORMAT_KEY_VALIDATORS: dict[tuple[str, str], frozenset[str] | None] = {
     ),
     ("workspaces", "label_format"): frozenset({"id"}),
     ("network_usage", "label_format"): frozenset({"upload", "download"}),
+    ("weather", "provider"): frozenset({"open-mateo", "wttr"}),
 }
 
 

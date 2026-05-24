@@ -410,7 +410,7 @@ radius = "16px"
 width = "1px"
 
 [bar.widgets.weather]
-icon_size = "16px"
+icon_size = "17px"
 spacing = "0.125em"
 
 [bar.widgets.weather.border]
