@@ -3,6 +3,7 @@ from fabric.utils import (
     GLib,
     exec_shell_command,
     get_relative_path,
+    idle_add,
     logger,
     monitor_file,
     os,
@@ -27,14 +28,14 @@ def process_and_apply_css(app: Application):
 
         if output == "":
             logger.info(f"{Colors.INFO}[Main] CSS applied")
-            GLib.idle_add(
+            idle_add(
                 lambda: app.set_stylesheet_from_file(get_relative_path("dist/main.css"))
             )
         else:
             logger.exception(f"{Colors.ERROR}[Main]Failed to compile sass!")
             logger.exception(f"{Colors.ERROR}[Main] {output}")
 
-            GLib.idle_add(lambda: app.set_stylesheet_from_string(""))
+            idle_add(lambda: app.set_stylesheet_from_string(""))
 
     _compile()
 

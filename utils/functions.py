@@ -23,6 +23,7 @@ from fabric.utils import (
     exec_shell_command,
     exec_shell_command_async,
     get_relative_path,
+    idle_add,
     invoke_repeater,
     logger,
     os,
@@ -190,10 +191,10 @@ def _pillow_worker(image_path, callback, color_count, resize):
             most_common = Counter(pixels).most_common(color_count)
             palette = [color for color, _ in most_common]
 
-            GLib.idle_add(callback, palette)
+            idle_add(callback, palette)
     except Exception as e:
         logger.exception(f"Error generating color palette: {e}")
-        GLib.idle_add(callback, None)
+        idle_add(callback, None)
 
 
 # Function to get a simple color palette from an image using threading
@@ -341,7 +342,7 @@ def _compile_css():
 
         if output == "":
             logger.info(f"{Colors.INFO}[Theme] CSS recompiled successfully")
-            GLib.idle_add(_apply_css_to_app)
+            idle_add(_apply_css_to_app)
         else:
             logger.exception(f"{Colors.ERROR}[Theme] Failed to compile sass!")
             logger.exception(f"{Colors.ERROR}[Theme] {output}")

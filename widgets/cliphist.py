@@ -2,7 +2,18 @@ import shutil
 import tempfile
 from urllib.parse import unquote, urlparse
 
-from fabric.utils import Gdk, GdkPixbuf, Gio, GLib, Gtk, logger, os, re, remove_handler
+from fabric.utils import (
+    Gdk,
+    GdkPixbuf,
+    Gio,
+    GLib,
+    Gtk,
+    idle_add,
+    logger,
+    os,
+    re,
+    remove_handler,
+)
 from fabric.widgets.box import Box
 from fabric.widgets.button import Button
 from fabric.widgets.entry import Entry
@@ -265,7 +276,7 @@ class ClipHistoryMenu(Box):
 
         # Schedule next batch if there are more items
         if end < len(items):
-            GLib.idle_add(self._display_items_batch, items, end, batch_size)
+            idle_add(self._display_items_batch, items, end, batch_size)
         else:
             # Auto-select first item if we have filter text
             if self.search_entry.get_text() and self.viewport.get_children():
@@ -363,7 +374,7 @@ class ClipHistoryMenu(Box):
         """Load image preview asynchronously"""
         if item_id in self.image_cache:
             # Use cached pixbuf
-            GLib.idle_add(self._update_image_button, button, self.image_cache[item_id])
+            idle_add(self._update_image_button, button, self.image_cache[item_id])
             return
 
         try:
@@ -612,7 +623,7 @@ class ClipHistoryMenu(Box):
     def scroll_to_selected(self, button):
         """Scroll to ensure the selected item is visible"""
 
-        GLib.idle_add(self._scroll, button)
+        idle_add(self._scroll, button)
 
     def use_selected_item(self, *_):
         """Use (paste) the selected clipboard item"""

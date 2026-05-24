@@ -1,6 +1,6 @@
 from typing import Literal
 
-from fabric.utils import GLib, remove_handler
+from fabric.utils import GLib, idle_add, remove_handler
 from fabric.widgets.box import Box
 from fabric.widgets.image import Image
 from fabric.widgets.label import Label
@@ -165,7 +165,7 @@ class OSDContainer(Window):
             self.hide_timer_id = None
 
         # Delay reveal to ensure animation plays
-        GLib.idle_add(lambda: self.revealer.set_reveal_child(True))
+        idle_add(lambda: self.revealer.set_reveal_child(True))
 
         self.hide_timer_id = GLib.timeout_add(self.timeout, self._hide)
 

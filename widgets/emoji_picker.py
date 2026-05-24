@@ -1,5 +1,5 @@
 import ijson
-from fabric.utils import Gdk, Gio, GLib, logger, os, remove_handler
+from fabric.utils import Gdk, Gio, GLib, idle_add, logger, os, remove_handler
 from fabric.widgets.box import Box
 from fabric.widgets.button import Button
 from fabric.widgets.entry import Entry
@@ -91,7 +91,7 @@ class EmojiPickerMenu(Box):
                     logger.exception(
                         f"Emoji JSON file not found: {self._emoji_file_path}"
                     )
-                    GLib.idle_add(self._on_emoji_load_complete, {}, callback)
+                    idle_add(self._on_emoji_load_complete, {}, callback)
                     return
 
                 # Use ijson for streaming JSON parsing
@@ -101,10 +101,10 @@ class EmojiPickerMenu(Box):
                         for emoji_char, emoji_info in ijson.kvitems(f, "")
                     }
 
-                GLib.idle_add(self._on_emoji_load_complete, emoji_dict, callback)
+                idle_add(self._on_emoji_load_complete, emoji_dict, callback)
             except Exception as e:
                 logger.exception(f"Error loading emoji data: {e}")
-                GLib.idle_add(self._on_emoji_load_complete, {}, callback)
+                idle_add(self._on_emoji_load_complete, {}, callback)
 
         _load()
 

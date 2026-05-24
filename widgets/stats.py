@@ -1,7 +1,7 @@
 import json
 from time import monotonic
 
-from fabric.utils import GLib, exec_shell_command_async
+from fabric.utils import exec_shell_command_async, idle_add
 from fabric.widgets.label import Label
 
 import utils.functions as helpers
@@ -361,7 +361,7 @@ class NetworkUsageWidget(FabricatorBoundWidget):
             download=self.format_speed(download_display),
         )
 
-        GLib.idle_add(self.network_label.set_label, label_text)
+        idle_add(self.network_label.set_label, label_text)
 
         if self.config.get("tooltip", False) and self.tooltips_enabled:
             tooltip_text = (

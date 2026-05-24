@@ -8,6 +8,7 @@ from fabric.utils import (
     GLib,
     bulk_connect,
     exec_shell_command_async,
+    idle_add,
     invoke_repeater,
     logger,
     os,
@@ -245,11 +246,11 @@ class CustomWidgetExecutor:
             for line in process.stdout:
                 if not line:
                     break
-                GLib.idle_add(self._on_output, line.strip())
+                idle_add(self._on_output, line.strip())
 
             restart = self._config.get("restart_interval", 0)
             if restart > 0:
-                GLib.idle_add(self._schedule_restart, restart)
+                idle_add(self._schedule_restart, restart)
 
         threading.Thread(target=read_output_loop, daemon=True).start()
 

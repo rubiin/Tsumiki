@@ -3,7 +3,7 @@ from contextlib import suppress
 from typing import Callable, Optional
 
 import httpx
-from fabric.utils import GLib, logger, os, time
+from fabric.utils import idle_add, logger, os, time
 
 from utils.constants import WEATHER_CACHE_FILE
 from utils.decorators import thread
@@ -357,7 +357,7 @@ class WeatherService(SingletonService):
         callback: Callable[[Optional[dict]], None],
     ):
         result = self.get_weather(location, ttl=ttl, refresh=refresh)
-        GLib.idle_add(callback, result)
+        idle_add(callback, result)
 
     def get_weather_async(
         self,

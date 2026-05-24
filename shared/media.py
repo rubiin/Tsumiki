@@ -8,6 +8,7 @@ from fabric.utils import (
     GObject,
     bulk_connect,
     cooldown,
+    idle_add,
     logger,
     os,
 )
@@ -550,7 +551,7 @@ class PlayerBox(Box):
     def _download_and_set_artwork(self, arturl):
         """
         Download the artwork from the given URL asynchronously and update the cover
-        using GLib.idle_add to ensure UI updates occur on the main thread.
+        using idle_add to ensure UI updates occur on the main thread.
         """
         try:
             parsed = urllib.parse.urlparse(arturl)
@@ -575,7 +576,7 @@ class PlayerBox(Box):
                     logger.debug(f"[Media] Failed to remove temp file: {old_temp_path}")
         except Exception:
             local_arturl = self.fallback_cover_path
-        GLib.idle_add(self._update_image, local_arturl)
+        idle_add(self._update_image, local_arturl)
         return None
 
     def _move_seekbar(self, *_):

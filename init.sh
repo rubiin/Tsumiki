@@ -109,12 +109,13 @@ copy_config_files() {
 
 start_bar() {
 	enter_install_dir
+	local venv_python=.venv/bin/python
 
 	copy_config_files
 
 	VERSION=$(git tag --sort=-v:refname | head -n 1)
 
-	ensure_venv activate
+	ensure_venv check
 
 	cat <<EOF
 
@@ -131,11 +132,11 @@ version: $VERSION
 
 EOF
 
-	log_success "🐍 Using python: $(which python)"
+	log_success "🐍 Using python: $venv_python"
 
 	if [ "$DETACHED_MODE" = true ]; then
 		log_warning "🛠️  Running in detached mode..."
-		setsid python3 main.py >/dev/null 2>&1 &
+		setsid "$venv_python" main.py >/dev/null 2>&1 &
 		pid=$!
 		sleep 0.1 # Give a moment for the process to potentially fail on startup.
 		if ! ps -p "$pid" >/dev/null; then
@@ -143,10 +144,8 @@ EOF
 		fi
 	else
 		log_info "▶️  Starting Tsumiki Bar..."
-		python3 main.py || die "❌ Failed to start Tsumiki Bar"
+		"$venv_python" main.py || die "❌ Failed to start Tsumiki Bar"
 	fi
-
-	deactivate
 }
 
 install_packages() {

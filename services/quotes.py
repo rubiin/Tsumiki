@@ -2,7 +2,7 @@ import random
 from typing import Callable, Optional
 
 import httpx
-from fabric.utils import GLib, os, time
+from fabric.utils import idle_add, os, time
 
 from utils.constants import QUOTES_CACHE_FILE
 from utils.functions import read_json_file, write_json_file
@@ -61,7 +61,7 @@ class QuotesService(SingletonService):
 
     def _quotes_worker(self, callback: Callable[[Optional[dict]], None]):
         result = self.get_quotes()
-        GLib.idle_add(callback, result)
+        idle_add(callback, result)
 
     def get_quotes_async(
         self,
