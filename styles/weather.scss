@@ -17,6 +17,8 @@ $base_margin: common.toEm(4);
 }
 
 .weather-menu {
+  padding: variable.$padding;
+
   #weather-expander {
     arrow {
       color: theme.$text-main;
