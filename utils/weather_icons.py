@@ -44,13 +44,14 @@ WEATHER_SYMBOL_WI_NIGHT = {
     "VeryCloudy": "",
 }
 
-weather_icons = {
+WEATHER_ICONS = {
     "113": {
         "description": "Sunny",
         "icon": WEATHER_SYMBOL_WI_DAY["Sunny"],
         "icon-night": WEATHER_SYMBOL_WI_NIGHT["Sunny"],
         "image": "clear-day",
         "image-night": "clear-night",
+        "color": "#FFD24D",
         "quote": "It's a sunny day, gonna be fun! \nDon't go wandering all by yourself though",
     },
     "116": {
@@ -59,6 +60,7 @@ weather_icons = {
         "icon-night": WEATHER_SYMBOL_WI_NIGHT["PartlyCloudy"],
         "image": "partly-cloudy-day",
         "image-night": "partly-cloudy-night",
+        "color": "#C4D7F2",
         "quote": "It's  cloudy, sort of gloomy \nYou'd better get a book to read",
     },
     "119": {
@@ -67,6 +69,7 @@ weather_icons = {
         "icon-night": WEATHER_SYMBOL_WI_NIGHT["Cloudy"],
         "image": "cloudy",
         "image-night": "cloudy",
+        "color": "#9CA3AF",
         "quote": "It's  cloudy, sort of gloomy \nYou'd better get a book to read",
     },
     "122": {
@@ -75,6 +78,7 @@ weather_icons = {
         "icon-night": WEATHER_SYMBOL_WI_NIGHT["VeryCloudy"],
         "image": "cloudy",
         "image-night": "cloudy",
+        "color": "#6B7280",
         "quote": "It's  cloudy, sort of gloomy \nYou'd better get a book to read",
     },
     "143": {
@@ -83,6 +87,7 @@ weather_icons = {
         "icon-night": WEATHER_SYMBOL_WI_NIGHT["Fog"],
         "image": "fog",
         "image-night": "fog-night",
+        "color": "#CCD6E0",
         "quote": "Forecast says it's misty \nMake sure you don't get lost on your way",
     },
     "176": {
@@ -91,6 +96,7 @@ weather_icons = {
         "icon-night": WEATHER_SYMBOL_WI_NIGHT["LightShowers"],
         "image": "rain",
         "image-night": "rain",
+        "color": "#6BA4E2",
         "quote": "It's rainy, it's a great day! \nGet some ramen and watch as the rain falls",
     },
     "179": {
@@ -99,6 +105,7 @@ weather_icons = {
         "icon-night": WEATHER_SYMBOL_WI_NIGHT["LightSleetShowers"],
         "image": "sleet",
         "image-night": "sleet",
+        "color": "#91A8B6",
         "quote": "The forecast is vague; your day's still great!",
     },
     "182": {
@@ -107,6 +114,7 @@ weather_icons = {
         "icon-night": WEATHER_SYMBOL_WI_NIGHT["LightSleet"],
         "image": "sleet",
         "image-night": "sleet",
+        "color": "#A3B8C9",
         "quote": "The forecast is vague; your day's still great!",
     },
     "185": {
@@ -115,6 +123,7 @@ weather_icons = {
         "icon-night": WEATHER_SYMBOL_WI_NIGHT["LightSleet"],
         "image": "sleet",
         "image-night": "sleet",
+        "color": "#A3B8C9",
         "quote": "The forecast is vague; your day's still great!",
     },
     "200": {
@@ -123,6 +132,7 @@ weather_icons = {
         "icon-night": WEATHER_SYMBOL_WI_NIGHT["ThunderyShowers"],
         "image": "thunderstorms",
         "image-night": "thunderstorms-night",
+        "color": "#5B6D7A",
         "quote": "There's storm for forecast today \nMake sure you don't get blown away",
     },
     "227": {
@@ -131,6 +141,7 @@ weather_icons = {
         "icon-night": WEATHER_SYMBOL_WI_NIGHT["LightSnow"],
         "image": "snow",
         "image-night": "snow",
+        "color": "#DDE7F0",
         "quote": "It's snowing, it's a great day! \nGet some ramen and watch as the snow falls",
     },
     "230": {
@@ -139,6 +150,7 @@ weather_icons = {
         "icon-night": WEATHER_SYMBOL_WI_NIGHT["HeavySnow"],
         "image": "snow",
         "image-night": "snow",
+        "color": "#E3EDF6",
         "quote": "It's gonna snow today \nYou'd better wear thick clothes and make a snowman as well!",
     },
     "248": {
@@ -147,6 +159,7 @@ weather_icons = {
         "icon-night": WEATHER_SYMBOL_WI_NIGHT["Fog"],
         "image": "fog",
         "image-night": "fog",
+        "color": "#CCD6E0",
         "quote": "Forecast says it's misty \nMake sure you don't get lost on your way",
     },
     "260": {
@@ -155,6 +168,7 @@ weather_icons = {
         "icon-night": WEATHER_SYMBOL_WI_NIGHT["Fog"],
         "image": "fog",
         "image-night": "fog-night",
+        "color": "#CCD6E0",
         "quote": "Forecast says it's misty \nMake sure you don't get lost on your way",
     },
     "263": {
@@ -163,6 +177,7 @@ weather_icons = {
         "icon-night": WEATHER_SYMBOL_WI_NIGHT["LightShowers"],
         "image": "rain",
         "image-night": "rain",
+        "color": "#6BA4E2",
         "quote": "It's rainy, it's a great day! \nGet some ramen and watch as the rain falls",
     },
     "266": {
@@ -171,6 +186,7 @@ weather_icons = {
         "icon-night": WEATHER_SYMBOL_WI_NIGHT["LightRain"],
         "image": "rain",
         "image-night": "rain",
+        "color": "#5B8FD7",
         "quote": "When clouds cry, the earth drinks deep. A perfect day for promises to keep",
     },
     "281": {
@@ -179,6 +195,7 @@ weather_icons = {
         "icon-night": WEATHER_SYMBOL_WI_NIGHT["LightSleet"],
         "image": "sleet",
         "image-night": "sleet",
+        "color": "#A3B8C9",
         "quote": "The forecast is vague; your day's still great!",
     },
     "284": {
@@ -187,6 +204,7 @@ weather_icons = {
         "icon-night": WEATHER_SYMBOL_WI_NIGHT["LightSleet"],
         "image": "sleet",
         "image-night": "sleet",
+        "color": "#A3B8C9",
         "quote": "No clear forecast? Create your own sun.",
     },
     "293": {
@@ -195,6 +213,7 @@ weather_icons = {
         "icon-night": WEATHER_SYMBOL_WI_NIGHT["LightRain"],
         "image": "rain",
         "image-night": "rain",
+        "color": "#5B8FD7",
         "quote": "When clouds cry, the earth drinks deep. A perfect day for promises to keep",
     },
     "296": {
@@ -203,6 +222,7 @@ weather_icons = {
         "icon-night": WEATHER_SYMBOL_WI_NIGHT["LightRain"],
         "image": "rain",
         "image-night": "rain",
+        "color": "#5B8FD7",
         "quote": "It's rainy, it's a great day! \nGet some ramen and watch as the rain falls",
     },
     "299": {
@@ -211,6 +231,7 @@ weather_icons = {
         "icon-night": WEATHER_SYMBOL_WI_NIGHT["HeavyShowers"],
         "image": "rain",
         "image-night": "rain",
+        "color": "#4A6A8C",
         "quote": "When clouds cry, the earth drinks deep. A perfect day for promises to keep",
     },
     "302": {
@@ -219,6 +240,7 @@ weather_icons = {
         "icon-night": WEATHER_SYMBOL_WI_NIGHT["HeavyRain"],
         "image": "rain",
         "image-night": "rain",
+        "color": "#405772",
         "quote": "Grey skies, cozy vibes. A gentle day, where calm truly thrives",
     },
     "305": {
@@ -227,6 +249,7 @@ weather_icons = {
         "icon-night": WEATHER_SYMBOL_WI_NIGHT["HeavyShowers"],
         "image": "rain",
         "image-night": "rain",
+        "color": "#4A6A8C",
         "quote": "The world is washing clean. A perfect excuse for dreams unseen",
     },
     "308": {
@@ -235,6 +258,7 @@ weather_icons = {
         "icon-night": WEATHER_SYMBOL_WI_NIGHT["HeavyRain"],
         "image": "rain",
         "image-night": "rain",
+        "color": "#405772",
         "quote": "When clouds cry, the earth drinks deep. A perfect day for promises to keep",
     },
     "311": {
@@ -243,6 +267,7 @@ weather_icons = {
         "icon-night": WEATHER_SYMBOL_WI_NIGHT["LightSleet"],
         "image": "sleet",
         "image-night": "sleet",
+        "color": "#A3B8C9",
         "quote": "Weather's a wild card; make today count.",
     },
     "314": {
@@ -251,6 +276,7 @@ weather_icons = {
         "icon-night": WEATHER_SYMBOL_WI_NIGHT["LightSleet"],
         "image": "sleet",
         "image-night": "sleet",
+        "color": "#A3B8C9",
         "quote": "The forecast is vague; your day's still great!",
     },
     "317": {
@@ -259,6 +285,7 @@ weather_icons = {
         "icon-night": WEATHER_SYMBOL_WI_NIGHT["LightSleet"],
         "image": "sleet",
         "image-night": "sleet",
+        "color": "#A3B8C9",
         "quote": "Skies are undecided, but your day's a canvas.",
     },
     "320": {
@@ -267,6 +294,7 @@ weather_icons = {
         "icon-night": WEATHER_SYMBOL_WI_NIGHT["LightSnow"],
         "image": "snow",
         "image-night": "snow",
+        "color": "#DDE7F0",
         "quote": "Soft snow falling, hushes the ground. A peaceful silence all around.",
     },
     "323": {
@@ -275,6 +303,7 @@ weather_icons = {
         "icon-night": WEATHER_SYMBOL_WI_NIGHT["LightSnowShowers"],
         "image": "snow",
         "image-night": "snow",
+        "color": "#B9D1E8",
         "quote": "Let the chill of snow invigorate your day. A fresh, crisp start in a magical way",
     },
     "326": {
@@ -283,6 +312,7 @@ weather_icons = {
         "icon-night": WEATHER_SYMBOL_WI_NIGHT["LightSnowShowers"],
         "image": "snow",
         "image-night": "snow",
+        "color": "#B9D1E8",
         "quote": "Snow-covered trees, a breathtaking sight. Step into the beauty of pure, white light.",
     },
     "329": {
@@ -291,6 +321,7 @@ weather_icons = {
         "icon-night": WEATHER_SYMBOL_WI_NIGHT["HeavySnow"],
         "image": "snow",
         "image-night": "snow",
+        "color": "#E3EDF6",
         "quote": "A blanket of snow, fresh and serene. Step outside, feel the crisp, winter scene.",
     },
     "332": {
@@ -299,6 +330,7 @@ weather_icons = {
         "icon-night": WEATHER_SYMBOL_WI_NIGHT["HeavySnow"],
         "image": "snow",
         "image-night": "snow",
+        "color": "#E3EDF6",
         "quote": "The silent descent of snow. A perfect hush, a gentle glow.",
     },
     "335": {
@@ -307,6 +339,7 @@ weather_icons = {
         "icon-night": WEATHER_SYMBOL_WI_NIGHT["HeavySnowShowers"],
         "image": "snow",
         "image-night": "snow",
+        "color": "#D4E2F0",
         "quote": "Snow is here, hushed and bright. A cozy day awaits, bathed in soft light.",
     },
     "338": {
@@ -315,6 +348,7 @@ weather_icons = {
         "icon-night": WEATHER_SYMBOL_WI_NIGHT["HeavySnow"],
         "image": "snow",
         "image-night": "snow",
+        "color": "#E3EDF6",
         "quote": "Winter's white magic fills the air. A crisp, pure beauty beyond compare.",
     },
     "350": {
@@ -323,6 +357,7 @@ weather_icons = {
         "icon-night": WEATHER_SYMBOL_WI_NIGHT["LightSleet"],
         "image": "sleet",
         "image-night": "sleet",
+        "color": "#A3B8C9",
         "quote": "The forecast is vague; your day's still great!",
     },
     "353": {
@@ -331,6 +366,7 @@ weather_icons = {
         "icon-night": WEATHER_SYMBOL_WI_NIGHT["LightShowers"],
         "image": "rain",
         "image-night": "rain",
+        "color": "#6BA4E2",
         "quote": "It's rainy, it's a great day! \nGet some ramen and watch as the rain falls",
     },
     "356": {
@@ -339,6 +375,7 @@ weather_icons = {
         "icon-night": WEATHER_SYMBOL_WI_NIGHT["HeavyShowers"],
         "image": "rain",
         "image-night": "rain",
+        "color": "#4A6A8C",
         "quote": "It's rainy, it's a great day! \nGet some ramen and watch as the rain falls",
     },
     "359": {
@@ -347,6 +384,7 @@ weather_icons = {
         "icon-night": WEATHER_SYMBOL_WI_NIGHT["HeavyRain"],
         "image": "rain",
         "image-night": "rain",
+        "color": "#405772",
         "quote": "It's rainy, it's a great day! \nGet some ramen and watch as the rain falls",
     },
     "362": {
@@ -355,6 +393,7 @@ weather_icons = {
         "icon-night": WEATHER_SYMBOL_WI_NIGHT["LightSleetShowers"],
         "image": "sleet",
         "image-night": "sleet",
+        "color": "#91A8B6",
         "quote": "The forecast is vague; your day's still great!",
     },
     "365": {
@@ -363,6 +402,7 @@ weather_icons = {
         "icon-night": WEATHER_SYMBOL_WI_NIGHT["LightSleetShowers"],
         "image": "sleet",
         "image-night": "sleet",
+        "color": "#91A8B6",
         "quote": "Mystery in the clouds, embrace what unfolds.",
     },
     "368": {
@@ -371,6 +411,7 @@ weather_icons = {
         "icon-night": WEATHER_SYMBOL_WI_NIGHT["LightSnowShowers"],
         "image": "snow",
         "image-night": "snow",
+        "color": "#B9D1E8",
         "quote": "It's snowing, it's a great day! \nGet some ramen and watch as the snow falls",
     },
     "371": {
@@ -379,6 +420,7 @@ weather_icons = {
         "icon-night": WEATHER_SYMBOL_WI_NIGHT["HeavySnowShowers"],
         "image": "snow",
         "image-night": "snow",
+        "color": "#D4E2F0",
         "quote": "Bundle up warm, the snow calls your name. A winter's tale, a beautiful game",
     },
     "374": {
@@ -387,6 +429,7 @@ weather_icons = {
         "icon-night": WEATHER_SYMBOL_WI_NIGHT["LightSleetShowers"],
         "image": "sleet",
         "image-night": "sleet",
+        "color": "#91A8B6",
         "quote": "The forecast is vague; your day's still great!",
     },
     "377": {
@@ -395,6 +438,7 @@ weather_icons = {
         "icon-night": WEATHER_SYMBOL_WI_NIGHT["LightSleet"],
         "image": "sleet",
         "image-night": "sleet",
+        "color": "#A3B8C9",
         "quote": "Uncertain skies? Find joy anyway.",
     },
     "386": {
@@ -403,6 +447,7 @@ weather_icons = {
         "icon-night": WEATHER_SYMBOL_WI_NIGHT["ThunderyShowers"],
         "image": "sleet",
         "image-night": "sleet",
+        "color": "#5B6D7A",
         "quote": "There's thunder in the air, showers will soon appear \nFind a cozy spot indoors, and let the storm draw near",
     },
     "389": {
@@ -411,6 +456,7 @@ weather_icons = {
         "icon-night": WEATHER_SYMBOL_WI_NIGHT["ThunderyHeavyRain"],
         "image": "sleet",
         "image-night": "sleet",
+        "color": "#3B4C61",
         "quote": "There's thunder in the air, showers will soon appear \nFind a cozy spot indoors, and let the storm draw near",
     },
     "392": {
@@ -419,6 +465,7 @@ weather_icons = {
         "icon-night": WEATHER_SYMBOL_WI_NIGHT["ThunderySnowShowers"],
         "image": "sleet",
         "image-night": "sleet",
+        "color": "#A1B5CC",
         "quote": "Sort of odd, I don't know what to forecast \nMake sure you have a good time!",
     },
     "395": {
@@ -427,6 +474,7 @@ weather_icons = {
         "icon-night": WEATHER_SYMBOL_WI_NIGHT["HeavySnowShowers"],
         "image": "sleet",
         "image-night": "sleet",
+        "color": "#D4E2F0",
         "quote": "Sort of odd, I don't know what to forecast \nMake sure you have a good time!",
     },
 }

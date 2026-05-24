@@ -11,7 +11,7 @@ from services.weather import WeatherService
 from shared.widget_container import ButtonWidget
 from utils.constants import ASSETS_DIR
 from utils.functions import check_if_day
-from utils.weather_icons import weather_icons
+from utils.weather_icons import WEATHER_ICONS
 from utils.widget_utils import (
     nerd_font_icon,
 )
@@ -320,7 +320,7 @@ class WeatherMenu(Box, BaseWeatherWidget):
             sunset_time=self.sunset_time,
         )
         image_name = "image" if is_day else "image-night"
-        return f"{self.weather_icons_dir}/{weather_icons[str(code)][image_name]}.svg"
+        return f"{self.weather_icons_dir}/{WEATHER_ICONS[str(code)][image_name]}.svg"
 
 
 class WeatherWidget(ButtonWidget, BaseWeatherWidget):
@@ -383,7 +383,7 @@ class WeatherWidget(ButtonWidget, BaseWeatherWidget):
         # Get the current weather
         self.update_app_data(data)
 
-        weather_icon = weather_icons[self.current_weather["weatherCode"]]
+        weather_icon = WEATHER_ICONS[self.current_weather["weatherCode"]]
 
         text_icon = (
             weather_icon["icon"]
@@ -393,17 +393,21 @@ class WeatherWidget(ButtonWidget, BaseWeatherWidget):
             else weather_icon["icon-night"]
         )
 
-        self.weather_icon.set_label(text_icon)
+        self.weather_icon.set_markup(
+            f'<span foreground="{weather_icon["color"]}">{text_icon}</span>'
+        )
 
         if self.config.get("label", True):
-            self.weather_label.set_label(
-                self.config.get("label_format", "{location}").format(
-                    location=self.data["location"],
-                    temperature=self.get_temperature(),
-                    condition=self.get_description(),
-                    humidity=self.get_humidity(),
-                    wind_speed=self.get_wind_speed(),
-                )
+            label_text = self.config.get("label_format", "{location}").format(
+                location=self.data["location"],
+                temperature=self.get_temperature(),
+                condition=self.get_description(),
+                humidity=self.get_humidity(),
+                wind_speed=self.get_wind_speed(),
+            )
+
+            self.weather_label.set_markup(
+                f'<span foreground="{weather_icon["color"]}">{label_text}</span>'
             )
 
         # Update the tooltip with the city and weather condition if enabled
@@ -448,12 +452,12 @@ class WeatherWidget(ButtonWidget, BaseWeatherWidget):
             and (datetime.now() - self.update_time).total_seconds() > 300
         ):
             text_icon = (
-                weather_icons[self.current_weather["weatherCode"]]["icon"]
+                WEATHER_ICONS[self.current_weather["weatherCode"]]["icon"]
                 if check_if_day(
                     sunrise_time=self.sunrise_time,
                     sunset_time=self.sunset_time,
                 )
-                else weather_icons[self.current_weather["weatherCode"]]["icon-night"]
+                else WEATHER_ICONS[self.current_weather["weatherCode"]]["icon-night"]
             )
 
             self.weather_icon.set_label(text_icon)
