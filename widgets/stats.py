@@ -1,7 +1,7 @@
 import json
 from time import monotonic
 
-from fabric.utils import exec_shell_command_async
+from fabric.utils import GLib, exec_shell_command_async
 from fabric.widgets.label import Label
 
 import utils.functions as helpers
@@ -313,7 +313,7 @@ class NetworkUsageWidget(FabricatorBoundWidget):
         self.mb_digits = self.config.get("mb_digits", 2)
 
         self.network_label = Label(
-            name="download_label", label="0 MB", style_classes=["panel-text"]
+            name="network_label", label="0 MB", style_classes=["panel-text"]
         )
 
         self.container_box.children = [self.network_label]
@@ -356,12 +356,12 @@ class NetworkUsageWidget(FabricatorBoundWidget):
             download_speed if download_speed >= self.download_threshold else 0
         )
 
-        self.network_label.set_label(
-            self.label_format.format(
-                upload=self.format_speed(upload_display),
-                download=self.format_speed(download_display),
-            )
+        label_text = self.label_format.format(
+            upload=self.format_speed(upload_display),
+            download=self.format_speed(download_display),
         )
+
+        GLib.idle_add(self.network_label.set_label, label_text)
 
         if self.config.get("tooltip", False) and self.tooltips_enabled:
             tooltip_text = (
