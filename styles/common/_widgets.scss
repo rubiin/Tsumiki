@@ -97,6 +97,14 @@
     variable.$bar-widgets-battery-border-enabled,
     variable.$bar-widgets-battery-border-width
   );
+
+  .battery-icon {
+    font-size: 1.2em;
+  }
+
+  .panel-text{
+    margin-left: 2px;
+  }
 }
 
 #bluetooth {

@@ -13,7 +13,7 @@ $border-color: theme.$surface-disabled;
 
 $border: settings.$border-width solid $border-color;
 
-$popover-border-color: color.mix($border-color, transparent, 5%);
+$popover-border-color: color.mix($border-color, transparent, 60%);
 
 // Slider length presets
 $slider-long: 320px;

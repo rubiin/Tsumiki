@@ -73,6 +73,9 @@ text_nerd_icons = {
     "recorder": "󰻂",
     "fallback": "",
     "battery_low": "󰂎",
+    "battery": {
+        "charging": "󰠠",
+    },
     "hourglass": "",
     "powerprofiles": {"power-saver": "󰌪", "performance": "󰓅", "balanced": "󰒂"},
     "volume": {
@@ -724,6 +727,6 @@ def get_path(d, path, sep="."):
     return d or None
 
 
-def get_text_icon(name):
+def get_text_icon(name: str) -> str:
 
     return get_path(text_nerd_icons, name)

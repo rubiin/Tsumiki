@@ -1,10 +1,10 @@
-from fabric.widgets.image import Image
 from fabric.widgets.label import Label
 
 from services.battery import BatteryService
 from shared.widget_container import ButtonWidget
 from utils.functions import format_seconds_to_hours_minutes, send_notification
-from utils.icons import get_text_icon, symbolic_icons
+from utils.icons import get_text_icon
+from utils.widget_utils import nerd_font_icon
 
 
 class BatteryWidget(ButtonWidget):
@@ -22,11 +22,10 @@ class BatteryWidget(ButtonWidget):
 
         self.full_battery_level = self.config.get("full_battery_level", 100)
 
-        self.battery_icon = Image(
-            icon_name=symbolic_icons["battery"]["full"],
-            icon_size=self.config.get("icon_size", 14),
+        self.battery_icon = nerd_font_icon(
+            icon=get_text_icon("battery.charging"),
+            props={"style_classes": ["panel-font-icon", "battery-icon"]},
         )
-
         self.container_box.add(self.battery_icon)
 
         if self.config.get("label", True):
@@ -79,13 +78,20 @@ class BatteryWidget(ButtonWidget):
             else self.client.get_property("TimeToEmpty")
         ) or 0
 
-        self.battery_icon.set_from_icon_name(
-            self.client.get_property("IconName"), self.config.get("icon_size", 16)
+        glyph = self._map_glyph(battery_percent, is_charging)
+
+        percent_color = self._get_color_for_percent(battery_percent)
+
+        self.battery_icon.set_markup(
+            f'<span foreground="{percent_color}">{glyph}</span>'
         )
 
         # Update the label with the battery percentage if enabled
         if self.config.get("label", True):
-            self.battery_label.set_text(f"{battery_percent}%")
+            self.battery_label.set_markup(
+                f'<span foreground="{percent_color}">{battery_percent:.0f}%</span>'
+            )
+
             self.battery_label.show()
 
             ## Hide the label when the battery is full
@@ -210,3 +216,28 @@ class BatteryWidget(ButtonWidget):
                 self.low_battery_notified = True
             elif percentage > threshold or is_charging:
                 self.low_battery_notified = False
+
+    def _map_glyph(self, percent: float, charging: bool) -> str:
+        if charging:
+            return get_text_icon("battery.charging")
+
+        glyphs = ["", "", "", "", ""]
+        index = int(percent // 20)
+        index = min(index, 4)
+        return glyphs[index]
+
+    def _get_color_for_percent(self, percent: float) -> str:
+        """Return a pastel gradient color from red to green based on percent."""
+
+        percent = max(0, min(percent, 100)) / 100.0
+
+        # Pastel red (low %) to pastel green (high %)
+        red_start, green_start, blue_start = (252, 56, 56)  # pastel red
+        red_end, green_end, blue_end = (99, 252, 23)  # pastel green
+
+        # Linear interpolation
+        r = int(red_start + (red_end - red_start) * percent)
+        g = int(green_start + (green_end - green_start) * percent)
+        b = int(blue_start + (blue_end - blue_start) * percent)
+
+        return f"#{r:02x}{g:02x}{b:02x}"
