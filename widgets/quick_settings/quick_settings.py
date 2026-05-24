@@ -24,6 +24,7 @@ from utils.icons import get_text_icon, symbolic_icons
 from utils.widget_utils import (
     get_audio_icon_name,
     get_brightness_icon_name,
+    nerd_font_icon,
 )
 from widgets.quick_settings.submenu.hyprsunset import (
     HyprSunsetSubMenu,
@@ -204,9 +205,9 @@ class QuickSettingsMenu(Box):
                 orientation="h",
                 children=(
                     HoverButton(
-                        image=Image(
-                            icon_name=symbolic_icons["powermenu"]["reboot"],
-                            icon_size=16,
+                        child=nerd_font_icon(
+                            icon=get_text_icon("power_menu.reboot"),
+                            props={"style_classes": ["panel-font-icon"]},
                         ),
                         v_align="center",
                         on_clicked=lambda *_: self.show_dialog(
@@ -216,9 +217,9 @@ class QuickSettingsMenu(Box):
                         ),
                     ),
                     HoverButton(
-                        image=Image(
-                            icon_name=symbolic_icons["powermenu"]["shutdown"],
-                            icon_size=16,
+                        child=nerd_font_icon(
+                            icon=get_text_icon("power_menu.shutdown"),
+                            props={"style_classes": ["panel-font-icon"]},
                         ),
                         v_align="center",
                         on_clicked=lambda *_: self.show_dialog(

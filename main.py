@@ -175,6 +175,12 @@ def main():
 
         return False
 
+    @Application.action()
+    def open_inspector():
+        app.open_inspector()
+
+        return False
+
     # Run the application
     app.run()
 

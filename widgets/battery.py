@@ -56,7 +56,7 @@ class BatteryWidget(ButtonWidget):
         if not is_present:
             if self.config.get("hide_when_missing", True):
                 self.set_visible(False)
-            self.set_tooltip_text(f"{get_text_icon('battery_low')} No battery present")
+            self.set_tooltip_text(f"{get_text_icon('battery.low')} No battery present")
             if self.config.get("label", True):
                 self.battery_label.set_text("N/A")
             return True
