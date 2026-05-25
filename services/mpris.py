@@ -5,7 +5,7 @@ import gi
 
 # Fabric imports
 from fabric.core.service import Property, Service, Signal
-from fabric.utils import GLib, bulk_connect, idle_add, logger
+from fabric.utils import GLib, bulk_connect, logger
 
 from utils.exceptions import PlayerctlImportError
 
@@ -63,7 +63,7 @@ class MprisPlayer(Service):
             "metadata",
             lambda *_: self.update_status(),
         )
-        idle_add(self.update_status_once)
+        GLib.idle_add(self.update_status_once)
 
     def _notify_property(self, prop):
         if self.get_property(prop) is not None:
@@ -79,7 +79,7 @@ class MprisPlayer(Service):
             "arturl",
             "length",
         ]:
-            idle_add(lambda p=prop: (self._notify_property(p), False))
+            GLib.idle_add(lambda p=prop: (self._notify_property(p), False))
         for prop in [
             "can-seek",
             "can-pause",
@@ -87,7 +87,7 @@ class MprisPlayer(Service):
             "can-go-next",
             "can-go-previous",
         ]:
-            idle_add(lambda p=prop: (self.notifier(p), False))
+            GLib.idle_add(lambda p=prop: (self.notifier(p), False))
 
     def _notify_all(self):
         for prop in self.list_properties():  # type: ignore
@@ -97,7 +97,7 @@ class MprisPlayer(Service):
     def update_status_once(self):
         # schedule notifier calls for each property
 
-        idle_add(self._notify_all, priority=GLib.PRIORITY_DEFAULT_IDLE)
+        GLib.idle_add(self._notify_all, priority=GLib.PRIORITY_DEFAULT_IDLE)
 
     def _notify_and_emit(self, name):
         self.notify(name)
@@ -105,33 +105,33 @@ class MprisPlayer(Service):
         return False
 
     def notifier(self, name: str, args=None):
-        idle_add(self._notify_and_emit, name, priority=GLib.PRIORITY_DEFAULT_IDLE)
+        GLib.idle_add(self._notify_and_emit, name, priority=GLib.PRIORITY_DEFAULT_IDLE)
 
     def on_player_exit(self, player):
         for id in list(self._signal_connectors.values()):
             with contextlib.suppress(Exception):
                 self._player.disconnect(id)
         del self._signal_connectors
-        idle_add(lambda: (self.emit("exit", True), False))
+        GLib.idle_add(lambda: (self.emit("exit", True), False))
         del self._player
 
     def toggle_shuffle(self, *_):
         if self.can_shuffle:
             # schedule the shuffle toggle in the GLib idle loop
-            idle_add(lambda: (setattr(self, "shuffle", not self.shuffle), False))
+            GLib.idle_add(lambda: (setattr(self, "shuffle", not self.shuffle), False))
         # else do nothing
 
     def play_pause(self, *_):
         if self.can_pause:
-            idle_add(lambda: (self._player.play_pause(), False))
+            GLib.idle_add(lambda: (self._player.play_pause(), False))
 
     def next(self, *_):
         if self.can_go_next:
-            idle_add(lambda: (self._player.next(), False))
+            GLib.idle_add(lambda: (self._player.next(), False))
 
     def previous(self, *_):
         if self.can_go_previous:
-            idle_add(lambda: (self._player.previous(), False))
+            GLib.idle_add(lambda: (self._player.previous(), False))
 
     # Properties
     @Property(str, "readable")
