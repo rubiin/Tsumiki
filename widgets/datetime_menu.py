@@ -46,16 +46,11 @@ class DateMenuNotification(Box):
             spacing=8, orientation="h", style_classes=["notification-header"]
         )
 
+        title = self._notification.summary or notification.app_name
         header_container.children = (
             get_icon(notification.app_icon),
             Label(
-                markup=helpers.parse_markup(
-                    str(
-                        self._notification.summary
-                        if self._notification.summary
-                        else notification.app_name,
-                    )
-                ),
+                markup=helpers.parse_markup(str(title)),
                 h_align="start",
                 h_expand=True,
                 line_wrap="word-char",
@@ -69,9 +64,7 @@ class DateMenuNotification(Box):
             style_classes=["close-button"],
             child=nerd_font_icon(
                 icon=get_text_icon("ui.window_close"),
-                props={
-                    "style_classes": ["panel-font-icon", "close-icon"],
-                },
+                props={"style_classes": ["panel-font-icon", "close-icon"]},
             ),
             on_clicked=self.remove_notification,
         )
@@ -133,7 +126,7 @@ class DateMenuNotification(Box):
 
         body_container.add(
             Label(
-                markup=helpers.parse_markup(self._notification.body),
+                markup=helpers.parse_markup(self._notification.body or ""),
                 v_align="start",
                 h_align="start",
                 name="date-menu-notification-body",
@@ -169,10 +162,10 @@ class DateNotificationMenu(Box):
         )
 
         self.config = config
-
         self.pixel_size = 13
+        self.notification_enabled = config.get("notification", True)
 
-        if config.get("notification", True):
+        if self.notification_enabled:
             self.all_notifications: list[Notification] = (
                 notification_service.get_deserialized()
             )
@@ -187,10 +180,8 @@ class DateNotificationMenu(Box):
             )
 
             self.loaded_count = 0
-
             self.loading = False
             self.batch_size = 8  # how many to load per scroll
-
             self._load_next_batch()
 
             # Placeholder for when there are no notifications
@@ -201,7 +192,7 @@ class DateNotificationMenu(Box):
                 v_align="center",
                 v_expand=True,
                 h_expand=True,
-                visible=len(self.all_notifications) == 0,  # visible if no notifications
+                visible=len(self.all_notifications) == 0,
                 children=(
                     nerd_font_icon(
                         icon=get_text_icon("notifications.checked"),
@@ -210,12 +201,12 @@ class DateNotificationMenu(Box):
                         },
                     ),
                     Label(
-                        label="Your all caught up!", style_classes=["placeholder-text"]
+                        label="Your all caught up!",
+                        style_classes=["placeholder-text"],
                     ),
                 ),
             )
 
-            # Header for the notification column
             self.dnd_switch = Gtk.Switch(
                 name="notification-switch",
                 active=False,
@@ -237,9 +228,7 @@ class DateNotificationMenu(Box):
                 icon=get_text_icon("trash.empty")
                 if len(self.all_notifications) == 0
                 else get_text_icon("trash.full"),
-                props={
-                    "style_classes": ["panel-font-icon"],
-                },
+                props={"style_classes": ["panel-font-icon"]},
             )
 
             self.clear_button = HoverButton(
@@ -247,43 +236,36 @@ class DateNotificationMenu(Box):
                 v_align="center",
                 child=self.clear_icon,
             )
+            self.clear_button.connect("clicked", self._handle_clear_click)
 
-            self.clear_button.connect(
-                "clicked",
-                self._handle_clear_click,
+            notification_column_header.pack_end(
+                self.clear_button,
+                False,
+                False,
+                0,
             )
 
-        notification_column_header.pack_end(
-            self.clear_button,
-            False,
-            False,
-            0,
-        )
-        self.scrolled_window = ScrolledWindow(
-            v_expand=True,
-            style_classes=["notification-scrollable"],
-            v_scrollbar_policy="automatic",
-            h_scrollbar_policy="never",
-            child=Box(children=(self.placeholder, self.notifications_listbox)),
-        )
+            self.scrolled_window = ScrolledWindow(
+                v_expand=True,
+                style_classes=["notification-scrollable"],
+                v_scrollbar_policy="automatic",
+                h_scrollbar_policy="never",
+                child=Box(children=(self.placeholder, self.notifications_listbox)),
+            )
 
-        # Attach scroll listener
-        if self.scrolled_window:
             vadj = self.scrolled_window.get_vadjustment()
             vadj.connect("value-changed", self.on_scroll)
 
-        # Notification body column
-        notification_column = Box(
-            name="notification-column",
-            orientation="v",
-            children=(
-                notification_column_header,
-                self.scrolled_window,
-            ),
-        )
-        self.add(notification_column)
-
-        self.add(Separator())
+            notification_column = Box(
+                name="notification-column",
+                orientation="v",
+                children=(
+                    notification_column_header,
+                    self.scrolled_window,
+                ),
+            )
+            self.add(notification_column)
+            self.add(Separator())
 
         if config.get("calendar", True):
             date_column = Box(
@@ -312,23 +294,25 @@ class DateNotificationMenu(Box):
 
             self.add(date_column)
 
-        bulk_connect(
-            notification_service,
-            {
-                "notification-added": self.on_new_notification,
-                "notification-closed": self.on_notification_closed,
-                "clear_all": self.on_clear_all_notifications,
-                "dnd": self.on_dnd_switch,
-            },
-        )
+        if self.notification_enabled:
+            bulk_connect(
+                notification_service,
+                {
+                    "notification-added": self.on_new_notification,
+                    "notification-closed": self.on_notification_closed,
+                    "clear_all": self.on_clear_all_notifications,
+                    "dnd": self.on_dnd_switch,
+                },
+            )
 
-        if self.dnd_switch:
             self.dnd_switch.connect("notify::active", self.on_dnd_switch_toggled)
 
     def _handle_clear_click(self, *_):
         """Handle clear button click."""
 
         self.notifications_listbox.remove_all()
+        self.all_notifications.clear()
+        self.loaded_count = 0
 
         notification_service.clear_all_notifications()
         self.clear_icon.set_label(get_text_icon("trash.empty"))
@@ -367,6 +351,8 @@ class DateNotificationMenu(Box):
 
     def on_clear_all_notifications(self, *_):
         """Handle clearing all notifications."""
+        self.all_notifications.clear()
+        self.loaded_count = 0
         self.clear_icon.set_label(get_text_icon("trash.empty"))
         self.placeholder.set_visible(True)
         self.notifications_listbox.set_visible(False)
