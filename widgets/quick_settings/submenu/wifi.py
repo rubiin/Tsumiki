@@ -10,7 +10,7 @@ from shared.buttons import QSChevronButton, ScanButton
 from shared.list import ListBox
 from shared.submenu import QuickSubMenu
 from utils.exceptions import NetworkManagerNotFoundError
-from utils.icons import get_text_icon
+from utils.icons import get_text_icon, network_icon_to_text_icons
 from utils.widget_utils import nerd_font_icon
 
 try:
@@ -18,15 +18,6 @@ try:
     from gi.repository import NM
 except ValueError:
     raise NetworkManagerNotFoundError()
-
-
-icon_to_text_icons = {
-    "network-wireless-signal-excellent-symbolic": get_text_icon("wifi.strength_4"),
-    "network-wireless-signal-good-symbolic": get_text_icon("wifi.strength_3"),
-    "network-wireless-signal-ok-symbolic": get_text_icon("wifi.strength_2"),
-    "network-wireless-signal-weak-symbolic": get_text_icon("wifi.strength_1"),
-    "network-wireless-signal-none-symbolic": get_text_icon("wifi.strength_0"),
-}
 
 
 class WifiSubMenu(QuickSubMenu):
@@ -150,7 +141,7 @@ class WifiSubMenu(QuickSubMenu):
         )
         ap_container.add(
             nerd_font_icon(
-                icon=icon_to_text_icons.get(
+                icon=network_icon_to_text_icons.get(
                     icon_name,
                     get_text_icon("wifi.generic"),
                 ),
@@ -249,7 +240,7 @@ class WifiToggle(QSChevronButton):
             )
 
             self.action_icon.set_label(
-                icon_to_text_icons.get(
+                network_icon_to_text_icons.get(
                     wifi.get_property("icon-name"),
                     get_text_icon("wifi.generic"),
                 ),
@@ -260,7 +251,7 @@ class WifiToggle(QSChevronButton):
                 self.action_icon,
                 "label",
                 GObject.BindingFlags.DEFAULT,
-                lambda _, x: icon_to_text_icons.get(
+                lambda _, x: network_icon_to_text_icons.get(
                     x,
                     get_text_icon("wifi.generic"),
                 ),
@@ -280,7 +271,7 @@ class WifiToggle(QSChevronButton):
 
     def update_status(self, wifi: Wifi):
         self.action_icon.set_label(
-            icon_to_text_icons.get(
+            network_icon_to_text_icons.get(
                 wifi.get_property("icon-name"),
                 get_text_icon("wifi.generic"),
             ),

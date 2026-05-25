@@ -1,5 +1,6 @@
 # ruff: noqa: E501
 
+
 text_nerd_icons = {
     "ui": {
         "window_close": "",
@@ -18,6 +19,7 @@ text_nerd_icons = {
         "tick": "",
         "lock": "",
     },
+    "ethernet": "󰈀",
     "wifi": {
         "connected": "󰤨",
         "disconnected": "󰤩",
@@ -97,10 +99,10 @@ text_nerd_icons = {
         "high": "",
     },
     "brightness": {
-        "off": "",  # lowest brightness
-        "low": "",
-        "medium": "",
-        "high": "",  # highest brightness
+        "off": "󰃞",
+        "low": "󰃝",
+        "medium": "󰃟",
+        "high": "󰃠",
     },
     "distro": {
         "deepin": "",
@@ -133,6 +135,26 @@ text_nerd_icons = {
         "openbsd": "",
         "slackware": "",
     },
+}
+
+
+def get_path(d, path, sep="."):
+    for key in path.split(sep):
+        d = d.get(key, {})
+    return d or None
+
+
+def get_text_icon(name: str) -> str:
+
+    return get_path(text_nerd_icons, name)
+
+
+network_icon_to_text_icons = {
+    "network-wireless-signal-excellent-symbolic": get_text_icon("wifi.strength_4"),
+    "network-wireless-signal-good-symbolic": get_text_icon("wifi.strength_3"),
+    "network-wireless-signal-ok-symbolic": get_text_icon("wifi.strength_2"),
+    "network-wireless-signal-weak-symbolic": get_text_icon("wifi.strength_1"),
+    "network-wireless-signal-none-symbolic": get_text_icon("wifi.strength_0"),
 }
 
 
@@ -724,14 +746,3 @@ symbolic_icons = {
         "light": "light-mode-symbolic",
     },
 }
-
-
-def get_path(d, path, sep="."):
-    for key in path.split(sep):
-        d = d.get(key, {})
-    return d or None
-
-
-def get_text_icon(name: str) -> str:
-
-    return get_path(text_nerd_icons, name)
