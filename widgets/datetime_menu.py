@@ -30,9 +30,10 @@ class DateMenuNotification(Box):
         notification: Notification,
         **kwargs,
     ):
+        widget_name = kwargs.pop("name", "datemenu-notification-box")
         super().__init__(
             size=(constants.NOTIFICATION_WIDTH, -1),
-            name="datemenu-notification-box",
+            name=widget_name,
             h_expand=True,
             spacing=8,
             orientation="v",
@@ -182,6 +183,9 @@ class DateNotificationMenu(Box):
             self.loaded_count = 0
             self.loading = False
             self.batch_size = 8  # how many to load per scroll
+            self.grouped_entries: list[tuple[str, list[Notification]]] = []
+            self._app_expand_state: dict[str, bool] = {}
+            self._rebuild_grouped_entries()
             self._load_next_batch()
 
             # Placeholder for when there are no notifications
@@ -312,24 +316,252 @@ class DateNotificationMenu(Box):
 
         self.notifications_listbox.remove_all()
         self.all_notifications.clear()
+        self.grouped_entries.clear()
         self.loaded_count = 0
 
         notification_service.clear_all_notifications()
         self.clear_icon.set_label(get_text_icon("trash.empty"))
 
+    def _notification_id(self, notification: Notification) -> int | None:
+        """Get notification ID for both serialized and deserialized objects."""
+        if hasattr(notification, "__getitem__"):
+            try:
+                return int(notification["id"])
+            except Exception:
+                pass
+
+        notif_id = getattr(notification, "id", None)
+        if notif_id is None:
+            return None
+
+        try:
+            return int(notif_id)
+        except (TypeError, ValueError):
+            return None
+
+    def _notification_app_name(self, notification: Notification) -> str:
+        """Resolve a stable app name used for grouping."""
+        app_name = getattr(notification, "app_name", None)
+        if not app_name and hasattr(notification, "__getitem__"):
+            try:
+                app_name = notification["app_name"]
+            except Exception:
+                app_name = None
+
+        return str(app_name or "Unknown")
+
+    def _rebuild_grouped_entries(self):
+        """Build app-wise deck entries."""
+        grouped: dict[str, list[Notification]] = {}
+
+        for notification in self.all_notifications:
+            app_name = self._notification_app_name(notification)
+            if app_name not in grouped:
+                grouped[app_name] = []
+            grouped[app_name].append(notification)
+
+        # Keep newest notification at top in each app deck.
+        for app_name in grouped:
+            grouped[app_name].sort(
+                key=lambda n: self._notification_id(n) or 0,
+                reverse=True,
+            )
+
+        # Order app decks by most recent notification first.
+        app_order = sorted(
+            grouped,
+            key=lambda app: self._notification_id(grouped[app][0]) or 0,
+            reverse=True,
+        )
+
+        entries: list[tuple[str, list[Notification]]] = []
+        for app_name in app_order:
+            entries.append((app_name, grouped[app_name]))
+            self._app_expand_state.setdefault(app_name, False)
+
+        removed_apps = set(self._app_expand_state) - set(app_order)
+        for app_name in removed_apps:
+            self._app_expand_state.pop(app_name, None)
+
+        self.grouped_entries = entries
+
+    def _reload_grouped_list(self):
+        """Refresh the listbox from grouped entries."""
+        self.notifications_listbox.remove_all()
+        self.loaded_count = 0
+        self._rebuild_grouped_entries()
+        self._load_next_batch()
+
+        has_notifications = len(self.all_notifications) > 0
+        self.placeholder.set_visible(not has_notifications)
+        self.notifications_listbox.set_visible(has_notifications)
+        self.clear_icon.set_label(
+            get_text_icon("trash.full")
+            if has_notifications
+            else get_text_icon("trash.empty")
+        )
+
+    def _bake_group_deck(
+        self,
+        app_name: str,
+        notifications: list[Notification],
+    ) -> Gtk.ListBoxRow:
+        """Create one collapsible deck row for a single app group."""
+        if len(notifications) == 1:
+            single_notification = DateMenuNotification(
+                notification=notifications[0],
+                id=self._notification_id(notifications[0]) or 0,
+            )
+            return Gtk.ListBoxRow(
+                visible=True,
+                selectable=False,
+                activatable=False,
+                name="notification-group-row",
+                child=single_notification,
+            )
+
+        expanded = self._app_expand_state.get(app_name, False)
+
+        chevron_icon = nerd_font_icon(
+            icon=get_text_icon("chevron.down" if expanded else "chevron.right"),
+            props={"style_classes": ["panel-font-icon", "group-chevron"]},
+        )
+
+        title = Label(
+            label=app_name,
+            h_align="start",
+            h_expand=True,
+            visible=expanded,
+            style_classes=["notification-group-title"],
+        )
+
+        header_content = Box(
+            name="notification-group-header",
+            style_classes=["notification-group-header"],
+            orientation="h",
+            h_expand=True,
+            visible=expanded,
+            children=(title,),
+        )
+
+        top_notification = DateMenuNotification(
+            notification=notifications[0],
+            id=self._notification_id(notifications[0]) or 0,
+            style_classes=["notification-group-top"],
+        )
+
+        peek_layers = tuple(
+            Box(
+                name="notification-group-peek-layer",
+                style_classes=["notification-group-peek-layer"],
+                h_expand=True,
+                orientation="h",
+            )
+            for _ in range(min(2, max(0, len(notifications) - 1)))
+        )
+
+        peek_box = Box(
+            name="notification-group-peek",
+            orientation="v",
+            spacing=3,
+            visible=(not expanded and len(notifications) > 1),
+            children=peek_layers,
+        )
+
+        items_box = Box(
+            name="notification-group-items",
+            orientation="v",
+            spacing=8,
+            children=tuple(
+                DateMenuNotification(
+                    notification=notification,
+                    id=self._notification_id(notification) or 0,
+                )
+                for notification in notifications[1:]
+            ),
+        )
+
+        revealer = Revealer(
+            child=items_box,
+            reveal_child=expanded,
+            transition_type="slide_down",
+            transition_duration=220,
+        )
+
+        toggle_button = Button(
+            name="notification-group-top-toggle",
+            child=chevron_icon,
+            h_align="end",
+            v_align="start",
+        )
+
+        toggle_row = Box(
+            name="notification-group-toggle-row",
+            orientation="h",
+            h_expand=True,
+            children=(Box(h_expand=True), toggle_button),
+        )
+
+        deck = Box(
+            name="notification-group-deck",
+            orientation="v",
+            spacing=0,
+            children=(header_content, toggle_row, top_notification, peek_box, revealer),
+        )
+
+        if expanded:
+            deck.add_style_class("group-expanded")
+
+        def _toggle_group(*_):
+            expanded = not self._app_expand_state.get(app_name, False)
+            self._app_expand_state[app_name] = expanded
+            revealer.set_reveal_child(expanded)
+            peek_box.set_visible(not expanded and len(notifications) > 1)
+            header_content.set_visible(expanded)
+            if expanded:
+                deck.add_style_class("group-expanded")
+            else:
+                deck.remove_style_class("group-expanded")
+            chevron_icon.set_label(
+                get_text_icon("chevron.down" if expanded else "chevron.right")
+            )
+
+        def _toggle_group_from_click(*_):
+            _toggle_group()
+            return True
+
+        toggle_button.connect(
+            "clicked",
+            _toggle_group,
+        )
+
+        top_notification.connect("button-press-event", _toggle_group_from_click)
+        peek_box.connect("button-press-event", _toggle_group_from_click)
+
+        return Gtk.ListBoxRow(
+            visible=True,
+            selectable=False,
+            activatable=False,
+            name="notification-group-row",
+            child=deck,
+        )
+
     def _load_next_batch(self):
         """Load the next batch of notifications into the listbox."""
-        if self.loading or self.loaded_count >= len(self.all_notifications):
+        if self.loading or self.loaded_count >= len(self.grouped_entries):
             return
 
         self.loading = True
 
         items_to_add = min(
-            self.batch_size, len(self.all_notifications) - self.loaded_count
+            self.batch_size,
+            len(self.grouped_entries) - self.loaded_count,
         )
         for i in range(self.loaded_count, self.loaded_count + items_to_add):
-            notification_item = self._bake_notification(self.all_notifications[i])
-            self.notifications_listbox.add(notification_item)
+            app_name, notifications = self.grouped_entries[i]
+            self.notifications_listbox.add(
+                self._bake_group_deck(app_name, notifications)
+            )
 
         self.loaded_count += items_to_add
         self.loading = False
@@ -352,42 +584,23 @@ class DateNotificationMenu(Box):
     def on_clear_all_notifications(self, *_):
         """Handle clearing all notifications."""
         self.all_notifications.clear()
+        self.grouped_entries.clear()
+        self._app_expand_state.clear()
         self.loaded_count = 0
         self.clear_icon.set_label(get_text_icon("trash.empty"))
         self.placeholder.set_visible(True)
         self.notifications_listbox.set_visible(False)
-
-    def on_child_destroyed(self, widget, row: Gtk.ListBoxRow):
-        row.destroy()
-
-    def _bake_notification(self, notification):
-        """Create a notification widget from a Notification object."""
-
-        item = DateMenuNotification(
-            notification=notification,
-            id=notification["id"],
-        )
-
-        row = Gtk.ListBoxRow(visible=True, name="notification-list-item", child=item)
-        item.connect("destroy", self.on_child_destroyed, row)
-
-        return row
+        self.notifications_listbox.remove_all()
 
     def on_notification_closed(self, _, id, reason):
         """Handle notification being closed."""
+        if reason not in {"dismissed-by-user", "dismissed-by-limit"}:
+            return
 
-        for row in self.notifications_listbox.get_children():
-            item = row.get_child()  # unwrap the ListBoxRow to get the actual widget
-            if isinstance(item, DateMenuNotification) and item._id == id:
-                if reason in {"dismissed-by-user", "dismissed-by-limit"}:
-                    self._remove_notification(row)
-                break
-
-    def _remove_notification(self, widget):
-        self.notifications_listbox.remove(widget)
-        widget.destroy()  # Ensure the object is freed
-
-        return False
+        self.all_notifications = [
+            n for n in self.all_notifications if self._notification_id(n) != id
+        ]
+        self._reload_grouped_list()
 
     def on_new_notification(self, fabric_notification, id):
         if notification_service.dont_disturb:
@@ -397,18 +610,8 @@ class DateNotificationMenu(Box):
             fabric_notification.get_notification_from_id(id)
         )
 
-        self.clear_icon.set_label(
-            get_text_icon("trash.full"),
-        )
-
-        notification_item = self._bake_notification(
-            fabric_notification,
-        )
-
-        self.notifications_listbox.insert(notification_item, 0)
-
-        self.placeholder.set_visible(False)
-        self.notifications_listbox.set_visible(True)
+        self.all_notifications.insert(0, fabric_notification)
+        self._reload_grouped_list()
 
 
 class DateTimeWidget(ButtonWidget, PopoverMixin):

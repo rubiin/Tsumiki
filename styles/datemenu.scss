@@ -79,31 +79,10 @@
       #notification-list {
         margin-right: variable.$spacing;
 
-        #notification-list-item {
+        #notification-group-row {
           margin-top: 5px;
+          margin-bottom: 7px;
           border-radius: variable.$modules-notification-border-radius;
-          margin-bottom: 6px;
-          transition: background-color 190ms ease;
-
-          .close-button {
-            opacity: 0;
-          }
-
-          &:hover {
-            #datemenu-notification-box {
-              background-color: theme.$background;
-            }
-
-            .close-button {
-              opacity: 1;
-
-              @extend %widget_hover;
-
-              label {
-                color: theme.$background-dark;
-              }
-            }
-          }
 
           &:first-child {
             margin-top: 0;
@@ -111,6 +90,118 @@
 
           &:last-child {
             margin-bottom: 0;
+          }
+
+          #notification-group-deck {
+            #notification-group-header {
+              padding: 0 variable.$padding;
+              margin-bottom: 6px;
+
+              .notification-group-title {
+                @extend %smaller;
+                font-weight: 700;
+                opacity: 0.88;
+              }
+
+              .notification-group-count {
+                min-width: 1.6em;
+                font-size: 0.82em;
+                font-weight: 800;
+                border-radius: 999px;
+                background-color: color.mix(theme.$text-main, transparent, 82%);
+                padding: 0.05em 0.45em;
+              }
+            }
+
+            #datemenu-notification-box.notification-group-top {
+              margin-bottom: 0;
+
+              .close-button {
+                opacity: 0;
+              }
+
+              &:hover {
+                background-color: theme.$background;
+
+                .close-button {
+                  opacity: 1;
+
+                  @extend %widget_hover;
+
+                  label {
+                    color: theme.$background-dark;
+                  }
+                }
+              }
+            }
+
+            &.group-expanded {
+              #datemenu-notification-box.notification-group-top {
+                .close-button {
+                  opacity: 1;
+                }
+              }
+            }
+
+            #notification-group-toggle-row {
+              #notification-group-top-toggle {
+                margin-right: 8px;
+                margin-bottom: 6px;
+                min-height: 0;
+                min-width: 0;
+                padding: 2px 6px;
+                border-radius: variable.$radius;
+                border: variable.$border;
+                background-color: color.mix(theme.$background-alt, black, 15%);
+
+                .group-chevron {
+                  opacity: 0.85;
+                }
+
+                &:hover {
+                  @extend %widget_hover;
+                  color: theme.$background-dark;
+
+                  .group-chevron {
+                    opacity: 1;
+                  }
+                }
+              }
+            }
+
+            #notification-group-peek {
+              margin-top: -3px;
+              margin-left: 7px;
+              margin-right: 7px;
+              margin-bottom: 6px;
+
+              .notification-group-peek-layer {
+                min-height: 9px;
+                border-radius: 0 0 variable.$modules-notification-border-radius
+                  variable.$modules-notification-border-radius;
+                background-color: color.mix(theme.$background-alt, black, 70%);
+                border: if(variable.$modules-notification-border-enabled, variable.$border, none);
+                opacity: 0.95;
+              }
+
+              .notification-group-peek-layer:nth-child(2) {
+                margin-left: 7px;
+                margin-right: 7px;
+                opacity: 0.86;
+              }
+            }
+
+            #notification-group-items {
+              margin-top: 6px;
+
+              #datemenu-notification-box {
+                margin-bottom: 6px;
+
+                &:last-child {
+                  margin-bottom: 0;
+                }
+              }
+            }
           }
         }
       }
