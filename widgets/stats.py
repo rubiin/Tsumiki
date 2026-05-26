@@ -1,7 +1,7 @@
 import json
 from time import monotonic
 
-from fabric.utils import exec_shell_command_async, idle_add
+from fabric.utils import exec_shell_command, exec_shell_command_async, idle_add
 from fabric.widgets.label import Label
 
 import utils.functions as helpers
@@ -146,27 +146,23 @@ class GpuWidget(FabricatorBoundWidget, StatDisplayMixin):
 
         self._gpu_request_in_flight = True
         self._last_gpu_poll = now
+        out = exec_shell_command("nvtop -s")
 
-        # Fetch GPU stats asynchronously to avoid blocking
         try:
-            exec_shell_command_async(
-                "nvtop -s",
-                self._on_gpu_stats_received,
-            )
-        except Exception:
-            self._gpu_request_in_flight = False
+            data = json.loads(out)
+            self._on_gpu_stats_received(json.dumps(data[0]))
+
+        except Exception as e:
+            print(f"Error parsing JSON: {e}")
+
+
+
         return True
 
     def _on_gpu_stats_received(self, value: str):
         """Handle GPU stats received from async command."""
-        try:
-            stats = json.loads(value.strip("\n"))
-            if type(stats) is list:
-                stats = stats[0]
-        except (json.JSONDecodeError, Exception):
-            return
-        finally:
-            self._gpu_request_in_flight = False
+
+        stats = json.loads(value)
 
         frequency = stats.get("gpu_clock", "0 MHz")
         usage_str = stats.get("mem_util", "0").strip("%")

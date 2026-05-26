@@ -396,7 +396,7 @@ title = "Keybinds"
 
 [layout]
 left_section = ["workspaces", "window_title"]
-middle_section = ["date_time", "weather"]
+middle_section = ["date_time", "weather","cpu","storage","memory","gpu"]
 right_section = [
   "@collapsible:0",
   "@group:0",

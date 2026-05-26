@@ -92,15 +92,7 @@ class StatDisplayMixin:
     Mixin for stats widgets (CPU, GPU, Memory, Storage) that share
     common display modes: label, graph, and progress (circular).
     """
-
-    __slots__ = (
-        "_graph_maxlen",
-        "current_mode",
-        "graph_values",
-        "icon",
-        "level_label",
-        "progress_bar",
-    )
+    # DO NOT USE SLOTS HERE
 
     _stat_icon: str = "󰕸"
     _stat_name: str = "stat"
