@@ -7,10 +7,9 @@ These mixins provide common patterns used throughout the codebase
 from collections import deque
 from typing import Callable
 
-from fabric.widgets.circularprogressbar import CircularProgressBar
 from fabric.widgets.label import Label
-from fabric.widgets.overlay import Overlay
 
+from shared.animated.circularprogress import AnimatedCircularProgressBar
 from utils.widget_utils import get_bar_graph, nerd_font_icon
 
 
@@ -92,23 +91,79 @@ class StatDisplayMixin:
     Mixin for stats widgets (CPU, GPU, Memory, Storage) that share
     common display modes: label, graph, and progress (circular).
     """
+
     # DO NOT USE SLOTS HERE
 
     _stat_icon: str = "󰕸"
     _stat_name: str = "stat"
 
+    _VALID_STAT_MODES = ("label", "graph", "progress")
+
+    def _normalize_stat_mode(self, mode: str) -> str:
+        """Map aliases and invalid values to a supported mode."""
+        normalized = str(mode).strip().lower()
+        if normalized == "circular":
+            normalized = "progress"
+
+        if normalized not in self._VALID_STAT_MODES:
+            return "label"
+
+        return normalized
+
+    def _get_cycle_modes(self) -> list[str]:
+        """Resolve the mode cycle order from config."""
+        raw_modes = self.config.get("cycle_modes", self._VALID_STAT_MODES)
+        if not isinstance(raw_modes, (list, tuple)):
+            raw_modes = self._VALID_STAT_MODES
+
+        modes = []
+        for mode in raw_modes:
+            normalized = self._normalize_stat_mode(mode)
+            if normalized not in modes:
+                modes.append(normalized)
+
+        return modes or ["label"]
+
+    def _render_current_mode(self) -> None:
+        """Rebuild children for the currently selected display mode."""
+        if self.current_mode == "graph":
+            self._setup_graph_mode(self._stat_container)
+        elif self.current_mode == "progress":
+            self._setup_progress_mode(self._stat_container)
+        else:
+            self._setup_label_mode(self._stat_container)
+
     def setup_stat_display(self, container) -> None:
         """
         Setup the display mode (graph, progress, or label) based on config.
         """
-        self.current_mode = self.config.get("mode", "label")
+        self._stat_container = container
+        self._last_stat_value = 0.0
+        self._last_stat_label = "0%"
 
-        if self.current_mode == "graph":
-            self._setup_graph_mode(container)
-        elif self.current_mode == "progress":
-            self._setup_progress_mode(container)
-        else:
-            self._setup_label_mode(container)
+        self._cycle_modes = self._get_cycle_modes()
+        self.current_mode = self._normalize_stat_mode(self.config.get("mode", "label"))
+
+        if self.current_mode not in self._cycle_modes:
+            self._cycle_modes.insert(0, self.current_mode)
+
+        self._render_current_mode()
+
+        if self.config.get("cycle_mode_on_click", True):
+            self.connect("clicked", self.cycle_stat_mode)
+
+    def cycle_stat_mode(self, *_) -> None:
+        """Cycle to the next display mode and refresh current value."""
+        if len(self._cycle_modes) <= 1:
+            return
+
+        current_index = self._cycle_modes.index(self.current_mode)
+        self.current_mode = self._cycle_modes[
+            (current_index + 1) % len(self._cycle_modes)
+        ]
+
+        self._render_current_mode()
+        self.update_stat_display(self._last_stat_value, self._last_stat_label)
 
     def _setup_graph_mode(self, container) -> None:
         """Setup graph display mode with bar characters."""
@@ -122,23 +177,21 @@ class StatDisplayMixin:
 
     def _setup_progress_mode(self, container) -> None:
         """Setup circular progress bar display mode."""
-        self.progress_bar = CircularProgressBar(
+        self.icon = nerd_font_icon(
+            icon=self.config.get("icon", self._stat_icon),
+            props={"style_classes": ["panel-font-icon", "overlay-icon"]},
+        )
+        self.progress_bar = AnimatedCircularProgressBar(
             name="stat-circle",
             line_style="round",
             line_width=2,
             size=28,
             start_angle=150,
             end_angle=390,
+            child=self.icon,
         )
 
-        self.icon = nerd_font_icon(
-            icon=self.config.get("icon", self._stat_icon),
-            props={"style_classes": ["panel-font-icon", "overlay-icon"]},
-        )
-
-        container.children = (
-            Overlay(child=self.progress_bar, overlays=self.icon, name="overlay"),
-        )
+        container.children = self.progress_bar
 
     def _setup_label_mode(self, container) -> None:
         """Setup text label display mode with icon."""
@@ -161,10 +214,13 @@ class StatDisplayMixin:
             value: The stat value (0-100 for percentage)
             label_text: Text to display in label mode
         """
+        self._last_stat_value = value
+        self._last_stat_label = label_text
+
         if self.current_mode == "graph":
             self.graph_values.append(get_bar_graph(value))
             self.level_label.set_label("".join(self.graph_values))
         elif self.current_mode == "progress":
-            self.progress_bar.set_value(value / 100.0)
+            self.progress_bar.value = value / 100.0
         else:
             self.level_label.set_label(label_text)

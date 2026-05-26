@@ -155,8 +155,6 @@ class GpuWidget(FabricatorBoundWidget, StatDisplayMixin):
         except Exception as e:
             print(f"Error parsing JSON: {e}")
 
-
-
         return True
 
     def _on_gpu_stats_received(self, value: str):

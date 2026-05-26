@@ -121,7 +121,7 @@ round = true
 temperature_unit = "celsius"
 show_unit = true
 sensor = "acpitz"
-mode = "label"
+mode = "graph"
 graph_length = 4
 
 [widgets.gpu]
@@ -130,6 +130,25 @@ icon = ""
 tooltip = true
 mode = "circular"
 graph_length = 4
+
+
+[widgets.storage]
+path = "/"
+show_icon = true
+icon = "󰋊"
+mode = "label"
+tooltip = true
+graph_length = 4
+unit = "gb"
+
+
+[widgets.memory]
+show_icon = true
+icon = ""
+tooltip = true
+mode = "label"
+graph_length = 4
+unit = "gb"
 
 [widgets.settings]
 icon = "󰒓"
@@ -191,13 +210,6 @@ truncation_size = 2
 show_icon = false
 
 
-[widgets.memory]
-show_icon = true
-icon = ""
-tooltip = true
-mode = "label"
-graph_length = 4
-unit = "gb"
 
 [widgets.network_usage]
 tooltip = true
@@ -262,14 +274,6 @@ capture_sound = false
 stopped_icon = "󱫞"
 running_icon = "󱫠"
 
-[widgets.storage]
-path = "/"
-show_icon = true
-icon = "󰋊"
-mode = "label"
-tooltip = true
-graph_length = 4
-unit = "gb"
 
 [widgets.submap]
 icon = "󰌌"
@@ -396,7 +400,7 @@ title = "Keybinds"
 
 [layout]
 left_section = ["workspaces", "window_title"]
-middle_section = ["date_time", "weather","cpu","storage","memory","gpu"]
+middle_section = ["date_time", "weather","cpu","storage"]
 right_section = [
   "@collapsible:0",
   "@group:0",
@@ -407,11 +411,6 @@ right_section = [
 [[widget_groups]]
 widgets = ["quick_settings", "updates", "battery"]
 spacing = 2
-style_classes = ["compact"]
-
-[[widget_groups]]
-widgets = ["quick_settings"]
-spacing = 0
 style_classes = ["compact"]
 
 [[collapsible_groups]]
@@ -444,7 +443,7 @@ icon_size = 28
 play_sound = false
 transition_type = "slide-up"
 transition_duration = 500
-osds = ["brightness", "volume","lockkeys"]
+osds = ["brightness", "volume"]
 
 [modules.app_launcher]
 enabled = true

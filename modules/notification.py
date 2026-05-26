@@ -14,7 +14,6 @@ from fabric.utils import (
 )
 from fabric.widgets.box import Box
 from fabric.widgets.button import Button
-from fabric.widgets.circularprogressbar import CircularProgressBar
 from fabric.widgets.eventbox import EventBox
 from fabric.widgets.grid import Grid
 from fabric.widgets.label import Label
@@ -26,6 +25,7 @@ from fabric.widgets.widget import Widget
 import utils.constants as constants
 import utils.functions as helpers
 from services import notification_service
+from shared.animated.circularprogress import AnimatedCircularProgressBar
 from shared.buttons import HoverButton
 from shared.circle_image import CircularImage
 from utils.colors import Colors
@@ -137,13 +137,16 @@ class NotificationWidget(EventBox):
             | Gdk.EventMask.POINTER_MOTION_MASK
         )
 
-        self.progress_timeout = CircularProgressBar(
+        self.progress_timeout = AnimatedCircularProgressBar(
             name="notification-circular-progress-bar",
             size=27,
             min_value=0,
             max_value=1,
             radius_color=True,
             invert=True,
+            value=0,
+            line_style="round",
+            line_width=3,
         )
 
         self.notification_box = Box(
@@ -356,6 +359,7 @@ class NotificationWidget(EventBox):
     def _timer_tick(self) -> bool:
         """Single unified tick: update progress bar and close when expired."""
         self.progress_timeout.value = self._time_remaining
+
         if self._time_remaining <= 0:
             self.close_notification()
             return False
