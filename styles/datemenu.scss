@@ -102,18 +102,16 @@
                 font-weight: 700;
               }
 
-              #notification-group-collapse-button,
-              #notification-group-close-all-button {
+              #notification-group-collapse-button {
                 min-height: 0;
                 min-width: 0;
                 padding: 2px 6px;
                 border-radius: variable.$radius;
                 border: variable.$border;
-                background-color: color.mix(theme.$background-alt, black, 15%);
 
                 .panel-font-icon {
                   font-size: 11px;
-                  opacity: 0.85;
+                  color: theme.$text-main;
                 }
 
                 &:hover {
@@ -121,29 +119,29 @@
                   color: theme.$background-dark;
 
                   .panel-font-icon {
-                    opacity: 1;
+                    color: theme.$background-dark;
                   }
                 }
               }
-            }
 
-            #datemenu-notification-box.notification-group-top {
-              margin-bottom: 0;
-              margin-top: 0;
+              #notification-group-close-all-button {
+                min-height: 0;
+                min-width: 0;
+                padding: 2px 6px;
+                border-radius: variable.$radius;
+                border: variable.$border;
 
-              .close-button {
-                opacity: 0;
-              }
+                .panel-font-icon {
+                  font-size: 11px;
+                  color: theme.$text-main;
+                }
 
-              &:hover {
-                background-color: theme.$background;
-
-                .close-button {
-                  opacity: 1;
-
+                &:hover {
                   @extend %widget_hover;
+                  color: theme.$background-dark;
+                  background-color: theme.$accent-red;
 
-                  label {
+                  .panel-font-icon {
                     color: theme.$background-dark;
                   }
                 }
@@ -152,40 +150,6 @@
 
             #notification-group-collapsed-stack {
               margin-bottom: 6px;
-            }
-
-            &.group-expanded {
-              #datemenu-notification-box.notification-group-top {
-                .close-button {
-                  opacity: 1;
-                }
-              }
-            }
-
-            #notification-group-toggle-row {
-              #notification-group-top-toggle {
-                margin-right: 8px;
-                margin-bottom: 6px;
-                min-height: 0;
-                min-width: 0;
-                padding: 2px 6px;
-                border-radius: variable.$radius;
-                border: variable.$border;
-                background-color: color.mix(theme.$background-alt, black, 15%);
-
-                .group-chevron {
-                  opacity: 0.85;
-                }
-
-                &:hover {
-                  @extend %widget_hover;
-                  color: theme.$background-dark;
-
-                  .group-chevron {
-                    opacity: 1;
-                  }
-                }
-              }
             }
 
             #notification-group-peek {

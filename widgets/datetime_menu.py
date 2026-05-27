@@ -430,8 +430,8 @@ class DateNotificationMenu(Box):
             name="notification-group-collapse-button",
             v_align="center",
             child=nerd_font_icon(
-                icon=get_text_icon("chevron.down"),
-                props={"style_classes": ["panel-font-icon", "group-chevron"]},
+                icon=get_text_icon("ui.fold"),
+                props={"style_classes": ["panel-font-icon"]},
             ),
         )
 

@@ -17,6 +17,7 @@ text_nerd_icons = {
         "speakers": "󰓃",
         "package": "",
         "tick": "",
+        "fold": "",
         "lock": "",
     },
     "ethernet": "󰈀",
