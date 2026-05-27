@@ -3,6 +3,7 @@ from fabric.utils import GdkPixbuf, GLib, Gtk, bulk_connect, logger, math
 from fabric.widgets.box import Box
 from fabric.widgets.button import Button
 from fabric.widgets.datetime import DateTime
+from fabric.widgets.eventbox import EventBox
 from fabric.widgets.label import Label
 from fabric.widgets.revealer import Revealer
 from fabric.widgets.scrolledwindow import ScrolledWindow
@@ -526,25 +527,25 @@ class DateNotificationMenu(Box):
                 get_text_icon("chevron.down" if expanded else "chevron.right")
             )
 
-        def _toggle_group_from_click(*_):
-            _toggle_group()
-            return True
-
         toggle_button.connect(
             "clicked",
             _toggle_group,
         )
 
-        top_notification.connect("button-press-event", _toggle_group_from_click)
-        peek_box.connect("button-press-event", _toggle_group_from_click)
+        click_surface = EventBox()
+        click_surface.add(deck)
 
-        return Gtk.ListBoxRow(
+        row = Gtk.ListBoxRow(
             visible=True,
             selectable=False,
             activatable=False,
             name="notification-group-row",
-            child=deck,
+            child=click_surface,
         )
+
+        click_surface.connect("button-press-event", _toggle_group)
+
+        return row
 
     def _load_next_batch(self):
         """Load the next batch of notifications into the listbox."""
