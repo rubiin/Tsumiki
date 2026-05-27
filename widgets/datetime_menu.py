@@ -152,6 +152,8 @@ class DateMenuNotification(Box):
 class DateNotificationMenu(Box):
     """A menu to display the weather information."""
 
+    NUM_STACKED_NOTIFICATIONS = 3
+
     def __init__(
         self,
         config: dict,
@@ -423,26 +425,44 @@ class DateNotificationMenu(Box):
 
         expanded = self._app_expand_state.get(app_name, False)
 
-        chevron_icon = nerd_font_icon(
-            icon=get_text_icon("chevron.down" if expanded else "chevron.right"),
-            props={"style_classes": ["panel-font-icon", "group-chevron"]},
+        # Unified expanded group header: icon + name + collapse + close-all
+        collapse_button = Button(
+            name="notification-group-collapse-button",
+            v_align="center",
+            child=nerd_font_icon(
+                icon=get_text_icon("chevron.down"),
+                props={"style_classes": ["panel-font-icon", "group-chevron"]},
+            ),
         )
 
-        title = Label(
-            label=app_name,
-            h_align="start",
-            h_expand=True,
-            visible=expanded,
-            style_classes=["notification-group-title"],
+        close_all_button = Button(
+            name="notification-group-close-all-button",
+            v_align="center",
+            style_classes=["close-button"],
+            child=nerd_font_icon(
+                icon=get_text_icon("ui.window_close"),
+                props={"style_classes": ["panel-font-icon", "close-icon"]},
+            ),
         )
 
-        header_content = Box(
+        group_header = Box(
             name="notification-group-header",
             style_classes=["notification-group-header"],
             orientation="h",
             h_expand=True,
+            spacing=6,
             visible=expanded,
-            children=(title,),
+            children=(
+                get_icon(notifications[0].app_icon),
+                Label(
+                    label=app_name,
+                    h_expand=True,
+                    h_align="start",
+                    style_classes=["notification-group-title"],
+                ),
+                collapse_button,
+                close_all_button,
+            ),
         )
 
         top_notification = DateMenuNotification(
@@ -451,14 +471,20 @@ class DateNotificationMenu(Box):
             style_classes=["notification-group-top"],
         )
 
+        peek_layer_count = max(
+            0,
+            min(self.NUM_STACKED_NOTIFICATIONS, len(notifications)) - 1,
+        )
         peek_layers = tuple(
             Box(
-                name="notification-group-peek-layer",
-                style_classes=["notification-group-peek-layer"],
+                style_classes=[
+                    "notification-group-peek-layer",
+                    f"notification-group-peek-layer-depth-{index + 1}",
+                ],
                 h_expand=True,
-                orientation="h",
+                size=(-1, 10),
             )
-            for _ in range(min(2, max(0, len(notifications) - 1)))
+            for index in range(peek_layer_count)
         )
 
         peek_box = Box(
@@ -467,6 +493,13 @@ class DateNotificationMenu(Box):
             spacing=3,
             visible=(not expanded and len(notifications) > 1),
             children=peek_layers,
+        )
+
+        collapsed_stack = Box(
+            name="notification-group-collapsed-stack",
+            orientation="v",
+            spacing=0,
+            children=(top_notification, peek_box),
         )
 
         items_box = Box(
@@ -489,48 +522,39 @@ class DateNotificationMenu(Box):
             transition_duration=220,
         )
 
-        toggle_button = Button(
-            name="notification-group-top-toggle",
-            child=chevron_icon,
-            h_align="end",
-            v_align="start",
-        )
-
-        toggle_row = Box(
-            name="notification-group-toggle-row",
-            orientation="h",
-            h_expand=True,
-            children=(Box(h_expand=True), toggle_button),
-        )
-
         deck = Box(
             name="notification-group-deck",
             orientation="v",
             spacing=0,
-            children=(header_content, toggle_row, top_notification, peek_box, revealer),
+            children=(group_header, collapsed_stack, revealer),
         )
 
         if expanded:
             deck.add_style_class("group-expanded")
 
         def _toggle_group(*_):
-            expanded = not self._app_expand_state.get(app_name, False)
-            self._app_expand_state[app_name] = expanded
-            revealer.set_reveal_child(expanded)
-            peek_box.set_visible(not expanded and len(notifications) > 1)
-            header_content.set_visible(expanded)
-            if expanded:
+            is_expanded = not self._app_expand_state.get(app_name, False)
+            self._app_expand_state[app_name] = is_expanded
+            revealer.set_reveal_child(is_expanded)
+            peek_box.set_visible(not is_expanded and len(notifications) > 1)
+            group_header.set_visible(is_expanded)
+            if is_expanded:
                 deck.add_style_class("group-expanded")
             else:
                 deck.remove_style_class("group-expanded")
-            chevron_icon.set_label(
-                get_text_icon("chevron.down" if expanded else "chevron.right")
-            )
 
-        toggle_button.connect(
-            "clicked",
-            _toggle_group,
-        )
+        def _close_group(*_):
+            ids = {self._notification_id(n) for n in notifications}
+            ids.discard(None)
+            for nid in ids:
+                notification_service.remove_notification(nid)
+            self.all_notifications = [
+                n for n in self.all_notifications if self._notification_id(n) not in ids
+            ]
+            self._reload_grouped_list()
+
+        collapse_button.connect("clicked", _toggle_group)
+        close_all_button.connect("clicked", _close_group)
 
         click_surface = EventBox()
         click_surface.add(deck)
@@ -543,7 +567,11 @@ class DateNotificationMenu(Box):
             child=click_surface,
         )
 
-        click_surface.connect("button-press-event", _toggle_group)
+        def _on_group_press(*_):
+            if not self._app_expand_state.get(app_name, False):
+                _toggle_group()
+
+        click_surface.connect("button-press-event", _on_group_press)
 
         return row
 
