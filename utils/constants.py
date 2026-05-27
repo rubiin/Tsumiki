@@ -70,11 +70,9 @@ DEFAULT_CONFIG = {
         },
         "battery": {
             "full_battery_level": 100,
-            "hide_label_when_full": True,
             "hide_when_missing": True,
-            "label": True,
             "tooltip": True,
-            "icon_size": 14,
+            "label_format": "{icon} {percent}%",
             "notifications": {
                 "low_threshold": 10,
                 "full_battery": False,

@@ -27,7 +27,6 @@
     - **`tooltip`**: `bool` (default: true)
   - **`battery`**: `object`
     - **`full_battery_level`**: `int` (default: 100)
-    - **`hide_label_when_full`**: `bool` (default: true)
     - **`hide_when_missing`**: `bool` (default: true)
     - **`label`**: `bool` (default: true)
     - **`tooltip`**: `bool` (default: true)

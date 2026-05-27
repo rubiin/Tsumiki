@@ -109,13 +109,12 @@ WindowCount = TypedDict(
 Battery = TypedDict(
     "Battery",
     {
-        "label": bool,
         "tooltip": bool,
-        "icon_size": int,
+        "label_format": str,
         "full_battery_level": int,
-        "hide_label_when_full": bool,
         "hide_when_missing": bool,
         "notifications": dict,
+        "icons": list[str],
     },
 )
 

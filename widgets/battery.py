@@ -1,5 +1,3 @@
-from fabric.widgets.label import Label
-
 from services.battery import BatteryService
 from shared.widget_container import ButtonWidget
 from utils.functions import format_seconds_to_hours_minutes, send_notification
@@ -21,16 +19,13 @@ class BatteryWidget(ButtonWidget):
         )
 
         self.full_battery_level = self.config.get("full_battery_level", 100)
+        self.label_format = self.config.get("label_format", "{icon} {percent}%")
 
         self.battery_icon = nerd_font_icon(
             icon=get_text_icon("battery.charging"),
             props={"style_classes": ["panel-font-icon", "battery-icon"]},
         )
         self.container_box.add(self.battery_icon)
-
-        if self.config.get("label", True):
-            self.battery_label = Label(label="100%", style_classes=["panel-text"])
-            self.container_box.add(self.battery_label)
 
         self.client = BatteryService()
 
@@ -82,24 +77,15 @@ class BatteryWidget(ButtonWidget):
 
         percent_color = self._get_color_for_percent(battery_percent)
 
-        self.battery_icon.set_markup(
-            f'<span foreground="{percent_color}">{glyph}</span>'
+        label_text = self.label_format.format(
+            icon=glyph,
+            percent=battery_percent,
+            time_remaining=format_seconds_to_hours_minutes(time_remaining),
         )
 
-        # Update the label with the battery percentage if enabled
-        if self.config.get("label", True):
-            self.battery_label.set_markup(
-                f'<span foreground="{percent_color}">{battery_percent:.0f}%</span>'
-            )
-
-            self.battery_label.show()
-
-            ## Hide the label when the battery is full
-            if (
-                self.config.get("hide_label_when_full", False)
-                and battery_percent == self.full_battery_level
-            ):
-                self.battery_label.hide()
+        self.battery_icon.set_markup(
+            f'<span foreground="{percent_color}">{label_text}</span>'
+        )
 
         # Update the tooltip with the battery status details if enabled
         if self.config.get("tooltip", False) and self.tooltips_enabled:

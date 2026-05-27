@@ -95,7 +95,7 @@ panel = "default"
 widget = "default"
 
 [bar.widgets.battery]
-icon_size = "17px"
+icon_size = "14px"
 spacing = "0.125em"
 
 [bar.widgets.battery.border]

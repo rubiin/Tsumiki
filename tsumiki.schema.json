@@ -196,30 +196,20 @@
 				"battery": {
 					"type": "object",
 					"properties": {
-						"hide_label_when_full": {
-							"type": "boolean",
-							"default": true,
-							"description": "Determines whether to hide the label when the battery is full."
-						},
 						"hide_when_missing": {
 							"type": "boolean",
 							"default": true,
 							"description": "Determines whether to hide the widget when the battery is not present."
 						},
-						"label": {
-							"type": "boolean",
-							"default": true,
-							"description": "Determines whether to show the label."
+						"label_format": {
+							"type": "string",
+							"default": "{icon}",
+							"description": "Specifies the format string for the battery label. Available variables: {icon}, {percent}, {time_remaining}."
 						},
 						"tooltip": {
 							"type": "boolean",
 							"default": true,
 							"description": "Determines whether to show the tooltip."
-						},
-						"icon_size": {
-							"type": "number",
-							"default": 14,
-							"description": "The size of the icon displayed in the battery widget."
 						},
 						"notifications": {
 							"type": "object",
@@ -254,9 +244,8 @@
 						}
 					},
 					"required": [
-						"hide_label_when_full",
 						"hide_when_missing",
-						"label",
+						"format",
 						"tooltip",
 						"icon_size",
 						"notifications"
@@ -1211,7 +1200,11 @@
 						"style": {
 							"type": "string",
 							"default": "numbered",
-							"enum": ["pill","numbered","icon"],
+							"enum": [
+								"pill",
+								"numbered",
+								"icon"
+							],
 							"description": "The display style for workspaces."
 						},
 						"label_format": {
