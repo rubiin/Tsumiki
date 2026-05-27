@@ -27,10 +27,11 @@
     - **`tooltip`**: `bool` (default: true)
   - **`battery`**: `object`
     - **`full_battery_level`**: `int` (default: 100)
+    - **`hide_percent_when_full`**: `bool` (default: true)
     - **`hide_when_missing`**: `bool` (default: true)
-    - **`label`**: `bool` (default: true)
+    - **`icons`**: `list[str]` (default: ["", "", "", "", ""])
     - **`tooltip`**: `bool` (default: true)
-    - **`icon_size`**: `int` (default: 14)
+    - **`label_format`**: `str` (default: "{icon} {percent}%")
     - **`notifications`**: `object`
       - **`low_threshold`**: `int` (default: 10)
       - **`full_battery`**: `bool` (default: false)

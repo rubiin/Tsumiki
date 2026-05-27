@@ -211,6 +211,25 @@
 							"default": true,
 							"description": "Determines whether to show the tooltip."
 						},
+						"hide_percent_when_full": {
+							"type": "boolean",
+							"default": false,
+							"description": "Determines whether to hide the percent when full"
+						},
+						"icons": {
+							"type": "array",
+							"items": {
+								"type": "string"
+							},
+							"default": [
+								"",
+								"",
+								"",
+								"",
+								""
+							],
+							"description": "Determines the battery icons"
+						},
 						"notifications": {
 							"type": "object",
 							"properties": {
@@ -239,16 +258,17 @@
 								"low_threshold",
 								"full_battery",
 								"low_battery",
-								"charging"
+								"charging",
 							]
 						}
 					},
 					"required": [
 						"hide_when_missing",
+						"hide_percent_when_full",
 						"format",
 						"tooltip",
-						"icon_size",
-						"notifications"
+						"notifications",
+						"icons"
 					]
 				},
 				"overview_button": {

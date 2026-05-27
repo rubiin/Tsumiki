@@ -19,7 +19,9 @@ class BatteryWidget(ButtonWidget):
         )
 
         self.full_battery_level = self.config.get("full_battery_level", 100)
+        self.hide_percent_when_full = self.config.get("hide_percent_when_full", True)
         self.label_format = self.config.get("label_format", "{icon} {percent}%")
+        self.glyphs = self.config.get("icons", ["", "", "", "", ""])
 
         self.battery_icon = nerd_font_icon(
             icon=get_text_icon("battery.charging"),
@@ -65,6 +67,7 @@ class BatteryWidget(ButtonWidget):
         is_charging = battery_state == 1 if is_present else False
 
         temperature = self.client.get_property("Temperature") or 0
+
         energy = self.client.get_property("Energy") or 0
 
         time_remaining = (
@@ -75,12 +78,13 @@ class BatteryWidget(ButtonWidget):
 
         glyph = self._map_glyph(battery_percent, is_charging)
 
+        formatted_time = format_seconds_to_hours_minutes(time_remaining)
         percent_color = self._get_color_for_percent(battery_percent)
 
         label_text = self.label_format.format(
             icon=glyph,
             percent=battery_percent,
-            time_remaining=format_seconds_to_hours_minutes(time_remaining),
+            time_remaining=(formatted_time if not self.hide_percent_when_full else ""),
         )
 
         self.battery_icon.set_markup(
@@ -95,7 +99,7 @@ class BatteryWidget(ButtonWidget):
             tool_tip_text = (
                 f"󱐋 Energy : {round(energy, 2)} Wh\n Temperature: {temperature}°C"
             )
-            formatted_time = format_seconds_to_hours_minutes(time_remaining)
+
             if battery_percent == self.full_battery_level:
                 self.set_tooltip_text(f"󱠴 Status: Fully Charged\n{tool_tip_text}")
 
@@ -207,10 +211,9 @@ class BatteryWidget(ButtonWidget):
         if charging:
             return get_text_icon("battery.charging")
 
-        glyphs = ["", "", "", "", ""]
         index = int(percent // 20)
-        index = min(index, 4)
-        return glyphs[index]
+        index = min(index, len(self.glyphs) - 1)
+        return self.glyphs[index]
 
     def _get_color_for_percent(self, percent: float) -> str:
         """Return a pastel gradient color from red to green based on percent."""

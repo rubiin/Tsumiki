@@ -1,2 +1,3 @@
 
-remove icon_size , label and hide_label_when_full from battery widget settings
+remove icon_size , label from battery widget settings
+hide_label_when_full renamed to hide_percent_when_full in battery widget settings

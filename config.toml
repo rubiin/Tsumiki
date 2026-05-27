@@ -25,6 +25,8 @@ tooltip = true
 [widgets.battery]
 full_battery_level = 100
 hide_when_missing = true
+hide_percent_when_full = true
+icons = ["", "", "", "", ""]
 label = true
 tooltip = true
 icon_size = 14
@@ -211,7 +213,6 @@ truncation_size = 2
 show_icon = false
 
 
-
 [widgets.network_usage]
 tooltip = true
 label_format = "{upload}   {download} "
@@ -362,7 +363,7 @@ timezones = ["America/New_York", "Asia/Tokyo"]
 [widgets.privacy_indicator]
 tooltip = true
 hide_when_inactive = true
-modules = ["camera", "microphone","screen"]
+modules = ["camera", "microphone", "screen"]
 
 [widgets.custom_button_group]
 spacing = 4
@@ -401,13 +402,8 @@ title = "Keybinds"
 
 [layout]
 left_section = ["workspaces", "window_title"]
-middle_section = ["date_time", "weather","cpu","storage"]
-right_section = [
-  "@collapsible:0",
-  "@group:0",
-  "system_tray",
-  "power",
-]
+middle_section = ["date_time", "weather", "cpu", "storage"]
+right_section = ["@collapsible:0", "@group:0", "system_tray", "power"]
 
 [[widget_groups]]
 widgets = ["quick_settings", "updates", "battery"]

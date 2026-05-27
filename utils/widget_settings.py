@@ -114,6 +114,7 @@ Battery = TypedDict(
         "full_battery_level": int,
         "hide_when_missing": bool,
         "notifications": dict,
+        "hide_percent_when_full": bool,
         "icons": list[str],
     },
 )

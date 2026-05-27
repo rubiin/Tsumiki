@@ -70,7 +70,9 @@ DEFAULT_CONFIG = {
         },
         "battery": {
             "full_battery_level": 100,
+            "hide_percent_when_full": True,
             "hide_when_missing": True,
+            "icons": ["", "", "", "", ""],
             "tooltip": True,
             "label_format": "{icon} {percent}%",
             "notifications": {
