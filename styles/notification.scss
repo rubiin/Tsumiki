@@ -145,10 +145,33 @@ $hover-transition: background 0.15s ease-in-out;
 #datemenu-notification-box {
   @extend %notification_widget;
 
-  #date-menu-notification-summary {
-    font-size: 13.5px;
-  }
-  #date-menu-notification-body {
-    font-size: 13.5px;
+  border: variable.$border;
+  box-shadow:
+    0 2px 8px color.adjust(theme.$shadow-color, $alpha: -0.5),
+    0 1px 2px color.adjust(theme.$shadow-color, $alpha: -0.3);
+
+  // horizontal layout: icon on left, content on right
+  .notification-content {
+    min-width: 0; // allow text to shrink/wrap
+
+    .notification-header {
+      padding: 0;
+
+      .summary {
+        font-size: 13.5px;
+      }
+
+      .timestamp {
+        font-size: 11px;
+        font-weight: 600;
+        color: theme.$text-disabled;
+        margin-right: 4px;
+      }
+    }
+
+    #date-menu-notification-body {
+      font-size: 13px;
+      color: color.mix(theme.$text-main, transparent, 80%);
+    }
   }
 }

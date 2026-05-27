@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from fabric.notifications import Notification
 from fabric.utils import GdkPixbuf, GLib, Gtk, bulk_connect, logger, math
 from fabric.widgets.box import Box
@@ -36,71 +38,26 @@ class DateMenuNotification(Box):
             size=(constants.NOTIFICATION_WIDTH, -1),
             name=widget_name,
             h_expand=True,
-            spacing=8,
-            orientation="v",
+            spacing=12,
+            orientation="h",
             **kwargs,
         )
 
         self._notification = notification
         self._id = id
 
-        header_container = Box(
-            spacing=8, orientation="h", style_classes=["notification-header"]
-        )
-
-        title = self._notification.summary or notification.app_name
-        header_container.children = (
-            get_icon(notification.app_icon),
-            Label(
-                markup=helpers.parse_markup(str(title)),
-                h_align="start",
-                h_expand=True,
-                line_wrap="word-char",
-                style_classes=["summary"],
-                name="date-menu-notification-summary",
-            ),
-        )
-        close_button = Button(
-            name="close-button",
-            v_align="start",
-            style_classes=["close-button"],
-            child=nerd_font_icon(
-                icon=get_text_icon("ui.window_close"),
-                props={"style_classes": ["panel-font-icon", "close-icon"]},
-            ),
-            on_clicked=self.remove_notification,
-        )
-
-        header_container.pack_end(
-            close_button,
-            False,
-            False,
-            0,
-        )
-
-        body_container = Box(
-            spacing=15,
-            orientation="h",
-            style_classes=["notification-body"],
-            v_align="start",
-            h_align="start",
-        )
-
         notification_image_size = math.ceil(0.75 * constants.NOTIFICATION_IMAGE_SIZE)
 
-        # Try to get cached pixbuf first, fall back to deserializing
+        # Left: large circular icon (notification image or app icon fallback)
+        icon_widget = None
         try:
             cached_pixbuf = notification_service.get_cached_pixbuf(
                 self._id, notification_image_size
             )
             if cached_pixbuf:
-                body_container.add(
-                    CircularImage(
-                        pixbuf=cached_pixbuf,
-                        h_expand=True,
-                        v_expand=True,
-                        size=notification_image_size,
-                    ),
+                icon_widget = CircularImage(
+                    pixbuf=cached_pixbuf,
+                    size=notification_image_size,
                 )
             elif image_pixbuf := self._notification.image_pixbuf:
                 scaled = image_pixbuf.scale_simple(
@@ -109,24 +66,67 @@ class DateMenuNotification(Box):
                     GdkPixbuf.InterpType.BILINEAR,
                 )
                 if scaled:
-                    # Cache for future use
                     notification_service.cache_pixbuf(
                         self._id, scaled, notification_image_size
                     )
-                    body_container.add(
-                        CircularImage(
-                            pixbuf=scaled,
-                            h_expand=True,
-                            v_expand=True,
-                            size=notification_image_size,
-                        ),
+                    icon_widget = CircularImage(
+                        pixbuf=scaled,
+                        size=notification_image_size,
                     )
                 del image_pixbuf
         except GLib.GError:
-            # If the image is not available, use the symbolic icon
             logger.warning(f"{Colors.WARNING}[Notification] Image not available.")
 
-        body_container.add(
+        if icon_widget is None:
+            icon_widget = get_icon(notification.app_icon)
+
+        self.add(icon_widget)
+
+        # Right: vertical content (header row + body)
+        title = self._notification.summary or notification.app_name
+
+        self.close_button = Button(
+            name="close-button",
+            v_align="center",
+            style_classes=["close-button"],
+            child=nerd_font_icon(
+                icon=get_text_icon("ui.window_close"),
+                props={"style_classes": ["panel-font-icon", "close-icon"]},
+            ),
+            on_clicked=self.remove_notification,
+        )
+
+        header_row = Box(
+            spacing=4,
+            orientation="h",
+            style_classes=["notification-header"],
+        )
+        header_row.children = (
+            Label(
+                markup=helpers.parse_markup(str(title)),
+                h_align="start",
+                h_expand=True,
+                line_wrap="word-char",
+                style_classes=["summary"],
+                name="date-menu-notification-summary",
+            ),
+            Label(
+                label=self._format_time(),
+                v_align="center",
+                style_classes=["timestamp"],
+            ),
+        )
+        header_row.pack_end(self.close_button, False, False, 0)
+
+        content_box = Box(
+            orientation="v",
+            h_expand=True,
+            spacing=4,
+            style_classes=["notification-content"],
+            v_align="center",
+        )
+        content_box.children = (
+            header_row,
             Label(
                 markup=helpers.parse_markup(self._notification.body or ""),
                 v_align="start",
@@ -138,11 +138,24 @@ class DateMenuNotification(Box):
             ),
         )
 
-        # Add the header, body, and actions to the notification box
-        self.children = (
-            header_container,
-            body_container,
-        )
+        self.add(content_box)
+
+    def _format_time(self) -> str:
+        ts = getattr(self._notification, "time", None)
+        if ts is None:
+            return ""
+        try:
+            diff = datetime.now().timestamp() - float(ts)
+            if diff < 60:
+                return "Now"
+            elif diff < 3600:
+                return f"{int(diff / 60)}m ago"
+            elif diff < 86400:
+                return f"{int(diff / 3600)}h ago"
+            else:
+                return f"{int(diff / 86400)}d ago"
+        except Exception:
+            return ""
 
     def remove_notification(self, *_):
         notification_service.remove_notification(self._id)
@@ -470,6 +483,7 @@ class DateNotificationMenu(Box):
             id=self._notification_id(notifications[0]) or 0,
             style_classes=["notification-group-top"],
         )
+        top_notification.close_button.set_visible(expanded)
 
         peek_layer_count = max(
             0,
@@ -519,7 +533,7 @@ class DateNotificationMenu(Box):
             child=items_box,
             reveal_child=expanded,
             transition_type="slide_down",
-            transition_duration=220,
+            transition_duration=600,
         )
 
         deck = Box(
@@ -538,6 +552,7 @@ class DateNotificationMenu(Box):
             revealer.set_reveal_child(is_expanded)
             peek_box.set_visible(not is_expanded and len(notifications) > 1)
             group_header.set_visible(is_expanded)
+            top_notification.close_button.set_visible(is_expanded)
             if is_expanded:
                 deck.add_style_class("group-expanded")
             else:
