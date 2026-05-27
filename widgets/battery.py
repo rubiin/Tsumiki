@@ -20,7 +20,7 @@ class BatteryWidget(ButtonWidget):
 
         self.full_battery_level = self.config.get("full_battery_level", 100)
         self.hide_percent_when_full = self.config.get("hide_percent_when_full", True)
-        self.label_format = self.config.get("label_format", "{icon} {percent}%")
+        self.label_format = self.config.get("label_format", "{icon} {percent}")
         self.glyphs = self.config.get("icons", ["", "", "", "", ""])
 
         self.battery_icon = nerd_font_icon(
@@ -28,6 +28,9 @@ class BatteryWidget(ButtonWidget):
             props={"style_classes": ["panel-font-icon", "battery-icon"]},
         )
         self.container_box.add(self.battery_icon)
+
+        if self.hide_percent_when_full:
+            self.label_format = self.label_format.replace("{percent}", "")
 
         self.client = BatteryService()
 
@@ -83,8 +86,8 @@ class BatteryWidget(ButtonWidget):
 
         label_text = self.label_format.format(
             icon=glyph,
-            percent=battery_percent,
-            time_remaining=(formatted_time if not self.hide_percent_when_full else ""),
+            time_remaining=formatted_time,
+            percent=f"{battery_percent}%",
         )
 
         self.battery_icon.set_markup(

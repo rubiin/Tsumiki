@@ -74,7 +74,7 @@ DEFAULT_CONFIG = {
             "hide_when_missing": True,
             "icons": ["", "", "", "", ""],
             "tooltip": True,
-            "label_format": "{icon} {percent}%",
+            "label_format": "{icon} {percent}",
             "notifications": {
                 "low_threshold": 10,
                 "full_battery": False,

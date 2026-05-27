@@ -24,13 +24,13 @@ tooltip = true
 
 [widgets.battery]
 full_battery_level = 100
-hide_when_missing = true
+hide_when_missing = false
 hide_percent_when_full = true
 icons = ["", "", "", "", ""]
 label = true
 tooltip = true
 icon_size = 14
-label_format = "{icon} {percent}%"
+label_format = "{icon} {percent}"
 
 
 [widgets.battery.notifications]
