@@ -80,6 +80,7 @@ class DateMenuNotification(Box):
         if icon_widget is None:
             icon_widget = get_icon(notification.app_icon)
 
+        icon_widget.set_valign(Gtk.Align.START)
         self.add(icon_widget)
 
         # Right: vertical content (header row + body)

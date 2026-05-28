@@ -145,10 +145,22 @@ $hover-transition: background 0.15s ease-in-out;
 #datemenu-notification-box {
   @extend %notification_widget;
 
-  border: variable.$border;
+  background-color: theme.$background-dark;
+  border: 1px solid color.mix(theme.$surface-disabled, transparent, 40%);
   box-shadow:
-    0 2px 8px color.adjust(theme.$shadow-color, $alpha: -0.5),
-    0 1px 2px color.adjust(theme.$shadow-color, $alpha: -0.3);
+    0 4px 16px color.adjust(theme.$shadow-color, $alpha: -0.3),
+    0 1px 4px color.adjust(theme.$shadow-color, $alpha: -0.5);
+
+  // circular fallback app icon
+  #app-icon {
+    border-radius: 9999px;
+    background-color: color.mix(theme.$surface-neutral, theme.$background-dark, 30%);
+    padding: 6px;
+    min-width: 36px;
+    min-height: 36px;
+    -gtk-icon-effect: none;
+    -gtk-icon-shadow: none;
+  }
 
   // horizontal layout: icon on left, content on right
   .notification-content {
@@ -159,6 +171,7 @@ $hover-transition: background 0.15s ease-in-out;
 
       .summary {
         font-size: 13.5px;
+        font-weight: 700;
       }
 
       .timestamp {
@@ -171,7 +184,7 @@ $hover-transition: background 0.15s ease-in-out;
 
     #date-menu-notification-body {
       font-size: 13px;
-      color: color.mix(theme.$text-main, transparent, 80%);
+      color: color.mix(theme.$text-main, transparent, 75%);
     }
   }
 }
