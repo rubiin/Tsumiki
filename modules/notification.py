@@ -147,6 +147,7 @@ class NotificationWidget(EventBox):
             value=0,
             line_style="round",
             line_width=3,
+            start_angle=-90,
         )
 
         self.notification_box = Box(

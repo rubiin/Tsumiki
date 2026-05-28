@@ -29,9 +29,6 @@ class BatteryWidget(ButtonWidget):
         )
         self.container_box.add(self.battery_icon)
 
-        if self.hide_percent_when_full:
-            self.label_format = self.label_format.replace("{percent}", "")
-
         self.client = BatteryService()
 
         # Simple notification tracking
@@ -84,7 +81,16 @@ class BatteryWidget(ButtonWidget):
         formatted_time = format_seconds_to_hours_minutes(time_remaining)
         percent_color = self._get_color_for_percent(battery_percent)
 
-        label_text = self.label_format.format(
+        label_format = self.label_format
+
+        if battery_percent == self.full_battery_level:
+            label_format = (
+                label_format.replace("{percent}", "")
+                if self.hide_percent_when_full
+                else label_format
+            )
+
+        label_text = label_format.format(
             icon=glyph,
             time_remaining=formatted_time,
             percent=f"{battery_percent}%",

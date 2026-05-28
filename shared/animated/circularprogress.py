@@ -12,6 +12,7 @@ class AnimatedCircularProgressBar(CircularProgressBar):
         super().__init__(**kwargs)
         self.duration = duration
         self.curve = curve
+        self.animator = None
 
     def set_notify_value(self, p, *_):
         if p.value == self.value:
