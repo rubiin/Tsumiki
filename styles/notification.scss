@@ -17,13 +17,11 @@ $hover-transition: background 0.15s ease-in-out;
   border-width: variable.$modules-notification-border-width;
   transition: border 100ms ease-in-out;
 
-  @include common.module-shadow(
-    variable.$modules-notification-shadow-enabled,
+  @include common.module-shadow(variable.$modules-notification-shadow-enabled,
     variable.$modules-notification-shadow-offset,
     variable.$modules-notification-shadow-blur,
     variable.$modules-notification-shadow-spread,
-    variable.$modules-notification-shadow-opacity
-  );
+    variable.$modules-notification-shadow-opacity );
 
   .notification-header {
     padding: common.toEm(5);
@@ -96,6 +94,7 @@ $hover-transition: background 0.15s ease-in-out;
       border: 0;
       @extend %widget_hover;
       color: theme.$background-dark;
+
       .close-icon {
         @extend %clear_icon;
       }
@@ -145,11 +144,12 @@ $hover-transition: background 0.15s ease-in-out;
 #datemenu-notification-box {
   @extend %notification_widget;
 
-  background-color: theme.$background-dark;
+  background-color: theme.$background;
   border: 1px solid color.mix(theme.$surface-disabled, transparent, 40%);
   box-shadow:
-    0 4px 16px color.adjust(theme.$shadow-color, $alpha: -0.3),
-    0 1px 4px color.adjust(theme.$shadow-color, $alpha: -0.5);
+    0 0 0 1px rgba(0, 0, 0, 0.3),
+    0 1px 3px 1px rgba(0, 0, 0, 0.7),
+    0 2px 6px 2px rgba(0, 0, 0, 0.3);
 
   // circular fallback app icon
   #app-icon {
@@ -158,8 +158,6 @@ $hover-transition: background 0.15s ease-in-out;
     padding: 6px;
     min-width: 36px;
     min-height: 36px;
-    -gtk-icon-effect: none;
-    -gtk-icon-shadow: none;
   }
 
   // horizontal layout: icon on left, content on right
@@ -184,7 +182,7 @@ $hover-transition: background 0.15s ease-in-out;
 
     #date-menu-notification-body {
       font-size: 13px;
-      color: color.mix(theme.$text-main, transparent, 75%);
+      color: theme.$text-main;
     }
   }
 }
