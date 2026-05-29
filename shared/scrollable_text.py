@@ -126,10 +126,11 @@ class ScrollingLabel(Gtk.DrawingArea):
             # Convert speed (pixels per 16ms tick) to pixels per second
             pixels_per_second = self.speed * (1000 / 16)
 
-            # Dynamically calculate the duration needed to cover the distance at the given speed
+            # Dynamically calculate the duration needed to cover the distance
+            # at the given speed
             target_duration = scroll_distance / pixels_per_second
 
-            # Update the animator's duration if it has changed (e.g., due to resize or new text)
+            # Update the animator's duration if it has changed
             if abs(self.animator.duration - target_duration) > 0.01:
                 self.animator.duration = target_duration
 

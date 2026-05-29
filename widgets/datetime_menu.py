@@ -33,10 +33,9 @@ class DateMenuNotification(Box):
         notification: Notification,
         **kwargs,
     ):
-        widget_name = kwargs.pop("name", "datemenu-notification-box")
         super().__init__(
             size=(constants.NOTIFICATION_WIDTH, -1),
-            name=widget_name,
+            name="datemenu-notification-box",
             h_expand=True,
             spacing=12,
             orientation="h",
