@@ -496,8 +496,6 @@ class DateNotificationMenu(Box):
                     "notification-group-peek-layer",
                     f"notification-group-peek-layer-depth-{index + 1}",
                 ],
-                h_expand=True,
-                size=(-1, 10),
             )
             for index in range(peek_layer_count)
         )

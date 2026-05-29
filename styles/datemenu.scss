@@ -4,9 +4,11 @@
 @use "variable";
 
 #date_time {
-  @include common.bar-widget-style(variable.$bar-widgets-date_time-border-radius,
+  @include common.bar-widget-style(
+    variable.$bar-widgets-date_time-border-radius,
     variable.$bar-widgets-date_time-border-enabled,
-    variable.$bar-widgets-date_time-border-width );
+    variable.$bar-widgets-date_time-border-width
+  );
 
   #notification-indicator {
     font-weight: bold;
@@ -153,26 +155,26 @@
             }
 
             #notification-group-peek {
-              margin-top: 3px;
               margin-bottom: 0;
 
               .notification-group-peek-layer {
-                min-height: 10px;
-                border-radius: variable.$modules-notification-border-radius;
+                min-height: 5px;
+                border-radius: 0 0 variable.$modules-notification-border-radius
+                  variable.$modules-notification-border-radius;
                 background-color: theme.$background;
                 border: variable.$border;
                 border-width: variable.$modules-notification-border-width;
               }
 
               .notification-group-peek-layer-depth-1 {
-                margin-left: 6px;
-                margin-right: 6px;
+                margin-left: 10px;
+                margin-right: 10px;
                 opacity: 0.88;
               }
 
               .notification-group-peek-layer-depth-2 {
-                margin-left: 12px;
-                margin-right: 12px;
+                margin-left: 16px;
+                margin-right: 16px;
                 opacity: 0.7;
               }
             }

@@ -17,11 +17,13 @@ $hover-transition: background 0.15s ease-in-out;
   border-width: variable.$modules-notification-border-width;
   transition: border 100ms ease-in-out;
 
-  @include common.module-shadow(variable.$modules-notification-shadow-enabled,
+  @include common.module-shadow(
+    variable.$modules-notification-shadow-enabled,
     variable.$modules-notification-shadow-offset,
     variable.$modules-notification-shadow-blur,
     variable.$modules-notification-shadow-spread,
-    variable.$modules-notification-shadow-opacity );
+    variable.$modules-notification-shadow-opacity
+  );
 
   .notification-header {
     padding: common.toEm(5);
