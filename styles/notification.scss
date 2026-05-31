@@ -11,11 +11,14 @@ $hover-transition: background 0.15s ease-in-out;
   padding: variable.$modules-notification-padding_y variable.$modules-notification-padding_x;
   opacity: variable.$modules-notification-opacity * 0.01;
   color: theme.$text-main;
-  border-radius: variable.$modules-notification-border-radius;
   background-color: theme.$background-alt;
-  border: if(variable.$modules-notification-border-enabled, variable.$border, none);
-  border-width: variable.$modules-notification-border-width;
   transition: border 100ms ease-in-out;
+
+  @include common.widget_border(
+    variable.$modules-notification-border-radius,
+    variable.$modules-notification-border-enabled,
+    variable.$modules-notification-border-width
+  );
 
   @include common.module-shadow(
     variable.$modules-notification-shadow-enabled,

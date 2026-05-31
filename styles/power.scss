@@ -8,9 +8,11 @@
 }
 
 #power {
-  border-radius: variable.$bar-widgets-power-border-radius;
-  border: if(variable.$bar-widgets-power-border-enabled, variable.$border, none);
-  border-width: variable.$bar-widgets-power-border-width;
+  @include common.widget_border(
+    variable.$bar-widgets-power-border-radius,
+    variable.$bar-widgets-power-border-enabled,
+    variable.$bar-widgets-power-border-width
+  );
 
   @include common.nerd-icon(variable.$bar-widgets-power-icon_size, null);
 }

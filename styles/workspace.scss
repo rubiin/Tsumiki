@@ -18,9 +18,11 @@ $workspace-transition:
   #workspaces_widget {
     font-weight: 700;
 
-    border: if(variable.$bar-widgets-workspaces-border-enabled, variable.$border, none);
-    border-radius: variable.$bar-widgets-workspaces-border-radius;
-    border-width: variable.$bar-widgets-workspaces-border-width;
+    @include common.widget_border(
+      variable.$bar-widgets-workspaces-border-radius,
+      variable.$bar-widgets-workspaces-border-enabled,
+      variable.$bar-widgets-workspaces-border-width
+    );
 
     & > button {
       padding: variable.$bar-widgets-workspaces-pill-height

@@ -30,9 +30,11 @@
 
 /* system tray widget*/
 #system_tray {
-  border-radius: variable.$bar-widgets-system_tray-border-radius;
-  border: if(variable.$bar-widgets-system_tray-border-enabled, variable.$border, none);
-  border-width: variable.$bar-widgets-system_tray-border-width;
+  @include common.widget_border(
+    variable.$bar-widgets-system_tray-border-radius,
+    variable.$bar-widgets-system_tray-border-enabled,
+    variable.$bar-widgets-system_tray-border-width
+  );
 
   &-box {
     margin: 0 variable.$bar-widgets-system_tray-spacing;

@@ -107,9 +107,11 @@
 }
 
 #emoji_picker {
-  border-radius: variable.$bar-widgets-emoji_picker-border-radius;
-  border: if(variable.$bar-widgets-emoji_picker-border-enabled, variable.$border, none);
-  border-width: variable.$bar-widgets-emoji_picker-border-width;
+  @include common.widget_border(
+    variable.$bar-widgets-emoji_picker-border-radius,
+    variable.$bar-widgets-emoji_picker-border-enabled,
+    variable.$bar-widgets-emoji_picker-border-width
+  );
 
   @include common.nerd-icon(
     variable.$bar-widgets-emoji_picker-icon_size,

@@ -10,8 +10,12 @@
   padding: common.toEm(12) common.toEm(20);
   margin-bottom: 100px;
   opacity: variable.$modules-osd-opacity * 0.01;
-  border: if(variable.$modules-osd-border-enabled, variable.$border, none);
-  border-width: variable.$modules-osd-border-width;
+
+  @include common.widget-border(
+    variable.$modules-osd-border-radius,
+    variable.$modules-osd-border-enabled,
+    variable.$modules-osd-border-width
+  );
 
   @include common.module-shadow(
     variable.$modules-osd-shadow-enabled,

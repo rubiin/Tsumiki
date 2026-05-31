@@ -26,9 +26,11 @@ $toggler-radius: variable.$radius * 1.4;
 }
 
 #quick_settings {
-  border-radius: variable.$bar-widgets-quick_settings-border-radius;
-  border: if(variable.$bar-widgets-quick_settings-border-enabled, variable.$border, none);
-  border-width: variable.$bar-widgets-quick_settings-border-width;
+  @include common.widget_border(
+    variable.$bar-widgets-quick_settings-border-radius,
+    variable.$bar-widgets-quick_settings-border-enabled,
+    variable.$bar-widgets-quick_settings-border-width
+  );
 
   @include common.nerd-icon(
     variable.$bar-widgets-quick_settings-icon_size,

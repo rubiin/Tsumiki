@@ -31,8 +31,11 @@ button.launcher-button {
 }
 
 #launcher {
-  border: if(variable.$modules-app_launcher-border-enabled, variable.$border, none);
-  border-width: variable.$modules-app_launcher-border-width;
+  @include common.widget_border(
+    variable.$modules-app_launcher-border-radius,
+    variable.$modules-app_launcher-border-enabled,
+    variable.$modules-app_launcher-border-width
+  );
 
   @include common.module-shadow(
     variable.$modules-app_launcher-shadow-enabled,

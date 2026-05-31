@@ -4,7 +4,7 @@
 @use "variable";
 
 #date_time {
-  @include common.bar-widget-style(
+  @include common.widget-border(
     variable.$bar-widgets-date_time-border-radius,
     variable.$bar-widgets-date_time-border-enabled,
     variable.$bar-widgets-date_time-border-width

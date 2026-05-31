@@ -5,12 +5,15 @@
 /** taskbar widget **/
 
 #taskbar {
-  border-radius: variable.$bar-widgets-taskbar-border-radius;
-  border: if(variable.$bar-widgets-taskbar-border-enabled, variable.$border, none);
-  border-width: variable.$bar-widgets-taskbar-border-width;
   font-style: normal;
   color: theme.$text-main;
   background-color: theme.$bar-background;
+
+  @include common.widget-border(
+    variable.$bar-widgets-taskbar-border-radius,
+    variable.$bar-widgets-taskbar-border-enabled,
+    variable.$bar-widgets-taskbar-border-width
+  );
 
   &-box {
     margin: 0 variable.$bar-widgets-taskbar-spacing;
