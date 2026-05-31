@@ -172,7 +172,10 @@ class StatDisplayMixin:
 
         self.level_label = Label(
             label="0%",
-            style_classes=["panel-text", "stat-graph"],
+            style_classes=[
+                "panel-text",
+                "stat-graph",
+            ],
         )
         container.children = self.level_label
 
@@ -186,10 +189,10 @@ class StatDisplayMixin:
             name="stat-circle",
             line_style="round",
             line_width=2,
-            size=28,
             start_angle=150,
             end_angle=390,
             child=self.icon,
+            size=(28, 24),
         )
 
         container.children = self.progress_bar

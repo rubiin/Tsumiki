@@ -484,7 +484,8 @@ scrolledwindow {
   border: 1px solid theme.$accent-purple;
 }
 
+
 .stat-graph {
   margin-left: 0px;
-  min-width: 40px;
+  min-width: 40px; // TODO: make it dynamic based on the number of bar
 }

@@ -31,7 +31,7 @@
     - **`hide_when_missing`**: `bool` (default: true)
     - **`icons`**: `list[str]` (default: ["", "", "", "", ""])
     - **`tooltip`**: `bool` (default: true)
-    - **`label_format`**: `str` (default: "{icon} {percent}%")
+    - **`label_format`**: `str` (default: "{icon} {percent}")
     - **`notifications`**: `object`
       - **`low_threshold`**: `int` (default: 10)
       - **`full_battery`**: `bool` (default: false)
