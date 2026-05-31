@@ -168,7 +168,7 @@ reveal_duration = 500
 [widgets.date_time.notification]
 enabled = true
 count = true
-hide_count_on_zero = true
+hide_count_on_zero = false
 
 [widgets.divider]
 size = 2
