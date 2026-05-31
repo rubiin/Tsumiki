@@ -131,10 +131,6 @@
   border-color: theme.$surface-disabled;
 }
 
-.overlay-icon {
-  margin: 0 functions.toEm(6) 0 0;
-}
-
 tooltip {
   @extend %unset;
   opacity: variable.$bar-menus-tooltip-opacity * 0.01;

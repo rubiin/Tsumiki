@@ -180,7 +180,7 @@ class StatDisplayMixin:
         """Setup circular progress bar display mode."""
         self.icon = nerd_font_icon(
             icon=self.config.get("icon", self._stat_icon),
-            props={"style_classes": ["panel-font-icon", "overlay-icon"]},
+            props={"style_classes": ["panel-font-icon"]},
         )
         self.progress_bar = AnimatedCircularProgressBar(
             name="stat-circle",
