@@ -171,7 +171,7 @@ class StatDisplayMixin:
         self.graph_values = deque(maxlen=self._graph_maxlen)
         self.level_label = Label(
             label="0%",
-            style_classes=["panel-text"],
+            style_classes=["panel-text", "stat-label"],
         )
         container.children = self.level_label
 
