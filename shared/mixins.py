@@ -169,9 +169,10 @@ class StatDisplayMixin:
         """Setup graph display mode with bar characters."""
         self._graph_maxlen = self.config.get("graph_length", 4)
         self.graph_values = deque(maxlen=self._graph_maxlen)
+
         self.level_label = Label(
             label="0%",
-            style_classes=["panel-text", "stat-label"],
+            style_classes=["panel-text", "stat-graph"],
         )
         container.children = self.level_label
 
