@@ -84,6 +84,7 @@ class NotificationPopup(Window):
         new_box = NotificationRevealer(self.config, notification)
         self.notifications.add(new_box)
         new_box.set_reveal_child(True)
+    
         logger.info(
             f"{Colors.INFO}[Notification] New notification from "
             f"{Colors.OKGREEN}{notification.app_name}"
