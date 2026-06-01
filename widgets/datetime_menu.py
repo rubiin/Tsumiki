@@ -145,15 +145,17 @@ class DateMenuNotification(Box):
         if ts is None:
             return ""
         try:
-            diff = datetime.now().timestamp() - float(ts)
+            ts_value = float(ts)
+            if ts_value > 1e12:
+                ts_value /= 1000.0
+            diff = datetime.now().timestamp() - ts_value
             if diff < 60:
                 return "Now"
-            elif diff < 3600:
+            if diff < 3600:
                 return f"{int(diff / 60)}m ago"
-            elif diff < 86400:
+            if diff < 86400:
                 return f"{int(diff / 3600)}h ago"
-            else:
-                return f"{int(diff / 86400)}d ago"
+            return f"{int(diff / 86400)}d ago"
         except Exception:
             return ""
 
