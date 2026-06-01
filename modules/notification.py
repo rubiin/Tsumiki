@@ -2,6 +2,7 @@ from fabric.notifications import (
     Notification,
     NotificationAction,
     NotificationCloseReason,
+    Notifications,
 )
 from fabric.utils import (
     Gdk,
@@ -74,8 +75,8 @@ class NotificationPopup(Window):
             **kwargs,
         )
 
-    def on_new_notification(self, fabric_notification, id):
-        notification: Notification = fabric_notification.get_notification_from_id(id)
+    def on_new_notification(self, fabric_notification: Notifications, id):
+        notification = fabric_notification.get_notification_from_id(id)
 
         # Check if the notification is in the "do not disturb" mode, hacky way
         if self._server.dont_disturb or notification.app_name in self.ignored_apps:
@@ -450,11 +451,11 @@ class NotificationWidget(EventBox):
         if isinstance(self.config.get("timeout"), dict):
             urgency = self._notification.urgency
             if urgency == 0:
-                return self.config["timeout"].get("low", 3000)
+                return self.config.get("timeout", {}).get("low", 3000)
             elif urgency == 1:
-                return self.config["timeout"].get("normal", 8000)
+                return self.config.get("timeout", {}).get("normal", 8000)
             elif urgency == 2:
-                return self.config["timeout"].get("critical", 15000)
+                return self.config.get("timeout", {}).get("critical", 15000)
 
     def pause_timeout(self):
         self.stop_timeout()
@@ -491,6 +492,7 @@ class NotificationRevealer(Revealer):
         self._is_closing = False
 
         super().__init__(
+            name="notification-revealer",
             child=Box(
                 style="margin: 12px;",
                 children=[self.notification_box],
@@ -513,8 +515,7 @@ class NotificationRevealer(Revealer):
 
     def on_resolved(
         self,
-        notification: Notification,
-        reason: NotificationCloseReason,
+        *_,
     ):
         if self._is_closing:
             return
