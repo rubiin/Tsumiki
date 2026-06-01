@@ -452,16 +452,19 @@ class WeatherWidget(ButtonWidget, BaseWeatherWidget):
             hasattr(self, "current_weather")
             and (datetime.now() - self.update_time).total_seconds() > 300
         ):
+            weather_icon = WEATHER_ICONS[self.current_weather["weatherCode"]]
             text_icon = (
-                WEATHER_ICONS[self.current_weather["weatherCode"]]["icon"]
+                weather_icon["icon"]
                 if check_if_day(
                     sunrise_time=self.sunrise_time,
                     sunset_time=self.sunset_time,
                 )
-                else WEATHER_ICONS[self.current_weather["weatherCode"]]["icon-night"]
+                else weather_icon["icon-night"]
             )
 
-            self.weather_icon.set_label(text_icon)
+            self.weather_icon.set_markup(
+                f'<span foreground="{weather_icon["color"]}">{text_icon}</span>'
+            )
 
         if (datetime.now() - self.update_time).total_seconds() < self.config.get(
             "interval", 3600
