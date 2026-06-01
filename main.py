@@ -10,7 +10,7 @@ from fabric.utils import (
 )
 
 import utils.functions as helpers
-from modules.bar import StatusBar
+from modules.bar import Bar
 from utils.colors import Colors
 from utils.config import theme_config, widget_config
 from utils.constants import APP_DATA_DIRECTORY, APPLICATION_NAME
@@ -65,7 +65,7 @@ def main():
     app = Application(APPLICATION_NAME)
 
     # Create status bars
-    StatusBar.create_bars(app, widget_config)
+    Bar.create_bars(app, widget_config)
 
     if module_options.get("notification", {}).get("enabled", False):
         from modules.notification import NotificationPopup

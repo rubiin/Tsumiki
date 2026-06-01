@@ -123,7 +123,7 @@ LAZY_WIDGETS_LIST = {
 }
 
 
-class StatusBar(Window):
+class Bar(Window):
     """A widget to display the status bar panel."""
 
     def __init__(self, config: BarConfig, **kwargs):
@@ -286,16 +286,14 @@ class StatusBar(Window):
     def create_bars(app: Application, config: BarConfig) -> list:
         multi_monitor = config.get("general", {}).get("multi_monitor", False)
         bars = (
-            StatusBar._create_multi_monitor_bars(config)
-            if multi_monitor
-            else [StatusBar(config)]
+            Bar._create_multi_monitor_bars(config) if multi_monitor else [Bar(config)]
         )
 
         for bar in bars:
             app.add_window(bar)
 
         if multi_monitor:
-            StatusBar._setup_hotplug(app, config, bars)
+            Bar._setup_hotplug(app, config, bars)
 
         return bars
 
@@ -307,15 +305,15 @@ class StatusBar(Window):
         monitor_names = monitor_util.get_monitor_names()
 
         if not monitor_names:
-            return [StatusBar(config)]
+            return [Bar(config)]
 
         bars = []
         for monitor_name in monitor_names:
             monitor_id = monitor_util.get_gdk_monitor_id_from_name(monitor_name)
             if monitor_id is not None:
-                bars.append(StatusBar(config, monitor=monitor_id))
+                bars.append(Bar(config, monitor=monitor_id))
 
-        return bars if bars else [StatusBar(config)]
+        return bars if bars else [Bar(config)]
 
     @staticmethod
     def _setup_hotplug(app: Application, config: BarConfig, bars: list):
@@ -323,7 +321,7 @@ class StatusBar(Window):
 
         watcher = MonitorWatcher()
 
-        watcher.add_callback(lambda: StatusBar._recreate_bars(app, config, bars))
+        watcher.add_callback(lambda: Bar._recreate_bars(app, config, bars))
         watcher.start_watching()
 
     @staticmethod
@@ -338,7 +336,7 @@ class StatusBar(Window):
 
         # Create new
         bars.clear()
-        new_bars = StatusBar._create_multi_monitor_bars(config)
+        new_bars = Bar._create_multi_monitor_bars(config)
         bars.extend(new_bars)
 
         for bar in bars:
