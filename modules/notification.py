@@ -1,7 +1,6 @@
 from fabric.notifications import (
     Notification,
     NotificationAction,
-    NotificationCloseReason,
     Notifications,
 )
 from fabric.utils import (
