@@ -1,7 +1,6 @@
 from functools import partial
 
 import gi
-from fabric.utils import logger
 from gi.repository import Gdk, GLib, Gtk, PangoCairo
 
 from shared.animator import Animator, cubic_bezier
@@ -89,22 +88,14 @@ class ScrollingLabel(Gtk.DrawingArea):
         self.animator.play()
         return GLib.SOURCE_REMOVE
 
-    def on_enter_notify(self, widget, event):
-        logger.debug(
-            "ScrollingLabel hover enter: text=%r, scroll_on_hover=%s",
-            self.text,
-            self.scroll_on_hover,
-        )
+    def on_enter_notify(self, *_):
+
         self._hovered = True
         self.queue_draw()
         return False
 
-    def on_leave_notify(self, widget, event):
-        logger.debug(
-            "ScrollingLabel hover leave: text=%r, scroll_on_hover=%s",
-            self.text,
-            self.scroll_on_hover,
-        )
+    def on_leave_notify(self, *_):
+
         self._hovered = False
         if self.animator.playing:
             self.animator.pause()

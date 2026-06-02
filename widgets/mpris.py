@@ -27,6 +27,9 @@ class MprisWidget(ButtonWidget, PopoverMixin):
         self.cover = Box(style_classes=["cover"])
         self.container_box.children = [self.cover, self.label]
 
+        self.connect("enter-notify-event", self.on_hover_enter)
+        self.connect("leave-notify-event", self.on_hover_leave)
+
         self.config = {
             "enabled": True,
             "ignore": ["vlc"],
@@ -65,6 +68,14 @@ class MprisWidget(ButtonWidget, PopoverMixin):
         self.player.connect("notify::metadata", lambda *_: self.get_current())
         self.player.connect("notify::title", lambda *_: self.get_current())
         self.player.connect("notify::arturl", lambda *_: self.get_current())
+
+    def on_hover_enter(self, widget, event):
+        self.label.on_enter_notify()
+        return False
+
+    def on_hover_leave(self, widget, event):
+        self.label.on_leave_notify()
+        return False
 
     def get_current(self):
         if self.player is None:

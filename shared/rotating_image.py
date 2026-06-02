@@ -7,6 +7,7 @@ from .animator import Animator
 
 
 class RotatingIcon(Svg):
+    """A widget that displays an SVG icon and rotates it when active."""
     def __init__(
         self, icon_name: str, icon_size: int = 16, duration: float = 1.0, **kwargs
     ):
