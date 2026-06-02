@@ -23,18 +23,6 @@ class MprisWidget(ButtonWidget, PopoverMixin):
         self.cover = Box(style_classes=["cover"])
         self.container_box.children = [self.cover, self.label]
 
-        # Services
-        self.mpris_manager = MprisPlayerManager()
-
-        for player in self.mpris_manager.players:
-            logger.info(
-                f"{Colors.INFO}[PLAYER MANAGER] player found: "
-                f"{player.get_property('player-name')}",
-            )
-            self.player = MprisPlayer(player)
-            self.get_current()
-            break
-
         self.config = {
             "enabled": True,
             "ignore": ["vlc"],
@@ -45,6 +33,19 @@ class MprisWidget(ButtonWidget, PopoverMixin):
             "show_time_tooltip": True,
         }
 
+        # Services
+        self.mpris_manager = MprisPlayerManager()
+
+        for player in self.mpris_manager.players:
+            logger.info(
+                f"{Colors.INFO}[PLAYER MANAGER] player found: "
+                f"{player.get_property('player-name')}",
+            )
+            self.player = MprisPlayer(player)
+            self._bind_player_updates()
+            self.get_current()
+            break
+
         self.setup_popover(
             lambda: Box(
                 style_classes=["mpris-box"],
@@ -52,24 +53,37 @@ class MprisWidget(ButtonWidget, PopoverMixin):
             )
         )
 
+    def _bind_player_updates(self):
+        if self.player is None:
+            return
+
+        self.player.connect("changed", lambda *_: self.get_current())
+        self.player.connect("notify::metadata", lambda *_: self.get_current())
+        self.player.connect("notify::title", lambda *_: self.get_current())
+        self.player.connect("notify::arturl", lambda *_: self.get_current())
+
     def get_current(self):
-        bar_label = NEWLINE_RE.sub(" ", self.player.title)
+        if self.player is None:
+            self.label.set_label("Nothing playing")
+            return
+
+        title = self.player.title or ""
+        bar_label = NEWLINE_RE.sub(" ", title).strip() or "Nothing playing"
 
         truncated_info = (
             bar_label
             if len(bar_label) < self.config.get("truncation_size", 30)
-            else bar_label[:30]
+            else bar_label[: self.config.get("truncation_size", 30)]
         )
 
         self.label.set_label(truncated_info)
 
-        art_url = self.player.metadata["mpris:artUrl"]
-
-        if art_url == "" or art_url is None:
+        art_url = getattr(self.player, "arturl", None)
+        if not art_url:
             art_url = "https://ladydanville.wordpress.com/wp-content/uploads/2012/03/blankart.png?w=297&h=278"
 
         self.cover.set_style(
-            "background-image: url('" + art_url + "');background-size: cover;"
+            "background-image: url('" + art_url + "'); background-size: cover;"
         )
 
         if self.config.get("tooltip", False) and self.tooltips_enabled:

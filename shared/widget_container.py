@@ -105,7 +105,7 @@ class ButtonWidget(Button, BaseWidget):
         self.config: dict = widget_config.get("widgets", {}).get(widget_name, {})
         self.tooltips_enabled = widget_config.get("general", {}).get("tooltips", True)
 
-        self.container_box = Box(style_classes=["box"], v_align="center")
+        self.container_box = Box(style_classes=["box"])
         self.add(self.container_box)
 
         if self.config.get("hover_reveal", True):

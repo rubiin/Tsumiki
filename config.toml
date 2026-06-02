@@ -402,7 +402,7 @@ title = "Keybinds"
 
 [layout]
 left_section = ["workspaces", "window_title"]
-middle_section = ["date_time", "weather", "cpu"]
+middle_section = ["date_time", "weather", "mpris","cpu"]
 right_section = ["@collapsible:0", "@group:0", "system_tray", "power"]
 
 [[widget_groups]]
