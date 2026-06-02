@@ -1,10 +1,10 @@
 from fabric.utils import logger
 from fabric.widgets.box import Box
-from fabric.widgets.label import Label
 
 from services.mpris import MprisPlayer, MprisPlayerManager
 from shared.media import PlayerBoxStack
 from shared.mixins import PopoverMixin
+from shared.scrollable_text import ScrollingLabel
 from shared.widget_container import ButtonWidget
 from utils.colors import Colors
 from utils.constants import NEWLINE_RE
@@ -18,7 +18,7 @@ class MprisWidget(ButtonWidget, PopoverMixin):
 
         self.player = None
 
-        self.label = Label(label="Nothing playing", style_classes=["panel-text"])
+        self.label = ScrollingLabel(text="Nothing playing", style_classes=["panel-text"])
 
         self.cover = Box(style_classes=["cover"])
         self.container_box.children = [self.cover, self.label]
@@ -64,7 +64,7 @@ class MprisWidget(ButtonWidget, PopoverMixin):
 
     def get_current(self):
         if self.player is None:
-            self.label.set_label("Nothing playing")
+            self.label.set_text("Nothing playing")
             return
 
         title = self.player.title or ""
@@ -76,7 +76,7 @@ class MprisWidget(ButtonWidget, PopoverMixin):
             else bar_label[: self.config.get("truncation_size", 30)]
         )
 
-        self.label.set_label(truncated_info)
+        self.label.set_text(truncated_info)
 
         art_url = getattr(self.player, "arturl", None)
         if not art_url:

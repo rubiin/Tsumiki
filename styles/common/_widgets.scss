@@ -324,7 +324,7 @@
     background-position: center;
     margin: functions.toEm(3) functions.toEm(10) functions.toEm(3) 0;
     background-size: cover;
-    background-image: url('https: //raw.githubusercontent.com/rubiin/tsumiki/refs/heads/master/assets/images/disk.png');
+    background-image: url("https: //raw.githubusercontent.com/rubiin/tsumiki/refs/heads/master/assets/images/disk.png");
   }
 }
 
@@ -491,4 +491,9 @@
     variable.$bar-widgets-privacy-indicator-icon_size,
     variable.$bar-widgets-privacy-indicator-spacing
   );
+}
+
+
+#song-title{
+  color: red;
 }

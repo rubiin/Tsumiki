@@ -21,16 +21,27 @@ class ScrollingLabel(Gtk.DrawingArea):
         speed=0.8,
         pause_ms=2000,
         max_width=200,
+        name="scrolling-label",
+        style_classes=None,
         **kwargs,
     ):
         super().__init__(**kwargs)
-        self.set_name("song-title")
+        self.set_name(name)
         self.text = text
         self.speed = speed
         self.max_width_limit = max_width
         self.pause_ms = pause_ms
 
+        if style_classes:
+            style_context = self.get_style_context()
+            if isinstance(style_classes, str):
+                style_context.add_class(style_classes)
+            else:
+                for style_class in style_classes:
+                    style_context.add_class(style_class)
+
         self.set_halign(Gtk.Align.START)
+        self.show()
 
         self._pause_source_id = None
 
