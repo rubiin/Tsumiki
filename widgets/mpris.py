@@ -18,7 +18,11 @@ class MprisWidget(ButtonWidget, PopoverMixin):
 
         self.player = None
 
-        self.label = ScrollingLabel(text="Nothing playing", style_classes=["panel-text"])
+        self.label = ScrollingLabel(
+            text="Nothing playing",
+            style_classes=["panel-text"],
+            scroll_on_hover=True,
+        )
 
         self.cover = Box(style_classes=["cover"])
         self.container_box.children = [self.cover, self.label]

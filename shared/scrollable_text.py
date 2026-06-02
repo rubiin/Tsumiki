@@ -1,7 +1,8 @@
 from functools import partial
 
 import gi
-from gi.repository import GLib, Gtk, PangoCairo
+from fabric.utils import logger
+from gi.repository import Gdk, GLib, Gtk, PangoCairo
 
 from shared.animator import Animator, cubic_bezier
 
@@ -23,6 +24,7 @@ class ScrollingLabel(Gtk.DrawingArea):
         max_width=200,
         name="scrolling-label",
         style_classes=None,
+        scroll_on_hover=False,
         **kwargs,
     ):
         super().__init__(**kwargs)
@@ -31,6 +33,15 @@ class ScrollingLabel(Gtk.DrawingArea):
         self.speed = speed
         self.max_width_limit = max_width
         self.pause_ms = pause_ms
+        self.scroll_on_hover = scroll_on_hover
+        self._hovered = False
+
+        if self.scroll_on_hover:
+            self.add_events(
+                Gdk.EventMask.ENTER_NOTIFY_MASK | Gdk.EventMask.LEAVE_NOTIFY_MASK
+            )
+            self.connect("enter-notify-event", self.on_enter_notify)
+            self.connect("leave-notify-event", self.on_leave_notify)
 
         if style_classes:
             style_context = self.get_style_context()
@@ -77,6 +88,34 @@ class ScrollingLabel(Gtk.DrawingArea):
         self._pause_source_id = None
         self.animator.play()
         return GLib.SOURCE_REMOVE
+
+    def on_enter_notify(self, widget, event):
+        logger.debug(
+            "ScrollingLabel hover enter: text=%r, scroll_on_hover=%s",
+            self.text,
+            self.scroll_on_hover,
+        )
+        self._hovered = True
+        self.queue_draw()
+        return False
+
+    def on_leave_notify(self, widget, event):
+        logger.debug(
+            "ScrollingLabel hover leave: text=%r, scroll_on_hover=%s",
+            self.text,
+            self.scroll_on_hover,
+        )
+        self._hovered = False
+        if self.animator.playing:
+            self.animator.pause()
+        if self._pause_source_id:
+            GLib.source_remove(self._pause_source_id)
+            self._pause_source_id = None
+        self.animator.value = 0.0
+        self.animator.min_value = 0.0
+        self.animator.max_value = 1.0
+        self.queue_draw()
+        return False
 
     def get_text(self):
         return self.text
@@ -145,10 +184,20 @@ class ScrollingLabel(Gtk.DrawingArea):
             if abs(self.animator.duration - target_duration) > 0.01:
                 self.animator.duration = target_duration
 
-            if not self.animator.playing and self._pause_source_id is None:
-                self.animator.play()
-
-            x_offset = max_scroll * self.animator.value
+            if self.scroll_on_hover and not self._hovered:
+                if self.animator.playing:
+                    self.animator.pause()
+                if self._pause_source_id:
+                    GLib.source_remove(self._pause_source_id)
+                    self._pause_source_id = None
+                self.animator.value = 0.0
+                self.animator.min_value = 0.0
+                self.animator.max_value = 1.0
+                x_offset = 0
+            else:
+                if not self.animator.playing and self._pause_source_id is None:
+                    self.animator.play()
+                x_offset = max_scroll * self.animator.value
         else:
             self.animator.pause()
             if self._pause_source_id:
