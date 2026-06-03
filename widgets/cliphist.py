@@ -8,6 +8,7 @@ from fabric.utils import (
     Gio,
     GLib,
     Gtk,
+    bulk_connect,
     idle_add,
     logger,
     os,
@@ -81,11 +82,13 @@ class ClipHistoryMenu(Box):
         self.search_entry.set_icon_from_icon_name(
             Gtk.EntryIconPosition.SECONDARY, "edit-clear"
         )
-
-        self.search_entry.connect("notify::text", self.on_search_text_changed)
-
-        # Connect handler for icon clicks
-        self.search_entry.connect("icon-press", self.on_icon_press)
+        bulk_connect(
+            self.search_entry,
+            {
+                "notify::text": self.on_search_text_changed,
+                "icon-press": self.on_icon_press,
+            },
+        )
 
         self.search_entry.props.xalign = 0.1
 

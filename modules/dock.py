@@ -758,8 +758,13 @@ class AppBar(Box):
                 return True
             return False
 
-        client_button.connect("button-press-event", on_button_press)
-        client_button.connect("button-release-event", on_button_release)
+        bulk_connect(
+            client_button,
+            {
+                "button-press-event": on_button_press,
+                "button-release-event": on_button_release,
+            },
+        )
 
     def _wire_group_dnd(self, group: dict):
         box = group["box"]

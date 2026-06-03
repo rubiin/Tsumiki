@@ -1,4 +1,4 @@
-from fabric.utils import logger
+from fabric.utils import bulk_connect, logger
 from fabric.widgets.box import Box
 
 from services.mpris import MprisPlayer, MprisPlayerManager
@@ -25,10 +25,16 @@ class MprisWidget(ButtonWidget, PopoverMixin):
         )
 
         self.cover = Box(style_classes=["cover"])
+        self._set_default_values()
         self.container_box.children = [self.cover, self.label]
 
-        self.connect("enter-notify-event", self.on_hover_enter)
-        self.connect("leave-notify-event", self.on_hover_leave)
+        bulk_connect(
+            self,
+            {
+                "enter-notify-event": self.on_hover_enter,
+                "leave-notify-event": self.on_hover_leave,
+            },
+        )
 
         self.config = {
             "enabled": True,
@@ -64,10 +70,15 @@ class MprisWidget(ButtonWidget, PopoverMixin):
         if self.player is None:
             return
 
-        self.player.connect("changed", lambda *_: self.get_current())
-        self.player.connect("notify::metadata", lambda *_: self.get_current())
-        self.player.connect("notify::title", lambda *_: self.get_current())
-        self.player.connect("notify::arturl", lambda *_: self.get_current())
+        bulk_connect(
+            self.player,
+            {
+                "changed": lambda *_: self.get_current(),
+                "notify::metadata": lambda *_: self.get_current(),
+                "notify::title": lambda *_: self.get_current(),
+                "notify::arturl": lambda *_: self.get_current(),
+            },
+        )
 
     def on_hover_enter(self, widget, event):
         self.label.on_enter_notify()
@@ -79,7 +90,7 @@ class MprisWidget(ButtonWidget, PopoverMixin):
 
     def get_current(self):
         if self.player is None:
-            self.label.set_text("Nothing playing")
+            self._set_default_values()
             return
 
         title = self.player.title or ""
@@ -103,3 +114,9 @@ class MprisWidget(ButtonWidget, PopoverMixin):
 
         if self.config.get("tooltip", False) and self.tooltips_enabled:
             self.set_tooltip_text(bar_label)
+
+    def _set_default_values(self):
+        self.cover.set_style(
+            "background-image: url('https://raw.githubusercontent.com/rubiin/tsumiki/refs/heads/master/assets/images/disk.png')"
+        )
+        self.label.set_text("Nothing playing")

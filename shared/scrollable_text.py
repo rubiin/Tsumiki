@@ -1,6 +1,7 @@
 from functools import partial
 
 import gi
+from fabric.utils import bulk_connect
 from gi.repository import Gdk, GLib, Gtk, PangoCairo
 
 from shared.animator import Animator, cubic_bezier
@@ -39,8 +40,13 @@ class ScrollingLabel(Gtk.DrawingArea):
             self.add_events(
                 Gdk.EventMask.ENTER_NOTIFY_MASK | Gdk.EventMask.LEAVE_NOTIFY_MASK
             )
-            self.connect("enter-notify-event", self.on_enter_notify)
-            self.connect("leave-notify-event", self.on_leave_notify)
+            bulk_connect(
+                self,
+                {
+                    "enter-notify-event": self.on_enter_notify,
+                    "leave-notify-event": self.on_leave_notify,
+                },
+            )
 
         if style_classes:
             style_context = self.get_style_context()
@@ -65,8 +71,13 @@ class ScrollingLabel(Gtk.DrawingArea):
             tick_widget=self,
         )
 
-        self.animator.connect("notify::value", self.on_animator_step)
-        self.animator.connect("finished", self.on_animator_finished)
+        bulk_connect(
+            self.animator,
+            {
+                "notify::value": self.on_animator_step,
+                "finished": self.on_animator_finished,
+            },
+        )
 
     def on_animator_step(self, animator, *args):
         self.queue_draw()
