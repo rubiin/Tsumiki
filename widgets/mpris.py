@@ -67,9 +67,6 @@ class MprisWidget(ButtonWidget, PopoverMixin):
         )
 
     def _bind_player_updates(self):
-        if self.player is None:
-            return
-
         bulk_connect(
             self.player,
             {

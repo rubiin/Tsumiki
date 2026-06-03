@@ -16,13 +16,13 @@
 #desktop-clock-box {
   margin: 0 15rem 15rem 15rem;
 
-  #clock > label {
+  #clock>label {
     font-size: 9rem;
     font-weight: 600;
     @extend %desktop-widget;
   }
 
-  #date > label {
+  #date>label {
     @extend %title_1;
     @extend %desktop-widget;
   }
@@ -38,142 +38,104 @@
 }
 
 #cpu {
-  @include mixins.widget-border(
-    variable.$bar-widgets-cpu-border-radius,
+  @include mixins.widget-border(variable.$bar-widgets-cpu-border-radius,
     variable.$bar-widgets-cpu-border-enabled,
-    variable.$bar-widgets-cpu-border-width
-  );
+    variable.$bar-widgets-cpu-border-width );
 
   @include mixins.nerd-icon(variable.$bar-widgets-cpu-icon_size, variable.$bar-widgets-cpu-spacing);
 }
 
 #window_count {
-  @include mixins.widget-border(
-    variable.$bar-widgets-window_count-border-radius,
+  @include mixins.widget-border(variable.$bar-widgets-window_count-border-radius,
     variable.$bar-widgets-window_count-border-enabled,
-    variable.$bar-widgets-window_count-border-width
-  );
+    variable.$bar-widgets-window_count-border-width );
 
   @include mixins.nerd-icon(variable.$bar-widgets-cpu-icon_size, variable.$bar-widgets-cpu-spacing);
 }
 
 #memory {
-  @include mixins.widget-border(
-    variable.$bar-widgets-memory-border-radius,
+  @include mixins.widget-border(variable.$bar-widgets-memory-border-radius,
     variable.$bar-widgets-memory-border-enabled,
-    variable.$bar-widgets-memory-border-width
-  );
+    variable.$bar-widgets-memory-border-width );
 
-  @include mixins.nerd-icon(
-    variable.$bar-widgets-memory-icon_size,
-    variable.$bar-widgets-memory-spacing
-  );
+  @include mixins.nerd-icon(variable.$bar-widgets-memory-icon_size,
+    variable.$bar-widgets-memory-spacing );
 }
 
 #network_usage {
-  @include mixins.widget-border(
-    variable.$bar-widgets-network_usage-border-radius,
+  @include mixins.widget-border(variable.$bar-widgets-network_usage-border-radius,
     variable.$bar-widgets-network_usage-border-enabled,
-    variable.$bar-widgets-network_usage-border-width
-  );
+    variable.$bar-widgets-network_usage-border-width );
 
   #upload_label {
     margin-right: variable.$bar-widgets-network_usage-spacing;
   }
 
-  @include mixins.nerd-icon(
-    variable.$bar-widgets-network_usage-icon_size,
-    variable.$bar-widgets-network_usage-spacing
-  );
+  @include mixins.nerd-icon(variable.$bar-widgets-network_usage-icon_size,
+    variable.$bar-widgets-network_usage-spacing );
 }
 
 #storage {
-  @include mixins.widget-border(
-    variable.$bar-widgets-storage-border-radius,
+  @include mixins.widget-border(variable.$bar-widgets-storage-border-radius,
     variable.$bar-widgets-storage-border-enabled,
-    variable.$bar-widgets-storage-border-width
-  );
+    variable.$bar-widgets-storage-border-width );
 
-  @include mixins.nerd-icon(
-    variable.$bar-widgets-storage-icon_size,
-    variable.$bar-widgets-storage-spacing
-  );
+  @include mixins.nerd-icon(variable.$bar-widgets-storage-icon_size,
+    variable.$bar-widgets-storage-spacing );
 }
 
 #battery {
-  @include mixins.widget-border(
-    variable.$bar-widgets-battery-border-radius,
+  @include mixins.widget-border(variable.$bar-widgets-battery-border-radius,
     variable.$bar-widgets-battery-border-enabled,
-    variable.$bar-widgets-battery-border-width
-  );
+    variable.$bar-widgets-battery-border-width );
 
-  @include mixins.nerd-icon(
-    variable.$bar-widgets-battery-icon_size,
-    variable.$bar-widgets-battery-spacing
-  );
+  @include mixins.nerd-icon(variable.$bar-widgets-battery-icon_size,
+    variable.$bar-widgets-battery-spacing );
 }
 
 #bluetooth {
-  @include mixins.widget-border(
-    variable.$bar-widgets-bluetooth-border-radius,
+  @include mixins.widget-border(variable.$bar-widgets-bluetooth-border-radius,
     variable.$bar-widgets-bluetooth-border-enabled,
-    variable.$bar-widgets-bluetooth-border-width
-  );
+    variable.$bar-widgets-bluetooth-border-width );
 
-  @include mixins.nerd-icon(
-    variable.$bar-widgets-bluetooth-icon_size,
-    variable.$bar-widgets-bluetooth-spacing
-  );
+  @include mixins.nerd-icon(variable.$bar-widgets-bluetooth-icon_size,
+    variable.$bar-widgets-bluetooth-spacing );
 }
 
 #brightness {
-  @include mixins.widget-border(
-    variable.$bar-widgets-brightness-border-radius,
+  @include mixins.widget-border(variable.$bar-widgets-brightness-border-radius,
     variable.$bar-widgets-brightness-border-enabled,
-    variable.$bar-widgets-brightness-border-width
-  );
+    variable.$bar-widgets-brightness-border-width );
 
-  @include mixins.nerd-icon(
-    variable.$bar-widgets-brightness-icon_size,
-    variable.$bar-widgets-brightness-spacing
-  );
+  @include mixins.nerd-icon(variable.$bar-widgets-brightness-icon_size,
+    variable.$bar-widgets-brightness-spacing );
 }
 
 #cava {
-  @include mixins.widget-border(
-    variable.$bar-widgets-cava-border-radius,
+  @include mixins.widget-border(variable.$bar-widgets-cava-border-radius,
     variable.$bar-widgets-cava-border-enabled,
-    variable.$bar-widgets-cava-border-width
-  );
+    variable.$bar-widgets-cava-border-width );
 }
 
 #click_counter {
-  @include mixins.widget-border(
-    variable.$bar-widgets-click_counter-border-radius,
+  @include mixins.widget-border(variable.$bar-widgets-click_counter-border-radius,
     variable.$bar-widgets-click_counter-border-enabled,
-    variable.$bar-widgets-click_counter-border-width
-  );
+    variable.$bar-widgets-click_counter-border-width );
 
-  @include mixins.nerd-icon(
-    variable.$bar-widgets-click_counter-icon_size,
-    variable.$bar-widgets-click_counter-spacing
-  );
+  @include mixins.nerd-icon(variable.$bar-widgets-click_counter-icon_size,
+    variable.$bar-widgets-click_counter-spacing );
 }
 
 #desktop_clock {
-  @include mixins.widget-border(
-    variable.$modules-desktop_clock-border-radius,
+  @include mixins.widget-border(variable.$modules-desktop_clock-border-radius,
     variable.$modules-desktop_clock-border-enabled,
-    variable.$modules-desktop_clock-border-width
-  );
+    variable.$modules-desktop_clock-border-width );
 }
 
 #activate_linux {
-  @include mixins.widget-border(
-    variable.$modules-activate_linux-border-radius,
+  @include mixins.widget-border(variable.$modules-activate_linux-border-radius,
     variable.$modules-activate_linux-border-enabled,
-    variable.$modules-activate_linux-border-width
-  );
+    variable.$modules-activate_linux-border-width );
 
   opacity: 0.6;
 
@@ -197,11 +159,9 @@
 }
 
 #desktop_quotes {
-  @include mixins.widget-border(
-    variable.$modules-desktop_quotes-border-radius,
+  @include mixins.widget-border(variable.$modules-desktop_quotes-border-radius,
     variable.$modules-desktop_quotes-border-enabled,
-    variable.$modules-desktop_quotes-border-width
-  );
+    variable.$modules-desktop_quotes-border-width );
 
   #desktop_quotes-box {
     margin: 0rem 4rem 4rem 0rem;
@@ -215,115 +175,84 @@
 }
 
 #hypridle {
-  @include mixins.widget-border(
-    variable.$bar-widgets-hypridle-border-radius,
+  @include mixins.widget-border(variable.$bar-widgets-hypridle-border-radius,
     variable.$bar-widgets-hypridle-border-enabled,
-    variable.$bar-widgets-hypridle-border-width
-  );
+    variable.$bar-widgets-hypridle-border-width );
 
-  @include mixins.nerd-icon(
-    variable.$bar-widgets-hypridle-icon_size,
-    variable.$bar-widgets-hypridle-spacing
-  );
+  @include mixins.nerd-icon(variable.$bar-widgets-hypridle-icon_size,
+    variable.$bar-widgets-hypridle-spacing );
 }
 
 #hyprpicker {
-  @include mixins.widget-border(
-    variable.$bar-widgets-hyprpicker-border-radius,
+  @include mixins.widget-border(variable.$bar-widgets-hyprpicker-border-radius,
     variable.$bar-widgets-hyprpicker-border-enabled,
-    variable.$bar-widgets-hyprpicker-border-width
-  );
+    variable.$bar-widgets-hyprpicker-border-width );
 
-  @include mixins.nerd-icon(
-    variable.$bar-widgets-hyprpicker-icon_size,
-    variable.$bar-widgets-hyprpicker-spacing
-  );
+  @include mixins.nerd-icon(variable.$bar-widgets-hyprpicker-icon_size,
+    variable.$bar-widgets-hyprpicker-spacing );
 }
 
 #hyprsunset {
-  @include mixins.widget-border(
-    variable.$bar-widgets-hyprsunset-border-radius,
+  @include mixins.widget-border(variable.$bar-widgets-hyprsunset-border-radius,
     variable.$bar-widgets-hyprsunset-border-enabled,
-    variable.$bar-widgets-hyprsunset-border-width
-  );
+    variable.$bar-widgets-hyprsunset-border-width );
 
-  @include mixins.nerd-icon(
-    variable.$bar-widgets-hyprsunset-icon_size,
-    variable.$bar-widgets-hyprsunset-spacing
-  );
+  @include mixins.nerd-icon(variable.$bar-widgets-hyprsunset-icon_size,
+    variable.$bar-widgets-hyprsunset-spacing );
 }
 
 #keyboard {
-  @include mixins.widget-border(
-    variable.$bar-widgets-keyboard-border-radius,
+  @include mixins.widget-border(variable.$bar-widgets-keyboard-border-radius,
     variable.$bar-widgets-keyboard-border-enabled,
-    variable.$bar-widgets-keyboard-border-width
-  );
+    variable.$bar-widgets-keyboard-border-width );
 
-  @include mixins.nerd-icon(
-    variable.$bar-widgets-keyboard-icon_size,
-    variable.$bar-widgets-keyboard-spacing
-  );
+  @include mixins.nerd-icon(variable.$bar-widgets-keyboard-icon_size,
+    variable.$bar-widgets-keyboard-spacing );
 }
 
 #language {
-  @include mixins.widget-border(
-    variable.$bar-widgets-language-border-radius,
+  @include mixins.widget-border(variable.$bar-widgets-language-border-radius,
     variable.$bar-widgets-language-border-enabled,
-    variable.$bar-widgets-language-border-width
-  );
+    variable.$bar-widgets-language-border-width );
 
-  @include mixins.nerd-icon(
-    variable.$bar-widgets-language-icon_size,
-    variable.$bar-widgets-language_spacing
-  );
+  @include mixins.nerd-icon(variable.$bar-widgets-language-icon_size,
+    variable.$bar-widgets-language_spacing );
 }
 
 #microphone {
-  @include mixins.widget-border(
-    variable.$bar-widgets-microphone-border-radius,
+  @include mixins.widget-border(variable.$bar-widgets-microphone-border-radius,
     variable.$bar-widgets-microphone-border-enabled,
-    variable.$bar-widgets-microphone-border-width
-  );
+    variable.$bar-widgets-microphone-border-width );
 
-  @include mixins.nerd-icon(
-    variable.$bar-widgets-microphone-icon_size,
-    variable.$bar-widgets-microphone-spacing
-  );
+  @include mixins.nerd-icon(variable.$bar-widgets-microphone-icon_size,
+    variable.$bar-widgets-microphone-spacing );
 }
 
 #world_clock {
-  @include mixins.widget-border(
-    variable.$bar-widgets-world_clock-border-radius,
+  @include mixins.widget-border(variable.$bar-widgets-world_clock-border-radius,
     variable.$bar-widgets-world_clock-border-enabled,
-    variable.$bar-widgets-world_clock-border-width
-  );
+    variable.$bar-widgets-world_clock-border-width );
 
-  @include mixins.nerd-icon(
-    variable.$bar-widgets-world_clock-icon_size,
-    variable.$bar-widgets-world_clock-spacing
-  );
+  @include mixins.nerd-icon(variable.$bar-widgets-world_clock-icon_size,
+    variable.$bar-widgets-world_clock-spacing );
 }
 
 #mpris {
-  @include mixins.widget-border(
-    variable.$bar-widgets-mpris-border-radius,
+  @include mixins.widget-border(variable.$bar-widgets-mpris-border-radius,
     variable.$bar-widgets-mpris-border-enabled,
-    variable.$bar-widgets-mpris-border-width
-  );
+    variable.$bar-widgets-mpris-border-width );
 
-  @include mixins.nerd-icon(
-    variable.$bar-widgets-mpris-icon_size,
-    variable.$bar-widgets-mpris-spacing
-  );
+  @include mixins.nerd-icon(variable.$bar-widgets-mpris-icon_size,
+    variable.$bar-widgets-mpris-spacing );
 
   .cover {
     min-height: 0.8em;
     min-width: 3em;
     border-radius: variable.$radius;
-    background-position: center;
     margin: functions.toEm(3) functions.toEm(10) functions.toEm(3) 0;
-    background-size: cover;
+    background-size: 25px;
+    background-repeat: no-repeat;
+    background-position: center;
   }
 }
 
@@ -334,11 +263,9 @@
 }
 
 #ocr {
-  @include mixins.widget-border(
-    variable.$bar-widgets-ocr-border-radius,
+  @include mixins.widget-border(variable.$bar-widgets-ocr-border-radius,
     variable.$bar-widgets-ocr-border-enabled,
-    variable.$bar-widgets-ocr-border-width
-  );
+    variable.$bar-widgets-ocr-border-width );
 
   @include mixins.nerd-icon(variable.$bar-widgets-ocr-icon_size, variable.$bar-widgets-ocr-spacing);
 
@@ -376,120 +303,84 @@
 }
 
 #screenshot {
-  @include mixins.widget-border(
-    variable.$bar-widgets-screenshot-border-radius,
+  @include mixins.widget-border(variable.$bar-widgets-screenshot-border-radius,
     variable.$bar-widgets-screenshot-border-enabled,
-    variable.$bar-widgets-screenshot-border-width
-  );
+    variable.$bar-widgets-screenshot-border-width );
 
-  @include mixins.nerd-icon(
-    variable.$bar-widgets-screenshot-icon_size,
-    variable.$bar-widgets-screenshot-spacing
-  );
+  @include mixins.nerd-icon(variable.$bar-widgets-screenshot-icon_size,
+    variable.$bar-widgets-screenshot-spacing );
 }
 
 #recorder {
-  @include mixins.widget-border(
-    variable.$bar-widgets-recorder-border-radius,
+  @include mixins.widget-border(variable.$bar-widgets-recorder-border-radius,
     variable.$bar-widgets-recorder-border-enabled,
-    variable.$bar-widgets-recorder-border-width
-  );
+    variable.$bar-widgets-recorder-border-width );
 
-  @include mixins.nerd-icon(
-    variable.$bar-widgets-recorder-icon_size,
-    variable.$bar-widgets-recorder-spacing
-  );
+  @include mixins.nerd-icon(variable.$bar-widgets-recorder-icon_size,
+    variable.$bar-widgets-recorder-spacing );
 }
 
 #stopwatch {
-  @include mixins.widget-border(
-    variable.$bar-widgets-stopwatch-border-radius,
+  @include mixins.widget-border(variable.$bar-widgets-stopwatch-border-radius,
     variable.$bar-widgets-stopwatch-border-enabled,
-    variable.$bar-widgets-stopwatch-border-width
-  );
+    variable.$bar-widgets-stopwatch-border-width );
 
-  @include mixins.nerd-icon(
-    variable.$bar-widgets-stopwatch-icon_size,
-    variable.$bar-widgets-stopwatch-spacing
-  );
+  @include mixins.nerd-icon(variable.$bar-widgets-stopwatch-icon_size,
+    variable.$bar-widgets-stopwatch-spacing );
 }
 
 #submap {
-  @include mixins.widget-border(
-    variable.$bar-widgets-submap-border-radius,
+  @include mixins.widget-border(variable.$bar-widgets-submap-border-radius,
     variable.$bar-widgets-submap-border-enabled,
-    variable.$bar-widgets-submap-border-width
-  );
+    variable.$bar-widgets-submap-border-width );
 
-  @include mixins.nerd-icon(
-    variable.$bar-widgets-submap-icon_size,
-    variable.$bar-widgets-submap-spacing
-  );
+  @include mixins.nerd-icon(variable.$bar-widgets-submap-icon_size,
+    variable.$bar-widgets-submap-spacing );
 }
 
 #theme_switcher {
-  @include mixins.widget-border(
-    variable.$bar-widgets-theme-border-radius,
+  @include mixins.widget-border(variable.$bar-widgets-theme-border-radius,
     variable.$bar-widgets-theme-border-enabled,
-    variable.$bar-widgets-theme-border-width
-  );
+    variable.$bar-widgets-theme-border-width );
 
-  @include mixins.nerd-icon(
-    variable.$bar-widgets-theme-icon_size,
-    variable.$bar-widgets-theme-spacing
-  );
+  @include mixins.nerd-icon(variable.$bar-widgets-theme-icon_size,
+    variable.$bar-widgets-theme-spacing );
 }
 
 #updates {
-  @include mixins.widget-border(
-    variable.$bar-widgets-updates-border-radius,
+  @include mixins.widget-border(variable.$bar-widgets-updates-border-radius,
     variable.$bar-widgets-updates-border-enabled,
-    variable.$bar-widgets-updates-border-width
-  );
+    variable.$bar-widgets-updates-border-width );
 
-  @include mixins.nerd-icon(
-    variable.$bar-widgets-updates-icon_size,
-    variable.$bar-widgets-updates-spacing
-  );
+  @include mixins.nerd-icon(variable.$bar-widgets-updates-icon_size,
+    variable.$bar-widgets-updates-spacing );
 }
 
 #volume {
-  @include mixins.widget-border(
-    variable.$bar-widgets-volume-border-radius,
+  @include mixins.widget-border(variable.$bar-widgets-volume-border-radius,
     variable.$bar-widgets-volume-border-enabled,
-    variable.$bar-widgets-volume-border-width
-  );
+    variable.$bar-widgets-volume-border-width );
 
-  @include mixins.nerd-icon(
-    variable.$bar-widgets-volume-icon_size,
-    variable.$bar-widgets-volume-spacing
-  );
+  @include mixins.nerd-icon(variable.$bar-widgets-volume-icon_size,
+    variable.$bar-widgets-volume-spacing );
 }
 
 #window_title {
-  @include mixins.widget-border(
-    variable.$bar-widgets-window_title-border-radius,
+  @include mixins.widget-border(variable.$bar-widgets-window_title-border-radius,
     variable.$bar-widgets-window_title-border-enabled,
-    variable.$bar-widgets-window_title-border-width
-  );
+    variable.$bar-widgets-window_title-border-width );
 
-  @include mixins.nerd-icon(
-    variable.$bar-widgets-window_title-icon_size,
-    variable.$bar-widgets-window_title-spacing
-  );
+  @include mixins.nerd-icon(variable.$bar-widgets-window_title-icon_size,
+    variable.$bar-widgets-window_title-spacing );
 }
 
 #privacy_indicator {
-  @include mixins.widget-border(
-    variable.$bar-widgets-privacy-indicator-border-radius,
+  @include mixins.widget-border(variable.$bar-widgets-privacy-indicator-border-radius,
     variable.$bar-widgets-privacy-indicator-border-enabled,
-    variable.$bar-widgets-privacy-indicator-border-width
-  );
+    variable.$bar-widgets-privacy-indicator-border-width );
 
-  @include mixins.nerd-icon(
-    variable.$bar-widgets-privacy-indicator-icon_size,
-    variable.$bar-widgets-privacy-indicator-spacing
-  );
+  @include mixins.nerd-icon(variable.$bar-widgets-privacy-indicator-icon_size,
+    variable.$bar-widgets-privacy-indicator-spacing );
 }
 
 #song-title {
