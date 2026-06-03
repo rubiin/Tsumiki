@@ -149,4 +149,5 @@ class PowerProfileToggle(QSChevronButton):
         active = power_pfl_service.active_profile
         self.action_icon.set_label(icon_name_to_icon(active))
         self.set_action_label(self.unslug(active))
-        self.popup.hide_popover()
+        if self.popup is not None:
+            self.popup.hide_popover()

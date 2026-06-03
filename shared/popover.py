@@ -178,6 +178,11 @@ class Popover(Widget):
         """Set the content for the popover."""
         self._content = content
 
+    @property
+    def content(self):
+        """Return the content widget for the popover."""
+        return self._content
+
     def set_pointing_to(self, widget):
         """Set the widget to point the popover at."""
         self._point_to = widget

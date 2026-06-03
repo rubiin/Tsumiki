@@ -17,6 +17,7 @@ from shared.buttons import HoverButton, QSChevronButton
 from shared.circle_image import CircularImage
 from shared.dialog import Dialog
 from shared.media import PlayerBoxStack
+from shared.mixins import PopoverMixin
 from shared.widget_container import ButtonWidget
 from utils.constants import ASSETS_DIR
 from utils.icons import get_text_icon, network_icon_to_text_icons
@@ -130,7 +131,7 @@ class QuickSettingsButtonBox(Box):
 
 
 class QuickSettingsMenu(Box):
-    """A menu to display the weather information."""
+    """A menu to display the quick settings information."""
 
     def __init__(self, config: dict, popup, **kwargs):
         super().__init__(
@@ -387,7 +388,7 @@ class QuickSettingsMenu(Box):
         ).toggle_popup()
 
 
-class QuickSettingsButtonWidget(ButtonWidget):
+class QuickSettingsButtonWidget(ButtonWidget, PopoverMixin):
     """A button to display the date and time."""
 
     def __init__(self, **kwargs):
@@ -450,23 +451,21 @@ class QuickSettingsButtonWidget(ButtonWidget):
             self.show_popover,
         )
 
+        self.setup_popover(
+            lambda: QuickSettingsMenu(config=self.config, popup=self._popup),
+            connect_clicked=False,
+            on_close_callback=lambda *_: self.remove_style_class("active"),
+        )
+
     def show_popover(self, *_):
-        """Show the popover."""
-        if self.popup is None:
-            from shared.popover import Popover
+        if self._popover_content_factory is None:
+            self.setup_popover(
+                lambda: QuickSettingsMenu(config=self.config, popup=self._popup),
+                connect_clicked=False,
+                on_close_callback=lambda *_: self.remove_style_class("active"),
+            )
 
-            self.popup = Popover(
-                point_to=self,
-            )
-            self.popup.set_content(
-                QuickSettingsMenu(config=self.config, popup=self.popup),
-            )
-            self.popup.connect(
-                "popover-closed", lambda *_: self.remove_style_class("active")
-            )
-        self.popup.open()
-
-        self.add_style_class("active")
+        super().show_popover()
 
     def _get_network_icon(self, *_):
         # Check if the network service is ready

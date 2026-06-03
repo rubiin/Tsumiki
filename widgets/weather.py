@@ -8,6 +8,7 @@ from fabric.widgets.revealer import Revealer
 from fabric.widgets.svg import Svg
 
 from services.weather import WeatherService
+from shared.mixins import PopoverMixin
 from shared.widget_container import ButtonWidget
 from utils.constants import ASSETS_DIR
 from utils.functions import check_if_day
@@ -324,7 +325,7 @@ class WeatherMenu(Box, BaseWeatherWidget):
         return f"{self.weather_icons_dir}/{WEATHER_ICONS[str(code)][image_name]}.svg"
 
 
-class WeatherWidget(ButtonWidget, BaseWeatherWidget):
+class WeatherWidget(ButtonWidget, BaseWeatherWidget, PopoverMixin):
     """A widget to display the current weather."""
 
     def __init__(
@@ -345,9 +346,13 @@ class WeatherWidget(ButtonWidget, BaseWeatherWidget):
         )
         self.container_box.add(self.weather_icon)
 
-        self.popup = None
-
         self.connect("button-press-event", self.on_button_press)
+
+        self.setup_popover(
+            lambda: WeatherMenu(config=self.config),
+            connect_clicked=False,
+            on_close_callback=lambda *_: self.remove_style_class("active"),
+        )
 
         self.update_time = datetime.now()
 
@@ -418,29 +423,12 @@ class WeatherWidget(ButtonWidget, BaseWeatherWidget):
 
             self.set_tooltip_text(tool_tip)
 
-        # Create popover only once
-
-        if self.popup is None:
-            from shared.popover import Popover
-
-            self.popup = Popover(
-                content=WeatherMenu(config=self.config),
-                point_to=self,
-            )
-            self.popup.connect(
-                "popover-closed", lambda *_: self.remove_style_class("active")
-            )
-
         return False
 
     @cooldown(1)
     def on_button_press(self, _, event):
         if event.button == 1:
-            if self.popup is None:
-                return
-            self.popup.open()
-            self.add_style_class("active")
-
+            self.show_popover()
         else:
             self._update_ui(forced=True)
 

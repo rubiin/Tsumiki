@@ -14,6 +14,7 @@ from fabric.widgets.grid import Grid
 from fabric.widgets.image import Image
 
 from shared.buttons import HoverButton
+from shared.mixins import PopoverMixin
 from shared.widget_container import ButtonWidget
 from utils.icons import get_text_icon
 from utils.widget_utils import nerd_font_icon
@@ -163,7 +164,7 @@ class SystemTrayMenu(Box, BaseSystemTray):
             self.parent_widget.update_visibility()
 
 
-class SystemTrayWidget(ButtonWidget, BaseSystemTray):
+class SystemTrayWidget(ButtonWidget, PopoverMixin, BaseSystemTray):
     """A widget to display the system tray items."""
 
     def __init__(self, **kwargs):
@@ -188,7 +189,11 @@ class SystemTrayWidget(ButtonWidget, BaseSystemTray):
         # Create popup menu for hidden items
         self.popup_menu = SystemTrayMenu(config=self.config, parent_widget=self)
 
-        self.popup = None
+        self.setup_popover(
+            lambda: self.popup_menu,
+            connect_clicked=False,
+            on_close_callback=self._on_popover_closed,
+        )
 
         self._watcher = SystemTrayService()
 
@@ -210,31 +215,22 @@ class SystemTrayWidget(ButtonWidget, BaseSystemTray):
         # Initial visibility check
         self.update_visibility()
 
+    def _on_popover_closed(self, *_):
+        self.remove_style_class("active")
+        self.chevron_icon.set_label(get_text_icon("chevron.down"))
+
     # show or hide the popup menu
     def on_click(self, *_):
-        if self.popup is None:
-            from shared.popover import Popover
-
-            self.popup = Popover(
-                content=self.popup_menu,
-                point_to=self,
-            )
-            self.popup.connect(
-                "popover-closed", lambda *_: self.remove_style_class("active")
-            )
-
-        visible = self.popup.get_visible()
+        visible = self._popup is not None and self._popup.get_visible()
 
         self.toggle_css_class("active", not visible)
 
         if visible:
-            self.popup.hide()
+            self.hide_popover()
             self.chevron_icon.set_label(get_text_icon("chevron.down"))
-
         else:
-            self.popup.open()
+            self.show_popover()
             self.chevron_icon.set_label(get_text_icon("chevron.up"))
-            self.add_style_class("active")
 
     def update_visibility(self):
         """Update widget visibility based on configuration and item count."""
