@@ -2,8 +2,8 @@ from fabric.utils import bulk_connect
 from fabric.widgets.button import Button
 from fabric.widgets.image import Image
 from gi.repository import Glace
-from shared.style_helpers import set_active_style
 
+from shared.style_helpers import set_active_style
 from shared.widget_container import BoxWidget
 from utils.icon_resolver import IconResolver
 
