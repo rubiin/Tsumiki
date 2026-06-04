@@ -1,5 +1,3 @@
-import contextlib
-
 from fabric.utils import GLib, Gtk, bulk_connect, invoke_repeater, logger, os
 from fabric.widgets.box import Box
 from fabric.widgets.centerbox import CenterBox
@@ -20,6 +18,7 @@ from shared.media import PlayerBoxStack
 from shared.mixins import PopoverMixin
 from shared.widget_container import ButtonWidget
 from utils.constants import ASSETS_DIR
+from utils.functions import safe_disconnect
 from utils.icons import get_text_icon, network_icon_to_text_icons
 from utils.widget_utils import (
     get_audio_icon_name,
@@ -483,8 +482,7 @@ class QuickSettingsButtonWidget(ButtonWidget, PopoverMixin):
                     and self._wifi_changed_handler_id is not None
                     and self._active_wifi != wifi
                 ):
-                    with contextlib.suppress(Exception):
-                        self._active_wifi.disconnect(self._wifi_changed_handler_id)
+                    safe_disconnect(self._active_wifi, self._wifi_changed_handler_id)
                     self._wifi_changed_handler_id = None
 
                 if self._wifi_changed_handler_id is None:
@@ -495,8 +493,7 @@ class QuickSettingsButtonWidget(ButtonWidget, PopoverMixin):
         else:
             ethernet = self.network_service.ethernet_device
             if self._active_wifi and self._wifi_changed_handler_id is not None:
-                with contextlib.suppress(Exception):
-                    self._active_wifi.disconnect(self._wifi_changed_handler_id)
+                safe_disconnect(self._active_wifi, self._wifi_changed_handler_id)
                 self._wifi_changed_handler_id = None
                 self._active_wifi = None
             if ethernet:
@@ -523,8 +520,7 @@ class QuickSettingsButtonWidget(ButtonWidget, PopoverMixin):
             and self._speaker_volume_handler_id is not None
             and self._active_speaker != speaker
         ):
-            with contextlib.suppress(Exception):
-                self._active_speaker.disconnect(self._speaker_volume_handler_id)
+            safe_disconnect(self._active_speaker, self._speaker_volume_handler_id)
             self._speaker_volume_handler_id = None
 
         if self._speaker_volume_handler_id is None:
@@ -573,14 +569,12 @@ class QuickSettingsButtonWidget(ButtonWidget, PopoverMixin):
 
     def destroy(self):
         if self._active_wifi and self._wifi_changed_handler_id is not None:
-            with contextlib.suppress(Exception):
-                self._active_wifi.disconnect(self._wifi_changed_handler_id)
+            safe_disconnect(self._active_wifi, self._wifi_changed_handler_id)
             self._wifi_changed_handler_id = None
         self._active_wifi = None
 
         if self._active_speaker and self._speaker_volume_handler_id is not None:
-            with contextlib.suppress(Exception):
-                self._active_speaker.disconnect(self._speaker_volume_handler_id)
+            safe_disconnect(self._active_speaker, self._speaker_volume_handler_id)
             self._speaker_volume_handler_id = None
         self._active_speaker = None
 

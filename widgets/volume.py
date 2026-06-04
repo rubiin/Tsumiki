@@ -1,10 +1,9 @@
-import contextlib
-
 from fabric.utils import cooldown
 
 from services import audio_service
 from shared.animated.circularprogress import AnimatedCircularProgressBar
 from shared.widget_container import EventBoxWidget
+from utils.functions import safe_disconnect
 from utils.icons import get_text_icon
 from utils.widget_utils import get_audio_icon_name, nerd_font_icon
 
@@ -69,8 +68,7 @@ class VolumeWidget(EventBoxWidget):
             return
 
         if self._speaker and self._speaker_volume_handler_id is not None:
-            with contextlib.suppress(Exception):
-                self._speaker.disconnect(self._speaker_volume_handler_id)
+            safe_disconnect(self._speaker, self._speaker_volume_handler_id)
             self._speaker_volume_handler_id = None
 
         if self.config.get("tooltip", False) and self.tooltips_enabled:
@@ -105,8 +103,7 @@ class VolumeWidget(EventBoxWidget):
 
     def destroy(self):
         if self._speaker and self._speaker_volume_handler_id is not None:
-            with contextlib.suppress(Exception):
-                self._speaker.disconnect(self._speaker_volume_handler_id)
+            safe_disconnect(self._speaker, self._speaker_volume_handler_id)
             self._speaker_volume_handler_id = None
         self._speaker = None
         return super().destroy()

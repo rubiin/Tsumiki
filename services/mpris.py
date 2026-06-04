@@ -1,6 +1,4 @@
 # Standard library imports
-import contextlib
-
 import gi
 
 # Fabric imports
@@ -8,6 +6,7 @@ from fabric.core.service import Property, Service, Signal
 from fabric.utils import GLib, bulk_connect, logger
 
 from utils.exceptions import PlayerctlImportError
+from utils.functions import safe_disconnect
 
 try:
     gi.require_version("Playerctl", "2.0")
@@ -109,8 +108,7 @@ class MprisPlayer(Service):
 
     def on_player_exit(self, player):
         for id in list(self._signal_connectors.values()):
-            with contextlib.suppress(Exception):
-                self._player.disconnect(id)
+            safe_disconnect(self._player, id)
         del self._signal_connectors
         GLib.idle_add(lambda: (self.emit("exit", True), False))
         del self._player

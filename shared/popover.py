@@ -9,6 +9,8 @@ from fabric.widgets.wayland import WaylandWindow as Window
 from fabric.widgets.widget import Widget
 from gi.repository import GtkLayerShell
 
+from utils.functions import safe_disconnect
+
 POPOVER_BAR_GAP = -70
 
 
@@ -316,8 +318,7 @@ class Popover(Widget):
 
     def on_content_ready(self, widget, event):
         if self._draw_handler_id is not None:
-            with contextlib.suppress(Exception):
-                self._content.disconnect(self._draw_handler_id)
+            safe_disconnect(self._content, self._draw_handler_id)
             self._draw_handler_id = None
         self.set_position()
 

@@ -1,5 +1,3 @@
-import contextlib
-
 from fabric.utils import GLib, bulk_connect, logger
 from fabric.widgets.box import Box
 
@@ -10,6 +8,7 @@ from shared.scrollable_text import ScrollingLabel
 from shared.widget_container import ButtonWidget
 from utils.colors import Colors
 from utils.constants import NEWLINE_RE
+from utils.functions import safe_disconnect
 
 
 class MprisWidget(ButtonWidget, PopoverMixin):
@@ -162,8 +161,7 @@ class MprisWidget(ButtonWidget, PopoverMixin):
             return
 
         for handler_id in self._player_update_handlers:
-            with contextlib.suppress(Exception):
-                self.player.disconnect(handler_id)
+            safe_disconnect(self.player, handler_id)
         self._player_update_handlers.clear()
 
     def _set_player(self, raw_player):

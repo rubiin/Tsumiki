@@ -1,4 +1,5 @@
 import atexit
+import contextlib
 import ctypes
 import html
 import json
@@ -981,3 +982,15 @@ def set_debug_logger():
 
     for domain in _LOG_DOMAINS:
         GLib.log_set_handler(domain, log_levels, log_handler)
+
+
+def safe_disconnect(signal_source, handler_id: int | None) -> None:
+    """Safely disconnect a signal handler without raising exceptions.
+
+    Args:
+        signal_source: The object (e.g., GObject) with the signal
+        handler_id: The handler ID returned by connect(). Can be None.
+    """
+    if handler_id is not None:
+        with contextlib.suppress(Exception):
+            signal_source.disconnect(handler_id)
