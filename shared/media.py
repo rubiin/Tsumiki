@@ -505,11 +505,25 @@ class PlayerBox(Box):
             self.update_colors(self.fallback_cover_path)
 
     def on_accent_color(self, palette):
-        if palette is None:
-            return
         default_color = (255, 0, 0)  # fallback color
 
-        base_color = palette[0] if palette else default_color
+        valid_palette: list[tuple[int, int, int]] = (
+            [
+                (int(color[0]), int(color[1]), int(color[2]))
+                for color in palette
+                if (
+                    isinstance(color, (list, tuple))
+                    and len(color) >= 3
+                    and color[0] is not None
+                    and color[1] is not None
+                    and color[2] is not None
+                )
+            ]
+            if isinstance(palette, (list, tuple))
+            else []
+        )
+
+        base_color = valid_palette[0] if valid_palette else default_color
         mix_target = (247, 239, 209)  # #F7EFD1
 
         # Mix base color with the target color
@@ -526,7 +540,12 @@ class PlayerBox(Box):
             f"trough highlight {{ {bg} {border} }} slider {{ {bg} }}"
         )
 
-        css_colors = [rgb_to_css(color) for color in palette]
+        gradient_palette = (
+            valid_palette
+            if valid_palette
+            else [default_color, tint_color(default_color, 0.3)]
+        )
+        css_colors = [rgb_to_css(color) for color in gradient_palette]
         gradient = f"linear-gradient(135deg, {', '.join(css_colors)})"
 
         self.inner_box.set_style(f"background: {gradient};")
