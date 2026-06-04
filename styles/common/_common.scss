@@ -116,7 +116,6 @@
 .panel-font-icon {
   margin-left: 2px;
   margin-right: 2px;
-  color: theme.$text-main;
 }
 
 .panel-text {
@@ -480,8 +479,8 @@ scrolledwindow {
   }
 }
 
-#stat-circle {
-  border: 1px solid theme.$accent-purple;
+.stat-circle {
+  border: solid 0 rgb(151, 151, 177);
 }
 
 .stat-graph {

@@ -33,13 +33,13 @@ class VolumeWidget(EventBoxWidget):
 
         # Create a circular progress bar to display the brightness level
         self.progress_bar = AnimatedCircularProgressBar(
-            name="stat-circle",
+            style_classes=["stat-circle"],
             line_style="round",
             line_width=2,
             start_angle=150,
             end_angle=390,
             child=self.icon,
-            size=(28, 24),
+            size=(22, 20),
         )
 
         # Create an event box to handle scroll events for volume control

@@ -113,8 +113,8 @@ radius = "16px"
 width = "1px"
 
 [bar.widgets.brightness]
-icon_size = "14px"
-spacing = "0.125em"
+icon_size = "12px"
+spacing = "0.25em"
 
 [bar.widgets.brightness.border]
 enabled = false
@@ -402,7 +402,7 @@ radius = "16px"
 width = "1px"
 
 [bar.widgets.volume]
-icon_size = "14px"
+icon_size = "12px"
 spacing = "0.125em"
 
 [bar.widgets.volume.border]

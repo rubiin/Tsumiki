@@ -29,6 +29,10 @@ class BaseWidget(Widget):
         else:
             self.remove_style_class(class_name)
 
+    def _toggle_revealer(self, *_):
+        if hasattr(self, "revealer"):
+            self.revealer.set_reveal_child(not self.revealer.get_reveal_child())
+
 
 class BaseWindow(Window, BaseWidget):
     """A base window class that can be extended for custom windows."""
@@ -73,6 +77,7 @@ class EventBoxWidget(EventBox, BaseWidget):
         self.config: dict = widget_config.get("widgets", {}).get(widget_name, {})
         self.general_config: dict = widget_config.get("general", {})
         self.container_box = Box(style_classes=["panel-box"])
+        self.tooltips_enabled = widget_config.get("general", {}).get("tooltips", True)
         self.add(
             self.container_box,
         )
@@ -86,10 +91,6 @@ class EventBoxWidget(EventBox, BaseWidget):
                     "leave-notify-event": self._toggle_revealer,
                 },
             )
-
-    def _toggle_revealer(self, *_):
-        if hasattr(self, "revealer"):
-            self.revealer.set_reveal_child(not self.revealer.get_reveal_child())
 
 
 class ButtonWidget(Button, BaseWidget):
@@ -127,10 +128,6 @@ class ButtonWidget(Button, BaseWidget):
                 else btn.set_cursor("default"),
             ),
         )
-
-    def _toggle_revealer(self, *_):
-        if hasattr(self, "revealer"):
-            self.revealer.set_reveal_child(not self.revealer.get_reveal_child())
 
 
 class WidgetGroup(BoxWidget):

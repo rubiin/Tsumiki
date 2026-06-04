@@ -29,19 +29,19 @@ class BrightnessWidget(EventBoxWidget):
         self.icon = nerd_font_icon(
             icon=get_text_icon("brightness.medium"),
             props={
-                "style_classes": ["panel-font-icon", "overlay-icon"],
+                "style_classes": ["panel-font-icon", "progress-bar-icon"],
             },
         )
 
         # Create a circular progress bar to display the brightness level
         self.progress_bar = AnimatedCircularProgressBar(
-            name="stat-circle",
+            style_classes=["stat-circle"],
             line_style="round",
             line_width=2,
             start_angle=150,
             end_angle=390,
             child=self.icon,
-            size=(28, 24),
+            size=(22, 20),
             value=normalized_brightness / 100,
         )
 

@@ -192,7 +192,7 @@ class StatDisplayMixin:
             start_angle=150,
             end_angle=390,
             child=self.icon,
-            size=(28, 24),
+            size=(22, 20),
         )
 
         container.children = self.progress_bar
