@@ -10,6 +10,7 @@ from fabric.utils import GLib
 # Auto-tune max_workers based on CPU count, fallback to 4
 _cpu_count = os.cpu_count() or 4
 thread_pool: ThreadPoolExecutor | None = None
+_thread_pool_atexit_registered = False
 
 T = TypeVar("T")
 
@@ -34,11 +35,35 @@ def safe_operation(func):
 
 def _get_thread_pool() -> ThreadPoolExecutor:
     """Lazy-initialize thread pool on first use."""
-    global thread_pool
+    global thread_pool, _thread_pool_atexit_registered
     if thread_pool is None:
         thread_pool = ThreadPoolExecutor(max_workers=_cpu_count)
-        atexit.register(thread_pool.shutdown)
+        if not _thread_pool_atexit_registered:
+            atexit.register(_shutdown_thread_pool)
+            _thread_pool_atexit_registered = True
     return thread_pool
+
+
+def _shutdown_thread_pool() -> None:
+    """Best-effort, non-blocking shutdown for interpreter exit.
+
+    On Ctrl+C, Python may run atexit handlers while another KeyboardInterrupt is
+    still bubbling; avoid blocking joins to keep shutdown quiet and fast.
+    """
+
+    global thread_pool
+    if thread_pool is None:
+        return
+
+    try:
+        thread_pool.shutdown(wait=False, cancel_futures=True)
+    except KeyboardInterrupt:
+        # Suppress noisy traceback during interpreter teardown.
+        pass
+    except Exception:
+        pass
+    finally:
+        thread_pool = None
 
 
 def thread(target: Callable[..., T], *args: Any, **kwargs: Any) -> Any:
