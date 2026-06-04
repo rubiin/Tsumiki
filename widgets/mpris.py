@@ -124,9 +124,12 @@ class MprisWidget(ButtonWidget, PopoverMixin):
         return True
 
     def _update_progress(self):
+        show_progress = False
         if self.player is None:
             progress_pct = 0.0
         else:
+            title = (self.player.title or "").strip()
+            show_progress = self.player.playback_status == "playing" and bool(title)
             length_raw = getattr(self.player, "length", None)
             position_raw = getattr(self.player, "position", 0)
             try:
@@ -144,6 +147,7 @@ class MprisWidget(ButtonWidget, PopoverMixin):
             else:
                 progress_pct = 0.0
 
+        self.progress.set_visible(show_progress)
         self.progress.set_style(
             "background-image: linear-gradient(90deg, "
             "rgba(103, 200, 255, 0.95) 0%, "
