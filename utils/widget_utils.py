@@ -1,3 +1,4 @@
+import contextlib
 import importlib
 from numbers import Number
 from time import sleep
@@ -17,6 +18,9 @@ from .icons import get_text_icon, symbolic_icons
 
 storage_config = widget_config.get("widgets", {}).get("storage", {})
 
+UTIL_FAST_POLL_SECONDS = 1
+UTIL_SLOW_POLL_TICKS = 5
+
 
 # Function to get the system stats using psutil
 def stats_poll(fabricator):
@@ -25,8 +29,8 @@ def stats_poll(fabricator):
     disk = psutil.disk_usage(storage_config.get("path", "/"))
     ticks = 0
 
-    while True:
-        if ticks % 2 == 0:
+    while _util_polling_enabled:
+        if ticks % UTIL_SLOW_POLL_TICKS == 0:
             cpu_freq = psutil.cpu_freq()
             temperature = psutil.sensors_temperatures()
             disk = psutil.disk_usage(storage_config.get("path", "/"))
@@ -41,21 +45,70 @@ def stats_poll(fabricator):
             "disk": disk,
         }
         ticks += 1
-        sleep(1)
+        sleep(UTIL_FAST_POLL_SECONDS)
 
 
 # Lazy-loaded stats fabricator - only created when first stat widget is used
 _util_fabricator = None
+_util_polling_enabled = False
+_util_subscribers = 0
+_util_changed_handler_ids: set[int] = set()
+
+
+def _stop_util_fabricator() -> None:
+    global _util_fabricator, _util_polling_enabled, _util_subscribers
+
+    _util_polling_enabled = False
+
+    if _util_fabricator is not None:
+        destroy = getattr(_util_fabricator, "destroy", None)
+        if callable(destroy):
+            destroy()
+
+    _util_fabricator = None
+    _util_subscribers = 0
+    _util_changed_handler_ids.clear()
 
 
 def get_util_fabricator():
     """Get the stats fabricator, creating it on first access."""
-    global _util_fabricator
+    global _util_fabricator, _util_polling_enabled
     if _util_fabricator is None:
         from fabric import Fabricator
 
+        _util_polling_enabled = True
         _util_fabricator = Fabricator(poll_from=stats_poll, stream=True)
     return _util_fabricator
+
+
+def connect_util_fabricator_changed(callback) -> int:
+    """Connect to util fabricator changed signal with lifecycle tracking."""
+    global _util_subscribers
+
+    handler_id = get_util_fabricator().connect("changed", callback)
+    _util_changed_handler_ids.add(handler_id)
+    _util_subscribers += 1
+    return handler_id
+
+
+def disconnect_util_fabricator_changed(handler_id: int | None) -> None:
+    """Disconnect a changed signal handler and stop poller when unused."""
+    global _util_subscribers
+
+    if handler_id is None:
+        return
+
+    fabricator = _util_fabricator
+    if fabricator is not None:
+        with contextlib.suppress(KeyError, AttributeError, TypeError):
+            fabricator.disconnect(handler_id)
+
+    if handler_id in _util_changed_handler_ids:
+        _util_changed_handler_ids.discard(handler_id)
+        _util_subscribers = max(0, _util_subscribers - 1)
+
+    if _util_subscribers == 0:
+        _stop_util_fabricator()
 
 
 # Backward compatibility - lazy proxy for util_fabricator

@@ -10,7 +10,8 @@ from shared.mixins import StatDisplayMixin
 from shared.widget_container import ButtonWidget
 from utils.icons import get_text_icon
 from utils.widget_utils import (
-    util_fabricator,
+    connect_util_fabricator_changed,
+    disconnect_util_fabricator_changed,
 )
 
 
@@ -23,18 +24,14 @@ class FabricatorBoundWidget(ButtonWidget):
         self.connect("destroy", self._disconnect_fabricator)
 
     def _bind_fabricator_changed(self, callback):
-        self._util_changed_handler_id = util_fabricator.connect("changed", callback)
+        self._util_changed_handler_id = connect_util_fabricator_changed(callback)
 
     def _disconnect_fabricator(self, *_):
         if self._util_changed_handler_id is None:
             return
 
-        try:
-            util_fabricator.disconnect(self._util_changed_handler_id)
-        except Exception:
-            pass
-        finally:
-            self._util_changed_handler_id = None
+        disconnect_util_fabricator_changed(self._util_changed_handler_id)
+        self._util_changed_handler_id = None
 
 
 class CpuWidget(FabricatorBoundWidget, StatDisplayMixin):
