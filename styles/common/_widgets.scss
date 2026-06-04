@@ -327,6 +327,24 @@
     background-position: center;
     margin-left: -15px;
   }
+
+  .mpris-meta {
+    min-width: 9em;
+    margin-right: functions.toEm(6);
+  
+  }
+
+  #mpris-label{
+    font-size: 0.85em;
+  }
+
+  .mpris-progress {
+    min-height: 2px;
+    border-radius: 99px;
+    background-color: rgba(255, 255, 255, 0.2);
+    margin-top: 1px;
+    margin-right: functions.toEm(2);
+  }
 }
 
 .mpris-box {

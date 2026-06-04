@@ -1,6 +1,6 @@
 import contextlib
 
-from fabric.utils import bulk_connect, logger
+from fabric.utils import GLib, bulk_connect, logger
 from fabric.widgets.box import Box
 
 from services.mpris import MprisPlayer, MprisPlayerManager
@@ -20,16 +20,27 @@ class MprisWidget(ButtonWidget, PopoverMixin):
 
         self.player = None
         self._player_update_handlers: list[int] = []
+        self._progress_timer_id: int | None = None
 
         self.label = ScrollingLabel(
+            name="mpris-label",
             text="Nothing playing",
             style_classes=["panel-text"],
             scroll_on_hover=True,
         )
 
         self.cover = Box(style_classes=["cover"])
+        self.progress = Box(style_classes=["mpris-progress"])
+        self.meta_box = Box(
+            orientation="v",
+            spacing=2,
+            h_expand=True,
+            v_align="start",
+            style_classes=["mpris-meta"],
+            children=[self.label, self.progress],
+        )
         self._set_default_values()
-        self.container_box.children = [self.cover, self.label]
+        self.container_box.children = [self.cover, self.meta_box]
 
         bulk_connect(
             self,
@@ -75,6 +86,7 @@ class MprisWidget(ButtonWidget, PopoverMixin):
                 children=[PlayerBoxStack(self.mpris_manager, config=self.config)],
             )
         )
+        self._start_progress_timer()
 
     def _bind_player_updates(self):
         self._unbind_player_updates()
@@ -86,10 +98,59 @@ class MprisWidget(ButtonWidget, PopoverMixin):
             "notify::metadata",
             "notify::title",
             "notify::arturl",
+            "notify::length",
+            "notify::position",
         ]:
             self._player_update_handlers.append(
                 self.player.connect(signal_name, lambda *_: self.get_current())
             )
+
+    def _start_progress_timer(self):
+        if self._progress_timer_id is not None:
+            return
+
+        self._progress_timer_id = GLib.timeout_add(1000, self._on_progress_tick)
+
+    def _stop_progress_timer(self):
+        if self._progress_timer_id is None:
+            return
+
+        GLib.source_remove(self._progress_timer_id)
+        self._progress_timer_id = None
+
+    def _on_progress_tick(self):
+        if self.player and self.player.playback_status == "playing":
+            self._update_progress()
+        return True
+
+    def _update_progress(self):
+        if self.player is None:
+            progress_pct = 0.0
+        else:
+            length_raw = getattr(self.player, "length", None)
+            position_raw = getattr(self.player, "position", 0)
+            try:
+                track_length = int(length_raw) if length_raw is not None else 0
+            except (TypeError, ValueError):
+                track_length = 0
+
+            try:
+                position = int(position_raw) if position_raw is not None else 0
+            except (TypeError, ValueError):
+                position = 0
+
+            if track_length > 0:
+                progress_pct = max(0.0, min(100.0, (position / track_length) * 100.0))
+            else:
+                progress_pct = 0.0
+
+        self.progress.set_style(
+            "background-image: linear-gradient(90deg, "
+            "rgba(103, 200, 255, 0.95) 0%, "
+            f"rgba(103, 200, 255, 0.95) {progress_pct:.2f}%, "
+            f"rgba(255, 255, 255, 0.20) {progress_pct:.2f}%, "
+            "rgba(255, 255, 255, 0.20) 100%);"
+        )
 
     def _unbind_player_updates(self):
         if self.player is None:
@@ -161,6 +222,7 @@ class MprisWidget(ButtonWidget, PopoverMixin):
         self.cover.set_style(
             "background-image: url('" + art_url + "'); background-size: cover;"
         )
+        self._update_progress()
 
         if self.config.get("tooltip", False) and self.tooltips_enabled:
             self.set_tooltip_text(bar_label)
@@ -171,3 +233,9 @@ class MprisWidget(ButtonWidget, PopoverMixin):
             "background-image: url('https://raw.githubusercontent.com/rubiin/tsumiki/refs/heads/master/assets/images/disk.png')"
         )
         self.label.set_text("Nothing playing")
+        self._update_progress()
+
+    def destroy(self):
+        self._stop_progress_timer()
+        self._unbind_player_updates()
+        return super().destroy()
