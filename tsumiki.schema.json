@@ -1016,11 +1016,6 @@
 				"volume": {
 					"type": "object",
 					"properties": {
-						"label": {
-							"type": "boolean",
-							"default": true,
-							"description": "Determines whether to show the label for volume."
-						},
 						"tooltip": {
 							"type": "boolean",
 							"default": true,
@@ -1291,11 +1286,6 @@
 				"brightness": {
 					"type": "object",
 					"properties": {
-						"label": {
-							"type": "boolean",
-							"default": true,
-							"description": "Display brightness percentage as text."
-						},
 						"tooltip": {
 							"type": "boolean",
 							"default": true,
@@ -1308,7 +1298,6 @@
 						}
 					},
 					"required": [
-						"label",
 						"tooltip",
 						"step_size"
 					]

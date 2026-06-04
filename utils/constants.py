@@ -107,7 +107,6 @@ DEFAULT_CONFIG = {
             "tooltip": True,
         },
         "brightness": {
-            "label": True,
             "tooltip": True,
             "step_size": 5,
         },
@@ -316,7 +315,6 @@ DEFAULT_CONFIG = {
             "brew": False,
         },
         "volume": {
-            "label": True,
             "tooltip": True,
             "step_size": 5,
         },

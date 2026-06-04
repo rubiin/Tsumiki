@@ -95,7 +95,6 @@ label = true
 tooltip = true
 
 [widgets.brightness]
-label = true
 tooltip = true
 step_size = 5
 
@@ -317,7 +316,6 @@ snap = false
 brew = false
 
 [widgets.volume]
-label = true
 tooltip = true
 step_size = 5
 
@@ -402,7 +400,7 @@ title = "Keybinds"
 
 [layout]
 left_section = ["workspaces", "window_title"]
-middle_section = ["date_time", "weather", "mpris","cpu"]
+middle_section = ["date_time", "weather", "mpris","brightness"]
 right_section = ["@collapsible:0", "@group:0", "system_tray", "power"]
 
 [[widget_groups]]

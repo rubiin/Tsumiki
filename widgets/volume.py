@@ -1,8 +1,6 @@
 import contextlib
 
 from fabric.utils import cooldown
-from fabric.widgets.label import Label
-from fabric.widgets.overlay import Overlay
 
 from services import audio_service
 from shared.animated.circularprogress import AnimatedCircularProgressBar
@@ -26,13 +24,6 @@ class VolumeWidget(EventBoxWidget):
         # Initialize the audio service
         self.audio = audio_service
 
-        # Create a circular progress bar to display the volume level
-        self.progress_bar = AnimatedCircularProgressBar(
-            style_classes=["overlay-progress-bar"],
-            pie=True,
-            size=24,
-        )
-
         self.icon = nerd_font_icon(
             icon=get_text_icon("volume.medium"),
             props={
@@ -40,20 +31,25 @@ class VolumeWidget(EventBoxWidget):
             },
         )
 
-        # Create an event box to handle scroll events for volume control
-        self.container_box.add(
-            Overlay(child=self.progress_bar, overlays=self.icon, name="overlay"),
+        # Create a circular progress bar to display the brightness level
+        self.progress_bar = AnimatedCircularProgressBar(
+            name="stat-circle",
+            line_style="round",
+            line_width=2,
+            start_angle=150,
+            end_angle=390,
+            child=self.icon,
+            size=(28, 24),
         )
+
+        # Create an event box to handle scroll events for volume control
+        self.container_box.add(self.progress_bar)
 
         # Connect the audio service to update the progress bar on volume change
         self.audio.connect("notify::speaker", self.on_speaker_changed)
 
         # Connect the event box to handle scroll events
         self.connect("scroll-event", self.on_scroll)
-
-        if self.config.get("label", True):
-            self.volume_label = Label(style_classes=["panel-text"])
-            self.container_box.add(self.volume_label)
 
     @cooldown(0.1)
     def on_scroll(self, _, event):
@@ -102,9 +98,6 @@ class VolumeWidget(EventBoxWidget):
 
         volume = round(speaker.volume)
         self.progress_bar.set_value(volume / 100)
-
-        if self.config.get("label", True):
-            self.volume_label.set_text(f"{volume}%")
 
         self.icon.set_text(get_audio_icon_name(volume, speaker.muted)["icon_text"])
 

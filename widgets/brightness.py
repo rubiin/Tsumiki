@@ -1,6 +1,4 @@
 from fabric.utils import cooldown
-from fabric.widgets.label import Label
-from fabric.widgets.overlay import Overlay
 
 import utils.functions as helpers
 from services.brightness import BrightnessService
@@ -28,14 +26,6 @@ class BrightnessWidget(EventBoxWidget):
             self.brightness_service.max_screen,
         )
 
-        # Create a circular progress bar to display the brightness level
-        self.progress_bar = AnimatedCircularProgressBar(
-            style_classes=["overlay-progress-bar"],
-            pie=True,
-            size=24,
-            value=normalized_brightness / 100,
-        )
-
         self.icon = nerd_font_icon(
             icon=get_text_icon("brightness.medium"),
             props={
@@ -43,10 +33,20 @@ class BrightnessWidget(EventBoxWidget):
             },
         )
 
-        # Create an event box to handle scroll events for brightness control
-        self.container_box.add(
-            Overlay(child=self.progress_bar, overlays=self.icon, name="overlay"),
+        # Create a circular progress bar to display the brightness level
+        self.progress_bar = AnimatedCircularProgressBar(
+            name="stat-circle",
+            line_style="round",
+            line_width=2,
+            start_angle=150,
+            end_angle=390,
+            child=self.icon,
+            size=(28, 24),
+            value=normalized_brightness / 100,
         )
+
+        # Create an event box to handle scroll events for brightness control
+        self.container_box.add(self.progress_bar)
 
         # Connect the audio service to update the progress bar on brightness change
         self.brightness_service.connect(
@@ -55,13 +55,6 @@ class BrightnessWidget(EventBoxWidget):
 
         # Connect the event box to handle scroll events
         self.connect("scroll-event", self.on_scroll)
-
-        if self.config.get("label", True):
-            self.brightness_label = Label(
-                label=f"{normalized_brightness}%",
-                style_classes=["panel-text"],
-            )
-            self.container_box.add(self.brightness_label)
 
     @cooldown(1)
     def on_scroll(self, _, event):
@@ -80,9 +73,6 @@ class BrightnessWidget(EventBoxWidget):
             self.brightness_service.max_screen,
         )
         self.progress_bar.set_value(normalized_brightness / 100)
-
-        if self.config.get("label", True):
-            self.brightness_label.set_text(f"{normalized_brightness}%")
 
         self.icon.set_text(get_brightness_icon_name(normalized_brightness)["icon_text"])
 
