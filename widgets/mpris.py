@@ -1,3 +1,5 @@
+import contextlib
+
 from fabric.utils import bulk_connect, logger
 from fabric.widgets.box import Box
 
@@ -17,6 +19,7 @@ class MprisWidget(ButtonWidget, PopoverMixin):
         super().__init__(name="mpris", **kwargs)
 
         self.player = None
+        self._player_update_handlers: list[int] = []
 
         self.label = ScrollingLabel(
             text="Nothing playing",
@@ -48,15 +51,22 @@ class MprisWidget(ButtonWidget, PopoverMixin):
 
         # Services
         self.mpris_manager = MprisPlayerManager()
+        bulk_connect(
+            self.mpris_manager,
+            {
+                "player-appeared": self.on_player_appeared,
+                "player-vanished": self.on_player_vanished,
+            },
+        )
 
         for player in self.mpris_manager.players:
             logger.info(
                 f"{Colors.INFO}[PLAYER MANAGER] player found: "
                 f"{player.get_property('player-name')}",
             )
-            self.player = MprisPlayer(player)
-            self._bind_player_updates()
-            self.get_current()
+            if player.props.player_name in self.config.get("ignore", []):
+                continue
+            self._set_player(player)
             break
 
         self.setup_popover(
@@ -67,15 +77,58 @@ class MprisWidget(ButtonWidget, PopoverMixin):
         )
 
     def _bind_player_updates(self):
-        bulk_connect(
-            self.player,
-            {
-                "changed": lambda *_: self.get_current(),
-                "notify::metadata": lambda *_: self.get_current(),
-                "notify::title": lambda *_: self.get_current(),
-                "notify::arturl": lambda *_: self.get_current(),
-            },
-        )
+        self._unbind_player_updates()
+        if self.player is None:
+            return
+
+        for signal_name in [
+            "changed",
+            "notify::metadata",
+            "notify::title",
+            "notify::arturl",
+        ]:
+            self._player_update_handlers.append(
+                self.player.connect(signal_name, lambda *_: self.get_current())
+            )
+
+    def _unbind_player_updates(self):
+        if self.player is None:
+            self._player_update_handlers.clear()
+            return
+
+        for handler_id in self._player_update_handlers:
+            with contextlib.suppress(Exception):
+                self.player.disconnect(handler_id)
+        self._player_update_handlers.clear()
+
+    def _set_player(self, raw_player):
+        self._unbind_player_updates()
+        self.player = MprisPlayer(raw_player)
+        self._bind_player_updates()
+        self.get_current()
+
+    def on_player_appeared(self, manager, raw_player):
+        if raw_player.props.player_name in self.config.get("ignore", []):
+            return
+
+        # Prefer active playback for the compact bar widget when players appear.
+        if self.player is None or self.player.playback_status != "playing":
+            self._set_player(raw_player)
+
+    def on_player_vanished(self, manager, player_name):
+        if self.player is None or self.player.player_name != player_name:
+            return
+
+        self._unbind_player_updates()
+        self.player = None
+
+        for raw_player in self.mpris_manager.players:
+            if raw_player.props.player_name in self.config.get("ignore", []):
+                continue
+            self._set_player(raw_player)
+            return
+
+        self.get_current()
 
     def on_hover_enter(self, widget, event):
         self.label.on_enter_notify()
@@ -113,6 +166,7 @@ class MprisWidget(ButtonWidget, PopoverMixin):
             self.set_tooltip_text(bar_label)
 
     def _set_default_values(self):
+        self._unbind_player_updates()
         self.cover.set_style(
             "background-image: url('https://raw.githubusercontent.com/rubiin/tsumiki/refs/heads/master/assets/images/disk.png')"
         )
