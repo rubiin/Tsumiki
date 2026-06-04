@@ -68,13 +68,16 @@ class BrightnessWidget(EventBoxWidget):
             self.brightness_service.screen_brightness -= step_size
 
     def on_brightness_changed(self, *_):
-        normalized_brightness = helpers.convert_to_percent(
+        brightness = helpers.convert_to_percent(
             self.brightness_service.screen_brightness,
             self.brightness_service.max_screen,
         )
-        self.progress_bar.set_value(normalized_brightness / 100)
 
-        self.icon.set_text(get_brightness_icon_name(normalized_brightness)["icon_text"])
+        normalized_volume = brightness / 100
+        self.progress_bar.set_value(normalized_volume)
+        self.progress_bar.animate_value(normalized_volume)
+
+        self.icon.set_text(get_brightness_icon_name(brightness)["icon_text"])
 
         if self.config.get("tooltip", False) and self.tooltips_enabled:
-            self.set_tooltip_text(f"{normalized_brightness}%")
+            self.set_tooltip_text(f"{brightness}%")

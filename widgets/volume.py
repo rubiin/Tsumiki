@@ -97,7 +97,9 @@ class VolumeWidget(EventBoxWidget):
             return
 
         volume = round(speaker.volume)
-        self.progress_bar.set_value(volume / 100)
+        nomalized_value = volume / 100
+        self.progress_bar.set_value(nomalized_value)
+        self.progress_bar.animate_value(nomalized_value)
 
         self.icon.set_text(get_audio_icon_name(volume, speaker.muted)["icon_text"])
 

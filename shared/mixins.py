@@ -225,6 +225,8 @@ class StatDisplayMixin:
             self.graph_values.append(get_bar_graph(value))
             self.level_label.set_label("".join(self.graph_values))
         elif self.current_mode == "progress":
-            self.progress_bar.value = value / 100.0
+            normalized_value = value / 100
+            self.progress_bar.set_value(normalized_value)
+            self.progress_bar.animate_value(normalized_value)
         else:
             self.level_label.set_label(label_text)
