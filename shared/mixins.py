@@ -9,8 +9,7 @@ from typing import Callable
 
 from fabric.widgets.label import Label
 
-from shared.animated.circularprogress import AnimatedCircularProgressBar
-from utils.widget_utils import get_bar_graph, nerd_font_icon
+from utils.widget_utils import create_progress, get_bar_graph, nerd_font_icon
 
 
 class PopoverMixin:
@@ -185,15 +184,8 @@ class StatDisplayMixin:
             icon=self.config.get("icon", self._stat_icon),
             props={"style_classes": ["panel-font-icon"]},
         )
-        self.progress_bar = AnimatedCircularProgressBar(
-            name="stat-circle",
-            line_style="round",
-            line_width=2,
-            start_angle=150,
-            end_angle=390,
-            child=self.icon,
-            size=(22, 20),
-        )
+
+        self.progress_bar = create_progress(name="stat-circle", child=self.icon)
 
         container.children = self.progress_bar
 

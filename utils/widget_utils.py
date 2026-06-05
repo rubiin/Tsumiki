@@ -11,6 +11,7 @@ from fabric.widgets.label import Label
 from fabric.widgets.scale import ScaleMark
 from fabric.widgets.widget import Widget
 
+from shared.animated.circularprogress import AnimatedCircularProgressBar
 from shared.animated.scale import AnimatedScale
 
 from .config import widget_config
@@ -333,3 +334,28 @@ def get_audio_icon_name(
         "icon_text": get_text_icon(f"volume.{level}"),
         "icon": symbolic_icons["audio"]["volume"][level],
     }
+
+
+def create_progress(
+    value=0,
+    start_angle=150,
+    end_angle=390,
+    child=None,
+    size=(22, 20),
+    line_width=2,
+    name="circular-progress",
+    **kwargs,
+):
+
+    return AnimatedCircularProgressBar(
+        name=name,
+        style_classes=["stat-circle"],
+        line_style="round",
+        line_width=line_width,
+        start_angle=start_angle,
+        end_angle=end_angle,
+        child=child,
+        size=size,
+        value=value,
+        **kwargs,
+    )

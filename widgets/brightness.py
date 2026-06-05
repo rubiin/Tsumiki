@@ -2,10 +2,9 @@ from fabric.utils import cooldown
 
 import utils.functions as helpers
 from services.brightness import BrightnessService
-from shared.animated.circularprogress import AnimatedCircularProgressBar
 from shared.widget_container import EventBoxWidget
 from utils.icons import get_text_icon
-from utils.widget_utils import get_brightness_icon_name, nerd_font_icon
+from utils.widget_utils import create_progress, get_brightness_icon_name, nerd_font_icon
 
 
 class BrightnessWidget(EventBoxWidget):
@@ -34,14 +33,8 @@ class BrightnessWidget(EventBoxWidget):
         )
 
         # Create a circular progress bar to display the brightness level
-        self.progress_bar = AnimatedCircularProgressBar(
-            style_classes=["stat-circle"],
-            line_style="round",
-            line_width=2,
-            start_angle=150,
-            end_angle=390,
+        self.progress_bar = create_progress(
             child=self.icon,
-            size=(22, 20),
             value=normalized_brightness / 100,
         )
 

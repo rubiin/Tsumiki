@@ -1,11 +1,10 @@
 from fabric.utils import cooldown
 
 from services import audio_service
-from shared.animated.circularprogress import AnimatedCircularProgressBar
 from shared.widget_container import EventBoxWidget
 from utils.functions import safe_disconnect
 from utils.icons import get_text_icon
-from utils.widget_utils import get_audio_icon_name, nerd_font_icon
+from utils.widget_utils import create_progress, get_audio_icon_name, nerd_font_icon
 
 
 class VolumeWidget(EventBoxWidget):
@@ -31,14 +30,8 @@ class VolumeWidget(EventBoxWidget):
         )
 
         # Create a circular progress bar to display the brightness level
-        self.progress_bar = AnimatedCircularProgressBar(
-            style_classes=["stat-circle"],
-            line_style="round",
-            line_width=2,
-            start_angle=150,
-            end_angle=390,
+        self.progress_bar = create_progress(
             child=self.icon,
-            size=(22, 20),
         )
 
         # Create an event box to handle scroll events for volume control

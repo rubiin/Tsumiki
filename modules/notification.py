@@ -25,13 +25,12 @@ from fabric.widgets.widget import Widget
 import utils.constants as constants
 import utils.functions as helpers
 from services import notification_service
-from shared.animated.circularprogress import AnimatedCircularProgressBar
 from shared.buttons import HoverButton
 from shared.circle_image import CircularImage
 from utils.colors import Colors
 from utils.icons import get_text_icon
 from utils.widget_settings import BarConfig
-from utils.widget_utils import get_icon, nerd_font_icon
+from utils.widget_utils import create_progress, get_icon, nerd_font_icon
 
 # Swipe threshold for dismissing notifications (normalized: 0.0 to 1.0)
 _SWIPE_DISMISS_THRESHOLD = 0.35
@@ -138,17 +137,15 @@ class NotificationWidget(EventBox):
             | Gdk.EventMask.POINTER_MOTION_MASK
         )
 
-        self.progress_timeout = AnimatedCircularProgressBar(
+        self.progress_timeout = create_progress(
             name="notification-circular-progress-bar",
-            size=27,
+            line_width=3,
             min_value=0,
             max_value=1,
             radius_color=True,
             invert=True,
-            value=0,
-            line_style="round",
-            line_width=3,
             start_angle=-90,
+            size=27,
         )
 
         self.notification_box = Box(
