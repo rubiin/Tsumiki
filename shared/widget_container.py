@@ -105,6 +105,15 @@ class EventBoxWidget(EventBox, BaseWidget):
             self.container_box,
         )
         self._connect_hover_reveal()
+        self.connect(
+            "state-flags-changed",
+            lambda btn, *_: (
+                btn.set_cursor("pointer")
+                if btn.get_state_flags() & 2  # type: ignore
+                else btn.set_cursor("default"),
+            ),
+        )
+
 
 
 class ButtonWidget(Button, BaseWidget):

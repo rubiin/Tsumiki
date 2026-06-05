@@ -22,9 +22,15 @@ storage_config = widget_config.get("widgets", {}).get("storage", {})
 UTIL_FAST_POLL_SECONDS = 1
 UTIL_SLOW_POLL_TICKS = 5
 
+# Lazy-loaded stats fabricator - only created when first stat widget is used
+_util_fabricator = None
+_util_polling_enabled = False
+_util_subscribers = 0
+_util_changed_handler_ids: set[int] = set()
+
 
 # Function to get the system stats using psutil
-def stats_poll(fabricator):
+def stats_poll(*_):
     cpu_freq = None
     temperature = {}
     disk = psutil.disk_usage(storage_config.get("path", "/"))
@@ -47,13 +53,6 @@ def stats_poll(fabricator):
         }
         ticks += 1
         sleep(UTIL_FAST_POLL_SECONDS)
-
-
-# Lazy-loaded stats fabricator - only created when first stat widget is used
-_util_fabricator = None
-_util_polling_enabled = False
-_util_subscribers = 0
-_util_changed_handler_ids: set[int] = set()
 
 
 def _stop_util_fabricator() -> None:
