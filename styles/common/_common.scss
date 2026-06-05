@@ -485,5 +485,13 @@ scrolledwindow {
 
 .stat-graph {
   margin-left: 0px;
-  min-width: 40px; // TODO: make it dynamic based on the number of bar
+}
+
+
+.panel-eventbox {
+
+  &:hover{
+    color: red;
+
+  }
 }

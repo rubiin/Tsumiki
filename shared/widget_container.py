@@ -100,7 +100,7 @@ class EventBoxWidget(EventBox, BaseWidget):
 
         widget_name = kwargs.get("name", "eventbox")
         self._init_widget_settings(widget_name)
-        self.container_box = Box(style_classes=["panel-box"])
+        self.container_box = Box(name="widget-container", style_classes=["panel-box"])
         self.add(
             self.container_box,
         )

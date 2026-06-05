@@ -175,6 +175,7 @@ class StatDisplayMixin:
                 "panel-text",
                 "stat-graph",
             ],
+            style=f"min-width: {self._graph_maxlen * 10}px;",
         )
         container.children = self.level_label
 
