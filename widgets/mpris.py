@@ -7,7 +7,7 @@ from shared.mixins import PopoverMixin
 from shared.scrollable_text import ScrollingLabel
 from shared.widget_container import ButtonWidget
 from utils.colors import Colors
-from utils.constants import NEWLINE_RE
+from utils.constants import ASSETS_DIR, NEWLINE_RE
 from utils.functions import safe_disconnect
 
 
@@ -20,6 +20,8 @@ class MprisWidget(ButtonWidget, PopoverMixin):
         self.player = None
         self._player_update_handlers: list[int] = []
         self._progress_timer_id: int | None = None
+
+        self.default_cover = f"{ASSETS_DIR}/images/disk.png"
 
         self.label = ScrollingLabel(
             name="mpris-label",
@@ -222,11 +224,9 @@ class MprisWidget(ButtonWidget, PopoverMixin):
 
         art_url = getattr(self.player, "arturl", None)
         if not art_url:
-            art_url = "https://ladydanville.wordpress.com/wp-content/uploads/2012/03/blankart.png?w=297&h=278"
+            art_url = self.default_cover
 
-        self.cover.set_style(
-            "background-image: url('" + art_url + "'); background-size: cover;"
-        )
+        self.cover.set_style("background-image: url('" + art_url + "');")
         self._update_progress()
 
         if self.config.get("tooltip", False) and self.tooltips_enabled:
@@ -234,9 +234,7 @@ class MprisWidget(ButtonWidget, PopoverMixin):
 
     def _set_default_values(self):
         self._unbind_player_updates()
-        self.cover.set_style(
-            "background-image: url('https://raw.githubusercontent.com/rubiin/tsumiki/refs/heads/master/assets/images/disk.png')"
-        )
+        self.cover.set_style("background-image: url('" + self.default_cover + "');")
         self.label.set_text("Nothing playing")
         self._update_progress()
 
