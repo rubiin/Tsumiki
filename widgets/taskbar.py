@@ -3,7 +3,6 @@ from fabric.widgets.button import Button
 from fabric.widgets.image import Image
 from gi.repository import Glace
 
-from shared.style_helpers import set_active_style
 from shared.widget_container import BoxWidget
 from utils.icon_resolver import IconResolver
 
@@ -48,7 +47,7 @@ class TaskBarWidget(BoxWidget):
                 "notify::app-id": lambda *_: self.on_app_id(
                     client, client_image, client_button
                 ),
-                "notify::activated": lambda *_: set_active_style(
+                "notify::activated": lambda *_: self.set_active_style(
                     client_button, client.get_activated()
                 ),
                 "close": lambda *_: self.remove(client_button),

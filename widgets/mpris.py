@@ -124,7 +124,10 @@ class MprisWidget(ButtonWidget, PopoverMixin):
 
     def _update_progress(self):
         show_progress = False
+        self.meta_box.v_align = "start"
+
         if self.player is None:
+            self.meta_box.v_align = "center"
             progress_pct = 0.0
         else:
             title = (self.player.title or "").strip()

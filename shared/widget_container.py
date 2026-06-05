@@ -62,6 +62,9 @@ class BaseWidget(Widget):
         if hasattr(self, "revealer"):
             self.revealer.set_reveal_child(not self.revealer.get_reveal_child())
 
+    def set_active_style(self, action: bool, *_) -> None:
+        self.set_style_classes("") if not action else self.set_style_classes("active")
+
 
 class BaseWindow(Window, BaseWidget):
     """A base window class that can be extended for custom windows."""
