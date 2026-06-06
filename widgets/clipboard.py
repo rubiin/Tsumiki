@@ -32,6 +32,7 @@ _HTML_IMG_RE = re.compile(r"^\s*<img\s+")
 
 
 # TODO: add scrolled pagination
+# TODO: close popover on se
 class ClipHistoryMenu(Box):
     """A widget to display and manage clipboard history."""
 
@@ -362,9 +363,17 @@ class ClipHistoryMenu(Box):
             button = self.create_text_item_button(item_id, display_text)
 
         # Add key press event handler for Enter key
-        button.connect(
-            "key-press-event",
-            lambda widget, event, id=item_id: self.on_item_key_press(widget, event, id),
+
+        bulk_connect(
+            button,
+            {
+                "key-press-event": lambda widget, event, id=item_id: (
+                    self.on_item_key_press(widget, event, id)
+                ),
+                "button-press-event": lambda widget, event, id=item_id: (
+                    self.on_item_key_press(widget, event, id)
+                ),
+            },
         )
 
         # Make sure button can receive focus and key events
@@ -656,6 +665,11 @@ class ClipHistoryMenu(Box):
 
     def on_item_key_press(self, widget, event, item_id):
         """Handle key press events on clipboard items"""
+        if event.type == Gdk.EventType.BUTTON_PRESS:
+            # Copy item to clipboard and close
+            self.paste_item(item_id)
+            return True
+
         if event.keyval in (Gdk.KEY_Return, Gdk.KEY_KP_Enter):
             # Copy item to clipboard and close
             self.paste_item(item_id)
