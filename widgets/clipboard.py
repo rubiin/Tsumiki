@@ -691,11 +691,11 @@ class ClipHistoryMenu(Box):
             logger.exception(f"Error cleaning up temporary files: {e}")
 
 
-class ClipHistoryWidget(ButtonWidget, PopoverMixin):
+class ClipBoardWidget(ButtonWidget, PopoverMixin):
     """A widget to display and manage clipboard history."""
 
     def __init__(self, **kwargs):
-        super().__init__(name="cliphist", **kwargs)
+        super().__init__(name="clipboard", **kwargs)
 
         self.container_box.add(
             nerd_font_icon(

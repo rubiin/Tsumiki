@@ -511,7 +511,7 @@ Overview_Button = TypedDict(
 )
 
 
-Cliphist = TypedDict("Cliphist", {"icon": str, **BaseConfig.__annotations__})
+ClipBoard = TypedDict("ClipBoard", {"icon": str, **BaseConfig.__annotations__})
 
 Kanban = TypedDict("kanban", {"icon": str, **BaseConfig.__annotations__})
 
@@ -798,7 +798,7 @@ class Widgets(TypedDict):
     window_count: WindowCount
     workspaces: Workspaces
     world_clock: WorldClock
-    cliphist: Cliphist
+    clipboard: ClipBoard
 
 
 class BarConfig(TypedDict):

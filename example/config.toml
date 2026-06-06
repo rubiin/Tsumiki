@@ -327,7 +327,7 @@ tooltip = true
 expanded = true
 temperature_unit = "celsius"
 wind_speed_unit = "kmh"
-interval = 3_600
+interval = 86400
 hover_reveal = true
 reveal_duration = 500
 provider = "open-meteo"
@@ -399,9 +399,14 @@ title = "Keybinds"
 
 
 [layout]
-left_section = ["workspaces", "window_title"]
-middle_section = ["date_time", "weather", "mpris","brightness"]
-right_section = ["@collapsible:0", "@group:0", "system_tray", "power"]
+left_section = ["@group:0"]
+middle_section = ["date_time", "weather", "mpris","brightness","cpu"]
+right_section = ["@collapsible:0", "@group:1", "system_tray", "power"]
+
+[[widget_groups]]
+widgets = ["workspaces", "window_title"]
+spacing = 2
+style_classes = ["compact"]
 
 [[widget_groups]]
 widgets = ["quick_settings", "updates", "battery"]

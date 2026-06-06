@@ -286,7 +286,7 @@ Updating to latest commit is fairly simple, just git pull the latest changes.
 | **brightness**        | Widget controls the screen brightness level.                                   |
 | **cava**              | An audio visualizer widget.                                                    |
 | **click_counter**     | Widget tracks the number of mouse clicks.                                      |
-| **cliphist**          | Widget for the clipboard history.                                              |
+| **clipboard**          | Widget for the clipboard history.                                              |
 | **custom_button_group** | Widget that defines a group of customizable buttons for executing shell commands. Buttons are not displayed as a group but can be individually placed anywhere in the layout using `@custom_button:0`, `@custom_button:1`, etc. Each button can have custom icons, labels, tooltips, and execute different commands when clicked. |
 | **custom_widget**     | Widget that runs shell commands and renders output. Supports indexed placement via `@custom_widget:0` and named placement via `custom/<name>` (example: `custom/hello-world`). |
 | **cpu**               | Widget displays CPU usage and performance statistics.                          |

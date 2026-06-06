@@ -148,14 +148,16 @@ class WeatherService(SingletonService):
     def simple_weather_info(
         self, location: str, retries: int = 3, delay: float = 2.0
     ) -> Optional[dict]:
-        """Fetch weather data from the configured API provider."""
-        if self.provider == "wttr":
-            return self._fetch_wttr_weather(location, retries, delay)
-        elif self.provider == "open-meteo":
-            return self._fetch_openmeteo_weather(location, retries, delay)
-        else:
-            # Default to open-meteo
-            return self._fetch_openmeteo_weather(location, retries, delay)
+
+        try:
+            """Fetch weather data from the configured API provider."""
+            if self.provider == "wttr":
+                return self._fetch_wttr_weather(location, retries, delay)
+            else:  # open meteo is the default
+                return self._fetch_openmeteo_weather(location, retries, delay)
+
+        except Exception:
+            logger.error("Failed to fetch weather")
 
     def _fetch_wttr_weather(
         self, location: str, retries: int = 3, delay: float = 2.0

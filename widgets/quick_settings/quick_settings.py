@@ -256,24 +256,20 @@ class QuickSettingsMenu(Box):
         # Create sliders grid
         sliders_grid = Grid(
             row_spacing=10,
-            column_spacing=10,
-            column_homogeneous=True,
-            row_homogeneous=False,
             v_align="center",
             h_expand=True,
             v_expand=True,
         )
-
-        # TODO: check gtk_adjustment_set_value: assertion 'GTK_IS_ADJUSTMENT, microphone
-
-        # TODO: add the submenu on slider add
 
         # Create center box with sliders and shortcuts if configured
         center_box = Box(
             orientation="h", spacing=10, style_classes=["section-box"], h_expand=True
         )
 
-        main_grid = Grid(column_spacing=10, h_expand=True, column_homogeneous=False)
+        main_grid = Grid(
+            column_spacing=10,
+            h_expand=True,
+        )
         center_box.add(main_grid)
 
         # Set up grid columns

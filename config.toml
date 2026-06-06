@@ -5,7 +5,7 @@ icon = "view-app-grid-symbolic"
 icon_size = 20
 tooltip = true
 
-[widgets.cliphist]
+[widgets.clipboard]
 icon = ""
 label = false
 tooltip = true
@@ -399,9 +399,14 @@ title = "Keybinds"
 
 
 [layout]
-left_section = ["workspaces", "window_title"]
+left_section = ["@group:0"]
 middle_section = ["date_time", "weather", "mpris","brightness","cpu"]
-right_section = ["@collapsible:0", "@group:0", "system_tray", "power"]
+right_section = ["@collapsible:0", "@group:1","clipboard", "system_tray", "power"]
+
+[[widget_groups]]
+widgets = ["workspaces", "window_title"]
+spacing = 2
+style_classes = ["compact"]
 
 [[widget_groups]]
 widgets = ["quick_settings", "updates", "battery"]

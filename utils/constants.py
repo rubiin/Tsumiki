@@ -46,7 +46,7 @@ DEFAULT_CONFIG = {
             "icon_size": 16,
             "tooltip": True,
         },
-        "cliphist": {
+        "clipboard": {
             "icon": "",
             "label": False,
             "tooltip": True,

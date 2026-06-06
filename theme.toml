@@ -138,11 +138,11 @@ enabled = false
 radius = "16px"
 width = "1px"
 
-[bar.widgets.cliphist]
+[bar.widgets.clipboard]
 icon_size = "12px"
 spacing = "0.125em"
 
-[bar.widgets.cliphist.border]
+[bar.widgets.clipboard.border]
 enabled = false
 radius = "16px"
 width = "1px"

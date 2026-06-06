@@ -108,7 +108,7 @@
 							"media",
 							"microphone",
 							"network_usage",
-							"cliphist",
+							"clipboard",
 							"ocr",
 							"power",
 							"recorder",
@@ -1686,7 +1686,7 @@
 						"unit"
 					]
 				},
-				"cliphist": {
+				"clipboard": {
 					"type": "object",
 					"properties": {
 						"icon": {
