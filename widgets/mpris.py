@@ -128,7 +128,7 @@ class MprisWidget(ButtonWidget, PopoverMixin):
         show_progress = False
         self.meta_box.v_align = "start"
 
-        if self.player is None:
+        if self.player is None or self.player.playback_status == "stopped":
             self.meta_box.v_align = "center"
             progress_pct = 0.0
         else:
@@ -208,6 +208,10 @@ class MprisWidget(ButtonWidget, PopoverMixin):
 
     def get_current(self):
         if self.player is None:
+            self._set_default_values()
+            return
+
+        if self.player.playback_status == "stopped":
             self._set_default_values()
             return
 
