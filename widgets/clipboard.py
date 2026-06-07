@@ -32,18 +32,22 @@ _HTML_IMG_RE = re.compile(r"^\s*<img\s+")
 
 
 # TODO: add scrolled pagination
-# TODO: close popover on se
+
+
 class ClipHistoryMenu(Box):
     """A widget to display and manage clipboard history."""
 
     def __init__(
         self,
+        parent=None,
         **kwargs,
     ):
         super().__init__(
             name="clip-menu",
             **kwargs,
         )
+
+        self._parent = parent
 
         # Create a temporary directory for image icons
         self.tmp_dir = tempfile.mkdtemp(prefix="cliphist-")
@@ -53,6 +57,7 @@ class ClipHistoryMenu(Box):
         self.selected_index = -1  # Track the selected item index
         self._arranger_handler = 0
         self.clipboard_items = []
+        self.filtered_items = []
         self._loading = False
         self._pending_updates = False
 
@@ -170,6 +175,9 @@ class ClipHistoryMenu(Box):
         """Close the clipboard history panel"""
         self.viewport.children = []
         self.selected_index = -1  # Reset selection
+        self.filtered_items = []
+        if self._parent is not None:
+            self._parent.hide_popover()
 
     def open(self):
         """Open the clipboard history panel and load items"""
@@ -234,8 +242,11 @@ class ClipHistoryMenu(Box):
             if filter_text.lower() in content.lower():
                 filtered_items.append(item)
 
+            self.filtered_items = filtered_items
+
         # Show message if no items are found
         if not filtered_items:
+            self.filtered_items = []
             # Create a container box to better center the message
             container = Box(
                 name="no-clip-container",
@@ -567,6 +578,14 @@ class ClipHistoryMenu(Box):
         elif event.keyval in (Gdk.KEY_Return, Gdk.KEY_KP_Enter):
             self.use_selected_item()
             return True
+        elif event.keyval == Gdk.KEY_Home:
+            self.update_selection(0)
+            return True
+        elif event.keyval == Gdk.KEY_End:
+            children = self.viewport.get_children()
+            if children:
+                self.update_selection(len(children) - 1)
+            return True
         elif event.keyval == Gdk.KEY_Delete:
             self.delete_selected_item()
             return True
@@ -600,8 +619,8 @@ class ClipHistoryMenu(Box):
             return
 
         # Allow starting selection from nothing
-        if self.selected_index == -1 and delta == 1:
-            new_index = 0
+        if self.selected_index == -1:
+            new_index = 0 if delta > 0 else len(children) - 1
         else:
             new_index = self.selected_index + delta
 
@@ -639,27 +658,33 @@ class ClipHistoryMenu(Box):
 
     def use_selected_item(self, *_):
         """Use (paste) the selected clipboard item"""
-        children = self.viewport.get_children()
-        if (
-            not children
-            or self.selected_index == -1
-            or self.selected_index >= len(self.clipboard_items)
-        ):
+        if not self.filtered_items:
+            return
+
+        if self.selected_index == -1:
+            self.update_selection(0)
+
+        if self.selected_index == -1 or self.selected_index >= len(self.filtered_items):
             return
 
         # Get the item ID from the first part before the tab
-        item_line = self.clipboard_items[self.selected_index]
+        item_line = self.filtered_items[self.selected_index]
         item_id = item_line.split("\t", 1)[0]
         self.paste_item(item_id)
 
     def delete_selected_item(self):
         """Delete the selected clipboard item"""
-        children = self.viewport.get_children()
-        if not children or self.selected_index == -1:
+        if not self.filtered_items:
+            return
+
+        if self.selected_index == -1:
+            self.update_selection(0)
+
+        if self.selected_index == -1 or self.selected_index >= len(self.filtered_items):
             return
 
         # Get the item ID from the first part before the tab
-        item_line = self.clipboard_items[self.selected_index]
+        item_line = self.filtered_items[self.selected_index]
         item_id = item_line.split("\t", 1)[0]
         self.delete_item(item_id)
 
@@ -724,4 +749,4 @@ class ClipBoardWidget(ButtonWidget, PopoverMixin):
         if self.config.get("tooltip", False) and self.tooltips_enabled:
             self.set_tooltip_text("Clipboard History")
 
-        self.setup_popover(ClipHistoryMenu)
+        self.setup_popover(lambda: ClipHistoryMenu(parent=self))

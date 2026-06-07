@@ -441,26 +441,11 @@ class QuickSettingsButtonWidget(ButtonWidget, PopoverMixin):
             },
         )
 
-        self.connect(
-            "clicked",
-            self.show_popover,
-        )
-
         self.setup_popover(
             lambda: QuickSettingsMenu(config=self.config, popup=self._popup),
-            connect_clicked=False,
+            connect_clicked=True,
             on_close_callback=lambda *_: self.remove_style_class("active"),
         )
-
-    def show_popover(self, *_):
-        if self._popover_content_factory is None:
-            self.setup_popover(
-                lambda: QuickSettingsMenu(config=self.config, popup=self._popup),
-                connect_clicked=False,
-                on_close_callback=lambda *_: self.remove_style_class("active"),
-            )
-
-        super().show_popover()
 
     def _get_network_icon(self, *_):
         # Check if the network service is ready
