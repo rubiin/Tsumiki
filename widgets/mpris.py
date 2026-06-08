@@ -127,13 +127,14 @@ class MprisWidget(ButtonWidget, PopoverMixin):
     def _update_progress(self):
         show_progress = False
         self.meta_box.v_align = "start"
+        playback_status = self.player.playback_status if self.player else None
 
-        if self.player is None or self.player.playback_status == "stopped":
+        if playback_status not in {"playing", "paused"}:
             self.meta_box.v_align = "center"
             progress_pct = 0.0
         else:
             title = (self.player.title or "").strip()
-            show_progress = self.player.playback_status == "playing" and bool(title)
+            show_progress = playback_status in {"playing", "paused"} and bool(title)
             length_raw = getattr(self.player, "length", None)
             position_raw = getattr(self.player, "position", 0)
             try:
@@ -207,11 +208,8 @@ class MprisWidget(ButtonWidget, PopoverMixin):
         return False
 
     def get_current(self):
-        if self.player is None:
-            self._set_default_values()
-            return
-
-        if self.player.playback_status == "stopped":
+        playback_status = self.player.playback_status if self.player else None
+        if playback_status not in {"playing", "paused"}:
             self._set_default_values()
             return
 
@@ -237,10 +235,11 @@ class MprisWidget(ButtonWidget, PopoverMixin):
             self.set_tooltip_text(bar_label)
 
     def _set_default_values(self):
-        self._unbind_player_updates()
         self.cover.set_style("background-image: url('" + self.default_cover + "');")
         self.label.set_text("Nothing playing")
-        self._update_progress()
+        self.meta_box.v_align = "center"
+        self.progress.set_visible(False)
+        self.progress.set_style("")
 
     def destroy(self):
         self._stop_progress_timer()
