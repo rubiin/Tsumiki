@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.11.1](https://github.com/rubiin/tsumiki/compare/v2.11.0...v2.11.1) (2026-06-08)
+
+
+### ⚙️ Chores
+
+* remove GitHub Actions workflow for deploying docs to GitHub Pages ([ef45899](https://github.com/rubiin/tsumiki/commit/ef458998e783a2a5c45d8106f63153dad39eb544))
+
 ## [2.11.0](https://github.com/rubiin/tsumiki/compare/v2.10.2...v2.11.0) (2026-05-09)
 
 
