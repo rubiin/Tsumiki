@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.0.1](https://github.com/rubiin/tsumiki/compare/v3.0.0...v3.0.1) (2026-06-09)
+
+
+### 🐛 Bug Fixes
+
+* allow validation of enums on start ([17cad16](https://github.com/rubiin/tsumiki/commit/17cad16f2906e5fc83e63b06e7a075b30adc5e9a))
+* enhance schema reference resolution to support local overrides ([9c57466](https://github.com/rubiin/tsumiki/commit/9c574668f225a284356348f5667e61734f5f704b))
+
 ## [3.0.0](https://github.com/rubiin/tsumiki/compare/v3.0.0...v3.0.0) (2026-06-09)
 
 
