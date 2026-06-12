@@ -1,5 +1,34 @@
 # Changelog
 
+## [3.1.0](https://github.com/rubiin/tsumiki/compare/v3.0.1...v3.1.0) (2026-06-12)
+
+
+### 🚀 New Features
+
+* enhance quick settings UI with new components and improved styling ([272a80c](https://github.com/rubiin/tsumiki/commit/272a80cec185634bfc4955d2a584694c207c756c))
+* enhance quick settings UI with new icons and refactor state management ([cc1f539](https://github.com/rubiin/tsumiki/commit/cc1f539365249d5c44bd8cae9e4e6d2d54db1de8))
+* implement lazy loading for dynamic class imports in quick settings ([a5197c7](https://github.com/rubiin/tsumiki/commit/a5197c71706646b134f2988aff3adf3617e149d1))
+* implement password prompt for secured WiFi connections and refactor related UI components ([e4b4303](https://github.com/rubiin/tsumiki/commit/e4b4303c7352fde78b690b19492f11047143f380))
+* improve WiFi connection handling and state management in quick settings ([d250eaf](https://github.com/rubiin/tsumiki/commit/d250eaffe23a24043fd6039c07346cc9b22fb32e))
+* integrate character limit calculation for label width in MprisWidget ([6f83ffb](https://github.com/rubiin/tsumiki/commit/6f83ffb0230cee67f7c876d2ac819346cebb3c07))
+
+
+### 🐛 Bug Fixes
+
+* adjust icon sizes and border radius for improved UI consistency ([a333780](https://github.com/rubiin/tsumiki/commit/a33378069cae7d10ea4b428038a93d2a45c989e4))
+* enhance drag-and-drop functionality by adding app ID to drag data ([fcb6a4f](https://github.com/rubiin/tsumiki/commit/fcb6a4f383b5f537bc76813922ca11ab9d6f1a67))
+* reset seek bar value on player next and previous actions ([e1c1100](https://github.com/rubiin/tsumiki/commit/e1c1100d1870a585b80ae469c198186f956efca8))
+* update battery and charging icons for better visual representation ([3059a29](https://github.com/rubiin/tsumiki/commit/3059a298da5ab7848f87e5c76b3adc812501cef4))
+* update CSS path handling for dynamic stylesheet application ([a88d919](https://github.com/rubiin/tsumiki/commit/a88d919f889036ccd1603f9c72498fc35b854167))
+
+
+### ♻️ Code Refactoring
+
+* remove unnecessary blank line in WeatherWidget class ([cc8cadb](https://github.com/rubiin/tsumiki/commit/cc8cadbf53cbbf7f34bc7f18b7738facb9409e7c))
+* simplify notification indicator handling in DateTimeWidget ([13e6d10](https://github.com/rubiin/tsumiki/commit/13e6d108f01c3b0bc8206edf657764b586239b52))
+* streamline clipboard history widget layout and pagination handling ([b22de36](https://github.com/rubiin/tsumiki/commit/b22de366467cc9381bfcf7bfab893196dbccc800))
+* update window count widget to use new label format and remove unused icon handling ([130fd6b](https://github.com/rubiin/tsumiki/commit/130fd6bd8d7c096b0aae3cc4e1ca2432a75a66db))
+
 ## [3.0.1](https://github.com/rubiin/tsumiki/compare/v3.0.0...v3.0.1) (2026-06-09)
 
 
