@@ -20,7 +20,7 @@ repos:
 
   # Ruff for linting, formatting, and import sorting
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.15.16
+    rev: v0.15.17
     hooks:
       - id: ruff
         args: ["--fix"]
@@ -33,7 +33,7 @@ repos:
         args: ["--profile", "black"]
 
   - repo: https://github.com/betterleaks/betterleaks
-    rev: v1.4.1
+    rev: v1.5.0
     hooks:
       - id: betterleaks
 
