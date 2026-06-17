@@ -1,5 +1,30 @@
 # Changelog
 
+## [3.1.1](https://github.com/rubiin/tsumiki/compare/v3.1.0...v3.1.1) (2026-06-17)
+
+
+### 🐛 Bug Fixes
+
+* add hover cursor for workspace ([02dbaea](https://github.com/rubiin/tsumiki/commit/02dbaeaf99190f56e60a4e9b8051577ded66d1b6))
+* clipboard style ([20c3922](https://github.com/rubiin/tsumiki/commit/20c392212e86fc3b37220b6198d2980585edddac))
+* css ([aac0460](https://github.com/rubiin/tsumiki/commit/aac04602993e6b9d3f033dee70b07caf2ded7872))
+* date menu config ([8df6ea7](https://github.com/rubiin/tsumiki/commit/8df6ea7e15c42a0f0f95c1a4466de404fc25e7c4))
+* notification counter hide on zero ([0023e35](https://github.com/rubiin/tsumiki/commit/0023e35315591d6a5b0db195b3d78361196d5d17))
+* notification counter style ([a5b1668](https://github.com/rubiin/tsumiki/commit/a5b1668440450ebb41bc3bf14a1fb0711114659e))
+* remove distro icon from workspace ([8f96657](https://github.com/rubiin/tsumiki/commit/8f966572b7bf5b429fc23114796e9ed2ce3e49e0))
+* styles and imports ([894d50a](https://github.com/rubiin/tsumiki/commit/894d50a1261865220814e8e45234bdc72fb07daa))
+* widget style ([a5c71c7](https://github.com/rubiin/tsumiki/commit/a5c71c7aed2044fb3c1c7adbc5f59497ac0b80da))
+* widget style ([b43438d](https://github.com/rubiin/tsumiki/commit/b43438d5e4a7c052bb82d98624102c6cd18b8887))
+
+
+### ♻️ Code Refactoring
+
+* add power menu item shortcuts and update button handling ([8a5f20d](https://github.com/rubiin/tsumiki/commit/8a5f20d35c97b821b97fa568dabce890d8f5bbe7))
+* clean up clipboard widget code and improve placeholder text ([ced7d79](https://github.com/rubiin/tsumiki/commit/ced7d79b4263406d4f6648e3254341c52a74fd70))
+* remove unused icon size from window count widget and update MprisWidget box style classes ([ae6174d](https://github.com/rubiin/tsumiki/commit/ae6174daf7e4715f3881b0ddadfa8015e810e177))
+* update app launcher configuration and styles for improved layout and spacing ([352c774](https://github.com/rubiin/tsumiki/commit/352c774383f9363a66c82e46a8d8f78aa8e3af52))
+* update lambda functions for improved readability and maintainability ([c6dec79](https://github.com/rubiin/tsumiki/commit/c6dec79d6aee4b08a06e9c76dcb63d190bb8f504))
+
 ## [3.1.0](https://github.com/rubiin/tsumiki/compare/v3.0.1...v3.1.0) (2026-06-12)
 
 
