@@ -1,5 +1,18 @@
 # Changelog
 
+## [3.2.0](https://github.com/rubiin/tsumiki/compare/v3.1.1...v3.2.0) (2026-06-19)
+
+
+### 🚀 New Features
+
+* add label format for mpris widget ([e26206d](https://github.com/rubiin/tsumiki/commit/e26206d36ba9f7412e8fb5ca01f71f37080bd720))
+
+
+### 🐛 Bug Fixes
+
+* fix collapsible group style ([06989ec](https://github.com/rubiin/tsumiki/commit/06989ec6bef49bc7231ff12e23c56b68a881f510))
+* validate label_format and show warning ([7f2b319](https://github.com/rubiin/tsumiki/commit/7f2b319a710ca2537414ba7c2fe50ab631d6a338))
+
 ## [3.1.1](https://github.com/rubiin/tsumiki/compare/v3.1.0...v3.1.1) (2026-06-17)
 
 
