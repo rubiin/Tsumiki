@@ -1,5 +1,53 @@
 # Changelog
 
+## [3.3.0](https://github.com/rubiin/tsumiki/compare/v3.2.0...v3.3.0) (2026-07-05)
+
+
+### 🚀 New Features
+
+* add cheatsheet for keybind ([27d7e42](https://github.com/rubiin/tsumiki/commit/27d7e42226ab01a88238a941a0145a2340afb317))
+* add dark mode support ([29a8c99](https://github.com/rubiin/tsumiki/commit/29a8c9995d41d33eb5a5d6581365debb22dda5e0))
+* add dark mode support ([1bd915d](https://github.com/rubiin/tsumiki/commit/1bd915d08ab65d83a96827214e5961441dbac6c0))
+* add gitcompanion ([dce77be](https://github.com/rubiin/tsumiki/commit/dce77befa2c674e15c6a43b3c4bb47770812562e))
+* add mpris ignore ([3a88b56](https://github.com/rubiin/tsumiki/commit/3a88b56465331d53b5bcae4050fca96babbe628d))
+* add pomodoro timer widget and configuration ([5ad4270](https://github.com/rubiin/tsumiki/commit/5ad42702571877e1672ece7b0e7d047d14d9e771))
+* add replaces_id support notification ([e492691](https://github.com/rubiin/tsumiki/commit/e4926913c29fee9eca876898000446467b56b0ff))
+* add USB manager widget for managing removable drives ([aa16e79](https://github.com/rubiin/tsumiki/commit/aa16e79ed8f4fd05ce6637cd167c23fec3571813))
+* enhance USB manager layout and functionality with improved styles and device handling ([9f2012b](https://github.com/rubiin/tsumiki/commit/9f2012b594008ba75c5ae2704a8218581ed213e7))
+* implement clipboard item pinning functionality ([55d6846](https://github.com/rubiin/tsumiki/commit/55d6846c3386bc1b0b941e3e1d9e5b126e5bbd13))
+* refactor clipboard and USB manager popover setup for improved readability and functionality ([df504e9](https://github.com/rubiin/tsumiki/commit/df504e98bd5e1658cec42ada7430d225b8d64087))
+* toml theme files ([8c28109](https://github.com/rubiin/tsumiki/commit/8c281094091c95adcf210b3f5544900f7bc420ab))
+* update .gitignore to include graphify-out and enhance USB manager styles with padding ([a481742](https://github.com/rubiin/tsumiki/commit/a481742a86489fb17170429e198d7d6a5d298837))
+* update icons in PomodoroMenu for improved visual consistency ([85964b2](https://github.com/rubiin/tsumiki/commit/85964b228eac2cf9b3a7a720f49013ba7b290df5))
+* update layout and styles for pomodoro and git companion widgets ([9c5724b](https://github.com/rubiin/tsumiki/commit/9c5724b4bd5915699d3f84f02971035ae9c4a3b8))
+* update layout configuration to replace usb_manager with mpris ([cdc8434](https://github.com/rubiin/tsumiki/commit/cdc8434e3a40be1da0772b7ac082d92a39baef4f))
+* update layout to replace usb_manager with mpris and enhance USB manager functionality ([527e0f9](https://github.com/rubiin/tsumiki/commit/527e0f9d4c0c55ef57c3975336ceda00e2f5f7c4))
+* update USB manager layout and styles with new title icon and improved button colors ([bf1f7f0](https://github.com/rubiin/tsumiki/commit/bf1f7f09aaba3bc1aa04f355cce9b83b660cb1b0))
+* update USB manager widget with new icon and improved layout ([3a3bf86](https://github.com/rubiin/tsumiki/commit/3a3bf8629bbd36de2416049eb23adeb028450876))
+
+
+### 🐛 Bug Fixes
+
+* autohide ([9611f82](https://github.com/rubiin/tsumiki/commit/9611f8263fb6cd5f5abd064b0fc37ed33db89689))
+* clipboard loading issue ([43c5a2a](https://github.com/rubiin/tsumiki/commit/43c5a2a917422268683e12af5d49f4e9a9873ce7))
+* control time in date menu from the format ([5c6ff54](https://github.com/rubiin/tsumiki/commit/5c6ff54e7eaf73e0503ab336eb65cb0860b97763))
+* correct enable_pinning placement and update bar layer to background ([b07f469](https://github.com/rubiin/tsumiki/commit/b07f4691fd8848475f8a73d87837c112c685eb06))
+* disable auto-hide for the top bar ([35a4a2d](https://github.com/rubiin/tsumiki/commit/35a4a2d757e8385a7494fcb9d9e32c97b984b956))
+* enhance notification replacement logic and improve closing behavior ([4d99ce5](https://github.com/rubiin/tsumiki/commit/4d99ce58061e07b809da40305c30cf9ad0aaa52b))
+* themechanger widget ([d125cee](https://github.com/rubiin/tsumiki/commit/d125cee9f3beda382e39ef305e4ef72ac1b7a826))
+* use basewindow ([7b11aad](https://github.com/rubiin/tsumiki/commit/7b11aad656e9c8761b951adc8d6a050e97f24c0c))
+
+
+### 🎨 Code Style
+
+* move themes to toml ([758319a](https://github.com/rubiin/tsumiki/commit/758319a891a8b196de85e51b076ac66c058d7b43))
+
+
+### ⚙️ Chores
+
+* **deps:** update all non-major dependencies ([#321](https://github.com/rubiin/tsumiki/issues/321)) ([3932ea8](https://github.com/rubiin/tsumiki/commit/3932ea8801d756d6b417296076eed32407810c6b))
+* remove redundant style var ([36d79f8](https://github.com/rubiin/tsumiki/commit/36d79f8b1bdcab18261498d2625e1889e0f95bdf))
+
 ## [3.2.0](https://github.com/rubiin/tsumiki/compare/v3.1.1...v3.2.0) (2026-06-19)
 
 
