@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.4.0](https://github.com/rubiin/tsumiki/compare/v3.3.0...v3.4.0) (2026-07-05)
+
+
+### 🚀 New Features
+
+* add IP monitor widget with customizable features and integration ([008d96c](https://github.com/rubiin/tsumiki/commit/008d96cc3dfd92a2fb0731ebdeab437d39a2125b))
+* implement cookie-style desktop clock with customizable features ([0dd36db](https://github.com/rubiin/tsumiki/commit/0dd36db19bf4b4a2502d4427ef9565c54ceb6efb))
+
 ## [3.3.0](https://github.com/rubiin/tsumiki/compare/v3.2.0...v3.3.0) (2026-07-05)
 
 
