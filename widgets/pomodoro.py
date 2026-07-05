@@ -8,7 +8,6 @@ from fabric.widgets.overlay import Overlay
 
 from shared.mixins import PopoverMixin
 from shared.widget_container import ButtonWidget
-from utils.icons import get_text_icon
 from utils.widget_utils import nerd_font_icon
 
 
