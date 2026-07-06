@@ -152,6 +152,7 @@ DEFAULT_CONFIG = {
         },
         "divider": {"size": 2},
         "cheatsheet": {},
+        "crypto_market": {},
         "git_companion": {
             "icon": "",
             "label": False,

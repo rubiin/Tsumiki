@@ -1,0 +1,130 @@
+@use "common";
+@use "variable";
+
+#crypto_market {
+  @include common.widget_border(
+    variable.$bar-widgets-crypto_market-border-radius,
+    variable.$bar-widgets-crypto_market-border-enabled,
+    variable.$bar-widgets-crypto_market-border-width
+  );
+
+  @include common.nerd-icon(variable.$bar-widgets-crypto_market-icon_size, null);
+}
+
+#crypto-market-window {
+  min-width: 430px;
+  padding: 8px;
+  border-radius: 12px;
+
+  #crypto-market-header {
+    padding: 4px;
+
+    .crypto-market-title {
+      color: #f2f5f9;
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .crypto-market-subtitle {
+      color: #d8e1ea;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .crypto-market-action-btn {
+      min-width: 20px;
+      min-height: 20px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 213, 0, 0.45);
+      color: #ffcf22;
+      background-color: rgba(0, 0, 0, 0.25);
+
+      &:hover {
+        background-color: rgba(255, 206, 34, 0.12);
+      }
+
+      &.danger {
+        border-color: rgba(255, 213, 0, 0.35);
+      }
+    }
+
+    .crypto-market-action-icon {
+      font-size: 11px;
+    }
+  }
+
+  #crypto-market-card {
+    padding: 8px 10px;
+    border-radius: 10px;
+    background-color: rgba(27, 31, 36, 0.95);
+  }
+
+  #crypto-market-table-header {
+    padding-bottom: 6px;
+    border-bottom: 1px solid rgba(170, 180, 190, 0.22);
+
+    .crypto-market-th {
+      color: #d8e1ea;
+      font-size: 13px;
+      font-weight: 600;
+    }
+  }
+
+  #crypto-market-rows {
+    padding-top: 6px;
+  }
+
+  #crypto-market-row {
+    min-height: 30px;
+
+    .crypto-market-coin-label,
+    .crypto-market-td {
+      color: #f0f4f8;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .crypto-market-coin-icon {
+      min-width: 18px;
+      min-height: 18px;
+      border-radius: 999px;
+      color: #ffffff;
+      background-color: #f5a623;
+      font-size: 12px;
+      font-weight: 700;
+
+      &.eth {
+        background-color: #5b648f;
+      }
+
+      &.bnb {
+        background-color: #efc72f;
+        color: #3a2d00;
+      }
+
+      &.sol {
+        background-color: #54cbb7;
+        color: #0c2530;
+      }
+
+      &.xrp {
+        background-color: #d8dce2;
+        color: #1f2630;
+      }
+    }
+  }
+
+  .coin {
+    min-width: 74px;
+  }
+
+  .price,
+  .high,
+  .low {
+    min-width: 82px;
+  }
+
+  .change {
+    min-width: 76px;
+  }
+}

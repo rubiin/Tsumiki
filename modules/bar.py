@@ -83,6 +83,7 @@ LAZY_WIDGETS_LIST = {
     "clipboard": "widgets.clipboard.ClipBoardWidget",
     "collapsible_group": "shared.collapsible_group.CollapsibleGroupWidget",
     "cpu": "widgets.stats.CpuWidget",
+    "crypto_market": "widgets.crypto_market.CryptoMarketWidget",
     "custom_widget": "widgets.custom_widget.CustomWidget",
     "date_time": "widgets.datetime_menu.DateTimeWidget",
     "divider": "widgets.utility_widgets.DividerWidget",

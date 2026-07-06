@@ -125,6 +125,59 @@
 						}
 					}
 				},
+				"crypto_market": {
+					"type": "object",
+					"properties": {
+						"tooltip": {
+							"type": "boolean",
+							"default": true,
+							"description": "Determines whether the crypto market widget has a tooltip."
+						},
+						"tooltip_text": {
+							"type": "string",
+							"default": "Crypto Market",
+							"description": "Tooltip text shown for the crypto market widget."
+						},
+						"label": {
+							"type": "boolean",
+							"default": false,
+							"description": "Determines whether to show text beside icon."
+						},
+						"label_text": {
+							"type": "string",
+							"default": "Crypto",
+							"description": "Text shown when label is enabled."
+						},
+						"icon": {
+							"type": "string",
+							"default": "󰠳",
+							"description": "Icon displayed in the crypto market widget."
+						},
+						"refresh_interval": {
+							"type": "integer",
+							"default": 5,
+							"description": "Market refresh interval in seconds (1-60)."
+						},
+						"red_rises": {
+							"type": "boolean",
+							"default": false,
+							"description": "If true, rising values become red and falling become green."
+						},
+						"watch_list": {
+							"type": "array",
+							"items": {
+								"type": "string"
+							},
+							"default": ["BTC", "ETH", "BNB", "SOL", "XRP"],
+							"description": "Coins shown in table. Supported: BTC, ETH, BNB, SOL, XRP."
+						},
+						"endpoint": {
+							"type": "string",
+							"default": "https://api.coingecko.com/api/v3/simple/price",
+							"description": "Optional custom endpoint for market data."
+						}
+					}
+				},
 				"battery": {
 					"type": "object",
 					"properties": {
@@ -2266,6 +2319,7 @@
 								"enum": [
 									"app_launcher_button",
 									"git_companion",
+									"crypto_market",
 									"ip_monitor",
 									"battery",
 									"bluetooth",
@@ -2360,6 +2414,7 @@
 								"enum": [
 									"app_launcher_button",
 									"git_companion",
+									"crypto_market",
 									"ip_monitor",
 									"battery",
 									"bluetooth",
@@ -2454,6 +2509,7 @@
 								"enum": [
 									"app_launcher_button",
 									"git_companion",
+									"crypto_market",
 									"ip_monitor",
 									"battery",
 									"bluetooth",
@@ -2561,6 +2617,7 @@
 									"enum": [
 										"app_launcher_button",
 										"git_companion",
+										"crypto_market",
 										"ip_monitor",
 										"battery",
 										"bluetooth",

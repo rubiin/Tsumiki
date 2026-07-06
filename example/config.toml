@@ -15,6 +15,17 @@ avatar_size = 44
 default_tab = "issues"
 cache_ttl = 300
 
+[widgets.crypto_market]
+icon = "󰠳"
+label = false
+label_text = "Crypto"
+tooltip = true
+tooltip_text = "Crypto Market"
+refresh_interval = 5
+red_rises = false
+watch_list = ["BTC", "ETH", "BNB", "SOL", "XRP"]
+endpoint = "https://api.coingecko.com/api/v3/simple/price"
+
 [widgets.ip_monitor]
 icon = "󰖟"
 label = false

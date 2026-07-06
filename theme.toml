@@ -143,6 +143,15 @@ radius = "16px"
 width = "1px"
 
 
+[bar.widgets.crypto_market]
+icon_size = "14px"
+spacing = "0.125em"
+
+[bar.widgets.crypto_market.border]
+enabled = false
+radius = "16px"
+width = "1px"
+
 [bar.widgets.git_companion]
 icon_size = "12px"
 spacing = "0.125em"
