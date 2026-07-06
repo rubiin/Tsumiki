@@ -33,7 +33,7 @@ repos:
         args: ["--profile", "black"]
 
   - repo: https://github.com/betterleaks/betterleaks
-    rev: v1.6.0
+    rev: v1.6.1
     hooks:
       - id: betterleaks
 
