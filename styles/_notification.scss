@@ -8,25 +8,21 @@ $hover-transition: background 0.15s ease-in-out;
 /* notification widget*/
 
 %notification_widget {
-  padding: variable.$modules-notification-padding_y variable.$modules-notification-padding_x;
+  padding: 0 variable.$modules-notification-padding_x variable.$modules-notification-padding_y variable.$modules-notification-padding_x;
   opacity: variable.$modules-notification-opacity * 0.01;
   color: theme.$text-main;
   background-color: theme.$background-alt;
   transition: border 100ms ease-in-out;
 
-  @include common.widget_border(
-    variable.$modules-notification-border-radius,
+  @include common.widget_border(variable.$modules-notification-border-radius,
     variable.$modules-notification-border-enabled,
-    variable.$modules-notification-border-width
-  );
+    variable.$modules-notification-border-width );
 
-  @include common.module-shadow(
-    variable.$modules-notification-shadow-enabled,
+  @include common.module-shadow(variable.$modules-notification-shadow-enabled,
     variable.$modules-notification-shadow-offset,
     variable.$modules-notification-shadow-blur,
     variable.$modules-notification-shadow-spread,
-    variable.$modules-notification-shadow-opacity
-  );
+    variable.$modules-notification-shadow-opacity );
 
   .notification-header {
     padding: common.toEm(5);

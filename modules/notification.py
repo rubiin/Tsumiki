@@ -7,6 +7,7 @@ from fabric.utils import (
     Gdk,
     GdkPixbuf,
     GLib,
+    Gtk,
     bulk_connect,
     invoke_repeater,
     logger,
@@ -17,7 +18,6 @@ from fabric.widgets.button import Button
 from fabric.widgets.eventbox import EventBox
 from fabric.widgets.grid import Grid
 from fabric.widgets.label import Label
-from fabric.widgets.overlay import Overlay
 from fabric.widgets.revealer import Revealer
 from fabric.widgets.widget import Widget
 
@@ -30,10 +30,11 @@ from shared.widget_container import BaseWindow
 from utils.colors import Colors
 from utils.icons import get_text_icon
 from utils.widget_settings import BarConfig
-from utils.widget_utils import create_progress, get_icon, nerd_font_icon
+from utils.widget_utils import get_icon, nerd_font_icon
 
 # Swipe threshold for dismissing notifications (normalized: 0.0 to 1.0)
 _SWIPE_DISMISS_THRESHOLD = 0.35
+BAR_COLOR = (1.0, 0.36, 0.36)  # RGB for the progress bar color
 
 
 class NotificationPopup(BaseWindow):
@@ -158,19 +159,14 @@ class NotificationWidget(EventBox):
             | Gdk.EventMask.POINTER_MOTION_MASK
         )
 
-        self.progress_timeout = create_progress(
-            name="notification-circular-progress-bar",
-            line_width=3,
-            min_value=0,
-            max_value=1,
-            radius_color=True,
-            invert=True,
-            start_angle=-90,
-            size=27,
+        self.progress_timeout = Gtk.DrawingArea(
+            visible=True,
+            name="notification-progress-timeout",
         )
+        self.progress_timeout.set_size_request(-1, 2)
+        self.progress_timeout.connect("draw", self._draw_progress)
 
         self.notification_box = Box(
-            spacing=8,
             name="notification",
             orientation="v",
         )
@@ -195,7 +191,12 @@ class NotificationWidget(EventBox):
         )
         self.actions_container_grid = self._build_actions(notification)
 
-        self.notification_box.children = (header, body, self.actions_container_grid)
+        self.notification_box.children = (
+            self.progress_timeout,
+            header,
+            body,
+            self.actions_container_grid,
+        )
         self.add(self.notification_box)
 
         self._notification.connect("closed", lambda *_: self.stop_timeout())
@@ -212,6 +213,26 @@ class NotificationWidget(EventBox):
                 "leave-notify-event": self.on_unhover,
             },
         )
+
+    def _draw_progress(self, widget, cr):
+        width = widget.get_allocated_width()
+        height = widget.get_allocated_height()
+
+        elapsed = self.get_timeout() - self._time_remaining
+        frac = (
+            max(0.0, 1.0 - (elapsed / self.get_timeout()))
+            if self.get_timeout()
+            else 1.0
+        )
+
+        bar_width = width * frac
+        x = (width - bar_width) / 2  # shrinks inward from both edges toward center
+
+        r, g, b = BAR_COLOR
+        cr.set_source_rgb(r, g, b)
+        cr.rectangle(x, 0, bar_width, height)
+        cr.fill()
+        return False
 
     def _build_header(
         self,
@@ -254,21 +275,18 @@ class NotificationWidget(EventBox):
                 ),
             )
 
-        overlay = Overlay(
-            child=self.progress_timeout,
-            overlays=Button(
-                v_align="center",
-                h_align="center",
-                style_classes=["close-button"],
-                child=nerd_font_icon(
-                    icon=get_text_icon("ui.window_close"),
-                    props={"style_classes": ["panel-font-icon", "close-icon"]},
-                ),
-                on_clicked=self.on_close_button_clicked,
+        close_btn = Button(
+            v_align="center",
+            h_align="center",
+            style_classes=["close-button"],
+            child=nerd_font_icon(
+                icon=get_text_icon("ui.window_close"),
+                props={"style_classes": ["panel-font-icon", "close-icon"]},
             ),
+            on_clicked=self.on_close_button_clicked,
         )
 
-        header_container.pack_end(overlay, False, False, 0)
+        header_container.pack_end(close_btn, False, False, 0)
         if self.expand_button:
             header_container.pack_end(self.expand_button, False, False, 0)
 
@@ -373,17 +391,16 @@ class NotificationWidget(EventBox):
     def start_timeout(self):
         self.stop_timeout()
         self._time_remaining = self.get_timeout()
-        self.progress_timeout.max_value = self._time_remaining
         self._timeout_id = invoke_repeater(10, self._timer_tick)
 
     def _timer_tick(self) -> bool:
         """Single unified tick: update progress bar and close when expired."""
-        self.progress_timeout.value = self._time_remaining
 
         if self._time_remaining <= 0:
             self.close_notification()
             return False
         self._time_remaining -= 10
+        self.progress_timeout.queue_draw()
         return True
 
     def stop_timeout(self):

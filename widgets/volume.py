@@ -32,6 +32,7 @@ class VolumeWidget(EventBoxWidget):
         # Create a circular progress bar to display the brightness level
         self.progress_bar = create_progress(
             child=self.icon,
+            value=self.audio.speaker.volume / 100 if self.audio.speaker else 0,
         )
 
         # Create an event box to handle scroll events for volume control
