@@ -42,6 +42,7 @@ class MprisWidget(ButtonWidget, PopoverMixin):
         )
         self._set_default_values()
         self.container_box.children = [self.cover, self.meta_box]
+        self._last_progress_pct: float | None = None
 
         bulk_connect(
             self,
@@ -93,14 +94,16 @@ class MprisWidget(ButtonWidget, PopoverMixin):
         if self.player is None:
             return
 
-        for signal_name in [
+        metadata_signals = [
             "changed",
             "notify::metadata",
             "notify::title",
             "notify::arturl",
             "notify::length",
-            "notify::position",
-        ]:
+            "notify::playback-status",
+        ]
+
+        for signal_name in metadata_signals:
             self._player_update_handlers.append(
                 self.player.connect(signal_name, lambda *_: self.get_current())
             )
@@ -152,12 +155,25 @@ class MprisWidget(ButtonWidget, PopoverMixin):
                 progress_pct = 0.0
 
         self.progress.set_visible(show_progress)
+
+        if not show_progress:
+            self._last_progress_pct = None
+            self.progress.set_style("")
+            return
+
+        rounded = round(progress_pct, 1)
+
+        if rounded == self._last_progress_pct:
+            return
+
+        self._last_progress_pct = rounded
+
         self.progress.set_style(
             "background-image: linear-gradient(90deg, "
             "rgba(103, 200, 255, 0.95) 0%, "
-            f"rgba(103, 200, 255, 0.95) {progress_pct:.2f}%, "
-            f"rgba(255, 255, 255, 0.20) {progress_pct:.2f}%, "
-            "rgba(255, 255, 255, 0.20) 100%);"
+            f"rgba(103, 200, 255, 0.95) {rounded:.1f}%, "
+            f"rgba(255,255,255,0.20) {rounded:.1f}%, "
+            "rgba(255,255,255,0.20) 100%);"
         )
 
     def _unbind_player_updates(self):
@@ -171,6 +187,7 @@ class MprisWidget(ButtonWidget, PopoverMixin):
 
     def _set_player(self, raw_player):
         self._unbind_player_updates()
+        self._last_progress_pct = None
         self.player = MprisPlayer(raw_player)
         self._bind_player_updates()
         self.get_current()
@@ -213,8 +230,8 @@ class MprisWidget(ButtonWidget, PopoverMixin):
             return
 
         self.show()
-        title = self.player.title or ""
-        bar_label = NEWLINE_RE.sub(" ", title).strip() or "Nothing playing"
+        title = NEWLINE_RE.sub(" ", self.player.title or "").strip()
+        bar_label = title or "Nothing playing"
 
         label_text = self.label_format.format(
             title=title,
@@ -236,6 +253,7 @@ class MprisWidget(ButtonWidget, PopoverMixin):
             self.set_tooltip_text(bar_label)
 
     def _set_default_values(self):
+        self._last_progress_pct = None
         self.cover.set_style("background-image: url('" + self.default_cover + "');")
         self.label.set_text("Nothing playing")
         self.meta_box.v_align = "center"
