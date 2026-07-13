@@ -12,7 +12,7 @@ from fabric.utils import (
 import utils.functions as helpers
 from modules.bar import Bar
 from utils.colors import Colors
-from utils.config import theme_config, widget_config
+from utils.config import tsumiki_config
 from utils.constants import APP_DATA_DIRECTORY, APPLICATION_NAME, CSS_PATH
 
 
@@ -40,22 +40,23 @@ def main():
     """Main function to run the application."""
     # Defer config loading until main() is called
 
-    general_options = widget_config.get("general", {})
-    module_options = widget_config.get("modules", {})
+    general_options = tsumiki_config.get("general", {})
+    module_options = tsumiki_config.get("modules", {})
 
     helpers.check_executable_exists("sass")
     helpers.ensure_directory(APP_DATA_DIRECTORY)
 
     # Check if matugen is enabled and generate palette
-    matugen_config = theme_config.get("matugen", {})
+    style_config = tsumiki_config.get("styling", {})
+    matugen_config = style_config.get("matugen", {})
     if matugen_config.get("enabled", False):
         from services import matugen_service
 
         matugen_service.generate_sync()
     else:
         helpers.copy_themev2(
-            theme_config.get("name", "catppuccin-mocha"),
-            theme_config.get("mode", "dark"),
+            style_config.get("name", "catppuccin-mocha"),
+            style_config.get("mode", "dark"),
         )
 
     helpers.set_process_name(APPLICATION_NAME)
@@ -64,54 +65,54 @@ def main():
     app = Application(APPLICATION_NAME)
 
     # Create status bars
-    Bar.create_bars(app, widget_config)
+    Bar.create_bars(app, tsumiki_config)
 
     if module_options.get("notification", {}).get("enabled", False):
         from modules.notification import NotificationPopup
 
-        app.add_window(NotificationPopup(widget_config))
+        app.add_window(NotificationPopup(tsumiki_config))
 
     if module_options.get("overview", {}).get("enabled", False):
         from modules.overview import OverViewOverlay
 
         logger.info("[Main] Adding overview module")
 
-        app.add_window(OverViewOverlay(widget_config))
+        app.add_window(OverViewOverlay(tsumiki_config))
 
     if module_options.get("screen_corners", {}).get("enabled", False):
         from modules.corners import ScreenCorners
 
-        app.add_window(ScreenCorners(widget_config))
+        app.add_window(ScreenCorners(tsumiki_config))
 
     if module_options.get("desktop_quotes", {}).get("enabled", False):
         from modules.desktop_quotes import DesktopQuote
 
-        app.add_window(DesktopQuote(widget_config))
+        app.add_window(DesktopQuote(tsumiki_config))
 
     if module_options.get("activate_linux", {}).get("enabled", False):
         from modules.activate_linux import ActivateLinux
 
-        app.add_window(ActivateLinux(widget_config))
+        app.add_window(ActivateLinux(tsumiki_config))
 
     if module_options.get("app_launcher", {}).get("enabled", False):
         from modules.app_launcher import AppLauncher
 
-        app.add_window(AppLauncher(widget_config))
+        app.add_window(AppLauncher(tsumiki_config))
 
     if module_options.get("dock", {}).get("enabled", False):
         from modules.dock import Dock
 
-        app.add_window(Dock(widget_config))
+        app.add_window(Dock(tsumiki_config))
 
     if module_options.get("desktop_clock", {}).get("enabled", False):
         from modules.desktop_clock import DesktopClock
 
-        app.add_window(DesktopClock(widget_config))
+        app.add_window(DesktopClock(tsumiki_config))
 
     if module_options.get("osd", {}).get("enabled", False):
         from modules.osd import OSDContainer
 
-        app.add_window(OSDContainer(widget_config))
+        app.add_window(OSDContainer(tsumiki_config))
 
     # Disable verbose logging for non-debug mode
 

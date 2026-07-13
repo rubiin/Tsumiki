@@ -587,3 +587,655 @@ auto_restart = true
 restart_delay = 1500
 multi_monitor = false
 tooltips = true
+
+
+[styling]
+border-radius = "10px"
+border-width = "1px"
+mode = "dark"
+name = "catpuccin-mocha"
+padding = "7pt"
+spacing = "12pt"
+
+
+[styling.font]
+name = "JetBrainsMono Nerd Font Propo"
+size = "1rem"
+style = "normal"
+weight = 600
+
+[styling.matugen]
+contrast = 0
+enabled = false
+scheme = "scheme-tonal-spot"
+wallpaper = "~/2.jpg"
+
+
+[styling.bar]
+margin_x = "0"
+margin_y = "1.25em"
+opacity = 10
+padding_x = "0.8em"
+padding_y = "0.6em"
+scaling = 100
+
+
+[styling.bar.border]
+enabled = true
+radius = "16px"
+width = "4px"
+
+[styling.bar.buttons]
+hover_opacity = 90
+margin_x = "0"
+margin_y = "1.25em"
+opacity = 100
+padding_x = "0"
+padding_y = "1.25em"
+scaling = 100
+
+[styling.bar.buttons.shadow]
+blur = 0
+enabled = false
+offset = 0
+opacity = 100
+spread = 0
+
+[styling.bar.menus]
+opacity = 100
+scaling = 100
+
+[styling.bar.menus.border]
+enabled = false
+radius = "16px"
+width = "1px"
+
+[styling.bar.menus.popover]
+font-weight = 700
+margin_x = "0"
+margin_y = "1.25em"
+opacity = 100
+padding_x = "0.5em"
+padding_y = "0.5em"
+scaling = 100
+
+[styling.bar.menus.popover.border]
+enabled = false
+radius = "1.5em"
+width = "1px"
+
+[styling.bar.menus.popover.shadow]
+blur = 0
+enabled = false
+offset = 0
+opacity = 100
+spread = 0
+
+[styling.bar.menus.tooltip]
+font-weight = 700
+opacity = 100
+padding_x = "0.25em"
+padding_y = "0.125em"
+scaling = 100
+
+[styling.bar.menus.tooltip.border]
+enabled = false
+radius = "1em"
+width = "1px"
+
+[styling.bar.menus.tooltip.shadow]
+blur = 0
+enabled = false
+offset = 0
+opacity = 100
+spread = 0
+
+[styling.bar.shadow]
+blur = 0
+enabled = false
+offset = 0
+opacity = 100
+spread = 0
+
+[styling.bar.style]
+panel = "default"
+widget = "default"
+
+[styling.bar.widgets.battery]
+icon_size = "14px"
+spacing = "0.125em"
+
+[styling.bar.widgets.battery.border]
+enabled = false
+radius = "16px"
+width = "1px"
+
+[styling.bar.widgets.bluetooth]
+icon_size = "12px"
+spacing = "0.125em"
+
+[styling.bar.widgets.bluetooth.border]
+enabled = false
+radius = "16px"
+width = "1px"
+
+
+[styling.bar.widgets.cheatsheet]
+icon_size = "12px"
+spacing = "0.125em"
+
+[styling.bar.widgets.cheatsheet.border]
+enabled = false
+radius = "16px"
+width = "1px"
+
+[styling.bar.widgets.usb_manager]
+icon_size = "14px"
+spacing = "0.125em"
+
+[styling.bar.widgets.usb_manager.border]
+enabled = false
+radius = "16px"
+width = "1px"
+
+
+[styling.bar.widgets.ip_monitor]
+icon_size = "14px"
+spacing = "0.125em"
+
+[styling.bar.widgets.ip_monitor.border]
+enabled = false
+radius = "16px"
+width = "1px"
+
+
+[styling.bar.widgets.git_companion]
+icon_size = "12px"
+spacing = "0.125em"
+
+[styling.bar.widgets.git_companion.border]
+enabled = false
+radius = "16px"
+width = "1px"
+
+[styling.bar.widgets.pomodoro]
+icon_size = "12px"
+spacing = "0.125em"
+
+[styling.bar.widgets.pomodoro.border]
+enabled = false
+radius = "16px"
+width = "1px"
+
+[styling.bar.widgets.brightness]
+icon_size = "12px"
+spacing = "0.25em"
+
+[styling.bar.widgets.brightness.border]
+enabled = false
+radius = "16px"
+width = "1px"
+
+[styling.bar.widgets.cava]
+spacing = "0.125em"
+
+[styling.bar.widgets.cava.border]
+enabled = false
+radius = "16px"
+width = "1px"
+
+[styling.bar.widgets.click_counter]
+icon_size = "14px"
+spacing = "0.125em"
+
+[styling.bar.widgets.click_counter.border]
+enabled = false
+radius = "16px"
+width = "1px"
+
+[styling.bar.widgets.clipboard]
+icon_size = "12px"
+spacing = "0.125em"
+
+[styling.bar.widgets.clipboard.border]
+enabled = false
+radius = "16px"
+width = "1px"
+
+[styling.bar.widgets.cpu]
+icon_size = "12px"
+spacing = "0.125em"
+
+[styling.bar.widgets.cpu.border]
+enabled = false
+radius = "16px"
+width = "1px"
+
+[styling.bar.widgets.date_time]
+icon_size = "12px"  # TODO: add this
+spacing = "0.125em"
+
+[styling.bar.widgets.date_time.border]
+enabled = false
+radius = "16px"
+width = "1px"
+
+[styling.bar.widgets.divider]
+margin_x = "0"
+margin_y = "1.25em"
+size = " 2px"
+
+[styling.bar.widgets.emoji_picker]
+icon_size = "12px"
+spacing = "0.125em"
+
+[styling.bar.widgets.emoji_picker.border]
+enabled = false
+radius = "16px"
+width = "1px"
+
+[styling.bar.widgets.hypridle]
+icon_size = "14px"
+spacing = "0.125em"
+
+[styling.bar.widgets.hypridle.border]
+enabled = false
+radius = "16px"
+width = "1px"
+
+[styling.bar.widgets.hyprpicker]
+icon_size = "14px"
+spacing = "0.125em"
+
+[styling.bar.widgets.hyprpicker.border]
+enabled = false
+radius = "16px"
+width = "1px"
+
+[styling.bar.widgets.hyprsunset]
+icon_size = "14px"
+spacing = "0.125em"
+
+[styling.bar.widgets.hyprsunset.border]
+enabled = false
+radius = "16px"
+width = "1px"
+
+[styling.bar.widgets.kanban]
+icon_size = "12px"
+spacing = "0.125em"
+
+[styling.bar.widgets.kanban.border]
+enabled = false
+radius = "16px"
+width = "1px"
+
+[styling.bar.widgets.keyboard]
+icon_size = "14px"
+spacing = "0.125em"
+
+[styling.bar.widgets.keyboard.border]
+enabled = false
+radius = "16px"
+width = "1px"
+
+[styling.bar.widgets.language]
+icon_size = "14px"
+spacing = "0.125em"
+
+[styling.bar.widgets.language.border]
+enabled = false
+radius = "16px"
+width = "1px"
+
+[styling.bar.widgets.memory]
+icon_size = "14px"
+spacing = "0.125em"
+
+[styling.bar.widgets.memory.border]
+enabled = false
+radius = "16px"
+width = "1px"
+
+[styling.bar.widgets.microphone]
+icon_size = "14px"
+spacing = "0.125em"
+
+[styling.bar.widgets.microphone.border]
+enabled = false
+radius = "16px"
+width = "1px"
+
+[styling.bar.widgets.mpris]
+icon_size = "14px"
+spacing = "0.125em"
+
+[styling.bar.widgets.mpris.border]
+enabled = false
+radius = "16px"
+width = "1px"
+
+[styling.bar.widgets.network_usage]
+icon_size = "14px"
+spacing = "0.125em"
+
+[styling.bar.widgets.network_usage.border]
+enabled = false
+radius = "16px"
+width = "1px"
+
+[styling.bar.widgets.ocr]
+icon_size = "14px"
+spacing = "0.125em"
+
+[styling.bar.widgets.ocr.border]
+enabled = false
+radius = "16px"
+width = "1px"
+
+[styling.bar.widgets.overview]
+icon_size = "14px"
+spacing = "0.125em"
+
+[styling.bar.widgets.overview.border]
+enabled = false
+radius = "16px"
+width = "1px"
+
+[styling.bar.widgets.power]
+icon_size = "14px"
+spacing = "0.125em"
+
+[styling.bar.widgets.power.border]
+enabled = false
+radius = "16px"
+width = "1px"
+
+[styling.bar.widgets.quick_settings]
+icon_size = "17px"
+spacing = "0.125em"
+
+[styling.bar.widgets.quick_settings.border]
+enabled = false
+radius = "16px"
+width = "1px"
+
+[styling.bar.widgets.quick_settings.sliders]
+height = "7px"
+knob = true
+knob_height = "8px"
+
+[styling.bar.widgets.radio_player]
+icon_size = "12px"
+spacing = "0.125em"
+
+[styling.bar.widgets.radio_player.border]
+enabled = false
+radius = "16px"
+width = "1px"
+
+[styling.bar.widgets.recorder]
+icon_size = "14px"
+spacing = "0.125em"
+
+[styling.bar.widgets.recorder.border]
+enabled = false
+radius = "16px"
+width = "1px"
+
+[styling.bar.widgets.screenshot]
+icon_size = "14px"
+spacing = "0.125em"
+
+[styling.bar.widgets.screenshot.border]
+enabled = false
+radius = "16px"
+width = "1px"
+
+[styling.bar.widgets.spacing]
+size = " 20px"
+
+[styling.bar.widgets.stopwatch]
+icon_size = "14px"
+spacing = "0.125em"
+
+[styling.bar.widgets.stopwatch.border]
+enabled = false
+radius = "16px"
+width = "1px"
+
+[styling.bar.widgets.storage]
+icon_size = "14px"
+spacing = "0.125em"
+
+[styling.bar.widgets.storage.border]
+enabled = false
+radius = "16px"
+width = "1px"
+
+[styling.bar.widgets.submap]
+icon_size = "14px"
+spacing = "0.125em"
+
+[styling.bar.widgets.submap.border]
+enabled = false
+radius = "16px"
+width = "1px"
+
+[styling.bar.widgets.system_tray]
+spacing = "0.3em"
+
+[styling.bar.widgets.system_tray.border]
+enabled = false
+radius = "16px"
+width = "1px"
+
+[styling.bar.widgets.taskbar]
+spacing = "0.125em"
+
+[styling.bar.widgets.taskbar.border]
+enabled = false
+radius = "16px"
+width = "1px"
+
+[styling.bar.widgets.theme]
+icon_size = "14px"
+spacing = "0.125em"
+
+[styling.bar.widgets.theme.border]
+enabled = false
+radius = "16px"
+width = "1px"
+
+[styling.bar.widgets.updates]
+icon_size = "14px"
+spacing = "0.125em"
+
+[styling.bar.widgets.updates.border]
+enabled = false
+radius = "16px"
+width = "1px"
+
+[styling.bar.widgets.volume]
+icon_size = "12px"
+spacing = "0.125em"
+
+[styling.bar.widgets.volume.border]
+enabled = false
+radius = "16px"
+width = "1px"
+
+[styling.bar.widgets.weather]
+icon_size = "17px"
+spacing = "0.125em"
+
+[styling.bar.widgets.weather.border]
+enabled = false
+radius = "16px"
+width = "1px"
+
+[styling.bar.widgets.window_count]
+spacing = "0.125em"
+
+[styling.bar.widgets.window_count.border]
+enabled = false
+radius = "16px"
+width = "1px"
+
+[styling.bar.widgets.window_title]
+icon_size = "14px"
+spacing = "0.125em"
+
+[styling.bar.widgets.window_title.border]
+enabled = false
+radius = "16px"
+width = "1px"
+
+
+[styling.bar.widgets.privacy_indicator]
+icon_size = "12px"
+spacing = "0.125em"
+
+[styling.bar.widgets.privacy_indicator.border]
+enabled = false
+radius = "16px"
+width = "1px"
+
+
+[styling.bar.widgets.workspaces]
+icon_size = "12px"
+spacing = "0.125em"
+
+[styling.bar.widgets.workspaces.border]
+enabled = false
+radius = "16px"
+width = "1px"
+
+[styling.bar.widgets.workspaces.pill]
+active_width = "1em"
+height = "1px"
+width = "0.5em"
+
+[styling.bar.widgets.workspaces.pill.border]
+enabled = false
+radius = "16px"
+width = "2px"
+
+[styling.bar.widgets.world_clock]
+icon_size = "12px"
+spacing = "0.125em"
+
+[styling.bar.widgets.world_clock.border]
+enabled = false
+radius = "16px"
+width = "1px"
+
+[styling.modules.activate_linux]
+spacing = "0.125em"
+
+[styling.modules.activate_linux.border]
+enabled = false
+radius = "16px"
+width = "1px"
+
+[styling.modules.app_launcher]
+margin_x = "8px"
+margin_y = "8px"
+opacity = 50
+padding_x = "8px"
+padding_y = "8px"
+scaling = 100
+
+[styling.modules.app_launcher.border]
+enabled = false
+radius = "1.5rem"
+width = "1px"
+
+[styling.modules.app_launcher.shadow]
+blur = 0
+enabled = false
+offset = 0
+opacity = 100
+spread = 0
+
+[styling.modules.desktop_clock]
+spacing = "0.125em"
+
+[styling.modules.desktop_clock.border]
+enabled = false
+radius = "16px"
+width = "1px"
+
+[styling.modules.desktop_quotes]
+spacing = "0.125em"
+
+[styling.modules.desktop_quotes.border]
+enabled = false
+radius = "16px"
+width = "1px"
+
+[styling.modules.dock]
+margin_x = "8px"
+margin_y = "8px"
+opacity = 10
+padding_x = "8px"
+padding_y = "4px"
+scaling = 100
+
+[styling.modules.dock.border]
+enabled = false
+radius = "1.5rem"
+width = "1px"
+
+[styling.modules.dock.shadow]
+blur = 0
+enabled = false
+offset = 0
+opacity = 100
+spread = 0
+
+[styling.modules.notification]
+margin_x = "0"
+margin_y = "1.25em"
+opacity = 100
+padding_x = "0.9em"
+padding_y = "0.9em"
+scaling = 100
+
+[styling.modules.notification.border]
+enabled = false
+radius = "16px"
+width = "1px"
+
+[styling.modules.notification.shadow]
+blur = 0
+enabled = false
+offset = 0
+opacity = 100
+spread = 0
+
+[styling.modules.osd]
+margin_x = "0"
+margin_y = "1.25em"
+opacity = 100
+padding_x = "0.8em"
+padding_y = "0.6em"
+scaling = 100
+widget_style = "default"
+
+[styling.modules.osd.border]
+enabled = false
+radius = "25px"
+width = "1px"
+
+[styling.modules.osd.shadow]
+blur = 0
+enabled = false
+offset = 0
+opacity = 100
+spread = 0
+
+[styling.modules.osd.sliders]
+height = "7px"
+knob = false
+knob_height = "8px"

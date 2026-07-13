@@ -7,7 +7,7 @@ from fabric.widgets.eventbox import EventBox
 from fabric.widgets.wayland import WaylandWindow as Window
 from fabric.widgets.widget import Widget
 
-from utils.config import widget_config
+from utils.config import tsumiki_config
 
 
 class BaseWidget(Widget):
@@ -29,8 +29,8 @@ class BaseWidget(Widget):
         return merged
 
     def _init_widget_settings(self, widget_name: str) -> None:
-        self.config: dict = widget_config.get("widgets", {}).get(widget_name, {})
-        self.general_config: dict = widget_config.get("general", {})
+        self.config: dict = tsumiki_config.get("widgets", {}).get(widget_name, {})
+        self.general_config: dict = tsumiki_config.get("general", {})
         self.tooltips_enabled = self.general_config.get("tooltips", True)
 
     def _connect_hover_reveal(self) -> None:

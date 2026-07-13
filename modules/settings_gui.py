@@ -13,7 +13,7 @@ from fabric.widgets.stack import Stack
 from fabric.widgets.window import Window
 
 from shared.buttons import HoverButton
-from utils.config import configuration, theme_config, widget_config
+from utils.config import configuration, theme_config, tsumiki_config
 from utils.constants import ASSETS_DIR
 from utils.functions import send_notification, write_toml_file
 from utils.types import (
@@ -60,7 +60,7 @@ class SettingsGUI(Window):
         )
 
         self.set_resizable(False)
-        self.config = dict(widget_config)
+        self.config = dict(tsumiki_config)
         self.theme = dict(theme_config)
         self.modified = False
 
@@ -747,7 +747,7 @@ class SettingsGUI(Window):
 
     def _on_reset(self, *_):
         """Reset to saved config."""
-        self.config = dict(widget_config)
+        self.config = dict(tsumiki_config)
         self.theme = dict(theme_config)
         self.modified = False
         self.save_btn.set_sensitive(False)

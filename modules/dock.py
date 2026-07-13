@@ -11,7 +11,7 @@ from fabric.widgets.revealer import Revealer
 
 from shared.widget_container import BaseWindow
 from utils.app import AppUtils
-from utils.config import widget_config
+from utils.config import tsumiki_config
 from utils.constants import PINNED_APPS_FILE
 from utils.functions import (
     normalize_address,
@@ -106,7 +106,7 @@ class AppBar(Box):
         if self.app_launcher is None:
             from modules.app_launcher import AppLauncher
 
-            self.app_launcher = AppLauncher(widget_config)
+            self.app_launcher = AppLauncher(tsumiki_config)
         self.app_launcher.toggle()
 
     def _bake_button(self, **kwargs) -> Button:

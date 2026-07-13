@@ -14,10 +14,10 @@ from fabric.widgets.widget import Widget
 from shared.animated.circularprogress import AnimatedCircularProgressBar
 from shared.animated.scale import AnimatedScale
 
-from .config import widget_config
+from .config import tsumiki_config
 from .icons import get_text_icon, symbolic_icons
 
-storage_config = widget_config.get("widgets", {}).get("storage", {})
+storage_config = tsumiki_config.get("widgets", {}).get("storage", {})
 
 UTIL_FAST_POLL_SECONDS = 1
 UTIL_SLOW_POLL_TICKS = 5

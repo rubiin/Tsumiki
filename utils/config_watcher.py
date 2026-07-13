@@ -8,7 +8,7 @@ import subprocess
 from fabric.utils import Gio, GLib, get_relative_path, logger, os
 
 from utils.colors import Colors
-from utils.config import widget_config
+from utils.config import tsumiki_config
 from utils.constants import APPLICATION_NAME
 
 # Constants
@@ -78,7 +78,7 @@ class ConfigWatcher:
     def _get_restart_delay(self) -> int:
         """Read restart debounce delay from config with a safe fallback."""
         delay_ms = (
-            widget_config.get("general", {}).get(
+            tsumiki_config.get("general", {}).get(
                 "restart_delay", _DEFAULT_restart_delay
             )
             or _DEFAULT_restart_delay

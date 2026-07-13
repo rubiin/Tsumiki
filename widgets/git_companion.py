@@ -18,7 +18,6 @@ import utils.functions as helpers
 from shared.circle_image import CircularImage
 from shared.mixins import PopoverMixin
 from shared.widget_container import ButtonWidget
-from utils.config import widget_config
 from utils.icons import get_text_icon
 from utils.widget_utils import nerd_font_icon
 
@@ -168,7 +167,7 @@ class GitCompanionPopoverContent(Box):
 
     def __init__(self, config: dict, parent=None, **kwargs):
         self.widget_config = config
-        self.config = config.get("widgets", {}).get("git_companion", {})
+        self.config = config
         self.client = GitHubClient(self.config)
         self.avatar_size = int(self.config.get("avatar_size", 44))
         self.default_tab = str(self.config.get("default_tab", "issues")).strip()
@@ -572,7 +571,7 @@ class GitCompanionWidget(ButtonWidget, PopoverMixin):
             self.set_tooltip_text(self.config.get("tooltip_text", "Open Git Companion"))
 
         self.setup_popover(
-            lambda: GitCompanionPopoverContent(widget_config, parent=self),
+            lambda: GitCompanionPopoverContent(config=self.config, parent=self),
             connect_clicked=False,
         )
         self.connect("clicked", self.on_click)

@@ -3,7 +3,7 @@ import threading
 from fabric.utils import get_relative_path, os
 
 from shared.widget_container import ButtonWidget
-from utils.config import theme_config
+from utils.config import tsumiki_config
 from utils.functions import (
     copy_themev2,
     send_notification,
@@ -30,7 +30,9 @@ class ThemeSwitcherWidget(ButtonWidget):
         self.themes_list = [style.replace(".toml", "") for style in theme_files]
 
         # Get current theme from theme config, with fallback
-        self.current_theme = theme_config.get("name", "catpuccin-mocha")
+        self.current_theme = tsumiki_config.get("theme", {}).get(
+            "name", "catpuccin-mocha"
+        )
 
         # Ensure current theme is in the themes list, fallback to first available theme
         if self.current_theme not in self.themes_list:
@@ -63,6 +65,6 @@ class ThemeSwitcherWidget(ButtonWidget):
 
         if self.config.get("notify", True):
             send_notification("Tsumiki", f"Theme switched to {self.current_theme}")
-        copy_themev2(self.current_theme, theme_config.get("mode", "dark"))
+        copy_themev2(self.current_theme, tsumiki_config.get("mode", "dark"))
         update_theme_config(self.current_theme)
         self.set_tooltip_text(self.current_theme)

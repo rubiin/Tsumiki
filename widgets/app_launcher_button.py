@@ -33,10 +33,10 @@ class AppLauncherButton(ButtonWidget):
     def _get_or_create_launcher(self):
         """Get or create the app launcher instance."""
         from modules.app_launcher import AppLauncher
-        from utils.config import widget_config
+        from utils.config import tsumiki_config
 
         if self.app_launcher is None:
-            self.app_launcher = AppLauncher(widget_config)
+            self.app_launcher = AppLauncher(tsumiki_config)
 
         return self.app_launcher
 

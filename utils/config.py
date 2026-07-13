@@ -24,8 +24,6 @@ class TsumikiConfig:
         "_initialized",
         "config",
         "root_dir",
-        "theme_config",
-        "theme_config_file",
         "toml_config_file",
     )
 
@@ -43,13 +41,10 @@ class TsumikiConfig:
         self.root_dir = get_relative_path("..")
 
         self.toml_config_file = f"{self.root_dir}/config.toml"
-        self.theme_config_file = f"{self.root_dir}/theme.toml"
-
         self.config = self._load_config()
-        self.theme_config = read_toml_file(file_path=self.theme_config_file) or {}
 
         write_css_settings(
-            flatten_dict(exclude_keys(self.theme_config, ["name", "matugen"])),
+            flatten_dict(exclude_keys(self.config.get("styling", {}), ["matugen"])),
             f"{self.root_dir}/styles/_settings.scss",
         )
         self._initialized = True
@@ -90,5 +85,4 @@ class TsumikiConfig:
 
 
 configuration = TsumikiConfig()
-theme_config = configuration.theme_config
-widget_config = configuration.config
+tsumiki_config = configuration.config

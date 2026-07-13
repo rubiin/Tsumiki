@@ -8,7 +8,7 @@ from fabric.utils import (
 )
 
 import utils.functions as helpers
-from utils.config import theme_config
+from utils.config import tsumiki_config
 
 from .base import SingletonService
 
@@ -30,7 +30,7 @@ class MatugenService(SingletonService):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         helpers.check_executable_exists("matugen")
-        self._config = theme_config.get("matugen", {})
+        self._config = tsumiki_config.get("styling", {}).get("matugen", {})
         self._mode = self._config.get("mode", "dark")
 
     def _build_cmd(self, image_path: str) -> str:

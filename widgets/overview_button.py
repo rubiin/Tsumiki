@@ -29,8 +29,8 @@ class OverviewButtonWidget(ButtonWidget):
 
     def on_click(self, *_):
         from modules.overview import OverViewOverlay
-        from utils.config import widget_config
+        from utils.config import tsumiki_config
 
         if self._overview_popup is None:
-            self._overview_popup = OverViewOverlay(widget_config)
+            self._overview_popup = OverViewOverlay(tsumiki_config)
         self._overview_popup.toggle_popup()
