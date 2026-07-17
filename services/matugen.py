@@ -30,13 +30,13 @@ class MatugenService(SingletonService):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         helpers.check_executable_exists("matugen")
-        self._config = tsumiki_config.get("styling", {}).get("matugen", {})
-        self._mode = self._config.get("mode", "dark")
+        self._style_config = tsumiki_config.get("styling", {}).get("matugen", {})
+        self._mode = self._style_config.get("mode", "dark")
 
     def _build_cmd(self, image_path: str) -> str:
         """Build matugen command from config."""
-        scheme = self._config.get("scheme", "scheme-tonal-spot")
-        contrast = self._config.get("contrast", 0.0)
+        scheme = self._style_config.get("scheme", "scheme-tonal-spot")
+        contrast = self._style_config.get("contrast", 0.0)
 
         return (
             f"matugen image -q {image_path} -t {scheme} "
@@ -46,7 +46,9 @@ class MatugenService(SingletonService):
 
     def generate(self, image_path: str | None = None) -> None:
         """Generate colors from an image asynchronously."""
-        image_path = image_path or os.path.expanduser(self._config.get("wallpaper", ""))
+        image_path = image_path or os.path.expanduser(
+            self._style_config.get("wallpaper", "")
+        )
 
         if not os.path.exists(image_path):
             self.emit("generation_failed", f"Image not found: {image_path}")
@@ -66,7 +68,9 @@ class MatugenService(SingletonService):
 
     def generate_sync(self, image_path: str | None = None) -> bool:
         """Generate colors from an image synchronously."""
-        image_path = image_path or os.path.expanduser(self._config.get("wallpaper", ""))
+        image_path = image_path or os.path.expanduser(
+            self._style_config.get("wallpaper", "")
+        )
 
         if not os.path.exists(image_path):
             self.emit("generation_failed", f"Image not found: {image_path}")

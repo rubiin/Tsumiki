@@ -59,10 +59,10 @@ If the issue continues, open an issue and include logs.
 <summary id="sass-error">Sass compilation error or UI not rendering?</summary>
 <div>
 
-Your `theme.toml` may be outdated or invalid. Reset it from the example:
+Your `config.toml` may be outdated or invalid. Reset it from the example:
 
 ```sh
-cp example/theme.toml theme.toml
+cp example/config.toml config.toml
 ```
 
 This overwrites custom values.
@@ -144,7 +144,7 @@ git pull
 ```
 
 :::note
-Keep a backup of `config.toml` and `theme.toml` before major updates.
+Keep a backup of `config.toml` before major updates.
 :::
 
 </div>

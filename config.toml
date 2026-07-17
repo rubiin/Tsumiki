@@ -593,7 +593,7 @@ tooltips = true
 border-radius = "10px"
 border-width = "1px"
 mode = "dark"
-name = "catpuccin-mocha"
+theme_name = "catpuccin-mocha"
 padding = "7pt"
 spacing = "12pt"
 

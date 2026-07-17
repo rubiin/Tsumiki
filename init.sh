@@ -96,7 +96,7 @@ setup_venv() {
 copy_config_files() {
 	enter_install_dir
 	local file src
-	for file in config.toml theme.toml; do
+	for file in config.toml; do
 		src="example/$file"
 		if [ ! -f "$file" ]; then
 			[ -f "$src" ] || die "$src not found. Cannot create default $file."

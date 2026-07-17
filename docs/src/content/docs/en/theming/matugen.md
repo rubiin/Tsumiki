@@ -5,7 +5,7 @@ description: Making Tsumiki use Matugen to generate Material You color palettes 
 
 Tsumiki can use Matugen to generate a Material You palette from your wallpaper.
 
-Add or update this section in `theme.toml`:
+Add or update this section in `config.toml` under styling:
 
 ```toml
 [matugen]
@@ -89,4 +89,4 @@ m = MatugenService()
 m.generate_sync('~/Pictures/wallpaper.jpg')
 ```
 
-Enable `matugen` in `theme.toml`, ensure `matugen` is installed, and Tsumiki will generate colors on startup or when you run the service manually.
+Enable `matugen` under styling in `config.toml`, ensure `matugen` is installed, and Tsumiki will generate colors on startup or when you run the service manually.

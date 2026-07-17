@@ -30,14 +30,14 @@ class ThemeSwitcherWidget(ButtonWidget):
         self.themes_list = [style.replace(".toml", "") for style in theme_files]
 
         # Get current theme from theme config, with fallback
-        self.current_theme = tsumiki_config.get("theme", {}).get(
-            "name", "catpuccin-mocha"
+        self.current_theme = tsumiki_config.get("styling", {}).get(
+            "theme_name", "catppuccin-mocha"
         )
 
         # Ensure current theme is in the themes list, fallback to first available theme
         if self.current_theme not in self.themes_list:
             self.current_theme = (
-                self.themes_list[0] if self.themes_list else "catpuccin-mocha"
+                self.themes_list[0] if self.themes_list else "catppuccin-mocha"
             )
 
         self.children = nerd_font_icon(

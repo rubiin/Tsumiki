@@ -8,7 +8,6 @@ Tsumiki uses TOML for configuration.
 ## Config Files
 
 - `config.toml`: widgets, layout, modules, runtime behavior.
-- `theme.toml`: theme selection and optional Matugen settings.
 - `tsumiki.schema.json`: schema source of truth.
 
 :::note

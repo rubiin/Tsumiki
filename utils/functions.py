@@ -475,22 +475,22 @@ def copy_themev2(theme: str, mode: str = "dark"):
 
 # Function to update the theme configuration
 def update_theme_config(theme_name: str):
-    """Update the theme.toml file with the new theme name."""
+    """Update the config.toml file with the new theme name."""
     try:
-        theme_config_file = get_relative_path("../theme.toml")
+        config_file = get_relative_path("../config.toml")
 
         # Read current theme config
-        config = read_toml_file(theme_config_file)
+        config = read_toml_file(config_file)
 
         if config is None:
             return
 
         # Update the theme name
-        config["name"] = theme_name
+        config["styling"]["theme_name"] = theme_name
 
         # Write back to file
 
-        write_toml_file(theme_config_file, config)
+        write_toml_file(config_file, config)
 
         logger.info(f"{Colors.INFO}[Theme] Updated theme config to {theme_name}")
     except Exception as e:

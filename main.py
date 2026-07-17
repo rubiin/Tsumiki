@@ -55,7 +55,7 @@ def main():
         matugen_service.generate_sync()
     else:
         helpers.copy_themev2(
-            style_config.get("name", "catppuccin-mocha"),
+            style_config.get("theme_name", "catppuccin-mocha"),
             style_config.get("mode", "dark"),
         )
 

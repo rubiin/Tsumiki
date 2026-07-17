@@ -20,7 +20,7 @@ Tsumiki is a modular status bar / panel for Hyprland written using [Fabric](http
 
 - `main.py` — Entry point
 - `pyproject.toml` — Python project metadata
-- `config.toml` / `theme.toml` — Configuration examples
+- `config.toml` — Configuration examples
 - `tsumiki.schema.json` — Configuration schema
 - `Justfile` — Task recipes
 

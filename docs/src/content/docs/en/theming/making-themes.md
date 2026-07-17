@@ -58,11 +58,11 @@ $general-shadow-color: rgba(0, 0, 0, 0.6);
 
 ## Enable Your Theme
 
-Set the theme name in `theme.toml`:
+Set the theme name in `config.toml` under styling:
 
 ```toml
-[theme]
-name = "my-theme"
+[styling]
+theme = "my-theme"
 ```
 
 Then restart Tsumiki or reload your setup.

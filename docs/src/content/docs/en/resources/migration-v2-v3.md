@@ -125,11 +125,11 @@ label = false
 
 ### 7. Update Matugen theming (if used)
 
-Matugen config now lives in `theme.toml` under `[matugen]`.
+Matugen config now lives in `config.toml` under `[matugen]`.
 Start from the latest theme example:
 
 ```sh
-cp ~/.config/tsumiki/example/theme.toml ~/.config/tsumiki/theme.toml
+cp ~/.config/tsumiki/example/config.toml ~/.config/tsumiki/config.toml
 ```
 
 Then re-apply your custom colors.

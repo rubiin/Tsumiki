@@ -15,7 +15,7 @@ from utils.constants import APPLICATION_NAME
 # Debounce first, then enforce a minimum gap between restart attempts.
 _DEFAULT_restart_delay = 1500
 _RESTART_COOLDOWN_MS = 3000
-_CONFIG_FILES = frozenset(("config.toml", "theme.toml"))
+_CONFIG_FILES = frozenset(("config.toml"))
 
 
 class ConfigWatcher:
