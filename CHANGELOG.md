@@ -1,5 +1,35 @@
 # Changelog
 
+## [3.4.5](https://github.com/rubiin/tsumiki/compare/v3.4.0...v3.4.5) (2026-07-17)
+
+
+### 🚀 New Features
+
+* new progress bar ([d6f8d79](https://github.com/rubiin/tsumiki/commit/d6f8d790bfdbb5bca1eacfffa6507b78ece2111e))
+
+
+### 🐛 Bug Fixes
+
+* add styling field ([3514b79](https://github.com/rubiin/tsumiki/commit/3514b79449ecc7d9b3165cb827ed545d5a26127e))
+* add styling field ([3514b79](https://github.com/rubiin/tsumiki/commit/3514b79449ecc7d9b3165cb827ed545d5a26127e))
+* add styling field ([3514b79](https://github.com/rubiin/tsumiki/commit/3514b79449ecc7d9b3165cb827ed545d5a26127e))
+* add styling field ([3514b79](https://github.com/rubiin/tsumiki/commit/3514b79449ecc7d9b3165cb827ed545d5a26127e))
+* optimized mpris ([14e035e](https://github.com/rubiin/tsumiki/commit/14e035ea2b354c33c3e8d4c9f3f6b7bb70a284a2))
+* popup color issue ([d983558](https://github.com/rubiin/tsumiki/commit/d983558576380ee6d6a74776fb091e3a83edb837))
+* scan button size ([07216ce](https://github.com/rubiin/tsumiki/commit/07216ceae9807c614d7dc5975dc978c258a46a86))
+* settings and stuff ([1548741](https://github.com/rubiin/tsumiki/commit/1548741e8d2705d35d5ce102941cc975eea2b5ce))
+* systray dont show popup if empty ([035944f](https://github.com/rubiin/tsumiki/commit/035944f2ee69e994eafe3b129ac7f8c0f6b00eb8))
+* systray hide ([9e509a2](https://github.com/rubiin/tsumiki/commit/9e509a28caa7b5a5902ff2445751f70ef81645dd))
+
+
+### ⚙️ Chores
+
+* add sounds ([2fab9e4](https://github.com/rubiin/tsumiki/commit/2fab9e424cb3dcc586419f6a6af3a1d900275435))
+* farbricify ([ef8aaed](https://github.com/rubiin/tsumiki/commit/ef8aaedcb78b78d0f17dde2969f5847d633b9e3d))
+* fix imports ([bb4fa03](https://github.com/rubiin/tsumiki/commit/bb4fa038945a8600262e0fa5102a35e7141582ad))
+* move client to separate file ([a1d1bc0](https://github.com/rubiin/tsumiki/commit/a1d1bc0b71c5029a4f4e8af8accfef067a01606c))
+* release 3.4.5 ([aa8b569](https://github.com/rubiin/tsumiki/commit/aa8b56904584511d5fc004ab2bbdf73ca47092f9))
+
 ## [3.4.0](https://github.com/rubiin/tsumiki/compare/v3.3.0...v3.4.0) (2026-07-05)
 
 
