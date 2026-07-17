@@ -5,27 +5,46 @@ description: Things you should do after installing Tsumiki
 
 After installing Tsumiki, add these Hyprland layer rules so blur and popup effects render correctly.
 
-```bash
-layerrule = blur, ^tsumiki-notifications$
-layerrule = xray 0, ^tsumiki-notifications$
-layerrule = blurpopups, ^tsumiki-notifications$
-layerrule = ignorezero, ^tsumiki-notifications$
-layerrule = noanim , ^tsumiki-notifications$
-layerrule = blur, ^fabric$
-layerrule = ignorezero, ^fabric$
-layerrule = xray 0, ^fabric$
-layerrule = blurpopups, ^fabric$
-layerrule = blur, ^tsumiki$
-layerrule = xray 0, ^tsumiki$
-layerrule = blurpopups, ^tsumiki$
-layerrule = ignorezero, ^tsumiki$
-layerrule = blur ,gtk-layer-shell
-layerrule = ignorezero ,gtk-layer-shell
-layerrule = blur, ^launcher$
-layerrule = xray 0, ^launcher$
-layerrule = blurpopups, ^launcher$
-layerrule = ignorezero, ^launcher$
-layerrule = animation popin, ^launcher$
+```lua
+
+layerrule {
+  name = tsumiki-notifications
+  match:namespace = tsumiki-notifications
+  blur = on
+  xray = on
+  blur_popups = on
+  ignore_alpha = 0
+  no_anim = on
+}
+
+
+layerrule {
+  name = tsumiki-layer
+  match:namespace = tsumiki
+  blur = on
+  xray = on
+  blur_popups = on
+  ignore_alpha = 0
+}
+
+layerrule {
+  name = gtk-layer-shell
+  match:namespace = gtk-layer-shell
+  blur = on
+  ignore_alpha = 0
+}
+
+layerrule {
+  name = launcher-layer
+  match:namespace = launcher
+  blur = on
+  xray = on
+  blur_popups = on
+  ignore_alpha = 0
+  animation = popin
+}
+
+
 ```
 
 ## Next Steps

@@ -3,11 +3,11 @@ interface Props {
 	repo?: string;
 	versionLabel?: string;
 	dateLabel?: string;
+	tagName?: string;
+	publishedAt?: any;
 }
 
-const { repo = "rubiin/tsumiki" } = Astro.props as Props;
-
-let _tagName: string | null = null;
+let { repo = "rubiin/tsumiki", versionLabel, dateLabel, tagName, publishedAt } = Astro.props as Props;
 
 try {
 	const res = await fetch(
@@ -18,7 +18,7 @@ try {
 	);
 	if (res.ok) {
 		const data = await res.json();
-		_tagName = data?.tag_name ?? null;
+		tagName = data?.tag_name ?? null;
 		const rawDate = data?.published_at as string | undefined;
 		if (rawDate) {
 			const d = new Date(rawDate);
