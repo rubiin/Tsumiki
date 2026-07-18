@@ -13,9 +13,9 @@ from utils.constants import APPLICATION_NAME
 
 # Constants
 # Debounce first, then enforce a minimum gap between restart attempts.
-_DEFAULT_restart_delay = 1500
+_DEFAULT_RESTART_DELAY = 1500
 _RESTART_COOLDOWN_MS = 3000
-_CONFIG_FILES = frozenset(("config.toml"))
+_CONFIG_FILES = frozenset(["config.toml"])
 
 
 class ConfigWatcher:
@@ -30,14 +30,8 @@ class ConfigWatcher:
         "init_script",
         "monitors",
         "root_dir",
+        "watched_names",
     )
-
-    _instance = None
-
-    def __new__(cls):
-        if cls._instance is None:
-            cls._instance = super().__new__(cls)
-        return cls._instance
 
     def __init__(self):
         if getattr(self, "_initialized", False):
@@ -50,38 +44,47 @@ class ConfigWatcher:
         self._restart_delay = self._get_restart_delay()
         self.root_dir = get_relative_path("..")
         self.init_script = f"{self.root_dir}/init.sh"
+        self.watched_names = {os.path.basename(p) for p in _CONFIG_FILES}
 
-        # Set up monitors for existing config files
-        for filename in _CONFIG_FILES:
-            config_path = f"{self.root_dir}/{filename}"
-            if os.path.exists(config_path):
-                self._monitor_file(config_path)
+        print(self.watched_names)
+
+        self._monitor_directory()
 
         self._initialized = True
 
-    def _monitor_file(self, file_path: str):
-        """Monitor a single file for changes."""
+    def _monitor_directory(self):
+        """Monitor the config directory, reacting only to watched files.
+
+        Monitoring the directory (rather than each file) keeps the watcher
+        alive when an editor saves atomically by replacing the file via rename,
+        which would otherwise silently drop a per-file inotify watch.
+        """
         try:
-            file_obj = Gio.File.new_for_path(file_path)
-            monitor = file_obj.monitor_file(Gio.FileMonitorFlags.NONE, None)
+            directory = Gio.File.new_for_path(self.root_dir)
+            monitor = directory.monitor_directory(Gio.FileMonitorFlags.NONE, None)
             monitor.connect("changed", self._on_file_changed)
             self.monitors.append(monitor)
-            self._file_hashes[file_path] = self._read_file_hash(file_path)
             logger.info(
-                f"{Colors.INFO}[ConfigWatcher] Monitoring {os.path.basename(file_path)}"
+                f"{Colors.INFO}[ConfigWatcher] Monitoring "
+                f"{', '.join(sorted(self.watched_names))} in {self.root_dir}"
             )
         except Exception as e:
             logger.exception(
-                f"{Colors.ERROR}[ConfigWatcher] Failed to monitor {file_path}: {e}"
+                f"{Colors.ERROR}[ConfigWatcher] Failed to monitor {self.root_dir}: {e}"
             )
+
+        for filename in _CONFIG_FILES:
+            config_path = f"{self.root_dir}/{filename}"
+            if os.path.exists(config_path):
+                self._file_hashes[config_path] = self._read_file_hash(config_path)
 
     def _get_restart_delay(self) -> int:
         """Read restart debounce delay from config with a safe fallback."""
         delay_ms = (
             tsumiki_config.get("general", {}).get(
-                "restart_delay", _DEFAULT_restart_delay
+                "restart_delay", _DEFAULT_RESTART_DELAY
             )
-            or _DEFAULT_restart_delay
+            or _DEFAULT_RESTART_DELAY
         )
 
         try:
@@ -89,9 +92,9 @@ class ConfigWatcher:
         except (TypeError, ValueError):
             logger.warning(
                 f"{Colors.WARNING}[ConfigWatcher] Invalid restart_delay "
-                f"({delay_ms}), using {_DEFAULT_restart_delay}"
+                f"({delay_ms}), using {_DEFAULT_RESTART_DELAY}"
             )
-            return _DEFAULT_restart_delay
+            return _DEFAULT_RESTART_DELAY
 
     def _read_file_hash(self, file_path: str) -> str | None:
         """Return a stable hash for file content, or None when unreadable."""
@@ -107,7 +110,7 @@ class ConfigWatcher:
             return
 
         file_path = file.get_path()
-        if not file_path:
+        if not file_path or os.path.basename(file_path) not in self.watched_names:
             return
 
         current_hash = self._read_file_hash(file_path)
@@ -128,7 +131,6 @@ class ConfigWatcher:
 
     def _restart_if_allowed(self) -> bool:
         """Restart after debounce while respecting cooldown between restarts."""
-
         now_us = GLib.get_monotonic_time()
         if self._last_restart_at_us:
             elapsed_ms = (now_us - self._last_restart_at_us) // 1000
