@@ -43,6 +43,10 @@ export default defineConfig({
 					items: [{ autogenerate: { directory: "configuring" } }],
 				},
 				{
+					label: "🧩 Features",
+					items: [{ autogenerate: { directory: "features" } }],
+				},
+				{
 					label: "🎨 Theming",
 					items: [{ autogenerate: { directory: "theming" } }],
 				},
@@ -54,6 +58,7 @@ export default defineConfig({
 					label: "👥 Help",
 					items: [{ autogenerate: { directory: "help" } }],
 				},
+
 			],
 		}),
 	],
