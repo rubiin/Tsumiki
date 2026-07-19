@@ -1,7 +1,8 @@
 from contextlib import suppress
+from functools import lru_cache
 
 from fabric.hyprland.widgets import get_hyprland_connection
-from fabric.utils import Gdk, GdkPixbuf, GLib, Gtk, bulk_connect, logger
+from fabric.utils import Gdk, GdkPixbuf, GLib, Gtk, logger
 from fabric.widgets.box import Box
 from fabric.widgets.button import Button
 from fabric.widgets.eventbox import EventBox
@@ -12,7 +13,7 @@ from fabric.widgets.overlay import Overlay
 
 from shared.popup import PopupWindow
 from utils.app import AppUtils
-from utils.functions import parse_hyprland_reply
+from utils.functions import parse_hyprland_reply, safe_disconnect
 from utils.icon_resolver import IconResolver
 from utils.widget_settings import BarConfig
 from utils.widget_utils import create_surface_from_widget
@@ -21,13 +22,18 @@ SCALE = 0.14
 TARGET = [Gtk.TargetEntry.new("text/plain", Gtk.TargetFlags.SAME_APP, 0)]
 
 
+@lru_cache(maxsize=256)
 def _resolve_icon_pixbuf(
     icon_resolver: IconResolver,
     app_id: str,
     size: int,
     desktop_app=None,
 ) -> GdkPixbuf.Pixbuf | None:
-    """Resolve icon pixbuf with desktop-app -> resolver -> fallback chain."""
+    """Resolve icon pixbuf with desktop-app -> resolver -> fallback chain.
+
+    Cached by (app_id, size) so icons are decoded once per session;
+    subsequent overview refreshes reuse the cached pixbuf.
+    """
     pixbuf = None
     if desktop_app:
         pixbuf = desktop_app.get_icon_pixbuf(size=size)
@@ -209,19 +215,24 @@ class OverviewMenu(Box):
         self._hyprland_connection = get_hyprland_connection()
         self._app_util = None  # Lazy-load on first access
         self._app_cache_dirty = False
+        self._handler_ids: list[int] = []
 
         # Remove the window_class_aliases dictionary completely
         # TODO: replace with glace
 
-        bulk_connect(
-            self._hyprland_connection,
-            {
-                "event::openwindow": self._schedule_update,
-                "event::closewindow": self._schedule_update,
-                "event::movewindow": self._schedule_update,
-            },
-        )
+        self._handler_ids = [
+            self._hyprland_connection.connect(
+                "event::openwindow", self._schedule_update
+            ),
+            self._hyprland_connection.connect(
+                "event::closewindow", self._schedule_update
+            ),
+            self._hyprland_connection.connect(
+                "event::movewindow", self._schedule_update
+            ),
+        ]
 
+        self.connect("destroy", self._on_destroy)
         self._init_grid()
         self.update()
 
@@ -248,6 +259,10 @@ class OverviewMenu(Box):
             overlays.append(overlay)
 
         self.grid.attach_flow(children=overlays, columns=5)
+
+    def _on_destroy(self, *_):
+        for hid in self._handler_ids:
+            safe_disconnect(self._hyprland_connection, hid)
 
     @property
     def app_util(self) -> AppUtils:

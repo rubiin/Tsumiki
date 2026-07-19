@@ -169,6 +169,7 @@ class CustomWidgetExecutor:
         self._interval = module_config.get("interval", 0)
         self._process: subprocess.Popen | None = None
         self._repeater_handler_id: int | None = None
+        self._restart_timer_id: int | None = None
         self._actual_signal: int | None = None
         self._original_signal_handler = None
 
@@ -255,13 +256,19 @@ class CustomWidgetExecutor:
         threading.Thread(target=read_output_loop, daemon=True).start()
 
     def _schedule_restart(self, restart_interval: int):
-        GLib.timeout_add(restart_interval * 1000, self._start_continuous)
+        self._restart_timer_id = GLib.timeout_add(
+            restart_interval * 1000, self._start_continuous
+        )
         return False
 
     def cleanup(self):
         if self._repeater_handler_id:
             remove_handler(self._repeater_handler_id)
             self._repeater_handler_id = None
+
+        if self._restart_timer_id is not None:
+            GLib.source_remove(self._restart_timer_id)
+            self._restart_timer_id = None
 
         if (
             self._actual_signal is not None

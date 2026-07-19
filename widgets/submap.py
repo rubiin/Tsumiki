@@ -28,13 +28,19 @@ class SubMapWidget(ButtonWidget):
 
         self._hyprland_connection = get_hyprland_connection()
 
-        self._hyprland_connection.connect("event::submap", self._get_submap)
+        self._register_handler(
+            self._hyprland_connection,
+            self._hyprland_connection.connect("event::submap", self._get_submap),
+        )
 
         # all aboard...
         if self._hyprland_connection.ready:
             self.on_ready(None)
         else:
-            self._hyprland_connection.connect("event::ready", self.on_ready)
+            self._register_handler(
+                self._hyprland_connection,
+                self._hyprland_connection.connect("event::ready", self.on_ready),
+            )
 
     def on_ready(self, _):
         return self._get_submap(), logger.info(

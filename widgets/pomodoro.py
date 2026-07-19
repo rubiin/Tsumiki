@@ -173,6 +173,12 @@ class PomodoroMenu(Box):
         ]
 
         self._update_display()
+        self.connect("destroy", self._on_destroy)
+
+    def _on_destroy(self, *_):
+        if self.timer_id is not None:
+            GLib.source_remove(self.timer_id)
+            self.timer_id = None
 
     def _get_current_duration(self) -> int:
         """Get total duration of current session."""

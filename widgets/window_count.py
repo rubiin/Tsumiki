@@ -18,7 +18,7 @@ class WindowCountWidget(ButtonWidget):
         self.count_label = Label(label="0", style_classes=["panel-text"])
         self.container_box.add(self.count_label)
 
-        bulk_connect(
+        for hid in bulk_connect(
             self._hyprland_connection,
             {
                 "event::workspace": self._get_window_count,
@@ -27,13 +27,17 @@ class WindowCountWidget(ButtonWidget):
                 "event::closewindow": self._get_window_count,
                 "event::movewindow": self._get_window_count,
             },
-        )
+        ):
+            self._register_handler(self._hyprland_connection, hid)
 
         # all aboard...
         if self._hyprland_connection.ready:
             self.on_ready(None)
         else:
-            self._hyprland_connection.connect("event::ready", self.on_ready)
+            self._register_handler(
+                self._hyprland_connection,
+                self._hyprland_connection.connect("event::ready", self.on_ready),
+            )
 
     def on_ready(self, _):
         return self._get_window_count(None, None), logger.info(

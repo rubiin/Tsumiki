@@ -49,9 +49,13 @@ class DesktopQuote(BaseWindow):
         self.quote_service = QuotesService()
         self.update_quote()
 
-        invoke_repeater(
-            convert_seconds_to_milliseconds(self.config.get("update_interval", 600)),
-            self.update_quote,
+        self._register_repeater(
+            invoke_repeater(
+                convert_seconds_to_milliseconds(
+                    self.config.get("update_interval", 600)
+                ),
+                self.update_quote,
+            )
         )
 
     def update_quote(self):

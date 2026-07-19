@@ -12,6 +12,9 @@ from utils.constants import ASSETS_DIR
 from utils.decorators import run_in_thread
 from utils.widget_utils import nerd_font_icon
 
+# Module-level cache for emoji data — parsed once, reused across picker opens
+_emoji_data_cache: dict | None = None
+
 
 class EmojiPickerMenu(Box):
     """A widget to display an emoji picker."""
@@ -74,7 +77,16 @@ class EmojiPickerMenu(Box):
 
     def _load_emoji_data_async(self, callback=None):
         """Load emoji data in background thread."""
+        global _emoji_data_cache
+
         if self._emoji_loading:
+            return
+
+        # Use module-level cache if available (persists across picker opens)
+        if _emoji_data_cache is not None:
+            self._all_emojis = _emoji_data_cache
+            if callback:
+                callback()
             return
 
         if self._all_emojis is not None:
@@ -110,7 +122,10 @@ class EmojiPickerMenu(Box):
 
     def _on_emoji_load_complete(self, emoji_dict, callback):
         """Called on main thread when emoji loading completes."""
+        global _emoji_data_cache
+
         self._all_emojis = emoji_dict
+        _emoji_data_cache = emoji_dict  # Cache at module level for next picker open
         self._emoji_loading = False
 
         # Execute pending query if any

@@ -1226,7 +1226,11 @@ def safe_disconnect(signal_source, handler_id: int | None) -> None:
 
 
 def load_cover_pixbuf(path: str, width: int, height: int):
-    pixbuf = GdkPixbuf.Pixbuf.new_from_file(path)
+    # Decode at roughly the target size to avoid full-resolution decode.
+    # GdkPixbuf.new_from_file_at_size uses optimized JPEG decode that only
+    # decompresses the needed resolution when possible.
+    target_size = max(width, height)
+    pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(path, target_size, target_size)
 
     src_w = pixbuf.get_width()
     src_h = pixbuf.get_height()

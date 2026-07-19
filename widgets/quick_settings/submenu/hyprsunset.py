@@ -1,5 +1,10 @@
 from fabric.hyprland.widgets import get_hyprland_connection
-from fabric.utils import cooldown, exec_shell_command_async, invoke_repeater
+from fabric.utils import (
+    cooldown,
+    exec_shell_command_async,
+    invoke_repeater,
+    remove_handler,
+)
 from fabric.widgets.scale import Scale
 
 from shared.buttons import QSChevronButton
@@ -38,7 +43,13 @@ class HyprSunsetSubMenu(QuickSubMenu):
 
         # Connect the slider immediately
         self.scale.connect("value-changed", self.on_scale_move)
-        invoke_repeater(1000, self.update_scale)
+        self._repeater_id = invoke_repeater(1000, self.update_scale)
+        self.connect("destroy", self._on_destroy)
+
+    def _on_destroy(self, *_):
+        if self._repeater_id is not None:
+            remove_handler(self._repeater_id)
+            self._repeater_id = None
 
     @cooldown(0.1)
     def on_scale_move(self, scale: Scale):
@@ -90,7 +101,7 @@ class HyprSunsetToggle(QSChevronButton):
 
         self.connect("action-clicked", self.on_action)
 
-        invoke_repeater(1000, self.update_action_button)
+        self._register_repeater(invoke_repeater(1000, self.update_action_button))
 
     def on_action(self, *_):
         """Handle the action button click event."""

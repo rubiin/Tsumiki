@@ -5,7 +5,9 @@ from shared.widget_container import ButtonWidget
 from utils.constants import WINDOW_TITLE_MAP
 
 # Pre-compile regex patterns from WINDOW_TITLE_MAP at module load
+# Capped at 64 entries to prevent unbounded growth from custom config patterns
 _COMPILED_PATTERNS: dict[str, re.Pattern | None] = {}
+_MAX_COMPILED_PATTERNS = 50
 
 
 class WindowTitleWidget(ButtonWidget):
@@ -67,6 +69,8 @@ class WindowTitleWidget(ButtonWidget):
     def _get_compiled_pattern(self, pattern: str) -> re.Pattern | None:
         """Get or compile a regex pattern, caching the result."""
         if pattern not in _COMPILED_PATTERNS:
+            if len(_COMPILED_PATTERNS) >= _MAX_COMPILED_PATTERNS:
+                _COMPILED_PATTERNS.clear()
             try:
                 _COMPILED_PATTERNS[pattern] = re.compile(pattern)
             except re.error:

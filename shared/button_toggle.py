@@ -61,7 +61,7 @@ class CommandSwitcher(ButtonWidget):
         self.connect("clicked", self.on_click)
 
         # reusing the fabricator to call specified intervals
-        invoke_repeater(1000, self._update_ui)
+        self._register_repeater(invoke_repeater(1000, self._update_ui))
         self._update_ui()  # Initial update
 
     # toggle the command on click

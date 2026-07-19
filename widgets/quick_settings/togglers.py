@@ -68,7 +68,10 @@ class NotificationQuickSetting(HoverButton):
 
         self.children = self.row
 
-        notification_service.connect("dnd", self.toggle_notification)
+        self._register_handler(
+            notification_service,
+            notification_service.connect("dnd", self.toggle_notification),
+        )
 
         self.connect("clicked", self.on_click)
 

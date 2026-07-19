@@ -19,7 +19,10 @@ class TaskBarWidget(BoxWidget):
         # TODO: remove glace, use hyprland
         self.icon_resolver = IconResolver()
         self._manager = Glace.Manager()
-        self._manager.connect("client-added", self.on_client_added)
+        self._register_handler(
+            self._manager,
+            self._manager.connect("client-added", self.on_client_added),
+        )
 
     def on_app_id(
         self, client: Glace.Client, client_image: Image, client_button: Button, *_

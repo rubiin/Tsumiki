@@ -34,6 +34,7 @@ class USBManagerMenu(Box):
         self._parent = parent
         self.config = config or {}
         self.devices = []
+        self._refresh_timer_id: int | None = None
 
         self.title = Label(
             label="USB Manager",
@@ -127,6 +128,9 @@ class USBManagerMenu(Box):
         self.refresh_devices(animate=True)
 
     def _on_destroy(self, *_):
+        if self._refresh_timer_id is not None:
+            GLib.source_remove(self._refresh_timer_id)
+            self._refresh_timer_id = None
         return None
 
     def close(self, *_):
@@ -478,7 +482,9 @@ class USBManagerMenu(Box):
         self._on_action_done()
 
     def _on_action_done(self, *_):
-        GLib.timeout_add(250, self._refresh_after_action)
+        if self._refresh_timer_id is not None:
+            GLib.source_remove(self._refresh_timer_id)
+        self._refresh_timer_id = GLib.timeout_add(250, self._refresh_after_action)
 
     def _refresh_after_action(self):
         self.refresh_devices()
