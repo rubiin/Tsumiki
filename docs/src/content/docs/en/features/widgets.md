@@ -1,0 +1,901 @@
+---
+title: Widgets Reference
+description: Complete configuration reference for all Tsumiki widgets
+sidebar:
+  order: 1
+---
+
+This page documents every widget available in Tsumiki, its configuration options, defaults, and behavior.
+
+Widgets are configured under `[widgets.<name>]` in `config.toml` and placed in the bar via `layout` sections.
+
+---
+
+## System Information Widgets
+
+### CPU
+
+Displays CPU usage with multiple display modes.
+
+```toml
+[widgets.cpu]
+show_icon = true
+icon = ""
+tooltip = true
+round = true
+temperature_unit = "celsius"
+show_unit = true
+sensor = "acpitz"
+mode = "graph"          # "label" | "graph" | "circular"
+graph_length = 4
+```
+
+- **`mode`**: Display style — `label` shows percentage text, `graph` shows a sparkline, `circular` shows a circular progress ring.
+- **`graph_length`**: Number of data points for the sparkline graph.
+- **`sensor`**: Thermal zone sensor path (e.g. `acpitz`, `k10temp`). Leave empty for auto-detect.
+
+### Memory
+
+Displays memory usage with multiple display modes.
+
+```toml
+[widgets.memory]
+show_icon = true
+icon = ""
+tooltip = true
+mode = "label"          # "label" | "graph" | "circular"
+graph_length = 4
+unit = "gb"             # Display unit for memory values
+```
+
+### GPU
+
+Displays GPU usage (supports AMD via `amdgpu` and NVIDIA via `nvidia-smi`).
+
+```toml
+[widgets.gpu]
+show_icon = true
+icon = ""
+tooltip = true
+mode = "circular"       # "label" | "graph" | "circular"
+graph_length = 4
+```
+
+### Storage
+
+Displays disk usage for a given path.
+
+```toml
+[widgets.storage]
+path = "/"
+show_icon = true
+icon = "󰋊"
+mode = "label"          # "label" | "graph" | "circular"
+tooltip = true
+graph_length = 4
+unit = "gb"
+```
+
+### Network Usage
+
+Monitors real-time network upload/download speeds.
+
+```toml
+[widgets.network_usage]
+tooltip = true
+label_format = "{upload}   {download} "
+upload_threshold = 1024
+download_threshold = 1024
+kb_digits = 0
+mb_digits = 2
+interval = 2000         # Polling interval in milliseconds
+```
+
+Variables available in `label_format`: `{upload}`, `{download}`.
+
+### Updates
+
+Checks for system package updates (Arch Linux, Flatpak, Snap, Homebrew).
+
+```toml
+[widgets.updates]
+show_icon = true
+available_icon = "󰏗"
+no_updates_icon = "󰏖"
+os = "arch"
+hover_reveal = true
+reveal_duration = 500
+interval = 3600         # Refresh interval in seconds
+tooltip = true
+terminal = "kitty"
+pad_zero = false
+label = true
+auto_hide = false
+flatpak = true
+snap = false
+brew = false
+```
+
+- **`interval`**: Polling interval in seconds (default: 3600 = 1 hour).
+- **`os`**: Distribution for native package checking (supports `arch`, `fedora`, `ubuntu`).
+- **`flatpak`/`snap`/`brew`**: Enable checking for these package formats.
+
+---
+
+## Hardware & Power Widgets
+
+### Battery
+
+Shows battery level with customizable icons and notifications.
+
+```toml
+[widgets.battery]
+full_battery_level = 100
+hide_percent_when_full = true
+hide_when_missing = true
+icons = ["", "", "", "", ""]
+tooltip = true
+label_format = "{icon} {percent}"
+
+[widgets.battery.notifications]
+low_threshold = 10
+full_battery = false
+low_battery = false
+charging = false
+```
+
+Variables available in `label_format`: `{icon}`, `{percent}`, `{time_remaining}`.
+
+The notifications section controls which battery events trigger desktop notifications.
+
+### Volume
+
+Controls system audio output volume.
+
+```toml
+[widgets.volume]
+tooltip = true
+step_size = 5
+```
+
+Click to toggle mute, scroll to adjust volume.
+
+### Brightness
+
+Controls screen and keyboard brightness.
+
+```toml
+[widgets.brightness]
+tooltip = true
+step_size = 5
+```
+
+Requires `brightnessctl`. Click to toggle, scroll to adjust.
+
+### Bluetooth
+
+Manages Bluetooth connections and visibility.
+
+```toml
+[widgets.bluetooth]
+label = true
+tooltip = true
+```
+
+Opens a popover to manage paired devices and toggle Bluetooth.
+
+### Microphone
+
+Shows microphone status and muting.
+
+```toml
+[widgets.microphone]
+label = false
+tooltip = true
+show_icon = true
+```
+
+Click to toggle microphone mute.
+
+### Power Button
+
+System power menu with shutdown, reboot, suspend, hibernate, lock, and logout.
+
+```toml
+[widgets.power]
+icon = "󰐥"
+tooltip = true
+items_per_row = 3
+icon_size = 100
+show_icon = true
+label = false
+confirm = true
+
+[widgets.power.item_shortcuts]
+shutdown = "s"
+reboot = "r"
+hibernate = "h"
+suspend = "u"
+lock = "l"
+logout = "o"
+
+[widgets.power.buttons]
+shutdown = "systemctl poweroff"
+reboot = "systemctl reboot"
+hibernate = "systemctl hibernate"
+suspend = "systemctl suspend"
+lock = "loginctl lock-session"
+logout = "loginctl terminate-user $USER"
+```
+
+- **`confirm`**: Shows a confirmation dialog before executing power actions.
+- **`item_shortcuts`**: Keyboard shortcuts for power menu items.
+
+### Hypridle
+
+Toggle Hyprland's idle management daemon.
+
+```toml
+[widgets.hypridle]
+enabled_icon = ""
+disabled_icon = ""
+label = true
+tooltip = true
+```
+
+### Hyprsunset
+
+Toggle blue-light filter (night mode) via Hyprsunset.
+
+```toml
+[widgets.hyprsunset]
+temperature = "2800k"
+enabled_icon = "󱩌"
+disabled_icon = "󰛨"
+label = true
+tooltip = true
+```
+
+### Hyprpicker
+
+Color picker that captures a color from the screen.
+
+```toml
+[widgets.hyprpicker]
+icon = ""
+tooltip = true
+label = false
+quiet = false
+show_icon = true
+```
+
+The selected color is copied to clipboard. In quiet mode, no notification is shown.
+
+### Privacy Indicator
+
+Shows when applications are using the microphone, camera, or screen sharing.
+
+```toml
+[widgets.privacy_indicator]
+tooltip = true
+hide_when_inactive = true
+modules = ["camera", "microphone", "screen"]
+```
+
+---
+
+## Desktop & Workspace Widgets
+
+### Workspaces
+
+Displays virtual desktops with click/scroll switching. See the [full Workspaces documentation](/en/features/workspaces) for details.
+
+```toml
+[widgets.workspaces]
+count = 10
+hide_unoccupied = true
+ignored = [-99]
+reverse_scroll = false
+style = "numbered"       # "numbered" | "pill" | "icon" | "default" | "underline" | "bubble"
+empty_scroll = false
+label_format = "{id}"
+icon_map = {}
+```
+
+- **`style`**: Choose from `numbered`, `pill`, `icon`, `default`, `underline`, or `bubble`.
+- **`icon_map`**: Map workspace IDs to custom icons: `{ "1": "", "2": "" }`.
+- **`label_format`**: Format string with `{id}` variable.
+
+### Window Title
+
+Shows the title of the currently focused window.
+
+```toml
+[widgets.window_title]
+icon = true
+truncation = true
+truncation_size = 50
+tooltip = true
+mappings = true
+title_map = []
+fallback = "class"       # "class" | "title"
+```
+
+- **`title_map`**: List of mapping rules to rename window titles.
+- **`fallback`**: What to show when no title is available.
+
+### Window Count
+
+Shows the number of windows in the current workspace.
+
+```toml
+[widgets.window_count]
+label_format = " [{count}]"
+hide_when_zero = true
+tooltip = true
+```
+
+Variables available in `label_format`: `{count}`.
+
+### Overview Button
+
+Button that opens the window overview/exposé.
+
+```toml
+[widgets.overview_button]
+icon = "󰡃"
+tooltip = true
+label = false
+```
+
+### Taskbar
+
+Shows running applications as clickable icons similar to a traditional taskbar.
+
+```toml
+[widgets.taskbar]
+icon_size = 22
+ignored = []
+tooltip = true
+```
+
+---
+
+## Date, Time & Calendar
+
+### Date & Time Menu
+
+Shows the current date/time with a calendar popover and event notifications.
+
+```toml
+[widgets.date_time]
+date_format = " %a %b %d,"
+calendar = true
+clock_format = "12h"   # "12h" | "24h"
+hover_reveal = false
+reveal_duration = 500
+
+[widgets.date_time.notification]
+enabled = true
+count = true
+hide_count_on_zero = true
+```
+
+### World Clock
+
+Shows time in multiple timezones.
+
+```toml
+[widgets.world_clock]
+icon = "󰃰"
+use_24hr = true
+show_icon = true
+timezones = ["America/New_York", "Asia/Tokyo"]
+```
+
+---
+
+## Media & Audio Widgets
+
+### MPRIS Media Controls
+
+Displays currently playing media with playback controls.
+
+```toml
+[widgets.mpris]
+truncation_size = 20
+tooltip = true
+label_format = "{title} - {artist}"
+hide_when_no_player = true
+ignore = []
+```
+
+Variables available in `label_format`: `{title}`, `{artist}`, `{album}`, `{name}`.
+
+Requires `playerctl`. Automatically hides when no media player is running.
+
+### Cava Audio Visualizer
+
+Real-time audio visualization powered by Cava.
+
+```toml
+[widgets.cava]
+bars = 10
+color = "#89b4fa"
+```
+
+Requires Cava to be installed and configured.
+
+---
+
+## System Utilities
+
+### Screenshot
+
+Capture screenshots with annotation support.
+
+```toml
+[widgets.screenshot]
+path = "Pictures/Screenshots"
+icon = "󰄀"
+tooltip = true
+annotation = true
+delayed = false
+delayed_timeout = 5000
+label = false
+capture_sound = false
+```
+
+Uses `grimblast` for captures and `satty` for annotations.
+
+### Screen Recording
+
+Start/stop screen recording with optional audio.
+
+```toml
+[widgets.recorder]
+path = "Videos/Screencasting"
+tooltip = true
+audio = true
+delayed = false
+delayed_timeout = 5000
+```
+
+Uses `wf-recorder` for recording.
+
+### OCR (Optical Character Recognition)
+
+Extract text from a screen region using Tesseract.
+
+```toml
+[widgets.ocr]
+icon = "󰐳"
+tooltip = true
+label = false
+show_icon = true
+quiet = false
+```
+
+Requires `tesseract`, `slurp`, and `imagemagick`.
+
+### Clipboard Manager
+
+Clipboard history manager with image support.
+
+```toml
+[widgets.clipboard]
+icon = ""
+label = false
+tooltip = true
+item_tooltip = false
+show_images = true
+enable_pinning = true
+```
+
+Uses `cliphist` for clipboard history.
+
+### USB Manager
+
+Manage USB drive mounting and ejection.
+
+```toml
+[widgets.usb_manager]
+icon = "󰕓"
+label = false
+tooltip = true
+auto_refresh = true
+refresh_interval = 5
+```
+
+---
+
+## Input & Language Widgets
+
+### Keyboard Layout
+
+Displays the current keyboard layout.
+
+```toml
+[widgets.keyboard]
+icon = "󰌌"
+label = true
+tooltip = true
+show_icon = false
+```
+
+### Language
+
+Shows the current input language.
+
+```toml
+[widgets.language]
+icon = ""
+tooltip = true
+truncation_size = 2
+show_icon = false
+```
+
+### Submap
+
+Displays the active Hyprland keybind submap.
+
+```toml
+[widgets.submap]
+icon = "󰌌"
+label = true
+tooltip = true
+show_icon = false
+hide_on_default = false
+```
+
+Hides automatically when the active submap is the default.
+
+---
+
+## UI & Application Widgets
+
+### Application Launcher Button
+
+Opens the application launcher popup.
+
+```toml
+[widgets.app_launcher_button]
+icon = "view-app-grid-symbolic"
+icon_size = 20
+tooltip = true
+```
+
+### Quick Settings
+
+A comprehensive quick settings panel with user info, controls, media, and shortcuts.
+
+```toml
+[widgets.quick_settings]
+hover_reveal = false
+
+[widgets.quick_settings.user]
+avatar = "~/.face"
+name = "system"
+distro_icon = true
+
+[widgets.quick_settings.controls]
+sliders = ["brightness", "volume"]
+
+[widgets.quick_settings.media]
+enabled = true
+ignore = []
+truncation_size = 30
+show_album = true
+show_artist = true
+show_time = true
+show_time_tooltip = true
+
+[widgets.quick_settings.shortcuts]
+enabled = true
+
+[[widgets.quick_settings.shortcuts.items]]
+icon = ""
+label = "Terminal"
+command = "kitty"
+tooltip = "Open terminal"
+icon_size = 18
+```
+
+### System Tray
+
+System tray for background applications (NetworkManager, Bluetooth, etc.).
+
+```toml
+[widgets.system_tray]
+icon_size = 16
+ignored = []
+hidden = []
+hide_when_empty = false
+```
+
+### Wallpaper Button
+
+Opens the wallpaper selection popup.
+
+```toml
+[widgets.wallpaper]
+icon = "󰸉"
+label = false
+tooltip = true
+```
+
+### Settings Button
+
+Opens the in-app settings GUI.
+
+```toml
+[widgets.settings]
+icon = "󰒓"
+tooltip = true
+label = false
+```
+
+### Theme Switcher
+
+Quickly switch between installed themes.
+
+```toml
+[widgets.theme_switcher]
+icon = ""
+notify = false    # Show notification on theme change
+```
+
+### Cheatsheet
+
+Displays a searchable keybind cheatsheet for Hyprland.
+
+```toml
+[widgets.cheatsheet]
+label = true
+label_text = "Keys"
+tooltip = true
+title = "Hyprland Cheatsheet"
+columns = 3
+groups_per_page = 6
+max_entries_per_group = 8
+```
+
+### Emoji Picker
+
+Search and insert emoji characters.
+
+```toml
+[widgets.emoji_picker]
+icon = ""
+label = false
+tooltip = true
+per_row = 9
+per_column = 4
+```
+
+### Kanban Board
+
+A simple Kanban task management board.
+
+```toml
+[widgets.kanban]
+icon = "󱞁"
+label = false
+tooltip = true
+```
+
+### Pomodoro Timer
+
+A Pomodoro productivity timer.
+
+```toml
+[widgets.pomodoro]
+icon = "🍅"
+label = true
+label_text = "Pomo"
+tooltip = true
+```
+
+### Git Companion
+
+Displays GitHub repository information (issues, PRs).
+
+```toml
+[widgets.git_companion]
+icon = ""
+label = false
+label_text = "Git"
+tooltip = true
+username = "rubiin"
+repository = "rubiin/tsumiki"
+avatar_size = 44
+default_tab = "issues"      # "issues" | "pull_requests"
+cache_ttl = 300
+```
+
+### IP Monitor
+
+Displays the current IP address.
+
+```toml
+[widgets.ip_monitor]
+icon = "󰖟"
+label = false
+label_text = "IP"
+tooltip = true
+```
+
+### Stopwatch
+
+A simple stopwatch/timer.
+
+```toml
+[widgets.stopwatch]
+stopped_icon = "󱫞"
+running_icon = "󱫠"
+```
+
+### Click Counter
+
+A counter that increments on each click.
+
+```toml
+[widgets.click_counter]
+count = 0
+```
+
+### Breathe
+
+A breathing exercise guide widget.
+
+```toml
+[widgets.breathe]
+icon = ""
+label = false
+tooltip = true
+```
+
+### Weather
+
+Displays current weather conditions for a location.
+
+```toml
+[widgets.weather]
+location = "kathmandu"
+label_format = "{temperature} {condition}"
+tooltip = true
+expanded = true
+temperature_unit = "celsius"   # "celsius" | "fahrenheit"
+wind_speed_unit = "kmh"        # "kmh" | "mph" | "ms" | "beaufort"
+interval = 86400
+hover_reveal = true
+reveal_duration = 500
+provider = "open-meteo"        # "open-meteo" | "wttr"
+```
+
+Variables available in `label_format`: `{temperature}`, `{condition}`.
+
+---
+
+## Layout & Grouping Widgets
+
+### Divider
+
+A visual separator between bar sections.
+
+```toml
+[widgets.divider]
+size = 2
+```
+
+### Custom Button Group
+
+A group of custom command buttons.
+
+```toml
+[widgets.custom_button_group]
+spacing = 4
+
+[[widgets.custom_button_group.buttons]]
+command = "firefox"
+icon = "󰈹"
+label_text = "Firefox"
+tooltip_text = "Open Firefox Browser"
+show_icon = true
+label = false
+tooltip = true
+```
+
+### Custom Widget
+
+Waybar-compatible custom widgets that run external shell commands with configurable output parsing and click handling.
+
+Named custom widgets can be defined and referenced in the layout:
+
+```toml
+# Define a custom widget
+[widgets."custom/temperature"]
+exec = "sensors -j | jq '.[] | to_entries[] | select(.key | contains(\"temp\")).value[\"temp1_input\"]'"
+interval = 30
+return_type = "plain"       # "plain" | "json"
+label_format = "{:.1f}°C"
+tooltip = true
+on_click = "kitty -e htop"
+on_click_right = "firefox"
+
+# Reference in layout
+[layout]
+left_section = ["custom/temperature", "workspaces"]
+```
+
+Full configuration options:
+
+| Key | Type | Default | Description |
+|---|---|---|---|
+| `exec` | string | required | Shell command to execute |
+| `interval` | int | `0` | Refresh interval in seconds (0 = run once) |
+| `return_type` | string | `"plain"` | Output format: `"plain"` or `"json"` |
+| `label_format` | string | `"{}"` | Format string where `{}` is replaced with output |
+| `exec_on_event` | bool | `false` | Re-run command after click/scroll |
+| `max_length` | int | `0` | Max text length (0 = no limit) |
+| `min_length` | int | `0` | Min text length (pads with spaces) |
+| `rotate` | int | `0` | Rotate text by degrees |
+| `tooltip` | bool | `true` | Show tooltip with output |
+| `tooltip_format` | string | — | Tooltip format string |
+| `on_click` | string | — | Left-click command |
+| `on_click_right` | string | — | Right-click command |
+| `on_click_middle` | string | — | Middle-click command |
+| `on_scroll_up` | string | — | Scroll-up command |
+| `on_scroll_down` | string | — | Scroll-down command |
+| `signal` | int | — | Signal number for sig* event triggers |
+| `restart_interval` | int | — | Restart interval for persistent scripts |
+
+## Widget Groups & Collapsible Groups
+
+Widgets can be grouped together with shared styling:
+
+```toml
+[[widget_groups]]
+widgets = ["workspaces", "window_title"]
+spacing = 2
+style_classes = ["compact"]
+
+[[collapsible_groups]]
+widgets = ["ocr", "screenshot", "recorder"]
+spacing = 4
+icon = "󰒓"
+tooltip = "Utility Tools"
+style_classes = ["utility-tools"]
+```
+
+Reference groups in layout using `@group:N` or `@collapsible:N` (zero-based index):
+
+```toml
+[layout]
+left_section = ["@group:0", "window_title"]
+right_section = ["@group:1", "@collapsible:0", "system_tray"]
+```
+
+Widgets can be grouped together with shared styling:
+
+```toml
+[[widget_groups]]
+widgets = ["workspaces", "window_title"]
+spacing = 2
+style_classes = ["compact"]
+
+[[collapsible_groups]]
+widgets = ["ocr", "screenshot", "recorder"]
+spacing = 4
+icon = "󰒓"
+tooltip = "Utility Tools"
+style_classes = ["utility-tools"]
+```
+
+Reference groups in layout using `@group:N` or `@collapsible:N` (zero-based index):
+
+```toml
+[layout]
+left_section = ["@group:0", "window_title"]
+right_section = ["@group:1", "@collapsible:0", "system_tray"]
+```

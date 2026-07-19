@@ -5,7 +5,8 @@
 
 $workspace-transition:
   padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-  background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+  border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
 /** workspace switcher widget */
 
@@ -74,5 +75,243 @@ $workspace-transition:
 
   .icon {
     padding: 0.4em;
+  }
+}
+
+#workspaces_widget.minimal {
+  & > button {
+    padding: 0.2em 0.7em;
+    border-radius: 6px;
+    background-color: transparent;
+    transition: $workspace-transition;
+
+    label {
+      font-weight: 500;
+      transition: inherit;
+    }
+
+    &:hover {
+      background-color: color.adjust(theme.$accent-orange, $alpha: -0.5);
+
+      label {
+        color: theme.$background-dark;
+      }
+    }
+
+    &.active {
+      background-color: theme.$accent-purple;
+      font-weight: 700;
+
+      label {
+        color: theme.$background-dark;
+      }
+    }
+  }
+}
+
+#workspaces_widget.underline {
+  & > button {
+    padding: 0.25em 0.7em;
+    background-color: transparent;
+    border-bottom: 2px solid transparent;
+    border-radius: 0;
+    transition: $workspace-transition;
+
+    label {
+      font-weight: 500;
+      transition: inherit;
+    }
+
+    &:hover {
+      background-color: color.adjust(theme.$accent-purple, $alpha: -0.6);
+      border-bottom-color: color.adjust(theme.$accent-purple, $alpha: -0.3);
+
+      label {
+        color: theme.$background-dark;
+      }
+    }
+
+    &.active {
+      background-color: transparent;
+      border-bottom-color: theme.$accent-teal;
+      border-bottom-width: 2px;
+      font-weight: 700;
+
+      label {
+        color: theme.$accent-teal;
+      }
+
+      &:hover {
+        background-color: color.adjust(theme.$accent-teal, $alpha: -0.7);
+
+        label {
+          color: theme.$accent-teal;
+        }
+      }
+    }
+  }
+}
+
+#workspaces_widget.bubble {
+  & > button {
+    min-width: 2em;
+    min-height: 1.8em;
+    padding: 0.15em 0.3em;
+    border-radius: 9999px;
+    background-color: color.adjust(theme.$accent-orange, $alpha: -0.7);
+    transition: $workspace-transition;
+
+    label {
+      font-weight: 500;
+      font-size: 0.9em;
+      transition: inherit;
+    }
+
+    &:hover {
+      background-color: color.adjust(theme.$accent-teal, $alpha: -0.3);
+
+      label {
+        color: theme.$background-dark;
+      }
+    }
+
+    &.active {
+      background-color: theme.$accent-purple;
+      font-weight: 700;
+
+      label {
+        color: theme.$background-dark;
+      }
+    }
+  }
+}
+
+#workspaces_widget.slanted {
+  & > button {
+    padding: 0.25em 0.7em;
+    background-color: color.adjust(theme.$accent-orange, $alpha: -0.2);
+    border-radius: 0;
+    border-left: 3px solid color.adjust(theme.$accent-orange, $alpha: -0.3);
+    border-right: 3px solid color.adjust(theme.$accent-orange, $alpha: -0.3);
+    transition: $workspace-transition;
+
+    label {
+      color: theme.$background-dark;
+      font-weight: 500;
+      transition: inherit;
+    }
+
+    &:hover {
+      background-color: theme.$accent-teal;
+      border-left-color: theme.$accent-teal;
+      border-right-color: theme.$accent-teal;
+
+      label {
+        color: theme.$background-dark;
+      }
+    }
+
+    &.active {
+      background-color: theme.$accent-purple;
+      font-weight: 700;
+      min-width: 1.6em;
+      border-left-color: color.adjust(theme.$accent-purple, $alpha: -0.2);
+      border-right-color: color.adjust(theme.$accent-purple, $alpha: -0.2);
+
+      label {
+        color: theme.$background-dark;
+      }
+    }
+  }
+}
+
+#workspaces_widget.slanted-right {
+  & > button {
+    padding: 0.25em 1em;
+    background-color: color.adjust(theme.$accent-orange, $alpha: -0.2);
+    background-image: linear-gradient(
+      190deg,
+      color.adjust(theme.$accent-orange, $alpha: -0.1) 0%,
+      transparent 100%
+    );
+    border-radius: 0;
+    border-right: 3px solid color.adjust(theme.$accent-orange, $alpha: -0.3);
+    transition: $workspace-transition;
+
+    label {
+      color: theme.$background-dark;
+      font-weight: 500;
+      transition: inherit;
+    }
+
+    &:hover {
+      background-color: theme.$accent-teal;
+      background-image: linear-gradient(
+        190deg,
+        color.adjust(theme.$accent-teal, $alpha: -0.1) 0%,
+        transparent 100%
+      );
+      border-right-color: theme.$accent-teal;
+
+      label {
+        color: theme.$background-dark;
+      }
+    }
+
+    &.active {
+      background-color: theme.$accent-purple;
+      background-image: linear-gradient(
+        190deg,
+        color.adjust(theme.$accent-purple, $alpha: -0.1) 0%,
+        transparent 100%
+      );
+      font-weight: 700;
+      min-width: 1.6em;
+      border-right-color: color.adjust(theme.$accent-purple, $alpha: -0.2);
+
+      label {
+        color: theme.$background-dark;
+      }
+    }
+  }
+}
+
+#workspaces_widget.flat {
+  & > button {
+    padding: 0.2em 0.8em;
+    background-color: transparent;
+    border: none;
+    border-radius: 0;
+    transition: $workspace-transition;
+
+    label {
+      color: color.adjust(theme.$background-dark, $alpha: -0.4);
+      font-weight: 500;
+      transition: inherit;
+    }
+
+    &:hover {
+      label {
+        color: theme.$background-dark;
+      }
+    }
+
+    &.active {
+      background-color: transparent;
+      border: none;
+
+      label {
+        color: theme.$accent-purple;
+        font-weight: 700;
+      }
+
+      &:hover {
+        background-color: transparent;
+
+        label {
+          color: color.adjust(theme.$accent-purple, $alpha: -0.2);
+        }
+      }
+    }
   }
 }

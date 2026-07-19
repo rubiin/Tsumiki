@@ -7,6 +7,9 @@ freeze:
 doc_gen:
     python doc_gen.py
 
+docs-dev:
+    cd docs && pnpm dev
+
 restore_config:
     cp config.toml.bak config.toml
 

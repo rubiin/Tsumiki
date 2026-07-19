@@ -1208,7 +1208,13 @@
 							"enum": [
 								"pill",
 								"numbered",
-								"icon"
+								"icon",
+								"minimal",
+								"underline",
+								"bubble",
+								"slanted",
+								"slanted-right",
+								"flat"
 							],
 							"description": "The display style for workspaces."
 						},

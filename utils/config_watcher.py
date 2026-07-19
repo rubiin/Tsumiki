@@ -46,8 +46,6 @@ class ConfigWatcher:
         self.init_script = f"{self.root_dir}/init.sh"
         self.watched_names = {os.path.basename(p) for p in _CONFIG_FILES}
 
-        print(self.watched_names)
-
         self._monitor_directory()
 
         self._initialized = True

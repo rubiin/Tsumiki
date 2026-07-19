@@ -209,7 +209,7 @@ Import in `styles/main.scss`:
 ```
 
 ### Step 5: GTK3 CSS Best Practices
-- Use `color`, `background-color`, `font-size`, `padding`, `margin`, `border-radius`
+- **Use**: Only styles that are supported by GTK3 CSS (https://docs.gtk.org/gtk3/css-properties.html)
 - **Avoid**: `text-align`, `align-items`, `justify-content`, `margin: auto`, `transition`
 - For centering labels: use `h_align="center"` in Python
 - For centering boxes: use `h_align="center"` in Python property

@@ -53,10 +53,10 @@ count = 10
 hide_unoccupied = true
 
 [widgets.date_time]
-format = "%b %d %H:%M"
+date_format = "%b %d %H:%M"
 
 [widgets.volume]
-label = true
+tooltip = true
 step_size = 5
 
 [widgets.battery]
@@ -70,6 +70,16 @@ tooltip = true
 
 Global behavior such as debug mode, auto reload, and multi-monitor controls.
 
+| Key | Type | Default | Description |
+|---|---|---|---|
+| `debug` | bool | `false` | Enable verbose logging |
+| `auto_restart` | bool | `true` | Automatically restart on crash |
+| `restart_delay` | int | `1500` | Delay before restart (ms) |
+| `multi_monitor` | bool | `false` | Per-monitor bar instances |
+| `tooltips` | bool | `true` | Enable widget tooltips |
+| `check_updates` | bool | `false` | Check for Tsumiki updates |
+| `monitor_styles` | bool | `true` | Watch and reload SCSS changes |
+
 ### `layout`
 
 Controls widget placement in bar sections:
@@ -78,19 +88,43 @@ Controls widget placement in bar sections:
 - `middle_section`
 - `right_section`
 
-Each value is a list of widget IDs.
+Each value is a list of widget IDs. Use `@group:N` (zero-based index) for widget groups:
+
+```toml
+[layout]
+left_section = ["@group:0", "window_title"]
+middle_section = ["date_time"]
+right_section = ["@group:1", "system_tray", "power"]
+```
+
+Available reference types:
+
+| Reference | Example | Description |
+|---|---|---|
+| Widget name | `"workspaces"` | Direct widget reference |
+| `@group:N` | `"@group:0"` | Widget group by index |
+| `@collapsible:N` | `"@collapsible:0"` | Collapsible group by index |
+| `@custom_button:N` | `"@custom_button:0"` | Custom button by index |
 
 ### `modules`
 
 Enables and configures larger UI modules such as:
 
-- `bar`
-- `notification`
-- `dock`
-- `overview`
-- `osd`
+| Module | Key | Description |
+|---|---|---|
+| Bar | `modules.bar` | Panel bar position and layer |
+| Notification | `modules.notification` | Desktop notification system |
+| Dock | `modules.dock` | Application dock with intellihide |
+| Overview | `modules.overview` | Workspace exposé view |
+| OSD | `modules.osd` | On-screen display for volume, etc. |
+| App Launcher | `modules.app_launcher` | Application search & launch |
+| Desktop Clock | `modules.desktop_clock` | Decorative desktop clock |
+| Desktop Quotes | `modules.desktop_quotes` | Inspirational quote overlay |
+| Screen Corners | `modules.screen_corners` | Hot corners |
+| Cheatsheet | `modules.cheatsheet` | Keybinding reference |
+| Activate Linux | `modules.activate_linux` | Window activation hint |
 
-Example dock keys are under `modules.dock`, not `widgets`:
+Example dock configuration:
 
 ```toml
 [modules.dock]
@@ -100,20 +134,87 @@ show_when_no_windows = false
 icon_size = 40
 ```
 
+See the [Modules Reference](/en/features/modules) for complete options.
+
 ### `widgets`
 
 Per-widget settings (icons, labels, thresholds, polling intervals, behavior flags).
 
+Over 45 widgets are available. See the complete [Widgets Reference](/en/features/widgets) for every option.
+
 Common widgets include:
 
-- `workspaces`
-- `window_title`
-- `date_time`
-- `system_tray`
-- `volume`
-- `battery`
-- `network_usage`
-- `weather`
+| Widget | Description |
+|---|---|
+| `workspaces` | Virtual desktop switcher |
+| `window_title` | Active window title |
+| `date_time` | Date/time display |
+| `system_tray` | System tray icons |
+| `volume` | Audio volume control |
+| `battery` | Battery status |
+| `cpu` | CPU usage monitor |
+| `memory` | Memory usage monitor |
+| `network_usage` | Network speed monitor |
+| `weather` | Weather conditions |
+| `power` | Power menu (shutdown, etc.) |
+| `quick_settings` | Quick settings panel |
+
+## Workspace Styles
+
+The workspace widget supports six display styles:
+
+```toml
+[widgets.workspaces]
+style = "numbered"   # "numbered" | "pill" | "icon" | "minimal" | "underline" | "bubble"
+```
+
+- **numbered** — Numbers with pill-shaped active indicator (default)
+- **pill** — Minimal pill indicators without text
+- **icon** — Custom Nerd Font icons per workspace
+- **minimal** — Clean, understated with subtle background
+- **underline** — Active workspace gets a bottom border accent, no background
+- **bubble** — Circular bubble containers
+
+See the [Workspaces Widget](/en/features/workspaces) page for full details.
+
+## Widget Groups & Collapsible Groups
+
+Group widgets together with shared spacing and styling:
+
+```toml
+[[widget_groups]]
+widgets = ["updates", "battery"]
+spacing = 4
+style_classes = ["bordered"]
+```
+
+Collapsible groups hide widgets behind a toggle:
+
+```toml
+[[collapsible_groups]]
+widgets = ["ocr", "screenshot", "recorder"]
+spacing = 4
+icon = "󰒓"
+tooltip = "Utility Tools"
+style_classes = ["utility-tools"]
+```
+
+Reference groups in layout with `@group:N` or `@collapsible:N`.
+
+## Matugen Theme Generation
+
+Auto-generate color palettes from your wallpaper:
+
+```toml
+[matugen]
+enabled = true
+wallpaper = "~/Pictures/wallpaper.jpg"
+scheme = "scheme-tonal-spot"
+mode = "dark"
+contrast = 0.0
+```
+
+See [Theming with Matugen](/en/theming/matugen) for details.
 
 ## Migration Note
 
@@ -129,4 +230,5 @@ If you are upgrading from older versions, review [Migration v2 to v3](/en/resour
 ## Reference Source
 
 This page is a practical overview.
-For complete key definitions and defaults, use `tsumiki.schema.json` in the project root.
+For complete key definitions and defaults, see the [Widgets Reference](/en/features/widgets) and [Modules Reference](/en/features/modules).
+For the complete schema, use `tsumiki.schema.json` in the project root.
