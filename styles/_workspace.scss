@@ -8,6 +8,20 @@ $workspace-transition:
   background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
   border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
+/// Shared skeleton for workspace style variants.
+/// Each variant injects its unique button/label/hover/active styles via @content.
+@mixin workspace-variant {
+  & > button {
+    transition: $workspace-transition;
+
+    label {
+      transition: inherit;
+    }
+
+    @content;
+  }
+}
+
 /** workspace switcher widget */
 
 #workspaces {
@@ -79,15 +93,13 @@ $workspace-transition:
 }
 
 #workspaces_widget.minimal {
-  & > button {
+  @include workspace-variant {
     padding: 0.2em 0.7em;
     border-radius: 6px;
     background-color: transparent;
-    transition: $workspace-transition;
 
     label {
       font-weight: 500;
-      transition: inherit;
     }
 
     &:hover {
@@ -110,16 +122,14 @@ $workspace-transition:
 }
 
 #workspaces_widget.underline {
-  & > button {
+  @include workspace-variant {
     padding: 0.25em 0.7em;
     background-color: transparent;
     border-bottom: 2px solid transparent;
     border-radius: 0;
-    transition: $workspace-transition;
 
     label {
       font-weight: 500;
-      transition: inherit;
     }
 
     &:hover {
@@ -153,18 +163,16 @@ $workspace-transition:
 }
 
 #workspaces_widget.bubble {
-  & > button {
+  @include workspace-variant {
     min-width: 2em;
     min-height: 1.8em;
     padding: 0.15em 0.3em;
     border-radius: 9999px;
     background-color: color.adjust(theme.$accent-orange, $alpha: -0.7);
-    transition: $workspace-transition;
 
     label {
       font-weight: 500;
       font-size: 0.9em;
-      transition: inherit;
     }
 
     &:hover {
@@ -187,18 +195,16 @@ $workspace-transition:
 }
 
 #workspaces_widget.slanted {
-  & > button {
+  @include workspace-variant {
     padding: 0.25em 0.7em;
     background-color: color.adjust(theme.$accent-orange, $alpha: -0.2);
     border-radius: 0;
     border-left: 3px solid color.adjust(theme.$accent-orange, $alpha: -0.3);
     border-right: 3px solid color.adjust(theme.$accent-orange, $alpha: -0.3);
-    transition: $workspace-transition;
 
     label {
       color: theme.$background-dark;
       font-weight: 500;
-      transition: inherit;
     }
 
     &:hover {
@@ -226,7 +232,7 @@ $workspace-transition:
 }
 
 #workspaces_widget.slanted-right {
-  & > button {
+  @include workspace-variant {
     padding: 0.25em 1em;
     background-color: color.adjust(theme.$accent-orange, $alpha: -0.2);
     background-image: linear-gradient(
@@ -236,12 +242,10 @@ $workspace-transition:
     );
     border-radius: 0;
     border-right: 3px solid color.adjust(theme.$accent-orange, $alpha: -0.3);
-    transition: $workspace-transition;
 
     label {
       color: theme.$background-dark;
       font-weight: 500;
-      transition: inherit;
     }
 
     &:hover {
@@ -277,17 +281,15 @@ $workspace-transition:
 }
 
 #workspaces_widget.flat {
-  & > button {
+  @include workspace-variant {
     padding: 0.2em 0.8em;
     background-color: transparent;
     border: none;
     border-radius: 0;
-    transition: $workspace-transition;
 
     label {
       color: color.adjust(theme.$background-dark, $alpha: -0.4);
       font-weight: 500;
-      transition: inherit;
     }
 
     &:hover {

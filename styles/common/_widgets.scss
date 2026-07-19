@@ -55,48 +55,225 @@
   }
 }
 
-#window_count {
-  @include widget-shell(
+/// Generate widget-shell blocks for simple widgets (border + optional nerd-icon only).
+/// Widgets with extra child styles (network_usage, mpris, ocr) defined separately below.
+$widget-shell-widgets: (
+  (
+    "window_count" // 3-param widgets (no icon/spacing)
+    ,
     variable.$bar-widgets-window_count-border-radius,
     variable.$bar-widgets-window_count-border-enabled,
-    variable.$bar-widgets-window_count-border-width
-  );
-}
-
-#cava {
-  @include widget-shell(
+    variable.$bar-widgets-window_count-border-width,
+    null,
+    null
+  ),
+  (
+    "cava",
     variable.$bar-widgets-cava-border-radius,
     variable.$bar-widgets-cava-border-enabled,
-    variable.$bar-widgets-cava-border-width
-  );
-}
-
-#desktop_clock {
-  @include widget-shell(
+    variable.$bar-widgets-cava-border-width,
+    null,
+    null
+  ),
+  (
+    "desktop_clock",
     variable.$modules-desktop_clock-border-radius,
     variable.$modules-desktop_clock-border-enabled,
-    variable.$modules-desktop_clock-border-width
-  );
-}
-
-#cpu {
-  @include widget-shell(
+    variable.$modules-desktop_clock-border-width,
+    null,
+    null
+  ),
+  (
+    "cpu" // 5-param widgets (border + icon + spacing)
+    ,
     variable.$bar-widgets-cpu-border-radius,
     variable.$bar-widgets-cpu-border-enabled,
     variable.$bar-widgets-cpu-border-width,
     variable.$bar-widgets-cpu-icon_size,
     variable.$bar-widgets-cpu-spacing
-  );
-}
-
-#memory {
-  @include widget-shell(
+  ),
+  (
+    "memory",
     variable.$bar-widgets-memory-border-radius,
     variable.$bar-widgets-memory-border-enabled,
     variable.$bar-widgets-memory-border-width,
     variable.$bar-widgets-memory-icon_size,
     variable.$bar-widgets-memory-spacing
-  );
+  ),
+  (
+    "storage",
+    variable.$bar-widgets-storage-border-radius,
+    variable.$bar-widgets-storage-border-enabled,
+    variable.$bar-widgets-storage-border-width,
+    variable.$bar-widgets-storage-icon_size,
+    variable.$bar-widgets-storage-spacing
+  ),
+  (
+    "battery",
+    variable.$bar-widgets-battery-border-radius,
+    variable.$bar-widgets-battery-border-enabled,
+    variable.$bar-widgets-battery-border-width,
+    variable.$bar-widgets-battery-icon_size,
+    variable.$bar-widgets-battery-spacing
+  ),
+  (
+    "bluetooth",
+    variable.$bar-widgets-bluetooth-border-radius,
+    variable.$bar-widgets-bluetooth-border-enabled,
+    variable.$bar-widgets-bluetooth-border-width,
+    variable.$bar-widgets-bluetooth-icon_size,
+    variable.$bar-widgets-bluetooth-spacing
+  ),
+  (
+    "brightness",
+    variable.$bar-widgets-brightness-border-radius,
+    variable.$bar-widgets-brightness-border-enabled,
+    variable.$bar-widgets-brightness-border-width,
+    variable.$bar-widgets-brightness-icon_size,
+    variable.$bar-widgets-brightness-spacing
+  ),
+  (
+    "click_counter",
+    variable.$bar-widgets-click_counter-border-radius,
+    variable.$bar-widgets-click_counter-border-enabled,
+    variable.$bar-widgets-click_counter-border-width,
+    variable.$bar-widgets-click_counter-icon_size,
+    variable.$bar-widgets-click_counter-spacing
+  ),
+  (
+    "hypridle",
+    variable.$bar-widgets-hypridle-border-radius,
+    variable.$bar-widgets-hypridle-border-enabled,
+    variable.$bar-widgets-hypridle-border-width,
+    variable.$bar-widgets-hypridle-icon_size,
+    variable.$bar-widgets-hypridle-spacing
+  ),
+  (
+    "hyprpicker",
+    variable.$bar-widgets-hyprpicker-border-radius,
+    variable.$bar-widgets-hyprpicker-border-enabled,
+    variable.$bar-widgets-hyprpicker-border-width,
+    variable.$bar-widgets-hyprpicker-icon_size,
+    variable.$bar-widgets-hyprpicker-spacing
+  ),
+  (
+    "hyprsunset",
+    variable.$bar-widgets-hyprsunset-border-radius,
+    variable.$bar-widgets-hyprsunset-border-enabled,
+    variable.$bar-widgets-hyprsunset-border-width,
+    variable.$bar-widgets-hyprsunset-icon_size,
+    variable.$bar-widgets-hyprsunset-spacing
+  ),
+  (
+    "keyboard",
+    variable.$bar-widgets-keyboard-border-radius,
+    variable.$bar-widgets-keyboard-border-enabled,
+    variable.$bar-widgets-keyboard-border-width,
+    variable.$bar-widgets-keyboard-icon_size,
+    variable.$bar-widgets-keyboard-spacing
+  ),
+  (
+    "language",
+    variable.$bar-widgets-language-border-radius,
+    variable.$bar-widgets-language-border-enabled,
+    variable.$bar-widgets-language-border-width,
+    variable.$bar-widgets-language-icon_size,
+    variable.$bar-widgets-language_spacing
+  ),
+  (
+    "microphone",
+    variable.$bar-widgets-microphone-border-radius,
+    variable.$bar-widgets-microphone-border-enabled,
+    variable.$bar-widgets-microphone-border-width,
+    variable.$bar-widgets-microphone-icon_size,
+    variable.$bar-widgets-microphone-spacing
+  ),
+  (
+    "recorder",
+    variable.$bar-widgets-recorder-border-radius,
+    variable.$bar-widgets-recorder-border-enabled,
+    variable.$bar-widgets-recorder-border-width,
+    variable.$bar-widgets-recorder-icon_size,
+    variable.$bar-widgets-recorder-spacing
+  ),
+  (
+    "screenshot",
+    variable.$bar-widgets-screenshot-border-radius,
+    variable.$bar-widgets-screenshot-border-enabled,
+    variable.$bar-widgets-screenshot-border-width,
+    variable.$bar-widgets-screenshot-icon_size,
+    variable.$bar-widgets-screenshot-spacing
+  ),
+  (
+    "stopwatch",
+    variable.$bar-widgets-stopwatch-border-radius,
+    variable.$bar-widgets-stopwatch-border-enabled,
+    variable.$bar-widgets-stopwatch-border-width,
+    variable.$bar-widgets-stopwatch-icon_size,
+    variable.$bar-widgets-stopwatch-spacing
+  ),
+  (
+    "submap",
+    variable.$bar-widgets-submap-border-radius,
+    variable.$bar-widgets-submap-border-enabled,
+    variable.$bar-widgets-submap-border-width,
+    variable.$bar-widgets-submap-icon_size,
+    variable.$bar-widgets-submap-spacing
+  ),
+  (
+    "theme_switcher",
+    variable.$bar-widgets-theme-border-radius,
+    variable.$bar-widgets-theme-border-enabled,
+    variable.$bar-widgets-theme-border-width,
+    variable.$bar-widgets-theme-icon_size,
+    variable.$bar-widgets-theme-spacing
+  ),
+  (
+    "updates",
+    variable.$bar-widgets-updates-border-radius,
+    variable.$bar-widgets-updates-border-enabled,
+    variable.$bar-widgets-updates-border-width,
+    variable.$bar-widgets-updates-icon_size,
+    variable.$bar-widgets-updates-spacing
+  ),
+  (
+    "volume",
+    variable.$bar-widgets-volume-border-radius,
+    variable.$bar-widgets-volume-border-enabled,
+    variable.$bar-widgets-volume-border-width,
+    variable.$bar-widgets-volume-icon_size,
+    variable.$bar-widgets-volume-spacing
+  ),
+  (
+    "window_title",
+    variable.$bar-widgets-window_title-border-radius,
+    variable.$bar-widgets-window_title-border-enabled,
+    variable.$bar-widgets-window_title-border-width,
+    variable.$bar-widgets-window_title-icon_size,
+    variable.$bar-widgets-window_title-spacing
+  ),
+  (
+    "privacy_indicator",
+    variable.$bar-widgets-privacy-indicator-border-radius,
+    variable.$bar-widgets-privacy-indicator-border-enabled,
+    variable.$bar-widgets-privacy-indicator-border-width,
+    variable.$bar-widgets-privacy-indicator-icon_size,
+    variable.$bar-widgets-privacy-indicator-spacing
+  ),
+  (
+    "world_clock",
+    variable.$bar-widgets-world_clock-border-radius,
+    variable.$bar-widgets-world_clock-border-enabled,
+    variable.$bar-widgets-world_clock-border-width,
+    variable.$bar-widgets-world_clock-icon_size,
+    variable.$bar-widgets-world_clock-spacing
+  )
+);
+
+@each $name, $_br, $_be, $_bw, $_is, $_sp in $widget-shell-widgets {
+  ##{$name} {
+    @include widget-shell($_br, $_be, $_bw, $_is, $_sp);
+  }
 }
 
 #network_usage {
@@ -111,116 +288,6 @@
   #upload_label {
     margin-right: variable.$bar-widgets-network_usage-spacing;
   }
-}
-
-#storage {
-  @include widget-shell(
-    variable.$bar-widgets-storage-border-radius,
-    variable.$bar-widgets-storage-border-enabled,
-    variable.$bar-widgets-storage-border-width,
-    variable.$bar-widgets-storage-icon_size,
-    variable.$bar-widgets-storage-spacing
-  );
-}
-
-#battery {
-  @include widget-shell(
-    variable.$bar-widgets-battery-border-radius,
-    variable.$bar-widgets-battery-border-enabled,
-    variable.$bar-widgets-battery-border-width,
-    variable.$bar-widgets-battery-icon_size,
-    variable.$bar-widgets-battery-spacing
-  );
-}
-
-#bluetooth {
-  @include widget-shell(
-    variable.$bar-widgets-bluetooth-border-radius,
-    variable.$bar-widgets-bluetooth-border-enabled,
-    variable.$bar-widgets-bluetooth-border-width,
-    variable.$bar-widgets-bluetooth-icon_size,
-    variable.$bar-widgets-bluetooth-spacing
-  );
-}
-
-#brightness {
-  @include widget-shell(
-    variable.$bar-widgets-brightness-border-radius,
-    variable.$bar-widgets-brightness-border-enabled,
-    variable.$bar-widgets-brightness-border-width,
-    variable.$bar-widgets-brightness-icon_size,
-    variable.$bar-widgets-brightness-spacing
-  );
-}
-
-#click_counter {
-  @include widget-shell(
-    variable.$bar-widgets-click_counter-border-radius,
-    variable.$bar-widgets-click_counter-border-enabled,
-    variable.$bar-widgets-click_counter-border-width,
-    variable.$bar-widgets-click_counter-icon_size,
-    variable.$bar-widgets-click_counter-spacing
-  );
-}
-
-#hypridle {
-  @include widget-shell(
-    variable.$bar-widgets-hypridle-border-radius,
-    variable.$bar-widgets-hypridle-border-enabled,
-    variable.$bar-widgets-hypridle-border-width,
-    variable.$bar-widgets-hypridle-icon_size,
-    variable.$bar-widgets-hypridle-spacing
-  );
-}
-
-#hyprpicker {
-  @include widget-shell(
-    variable.$bar-widgets-hyprpicker-border-radius,
-    variable.$bar-widgets-hyprpicker-border-enabled,
-    variable.$bar-widgets-hyprpicker-border-width,
-    variable.$bar-widgets-hyprpicker-icon_size,
-    variable.$bar-widgets-hyprpicker-spacing
-  );
-}
-
-#hyprsunset {
-  @include widget-shell(
-    variable.$bar-widgets-hyprsunset-border-radius,
-    variable.$bar-widgets-hyprsunset-border-enabled,
-    variable.$bar-widgets-hyprsunset-border-width,
-    variable.$bar-widgets-hyprsunset-icon_size,
-    variable.$bar-widgets-hyprsunset-spacing
-  );
-}
-
-#keyboard {
-  @include widget-shell(
-    variable.$bar-widgets-keyboard-border-radius,
-    variable.$bar-widgets-keyboard-border-enabled,
-    variable.$bar-widgets-keyboard-border-width,
-    variable.$bar-widgets-keyboard-icon_size,
-    variable.$bar-widgets-keyboard-spacing
-  );
-}
-
-#language {
-  @include widget-shell(
-    variable.$bar-widgets-language-border-radius,
-    variable.$bar-widgets-language-border-enabled,
-    variable.$bar-widgets-language-border-width,
-    variable.$bar-widgets-language-icon_size,
-    variable.$bar-widgets-language_spacing
-  );
-}
-
-#microphone {
-  @include widget-shell(
-    variable.$bar-widgets-microphone-border-radius,
-    variable.$bar-widgets-microphone-border-enabled,
-    variable.$bar-widgets-microphone-border-width,
-    variable.$bar-widgets-microphone-icon_size,
-    variable.$bar-widgets-microphone-spacing
-  );
 }
 
 #mpris {
@@ -300,106 +367,6 @@
       }
     }
   }
-}
-
-#recorder {
-  @include widget-shell(
-    variable.$bar-widgets-recorder-border-radius,
-    variable.$bar-widgets-recorder-border-enabled,
-    variable.$bar-widgets-recorder-border-width,
-    variable.$bar-widgets-recorder-icon_size,
-    variable.$bar-widgets-recorder-spacing
-  );
-}
-
-#screenshot {
-  @include widget-shell(
-    variable.$bar-widgets-screenshot-border-radius,
-    variable.$bar-widgets-screenshot-border-enabled,
-    variable.$bar-widgets-screenshot-border-width,
-    variable.$bar-widgets-screenshot-icon_size,
-    variable.$bar-widgets-screenshot-spacing
-  );
-}
-
-#stopwatch {
-  @include widget-shell(
-    variable.$bar-widgets-stopwatch-border-radius,
-    variable.$bar-widgets-stopwatch-border-enabled,
-    variable.$bar-widgets-stopwatch-border-width,
-    variable.$bar-widgets-stopwatch-icon_size,
-    variable.$bar-widgets-stopwatch-spacing
-  );
-}
-
-#submap {
-  @include widget-shell(
-    variable.$bar-widgets-submap-border-radius,
-    variable.$bar-widgets-submap-border-enabled,
-    variable.$bar-widgets-submap-border-width,
-    variable.$bar-widgets-submap-icon_size,
-    variable.$bar-widgets-submap-spacing
-  );
-}
-
-#theme_switcher {
-  @include widget-shell(
-    variable.$bar-widgets-theme-border-radius,
-    variable.$bar-widgets-theme-border-enabled,
-    variable.$bar-widgets-theme-border-width,
-    variable.$bar-widgets-theme-icon_size,
-    variable.$bar-widgets-theme-spacing
-  );
-}
-
-#updates {
-  @include widget-shell(
-    variable.$bar-widgets-updates-border-radius,
-    variable.$bar-widgets-updates-border-enabled,
-    variable.$bar-widgets-updates-border-width,
-    variable.$bar-widgets-updates-icon_size,
-    variable.$bar-widgets-updates-spacing
-  );
-}
-
-#volume {
-  @include widget-shell(
-    variable.$bar-widgets-volume-border-radius,
-    variable.$bar-widgets-volume-border-enabled,
-    variable.$bar-widgets-volume-border-width,
-    variable.$bar-widgets-volume-icon_size,
-    variable.$bar-widgets-volume-spacing
-  );
-}
-
-#window_title {
-  @include widget-shell(
-    variable.$bar-widgets-window_title-border-radius,
-    variable.$bar-widgets-window_title-border-enabled,
-    variable.$bar-widgets-window_title-border-width,
-    variable.$bar-widgets-window_title-icon_size,
-    variable.$bar-widgets-window_title-spacing
-  );
-}
-
-#privacy_indicator {
-  @include widget-shell(
-    variable.$bar-widgets-privacy-indicator-border-radius,
-    variable.$bar-widgets-privacy-indicator-border-enabled,
-    variable.$bar-widgets-privacy-indicator-border-width,
-    variable.$bar-widgets-privacy-indicator-icon_size,
-    variable.$bar-widgets-privacy-indicator-spacing
-  );
-}
-
-#world_clock {
-  @include widget-shell(
-    variable.$bar-widgets-world_clock-border-radius,
-    variable.$bar-widgets-world_clock-border-enabled,
-    variable.$bar-widgets-world_clock-border-width,
-    variable.$bar-widgets-world_clock-icon_size,
-    variable.$bar-widgets-world_clock-spacing
-  );
 }
 
 #activate_linux {

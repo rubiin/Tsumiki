@@ -7,6 +7,8 @@ $slider-height: 12px;
 
 $toggler-radius: variable.$radius * 1.4;
 
+$qs-active-text: color.mix(#000000, white, 8%);
+
 @mixin setting-slider($min-length) {
   @include common.slider(
     $highlight-color: theme.$accent-blue,
@@ -165,9 +167,8 @@ $toggler-radius: variable.$radius * 1.4;
       }
     }
 
-    // Base slider box styles
-    %slider-box-base {
-      padding: common.toEm(15);
+    @mixin slider-box($slider-length, $padding: common.toEm(15)) {
+      padding: $padding;
       border-radius: variable.$radius;
       background-color: theme.$background-main;
 
@@ -185,33 +186,21 @@ $toggler-radius: variable.$radius * 1.4;
           background-color: transparent;
           padding: 0 common.toEm(2);
         }
+
+        @include setting-slider($slider-length);
       }
     }
 
     .slider-box-long {
-      @extend %slider-box-base;
-
-      #setting-slider {
-        @include setting-slider(variable.$slider-long);
-      }
+      @include slider-box(variable.$slider-long);
     }
 
     .slider-box-short {
-      @extend %slider-box-base;
-
-      #setting-slider {
-        @include setting-slider(variable.$slider-medium);
-      }
+      @include slider-box(variable.$slider-medium);
     }
 
     .slider-box-shorter {
-      @extend %slider-box-base;
-
-      padding: common.toEm(10);
-
-      #setting-slider {
-        @include setting-slider(variable.$slider-short);
-      }
+      @include slider-box(variable.$slider-short, $padding: common.toEm(10));
     }
 
     #submenu {
@@ -328,7 +317,7 @@ $toggler-radius: variable.$radius * 1.4;
         image,
         .panel-font-icon,
         .panel-text {
-          color: color.mix(#000000, white, 8%);
+          color: $qs-active-text;
         }
       }
 
@@ -360,11 +349,11 @@ $toggler-radius: variable.$radius * 1.4;
           }
 
           label {
-            color: color.mix(#000000, white, 8%);
+            color: $qs-active-text;
           }
 
           image {
-            color: color.mix(#000000, white, 8%);
+            color: $qs-active-text;
           }
         }
       }
@@ -398,11 +387,11 @@ $toggler-radius: variable.$radius * 1.4;
 
       &.active {
         button {
-          color: color.mix(#000000, white, 8%);
+          color: $qs-active-text;
           padding-left: common.toEm(1);
           padding-right: common.toEm(4);
 
-          @include common.image-label-colors(color.mix(#000000, white, 8%));
+          @include common.image-label-colors($qs-active-text);
         }
       }
     }

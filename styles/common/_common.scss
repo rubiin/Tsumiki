@@ -57,11 +57,6 @@
   }
 }
 
-.floating {
-  margin: 1rem 1.5rem 0rem 1.5rem;
-  border-color: theme.$surface-disabled;
-}
-
 .panel-box,
 .panel-button {
   background-color: theme.$background-dark;
@@ -485,9 +480,12 @@ scrolledwindow {
 }
 
 .panel-eventbox {
-
   .widget-container {
     @include mixins.widget_style(variable.$bar-style-widget);
+  }
+
+  &:hover {
+    background-color: transparent;
   }
 }
 
@@ -497,8 +495,7 @@ scrolledwindow {
   @include mixins.widget_style(variable.$bar-style-widget);
 }
 
-.panel-button,
-.panel-eventbox {
+.panel-button {
   .widget-container {
     @include mixins.widget_style(variable.$bar-style-widget);
   }

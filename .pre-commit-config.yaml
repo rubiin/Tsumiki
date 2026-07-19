@@ -38,4 +38,14 @@ repos:
       - id: betterleaks
 
 
+  # oxfmt for SCSS formatting
+  - repo: local
+    hooks:
+      - id: oxfmt
+        name: Format SCSS files with oxfmt
+        entry: oxfmt --write
+        language: node
+        additional_dependencies: ['oxfmt']
+        files: '\.scss$'
+
 default_stages: [pre-commit]

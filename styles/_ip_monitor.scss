@@ -1,3 +1,4 @@
+@use "theme";
 @use "common";
 @use "variable";
 
@@ -20,18 +21,18 @@
     .ip-monitor-title {
       font-size: 18px;
       font-weight: 700;
-      color: #e4f0ff;
+      color: theme.$text-main;
     }
 
     #ip-monitor-refresh-btn {
       min-height: 28px;
       padding: 0 10px;
       border-radius: 14px;
-      background-color: #58bdf7;
-      color: #06263f;
+      background-color: theme.$accent-blue;
+      color: theme.$background-dark;
 
       &:hover {
-        background-color: #76cafa;
+        background-color: theme.$accent-lavender;
       }
     }
 
@@ -47,7 +48,7 @@
 
   #ip-monitor-hero-card,
   #ip-monitor-details-card {
-    background-color: #263749;
+    background-color: theme.$background-alt;
     border-radius: 14px;
     padding: 10px;
   }
@@ -56,18 +57,18 @@
     min-height: 96px;
 
     .ip-monitor-hero-icon {
-      color: #58bdf7;
+      color: theme.$accent-blue;
       font-size: 28px;
     }
 
     .ip-monitor-hero-ip {
-      color: #f4f8ff;
+      color: theme.$text-main;
       font-size: 22px;
       font-weight: 700;
     }
 
     .ip-monitor-hero-location {
-      color: #c8d9eb;
+      color: theme.$text-muted;
       font-size: 16px;
     }
   }
@@ -75,26 +76,26 @@
   .ip-monitor-section-title {
     font-size: 17px;
     font-weight: 700;
-    color: #e4f0ff;
+    color: theme.$text-main;
     margin-top: 2px;
   }
 
   #ip-monitor-details-card {
     .ip-monitor-detail-key {
       min-width: 96px;
-      color: #95afc8;
+      color: theme.$text-disabled;
       font-size: 14px;
       font-weight: 600;
     }
 
     .ip-monitor-detail-value {
-      color: #eaf3ff;
+      color: theme.$text-secondary;
       font-size: 14px;
     }
   }
 
   .ip-monitor-last-updated {
-    color: #86a4bf;
+    color: theme.$text-muted;
     font-size: 11px;
   }
 }

@@ -108,7 +108,7 @@
                   font-weight: 700;
                 }
 
-                #notification-group-collapse-button {
+                @mixin notification-header-button($hover-bg: null) {
                   min-height: 0;
                   min-width: 0;
                   padding: 2px 6px;
@@ -123,6 +123,10 @@
                   &:hover {
                     @extend %widget_hover;
                     color: theme.$background-dark;
+
+                    @if $hover-bg {
+                      background-color: $hover-bg;
+                    }
 
                     .panel-font-icon {
                       color: theme.$background-dark;
@@ -130,27 +134,12 @@
                   }
                 }
 
+                #notification-group-collapse-button {
+                  @include notification-header-button;
+                }
+
                 #notification-group-close-all-button {
-                  min-height: 0;
-                  min-width: 0;
-                  padding: 2px 6px;
-                  border-radius: variable.$radius;
-                  border: variable.$border;
-
-                  .panel-font-icon {
-                    font-size: 11px;
-                    color: theme.$text-main;
-                  }
-
-                  &:hover {
-                    @extend %widget_hover;
-                    color: theme.$background-dark;
-                    background-color: theme.$accent-red;
-
-                    .panel-font-icon {
-                      color: theme.$background-dark;
-                    }
-                  }
+                  @include notification-header-button($hover-bg: theme.$accent-red);
                 }
               }
 

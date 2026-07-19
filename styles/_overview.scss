@@ -36,7 +36,7 @@
 
       #overview-icon {
         margin: common.toEm(5);
-        background-color: color.mix(black, transparent, 40%);
+        background-color: theme.$general-shadow-color;
         border-color: black;
         border-radius: 15px;
         border-width: 2px;

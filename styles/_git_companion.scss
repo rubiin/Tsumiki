@@ -25,7 +25,7 @@
   }
 
   .git-companion-brand {
-    color: #1f6feb;
+    color: theme.$accent-blue;
     font-size: 18px;
   }
 
@@ -39,12 +39,12 @@
     min-width: 30px;
     min-height: 30px;
     border-radius: 999px;
-    background-color: #e9edf5;
-    border: 1px solid rgba(84, 104, 142, 0.18);
-    color: #5c6c89;
+    background-color: theme.$background-alt;
+    border: 1px solid theme.$surface-disabled;
+    color: theme.$text-muted;
 
     &:hover {
-      background-color: #f4f6fb;
+      background-color: theme.$surface-highlight;
     }
   }
 
@@ -61,8 +61,8 @@
     min-width: 44px;
     min-height: 44px;
     border-radius: 999px;
-    background-color: #eef2f8;
-    border: 2px solid #2f6df6;
+    background-color: theme.$background-alt;
+    border: 2px solid theme.$accent-blue;
   }
 
   #git-companion-avatar {
@@ -72,11 +72,11 @@
   #git-companion-avatar-fallback {
     min-width: 44px;
     min-height: 44px;
-    background-color: #eef2f8;
+    background-color: theme.$background-alt;
   }
 
   .git-companion-avatar-fallback-icon {
-    color: #2f6df6;
+    color: theme.$accent-blue;
     font-size: 18px;
   }
 
@@ -87,7 +87,7 @@
   }
 
   .git-companion-bio {
-    color: #7d8698;
+    color: theme.$text-disabled;
     font-size: 12px;
   }
 
@@ -95,7 +95,7 @@
     padding: 2px;
     border-radius: 18px;
     background-color: theme.$accent-purple;
-    border: 1px solid rgba(84, 104, 142, 0.18);
+    border: 1px solid theme.$surface-disabled;
   }
 
   .git-companion-tab-btn {
@@ -103,7 +103,7 @@
     padding: 0 14px;
     border-radius: 14px;
     background-color: transparent;
-    color: #4d5c78;
+    color: theme.$text-muted;
     font-weight: 600;
 
     &.active {
@@ -127,13 +127,13 @@
     padding: 10px 12px;
     border-radius: 14px;
     background-color: theme.$background-alt;
-    border: 1px solid rgba(84, 104, 142, 0.12);
+    border: 1px solid theme.$surface-disabled;
     color: theme.$text-main;
     min-height: 44px;
     transition: background-color 120ms ease-in-out;
 
     &:hover {
-      background-color: #eef3ff;
+      background-color: theme.$surface-highlight;
     }
   }
 
@@ -144,7 +144,7 @@
   }
 
   .git-companion-item-subtitle {
-    color: #6e7890;
+    color: theme.$text-disabled;
     font-size: 11px;
   }
 }

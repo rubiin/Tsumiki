@@ -1,91 +1,94 @@
+@use "sass:color";
+@use "theme";
+
 #breathe-box {
   .header-bar {
-    background-color: #181825;
-    border-bottom: 1px solid #313244;
+    background-color: theme.$background-alt;
+    border-bottom: 1px solid theme.$surface-disabled;
     padding: 6px 12px;
   }
 
   .title-label {
     font-size: 15px;
     font-weight: bold;
-    color: #cdd6f4;
+    color: theme.$text-main;
   }
 
   .subtitle-label {
     font-size: 11px;
-    color: #a6adc8;
+    color: theme.$text-muted;
   }
 
   .status-card {
-    background-color: #181825;
+    background-color: theme.$background-alt;
     border-radius: 12px;
-    border: 1px solid #313244;
+    border: 1px solid theme.$surface-disabled;
   }
 
   .phase-label {
     font-size: 22px;
     font-weight: bold;
-    color: #cdd6f4;
+    color: theme.$text-main;
   }
 
   .countdown-label {
     font-size: 32px;
     font-weight: bold;
-    color: #89b4fa;
+    color: theme.$accent-blue;
   }
 
   .info-label {
     font-size: 12px;
-    color: #a6adc8;
+    color: theme.$text-muted;
   }
 
   .section-label {
     font-size: 12px;
     font-weight: bold;
-    color: #a6adc8;
+    color: theme.$text-muted;
     letter-spacing: 1px;
   }
 
   .exercise-btn {
-    background-color: #181825;
+    background-color: theme.$background-alt;
     border-radius: 10px;
-    border: 1px solid #313244;
-    color: #cdd6f4;
+    border: 1px solid theme.$surface-disabled;
+    color: theme.$text-main;
     padding: 0;
   }
 
   .exercise-btn:hover {
-    background-color: #1e1e2e;
-    border-color: #89b4fa;
+    background-color: theme.$background-main;
+    border-color: theme.$accent-blue;
   }
 
   .exercise-btn.active {
-    background-color: #1e3a5f;
-    border-color: #89b4fa;
+    background-color: color.mix(theme.$accent-blue, theme.$background-dark, 25%);
+    border-color: theme.$accent-blue;
   }
 
   .exercise-name {
     font-size: 13px;
     font-weight: bold;
-    color: #cdd6f4;
+    color: theme.$text-main;
   }
 
   .exercise-timing {
     font-size: 11px;
-    color: #89b4fa;
+    color: theme.$accent-blue;
     font-family: monospace;
   }
 
   .exercise-desc {
     font-size: 11px;
-    color: #6c7086;
+    color: theme.$text-disabled;
   }
 
   .dur-spin {
-    background-color: #181825;
+    background-color: theme.$background-alt;
     border-radius: 6px;
-    border: 1px solid #313244;
-    color: #a6adc8;
+    border: 1px solid theme.$surface-disabled;
+    color: theme.$text-muted;
     font-size: 14px;
     padding: 6px;
 
@@ -98,55 +101,55 @@
     }
 
     button {
-      background: #1e1e2e;
-      border: 1px solid #313244;
+      background: theme.$background-main;
+      border: 1px solid theme.$surface-disabled;
       border-radius: 4px;
       padding: 0 4px;
       margin: 2px;
-      color: #a6adc8;
+      color: theme.$text-muted;
 
       &:hover {
-        background-color: #313244;
-        color: #cdd6f4;
+        background-color: theme.$surface-disabled;
+        color: theme.$text-main;
       }
     }
   }
 
   .start-btn {
-    background-color: #89b4fa;
+    background-color: theme.$accent-blue;
     border-radius: 8px;
     border: none;
-    color: #1e1e2e;
+    color: theme.$background-main;
     font-size: 14px;
     font-weight: bold;
     padding: 10px;
   }
 
   .start-btn:hover {
-    background-color: #b4befe;
+    background-color: theme.$accent-lavender;
   }
 
   .stop-btn {
-    background-color: #313244;
+    background-color: theme.$surface-disabled;
     border-radius: 8px;
     border: none;
-    color: #f38ba8;
+    color: theme.$accent-red;
     font-size: 14px;
     font-weight: bold;
     padding: 10px;
   }
 
   .stop-btn:hover {
-    background-color: #45475a;
+    background-color: theme.$surface-neutral;
   }
 
   .stop-btn:disabled {
-    background-color: #181825;
-    color: #45475a;
+    background-color: theme.$background-alt;
+    color: theme.$surface-neutral;
   }
 
   .hint-label {
     font-size: 11px;
-    color: #585b70;
+    color: theme.$text-disabled;
   }
 }
