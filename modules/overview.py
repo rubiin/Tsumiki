@@ -1,4 +1,3 @@
-import json
 from contextlib import suppress
 
 from fabric.hyprland.widgets import get_hyprland_connection
@@ -13,6 +12,7 @@ from fabric.widgets.overlay import Overlay
 
 from shared.popup import PopupWindow
 from utils.app import AppUtils
+from utils.functions import parse_hyprland_reply
 from utils.icon_resolver import IconResolver
 from utils.widget_settings import BarConfig
 from utils.widget_utils import create_surface_from_widget
@@ -350,22 +350,16 @@ class OverviewMenu(Box):
         self.workspace_boxes[workspace_id].put(button, x, y)
 
     def _fetch_monitors(self) -> dict[int, tuple[int, int, int]]:
-        monitors_data = json.loads(
-            self._hyprland_connection.send_command("j/monitors")
-            .reply.decode()
-            .strip("\n")
-        )
+        reply = self._hyprland_connection.send_command("j/monitors")
+        monitors_data = parse_hyprland_reply(reply)
         return {
             monitor["id"]: (monitor["x"], monitor["y"], monitor["transform"])
             for monitor in monitors_data
         }
 
     def _fetch_clients(self) -> list[dict]:
-        return json.loads(
-            self._hyprland_connection.send_command("j/clients")
-            .reply.decode()
-            .strip("\n")
-        )
+        reply = self._hyprland_connection.send_command("j/clients")
+        return parse_hyprland_reply(reply)
 
     def update(self, signal_update=False):
         # Only refresh app cache if needed (marked dirty by unknown app_id)

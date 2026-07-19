@@ -16,6 +16,7 @@ from typing import Any, Callable, Iterable, List, Literal, Optional, TypeVar
 
 import psutil
 from fabric import Application
+from fabric.hyprland import HyprlandReply
 from fabric.utils import (
     Gdk,
     GdkPixbuf,
@@ -471,6 +472,15 @@ def copy_themev2(theme: str, mode: str = "dark"):
             f"{Colors.ERROR}Error: The theme file '{source_file}' was not found."
         )
         exit(1)
+
+
+# Function to parse hyprland reply
+def parse_hyprland_reply(reply: HyprlandReply) -> dict:
+    try:
+        return json.loads(reply.reply.decode().strip("\n"))
+    except Exception as e:
+        logger.exception(f"Failed to parse hyprland reply: {e}")
+        return {}
 
 
 # Function to update the theme configuration

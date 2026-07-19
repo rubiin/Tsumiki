@@ -1,9 +1,11 @@
+from fabric.hyprland import HyprlandReply
 from fabric.hyprland.widgets import HyprlandEvent, get_hyprland_connection
 from fabric.utils import logger, re
 from fabric.widgets.label import Label
 
 from shared.widget_container import ButtonWidget
 from utils.constants import get_kblayout_map
+from utils.functions import parse_hyprland_reply
 from utils.widget_utils import nerd_font_icon
 
 
@@ -31,7 +33,10 @@ class KeyboardLayoutWidget(ButtonWidget):
         if self._hyprland_connection.ready:
             self.on_ready(None)
         else:
-            self._hyprland_connection.connect("event::ready", self.on_ready)
+            self._register_handler(
+                self._hyprland_connection,
+                self._hyprland_connection.connect("event::ready", self.on_ready),
+            )
 
     def on_ready(self, _):
         return self._get_keyboard(), logger.info(
@@ -51,17 +56,21 @@ class KeyboardLayoutWidget(ButtonWidget):
             f"[Keyboard] Keyboard: {keyboard}, Language: {language}, Match: {matched}"
         )
 
-    def _handle_reply(self, data: str):
+    def _handle_reply(self, res: HyprlandReply, *_):
         try:
+            data = parse_hyprland_reply(res)
             keyboards = data.get("keyboards", [])
             if not keyboards:
-                return "Unknown"
+                self.kb_label.set_label("Unknown")
+                return logger.warning("[Keyboard] No keyboards found in the data")
 
             main_kb = next((kb for kb in keyboards if kb.get("main")), keyboards[-1])
 
             layout = main_kb["active_keymap"]
 
             label = get_kblayout_map().get(layout, layout)
+
+            print(f"[Keyboard] Active layout: {layout}, Label: {label}")
 
             if self.config.get("tooltip", False) and self.tooltips_enabled:
                 caps = "On" if main_kb["capsLock"] else "Off"
@@ -77,7 +86,8 @@ class KeyboardLayoutWidget(ButtonWidget):
     def _get_keyboard(self):
         try:
             self._hyprland_connection.send_command_async(
-                "j/devices", lambda res, *_: self._handle_reply(res.reply.decode())
+                "j/devices",
+                self._handle_reply,
             )
 
         except Exception as e:

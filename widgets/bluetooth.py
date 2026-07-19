@@ -28,7 +28,10 @@ class BlueToothWidget(ButtonWidget):
             self.container_box.add(self.bt_label)
 
         self.bluetooth_client = BluetoothClient()
-        self.bluetooth_client.connect("changed", self.update_bluetooth_status)
+        self._register_handler(
+            self.bluetooth_client,
+            self.bluetooth_client.connect("changed", self.update_bluetooth_status),
+        )
 
         self.update_bluetooth_status()
 

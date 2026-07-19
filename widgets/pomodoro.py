@@ -249,9 +249,9 @@ class PomodoroMenu(Box):
             self.session_count += 1
 
         self.elapsed = 0
-        self.is_running = False
-
+        self.is_running = True
         self._update_display()
+        self.timer_id = GLib.timeout_add(1000, self._tick)
 
     def start(self):
         """Start timer."""

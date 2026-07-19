@@ -40,8 +40,12 @@ def main():
     """Main function to run the application."""
     # Defer config loading until main() is called
 
-    general_options = tsumiki_config.get("general", {})
-    module_options = tsumiki_config.get("modules", {})
+    general_options = tsumiki_config.get("general") or {}
+
+    module_options = tsumiki_config.get("modules") or {}
+
+    def module_enabled(name: str) -> bool:
+        return bool((module_options.get(name) or {}).get("enabled", False))
 
     helpers.check_executable_exists("sass")
     helpers.ensure_directory(APP_DATA_DIRECTORY)
@@ -67,49 +71,49 @@ def main():
     # Create status bars
     Bar.create_bars(app, tsumiki_config)
 
-    if module_options.get("notification", {}).get("enabled", False):
+    if module_enabled("notification"):
         from modules.notification import NotificationPopup
 
         app.add_window(NotificationPopup(tsumiki_config))
 
-    if module_options.get("overview", {}).get("enabled", False):
+    if module_enabled("overview"):
         from modules.overview import OverViewOverlay
 
         logger.info("[Main] Adding overview module")
 
         app.add_window(OverViewOverlay(tsumiki_config))
 
-    if module_options.get("screen_corners", {}).get("enabled", False):
+    if module_enabled("screen_corners"):
         from modules.corners import ScreenCorners
 
         app.add_window(ScreenCorners(tsumiki_config))
 
-    if module_options.get("desktop_quotes", {}).get("enabled", False):
+    if module_enabled("desktop_quotes"):
         from modules.desktop_quotes import DesktopQuote
 
         app.add_window(DesktopQuote(tsumiki_config))
 
-    if module_options.get("activate_linux", {}).get("enabled", False):
+    if module_enabled("activate_linux"):
         from modules.activate_linux import ActivateLinux
 
         app.add_window(ActivateLinux(tsumiki_config))
 
-    if module_options.get("app_launcher", {}).get("enabled", False):
+    if module_enabled("app_launcher"):
         from modules.app_launcher import AppLauncher
 
         app.add_window(AppLauncher(tsumiki_config))
 
-    if module_options.get("dock", {}).get("enabled", False):
+    if module_enabled("dock"):
         from modules.dock import Dock
 
         app.add_window(Dock(tsumiki_config))
 
-    if module_options.get("desktop_clock", {}).get("enabled", False):
+    if module_enabled("desktop_clock"):
         from modules.desktop_clock import DesktopClock
 
         app.add_window(DesktopClock(tsumiki_config))
 
-    if module_options.get("osd", {}).get("enabled", False):
+    if module_enabled("osd"):
         from modules.osd import OSDContainer
 
         app.add_window(OSDContainer(tsumiki_config))

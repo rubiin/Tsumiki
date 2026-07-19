@@ -42,8 +42,11 @@ class BrightnessWidget(EventBoxWidget):
         self.container_box.add(self.progress_bar)
 
         # Connect the audio service to update the progress bar on brightness change
-        self.brightness_service.connect(
-            "brightness_changed", self.on_brightness_changed
+        self._register_handler(
+            self.brightness_service,
+            self.brightness_service.connect(
+                "brightness_changed", self.on_brightness_changed
+            ),
         )
 
         # Connect the event box to handle scroll events

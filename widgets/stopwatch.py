@@ -1,4 +1,4 @@
-from fabric.utils import GLib, bulk_connect, time
+from fabric.utils import GLib, time
 from fabric.widgets.label import Label
 
 from shared.widget_container import ButtonWidget
@@ -26,20 +26,11 @@ class StopWatchWidget(ButtonWidget):
         self.time_label = Label(label="00:00", style_classes=["panel-text"])
         self.container_box.children = (self.icon, self.time_label)
 
-        bulk_connect(
-            self,
-            {
-                "clicked": self.on_click,
-                "destroy": self._on_destroy,
-            },
+        self.connect("clicked", self.on_click)
+
+        self.timeout_id = self._register_repeater(
+            GLib.timeout_add(100, self.update_time)
         )
-
-        self.timeout_id = GLib.timeout_add(100, self.update_time)
-
-    def _on_destroy(self, *_):
-        if self.timeout_id is not None:
-            GLib.source_remove(self.timeout_id)
-            self.timeout_id = None
 
     # stop or run on click
     def on_click(self, *_):

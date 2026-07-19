@@ -1,8 +1,10 @@
+from fabric.hyprland import HyprlandReply
 from fabric.hyprland.widgets import get_hyprland_connection
 from fabric.utils import bulk_connect, logger
 from fabric.widgets.label import Label
 
 from shared.widget_container import ButtonWidget
+from utils.functions import parse_hyprland_reply
 
 
 class WindowCountWidget(ButtonWidget):
@@ -38,8 +40,9 @@ class WindowCountWidget(ButtonWidget):
             "[WindowCount] Connected to the hyprland socket"
         )
 
-    def _handle_workspace_response(self, data: dict):
+    def _handle_workspace_response(self, res: HyprlandReply, *_):
         try:
+            data = parse_hyprland_reply(res)
             count = data.get("windows", 0)
             label_format = self.config.get("label_format", "[{count}]")
             self.count_label.set_label(label_format.format(count=count))
@@ -58,10 +61,7 @@ class WindowCountWidget(ButtonWidget):
         """Get the number of windows in the active workspace."""
         try:
             self._hyprland_connection.send_command_async(
-                "j/activeworkspace",
-                lambda res, *_: self._handle_workspace_response(
-                    res.reply.decode().strip("\n")
-                ),
+                "j/activeworkspace", self._handle_workspace_response
             )
         except Exception as e:
             logger.exception(f"[WindowCount] Failed to get active workspace: {e}")

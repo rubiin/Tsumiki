@@ -5,7 +5,7 @@ from concurrent.futures import ThreadPoolExecutor
 from time import monotonic
 from typing import Any, TypeVar
 
-from fabric.utils import GLib
+from fabric.utils import GLib, logger
 
 # Auto-tune max_workers based on CPU count, fallback to 4
 _cpu_count = os.cpu_count() or 4
@@ -16,19 +16,27 @@ T = TypeVar("T")
 
 
 def log_errors(func):
-    """Decorator to log errors in config operations"""
+    """Log exceptions raised by the wrapped function, then re-raise."""
 
     def wrapper(*args, **kwargs):
-        return func(*args, **kwargs)
+        try:
+            return func(*args, **kwargs)
+        except Exception:
+            logger.exception(f"[decorator] error in {func.__name__}")
+            raise
 
     return wrapper
 
 
 def safe_operation(func):
-    """Decorator for safe operations that shouldn't raise exceptions"""
+    """Catch and log exceptions, returning None instead of propagating."""
 
     def wrapper(*args, **kwargs):
-        return func(*args, **kwargs)
+        try:
+            return func(*args, **kwargs)
+        except Exception as e:
+            logger.error(f"[decorator] {func.__name__} failed: {e}")
+            return None
 
     return wrapper
 

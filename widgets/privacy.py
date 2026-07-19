@@ -17,11 +17,13 @@ class PrivacyIndicatorWidget(ButtonWidget):
         self.service = privacy_service
         self._privacy_repeater_id = None
 
-        GLib.timeout_add(3500, self._start_privacy_repeater)
+        self._register_repeater(GLib.timeout_add(3500, self._start_privacy_repeater))
 
     def _start_privacy_repeater(self):
         self.update_privacy_status()
-        self._privacy_repeater_id = invoke_repeater(1000, self.update_privacy_status)
+        self._privacy_repeater_id = self._register_repeater(
+            invoke_repeater(1000, self.update_privacy_status)
+        )
         return False
 
     def update_privacy_status(self):

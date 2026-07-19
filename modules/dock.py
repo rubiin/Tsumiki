@@ -1,5 +1,6 @@
 import json
 
+from fabric.hyprland import HyprlandReply
 from fabric.hyprland.widgets import get_hyprland_connection
 from fabric.utils import Gdk, GLib, Gtk, bulk_connect, logger, truncate
 from fabric.widgets.box import Box
@@ -15,6 +16,7 @@ from utils.config import tsumiki_config
 from utils.constants import PINNED_APPS_FILE
 from utils.functions import (
     normalize_address,
+    parse_hyprland_reply,
     read_json_file,
     write_json_file,
 )
@@ -283,22 +285,16 @@ class AppBar(Box):
 
     def _get_active_address(self) -> str | None:
         try:
-            parsed = json.loads(
-                self._hyprland_connection.send_command("j/activewindow")
-                .reply.decode()
-                .strip("\n")
-            )
+            reply = self._hyprland_connection.send_command("j/activewindow")
+            parsed = parse_hyprland_reply(reply)
         except Exception:
             return None
         return normalize_address(parsed.get("address"))
 
     def _list_visible_clients(self) -> list[NativeClient]:
         try:
-            raw_clients = json.loads(
-                self._hyprland_connection.send_command("j/clients")
-                .reply.decode()
-                .strip("\n")
-            )
+            res = self._hyprland_connection.send_command("j/clients")
+            raw_clients = parse_hyprland_reply(res)
         except Exception as e:
             logger.exception(f"[Dock] Failed to list clients: {e}")
             return []
@@ -954,9 +950,9 @@ class Dock(BaseWindow):
         if not self._app_bar._is_dragging:
             self.revealer.set_reveal_child(False)
 
-    def _handle_workspace_response(self, data: str):
+    def _handle_workspace_response(self, res: HyprlandReply, *_) -> None:
         try:
-            parsed = json.loads(data)
+            parsed = parse_hyprland_reply(res)
             if parsed.get("windows", 0) == 0:
                 self.revealer.set_reveal_child(True)
             else:
@@ -967,10 +963,7 @@ class Dock(BaseWindow):
     def _check_for_windows(self, *_):
         try:
             self._hyprland_connection.send_command_async(
-                "j/activeworkspace",
-                lambda res, *_: self._handle_workspace_response(
-                    res.reply.decode().strip("\n")
-                ),
+                "j/activeworkspace", self._handle_workspace_response
             )
         except Exception as e:
             logger.exception(f"[Dock] Failed to get active workspace: {e}")

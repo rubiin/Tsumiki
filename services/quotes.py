@@ -19,7 +19,7 @@ class QuotesService(SingletonService):
         self,
     ):
         super().__init__()
-        self.api_url = "https://zenquotes.io/api/quotes/"
+        self.api_url = "https://zenquotes.io/api/quotes"
 
     def _make_session(self) -> httpx.Client:
         """Create a throwaway session to avoid holding state in memory."""

@@ -66,13 +66,14 @@ class MprisWidget(ButtonWidget, PopoverMixin):
 
         # Services
         self.mpris_manager = MprisPlayerManager()
-        bulk_connect(
+        for hid in bulk_connect(
             self.mpris_manager,
             {
                 "player-appeared": self.on_player_appeared,
                 "player-vanished": self.on_player_vanished,
             },
-        )
+        ):
+            self._register_handler(self.mpris_manager, hid)
 
         for player in self.mpris_manager.players:
             logger.info(
@@ -112,7 +113,9 @@ class MprisWidget(ButtonWidget, PopoverMixin):
         if self._progress_timer_id is not None:
             return
 
-        self._progress_timer_id = GLib.timeout_add(1000, self._on_progress_tick)
+        self._progress_timer_id = self._register_repeater(
+            GLib.timeout_add(1000, self._on_progress_tick)
+        )
 
     def _stop_progress_timer(self):
         if self._progress_timer_id is None:

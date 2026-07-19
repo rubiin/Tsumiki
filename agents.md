@@ -2,7 +2,7 @@
 
 ## What this repo is
 
-Tsumiki is a modular status bar / panel for Hyprland written using [Fabric](https://github.com/Fabric-Development/fabric) (Python GTK4 widget framework). Main code is Python, with UI widgets under `modules/`, `widgets/`, `shared/`, `services/`, and helpers in `utils/`. Styles live in `styles/`. Docs and site assets live in `docs/`
+Tsumiki is a modular status bar / panel for Hyprland written using [Fabric](https://github.com/Fabric-Development/fabric) (Python GTK3 widget framework). Main code is Python, with UI widgets under `modules/`, `widgets/`, `shared/`, `services/`, and helpers in `utils/`. Styles live in `styles/`. Docs and site assets live in `docs/`
 
 ## Project Structure
 

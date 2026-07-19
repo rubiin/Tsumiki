@@ -1,9 +1,9 @@
-import subprocess
+import shlex
 from typing import Any, Literal
 
 import gi
 from fabric.core.service import Property, Service, Signal
-from fabric.utils import Gio, bulk_connect, logger, time
+from fabric.utils import Gio, bulk_connect, exec_shell_command_async, logger, time
 
 from utils.constants import NETWORK_RECENCY_THRESHOLD_SECONDS
 from utils.exceptions import NetworkManagerNotFoundError
@@ -131,82 +131,56 @@ class Wifi(Service):
         return
 
     def forget_access_point(self, ssid):
-        try:
-            # List all saved connections
-            result = subprocess.check_output(
-                ["nmcli", "-g", "NAME", "connection", "show"],
-                text=True,
+        # List saved connections asynchronously; delete the one matching ssid.
+        # The async API calls back once per stdout line, so each connection ID
+        # arrives as its own call.
+        def _on_connection_line(line):
+            connection_id = line.strip()
+            if not connection_id or connection_id != ssid:
+                return
+            exec_shell_command_async(
+                f"nmcli connection delete id {shlex.quote(connection_id)}",
+                self._log_nmcli,
             )
+            logger.info(f"[NetworkService] Deleted saved connection: {connection_id}")
 
-            # Find connection ID that matches SSID
-            for connection_id in (line.strip() for line in result.splitlines()):
-                if not connection_id:
-                    continue
-                if connection_id == ssid:
-                    subprocess.check_call(
-                        ["nmcli", "connection", "delete", "id", connection_id]
-                    )
-                    logger.info(
-                        f"[NetworkService] Deleted saved connection: {connection_id}"
-                    )
-                    return True
+        exec_shell_command_async("nmcli -g NAME connection show", _on_connection_line)
 
-            logger.warning(
-                f"[NetworkService] No saved connection found for SSID: {ssid}"
-            )
-            return False
-
-        except subprocess.CalledProcessError as e:
-            logger.exception(f"[NetworkService] Error forgetting connection: {e}")
-            return False
-        except FileNotFoundError:
-            logger.exception("[NetworkService] nmcli not found")
-            return False
-
-    def connect_network(
-        self, ssid: str, password: str = "", remember: bool = True
-    ) -> bool:
-        """Connect to a WiFi network"""
+    def connect_network(self, ssid: str, password: str = "", remember: bool = True):
+        """Connect to a WiFi network (async; connection is a side effect)."""
         if not ssid:
             logger.exception("[NetworkService] SSID cannot be empty")
-            return False
-        try:
-            # First try to connect using saved connection
-            try:
-                subprocess.run(["nmcli", "con", "up", ssid], check=True)
-                return True
-            except subprocess.CalledProcessError:
-                # If saved connection fails, try with password if provided
-                if password:
-                    cmd = [
-                        "nmcli",
-                        "device",
-                        "wifi",
-                        "connect",
-                        ssid,
-                        "password",
-                        password,
-                    ]
-                    if not remember:
-                        cmd.extend(["--temporary"])
-                    subprocess.run(cmd, check=True)
-                    return True
-                return False
-        except subprocess.CalledProcessError as e:
-            logger.exception(f"[NetworkService] Failed connecting to network: {e}")
-            return False
+            return
+        if password:
+            cmd = [
+                "nmcli",
+                "device",
+                "wifi",
+                "connect",
+                ssid,
+                "password",
+                password,
+            ]
+            if not remember:
+                cmd.append("--temporary")
+            exec_shell_command_async(
+                " ".join(shlex.quote(c) for c in cmd), self._log_nmcli
+            )
+        else:
+            exec_shell_command_async(
+                f"nmcli con up {shlex.quote(ssid)}", self._log_nmcli
+            )
 
-    def disconnect_network(self, ssid: str) -> bool:
-        """Disconnect from a WiFi network"""
+    def disconnect_network(self, ssid: str):
+        """Disconnect from a WiFi network (async; side effect only)."""
         if not ssid:
             logger.exception("[NetworkService] SSID cannot be empty")
-            return False
-        try:
-            subprocess.run(["nmcli", "con", "down", ssid], check=True)
-            return True
-        except subprocess.CalledProcessError as e:
-            logger.exception(f"[NetworkService] Failed disconnecting from network: {e}")
-            return False
+            return
+        exec_shell_command_async(f"nmcli con down {shlex.quote(ssid)}", self._log_nmcli)
+
+    def _log_nmcli(self, out):
+        if out:
+            logger.info(f"[NetworkService] nmcli: {out}")
 
     @Property(bool, "read-write", default_value=False)
     def enabled(self) -> bool:  # noqa: F811

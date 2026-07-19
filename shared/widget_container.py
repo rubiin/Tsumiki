@@ -1,6 +1,6 @@
 from typing import Iterable
 
-from fabric.utils import bulk_connect
+from fabric.utils import GLib, bulk_connect
 from fabric.widgets.box import Box
 from fabric.widgets.button import Button
 from fabric.widgets.eventbox import EventBox
@@ -8,9 +8,43 @@ from fabric.widgets.wayland import WaylandWindow as Window
 from fabric.widgets.widget import Widget
 
 from utils.config import tsumiki_config
+from utils.functions import safe_disconnect
 
 
-class BaseWidget(Widget):
+class TeardownMixin:
+    """Track GLib repeaters and signal handlers for teardown on destroy.
+
+    Widgets call ``_register_repeater`` / ``_register_handler``; the first call
+    wires a ``destroy`` handler that removes every tracked source. This stops
+    the leaks that stack when bars are recreated on config edit / hotplug.
+    """
+
+    def _register_repeater(self, repeater_id: int) -> int:
+        if not hasattr(self, "_repeaters"):
+            self._repeaters = []
+            self._handlers = []
+            self.connect("destroy", self._teardown)
+        self._repeaters.append(repeater_id)
+        return repeater_id
+
+    def _register_handler(self, source, handler_id) -> None:
+        if not hasattr(self, "_repeaters"):
+            self._repeaters = []
+            self._handlers = []
+            self.connect("destroy", self._teardown)
+        self._handlers.append((source, handler_id))
+
+    def _teardown(self, *_):
+        for repeater_id in getattr(self, "_repeaters", []):
+            if repeater_id:
+                GLib.source_remove(repeater_id)
+        for source, handler_id in getattr(self, "_handlers", []):
+            safe_disconnect(source, handler_id)
+        self._repeaters = []
+        self._handlers = []
+
+
+class BaseWidget(Widget, TeardownMixin):
     """A base widget class that can be extended for custom widgets."""
 
     @staticmethod
@@ -66,7 +100,7 @@ class BaseWidget(Widget):
         self.set_style_classes("") if not action else self.set_style_classes("active")
 
 
-class BaseWindow(Window):
+class BaseWindow(Window, TeardownMixin):
     """A base window class that can be extended for custom windows."""
 
     def __init__(self, **kwargs):

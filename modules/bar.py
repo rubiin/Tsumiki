@@ -249,7 +249,9 @@ class Bar(BaseWindow):
     def _start_hide_timer(self):
         """Start the timer to hide the bar after inactivity."""
         self._cancel_hide_timer()
-        self._hide_timer_id = GLib.timeout_add(self._auto_hide_timeout, self._hide_bar)
+        self._hide_timer_id = self._register_repeater(
+            GLib.timeout_add(self._auto_hide_timeout, self._hide_bar)
+        )
 
     def _cancel_hide_timer(self):
         """Cancel any pending hide timer."""
@@ -267,6 +269,7 @@ class Bar(BaseWindow):
     def _on_destroy(self, *_):
         """Ensure no pending hide timer survives teardown."""
         self._cancel_hide_timer()
+        BaseWindow._teardown(self)
 
     def make_layout(self, config: BarConfig):
         """assigns the three sections their respective widgets"""

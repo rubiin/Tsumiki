@@ -9,7 +9,7 @@ from fabric.widgets.svg import Svg
 
 from services.weather import WeatherService
 from shared.mixins import PopoverMixin
-from shared.widget_container import ButtonWidget
+from shared.widget_container import BoxWidget, ButtonWidget
 from utils.constants import ASSETS_DIR
 from utils.functions import check_if_day
 from utils.weather_icons import WEATHER_ICONS
@@ -22,9 +22,13 @@ class BaseWeatherWidget:
     """Base class for weather widgets."""
 
     def get_description(self):
+        if not getattr(self, "current_weather", None):
+            return ""
         return self.current_weather["weatherDesc"][0]["value"]
 
     def get_humidity(self):
+        if not getattr(self, "current_weather", None):
+            return ""
         return self.current_weather["humidity"] + "%"
 
     def sunrise_sunset_time(self) -> str:
@@ -48,6 +52,8 @@ class BaseWeatherWidget:
         return True
 
     def get_wind_speed(self):
+        if not getattr(self, "current_weather", None):
+            return ""
         if self.config.get("wind_speed_unit", "kmh") == "kmh":
             return self.current_weather["windspeedKmph"] + " Km/h"
 
@@ -55,6 +61,8 @@ class BaseWeatherWidget:
 
     def get_temperature(self):
         """Get the current temperature in the specified unit."""
+        if not getattr(self, "current_weather", None):
+            return ""
 
         if self.config.get("temperature_unit", "celsius") == "celsius":
             return self.current_weather["temp_C"] + "°C"
@@ -90,7 +98,7 @@ class BaseWeatherWidget:
         return f"{hour}:{minute:02d} {period}"
 
 
-class WeatherMenu(Box, BaseWeatherWidget):
+class WeatherMenu(BoxWidget, BaseWeatherWidget):
     """A menu to display the weather information."""
 
     def __init__(
@@ -242,7 +250,7 @@ class WeatherMenu(Box, BaseWeatherWidget):
             callback=self.update_data,
         )
 
-        invoke_repeater(1000, self.update_widget)
+        self._register_repeater(invoke_repeater(1000, self.update_widget))
 
     def update_data(self, data):
         self.update_app_data(data)
@@ -251,6 +259,12 @@ class WeatherMenu(Box, BaseWeatherWidget):
 
     def update_widget(self, *args, **kwargs):
         forced = kwargs.get("forced", False)
+
+        if (
+            getattr(self, "data", None) is None
+            or getattr(self, "hourly_forecast", None) is None
+        ):
+            return
 
         # Check if the update time is more than 4 minute ago
         if (datetime.now() - self.update_time).total_seconds() < 60 and not forced:
@@ -317,6 +331,7 @@ class WeatherMenu(Box, BaseWeatherWidget):
                     children=[hour, icon, temp],
                 )
                 self.forecast_box.attach(forecast_col, col, 0, 1, 1)
+        return True
 
     def get_weather_asset(self, code: int, time_str: str | None = None) -> str:
         is_day = check_if_day(
@@ -374,7 +389,7 @@ class WeatherWidget(ButtonWidget, BaseWeatherWidget, PopoverMixin):
 
         self._update_ui(forced=True)
 
-        invoke_repeater(1000, self._update_ui)
+        self._register_repeater(invoke_repeater(1000, self._update_ui))
 
     def update_data(self, data):
         self.update_time = datetime.now()
@@ -389,7 +404,10 @@ class WeatherWidget(ButtonWidget, BaseWeatherWidget, PopoverMixin):
         # Get the current weather
         self.update_app_data(data)
 
-        weather_icon = WEATHER_ICONS[self.current_weather["weatherCode"]]
+        code = self.current_weather.get("weatherCode")
+        if code is None:
+            return
+        weather_icon = WEATHER_ICONS[str(code)]
 
         text_icon = (
             weather_icon["icon"]
@@ -436,7 +454,7 @@ class WeatherWidget(ButtonWidget, BaseWeatherWidget, PopoverMixin):
 
         # Check if the update time is more than 5 minutes ago, update the icon
         if (
-            hasattr(self, "current_weather")
+            getattr(self, "current_weather", None) is not None
             and (datetime.now() - self.update_time).total_seconds() > 300
         ):
             weather_icon = WEATHER_ICONS[self.current_weather["weatherCode"]]

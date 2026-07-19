@@ -1,8 +1,10 @@
+from fabric.hyprland import HyprlandReply
 from fabric.hyprland.widgets import get_hyprland_connection
 from fabric.utils import logger
 from fabric.widgets.label import Label
 
 from shared.widget_container import ButtonWidget
+from utils.functions import parse_hyprland_reply
 from utils.widget_utils import nerd_font_icon
 
 
@@ -39,8 +41,10 @@ class SubMapWidget(ButtonWidget):
             "[Submap] Connected to the hyprland socket"
         )
 
-    def _handle_reply(self, submap: str):
+    def _handle_reply(self, res: HyprlandReply, *_):
         try:
+            # TODO: check this
+            submap = parse_hyprland_reply(res)
             if submap == "unknown request":
                 submap = "default"
 
@@ -61,7 +65,7 @@ class SubMapWidget(ButtonWidget):
             # TODO use the data from the event
             self._hyprland_connection.send_command_async(
                 "submap",
-                lambda res, *_: self._handle_reply(res.reply.decode().strip("\n")),
+                self._handle_reply,
             )
 
         except Exception as e:

@@ -8,12 +8,14 @@ from fabric.utils import (
     GLib,
     exec_shell_command,
     exec_shell_command_async,
+    idle_add,
     logger,
     os,
 )
 
 import utils.functions as helpers
 from utils.constants import APPLICATION_NAME, ASSETS_DIR
+from utils.decorators import thread
 from utils.icons import symbolic_icons
 
 from .base import SingletonService
@@ -58,14 +60,32 @@ class ScreenRecorderService(SingletonService):
         file_path = os.path.join(self.screenrecord_path, f"{timestamp}.mp4")
         self._current_screencast_path = file_path
 
-        area = "" if fullscreen else f"-g '{exec_shell_command('slurp')}'"
         audio = "--audio" if config.get("audio", False) else ""
+        delayed = config.get("delayed", False)
+        timeout = config.get("delayed_timeout", 5000)
+
+        if fullscreen:
+            self._start_recording(audio, "", file_path, delayed, timeout)
+            return
+
+        # `slurp` blocks until the user finishes dragging the region selector.
+        # Run it off the UI thread and marshal the result back via idle_add so
+        # the shell stays responsive while the user selects the area.
+        def _slurp_worker():
+            geometry = exec_shell_command("slurp")
+            idle_add(self._on_slurp, geometry, audio, file_path, delayed, timeout)
+
+        thread(_slurp_worker)
+
+    def _on_slurp(self, geometry, audio, file_path, delayed, timeout):
+        area = f"-g '{geometry}'" if geometry else ""
+        self._start_recording(audio, area, file_path, delayed, timeout)
+
+    def _start_recording(self, audio, area, file_path, delayed, timeout):
         command = (
             f"wf-recorder {audio} --file={file_path} --pixel-format yuv420p {area}"
         )
-
-        if config.get("delayed", False):
-            timeout = config.get("delayed_timeout", 5000)
+        if delayed:
             GLib.timeout_add(timeout, self.record_and_emit, command)
         else:
             self.record_and_emit(command)

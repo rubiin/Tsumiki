@@ -39,7 +39,10 @@ class VolumeWidget(EventBoxWidget):
         self.container_box.add(self.progress_bar)
 
         # Connect the audio service to update the progress bar on volume change
-        self.audio.connect("notify::speaker", self.on_speaker_changed)
+        self._register_handler(
+            self.audio,
+            self.audio.connect("notify::speaker", self.on_speaker_changed),
+        )
 
         # Connect the event box to handle scroll events
         self.connect("scroll-event", self.on_scroll)

@@ -172,7 +172,8 @@ class OSDContainer(BaseWindow):
         self.revealer.set_reveal_child(False)  # Trigger hide animation
 
         # Wait for the animation to finish before hiding the window completely
-        GLib.timeout_add(self.revealer.get_transition_duration(), self._finalize_hide)
+        duration = self.revealer.get_transition_duration()
+        self._register_repeater(GLib.timeout_add(duration, self._finalize_hide))
         return False
 
     def _finalize_hide(self):

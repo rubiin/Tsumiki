@@ -6,7 +6,7 @@ from fabric.widgets.flowbox import FlowBox
 from fabric.widgets.label import Label
 from fabric.widgets.scrolledwindow import ScrolledWindow
 
-from shared.widget_container import ButtonWidget
+from shared.widget_container import BoxWidget, ButtonWidget
 from utils.icons import get_text_icon
 from utils.widget_utils import nerd_font_icon
 
@@ -171,7 +171,7 @@ class ExerciseTile(Button):
             ctx.remove_class("active")
 
 
-class BreathingMenu(Box):
+class BreathingMenu(BoxWidget):
     """The main window for the breathing exercise widget."""
 
     def __init__(self):
@@ -414,7 +414,7 @@ class BreathingMenu(Box):
     def _schedule_tick(self):
         if self._timer_id is not None:
             GLib.source_remove(self._timer_id)
-        self._timer_id = GLib.timeout_add(1000, self._tick)
+        self._timer_id = self._register_repeater(GLib.timeout_add(1000, self._tick))
 
     def _tick(self):
         self._timer_id = None

@@ -27,7 +27,10 @@ class MicrophoneIndicatorWidget(ButtonWidget):
             )
             self.container_box.add(self.mic_label)
 
-        self.audio_service.connect("microphone_changed", self._update_status)
+        self._register_handler(
+            self.audio_service,
+            self.audio_service.connect("microphone_changed", self._update_status),
+        )
         self._update_status()
 
     def _update_status(self, *_):

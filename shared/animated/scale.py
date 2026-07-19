@@ -64,5 +64,7 @@ class AnimatedScale(Scale, BaseWidget):
         if self._animation_timeout:
             GLib.source_remove(self._animation_timeout)
 
-        self._animation_timeout = GLib.timeout_add(50, self._execute_animation)
+        self._animation_timeout = self._register_repeater(
+            GLib.timeout_add(50, self._execute_animation)
+        )
         return

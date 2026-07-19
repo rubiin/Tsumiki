@@ -55,11 +55,14 @@ class DesktopQuote(BaseWindow):
         )
 
     def update_quote(self):
-        """Fetch and update the quote label."""
-        quote = self.quote_service.get_quotes()
+        """Kick off an async quote fetch; the UI updates via the callback."""
+        self.quote_service.get_quotes_async(self._on_quote_ready)
+        return True  # Keep the repeater running
+
+    def _on_quote_ready(self, quote):
+        """Apply the fetched quote (runs on the main thread via idle_add)."""
         if quote:
             self.quote_label.set_label(quote["q"])
             self.author_label.set_label("- " + quote["a"])
         else:
             self.quote_label.set_text("Failed to load quote.")
-        return True  # Keep the repeater running

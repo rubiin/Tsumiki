@@ -1,11 +1,10 @@
-import subprocess
+import time
 
-from fabric.utils import Gdk, Gtk, exec_shell_command_async, os
+from fabric.utils import Gdk, GLib, Gtk, exec_shell_command_async, os
 from fabric.widgets.label import Label
 
 from shared.widget_container import ButtonWidget
 from utils.constants import ASSETS_DIR
-from utils.functions import ttl_lru_cache
 from utils.widget_utils import nerd_font_icon
 
 
@@ -21,6 +20,10 @@ class OCRWidget(ButtonWidget):
 
         self.current_lang = "eng"  # default
         self.initialized = False
+        self._langs_cache = None
+        self._langs_cache_time = 0.0
+        self._lang_lines: list[str] = []
+        self._lang_finalize_id = 0
 
         if self.config.get("show_icon", True):
             # Create a TextIcon with the specified icon and size
@@ -65,11 +68,39 @@ class OCRWidget(ButtonWidget):
             exec_shell_command_async(base_command, lambda *_: None)
 
     def _show_language_menu(self):
+        langs = self._get_cached_languages()
+        if langs is not None:
+            self._build_language_menu(langs)
+            return
+        self._lang_lines = []
+        self._lang_finalize_id = 0
+        exec_shell_command_async("tesseract --list-langs", self._on_lang_line)
+
+    def _on_lang_line(self, line):
+        self._lang_lines.append(line)
+        # The async API fires once per stdout line; re-arm a short timer so the
+        # menu is built ~200ms after the final line arrives.
+        if self._lang_finalize_id:
+            GLib.source_remove(self._lang_finalize_id)
+        self._lang_finalize_id = self._register_repeater(
+            GLib.timeout_add(200, self._finalize_languages)
+        )
+
+    def _finalize_languages(self):
+        self._lang_finalize_id = 0
+        lines = self._lang_lines
+        self._lang_lines = []
+        if not lines:
+            langs = ["eng"]
+        else:
+            langs = [lang.strip() for lang in lines[1:] if lang.strip()]
+        self._set_cached_languages(langs)
+        self._build_language_menu(langs)
+        return False
+
+    def _build_language_menu(self, langs):
         menu = Gtk.Menu(visible=True)
         menu.set_name("ocr-menu")  # For CSS targeting
-
-        # Get available languages
-        langs = self._get_available_languages()
 
         for lang in langs:
             if lang != "osd":  # Skip the OSD option
@@ -83,15 +114,14 @@ class OCRWidget(ButtonWidget):
 
         menu.popup_at_widget(self, Gdk.Gravity.SOUTH, Gdk.Gravity.NORTH, None)
 
-    @ttl_lru_cache(600, 10)
-    def _get_available_languages(self):
-        # Run the command synchronously to get output
-        try:
-            result = subprocess.check_output(["tesseract", "--list-langs"], text=True)
-            # Skip first line (header) and filter empty lines
-            return [lang.strip() for lang in result.split("\n")[1:] if lang.strip()]
-        except subprocess.CalledProcessError:
-            return ["eng"]  # fallback to English if command fails
+    def _get_cached_languages(self):
+        if self._langs_cache is not None and time.time() - self._langs_cache_time < 600:
+            return self._langs_cache
+        return None
+
+    def _set_cached_languages(self, langs):
+        self._langs_cache = langs
+        self._langs_cache_time = time.time()
 
     def on_language_selected(self, _, lang):
         self.current_lang = lang

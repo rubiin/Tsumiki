@@ -58,7 +58,7 @@ class UpdatesWidget(ButtonWidget):
         self._check_update()
 
         # reusing the fabricator to call specified intervals
-        invoke_repeater(1000, self._should_update)
+        self._register_repeater(invoke_repeater(1000, self._should_update))
 
     def _build_base_command(self) -> str:
         script = f"{ASSETS_DIR}/scripts/systemupdates.sh"
