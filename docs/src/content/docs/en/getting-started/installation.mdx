@@ -1,6 +1,6 @@
 ---
 title: Installation
-description: Get started with Tsumiki.
+description: Install Tsumiki — prerequisites, methods, and post-install setup
 sidebar:
   order: 2
 ---
@@ -9,11 +9,29 @@ import LatestRelease from '../../../../components/LatestRelease.astro'
 
 <div align="center"><img src="https://raw.githubusercontent.com/rubiin/tsumiki/refs/heads/master/assets/images/tsumiki.png" /><br /></div>
 
+## Prerequisites
+
+Ensure these are installed before proceeding:
+
+| Requirement | Install Command (Arch Linux) | Notes |
+|---|---|---|
+| [Hyprland](https://hyprland.org) | `sudo pacman -S hyprland` | Running Hyprland instance required |
+| [JetBrains Nerd Font](https://www.nerdfonts.com) | `sudo pacman -S ttf-jetbrains-mono-nerd` | Needed for icon rendering |
+| **Python 3.12+** | `sudo pacman -S python` | Verify: `python --version` |
+| **Git** | `sudo pacman -S git` | Required for cloning |
+| **NetworkManager** | `sudo pacman -S networkmanager` | Required by network widgets |
+| **PipeWire** | `sudo pacman -S pipewire pipewire-pulse` | Required by audio widgets |
+
 ::::caution
-You need a working Hyprland setup before installing Tsumiki.
+You need a **working Hyprland setup** before installing Tsumiki. If you're new to Hyprland, follow the [Hyprland Wiki](https://wiki.hyprland.org/Getting-Started/) first.
 ::::
 
-Tsumiki is a modular panel for Hyprland with widget-based customization.
+## Clone
+
+```sh
+git clone https://github.com/rubiin/tsumiki.git ~/.config/tsumiki
+cd ~/.config/tsumiki
+```
 
 ## Latest Release
 
@@ -25,23 +43,11 @@ Tsumiki is a modular panel for Hyprland with widget-based customization.
   />
 </div>
 
-For full release notes and assets, see the <a
-	href="https://github.com/rubiin/tsumiki/releases"
-	className="underline"
-	target="_blank"
-	rel="noopener noreferrer">
-	releases page</a> on GitHub.
-
-## Clone
-
-```sh
-git clone https://github.com/rubiin/tsumiki.git ~/.config/tsumiki
-cd ~/.config/tsumiki
-```
+For full release notes and assets, see the [releases page](https://github.com/rubiin/tsumiki/releases) on GitHub.
 
 ## Installation Options
 
-Choose one method.
+Choose one of the following three methods.
 
 ### Option 1: Bootstrap Script (Fastest)
 
@@ -49,9 +55,9 @@ Choose one method.
 curl -fsSL https://raw.githubusercontent.com/rubiin/tsumiki/master/install.sh | bash
 ```
 
-This script clones or updates `~/.config/tsumiki`, then runs setup.
+This script clones or updates `~/.config/tsumiki`, then runs the full setup.
 
-To also start immediately:
+To install **and start** immediately:
 
 ```sh
 curl -fsSL https://raw.githubusercontent.com/rubiin/tsumiki/master/install.sh | bash -s -- --start
@@ -59,38 +65,76 @@ curl -fsSL https://raw.githubusercontent.com/rubiin/tsumiki/master/install.sh | 
 
 ### Option 2: Automated Setup in Existing Clone
 
+If you already cloned the repo manually, run the setup script:
+
 ```sh
 ./init.sh -setup
 ./init.sh -start
 ```
 
-`-setup` installs required packages and configures the Python environment.
+The `-setup` flag installs required system packages and configures the Python virtual environment.
 
 ### Option 3: Manual Dependency Setup
 
-If you prefer manual package control, install dependencies yourself, then run:
+Prefer full control over packages? Install dependencies yourself and then start:
 
 ```sh
+# Install system packages
+sudo pacman -S --noconfirm --needed \
+  pipewire playerctl dart-sass power-profiles-daemon networkmanager \
+  brightnessctl pkgconf wf-recorder kitty python pacman-contrib \
+  gtk3 cairo gtk-layer-shell libgirepository noto-fonts-emoji \
+  gobject-introspection gobject-introspection-runtime python-pip \
+  python-gobject python-psutil python-cairo python-loguru libnotify \
+  cliphist python-httpx satty nvtop
+
+# Install AUR packages (using yay as example)
+yay -S --needed \
+  python-fabric-git gnome-bluetooth-3.0 python-rlottie-python \
+  python-pytomlpp slurp imagemagick tesseract tesseract-data-eng \
+  ttf-jetbrains-mono-nerd grimblast-git python-ijson glace-git
+
+# Install Python deps
+pip install -r requirements.txt
+
+# Start
 ./init.sh -start
 ```
 
-#### Required `pacman` Packages
+If you do not use `yay`, install the AUR packages with your preferred AUR helper.
+
+## Autostart Configuration
+
+Add this line to your `~/.config/hypr/hyprland.conf` to launch Tsumiki automatically when Hyprland starts:
 
 ```sh
-sudo pacman -S --noconfirm --needed pipewire playerctl dart-sass power-profiles-daemon networkmanager brightnessctl pkgconf wf-recorder kitty python pacman-contrib gtk3 cairo gtk-layer-shell libgirepository noto-fonts-emoji gobject-introspection gobject-introspection-runtime python-pip python-gobject python-psutil python-cairo python-loguru libnotify cliphist python-httpx satty nvtop
+exec-once = sleep 5; ~/.config/tsumiki/init.sh -start
 ```
 
-#### Required AUR Packages
+The `sleep 5` ensures Hyprland is fully initialized before Tsumiki launches. Adjust the path if you cloned to a different location.
+
+:::tip
+You can create a shell alias for convenience:
 
 ```sh
-yay -S --needed python-fabric-git gnome-bluetooth-3.0 python-rlottie-python python-pytomlpp slurp imagemagick tesseract tesseract-data-eng ttf-jetbrains-mono-nerd grimblast-git python-ijson glace-git
+alias tsumiki='~/.config/tsumiki/init.sh -start'
 ```
+:::
 
-If you do not use `yay`, install the same AUR packages with your preferred helper.
+## Verifying the Installation
+
+1. Run `./init.sh -start` from the project directory.
+2. The Tsumiki bar should appear at the top of your screen.
+3. If you see error messages, check that:
+   - All system packages are installed (`./init.sh -setup` re-runs this check)
+   - Python dependencies are installed (`pip install -r requirements.txt`)
+   - You're running under Hyprland (not another compositor or X11)
+
+If the bar doesn't appear, see [Troubleshooting](/en/help/troubleshooting).
 
 ## After Install
 
-Continue with [Post Installation](/en/resources/post-install) and [Configuration](/en/configuring/config).
+Continue with [Post Installation](/en/resources/post-install) for Hyprland layer rules and [First Steps](/en/getting-started/first-steps) to configure your panel.
 
 ::::tip
 Contributions to docs and install scripts are welcome:

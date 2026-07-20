@@ -1,0 +1,71 @@
+---
+title: Tsumiki
+description: Hyprland için Fabric ile yazılmış modüler panel
+template: splash
+hero:
+  tagline: Hyprland için modüler, hızlı bir panel ✨
+  image:
+    file: ../../../assets/tsumiki.png
+  actions:
+    - text: Tsumiki ile Başlayın
+      link: /tr/getting-started/overview
+      icon: rocket
+    - text: GitHub'da Keşfedin
+      link: https://github.com/rubiin/tsumiki
+      icon: github
+      variant: minimal
+---
+
+import { Card, CardGrid } from "@astrojs/starlight/components";
+
+## Tsumiki Nedir?
+
+Tsumiki (eski adıyla Hydepanel), Hyprland Wayland birleştiricisi için modüler bir durum çubuğudur.
+Fabric widget sistemi üzerine inşa edilmiş ve küçük, birleştirilebilir widget'lar etrafında tasarlanmıştır.
+
+## Özellikler
+
+<CardGrid stagger>
+  <Card title="Hyprland için Özelleştirilmiş" icon="seti:vala">
+    Hyprland iş akışları ve davranışıyla yerel entegrasyon.
+  </Card>
+  <Card title="Hafif ve Hızlı" icon="seti:swift">
+    Günlük kullanımda düşük CPU ve bellek yükü için tasarlanmıştır.
+  </Card>
+  <Card title="Temanlandırılabilir" icon="moon">
+    Masaüstünüze uyacak şekilde renkleri, boşlukları ve stilleri yapılandırın.
+  </Card>
+  <Card title="Modüler!" icon="puzzle">
+    Dock, başlatıcı, medya, pil, ağ ve daha fazlası için takılabilir widget'lar içerir.
+  </Card>
+
+</CardGrid>
+
+## Galeri
+
+<div className="showcase">
+  <img
+    src="https://raw.githubusercontent.com/rubiin/tsumiki/refs/heads/master/assets/screenshots/main.png"
+    alt="Ana Tsumiki Paneli"
+  />
+  <img
+    src="https://raw.githubusercontent.com/rubiin/tsumiki/refs/heads/master/assets/screenshots/quick_settings.png"
+    alt="Hızlı Ayarlar Paneli"
+  />
+  <img
+    src="https://raw.githubusercontent.com/rubiin/tsumiki/refs/heads/master/assets/screenshots/cava.png"
+    alt="Cava Görselleştirici"
+  />
+  <img
+    src="https://raw.githubusercontent.com/rubiin/tsumiki/refs/heads/master/assets/screenshots/notification_menu.png"
+    alt="Bildirim Menüsü"
+  />
+  <img
+    src="https://raw.githubusercontent.com/rubiin/tsumiki/refs/heads/master/assets/screenshots/logout.png"
+    alt="Çıkış menüsü"
+  />
+  <img
+    src="https://raw.githubusercontent.com/rubiin/tsumiki/refs/heads/master/assets/screenshots/weather.png"
+    alt="Hava Durumu Paneli"
+  />
+</div>

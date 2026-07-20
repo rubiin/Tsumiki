@@ -1,0 +1,140 @@
+---
+title: Installatie
+description: Tsumiki installeren — vereisten, methoden en configuratie na installatie
+sidebar:
+  order: 2
+---
+
+import LatestRelease from '../../../../components/LatestRelease.astro'
+
+<div align="center"><img src="https://raw.githubusercontent.com/rubiin/tsumiki/refs/heads/master/assets/images/tsumiki.png" /><br /></div>
+
+## Vereisten
+
+Zorg ervoor dat deze zijn geïnstalleerd voordat je verder gaat:
+
+| Vereiste | Installatiecommando (Arch Linux) | Opmerkingen |
+|---|---|---|
+| [Hyprland](https://hyprland.org) | `sudo pacman -S hyprland` | Draaiende Hyprland-instantie vereist |
+| [JetBrains Nerd Font](https://www.nerdfonts.com) | `sudo pacman -S ttf-jetbrains-mono-nerd` | Nodig voor pictogramweergave |
+| **Python 3.12+** | `sudo pacman -S python` | Controleren: `python --version` |
+| **Git** | `sudo pacman -S git` | Vereist voor klonen |
+| **NetworkManager** | `sudo pacman -S networkmanager` | Vereist door netwerkwidgets |
+| **PipeWire** | `sudo pacman -S pipewire pipewire-pulse` | Vereist door audiowidgets |
+
+::::caution
+Je hebt een **werkende Hyprland-installatie** nodig voordat je Tsumiki installeert. Als je nieuw bent met Hyprland, volg dan eerst de [Hyprland Wiki](https://wiki.hyprland.org/Getting-Started/).
+::::
+
+## Klonen
+
+```sh
+git clone https://github.com/rubiin/tsumiki.git ~/.config/tsumiki
+cd ~/.config/tsumiki
+## Nieuwste Versie
+
+<div className="latest-release">
+  <LatestRelease
+    repo="rubiin/tsumiki"
+    versionLabel="Versie:"
+    dateLabel="Datum:"
+  />
+</div>
+
+Voor volledige release-opmerkingen en assets, zie de [releases-pagina](https://github.com/rubiin/tsumiki/releases) op GitHub.
+
+## Installatieopties
+
+Kies een van de volgende drie methoden.
+
+### Optie 1: Bootstrap-script (Snelste)
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/rubiin/tsumiki/master/install.sh | bash
+```
+
+Dit script kloont of werkt `~/.config/tsumiki` bij en voert vervolgens de volledige installatie uit.
+
+Om **direct** te installeren **en te starten**:
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/rubiin/tsumiki/master/install.sh | bash -s -- --start
+```
+
+### Optie 2: Geautomatiseerde Installatie in Bestaande Clone
+
+Als je de repository al handmatig hebt gekloond, voer dan het installatiescript uit:
+
+```sh
+./init.sh -setup
+./init.sh -start
+```
+
+De vlag `-setup` installeert vereiste systeempakketten en configureert de virtuele Python-omgeving.
+
+### Optie 3: Handmatige Afhankelijkheidsinstallatie
+
+Heb je liever volledige controle over pakketten? Installeer dan zelf de afhankelijkheden en start vervolgens:
+
+```sh
+# Systeempakketten installeren
+sudo pacman -S --noconfirm --needed \
+  pipewire playerctl dart-sass power-profiles-daemon networkmanager \
+  brightnessctl pkgconf wf-recorder kitty python pacman-contrib \
+  gtk3 cairo gtk-layer-shell libgirepository noto-fonts-emoji \
+  gobject-introspection gobject-introspection-runtime python-pip \
+  python-gobject python-psutil python-cairo python-loguru libnotify \
+  cliphist python-httpx satty nvtop
+
+# AUR-pakketten installeren (met yay als voorbeeld)
+yay -S --needed \
+  python-fabric-git gnome-bluetooth-3.0 python-rlottie-python \
+  python-pytomlpp slurp imagemagick tesseract tesseract-data-eng \
+  ttf-jetbrains-mono-nerd grimblast-git python-ijson glace-git
+
+# Python-afhankelijkheden installeren
+pip install -r requirements.txt
+
+# Starten
+./init.sh -start
+```
+
+Als je geen `yay` gebruikt, installeer dan de AUR-pakketten met je favoriete AUR-helper.
+
+## Automatisch Starten Configureren
+
+Voeg deze regel toe aan je `~/.config/hypr/hyprland.conf` om Tsumiki automatisch te starten wanneer Hyprland opstart:
+
+```sh
+exec-once = sleep 5; ~/.config/tsumiki/init.sh -start
+```
+
+De `sleep 5` zorgt ervoor dat Hyprland volledig is geïnitialiseerd voordat Tsumiki start. Pas het pad aan als je naar een andere locatie hebt gekloond.
+
+:::tip
+Je kunt voor het gemak een shell-alias maken:
+
+```sh
+alias tsumiki='~/.config/tsumiki/init.sh -start'
+```
+:::
+
+## Installatie Verifiëren
+
+1. Voer `./init.sh -start` uit vanuit de projectmap.
+2. De Tsumiki-balk zou boven aan je scherm moeten verschijnen.
+3. Als je foutmeldingen ziet, controleer dan:
+   - Alle systeempakketten zijn geïnstalleerd (`./init.sh -setup` voert deze controle opnieuw uit)
+   - Python-afhankelijkheden zijn geïnstalleerd (`pip install -r requirements.txt`)
+   - Je draait onder Hyprland (niet een andere compositor of X11)
+
+Als de balk niet verschijnt, zie [Probleemoplossing](/nl/help/troubleshooting).
+
+## Na Installatie
+
+Ga verder met [Post-Installatie](/nl/resources/post-install) voor Hyprland-laagregels en [Eerste Stappen](/nl/getting-started/first-steps) om je paneel te configureren.
+
+::::tip
+Bijdragen aan documentatie en installatiescripts zijn welkom:
+[Tsumiki op GitHub](https://github.com/rubiin/tsumiki)
+::::

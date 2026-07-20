@@ -1,0 +1,71 @@
+---
+title: Tsumiki
+description: Panneau modulaire écrit en Fabric pour Hyprland
+template: splash
+hero:
+  tagline: Un panneau modulaire et rapide pour Hyprland ✨
+  image:
+    file: ../../../assets/tsumiki.png
+  actions:
+    - text: Commencer avec Tsumiki
+      link: /fr/getting-started/overview
+      icon: rocket
+    - text: Explorer sur GitHub
+      link: https://github.com/rubiin/tsumiki
+      icon: github
+      variant: minimal
+---
+
+import { Card, CardGrid } from "@astrojs/starlight/components";
+
+## Qu'est-ce que Tsumiki ?
+
+Tsumiki (anciennement Hydepanel) est une barre d'état modulaire pour le compositeur Wayland Hyprland.
+Il est construit sur le système de widgets Fabric et conçu autour de petits widgets composites.
+
+## Fonctionnalités
+
+<CardGrid stagger>
+  <Card title="Conçu pour Hyprland" icon="seti:vala">
+    Intégration native avec les flux de travail et le comportement d'Hyprland.
+  </Card>
+  <Card title="Léger et Rapide" icon="seti:swift">
+    Conçu pour une faible charge CPU et mémoire au quotidien.
+  </Card>
+  <Card title="Personnalisable" icon="moon">
+    Configure les couleurs, l'espacement et le style pour correspondre à votre bureau.
+  </Card>
+  <Card title="Modulaire !" icon="puzzle">
+    Inclut des widgets enfichables pour le dock, le lanceur, les médias, la batterie, le réseau et plus.
+  </Card>
+
+</CardGrid>
+
+## Galerie
+
+<div className="showcase">
+  <img
+    src="https://raw.githubusercontent.com/rubiin/tsumiki/refs/heads/master/assets/screenshots/main.png"
+    alt="Panneau principal Tsumiki"
+  />
+  <img
+    src="https://raw.githubusercontent.com/rubiin/tsumiki/refs/heads/master/assets/screenshots/quick_settings.png"
+    alt="Panneau des paramètres rapides"
+  />
+  <img
+    src="https://raw.githubusercontent.com/rubiin/tsumiki/refs/heads/master/assets/screenshots/cava.png"
+    alt="Visualiseur Cava"
+  />
+  <img
+    src="https://raw.githubusercontent.com/rubiin/tsumiki/refs/heads/master/assets/screenshots/notification_menu.png"
+    alt="Menu des notifications"
+  />
+  <img
+    src="https://raw.githubusercontent.com/rubiin/tsumiki/refs/heads/master/assets/screenshots/logout.png"
+    alt="Menu de déconnexion"
+  />
+  <img
+    src="https://raw.githubusercontent.com/rubiin/tsumiki/refs/heads/master/assets/screenshots/weather.png"
+    alt="Panneau météo"
+  />
+</div>

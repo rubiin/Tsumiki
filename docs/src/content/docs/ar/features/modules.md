@@ -1,0 +1,131 @@
+---
+title: مرجع الوحدات
+description: توثيق كامل لجميع وحدات تسوميكي
+sidebar:
+  order: 2
+---
+
+الوحدات هي أسطح واجهة أكبر تتجاوز الشريط، مثل الإرساء والإشعارات والنظرة العامة وOSD. يتم تكوينها تحت `[modules.<الاسم>]` في `config.toml`.
+
+على عكس الأدوات، معظم الوحدات هي نوافذ مستقلة أو تراكبات تحتاج إلى تفعيل صريح.
+
+---
+
+## الشريط
+
+الشريط نفسه هو وحدة. يكوّن الموضع والطبقة وسلوك الإخفاء التلقائي.
+
+```toml
+[modules.bar]
+layer = "top"           # "top" | "overlay" | "bottom" | "background"
+auto_hide = false
+auto_hide_timeout = 3000   # مللي ثانية
+location = "top"           # "top" | "bottom"
+```
+
+- **`layer`**: طبقة هيبرلاند — `top` يُعرض فوق النوافذ، `background` يُعرض تحتها.
+- **`auto_hide`**: يخفي الشريط بعد المهلة عند عدم تمرير المؤشر.
+- **`location`**: موضع الشريط على الشاشة.
+
+---
+
+## نظام الإشعارات
+
+يعرض إشعارات سطح المكتب عند وصولها، مع التكديس والتجميع وعدم الإزعاج.
+
+```toml
+[modules.notification]
+enabled = true
+anchor = "top-right"
+auto_dismiss = true
+respect_expire = true
+dnd_on_screencast = true
+ignored = []
+transition_type = "slide-left"       # "slide-left" | "slide-right" | "slide-up" | "slide-down" | "crossfade"
+transition_duration = 350
+per_app_limits = {}
+play_sound = false
+max_actions = 3
+dismiss_on_hover = false
+sound_file = "notification4"
+max_lines = 4
+max_expanded_lines = 20
+
+[modules.notification.timeout]
+low = 3000
+normal = 8000
+critical = 15000
+
+[modules.notification.persist]
+enabled = true
+low = true
+normal = true
+critical = true
+max_count = 200
+```
+
+- **`anchor`**: موضع الشاشة لنافذة الإشعارات.
+- **`auto_dismiss`**: رفض الإشعارات تلقائياً بعد انتهاء مهلة.
+- **`respect_expire`**: احترام مهلة انتهاء الصلاحية من مرسل الإشعار.
+- **`dnd_on_screencast`**: تفعيل وضع عدم الإزعاج أثناء تسجيل الشاشة.
+- **`per_app_limits`**: الحد من الإشعارات لكل تطبيق: `{ "app_name": 5 }`.
+- **`persist`**: حفظ الإشعارات على القرص لاسترجاعها بعد إعادة التشغيل.
+
+---
+
+## الإرساء (Dock)
+
+مشغل تطبيقات مثبتة مع الإخفاء الذكي ومعاينات النوافذ وتجميع التطبيقات.
+
+```toml
+[modules.dock]
+enabled = false
+ignored_apps = []
+icon_size = 40
+behavior = "intellihide"            # "intellihide" | "always_show"
+tooltip = false
+layer = "top"
+show_when_no_windows = false
+preview_apps = true
+preview_size = [200, 130]
+group_apps = true
+truncation_size = 20
+orientation = "horizontal"
+always_show_focused = true
+hide_special_workspace_apps = false
+show_launcher = true
+launcher_position = "last"          # "first" | "last"
+ignored = []
+```
+
+- **`behavior`**: `intellihide` يخفي الإرساء عندما تتداخل نافذة؛ `always_show` يبقيه مرئياً.
+- **`preview_apps`**: يعرض صوراً مصغرة للنوافذ عند تمرير المؤشر.
+- **`group_apps`**: يجمع نوافذ متعددة من نفس التطبيق.
+- **`show_launcher`**: يضيف أيقونة مشغل تطبيقات إلى الإرساء.
+- **`hide_special_workspace_apps`**: يخفي التطبيقات في مساحات العمل الخاصة.
+
+### اختصارات لوحة المفاتيح
+
+| الإجراء | الاختصار |
+|---|---|
+| التركيز على العميل التالي | `Super+Tab` |
+| التركيز على العميل السابق | `Super+Shift+Tab` |
+| فتح المشغل | `Super+Space` |
+| نقل العميل إلى مساحة عمل | زر أيمن → "نقل إلى مساحة عمل" |
+
+---
+
+## النظرة العامة (Exposé مساحات العمل)
+
+نظرة عامة بملء الشاشة لجميع مساحات العمل ونوافذها.
+
+```toml
+[modules.overview]
+enabled = false
+layer = "top"
+anchor = "center"
+transition_type = "crossfade"
+transition_duration = 350
+```
+
+تفتح باختصار لوحة مفاتيح قابل للتكوين (افتراضي: `Super+W`). تعرض صوراً مصغرة لمساحات العمل مع النقر للتركيز.

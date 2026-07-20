@@ -1,0 +1,71 @@
+---
+title: Tsumiki
+description: Panel modular escrito en Fabric para Hyprland
+template: splash
+hero:
+  tagline: Un panel modular y rápido para Hyprland ✨
+  image:
+    file: ../../../assets/tsumiki.png
+  actions:
+    - text: Comenzar con Tsumiki
+      link: /es/getting-started/overview
+      icon: rocket
+    - text: Explorar en GitHub
+      link: https://github.com/rubiin/tsumiki
+      icon: github
+      variant: minimal
+---
+
+import { Card, CardGrid } from "@astrojs/starlight/components";
+
+## ¿Qué es Tsumiki?
+
+Tsumiki (anteriormente Hydepanel) es una barra de estado modular para el compositor Wayland Hyprland.
+Está construido sobre el sistema de widgets Fabric y diseñado alrededor de widgets pequeños y componibles.
+
+## Características
+
+<CardGrid stagger>
+  <Card title="Diseñado para Hyprland" icon="seti:vala">
+    Integración nativa con los flujos de trabajo y el comportamiento de Hyprland.
+  </Card>
+  <Card title="Ligero y Rápido" icon="seti:swift">
+    Construido para bajo uso de CPU y memoria en el uso diario.
+  </Card>
+  <Card title="Personalizable" icon="moon">
+    Configura colores, espaciado y estilo para que coincida con tu escritorio.
+  </Card>
+  <Card title="¡Modular!" icon="puzzle">
+    Incluye widgets enchufables para dock, lanzador, medios, batería, red y más.
+  </Card>
+
+</CardGrid>
+
+## Galería
+
+<div className="showcase">
+  <img
+    src="https://raw.githubusercontent.com/rubiin/tsumiki/refs/heads/master/assets/screenshots/main.png"
+    alt="Panel Principal de Tsumiki"
+  />
+  <img
+    src="https://raw.githubusercontent.com/rubiin/tsumiki/refs/heads/master/assets/screenshots/quick_settings.png"
+    alt="Panel de Ajustes Rápidos"
+  />
+  <img
+    src="https://raw.githubusercontent.com/rubiin/tsumiki/refs/heads/master/assets/screenshots/cava.png"
+    alt="Visualizador Cava"
+  />
+  <img
+    src="https://raw.githubusercontent.com/rubiin/tsumiki/refs/heads/master/assets/screenshots/notification_menu.png"
+    alt="Menú de Notificaciones"
+  />
+  <img
+    src="https://raw.githubusercontent.com/rubiin/tsumiki/refs/heads/master/assets/screenshots/logout.png"
+    alt="Menú de cierre de sesión"
+  />
+  <img
+    src="https://raw.githubusercontent.com/rubiin/tsumiki/refs/heads/master/assets/screenshots/weather.png"
+    alt="Panel del Clima"
+  />
+</div>

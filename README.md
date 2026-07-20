@@ -1,450 +1,123 @@
-<p align="center"><img src="assets/images/tsumiki.png" align="centre" width="420" height="360"/></p>
-<h1 align="center"><img src="https://raw.githubusercontent.com/JaKooLit/Telegram-Animated-Emojis/refs/heads/main/Activity/Sparkles.webp"/ height=35> Tsumiki <img src="https://raw.githubusercontent.com/JaKooLit/Telegram-Animated-Emojis/refs/heads/main/Activity/Sparkles.webp"/ height=35></h1>
 <p align="center">
- <a href="https://github.com/rubiin/tsumiki/blob/master/LICENSE"><img alt="GitHub" src="https://img.shields.io/github/license/rubiin/tsumiki"></a>
-  <a href='http://makeapullrequest.com'><img alt='PRs Welcome' src='https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=shields'/></a>
-  <img alt="GitHub commit activity" src="https://img.shields.io/github/commit-activity/m/rubiin/tsumiki"/>
-  <img alt="GitHub closed issues" src="https://img.shields.io/github/issues-closed/rubiin/tsumiki"/>
-  <img alt="discord" src="https://img.shields.io/discord/1200448076620501063" />
+  <img src="assets/images/tsumiki.png" width="420" height="360" alt="Tsumiki" />
+</p>
+<h1 align="center">Tsumiki</h1>
+<p align="center">
+  <em>A modular status bar for Hyprland, built on Fabric.</em>
 </p>
 
+<p align="center">
+  <a href="https://github.com/rubiin/tsumiki/blob/master/LICENSE"><img alt="License" src="https://img.shields.io/github/license/rubiin/tsumiki" /></a>
+  <a href="http://makeapullrequest.com"><img alt="PRs Welcome" src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" /></a>
+  <img alt="Commit activity" src="https://img.shields.io/github/commit-activity/m/rubiin/tsumiki" />
+  <img alt="Closed issues" src="https://img.shields.io/github/issues-closed/rubiin/tsumiki" />
+  <a href="https://discord.gg/8nWbDC4SnP"><img alt="Discord" src="https://img.shields.io/discord/1200448076620501063" /></a>
+  <a href="https://tsumikii.pages.dev"><img alt="Docs" src="https://img.shields.io/badge/docs-tsumikii.pages.dev-blue" /></a>
+</p>
 
-Tsumiki (formerly Hydepanel) is a modular status bar for the Hyprland Wayland compositor. Built on [Fabric Widget System](https://github.com/Fabric-Development/fabric) from the ground up, it offers a flexible architecture for building custom panels with individual widgets. It’s designed to be lightweight, performant, and user-configurable.
-
-The name Tsumiki (pronounced as su-me-ki) comes from the Japanese word "tsumiki" (積み木), which means "building blocks". Just like toy blocks that stack together to form something greater, Tsumiki is designed to be modular, lightweight, and easy to build upon
+<p align="center">
+  <b><a href="#quick-start">Quick Start</a></b>
+  ·
+  <b><a href="https://tsumikii.pages.dev">Documentation</a></b>
+  ·
+  <b><a href="#contributing">Contributing</a></b>
+  ·
+  <b><a href="#license">License</a></b>
+</p>
 
 > *No, this isn't Waybar. Yes, it's written in Python. Yes, it's still fast.* 🐍
 
-<h2><sub><img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Camera%20with%20Flash.png" alt="Camera with Flash" width="25" height="25" /></sub> Screenshots</h2>
-
-<table align="center">
-  <tr>
-    <td colspan="4"><img src="assets/screenshots/main.png"></td>
-  </tr>
-    <tr>
-    <td colspan="4"><img src="assets/screenshots/notification_menu.png"></td>
-  </tr>
-  <tr>
-    <td colspan="1"><img src="assets/screenshots/quick_settings.png"></td>
-    <td colspan="1"><img src="assets/screenshots/notifications.png"></td>
-    <td colspan="1" align="center"><img src="assets/screenshots/logout.png"></td>
-    <td colspan="1" align="center"><img src="assets/screenshots/weather.png"></td>
-  </tr>
-</table>
-
-<table align="center">
-  <tr>
-    <td align="center"><sup>✨ sᴜᴘᴘᴏʀᴛ ᴛʜᴇ ᴘʀᴏᴊᴇᴄᴛ ✨</sup></td>
-  </tr>
-  <tr>
-    <td align="center">
-      <a href='https://ko-fi.com/rubiin' target='_blank'>
-        <img style='border:0px;height:128px;'
-             src='https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExc3N4NzlvZWs2Z2tsaGx4aHgwa3UzMWVpcmNwZTNraTM2NW84ZDlqbiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/PaF9a1MpqDzovyqVKj/giphy.gif'
-             border='0' alt='Support me on Ko-fi!' />
-      </a>
-    </td>
-  </tr>
-</table>
+**Tsumiki** (積み木 — Japanese for "building blocks") is a modular status bar for the [Hyprland](https://hyprland.org) Wayland compositor. Built on [Fabric](https://github.com/Fabric-Development/fabric), it offers a flexible, widget-based architecture for creating custom desktop panels — lightweight, performant, and deeply configurable.
 
 ---
 
-## ✨ Features
+## Screenshots
 
-- 🖥 **Tailored for Hyprland**
-  Built with full support for Hyprland’s ecosystem and event model.
+<table align="center">
+  <tr>
+    <td colspan="4"><img src="assets/screenshots/main.png" alt="Main panel" /></td>
+  </tr>
+  <tr>
+    <td colspan="4"><img src="assets/screenshots/notification_menu.png" alt="Notification menu" /></td>
+  </tr>
+  <tr>
+    <td><img src="assets/screenshots/quick_settings.png" alt="Quick settings" /></td>
+    <td><img src="assets/screenshots/notifications.png" alt="Notifications" /></td>
+    <td align="center"><img src="assets/screenshots/logout.png" alt="Logout" /></td>
+    <td align="center"><img src="assets/screenshots/weather.png" alt="Weather" /></td>
+  </tr>
+</table>
 
-- 🧩 **Modular Widget System**
-  Includes pluggable widgets for Dock, Launcher, CPU, memory, network, media playback, battery, and more.
+## Features
 
-- 🎨 **Fully Themeable**
-  Customize fonts, colors, layouts, and behavior using the power of Fabric.
+- **Hyprland-native** — Full integration with Hyprland's ecosystem and event model.
+- **Modular widget system** — 45+ widgets: workspaces, system tray, media, battery, CPU, weather, dock, launcher, and more.
+- **Fully themeable** — Customize every element with SCSS; generate dynamic [Material You](https://github.com/InioX/matugen) color schemes from your wallpaper.
+- **Highly configurable** — TOML-based configuration with hot-reload. Control layout, behavior, and appearance of every widget.
+- **Notification system** — Built-in notification daemon with Do Not Disturb, grouping, and history persistence.
+- **On-screen displays** — OSD overlays for volume, brightness, microphone, and lock keys.
+- **Lightweight & fast** — Designed for minimal memory and CPU overhead.
 
-- 🎨 **Material You Theming**
-  Generate dynamic color schemes from your wallpaper using [Matugen](https://github.com/InioX/matugen). Configure in `config.toml` to automatically extract colors and apply Material You design.
+## Quick Start
 
-- ⚙️ **Highly Configurable**
-  Control the positioning, behavior, and appearance of every widget and element. Tailor the experience to fit your exact needs.
-
-- 🔄 **Auto-Reload**
-  Automatically restarts when configuration files are modified, making development and customization seamless.
-
-- ⚡ **Lightweight & Fast**
-  Designed with performance in mind — minimal memory and CPU usage.
-
-- 📢 **On-Screen Display (OSD) Support**
-  Display real-time notifications or alerts directly on the screen (e.g., for volume, media, or custom events) in a visually appealing overlay.
-
-- 🛎️ **Notification System**
-  Integrated notification support allows the panel to show alerts from your system, apps, or scripts. Notifications can be styled, timed, and customized based on user preferences.
-
-
-## Prerequisites
-
-- [JetBrains Nerd Font](https://www.nerdfonts.com)
-- [python 3+](https://www.python.org/downloads/)
-
----
-
-> [!NOTE]
-> You need a functioning Hyprland installation.
-
-## **Getting Started**
-
-### Required
-
-Most of these are already installed on existing working machines
+**Prerequisites:** [Hyprland](https://hyprland.org), [JetBrains Nerd Font](https://www.nerdfonts.com), Python 3.12+.
 
 ```sh
-## network
-networkmanager
-
-## Sound
-pipewire
-
-## Bluetooth menu utilities
-gnome-bluetooth-3.0 # aur
-bluez
-bluez-utils
-
-## Compiler for sass/scss
-dart-sass
-
-## Brightness module for OSD
-brightnessctl
-
-## To open and execute commands in a terminal ex: updates, cava
-
-kitty
-```
-
-### Optional
-
-```sh
-
-## To generate Material You color schemes from wallpaper
-matugen
-
-## To check for updates using the default pacman script in the updates module
-pacman-contrib
-
-## To display cava audio visualizer
-cava
-
-## To switch between power profiles in the battery module
-power-profiles-daemon
-
-## To record screen through recorder module
-wf-recorder & slurp
-
-## To activate Hyprland’s native blue light filter
-hyprsunset
-
-## To activate Hyprland’s native idle inhibitor
-hypridle
-
-## To use media module on quick settings
-playerctl
-
-## To use the clipboard module
-cliphist
-
-## To use the gpu module
-nvtop
-
-```
-
-- Clone this repository:
-
-```sh
+# Clone the repository
 git clone https://github.com/rubiin/tsumiki.git ~/.config/tsumiki
-```
+cd ~/.config/tsumiki
 
-- Run the following command to install the required packages for particular os, few of them are already installed if you have a working system:
-
-## Installation
-
-You can choose one of three installation methods: **Curl Install**, **Automated Setup**, or **Manual Setup**.
-
-### Option 1: One-Line Curl Install
-
-```sh
-curl -fsSL https://raw.githubusercontent.com/rubiin/tsumiki/master/install.sh | bash
-```
-
-This bootstrap script will:
-
-- Clone or update Tsumiki in `~/.config/tsumiki`
-- Run `./init.sh -install -setup`
-
-To also start Tsumiki immediately:
-
-```sh
-curl -fsSL https://raw.githubusercontent.com/rubiin/tsumiki/master/install.sh | bash -s -- --start
-```
-
-### Option 2: Automated Setup Using `init.sh -setup`
-
-1.  **Run the `init.sh -setup` script** to automatically setup the virtual environment and install all the required packages and dependencies (both `pacman` and AUR packages):
-
-```sh
+# Automated setup (installs dependencies)
 ./init.sh -setup
-```
 
-This script will:
-
-- Install all required `pacman` and AUR packages.
-- Set up the virtual environment and any required configurations.
-
-1.  **Start the environment or bar** once the installation is complete:
-
-```sh
+# Start Tsumiki
 ./init.sh -start
 ```
 
-This will launch the environment or bar as defined in your project.
+For one-line bootstrap, detailed installation options, and manual dependency guides, see the **[Installation guide](https://tsumikii.pages.dev/en/getting-started/installation)**.
 
-### Option 3: Manual Setup (Install Dependencies First)
-
-If you prefer to have more control over the installation process, you can install the required dependencies manually and then run the `init.sh -start` script.
-
-#### Step 1: Install pacman and AUR Packages
-
-Using `yay` to install the required packages:
-
-```sh
-yay -S --needed	pipewire playerctl dart-sass power-profiles-daemon networkmanager brightnessctl pkgconf wf-recorder kitty python pacman-contrib gtk3 cairo gtk-layer-shell libgirepository noto-fonts-emoji gobject-introspection gobject-introspection-runtime libnotify cliphist satty nvtop gnome-bluetooth-3.0 slurp imagemagick tesseract tesseract-data-eng ttf-jetbrains-mono-nerd grimblast-git glace-git matugen-bin
-```
-
-If you have something else besides `yay`, install with the respective aur helper.
-
-#### Step 2: Install Python Dependencies
-
-You can install the required Python libraries either inside a virtual environment (recommended) or system-wide.
-
-##### Using a Virtual Environment (Recommended)
-It is highly recommended to use a virtual environment to avoid potential dependency conflicts.
-
-First, create the virtual environment:
-```sh
-python3 -m venv .venv
-```
-
-Next, activate it:
-```sh
-source .venv/bin/activate
-```
-If you are a fish user, use `source .venv/bin/activate.fish`.
-
-Finally, install the dependencies from requirements.txt:
-
-```sh
-pip install -r requirements.txt
-```
-
-##### Using the Package Manager (System-wide)
-If you prefer a system-wide installation, you can use pacman to install the Python packages:
-```sh
-sudo pacman -S --needed python-pip python-gobject python-psutil python-cairo python-loguru python-httpx python-fabric-git python-rlottie-python python-pytomlpp python-ijson
-```
-
-#### Step 3: Run the `init.sh -start` Script
-
-Once the dependencies are installed, run the following command to start the bar or environment:
-
-```sh
-./init.sh -start
-```
-
-## **Usage**
-
-Add this to your `.config/hyprland.conf`
-
-```sh
-exec = `sleep 5; ~/.config/tsumiki/init.sh -start`
-
-```
-
-> **Note**: modify the path accordingly
-
-Check FAQs for common things you are likely to encounter
-
-## Updating
-
-Updating to latest commit is fairly simple, just git pull the latest changes.
-
-> **Note**: make sure to keep the config safe just in case
-
-## Check [wiki](https://github.com/rubiin/tsumiki/wiki) for configuring individual widgets
-
-## **Available Modules**
-
-| **Item**              | **Description**                                                                |
-| --------------------- | ------------------------------------------------------------------------------ |
-| **battery**           | Widget that display battery status and usage information.                      |
-| **bluetooth**         | Widget manages Bluetooth connections and settings.                             |
-| **brightness**        | Widget controls the screen brightness level.                                   |
-| **cava**              | An audio visualizer widget.                                                    |
-| **click_counter**     | Widget tracks the number of mouse clicks.                                      |
-| **clipboard**          | Widget for the clipboard history.                                              |
-| **custom_button_group** | Widget that defines a group of customizable buttons for executing shell commands. Buttons are not displayed as a group but can be individually placed anywhere in the layout using `@custom_button:0`, `@custom_button:1`, etc. Each button can have custom icons, labels, tooltips, and execute different commands when clicked. |
-| **custom_widget**     | Widget that runs shell commands and renders output. Supports indexed placement via `@custom_widget:0` and named placement via `custom/<name>` (example: `custom/hello-world`). |
-| **cpu**               | Widget displays CPU usage and performance statistics.                          |
-| **date_time**         | A menu displaying the current date and notifications.                          |
-| **divider (utility)** | Widget separates sections in a user interface for better organization.         |
-| **emoji_picker**      | Widget that allows users to select and insert emojis.                          |
-| **hypridle**         | Widget that tracks idle time or status of the system.                          |
-| **hyprpicker**       | Widget that picks color from images.                                           |
-| **hyprsunset**       | Widget that adjusts screen settings based on the time of sunset.               |
-| **keyboard**          | Widget that manages and manages the keyboard layout or settings.               |
-| **window_count**      | Widget that shows window count on active workspace.                            |
-| **language**          | Widget allows selection of the system's language or locale settings.           |
-| **media**             | Widget controls media playback, volume, or other media-related settings.       |
-| **microphone**        | Widget manages microphone settings and input levels.                           |
-| **network_usage**     | Widget displays the upload/download speeds.                                    |
-| **ocr**               | Widget scans text from an image.                                               |
-| **overview**          | Widget displays running applications in workspaces.                            |
-| **power**             | Widget controls power-related settings, including sleep and shutdown.          |
-| **ram**               | Widget displays information about system RAM usage and performance.            |
-| **recorder**          | Widget for recording video on the system.                                      |
-| **screenshot**       | Widget for taking screenshot on the system.                                    |
-| **spacer (utility)**  | A simple utility for adding space in UI layouts.                               |
-| **storage**           | Widget that displays storage usage and manages disk partitions or drives.      |
-| **submap**            | Widget that displays active submap for hyprland.                               |
-| **stopwatch**        | A utility for tracking elapsed time, like a timer or stopwatch.                |
-| **system_tray**       | Widget that displays system tray icons and manages notifications.              |
-| **taskbar**           | A bar at the bottom of the screen for quick access to apps and notifications.  |
-| **updates**           | Widget that manages system updates, patches, and version upgrades.             |
-| **quick_settings**    | Displays panel for quickly accessing some settings like brightness, sound etc. |
-| **volume**            | Widget that controls the system’s audio volume.                                |
-| **weather**           | Widget that displays current weather information or forecasts. Supports multiple weather providers (Open-Meteo and wttr.in) with provider switching and location-based cache invalidation.                 |
-| **window_title**      | Widget that shows the title of the current window or application.              |
-
-### Named Custom Widget Example
-
-```toml
-[widgets."custom/hello-world"]
-format = "Greeting: {}"
-exec = "echo 'Hello World'"
-interval = 3600
-
-[layout]
-right_section = ["custom/hello-world", "system_tray", "power"]
-```
-| **workspaces**        | Widget that displays virtual desktops or workspaces.                           |
-| **world_clock**       | Widget that displays clock for various timezones.                              |
-
-> [!WARNING]
-> This is still in early development and will include breaking changes
-
-## Frequently Asked Questions (FAQ)
-
-### 1. **Cannot see system tray?**
-
-Be sure to kill any bars that you may be running. You can kill other bar with `pkill bar-name`
-
-### 2. **Cannot see notifications?**
-
-Be sure to kill other notifications daemon that you may be running. You can kill other daemons with `pkill -f "mako|dunst|waybar"`
-
-### 3. **Cannot see bar?**
-
-Kill the app with `pkill tsumiki`. Run `init.sh -start`. This should show some logs. If it shows like `ModuleNotFoundError`, run `pip install -r requirements.txt`. If this does not solve the issue, do report a bug with screenshot of the log.
-
-### 4. **Sass compilation error or UI not rendering?**
-Your `config.toml` may be incorrect or outdated. You can copy the latest `config.toml` from the `example/` directory. Be aware that this will overwrite any custom changes you've made.
-
-
-### 5. **No Icons?**
-Make sure your icon theme has the required icons. One of the recommended icon theme is  `Tela Circle`
-
-
-### 6. **ImportError: cannot import XX**
-This error usually occurs when the required module/package is not installed or cannot be found. Make sure you have all the necessary dependencies installed. You can run
-```sh
-./init.sh -install
-```
-to install all the required packages and dependencies. Additionally, you can also manually install the package. Follow the instructions in the [Installation](#installation) section.
-
-
-
-## Post-Installation
-Add these rules to your `hyprland.conf` to make blur and other effects work properly
+Add to your Hyprland config to autostart:
 
 ```conf
-layerrule = blur true,match:namespace ^tsumiki-notifications$
-layerrule = xray 0,match:namespace ^tsumiki-notifications$
-layerrule = blur_popups true,match:namespace ^tsumiki-notifications$
-layerrule = ignore_alpha 0.004,match:namespace ^tsumiki-notifications$
-layerrule = no_anim true,match:namespace ^tsumiki-notifications$
-layerrule = blur true,match:namespace ^tsumiki$
-layerrule = xray 0,match:namespace ^tsumiki$
-layerrule = blur_popups true,match:namespace ^tsumiki$
-layerrule = ignore_alpha 0.004,match:namespace ^tsumiki$
-layerrule = blur true,match:namespace gtk-layer-shell
-layerrule = ignore_alpha 0.004,match:namespace gtk-layer-shell
-layerrule = blur true,match:namespace ^launcher$
-layerrule = xray 0,match:namespace ^launcher$
-layerrule = blur_popups true,match:namespace ^launcher$
-layerrule = ignore_alpha 0.004,match:namespace ^launcher$
-layerrule = animation popin,match:namespace ^launcher$
+exec = sleep 5; ~/.config/tsumiki/init.sh -start
 ```
+
+## Documentation
+
+Full documentation is available at **[tsumikii.pages.dev](https://tsumikii.pages.dev)**:
+
+| Section | Description |
+|---|---|
+| [Getting Started](https://tsumikii.pages.dev/en/getting-started/overview) | Overview, installation, first steps |
+| [Configuration](https://tsumikii.pages.dev/en/configuring/config) | Layout, widget options, modules |
+| [Widgets Reference](https://tsumikii.pages.dev/en/features/widgets) | Complete widget configuration reference |
+| [Modules Reference](https://tsumikii.pages.dev/en/features/modules) | Bar, dock, notifications, launcher, OSD |
+| [Theming](https://tsumikii.pages.dev/en/theming/making-themes) | SCSS customization, Matugen, tips |
+| [FAQ & Troubleshooting](https://tsumikii.pages.dev/en/help/faq) | Common issues and solutions |
+| [Post-Installation](https://tsumikii.pages.dev/en/resources/post-install) | Hyprland layer rules for effects |
+
+## Support the Project
+
+<p align="center">
+  <a href="https://ko-fi.com/rubiin" target="_blank">
+    <img src="https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExc3N4NzlvZWs2Z2tsaGx4aHgwa3UzMWVpcmNwZTNraTM2NW84ZDlqbiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/PaF9a1MpqDzovyqVKj/giphy.gif" height="64" alt="Support on Ko-fi" />
+  </a>
+</p>
 
 ## Contributing
 
-We welcome all sorts of contributions, no matter how small, to this project! Please see the [CONTRIBUTING.md](CONTRIBUTING.md) file for guidelines on how to contribute.
+We welcome contributions of all sizes. Please see the [contributing guidelines](CONTRIBUTING.md) before opening a pull request.
 
 ## Acknowledgements
 
-- **Waybar** - A lot of the initial inspiration, and a pretty great bar.
-  [Waybar GitHub Repository](https://github.com/Alexays/Waybar)
+- **[Waybar](https://github.com/Alexays/Waybar)** — Initial inspiration.
+- **[Hyprpanel](https://github.com/Jas-SinghFSU/HyprPanel)** — Design and feature inspiration.
 
-- **Hyprpanel** - Served as inspiration for some of the panel's features and design choices, with its focus on dynamic and customizable Hyprland panels.
-  [Hyprpanel GitHub Repository](https://github.com/Jas-SinghFSU/HyprPanel)
+Special thanks to [darsh](https://github.com/its-darsh) (creator of Fabric), [gummy bear album](https://github.com/muhchaudhary), [axenide](https://github.com/Axenide), [sankalp](https://github.com/S4NKALP) for code contributions, bug fixes, and design ideas.
 
-## Special Thanks
+## Contributors
 
-A big thank you to the following people for their amazing help with code, bug fixes, and great ideas:
-
-- [darsh](https://github.com/its-darsh): For creating fabric without which the project wouldn't have existed. Also, your quick feedbacks and problem-solving approach were a game-changer!
-- [gummy bear album](https://github.com/muhchaudhary): For providing code snippets which served as a reference to start stuffs. Your creative ideas really pushed the project forward and made it better!
-- [axenide](https://github.com/Axenide): For your fresh ideas and design references. Your code improvements and insights made a significant impact
-- [sankalp](https://github.com/S4NKALP): For some bug fixes and recommendations,contributions in optimizing the code and identifying subtle bugs during the development period
-
-# ⭐ Hit that Star Button!
-
-Like what you see? Think this project is cooler than your morning coffee? ☕✨
-
-Give it a star! It’s like giving a virtual high-five to the code—plus, and who doesn't love high-fives? ✋
-
-Your star helps the project get noticed, and it makes us do a little happy dance. 💃
-
-Just click the shiny "Star" button at the top right (it’s begging for your attention). 🥳
-
-Thanks for making this project a little bit more awesome! 🚀
-
-# My other projects
-- [pokego](https://github.com/rubiin/pokego)
-- [nfdl](https://github.com/rubiin/nfdl)
-- [unprofane](https://github.com/rubiin/unprofane)
-- [url-minify](https://github.com/rubiin/url-minify)
-
-  My dotfiles are [here](https://github.com/rubiin/dotfiles)
-
-
-## Star History
-
-<a href="https://star-history.com/#rubiin/tsumiki&Timeline">
- <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=rubiin/tsumiki&type=Timeline&theme=dark" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=rubiin/tsumiki&type=Timeline" />
-   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=rubiin/tsumiki&type=Timeline" />
- </picture>
-</a>
-
-## Contributors ✨
-
-Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+Thanks to all contributors ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
@@ -470,10 +143,15 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     </tr>
   </tbody>
 </table>
-
 <!-- markdownlint-restore -->
 <!-- prettier-ignore-end -->
 
-<!-- ALL-CONTRIBUTORS-LIST:END -->
-
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
+
+## License
+
+Distributed under the [GPL-3.0 License](https://github.com/rubiin/tsumiki/blob/master/LICENSE).
+
+<p align="center">
+  ⭐ <strong>Star the repo</strong> if you find it useful!
+</p>

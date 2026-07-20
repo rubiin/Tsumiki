@@ -1,0 +1,71 @@
+---
+title: Tsumiki
+description: 基于 Fabric 为 Hyprland 编写的模块化面板
+template: splash
+hero:
+  tagline: 一个模块化、快速的 Hyprland 面板 ✨
+  image:
+    file: ../../../assets/tsumiki.png
+  actions:
+    - text: 开始使用 Tsumiki
+      link: /zh-cn/getting-started/overview
+      icon: rocket
+    - text: 在 GitHub 上探索
+      link: https://github.com/rubiin/tsumiki
+      icon: github
+      variant: minimal
+---
+
+import { Card, CardGrid } from "@astrojs/starlight/components";
+
+## 什么是 Tsumiki？
+
+Tsumiki（原名 Hydepanel）是 Hyprland Wayland 合成器的模块化状态栏。
+它基于 Fabric 组件系统构建，围绕小型、可组合的组件设计。
+
+## 特性
+
+<CardGrid stagger>
+  <Card title="为 Hyprland 量身定制" icon="seti:vala">
+    与 Hyprland 工作流程和行为的原生集成。
+  </Card>
+  <Card title="轻量快速" icon="seti:swift">
+    为日常使用中的低 CPU 和内存开销而构建。
+  </Card>
+  <Card title="可定制主题" icon="moon">
+    配置颜色、间距和样式以匹配您的桌面。
+  </Card>
+  <Card title="模块化！" icon="puzzle">
+    包括可插拔的组件，用于 Dock、启动器、媒体、电池、网络等。
+  </Card>
+
+</CardGrid>
+
+## 展示
+
+<div className="showcase">
+  <img
+    src="https://raw.githubusercontent.com/rubiin/tsumiki/refs/heads/master/assets/screenshots/main.png"
+    alt="Tsumiki 主面板"
+  />
+  <img
+    src="https://raw.githubusercontent.com/rubiin/tsumiki/refs/heads/master/assets/screenshots/quick_settings.png"
+    alt="快速设置面板"
+  />
+  <img
+    src="https://raw.githubusercontent.com/rubiin/tsumiki/refs/heads/master/assets/screenshots/cava.png"
+    alt="Cava 可视化器"
+  />
+  <img
+    src="https://raw.githubusercontent.com/rubiin/tsumiki/refs/heads/master/assets/screenshots/notification_menu.png"
+    alt="通知菜单"
+  />
+  <img
+    src="https://raw.githubusercontent.com/rubiin/tsumiki/refs/heads/master/assets/screenshots/logout.png"
+    alt="注销菜单"
+  />
+  <img
+    src="https://raw.githubusercontent.com/rubiin/tsumiki/refs/heads/master/assets/screenshots/weather.png"
+    alt="天气面板"
+  />
+</div>

@@ -1,0 +1,142 @@
+---
+title: Kurulum
+description: Tsumiki'yi kurun — ön koşullar, yöntemler ve kurulum sonrası yapılandırma
+sidebar:
+  order: 2
+---
+
+import LatestRelease from '../../../../components/LatestRelease.astro'
+
+<div align="center"><img src="https://raw.githubusercontent.com/rubiin/tsumiki/refs/heads/master/assets/images/tsumiki.png" /><br /></div>
+
+## Ön Koşullar
+
+Devam etmeden önce bunların kurulu olduğundan emin olun:
+
+| Gereksinim | Kurulum Komutu (Arch Linux) | Notlar |
+|---|---|---|
+| [Hyprland](https://hyprland.org) | `sudo pacman -S hyprland` | Çalışan Hyprland örneği gerekli |
+| [JetBrains Nerd Font](https://www.nerdfonts.com) | `sudo pacman -S ttf-jetbrains-mono-nerd` | Simge oluşturma için gerekli |
+| **Python 3.12+** | `sudo pacman -S python` | Doğrulayın: `python --version` |
+| **Git** | `sudo pacman -S git` | Kopyalama için gerekli |
+| **NetworkManager** | `sudo pacman -S networkmanager` | Ağ widget'ları için gerekli |
+| **PipeWire** | `sudo pacman -S pipewire pipewire-pulse` | Ses widget'ları için gerekli |
+
+::::caution
+Tsumiki'yi kurmadan önce **çalışan bir Hyprland kurulumuna** ihtiyacınız var. Hyprland'de yeniyseniz, önce [Hyprland Wiki](https://wiki.hyprland.org/Getting-Started/)'yi takip edin.
+::::
+
+## Kopyalama
+
+```sh
+git clone https://github.com/rubiin/tsumiki.git ~/.config/tsumiki
+cd ~/.config/tsumiki
+```
+
+## Son Sürüm
+
+<div className="latest-release">
+  <LatestRelease
+    repo="rubiin/tsumiki"
+    versionLabel="Sürüm:"
+    dateLabel="Tarih:"
+  />
+</div>
+
+Tam sürüm notları ve varlıklar için GitHub'daki [sürümler sayfasına](https://github.com/rubiin/tsumiki/releases) bakın.
+
+## Kurulum Seçenekleri
+
+Aşağıdaki üç yöntemden birini seçin.
+
+### Seçenek 1: Bootstrap Betiği (En Hızlı)
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/rubiin/tsumiki/master/install.sh | bash
+```
+
+Bu betik `~/.config/tsumiki`'yi kopyalar veya günceller, ardından tam kurulumu çalıştırır.
+
+Hemen kurmak **ve başlatmak** için:
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/rubiin/tsumiki/master/install.sh | bash -s -- --start
+```
+
+### Seçenek 2: Mevcut Kopyada Otomatik Kurulum
+
+Depoyu zaten manuel olarak kopyaladıysanız, kurulum betiğini çalıştırın:
+
+```sh
+./init.sh -setup
+./init.sh -start
+```
+
+`-setup` bayrağı gerekli sistem paketlerini kurar ve Python sanal ortamını yapılandırır.
+
+### Seçenek 3: Manuel Bağımlılık Kurulumu
+
+Paketler üzerinde tam kontrol mü istiyorsunuz? Bağımlılıkları kendiniz kurun ve ardından başlatın:
+
+```sh
+# Sistem paketlerini kurun
+sudo pacman -S --noconfirm --needed \
+  pipewire playerctl dart-sass power-profiles-daemon networkmanager \
+  brightnessctl pkgconf wf-recorder kitty python pacman-contrib \
+  gtk3 cairo gtk-layer-shell libgirepository noto-fonts-emoji \
+  gobject-introspection gobject-introspection-runtime python-pip \
+  python-gobject python-psutil python-cairo python-loguru libnotify \
+  cliphist python-httpx satty nvtop
+
+# AUR paketlerini kurun (yay örnek olarak)
+yay -S --needed \
+  python-fabric-git gnome-bluetooth-3.0 python-rlottie-python \
+  python-pytomlpp slurp imagemagick tesseract tesseract-data-eng \
+  ttf-jetbrains-mono-nerd grimblast-git python-ijson glace-git
+
+# Python bağımlılıklarını kurun
+pip install -r requirements.txt
+
+# Başlatın
+./init.sh -start
+```
+
+`yay` kullanmıyorsanız, AUR paketlerini tercih ettiğiniz AUR yardımcısıyla kurun.
+
+## Otomatik Başlatma Yapılandırması
+
+Hyprland başladığında Tsumiki'yi otomatik olarak başlatmak için `~/.config/hypr/hyprland.conf` dosyanıza şu satırı ekleyin:
+
+```sh
+exec-once = sleep 5; ~/.config/tsumiki/init.sh -start
+```
+
+`sleep 5`, Tsumiki başlamadan önce Hyprland'in tamamen başlatılmasını sağlar. Farklı bir konuma kopyaladıysanız yolu ayarlayın.
+
+:::tip
+Kolaylık için bir shell takma adı oluşturabilirsiniz:
+
+```sh
+alias tsumiki='~/.config/tsumiki/init.sh -start'
+```
+:::
+
+## Kurulumu Doğrulama
+
+1. Proje dizininden `./init.sh -start` komutunu çalıştırın.
+2. Tsumiki çubuğu ekranınızın üst kısmında görünmelidir.
+3. Hata mesajları görürseniz şunları kontrol edin:
+   - Tüm sistem paketleri kurulu (`./init.sh -setup` bu kontrolü yeniden çalıştırır)
+   - Python bağımlılıkları kurulu (`pip install -r requirements.txt`)
+   - Hyprland altında çalışıyorsunuz (başka bir birleştirici veya X11 değil)
+
+Çubuk görünmüyorsa, [Sorun Giderme](/tr/help/troubleshooting) bölümüne bakın.
+
+## Kurulumdan Sonra
+
+Hyprland katman kuralları için [Kurulum Sonrası](/tr/resources/post-install) ve panelinizi yapılandırmak için [İlk Adımlar](/tr/getting-started/first-steps) ile devam edin.
+
+::::tip
+Dökümantasyon ve kurulum betiklerine katkılar memnuniyetle karşılanır:
+[GitHub'da Tsumiki](https://github.com/rubiin/tsumiki)
+::::

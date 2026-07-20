@@ -1,0 +1,99 @@
+---
+title: Module-Referenz
+description: Vollständige Dokumentation aller Tsumiki-Module
+sidebar:
+  order: 2
+---
+
+Module sind größere UI-Oberflächen, die über die Leiste hinausgehen, wie Dock, Benachrichtigungen, Übersicht und OSD.
+
+## Leiste
+
+```toml
+[modules.bar]
+layer = "top"
+auto_hide = false
+auto_hide_timeout = 3000
+location = "top"
+```
+
+## Benachrichtigungssystem
+
+```toml
+[modules.notification]
+enabled = true
+anchor = "top-right"
+auto_dismiss = true
+transition_type = "slide-left"
+```
+
+## Dock
+
+```toml
+[modules.dock]
+enabled = false
+icon_size = 40
+behavior = "intellihide"
+preview_apps = true
+group_apps = true
+```
+
+## Übersicht
+
+```toml
+[modules.overview]
+enabled = false
+layer = "top"
+anchor = "center"
+transition_type = "crossfade"
+```
+
+## App-Launcher
+
+```toml
+[modules.app_launcher]
+enabled = false
+layout = "grid"
+grid_columns = 3
+```
+
+## OSD
+
+```toml
+[modules.osd]
+enabled = false
+timeout = 3000
+osds = ["brightness", "volume"]
+```
+
+## Desktop-Uhr
+
+```toml
+[modules.desktop_clock]
+enabled = false
+type = "cookie"
+layer = "bottom"
+```
+
+## Desktop-Zitate
+
+```toml
+[modules.desktop_quotes]
+enabled = false
+interval = 600
+```
+
+## Activate Linux
+
+```toml
+[modules.activate_linux]
+enabled = false
+```
+
+## Bildschirmecken
+
+```toml
+[modules.screen_corners]
+enabled = false
+size = 20
+```

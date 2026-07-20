@@ -100,7 +100,6 @@ html:has([data-template="splash"]) {
 	background-clip: text;
 	-webkit-background-clip: text;
 	-webkit-text-fill-color: transparent;
-	animation: hydeGradient 4s ease-in-out infinite;
 	position: relative;
 	z-index: 3;
 }
@@ -847,6 +846,158 @@ html:has([data-template="splash"]) {
 	}
 }
 
+/* ========== HOME PAGE ANIMATIONS ========== */
+
+/* --- Card entrance: slide up + fade in with stagger --- */
+[data-template="splash"] .card,
+[data-template="splash"] article.card {
+	animation: cardEntrance 0.6s ease-out both;
+}
+
+[data-template="splash"] .card:nth-child(1),
+[data-template="splash"] article.card:nth-child(1) {
+	animation-delay: 0.1s;
+}
+
+[data-template="splash"] .card:nth-child(2),
+[data-template="splash"] article.card:nth-child(2) {
+	animation-delay: 0.2s;
+}
+
+[data-template="splash"] .card:nth-child(3),
+[data-template="splash"] article.card:nth-child(3) {
+	animation-delay: 0.3s;
+}
+
+[data-template="splash"] .card:nth-child(4),
+[data-template="splash"] article.card:nth-child(4) {
+	animation-delay: 0.4s;
+}
+
+@keyframes cardEntrance {
+	from {
+		opacity: 0;
+		transform: translateY(40px) scale(0.96);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0) scale(1);
+	}
+}
+
+/* --- Card icon gentle float --- */
+[data-template="splash"] .card .icon,
+[data-template="splash"] article.card .icon {
+	animation: iconFloat 3s ease-in-out infinite;
+}
+
+[data-template="splash"] .card:nth-child(2) .icon,
+[data-template="splash"] article.card:nth-child(2) .icon {
+	animation-delay: 0.5s;
+}
+
+[data-template="splash"] .card:nth-child(3) .icon,
+[data-template="splash"] article.card:nth-child(3) .icon {
+	animation-delay: 1s;
+}
+
+[data-template="splash"] .card:nth-child(4) .icon,
+[data-template="splash"] article.card:nth-child(4) .icon {
+	animation-delay: 1.5s;
+}
+
+@keyframes iconFloat {
+	0%, 100% {
+		transform: translateY(0);
+	}
+	50% {
+		transform: translateY(-6px);
+	}
+}
+
+/* --- Showcase image entrance: staggered fade-in --- */
+.showcase img {
+	animation: imageEntrance 0.8s ease-out both;
+}
+
+.showcase img:nth-child(1) { animation-delay: 0.1s; }
+.showcase img:nth-child(2) { animation-delay: 0.2s; }
+.showcase img:nth-child(3) { animation-delay: 0.3s; }
+.showcase img:nth-child(4) { animation-delay: 0.4s; }
+.showcase img:nth-child(5) { animation-delay: 0.5s; }
+.showcase img:nth-child(6) { animation-delay: 0.6s; }
+
+@keyframes imageEntrance {
+	from {
+		opacity: 0;
+		transform: translateY(30px) scale(0.97);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0) scale(1);
+	}
+}
+
+/* --- Showcase image hover: enhanced lift + glow --- */
+.showcase img:hover {
+	transform: translateY(-6px) scale(1.02);
+	box-shadow: 0 24px 48px rgba(169, 132, 204, 0.35);
+	border-color: var(--hyde-purple);
+	transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* --- Hero primary button subtle pulse --- */
+.hero .actions a:not([data-variant="minimal"]) {
+	animation: buttonPulse 3s ease-in-out infinite;
+}
+
+.hero .actions a:not([data-variant="minimal"]):hover {
+	animation: none;
+}
+
+@keyframes buttonPulse {
+	0%, 100% {
+		box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+	}
+	50% {
+		box-shadow: 0 5px 25px var(--hyde-purple-glow);
+	}
+}
+
+/* --- Section heading slide-in (combined with existing gradient) --- */
+[data-template="splash"] h2 {
+	animation: headingSlideIn 0.8s ease-out both, hydeGradient 4s ease-in-out infinite;
+}
+
+@keyframes headingSlideIn {
+	from {
+		opacity: 0;
+		transform: translateX(-30px);
+	}
+	to {
+		opacity: 1;
+		transform: translateX(0);
+	}
+}
+
+/* --- Description paragraph fade-in --- */
+[data-template="splash"] .content-panel p:first-of-type {
+	animation: fadeInUp 0.8s ease-out both;
+}
+
+@keyframes fadeInUp {
+	from {
+		opacity: 0;
+		transform: translateY(20px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+/* ========== END HOME PAGE ANIMATIONS ========== */
+
 /* ========== END MAIN PAGE ONLY STYLES ========== */
 
 /* Performance optimization - disable animations for users who prefer reduced motion */
@@ -857,6 +1008,19 @@ html:has([data-template="splash"]) {
 		animation-duration: 0.01ms !important;
 		animation-iteration-count: 1 !important;
 		transition-duration: 0.01ms !important;
+	}
+
+	/* Also disable all home page animations */
+	[data-template="splash"] *,
+	[data-template="splash"] *::before,
+	[data-template="splash"] *::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+	}
+
+	.showcase img {
+		transform: none !important;
 	}
 }
 
@@ -900,7 +1064,70 @@ select:focus {
 	outline-offset: 2px;
 }
 
-/* That's it! Keep everything else as default Starlight */
+/* ========== ACTIVE SIDEBAR ITEM STYLING ========== */
+/* Make the currently active page in the sidebar more visually distinct */
+
+/* Active sidebar link — bold with accent color and left border */
+.sidebar-content a[aria-current="page"],
+nav.sidebar a[aria-current="page"] {
+	font-weight: 700 !important;
+	color: var(--hyde-purple) !important;
+	background: rgba(169, 132, 204, 0.08);
+	border-left: 4px solid var(--hyde-purple);
+	padding-left: calc(0.5rem - 4px);
+	border-radius: 0 6px 6px 0;
+	transition: all 0.2s ease;
+}
+
+/* Hover effect on sidebar links */
+.sidebar-content a:hover,
+nav.sidebar a:hover {
+	background: rgba(169, 132, 204, 0.05);
+	border-radius: 6px;
+	transition: all 0.2s ease;
+}
+
+/* ========== END ACTIVE SIDEBAR ITEM STYLING ========== */
+
+/* ========== CUSTOM THEME TOGGLE ========== */
+/* Subtle HyDE color theming for Starlight's built-in theme toggle */
+
+/* Icon color — brand tint without changing layout */
+starlight-theme-select .icon {
+	color: var(--hyde-purple);
+	transition: color 0.3s ease;
+}
+
+starlight-theme-select:hover .icon {
+	color: var(--hyde-blue);
+}
+
+[data-theme="dark"] starlight-theme-select .icon {
+	color: var(--hyde-blue);
+}
+
+[data-theme="dark"] starlight-theme-select:hover .icon {
+	color: var(--hyde-purple);
+}
+
+[data-theme="light"] starlight-theme-select .icon {
+	color: var(--hyde-blue);
+}
+
+[data-theme="light"] starlight-theme-select:hover .icon {
+	color: var(--hyde-purple);
+}
+
+/* Subtle glow on hover — no layout changes */
+starlight-theme-select {
+	transition: filter 0.3s ease;
+}
+
+starlight-theme-select:hover {
+	filter: drop-shadow(0 0 8px rgba(169, 132, 204, 0.4));
+}
+
+/* ========== END CUSTOM THEME TOGGLE ========== */
 
 /* Latest release inline layout in introduction */
 .latest-release {
