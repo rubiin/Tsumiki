@@ -1,5 +1,52 @@
 # Changelog
 
+## [3.4.6](https://github.com/rubiin/tsumiki/compare/v3.4.0...v3.4.6) (2026-07-20)
+
+
+### 🚀 New Features
+
+* add dns switcher and cloudflare warp widget ([0067560](https://github.com/rubiin/tsumiki/commit/0067560c92f552a9b3aee769ef8f729143bb9c1f))
+* add more workspace styles ([e1e2a19](https://github.com/rubiin/tsumiki/commit/e1e2a19d77ec130a52107335fab7cfd579619273))
+* new progress bar ([d6f8d79](https://github.com/rubiin/tsumiki/commit/d6f8d790bfdbb5bca1eacfffa6507b78ece2111e))
+
+
+### 🐛 Bug Fixes
+
+* add styling field ([3514b79](https://github.com/rubiin/tsumiki/commit/3514b79449ecc7d9b3165cb827ed545d5a26127e))
+* add styling field ([3514b79](https://github.com/rubiin/tsumiki/commit/3514b79449ecc7d9b3165cb827ed545d5a26127e))
+* add styling field ([3514b79](https://github.com/rubiin/tsumiki/commit/3514b79449ecc7d9b3165cb827ed545d5a26127e))
+* add styling field ([3514b79](https://github.com/rubiin/tsumiki/commit/3514b79449ecc7d9b3165cb827ed545d5a26127e))
+* css styles ([896ad58](https://github.com/rubiin/tsumiki/commit/896ad588a7a753a7d986bf19ae3c88118d7bbb43))
+* exception logging ([266fc24](https://github.com/rubiin/tsumiki/commit/266fc24ab92e1eeb268676680a9913d997384d42))
+* optimized mpris ([14e035e](https://github.com/rubiin/tsumiki/commit/14e035ea2b354c33c3e8d4c9f3f6b7bb70a284a2))
+* popup color issue ([d983558](https://github.com/rubiin/tsumiki/commit/d983558576380ee6d6a74776fb091e3a83edb837))
+* scan button size ([07216ce](https://github.com/rubiin/tsumiki/commit/07216ceae9807c614d7dc5975dc978c258a46a86))
+* settings and stuff ([1548741](https://github.com/rubiin/tsumiki/commit/1548741e8d2705d35d5ce102941cc975eea2b5ce))
+* systray dont show popup if empty ([035944f](https://github.com/rubiin/tsumiki/commit/035944f2ee69e994eafe3b129ac7f8c0f6b00eb8))
+* systray hide ([9e509a2](https://github.com/rubiin/tsumiki/commit/9e509a28caa7b5a5902ff2445751f70ef81645dd))
+
+
+### ⚡️ Performance Improvements
+
+* memory & timer optimizations, destroy cleanup audit ([cab70d9](https://github.com/rubiin/tsumiki/commit/cab70d937ba11429266c34b76334b58dff830d35))
+* teardown ([ea83d28](https://github.com/rubiin/tsumiki/commit/ea83d28096118749c98e0fdf14f3627c3e66d594))
+
+
+### 📚 Documentation
+
+* add features and matugen ([aeddd4a](https://github.com/rubiin/tsumiki/commit/aeddd4a9056826ee0d8aa07b55395efd0b400c8d))
+* update usage ([fa0f45b](https://github.com/rubiin/tsumiki/commit/fa0f45be4e98dd6194ef89cbcb09d5fc11ce1558))
+
+
+### ⚙️ Chores
+
+* add sounds ([2fab9e4](https://github.com/rubiin/tsumiki/commit/2fab9e424cb3dcc586419f6a6af3a1d900275435))
+* farbricify ([ef8aaed](https://github.com/rubiin/tsumiki/commit/ef8aaedcb78b78d0f17dde2969f5847d633b9e3d))
+* fix imports ([bb4fa03](https://github.com/rubiin/tsumiki/commit/bb4fa038945a8600262e0fa5102a35e7141582ad))
+* move client to separate file ([a1d1bc0](https://github.com/rubiin/tsumiki/commit/a1d1bc0b71c5029a4f4e8af8accfef067a01606c))
+* release 3.4.5 ([aa8b569](https://github.com/rubiin/tsumiki/commit/aa8b56904584511d5fc004ab2bbdf73ca47092f9))
+* release 3.4.6 ([0d7dbaf](https://github.com/rubiin/tsumiki/commit/0d7dbaf18b8c7e58e14091639864e0d10bfab1b3))
+
 ## [3.4.0](https://github.com/rubiin/tsumiki/compare/v3.3.0...v3.4.0) (2026-07-05)
 
 
