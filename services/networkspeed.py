@@ -1,7 +1,7 @@
 from time import monotonic
 
 import psutil
-from fabric.utils import re
+from fabric.utils import logger, re
 
 # Pre-compiled regex pattern for interface filtering
 _VIRTUAL_IFACE_RE = re.compile(r"^(ifb|lxdbr|virbr|br|vnet|tun|tap)[0-9]+$")
@@ -34,7 +34,8 @@ class NetworkSpeed:
         # Read counters from psutil for all interfaces.
         try:
             interface_counters = psutil.net_io_counters(pernic=True)
-        except Exception:
+        except Exception as e:
+            logger.warning(f"[NetworkSpeed] Failed to read network counters: {e}")
             return {"download": 0.0, "upload": 0.0}
 
         total_down_bytes = 0

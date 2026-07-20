@@ -183,7 +183,7 @@ class AppBar(Box):
         self._pinned_app_buttons = {}  # app_id -> Button widget
         self._populate_pinned_apps(self.pinned_apps)
 
-        bulk_connect(
+        for hid in bulk_connect(
             self._hyprland_connection,
             {
                 "event::openwindow": self._on_hyprland_event,
@@ -193,14 +193,18 @@ class AppBar(Box):
                 "event::activewindowv2": self._on_active_window_event,
                 "event::windowtitle": self._on_hyprland_event,
             },
-        )
+        ):
+            self._register_handler(self._hyprland_connection, hid)
 
         self.connect("destroy", self._on_destroy)
 
         if self._hyprland_connection.ready:
             self._sync_clients()
         else:
-            self._hyprland_connection.connect("event::ready", self._on_hyprland_ready)
+            self._register_handler(
+                self._hyprland_connection,
+                self._hyprland_connection.connect("event::ready", self._on_hyprland_ready),
+            )
 
     def _on_hyprland_ready(self, *_):
         self._schedule_sync_clients(delay_ms=0)
@@ -287,7 +291,8 @@ class AppBar(Box):
         try:
             reply = self._hyprland_connection.send_command("j/activewindow")
             parsed = parse_hyprland_reply(reply)
-        except Exception:
+        except Exception as e:
+            logger.warning(f"[Dock] Failed to get active window address: {e}")
             return None
         return normalize_address(parsed.get("address"))
 
@@ -415,7 +420,8 @@ class AppBar(Box):
         try:
             # Try to close the client gracefully first
             client.close()
-        except Exception:
+        except Exception as e:
+            logger.debug(f"[Dock] Graceful close failed, trying hyprctl fallback: {e}")
             # If that fails, try to get the app_id and use hyprctl to kill the window
             app_id = None
             try:
@@ -555,7 +561,8 @@ class AppBar(Box):
         try:
             app_id = client.get_app_id()
             return app_id if app_id else None
-        except Exception:
+        except Exception as e:
+            logger.debug(f"[Dock] Failed to get app_id: {e}")
             return None
 
     def _activate_group(self, app_id: str):

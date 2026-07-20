@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 
-from fabric.utils import exec_shell_command, os, re
+from fabric.utils import exec_shell_command, logger, os, re
 
 from .base import SingletonService
 
@@ -31,7 +31,8 @@ class PrivacyIndicatorService(SingletonService):
     def _load_pipewire_objects(self):
         try:
             return json.loads(exec_shell_command("pw-dump"))
-        except Exception:
+        except Exception as e:
+            logger.warning(f"[Privacy] Failed to load pipewire objects: {e}")
             return []
 
     def split_pipewire_objects(self, objects):
@@ -170,9 +171,11 @@ class PrivacyIndicatorService(SingletonService):
 
                         apps.add(comm)
                         break
-                    except Exception:
+                    except Exception as e:
+                        logger.debug(f"[Privacy] Error reading fd {fd}: {e}")
                         continue
-            except Exception:
+            except Exception as e:
+                logger.debug(f"[Privacy] Error accessing proc {proc}: {e}")
                 continue
 
         return list(apps)

@@ -33,7 +33,10 @@ class RecorderWidget(ButtonWidget):
         """Initialize the recorder service if not already initialized."""
         if not self.initialized:
             self.recorder_service = ScreenRecorderService()
-            self.recorder_service.connect("recording", self._update_ui)
+            self._register_handler(
+                self.recorder_service,
+                self.recorder_service.connect("recording", self._update_ui),
+            )
             self.initialized = True
 
     @property

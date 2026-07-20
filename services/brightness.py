@@ -72,7 +72,7 @@ class BrightnessService(SingletonService):
             brightness = int(file.load_bytes()[0].get_data())
             self._screen_brightness_cache = brightness
             self.emit("brightness_changed", brightness)
-        except Exception as e:
+        except (ValueError, OSError, TypeError) as e:
             logger.warning(f"{Colors.WARNING}Failed to read brightness update: {e}")
 
     def _read_max_brightness(self, path: str) -> int:
@@ -135,7 +135,7 @@ class BrightnessService(SingletonService):
         try:
             with open(self.kbd_backlight_path + "/brightness", "r") as f:
                 return int(f.readline())
-        except Exception as e:
+        except (FileNotFoundError, ValueError, OSError, TypeError) as e:
             logger.exception(f"{Colors.ERROR}Failed to read keyboard brightness: {e}")
             return -1
 

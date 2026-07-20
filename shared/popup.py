@@ -241,4 +241,4 @@ class PopupWindow(BaseWindow):
             self.current_timeout += 500
             return True
 
-        GLib.timeout_add(500, popup_func)
+        self._register_repeater(GLib.timeout_add(500, popup_func))

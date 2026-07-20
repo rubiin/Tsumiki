@@ -202,7 +202,7 @@ def _pillow_worker(image_path, callback, color_count, resize):
             palette = [color for color, _ in most_common]
 
             idle_add(callback, palette)
-    except Exception as e:
+    except (ImportError, OSError, ValueError, TypeError) as e:
         logger.exception(f"Error generating color palette: {e}")
         idle_add(callback, None)
 
@@ -246,7 +246,7 @@ def read_toml_file(file_path: str) -> Optional[dict]:
     try:
         with open(file_path, "r") as file:
             return toml.load(file)
-    except Exception as e:
+    except (IOError, OSError, ValueError, KeyError, TypeError) as e:
         logger.exception(f"Failed to read TOML file {file_path}: {e}")
         return None
 
@@ -421,7 +421,7 @@ def write_toml_file(path: str, data: dict) -> Optional[dict]:
         with open(path, "w") as f:
             toml.dump(data, f)
 
-    except Exception as e:
+    except (IOError, OSError, ValueError, KeyError, TypeError) as e:
         logger.exception(f"Failed to write toml: {e}")
         return None
 
@@ -478,7 +478,7 @@ def copy_themev2(theme: str, mode: str = "dark"):
 def parse_hyprland_reply(reply: HyprlandReply) -> dict:
     try:
         return json.loads(reply.reply.decode().strip("\n"))
-    except Exception as e:
+    except (json.JSONDecodeError, AttributeError, KeyError, TypeError, UnicodeDecodeError) as e:
         logger.exception(f"Failed to parse hyprland reply: {e}")
         return {}
 
@@ -503,7 +503,7 @@ def update_theme_config(theme_name: str):
         write_toml_file(config_file, config)
 
         logger.info(f"{Colors.INFO}[Theme] Updated theme config to {theme_name}")
-    except Exception as e:
+    except (IOError, OSError, KeyError, TypeError) as e:
         logger.exception(f"{Colors.ERROR}[Theme] Error updating theme config: {e}")
 
 
@@ -1099,7 +1099,7 @@ def write_json_file(path: str, data: dict):
     try:
         with open(path, "w") as f:
             json.dump(data, f, indent=4, ensure_ascii=False)
-    except Exception as e:
+    except (IOError, OSError, TypeError) as e:
         logger.exception(f"Failed to write json: {e}")
 
 

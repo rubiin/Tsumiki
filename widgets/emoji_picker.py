@@ -114,7 +114,7 @@ class EmojiPickerMenu(Box):
                     }
 
                 idle_add(self._on_emoji_load_complete, emoji_dict, callback)
-            except Exception as e:
+            except (OSError, ValueError, ijson.IncompleteJSONError) as e:
                 logger.exception(f"Error loading emoji data: {e}")
                 idle_add(self._on_emoji_load_complete, {}, callback)
 
@@ -396,7 +396,7 @@ class EmojiPickerMenu(Box):
                 lambda p, r, _: None,  # Fire and forget
                 None,
             )
-        except Exception as e:
+        except (GLib.Error, OSError) as e:
             logger.exception(f"Clipboard copy failed: {e}")
 
 

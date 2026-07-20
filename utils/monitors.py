@@ -66,9 +66,6 @@ class HyprlandWithMonitors(Hyprland):
         except Exception as e:
             logger.exception(f"[Monitors] Error getting monitor names: {e}")
             return []
-        except Exception as e:
-            logger.exception(f"[Monitors] Error getting monitor names: {e}")
-            return []
 
 
 class MonitorWatcher:
@@ -77,6 +74,7 @@ class MonitorWatcher:
     def __init__(self):
         self.callbacks = []
         self._hyprland_connection = None
+        self._pending_timer_id = None
 
     def add_callback(self, callback):
         if callback not in self.callbacks:
@@ -96,10 +94,20 @@ class MonitorWatcher:
             },
         )
 
+    def stop(self):
+        """Cancel any pending timer and stop watching."""
+        if self._pending_timer_id is not None:
+            GLib.source_remove(self._pending_timer_id)
+            self._pending_timer_id = None
+        self.callbacks.clear()
+
     def on_monitor_changed(self, *_):
-        GLib.timeout_add(MONITOR_HOTPLUG_DELAY_MS, self._notify_callbacks)
+        if self._pending_timer_id is not None:
+            GLib.source_remove(self._pending_timer_id)
+        self._pending_timer_id = GLib.timeout_add(MONITOR_HOTPLUG_DELAY_MS, self._notify_callbacks)
 
     def _notify_callbacks(self):
+        self._pending_timer_id = None
         for callback in tuple(self.callbacks):
             try:
                 callback()

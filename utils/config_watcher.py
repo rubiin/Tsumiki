@@ -22,11 +22,13 @@ class ConfigWatcher:
     """Simple file watcher that monitors config files and restarts Tsumiki."""
 
     __slots__ = (
+        "_cooldown_timer_id",
         "_file_hashes",
         "_initialized",
         "_last_restart_at_us",
         "_restart_delay",
         "_restart_pending",
+        "_restart_timer_id",
         "init_script",
         "monitors",
         "root_dir",
@@ -42,6 +44,8 @@ class ConfigWatcher:
         self._restart_pending = False
         self._last_restart_at_us = 0
         self._restart_delay = self._get_restart_delay()
+        self._restart_timer_id = None
+        self._cooldown_timer_id = None
         self.root_dir = get_relative_path("..")
         self.init_script = f"{self.root_dir}/init.sh"
         self.watched_names = {os.path.basename(p) for p in _CONFIG_FILES}
@@ -124,17 +128,24 @@ class ConfigWatcher:
         logger.info(
             f"{Colors.INFO}[ConfigWatcher] Config changed: {file.get_basename()}"
         )
+        # Cancel any pending restart timer
+        if self._restart_timer_id is not None:
+            GLib.source_remove(self._restart_timer_id)
         # Delay restart slightly to batch rapid config writes.
-        GLib.timeout_add(self._restart_delay, self._restart_if_allowed)
+        self._restart_timer_id = GLib.timeout_add(self._restart_delay, self._restart_if_allowed)
 
     def _restart_if_allowed(self) -> bool:
         """Restart after debounce while respecting cooldown between restarts."""
+        self._restart_timer_id = None
         now_us = GLib.get_monotonic_time()
         if self._last_restart_at_us:
             elapsed_ms = (now_us - self._last_restart_at_us) // 1000
             if elapsed_ms < _RESTART_COOLDOWN_MS:
                 wait_ms = max(1, _RESTART_COOLDOWN_MS - elapsed_ms)
-                GLib.timeout_add(wait_ms, self._restart_if_allowed)
+                # Cancel any existing cooldown timer
+                if self._cooldown_timer_id is not None:
+                    GLib.source_remove(self._cooldown_timer_id)
+                self._cooldown_timer_id = GLib.timeout_add(wait_ms, self._restart_if_allowed)
                 return False
 
         self._restart_pending = False
@@ -163,11 +174,17 @@ class ConfigWatcher:
         return False  # Don't repeat
 
     def stop(self):
-        """Stop monitoring files."""
+        """Stop monitoring files and cancel pending timers."""
         for monitor in self.monitors:
             monitor.cancel()
         self.monitors.clear()
         self._file_hashes.clear()
+        if self._restart_timer_id is not None:
+            GLib.source_remove(self._restart_timer_id)
+            self._restart_timer_id = None
+        if self._cooldown_timer_id is not None:
+            GLib.source_remove(self._cooldown_timer_id)
+            self._cooldown_timer_id = None
 
 
 # Global watcher instance

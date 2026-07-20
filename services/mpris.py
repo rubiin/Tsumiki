@@ -220,7 +220,8 @@ class MprisPlayer(Service):
         try:
             self._player.set_shuffle(self._player.get_property("shuffle"))
             return True
-        except Exception:
+        except Exception as e:
+            logger.debug(f"[MprisPlayer] Player doesn't support shuffle: {e}")
             return False
 
     @Property(bool, "readable", default_value=False)
@@ -228,7 +229,8 @@ class MprisPlayer(Service):
         try:
             self._player.set_loop_status(self._player.get_property("loop_status"))
             return True
-        except Exception:
+        except Exception as e:
+            logger.debug(f"[MprisPlayer] Player doesn't support loop: {e}")
             return False
 
 

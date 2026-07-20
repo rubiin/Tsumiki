@@ -218,7 +218,8 @@ class IPMonitorPopoverContent(Box):
             )
             if candidate not in {"", "-"} and ip_address(candidate).version == 4:
                 ipv4_addr = candidate
-        except Exception:
+        except Exception as e:
+            logger.debug(f"[ip_monitor] Failed to get public IP: {e}")
             ipv4_addr = "-"
 
         endpoint_template = "https://ipapi.co/{ip}/json/"

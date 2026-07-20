@@ -31,8 +31,11 @@ class ScreenRecorderService(SingletonService):
         super().__init__(**kwargs)
         self.home_dir = GLib.get_home_dir()
         self.shutter_sound = f"{ASSETS_DIR}/sounds/camera-shutter.mp3"
+        self._start_recording_timer_id = None
+        self._screenshot_timer_id = None
 
     def record_and_emit(self, command):
+        self._start_recording_timer_id = None
         exec_shell_command_async(command, lambda *_: None)
         self.emit("recording", True)
         return False  # Only run once
@@ -86,7 +89,9 @@ class ScreenRecorderService(SingletonService):
             f"wf-recorder {audio} --file={file_path} --pixel-format yuv420p {area}"
         )
         if delayed:
-            GLib.timeout_add(timeout, self.record_and_emit, command)
+            if self._start_recording_timer_id is not None:
+                GLib.source_remove(self._start_recording_timer_id)
+            self._start_recording_timer_id = GLib.timeout_add(timeout, self.record_and_emit, command)
         else:
             self.record_and_emit(command)
 
@@ -120,7 +125,7 @@ class ScreenRecorderService(SingletonService):
         def _callback(process: Gio.Subprocess, task: Gio.Task):
             try:
                 _, stdout, stderr = process.communicate_utf8_finish(task)
-            except Exception:
+            except GLib.Error:
                 logger.exception(
                     f"[SCREENSHOT] Failed read notification action with error {stderr}"
                 )
@@ -192,21 +197,24 @@ class ScreenRecorderService(SingletonService):
                 # Send notification after annotation or direct capture
                 self.send_screenshot_notification(file_path=file_path)
 
-            except Exception as e:
+            except (subprocess.CalledProcessError, OSError, FileNotFoundError) as e:
                 logger.exception(
                     f"[SCREENSHOT] Error in annotation or notification: {e}"
                 )
 
         def take_screenshot():
+            self._screenshot_timer_id = None
             try:
                 exec_shell_command_async(" ".join(command), after_screenshot)
-            except Exception:
+            except (GLib.Error, OSError):
                 logger.exception(f"[SCREENSHOT] Failed to run command: {command}")
             return False
 
         if config.get("delayed", False):
             timeout = config.get("delayed_timeout", 5000)
-            GLib.timeout_add(timeout, take_screenshot)
+            if self._screenshot_timer_id is not None:
+                GLib.source_remove(self._screenshot_timer_id)
+            self._screenshot_timer_id = GLib.timeout_add(timeout, take_screenshot)
         else:
             take_screenshot()
 
@@ -234,7 +242,7 @@ class ScreenRecorderService(SingletonService):
         def _callback(process: Gio.Subprocess, task: Gio.Task):
             try:
                 _, stdout, stderr = process.communicate_utf8_finish(task)
-            except Exception:
+            except GLib.Error:
                 logger.exception(
                     f"[SCREENRECORD] Failed read notification action with error."
                     f"{stderr}"

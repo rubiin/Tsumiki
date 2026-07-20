@@ -232,7 +232,7 @@ class ClipHistoryMenu(Box):
             )
             proc = launcher.spawnv(["cliphist", "list"])
             proc.communicate_async(None, None, self._on_clipboard_list_ready, None)
-        except Exception as e:
+        except (GLib.Error, OSError) as e:
             logger.exception(f"Error starting cliphist: {e}")
             self._loading = False
 
@@ -249,7 +249,7 @@ class ClipHistoryMenu(Box):
                         continue
                     new_items.append(line)
                 self._update_items(new_items)
-        except Exception as e:
+        except (GLib.Error, UnicodeDecodeError, ValueError) as e:
             logger.exception(f"Error loading clipboard history: {e}")
         finally:
             self._loading = False
@@ -453,7 +453,7 @@ class ClipHistoryMenu(Box):
             )
             proc = launcher.spawnv(["cliphist", "decode", item_id])
             proc.communicate_async(None, None, self._on_image_loaded, (item_id, button))
-        except Exception as e:
+        except (GLib.Error, OSError) as e:
             logger.exception(f"Error starting image decode: {e}")
 
     def _on_image_loaded(self, proc, result, user_data):
@@ -484,7 +484,7 @@ class ClipHistoryMenu(Box):
                     del self.image_cache[oldest_key]
                 self.image_cache[item_id] = pixbuf
                 self._update_image_button(button, pixbuf)
-        except Exception as e:
+        except (GLib.Error, ValueError, OSError) as e:
             logger.exception(f"Error loading image preview: {e}")
 
     def _update_image_button(self, button, pixbuf):
@@ -559,7 +559,7 @@ class ClipHistoryMenu(Box):
             )
             proc = launcher.spawnv(["cliphist", "decode", item_id])
             proc.communicate_async(None, None, self._on_paste_decoded, None)
-        except Exception as e:
+        except (GLib.Error, OSError) as e:
             logger.exception(f"Error starting paste decode: {e}")
 
     def _on_paste_decoded(self, proc, result, user_data):
@@ -576,7 +576,7 @@ class ClipHistoryMenu(Box):
                     self._on_paste_complete,
                     None,
                 )
-        except Exception as e:
+        except (GLib.Error, UnicodeDecodeError, ValueError) as e:
             logger.exception(f"Error decoding paste item: {e}")
 
     def _on_paste_complete(self, proc, result, user_data):
@@ -584,7 +584,7 @@ class ClipHistoryMenu(Box):
         try:
             proc.communicate_finish(result)
             self.close()
-        except Exception as e:
+        except (GLib.Error, OSError) as e:
             logger.exception(f"Error pasting clipboard item: {e}")
 
     def delete_item(self, item_id):
@@ -595,7 +595,7 @@ class ClipHistoryMenu(Box):
             launcher = self._make_launcher(Gio.SubprocessFlags.NONE)
             proc = launcher.spawnv(["cliphist", "delete", item_id])
             proc.wait_async(None, self._on_delete_complete, None)
-        except Exception as e:
+        except (GLib.Error, OSError) as e:
             logger.exception(f"Error starting delete: {e}")
 
     def _on_delete_complete(self, proc, result, user_data):
@@ -605,7 +605,7 @@ class ClipHistoryMenu(Box):
             self._pending_updates = True
             if not self._loading:
                 self._load_clipboard_items_async()
-        except Exception as e:
+        except (GLib.Error, OSError) as e:
             logger.exception(f"Error deleting clipboard item: {e}")
 
     def clear_history(self, *_):
@@ -614,7 +614,7 @@ class ClipHistoryMenu(Box):
             launcher = self._make_launcher(Gio.SubprocessFlags.NONE)
             proc = launcher.spawnv(["cliphist", "wipe"])
             proc.wait_async(None, self._on_clear_complete, None)
-        except Exception as e:
+        except (GLib.Error, OSError) as e:
             logger.exception(f"Error starting clear: {e}")
 
     def _on_clear_complete(self, proc, result, user_data):
@@ -625,7 +625,7 @@ class ClipHistoryMenu(Box):
             self._pending_updates = True
             if not self._loading:
                 self._load_clipboard_items_async()
-        except Exception as e:
+        except (GLib.Error, OSError) as e:
             logger.exception(f"Error clearing clipboard history: {e}")
 
     def filter_items(self, entry, *_):

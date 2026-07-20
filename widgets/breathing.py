@@ -191,6 +191,7 @@ class BreathingMenu(BoxWidget):
         self._timer_id = None
 
         self._build_ui()
+        self.connect("destroy", lambda *_: self._stop_exercise())
         self._select_exercise(0)
 
     # ── Build UI ──────────────────────────────────────────────────────────────
@@ -414,7 +415,7 @@ class BreathingMenu(BoxWidget):
     def _schedule_tick(self):
         if self._timer_id is not None:
             GLib.source_remove(self._timer_id)
-        self._timer_id = self._register_repeater(GLib.timeout_add(1000, self._tick))
+        self._timer_id = GLib.timeout_add(1000, self._tick)
 
     def _tick(self):
         self._timer_id = None
@@ -434,6 +435,7 @@ class BreathingMenu(BoxWidget):
 
         self._update_display()
         self._schedule_tick()
+
         return False
 
     def _advance_phase(self):

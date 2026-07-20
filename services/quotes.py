@@ -2,7 +2,7 @@ import random
 from typing import Callable, Optional
 
 import httpx
-from fabric.utils import idle_add, os, time
+from fabric.utils import idle_add, logger, os, time
 
 from utils.constants import QUOTES_CACHE_FILE
 from utils.functions import read_json_file, write_json_file
@@ -42,7 +42,8 @@ class QuotesService(SingletonService):
                 response = session.get(self.api_url, timeout=10.0)
                 response.raise_for_status()
                 return response.json()
-            except Exception:
+            except Exception as e:
+                logger.warning(f"[Quotes] Fetch failed (attempt {attempt + 1}/{retries}): {e}")
                 time.sleep(delay * (attempt + 1))
         return None
 

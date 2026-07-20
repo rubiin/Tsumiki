@@ -36,6 +36,7 @@ class IconResolver:
         self._icon_dict = None
         self._cache_dirty = False
         self._write_pending = False
+        self._flush_timer_id = None
 
     def _ensure_cache_loaded(self):
         """Lazily load the icon cache on first access."""
@@ -102,11 +103,14 @@ class IconResolver:
         if self._write_pending:
             return  # Already scheduled
         self._write_pending = True
-        GLib.timeout_add(_CACHE_WRITE_DELAY_MS, self._flush_cache)
+        if self._flush_timer_id is not None:
+            GLib.source_remove(self._flush_timer_id)
+        self._flush_timer_id = GLib.timeout_add(_CACHE_WRITE_DELAY_MS, self._flush_cache)
 
     def _flush_cache(self):
         """Write cache to disk if dirty."""
         self._write_pending = False
+        self._flush_timer_id = None
         if self._cache_dirty:
             write_json_file(ICON_CACHE_FILE, self._icon_dict)
             self._cache_dirty = False

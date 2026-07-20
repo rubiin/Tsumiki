@@ -156,7 +156,8 @@ class DateMenuNotification(Box):
             if diff < 86400:
                 return f"{int(diff / 3600)}h ago"
             return f"{int(diff / 86400)}d ago"
-        except Exception:
+        except Exception as e:
+            logger.warning(f"[DateTime] Failed to format time: {e}")
             return ""
 
     def remove_notification(self, *_):
@@ -344,7 +345,8 @@ class DateNotificationMenu(Box):
         if hasattr(notification, "__getitem__"):
             try:
                 return int(notification["id"])
-            except Exception:
+            except Exception as e:
+                logger.debug(f"[DateTime] Failed to get notification ID: {e}")
                 pass
 
         notif_id = getattr(notification, "id", None)
@@ -362,7 +364,8 @@ class DateNotificationMenu(Box):
         if not app_name and hasattr(notification, "__getitem__"):
             try:
                 app_name = notification["app_name"]
-            except Exception:
+            except Exception as e:
+                logger.debug(f"[DateTime] Failed to get app_name: {e}")
                 app_name = None
 
         return str(app_name or "Unknown")
