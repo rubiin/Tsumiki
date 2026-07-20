@@ -125,6 +125,8 @@ LAZY_WIDGETS_LIST = {
     "workspaces": "widgets.workspaces.WorkSpacesWidget",
     "world_clock": "widgets.world_clock.WorldClockWidget",
     "git_companion": "widgets.git_companion.GitCompanionWidget",
+    "cloudflare_warp": "widgets.cloudflare_warp.CloudflareWarpWidget",
+    "dns_switcher": "widgets.dns_switcher.DnsSwitcherWidget",
 }
 
 

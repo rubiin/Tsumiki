@@ -1,0 +1,188 @@
+import re
+
+from fabric.core.service import Property, Signal
+from fabric.utils import GLib, exec_shell_command_async, logger
+
+from .base import SingletonService
+
+# Pre-configured DNS providers with label, primary, secondary
+DEFAULT_PROVIDERS = [
+    {"label": "Cloudflare", "primary": "1.1.1.1", "secondary": "1.0.0.1"},
+    {"label": "Google", "primary": "8.8.8.8", "secondary": "8.8.4.4"},
+    {"label": "OpenDNS", "primary": "208.67.222.222", "secondary": "208.67.220.220"},
+    {"label": "AdGuard", "primary": "94.140.14.14", "secondary": "94.140.15.15"},
+    {"label": "Quad9", "primary": "9.9.9.9", "secondary": "149.112.112.112"},
+]
+
+_DNS_LINE_RE = re.compile(r"IP4\.DNS\[\d+\]:\s*(\S+)")
+
+
+class DnsSwitcherService(SingletonService):
+    """Service to detect and switch DNS servers via NetworkManager.
+
+    Polls ``nmcli`` every 3 seconds to read the current DNS server and
+    emits ``notify::current`` when it changes.
+    """
+
+    @Signal
+    def changed(self) -> None:
+        """Emitted every poll cycle regardless of change."""
+
+    def __init__(self, poll_interval_ms: int = 3000, **kwargs):
+        super().__init__(**kwargs)
+
+        self._poll_interval = poll_interval_ms
+        self._current: str | None = None
+        self._current_label: str = "Default"
+
+        self._poll_timer_id: int | None = None
+        self._poller_running = False
+        self._first_line_of_poll = True
+
+        self._start_polling()
+
+    # ── Properties ──────────────────────────────────────────────
+
+    @Property(str, "readable", default_value="Default")
+    def current(self) -> str:
+        return self._current or "Default"
+
+    # ── Polling ─────────────────────────────────────────────────
+
+    def _start_polling(self):
+        if self._poller_running:
+            return
+        self._poller_running = True
+        self._poll()
+
+    def _stop_polling(self):
+        self._poller_running = False
+        if self._poll_timer_id is not None:
+            GLib.source_remove(self._poll_timer_id)
+            self._poll_timer_id = None
+
+    def _poll(self):
+        if not self._poller_running:
+            return False
+
+        self._first_line_of_poll = True
+        exec_shell_command_async(
+            "nmcli -t -f IP4.DNS con show --active 2>/dev/null",
+            self._on_dns_line,
+        )
+        self._poll_timer_id = GLib.timeout_add(self._poll_interval, self._poll)
+        return False
+
+    def _on_dns_line(self, line: str):
+        # exec_shell_command_async calls this once per stdout line.
+        # Only use the first line so we capture the primary DNS.
+        if not self._first_line_of_poll:
+            return
+        self._first_line_of_poll = False
+
+        raw = line.strip()
+        if not raw:
+            was = self._current
+            self._current = None
+            self._current_label = "Default"
+            if was != self._current:
+                self.notify("current")
+                self.emit("changed")
+            return
+
+        # Parse DNS entries from nmcli output
+        dns_ips: list[str] = [m.group(1) for m in _DNS_LINE_RE.finditer(raw)]
+
+        if not dns_ips:
+            return
+
+        primary = dns_ips[0]
+        if primary == self._current:
+            return
+
+        was = self._current
+        self._current = primary
+
+        # Try to match against known providers
+        for prov in DEFAULT_PROVIDERS:
+            if prov["primary"] == primary:
+                self._current_label = prov["label"]
+                break
+        else:
+            self._current_label = primary
+
+        if was != self._current:
+            self.notify("current")
+            self.emit("changed")
+
+    # ── Actions ─────────────────────────────────────────────────
+
+    def _get_active_connection(self) -> str:
+        """Return the UUID of the active connection, or empty string."""
+        import subprocess
+
+        try:
+            result = subprocess.run(
+                ["nmcli", "-t", "-f", "UUID", "con", "show", "--active"],
+                capture_output=True,
+                text=True,
+                timeout=5,
+            )
+            lines = [
+                line.strip()
+                for line in result.stdout.strip().split("\n")
+                if line.strip()
+            ]
+            return lines[0] if lines else ""
+        except Exception:
+            return ""
+
+    def set_dns(self, primary: str, secondary: str = ""):
+        """Switch to the given DNS servers via pkexec nmcli."""
+        uuid = self._get_active_connection()
+        if not uuid:
+            logger.warning("[DNS] No active NetworkManager connection found")
+            return
+
+        servers = primary
+        if secondary:
+            servers = f"{primary} {secondary}"
+
+        cmd = (
+            f"pkexec nmcli con mod {uuid} ipv4.dns '{servers}' && "
+            f"pkexec nmcli con mod {uuid} ipv4.ignore-auto-dns yes && "
+            f"nmcli con down {uuid} && nmcli con up {uuid}"
+        )
+        exec_shell_command_async(cmd, lambda *_: None)
+        self.emit("changed")
+
+    def switch_provider(self, index: int):
+        """Switch to a pre-configured provider by index."""
+        if 0 <= index < len(DEFAULT_PROVIDERS):
+            prov = DEFAULT_PROVIDERS[index]
+            self.set_dns(prov["primary"], prov["secondary"])
+
+    def reset_to_default(self):
+        """Reset DNS to ISP default (auto)."""
+        uuid = self._get_active_connection()
+        if not uuid:
+            logger.warning("[DNS] No active NetworkManager connection found")
+            return
+
+        cmd = (
+            f"pkexec nmcli con mod {uuid} ipv4.dns '' && "
+            f"pkexec nmcli con mod {uuid} ipv4.ignore-auto-dns no && "
+            f"nmcli con down {uuid} && nmcli con up {uuid}"
+        )
+        exec_shell_command_async(cmd, lambda *_: None)
+        self.emit("changed")
+
+    # ── Teardown ────────────────────────────────────────────────
+
+    def destroy(self):
+        self._stop_polling()
+        return super().destroy()
+
+
+# Singleton instance
+dns_switcher_service = DnsSwitcherService()

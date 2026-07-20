@@ -17,7 +17,7 @@ _CACHE_WRITE_DELAY_MS = 2000
 class IconResolver:
     """A class to resolve icons for applications."""
 
-    __slots__ = ("_cache_dirty", "_icon_dict", "_write_pending")
+    __slots__ = ("_cache_dirty", "_flush_timer_id", "_icon_dict", "_write_pending")
 
     _instance = None
     _initialized = False
@@ -105,7 +105,9 @@ class IconResolver:
         self._write_pending = True
         if self._flush_timer_id is not None:
             GLib.source_remove(self._flush_timer_id)
-        self._flush_timer_id = GLib.timeout_add(_CACHE_WRITE_DELAY_MS, self._flush_cache)
+        self._flush_timer_id = GLib.timeout_add(
+            _CACHE_WRITE_DELAY_MS, self._flush_cache
+        )
 
     def _flush_cache(self):
         """Write cache to disk if dirty."""

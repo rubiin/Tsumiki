@@ -91,7 +91,9 @@ class ScreenRecorderService(SingletonService):
         if delayed:
             if self._start_recording_timer_id is not None:
                 GLib.source_remove(self._start_recording_timer_id)
-            self._start_recording_timer_id = GLib.timeout_add(timeout, self.record_and_emit, command)
+            self._start_recording_timer_id = GLib.timeout_add(
+                timeout, self.record_and_emit, command
+            )
         else:
             self.record_and_emit(command)
 

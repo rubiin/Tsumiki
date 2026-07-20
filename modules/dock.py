@@ -10,7 +10,7 @@ from fabric.widgets.eventbox import EventBox
 from fabric.widgets.image import Image
 from fabric.widgets.revealer import Revealer
 
-from shared.widget_container import BaseWindow
+from shared.widget_container import BaseWindow, BoxWidget
 from utils.app import AppUtils
 from utils.config import tsumiki_config
 from utils.constants import PINNED_APPS_FILE
@@ -93,7 +93,7 @@ class DotIndicator(Gtk.DrawingArea):
         cr.fill()
 
 
-class AppBar(Box):
+class AppBar(BoxWidget):
     """A simple app bar widget for the dock."""
 
     @property
@@ -203,7 +203,9 @@ class AppBar(Box):
         else:
             self._register_handler(
                 self._hyprland_connection,
-                self._hyprland_connection.connect("event::ready", self._on_hyprland_ready),
+                self._hyprland_connection.connect(
+                    "event::ready", self._on_hyprland_ready
+                ),
             )
 
     def _on_hyprland_ready(self, *_):

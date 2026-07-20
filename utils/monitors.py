@@ -104,7 +104,9 @@ class MonitorWatcher:
     def on_monitor_changed(self, *_):
         if self._pending_timer_id is not None:
             GLib.source_remove(self._pending_timer_id)
-        self._pending_timer_id = GLib.timeout_add(MONITOR_HOTPLUG_DELAY_MS, self._notify_callbacks)
+        self._pending_timer_id = GLib.timeout_add(
+            MONITOR_HOTPLUG_DELAY_MS, self._notify_callbacks
+        )
 
     def _notify_callbacks(self):
         self._pending_timer_id = None

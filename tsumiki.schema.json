@@ -29,6 +29,61 @@
 						}
 					}
 				},
+				"dns_switcher": {
+					"type": "object",
+					"properties": {
+						"tooltip": {
+							"type": "boolean",
+							"default": true,
+							"description": "Show tooltip with current DNS provider."
+						},
+						"label": {
+							"type": "boolean",
+							"default": false,
+							"description": "Show text label beside the icon."
+						},
+						"label_text": {
+							"type": "string",
+							"default": "DNS",
+							"description": "Label text shown when label is enabled."
+						},
+						"icon": {
+							"type": "string",
+							"default": "󰚘",
+							"description": "Nerd Font icon for the DNS switcher."
+						}
+					}
+				},
+				"cloudflare_warp": {
+					"type": "object",
+					"properties": {
+						"tooltip": {
+							"type": "boolean",
+							"default": true,
+							"description": "Show tooltip with WARP connection status."
+						},
+						"label": {
+							"type": "boolean",
+							"default": false,
+							"description": "Show text label beside the icon."
+						},
+						"label_text": {
+							"type": "string",
+							"default": "WARP",
+							"description": "Label text shown when label is enabled."
+						},
+						"connected_icon": {
+							"type": "string",
+							"default": "",
+							"description": "Nerd Font icon when WARP is connected."
+						},
+						"disconnected_icon": {
+							"type": "string",
+							"default": "",
+							"description": "Nerd Font icon when WARP is disconnected."
+						}
+					}
+				},
 				"git_companion": {
 					"type": "object",
 					"properties": {
@@ -2266,6 +2321,8 @@
 									"cava",
 									"breathe",
 									"click_counter",
+									"cloudflare_warp",
+									"dns_switcher",
 									"cpu",
 									"date_time",
 									"emoji_picker",
@@ -2360,6 +2417,8 @@
 									"cava",
 									"breathe",
 									"click_counter",
+									"cloudflare_warp",
+									"dns_switcher",
 									"cpu",
 									"date_time",
 									"emoji_picker",
@@ -2454,6 +2513,8 @@
 									"cava",
 									"breathe",
 									"click_counter",
+									"cloudflare_warp",
+									"dns_switcher",
 									"cpu",
 									"date_time",
 									"emoji_picker",
@@ -2561,6 +2622,8 @@
 										"cava",
 										"breathe",
 										"click_counter",
+										"cloudflare_warp",
+										"dns_switcher",
 										"cpu",
 										"date_time",
 										"emoji_picker",
@@ -2674,6 +2737,8 @@
 										"cava",
 										"breathe",
 										"click_counter",
+										"cloudflare_warp",
+										"dns_switcher",
 										"cpu",
 										"date_time",
 										"emoji_picker",

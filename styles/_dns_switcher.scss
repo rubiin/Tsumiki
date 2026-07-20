@@ -1,0 +1,167 @@
+@use "theme";
+@use "common";
+@use "sass:color";
+
+#dns_switcher {
+  @include common.widget_border(16px, false, 1px);
+}
+
+#dns-switcher-popover {
+  min-width: 300px;
+  padding: 12px;
+  border-radius: 14px;
+
+  #dns-header {
+    margin-bottom: 4px;
+
+    .dns-header-icon {
+      font-size: 20px;
+      color: theme.$accent-blue;
+    }
+
+    #dns-header-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: theme.$text-main;
+    }
+
+    #dns-header-status {
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .dns-status-active {
+      color: theme.$accent-green;
+    }
+
+    .dns-status-default {
+      color: theme.$text-disabled;
+    }
+  }
+
+  #dns-scroll {
+    padding: 4px 0;
+    min-height: 100px;
+    background-color: rgba(theme.$background-alt, 0.5);
+    border-radius: 10px;
+  }
+
+  #dns-provider-list {
+    #dns-provider-btn {
+      padding: 10px 14px;
+      border-radius: 10px;
+      background-color: transparent;
+
+      &:hover {
+        background-color: theme.$background-alt;
+      }
+
+      &.dns-provider-btn-active {
+        background-color: theme.$accent-blue;
+
+        &:hover {
+          background-color: color.mix(theme.$accent-blue, white, 10%);
+        }
+
+        .dns-radio-icon {
+          font-size: 14px;
+          color: theme.$background-dark;
+          margin-right: 2px;
+        }
+
+        .dns-provider-label {
+          font-size: 14px;
+          font-weight: 600;
+          color: theme.$background-dark;
+        }
+
+        .dns-provider-ip {
+          font-size: 11px;
+          color: rgba(theme.$background-dark, 0.7);
+        }
+      }
+
+      .dns-radio-icon {
+        font-size: 14px;
+        color: theme.$text-disabled;
+        margin-right: 2px;
+      }
+
+      .dns-provider-label {
+        font-size: 14px;
+        font-weight: 600;
+        color: theme.$text-main;
+      }
+
+      .dns-provider-ip {
+        font-size: 11px;
+        color: theme.$text-disabled;
+      }
+    }
+  }
+
+  #dns-add-btn {
+    padding: 8px 14px;
+    border-radius: 10px;
+    background-color: rgba(theme.$accent-blue, 0.15);
+    color: theme.$accent-blue;
+
+    &:hover {
+      background-color: rgba(theme.$accent-blue, 0.25);
+    }
+
+    &.dns-cancel-btn {
+      background-color: theme.$background-alt;
+      color: theme.$text-main;
+
+      &:hover {
+        background-color: theme.$background-alt;
+      }
+    }
+
+    .dns-btn-icon {
+      font-size: 14px;
+    }
+  }
+
+  #dns-add-form {
+    #dns-custom-name,
+    #dns-custom-ip {
+      padding: 6px 10px;
+      border-radius: 8px;
+      background-color: theme.$background-alt;
+      color: theme.$text-main;
+      font-size: 13px;
+      min-height: 28px;
+    }
+
+    #dns-save-btn {
+      padding: 6px 14px;
+      border-radius: 8px;
+      background-color: theme.$accent-green;
+      color: theme.$background-dark;
+      font-weight: 600;
+      font-size: 13px;
+
+      &:hover {
+        background-color: color.mix(theme.$accent-green, white, 10%);
+      }
+    }
+  }
+
+  #dns-reset-btn {
+    margin-top: 4px;
+    padding: 8px 14px;
+    border-radius: 10px;
+    background-color: rgba(theme.$accent-red, 0.15);
+    color: theme.$accent-red;
+
+    &:hover {
+      background-color: rgba(theme.$accent-red, 0.25);
+    }
+
+    .dns-btn-icon {
+      font-size: 12px;
+    }
+  }
+}

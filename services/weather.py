@@ -115,7 +115,13 @@ class WeatherService(SingletonService):
                 lat = float(data[0]["latitude"])
                 lon = float(data[0]["longitude"])
                 return lat, lon
-        except (httpx.RequestError, KeyError, IndexError, ValueError, json.JSONDecodeError) as e:
+        except (
+            httpx.RequestError,
+            KeyError,
+            IndexError,
+            ValueError,
+            json.JSONDecodeError,
+        ) as e:
             logger.exception("Error geocoding location", e)
         return None
 
@@ -301,7 +307,13 @@ class WeatherService(SingletonService):
 
                 return weather_data
 
-            except (httpx.RequestError, KeyError, IndexError, ValueError, json.JSONDecodeError) as e:
+            except (
+                httpx.RequestError,
+                KeyError,
+                IndexError,
+                ValueError,
+                json.JSONDecodeError,
+            ) as e:
                 logger.exception("Error fetching weather data: %s", e)
                 time.sleep(delay * (attempt + 1))
 

@@ -1,0 +1,52 @@
+@use "theme";
+@use "common";
+@use "variable";
+
+#cloudflare_warp {
+  @include common.widget_border(16px, false, 1px);
+}
+
+#cloudflare-warp-popover {
+  min-width: 220px;
+  padding: 16px;
+  border-radius: 14px;
+
+  #warp-status-box {
+    .warp-status-icon {
+      font-size: 32px;
+    }
+
+    .warp-connected {
+      color: theme.$accent-green;
+    }
+
+    .warp-disconnected {
+      color: theme.$text-disabled;
+    }
+
+    #warp-status-label {
+      font-size: 16px;
+      font-weight: 700;
+      color: theme.$text-main;
+    }
+
+    .warp-mode-text {
+      font-size: 12px;
+      color: theme.$text-muted;
+    }
+  }
+
+  #warp-toggle-btn {
+    min-height: 36px;
+    padding: 0 24px;
+    border-radius: 18px;
+    background-color: theme.$accent-blue;
+    color: theme.$background-dark;
+    font-weight: 700;
+    font-size: 14px;
+
+    &:hover {
+      background-color: theme.$accent-lavender;
+    }
+  }
+}

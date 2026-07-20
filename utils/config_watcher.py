@@ -132,7 +132,9 @@ class ConfigWatcher:
         if self._restart_timer_id is not None:
             GLib.source_remove(self._restart_timer_id)
         # Delay restart slightly to batch rapid config writes.
-        self._restart_timer_id = GLib.timeout_add(self._restart_delay, self._restart_if_allowed)
+        self._restart_timer_id = GLib.timeout_add(
+            self._restart_delay, self._restart_if_allowed
+        )
 
     def _restart_if_allowed(self) -> bool:
         """Restart after debounce while respecting cooldown between restarts."""
@@ -145,7 +147,9 @@ class ConfigWatcher:
                 # Cancel any existing cooldown timer
                 if self._cooldown_timer_id is not None:
                     GLib.source_remove(self._cooldown_timer_id)
-                self._cooldown_timer_id = GLib.timeout_add(wait_ms, self._restart_if_allowed)
+                self._cooldown_timer_id = GLib.timeout_add(
+                    wait_ms, self._restart_if_allowed
+                )
                 return False
 
         self._restart_pending = False

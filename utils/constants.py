@@ -119,6 +119,8 @@ DEFAULT_CONFIG = {
         "cava": {"bars": 10, "color": "#89b4fa"},
         "overview_button": {"icon": "󰡃", "tooltip": True, "label": False},
         "click_counter": {"count": 0},
+        "dns_switcher": {"count": 0},
+        "cloudflare_warp": {"count": 0},
         "cpu": {
             "show_icon": True,
             "icon": "",

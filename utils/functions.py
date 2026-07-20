@@ -478,7 +478,13 @@ def copy_themev2(theme: str, mode: str = "dark"):
 def parse_hyprland_reply(reply: HyprlandReply) -> dict:
     try:
         return json.loads(reply.reply.decode().strip("\n"))
-    except (json.JSONDecodeError, AttributeError, KeyError, TypeError, UnicodeDecodeError) as e:
+    except (
+        json.JSONDecodeError,
+        AttributeError,
+        KeyError,
+        TypeError,
+        UnicodeDecodeError,
+    ) as e:
         logger.exception(f"Failed to parse hyprland reply: {e}")
         return {}
 

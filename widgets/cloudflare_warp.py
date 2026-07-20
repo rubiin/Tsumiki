@@ -1,0 +1,156 @@
+from fabric.utils import GLib
+from fabric.widgets.box import Box
+from fabric.widgets.button import Button
+from fabric.widgets.label import Label
+
+from services.cloudflare_warp import cloudflare_warp_service
+from shared.mixins import PopoverMixin
+from shared.widget_container import ButtonWidget
+from utils.exceptions import ExecutableNotFoundError
+from utils.functions import check_executable_exists
+from utils.widget_utils import nerd_font_icon
+
+
+class CloudflareWarpPopover(Box):
+    """Popover content with WARP connection controls and status details."""
+
+    def __init__(self, parent=None, **kwargs):
+        super().__init__(
+            name="cloudflare-warp-popover",
+            orientation="v",
+            spacing=12,
+            **kwargs,
+        )
+
+        self._parent = parent
+        self._service = cloudflare_warp_service
+
+        # ── Status indicator ──
+        self._status_icon = nerd_font_icon(
+            icon="",
+            props={"style_classes": ["warp-status-icon"]},
+        )
+
+        self._status_label = Label(
+            name="warp-status-label",
+            label="Checking...",
+            h_align="center",
+        )
+
+        status_box = Box(
+            name="warp-status-box",
+            orientation="v",
+            spacing=6,
+            h_align="center",
+            children=[self._status_icon, self._status_label],
+        )
+
+        # ── Toggle button ──
+        self._toggle_btn = Button(
+            name="warp-toggle-btn",
+            label="Connect",
+            h_align="center",
+            on_clicked=lambda *_: self._on_toggle(),
+        )
+
+        # ── Layout ──
+        self.children = [status_box, self._toggle_btn]
+
+        self._handler_id = self._service.connect("changed", self._on_status_changed)
+        self.connect("destroy", self._on_destroy)
+
+        self._on_status_changed()
+
+    def _on_status_changed(self, *_):
+        connected = self._service.connected
+
+        if connected:
+            self._status_icon.set_label("")
+            self._status_icon.set_style_classes(["warp-status-icon", "warp-connected"])
+            self._status_label.set_label("Connected")
+            self._toggle_btn.set_label("Disconnect")
+        else:
+            self._status_icon.set_label("")
+            self._status_icon.set_style_classes(
+                ["warp-status-icon", "warp-disconnected"]
+            )
+            self._status_label.set_label("Disconnected")
+            self._toggle_btn.set_label("Connect")
+
+        self._toggle_btn.set_sensitive(True)
+
+    def _on_toggle(self):
+        self._toggle_btn.set_sensitive(False)
+        self._service.toggle_warp()
+        # Re-enable after a short delay
+        GLib.timeout_add(2000, lambda: self._toggle_btn.set_sensitive(True) or False)
+
+    def _on_destroy(self, *_):
+        if self._handler_id:
+            self._service.disconnect(self._handler_id)
+            self._handler_id = None
+
+    def close(self, *_):
+        if self._parent:
+            self._parent.hide_popover()
+
+
+class CloudflareWarpWidget(ButtonWidget, PopoverMixin):
+    """Bar widget showing Cloudflare WARP connection status."""
+
+    def __init__(self, **kwargs):
+        super().__init__(name="cloudflare_warp", **kwargs)
+
+        self._service = cloudflare_warp_service
+        self._available = True
+
+        self._connected_icon = self.config.get("connected_icon", "")
+        self._disconnected_icon = self.config.get("disconnected_icon", "")
+
+        # Check if warp-cli is installed
+        try:
+            check_executable_exists("warp-cli")
+        except ExecutableNotFoundError:
+            self._available = False
+            self._connected_icon = ""
+            self._disconnected_icon = ""
+
+        if self._available:
+            self._icon = nerd_font_icon(
+                icon=self._connected_icon,
+                props={"style_classes": ["panel-font-icon"]},
+            )
+            self.set_tooltip_text("Cloudflare WARP")
+            self._register_handler(
+                self._service,
+                self._service.connect("changed", self._on_status_changed),
+            )
+        else:
+            self._icon = nerd_font_icon(
+                icon="",
+                props={"style_classes": ["panel-font-icon"]},
+            )
+            self.set_tooltip_text("WARP: warp-cli not found")
+
+        self.container_box.add(self._icon)
+
+        if self.config.get("label", False):
+            self.container_box.add(
+                Label(
+                    label=self.config.get("label_text", "WARP"),
+                    style_classes=["panel-text"],
+                )
+            )
+
+        if self._available:
+            self.setup_popover(lambda: CloudflareWarpPopover(parent=self))
+
+    def _on_status_changed(self, *_):
+        if not self._available:
+            return
+        if self._service.connected:
+            self._icon.set_label(self._connected_icon)
+            self.set_tooltip_text("WARP: Connected")
+        else:
+            self._icon.set_label(self._disconnected_icon)
+            self.set_tooltip_text("WARP: Disconnected")

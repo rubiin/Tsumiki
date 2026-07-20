@@ -43,7 +43,9 @@ class QuotesService(SingletonService):
                 response.raise_for_status()
                 return response.json()
             except Exception as e:
-                logger.warning(f"[Quotes] Fetch failed (attempt {attempt + 1}/{retries}): {e}")
+                logger.warning(
+                    f"[Quotes] Fetch failed (attempt {attempt + 1}/{retries}): {e}"
+                )
                 time.sleep(delay * (attempt + 1))
         return None
 

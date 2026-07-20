@@ -713,6 +713,52 @@ default_tab = "issues"      # "issues" | "pull_requests"
 cache_ttl = 300
 ```
 
+### Cloudflare WARP
+
+Manage Cloudflare WARP VPN connection — connect, disconnect, and view status.
+
+```toml
+[widgets.cloudflare_warp]
+label = false
+label_text = "WARP"
+tooltip = true
+connected_icon = ""
+disconnected_icon = ""
+```
+
+- **connected_icon** / **disconnected_icon**: Nerd Font icons shown in the bar for each state.
+- Click the widget to open a popover with a toggle button.
+- Requires `warp-cli` from [Cloudflare WARP Client for Linux](https://developers.cloudflare.com/warp-client/get-started/linux/).
+- The service polls `warp-cli status` every 5 seconds to detect state changes.
+
+### DNS Switcher
+
+Quickly switch between popular DNS providers directly from the bar.
+
+```toml
+[widgets.dns_switcher]
+icon = "󰚘"
+label = false
+label_text = "DNS"
+tooltip = true
+```
+
+Click to open a popover with pre-configured providers:
+
+| Provider | Primary DNS | Secondary DNS |
+|---|---|---|
+| Cloudflare | `1.1.1.1` | `1.0.0.1` |
+| Google | `8.8.8.8` | `8.8.4.4` |
+| OpenDNS | `208.67.222.222` | `208.67.220.220` |
+| AdGuard | `94.140.14.14` | `94.140.15.15` |
+| Quad9 | `9.9.9.9` | `149.112.112.112` |
+
+Includes a "Reset to Default (ISP)" button to restore automatic DNS.
+
+- Uses `nmcli` (NetworkManager) to manage DNS settings.
+- DNS changes require Polkit authentication (`pkexec`).
+- The service polls `nmcli` every 3 seconds to detect the current DNS server.
+
 ### IP Monitor
 
 Displays the current IP address.
