@@ -1,5 +1,4 @@
 from contextlib import suppress
-from functools import lru_cache
 
 from fabric.hyprland.widgets import get_hyprland_connection
 from fabric.utils import Gdk, GdkPixbuf, GLib, Gtk, logger
@@ -13,7 +12,7 @@ from fabric.widgets.overlay import Overlay
 
 from shared.popup import PopupWindow
 from utils.app import AppUtils
-from utils.functions import parse_hyprland_reply, safe_disconnect
+from utils.functions import parse_hyprland_reply, safe_disconnect, ttl_lru_cache
 from utils.icon_resolver import IconResolver
 from utils.widget_settings import BarConfig
 from utils.widget_utils import create_surface_from_widget
@@ -22,7 +21,7 @@ SCALE = 0.14
 TARGET = [Gtk.TargetEntry.new("text/plain", Gtk.TargetFlags.SAME_APP, 0)]
 
 
-@lru_cache(maxsize=256)
+@ttl_lru_cache(seconds_to_live=3600, maxsize=256)
 def _resolve_icon_pixbuf(
     icon_resolver: IconResolver,
     app_id: str,

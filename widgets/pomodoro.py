@@ -7,7 +7,7 @@ from fabric.widgets.label import Label
 from fabric.widgets.overlay import Overlay
 
 from shared.mixins import PopoverMixin
-from shared.widget_container import ButtonWidget
+from shared.widget_container import ButtonWidget, TeardownMixin
 from utils.widget_utils import nerd_font_icon
 
 
@@ -46,7 +46,7 @@ class CircularProgressWidget(Gtk.DrawingArea):
         cr.stroke()
 
 
-class PomodoroMenu(Box):
+class PomodoroMenu(Box, TeardownMixin):
     """Popover content for pomodoro timer."""
 
     def __init__(self, parent=None, **kwargs):
@@ -176,9 +176,7 @@ class PomodoroMenu(Box):
         self.connect("destroy", self._on_destroy)
 
     def _on_destroy(self, *_):
-        if self.timer_id is not None:
-            GLib.source_remove(self.timer_id)
-            self.timer_id = None
+        self.timer_id = None
 
     def _get_current_duration(self) -> int:
         """Get total duration of current session."""
@@ -257,7 +255,7 @@ class PomodoroMenu(Box):
         self.elapsed = 0
         self.is_running = True
         self._update_display()
-        self.timer_id = GLib.timeout_add(1000, self._tick)
+        self.timer_id = self._register_repeater(GLib.timeout_add(1000, self._tick))
 
     def start(self):
         """Start timer."""
@@ -266,7 +264,7 @@ class PomodoroMenu(Box):
 
         self.is_running = True
         self._update_display()
-        self.timer_id = GLib.timeout_add(1000, self._tick)
+        self.timer_id = self._register_repeater(GLib.timeout_add(1000, self._tick))
 
     def pause(self):
         """Pause timer."""

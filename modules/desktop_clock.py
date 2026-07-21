@@ -5,11 +5,11 @@ from fabric.utils import GLib, Gtk
 from fabric.widgets.box import Box
 from fabric.widgets.datetime import DateTime
 
-from shared.widget_container import BaseWindow
+from shared.widget_container import BaseWindow, TeardownMixin
 from utils.widget_settings import BarConfig
 
 
-class CookieClockFace(Gtk.DrawingArea):
+class CookieClockFace(Gtk.DrawingArea, TeardownMixin):
     """Cookie-style analog clock face inspired by the QML reference."""
 
     def __init__(self, config: dict):
@@ -44,7 +44,9 @@ class CookieClockFace(Gtk.DrawingArea):
 
         self.now = datetime.now()
         tick_interval_ms = 1000 if self.show_seconds else 60000
-        self._tick_id = GLib.timeout_add(tick_interval_ms, self._tick)
+        self._tick_id = self._register_repeater(
+            GLib.timeout_add(tick_interval_ms, self._tick)
+        )
         self.set_size_request(
             self._scaled_clock_size + self._pad,
             self._scaled_clock_size + self._pad,
@@ -58,9 +60,7 @@ class CookieClockFace(Gtk.DrawingArea):
         return True
 
     def _on_destroy(self, *_):
-        if self._tick_id is not None:
-            GLib.source_remove(self._tick_id)
-            self._tick_id = None
+        self._tick_id = None
 
     @staticmethod
     def _draw_badge(cr, x, y, radius, fill, text, font_size):

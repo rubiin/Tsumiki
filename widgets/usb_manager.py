@@ -15,11 +15,11 @@ from fabric.widgets.label import Label
 from shared.buttons import HoverButton, ScanButton
 from shared.list import ListBox
 from shared.mixins import PopoverMixin
-from shared.widget_container import ButtonWidget
+from shared.widget_container import ButtonWidget, TeardownMixin
 from utils.widget_utils import nerd_font_icon
 
 
-class USBManagerMenu(Box):
+class USBManagerMenu(Box, TeardownMixin):
     """Popover content for managing removable USB drives."""
 
     def __init__(self, parent=None, config=None, **kwargs):
@@ -110,6 +110,8 @@ class USBManagerMenu(Box):
         self.connect("destroy", self._on_destroy)
         self.refresh_devices()
 
+    # Invoked from _on_action_done — timer cleanup is handled by TeardownMixin
+
     def _update_footer_buttons(self):
         mounted_count = sum(1 for device in self.devices if device.get("mountpoint"))
         parent_paths = {
@@ -128,9 +130,7 @@ class USBManagerMenu(Box):
         self.refresh_devices(animate=True)
 
     def _on_destroy(self, *_):
-        if self._refresh_timer_id is not None:
-            GLib.source_remove(self._refresh_timer_id)
-            self._refresh_timer_id = None
+        self._refresh_timer_id = None
         return None
 
     def close(self, *_):
@@ -484,7 +484,9 @@ class USBManagerMenu(Box):
     def _on_action_done(self, *_):
         if self._refresh_timer_id is not None:
             GLib.source_remove(self._refresh_timer_id)
-        self._refresh_timer_id = GLib.timeout_add(250, self._refresh_after_action)
+        self._refresh_timer_id = self._register_repeater(
+            GLib.timeout_add(250, self._refresh_after_action)
+        )
 
     def _refresh_after_action(self):
         self.refresh_devices()

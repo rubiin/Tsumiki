@@ -24,14 +24,14 @@ from fabric.widgets.scrolledwindow import ScrolledWindow
 
 from shared.list import ListBox
 from shared.mixins import PopoverMixin
-from shared.widget_container import ButtonWidget
+from shared.widget_container import ButtonWidget, TeardownMixin
 from utils.widget_utils import get_text_icon, nerd_font_icon
 
 # Pre-compiled regex for HTML image tag detection
 _HTML_IMG_RE = re.compile(r"^\s*<img\s+")
 
 
-class ClipHistoryMenu(Box):
+class ClipHistoryMenu(Box, TeardownMixin):
     """A widget to display and manage clipboard history."""
 
     def __init__(
@@ -79,7 +79,7 @@ class ClipHistoryMenu(Box):
         self.loading = False
         self.max_items = 0  # Will be set when items are loaded
 
-        self._search_timer_id = 0  # Timer ID for search text change
+        self._search_timer_id = None  # Timer ID for search text change
 
         self.viewport = ListBox(
             name="viewport",
@@ -151,6 +151,7 @@ class ClipHistoryMenu(Box):
 
         self.children = [self.header_box, self.scrolled_window]
         self.connect("destroy", self._on_destroy)
+        self._search_timer_id = None
 
     def on_icon_press(self, entry, icon_pos, event):
         if icon_pos == Gtk.EntryIconPosition.SECONDARY:
@@ -190,19 +191,21 @@ class ClipHistoryMenu(Box):
 
     def on_search_text_changed(self, entry, pspec):
         # Remove any existing pending filter operation
-        if self._search_timer_id > 0:
-            remove_handler(self._search_timer_id)
-            self._search_timer_id = 0
+        if self._search_timer_id is not None:
+            GLib.source_remove(self._search_timer_id)
+            self._search_timer_id = None
 
-        # Start a new timer to filter after a delay
-        self._search_timer_id = GLib.timeout_add(
-            250,  # Milliseconds delay (e.g., 250ms)
-            lambda: self._perform_filter_after_delay(entry),
+        # Start a new timer to filter after a delay, registered for auto-cleanup
+        self._search_timer_id = self._register_repeater(
+            GLib.timeout_add(
+                250,  # Milliseconds delay
+                lambda: self._perform_filter_after_delay(entry),
+            )
         )
 
     def _perform_filter_after_delay(self, entry):
         self.filter_items(entry, None)  # Call the actual filter method
-        self._search_timer_id = 0  # Reset the timer ID
+        self._search_timer_id = None  # Reset the timer ID
         return False  # Do not repeat the timeout
 
     def close(self, *_):
@@ -790,10 +793,11 @@ class ClipHistoryMenu(Box):
         return False
 
     def _cleanup_resources(self):
-        """Best-effort cleanup for timers, caches, and temporary resources."""
-        if self._search_timer_id > 0:
-            remove_handler(self._search_timer_id)
-            self._search_timer_id = 0
+        """Best-effort cleanup for timers, caches, and temporary resources.
+
+        Timer cleanup is handled by TeardownMixin._teardown.
+        """
+        self._search_timer_id = None
 
         if self._arranger_handler:
             remove_handler(self._arranger_handler)

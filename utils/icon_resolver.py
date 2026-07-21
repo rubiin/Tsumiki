@@ -1,8 +1,6 @@
-from functools import lru_cache
-
 from fabric.utils import GdkPixbuf, GLib, Gtk, logger, os, re
 
-from utils.functions import read_json_file, write_json_file
+from utils.functions import read_json_file, ttl_lru_cache, write_json_file
 
 from .constants import ICON_CACHE_FILE
 from .icons import symbolic_icons
@@ -73,7 +71,7 @@ class IconResolver:
         except GLib.GError:
             return self.get_icon_pixbuf(app_id, icon_size)
 
-    @lru_cache(maxsize=256)
+    @ttl_lru_cache(seconds_to_live=3600, maxsize=256)
     def get_icon_pixbuf(self, app_id: str, size: int = 16):
         icon_name = self.get_icon_name(app_id)
         try:
