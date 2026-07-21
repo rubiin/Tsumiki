@@ -7,7 +7,6 @@ from fabric.utils import (
     Gtk,
     bulk_connect,
     logger,
-    os,
 )
 from fabric.widgets.box import Box
 from fabric.widgets.grid import Grid

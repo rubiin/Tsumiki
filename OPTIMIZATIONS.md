@@ -131,13 +131,13 @@ Uses `Gio.Subprocess.new()` with manual `Gio.Task` callbacks instead of `exec_sh
 
 **Fix**: Refactor to use `exec_shell_command_async()` or `Gio.SubprocessLauncher`.
 
-### 14. Clipboard Widget Heavy Subprocess Launcher Usage
+### ~~14. Clipboard Widget Heavy Subprocess Launcher Usage~~
 **Files**: `widgets/clipboard.py`
 **Effort**: Small | **Impact**: Low
 
-Creates new `Gio.SubprocessLauncher` instances per clipboard operation. Clipboard history re-queried on every toggle with no caching.
-
-**Fix**: Cache clipboard history with a TTL. Reuse `Gio.SubprocessLauncher` instances.
+✅ Done:
+- `_launcher_cache` class dict reuses `Gio.SubprocessLauncher` instances by flags — avoids allocating a new launcher on every `cliphist list` / `decode` / `delete` / `wipe` call
+- Clipboard history cached with 3s TTL (`_cache_loaded_at` timestamp) — re-opening the popover within 3s skips `cliphist list` entirely, falling back to the previously loaded items
 
 ### 15. Battery Service Creates Separate DBus Connection
 **Files**: `services/battery.py`

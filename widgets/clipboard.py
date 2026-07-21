@@ -1,5 +1,6 @@
 import shutil
 import tempfile
+from typing import ClassVar
 from urllib.parse import unquote, urlparse
 
 from fabric.utils import (
@@ -14,6 +15,7 @@ from fabric.utils import (
     os,
     re,
     remove_handler,
+    time,
 )
 from fabric.widgets.box import Box
 from fabric.widgets.button import Button
@@ -79,6 +81,9 @@ class ClipHistoryMenu(Box, TeardownMixin):
         self.loading = False
         self.max_items = 0  # Will be set when items are loaded
 
+        self._cache_loaded_at: float | None = (
+            None  # Timestamp of last clipboard list load
+        )
         self._search_timer_id = None  # Timer ID for search text change
 
         self.viewport = ListBox(
@@ -157,8 +162,13 @@ class ClipHistoryMenu(Box, TeardownMixin):
         if icon_pos == Gtk.EntryIconPosition.SECONDARY:
             self.search_entry.set_text("")
 
+    _launcher_cache: ClassVar[dict[int, Gio.SubprocessLauncher]] = {}
+
     def _make_launcher(self, flags):
-        return Gio.SubprocessLauncher.new(flags)
+        """Return a cached ``Gio.SubprocessLauncher`` for the given flags."""
+        if flags not in self._launcher_cache:
+            self._launcher_cache[flags] = Gio.SubprocessLauncher.new(flags)
+        return self._launcher_cache[flags]
 
     def _load_next_batch(self):
         if self.loading or self.max_items == 0 or self.items_loaded >= self.max_items:
@@ -220,10 +230,22 @@ class ClipHistoryMenu(Box, TeardownMixin):
         """Open the clipboard history panel and load items"""
         if self._loading:
             return
+
+        # Check TTL cache — skip subprocess if items were loaded recently
+        cache_ttl = (self.config or {}).get("cache_ttl", 3)
+        if (
+            self.clipboard_items
+            and self._cache_loaded_at is not None
+            and time.time() - self._cache_loaded_at < cache_ttl
+        ):
+            self._display_clipboard_items()
+            self.search_entry.set_text("")
+            self.search_entry.grab_focus()
+            return
+
         self._loading = True
-        self.search_entry.set_text("")  # Clear search
+        self.search_entry.set_text("")
         self.search_entry.grab_focus()
-        # Start loading asynchronously
         self._load_clipboard_items_async()
 
     def _load_clipboard_items_async(self, *_):
@@ -263,6 +285,7 @@ class ClipHistoryMenu(Box, TeardownMixin):
     def _update_items(self, new_items):
         """Update the items list from main thread"""
         self.clipboard_items = new_items
+        self._cache_loaded_at = time.time()
         available_ids = {
             item.split("\t", 1)[0] if "\t" in item else item for item in new_items
         }
