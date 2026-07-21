@@ -10,6 +10,7 @@ from shared.mixins import PopoverMixin
 from shared.widget_container import ButtonWidget
 from utils.constants import ASSETS_DIR
 from utils.decorators import run_in_thread
+from utils.functions import ensure_file
 from utils.widget_utils import nerd_font_icon
 
 # Module-level cache for emoji data — parsed once, reused across picker opens
@@ -40,6 +41,7 @@ class EmojiPickerMenu(Box):
         self._emoji_loading = False  # Loading state flag
         self._pending_query = None  # Query to execute after loading
         self._emoji_file_path = f"{ASSETS_DIR}/emoji.json"
+        ensure_file(os.path.dirname(self._emoji_file_path))
 
         self.stack = Stack(
             name="viewport",
@@ -99,13 +101,6 @@ class EmojiPickerMenu(Box):
         @run_in_thread
         def _load():
             try:
-                if not os.path.exists(self._emoji_file_path):
-                    logger.exception(
-                        f"Emoji JSON file not found: {self._emoji_file_path}"
-                    )
-                    idle_add(self._on_emoji_load_complete, {}, callback)
-                    return
-
                 # Use ijson for streaming JSON parsing
                 with open(self._emoji_file_path, "r") as f:
                     emoji_dict = {

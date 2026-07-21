@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 
-from fabric.utils import exec_shell_command, logger, os, re
+from fabric.utils import exec_shell_command, logger, os, re, time
 
 from .base import SingletonService
 
@@ -130,7 +130,18 @@ class PrivacyIndicatorService(SingletonService):
 
         return list(apps)
 
+    _cached_video_devs: set[str] | None = None
+    _video_devs_cache_time: float = 0.0
+    _VIDEO_DEVS_TTL: float = 30.0
+
     def _camera_video_devices(self):
+        now = time.time()
+        if (
+            self._cached_video_devs is not None
+            and now - self._video_devs_cache_time < self._VIDEO_DEVS_TTL
+        ):
+            return self._cached_video_devs
+
         video_devs = set()
 
         for dev in Path("/sys/class/video4linux").glob("video*"):
@@ -144,6 +155,8 @@ class PrivacyIndicatorService(SingletonService):
 
             video_devs.add(f"/dev/{dev.name}")
 
+        self._cached_video_devs = video_devs
+        self._video_devs_cache_time = now
         return video_devs
 
     def detect_camera_apps(self, filter_regex=None):

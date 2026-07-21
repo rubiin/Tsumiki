@@ -1158,6 +1158,65 @@ def take_snapshot():
     return True  # Keep the timeout active
 
 
+# ── Shared HTTP client ───────────────────────────────────────
+
+_shared_http_client = None
+
+
+def get_http_client():
+    """Return a shared ``httpx.Client`` with connection pooling.
+
+    Services that make HTTP requests (weather, quotes, etc.) should use
+    this instead of creating throwaway ``httpx.Client`` or ``urlopen``
+    instances per call.  The shared session reuses TCP connections,
+    caches DNS, and applies consistent timeout / User-Agent defaults.
+
+    The underlying ``httpx`` module is imported lazily, so there is no
+    import cost for configurations that never make HTTP requests.
+    """
+    global _shared_http_client
+    if _shared_http_client is None:
+        import httpx
+
+        _shared_http_client = httpx.Client(
+            headers={
+                "User-Agent": (
+                    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                    "AppleWebKit/537.36 (KHTML, like Gecko) "
+                    "Chrome/58.0.3029.110 Safari/537.3"
+                )
+            },
+            timeout=httpx.Timeout(10.0),
+            limits=httpx.Limits(
+                max_keepalive_connections=5,
+                max_connections=10,
+            ),
+        )
+    return _shared_http_client
+
+
+# ── TTL-cached path existence ─────────────────────────────────
+
+_path_exists_cache: dict[str, tuple[bool, float]] = {}
+
+
+def path_exists_ttl(path: str, ttl: int = 300) -> bool:
+    """Check if a filesystem path exists, with TTL caching.
+
+    Caches ``os.path.exists`` results to avoid redundant syscalls on
+    hot paths (system tray icon checks, device scans, etc.).  The
+    cache is a simple module-level dict; entries live at most *ttl*
+    seconds before a fresh stat is issued.
+    """
+    now = time.time()
+    cached = _path_exists_cache.get(path)
+    if cached is not None and now - cached[1] < ttl:
+        return cached[0]
+    result = os.path.exists(path)
+    _path_exists_cache[path] = (result, now)
+    return result
+
+
 # Pre-defined log domains tuple (immutable)
 _LOG_DOMAINS = (
     None,  # Default domain

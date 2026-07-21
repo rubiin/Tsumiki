@@ -1,7 +1,6 @@
 import random
 from typing import Callable, Optional
 
-import httpx
 from fabric.utils import idle_add, logger, os, time
 
 from utils.constants import QUOTES_CACHE_FILE
@@ -21,22 +20,12 @@ class QuotesService(SingletonService):
         super().__init__()
         self.api_url = "https://zenquotes.io/api/quotes"
 
-    def _make_session(self) -> httpx.Client:
-        """Create a throwaway session to avoid holding state in memory."""
-        session = httpx.Client(
-            headers={
-                "User-Agent": (
-                    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
-                    "(KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3"
-                )
-            }
-        )
-        return session
-
     def simple_quotes_info(
         self, retries: int = 3, delay: float = 2.0
     ) -> Optional[dict]:
-        session = self._make_session()
+        from utils.functions import get_http_client
+
+        session = get_http_client()
         for attempt in range(retries):
             try:
                 response = session.get(self.api_url, timeout=10.0)

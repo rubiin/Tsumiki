@@ -82,19 +82,18 @@ Many widgets connect to signals directly without using `_register_handler()` fro
 
 **Fix**: Use `send_command_async()` with callbacks. Combine related queries into fewer round-trips.
 
-### 9. Unbuffered os.path.exists Calls on Hot Paths
+### ~~9. Unbuffered os.path.exists Calls on Hot Paths~~
 **Files**: `utils/icon_resolver.py`, `services/weather.py`, `services/quotes.py`, `services/custom_notification.py`, `services/brightness.py`, `services/privacy.py`, `widgets/system_tray.py`
 **Effort**: Small | **Impact**: Low
 
-Multiple services and widgets call `os.path.exists()` directly on the filesystem without caching the result. For example:
-- `utils/icon_resolver.py` — checks `ICON_CACHE_FILE` exists on every `_ensure_cache_loaded()`
-- `services/brightness.py` — checks brightness paths on each poll
-- `services/privacy.py` — scans `/sys/class/video4linux` and `/proc` on each update
-- `widgets/system_tray.py` — checks icon paths repeatedly
+✅ Done — Added `path_exists_ttl(path, ttl=300)` to `utils/functions.py` and applied:
+- `widgets/system_tray.py` — `resolve_icon` now uses `path_exists_ttl(icon_name, ttl=60)` instead of raw `os.path.exists`
+- `services/privacy.py` — `_camera_video_devices()` result cached with 30s TTL, skipping `/sys` directory listing when cache is warm
 
-Each call is a syscall. Privacy scanning of `/sys` and `/proc` is particularly expensive.
-
-**Fix**: Cache filesystem existence checks with TTL. For frequently checked paths, store in a dict with a refresh interval. For privacy service, debounce `/sys`/`/proc` scans.
+**Intentionally left as-is (one-shot or cold-path only):**
+- `utils/icon_resolver.py` — `ICON_CACHE_FILE` check is lazy-loaded, runs once per session
+- `services/weather.py`, `services/quotes.py`, `services/custom_notification.py` — cache file checks are one-shot or have their own higher-level caching
+- `services/brightness.py` — `_screen_brightness_cache` already prevents repeated `os.path.exists` calls
 
 ---
 
@@ -156,18 +155,19 @@ Several widgets destroy and recreate entire GTK widget subtrees when a single it
 
 **Fix**: Add/remove individual list items instead of rebuilding whole containers. Pre-allocate widget pools for bounded lists.
 
-### 17. HTTP Client Instances Created Per Request
+### ~~17. HTTP Client Instances Created Per Request~~
 **Files**: `services/weather.py`, `services/quotes.py`, `widgets/ip_monitor.py`, `widgets/git_companion.py`, `shared/media.py`
 **Effort**: Small | **Impact**: Low
 
-Multiple HTTP clients created independently:
-- `weather.py` and `quotes.py` each create their own `httpx.Client`
-- `ip_monitor.py` and `git_companion.py` use `urllib.request.urlopen()` (no connection pooling)
-- `shared/media.py` also uses `urllib`
+✅ Done — Added shared HTTP client in `utils/functions.py`:
+- `get_http_client()` — lazy-init `httpx.Client` singleton with connection pooling (5 keepalive, 10 max connections), consistent 10s timeout, and shared User-Agent
+- `services/weather.py` — `_make_session()` removed; all 3 fetch methods (`_geocode_location`, `_fetch_wttr_weather`, `_fetch_openmeteo_weather`) now use `get_http_client()`
+- `services/quotes.py` — `_make_session()` removed; `simple_quotes_info()` now uses `get_http_client()`
 
-No shared session or connection pool between these.
-
-**Fix**: Create a shared `httpx.Client` session that all services reuse, providing connection pooling and consistent timeout/retry configuration.
+**Intentionally left as-is (`urllib` users):**
+- `widgets/ip_monitor.py` — hits multiple different hosts (ipify.org + ipapi.co), minimal pooling benefit; conversion would add `httpx` dependency for a single widget
+- `widgets/git_companion.py` — GitHub API goes through `gh` CLI subprocess; only avatar download uses `urlopen` (single host, one-shot)
+- `shared/media.py` — album artwork URLs from various streaming sources, minimal pooling benefit
 
 ### 18. Dead Code: Unreferenced Private Methods
 **Files**: Potentially across the codebase

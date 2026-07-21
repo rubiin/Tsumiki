@@ -90,21 +90,11 @@ class WeatherService(SingletonService):
         self.provider = provider.lower()
         self.wttr_url_template = wttr_url_template
 
-    def _make_session(self) -> httpx.Client:
-        """Create a throwaway session to avoid holding state in memory."""
-        session = httpx.Client(
-            headers={
-                "User-Agent": (
-                    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
-                    "(KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3"
-                )
-            }
-        )
-        return session
-
     def _geocode_location(self, location: str) -> Optional[tuple[float, float]]:
         """Convert location name to latitude and longitude using Nominatim."""
-        session = self._make_session()
+        from utils.functions import get_http_client
+
+        session = get_http_client()
         params = {"name": location, "count": 10, "language": "en", "format": "json"}
         try:
             response = session.get(self.geocode_url, params=params, timeout=10.0)
@@ -169,7 +159,9 @@ class WeatherService(SingletonService):
         self, location: str, retries: int = 3, delay: float = 2.0
     ) -> Optional[dict]:
         """Fetch weather data from wttr.in API."""
-        session = self._make_session()
+        from utils.functions import get_http_client
+
+        session = get_http_client()
         url = self.wttr_url_template.format(
             location=httpx.utils.quote(location.title())
         )
@@ -202,7 +194,9 @@ class WeatherService(SingletonService):
         self, location: str, retries: int = 3, delay: float = 2.0
     ) -> Optional[dict]:
         """Fetch weather data from Open-Meteo API."""
-        session = self._make_session()
+        from utils.functions import get_http_client
+
+        session = get_http_client()
 
         # First, geocode the location
         coords = self._geocode_location(location)
