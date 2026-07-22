@@ -9,7 +9,7 @@ from .base import SingletonService
 class PrivacyIndicatorService(SingletonService):
     """Detect applications using microphone, camera, or screen sharing."""
 
-    SCREEN_SHARE_PATTERNS = (
+    _SCREEN_SHARE_PATTERNS = (
         r"^xdph-streaming",
         r"^gsr-default",
         r"^game capture",
@@ -26,7 +26,14 @@ class PrivacyIndicatorService(SingletonService):
         r"window-capture",
         r"game-capture",
     )
-    SCREEN_SHARE_RE = re.compile("|".join(SCREEN_SHARE_PATTERNS))
+    _SCREEN_SHARE_RE: "re.Pattern | None" = None
+
+    def _get_screen_share_re(self):
+        if self._SCREEN_SHARE_RE is None:
+            self.__class__._SCREEN_SHARE_RE = re.compile(
+                "|".join(self._SCREEN_SHARE_PATTERNS)
+            )
+        return self._SCREEN_SHARE_RE
 
     def _load_pipewire_objects(self):
         try:
@@ -83,7 +90,7 @@ class PrivacyIndicatorService(SingletonService):
             return False
 
         media_name = props.get("media.name", "").lower()
-        return bool(self.SCREEN_SHARE_RE.search(media_name))
+        return bool(self._get_screen_share_re().search(media_name))
 
     def _detect_microphone_apps(self, nodes, linked_node_ids, filter_regex=None):
         regex = re.compile(filter_regex) if filter_regex else None

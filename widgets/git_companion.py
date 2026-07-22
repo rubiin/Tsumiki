@@ -6,7 +6,6 @@ import shlex
 import subprocess
 from contextlib import suppress
 from time import monotonic
-from urllib.request import urlopen
 
 from fabric.utils import GdkPixbuf, exec_shell_command_async, idle_add, logger
 from fabric.widgets.box import Box
@@ -18,6 +17,7 @@ import utils.functions as helpers
 from shared.circle_image import CircularImage
 from shared.mixins import PopoverMixin
 from shared.widget_container import ButtonWidget
+from utils.functions import get_http_client
 from utils.icons import get_text_icon
 from utils.widget_utils import nerd_font_icon
 
@@ -147,10 +147,9 @@ class GitHubClient:
         avatar_url = str(profile.get("avatar_url", "")).strip()
         if avatar_url:
             with suppress(Exception):
-                with urlopen(avatar_url, timeout=8) as avatar_response:
-                    avatar_bytes = avatar_response.read()
+                avatar_response = get_http_client().get(avatar_url, timeout=8)
                 avatar_pixbuf = _load_pixbuf_from_bytes(
-                    avatar_bytes,
+                    avatar_response.content,
                     avatar_size,
                 )
 

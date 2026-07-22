@@ -14,8 +14,6 @@ DEFAULT_PROVIDERS = [
     {"label": "Quad9", "primary": "9.9.9.9", "secondary": "149.112.112.112"},
 ]
 
-_DNS_LINE_RE = re.compile(r"IP4\.DNS\[\d+\]:\s*(\S+)")
-
 
 class DnsSwitcherService(SingletonService):
     """Service to detect and switch DNS servers via NetworkManager.
@@ -24,9 +22,16 @@ class DnsSwitcherService(SingletonService):
     emits ``notify::current`` when it changes.
     """
 
+    _dns_line_re = None
+
     @Signal
     def changed(self) -> None:
         """Emitted every poll cycle regardless of change."""
+
+    def _get_dns_line_re(self):
+        if self._dns_line_re is None:
+            self.__class__._dns_line_re = re.compile(r"IP4\.DNS\[\d+\]:\s*(\S+)")
+        return self._dns_line_re
 
     def __init__(self, poll_interval_ms: int = 3000, **kwargs):
         super().__init__(**kwargs)
@@ -91,7 +96,7 @@ class DnsSwitcherService(SingletonService):
             return
 
         # Parse DNS entries from nmcli output
-        dns_ips: list[str] = [m.group(1) for m in _DNS_LINE_RE.finditer(raw)]
+        dns_ips: list[str] = [m.group(1) for m in self._get_dns_line_re().finditer(raw)]
 
         if not dns_ips:
             return

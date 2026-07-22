@@ -3,9 +3,6 @@ from time import monotonic
 import psutil
 from fabric.utils import logger, re
 
-# Pre-compiled regex pattern for interface filtering
-_VIRTUAL_IFACE_RE = re.compile(r"^(ifb|lxdbr|virbr|br|vnet|tun|tap)[0-9]+$")
-
 
 class NetworkSpeed:
     """A service to monitor network speed."""
@@ -17,6 +14,7 @@ class NetworkSpeed:
     )
 
     _instance = None
+    _virtual_iface_re = None
 
     def __new__(cls):
         if cls._instance is None:
@@ -29,6 +27,13 @@ class NetworkSpeed:
         self.last_total_down_bytes = 0
         self.last_total_up_bytes = 0
         self.last_sample_time = 0.0
+
+    def _get_virtual_iface_re(self):
+        if self._virtual_iface_re is None:
+            self.__class__._virtual_iface_re = re.compile(
+                r"^(ifb|lxdbr|virbr|br|vnet|tun|tap)[0-9]+$"
+            )
+        return self._virtual_iface_re
 
     def get_network_speed(self):
         # Read counters from psutil for all interfaces.
@@ -48,7 +53,7 @@ class NetworkSpeed:
             # Skip loopback and virtual interfaces or interfaces with invalid byte count
             if (
                 interface == "lo"
-                or _VIRTUAL_IFACE_RE.match(interface)
+                or self._get_virtual_iface_re().match(interface)
                 or current_interface_down_bytes < 0
                 or current_interface_up_bytes < 0
             ):

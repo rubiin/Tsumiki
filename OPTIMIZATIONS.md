@@ -163,11 +163,11 @@ Several widgets destroy and recreate entire GTK widget subtrees when a single it
 - `get_http_client()` — lazy-init `httpx.Client` singleton with connection pooling (5 keepalive, 10 max connections), consistent 10s timeout, and shared User-Agent
 - `services/weather.py` — `_make_session()` removed; all 3 fetch methods (`_geocode_location`, `_fetch_wttr_weather`, `_fetch_openmeteo_weather`) now use `get_http_client()`
 - `services/quotes.py` — `_make_session()` removed; `simple_quotes_info()` now uses `get_http_client()`
+- `widgets/ip_monitor.py` — `urllib.request.Request`/`urlopen` replaced with `get_http_client().get()` for both ipify and ipapi.co calls
+- `widgets/git_companion.py` — avatar download `urlopen` replaced with `get_http_client().get()`
+- `shared/media.py` — album artwork `urllib.request.urlopen` replaced with `get_http_client().get()`
 
-**Intentionally left as-is (`urllib` users):**
-- `widgets/ip_monitor.py` — hits multiple different hosts (ipify.org + ipapi.co), minimal pooling benefit; conversion would add `httpx` dependency for a single widget
-- `widgets/git_companion.py` — GitHub API goes through `gh` CLI subprocess; only avatar download uses `urlopen` (single host, one-shot)
-- `shared/media.py` — album artwork URLs from various streaming sources, minimal pooling benefit
+No remaining `urllib` HTTP callers in the codebase.
 
 ### 18. Dead Code: Unreferenced Private Methods
 **Files**: Potentially across the codebase
@@ -177,16 +177,3 @@ Multiple private methods defined but potentially never called (e.g., `_on_enter_
 
 **Fix**: Audit for unreferenced methods with a tool like `vulture` or manual grep for method references. Remove or document.
 
-### 19. Regex Compilation at Module Import Time
-**Files**: `services/privacy.py`, `utils/functions.py`, `utils/icon_resolver.py`, `services/dns_switcher.py`, `widgets/system_tray.py`
-**Effort**: Trivial | **Impact**: Low
-
-Module-level `re.compile()` calls are evaluated at import time even if the regex is never used (e.g., privacy indicator patterns when the widget is disabled).
-
-**Fix**: Move regex compilation inside the functions/methods that use them, or defer to a lazy property.
-
-### ~~20. Cache Expiration Gaps in LRU Caches~~
-**Files**: `modules/overview.py`, `utils/icon_resolver.py`
-**Effort**: Small | **Impact**: Low
-
-✅ Done — `_resolve_icon_pixbuf` in `overview.py` and `get_icon_pixbuf` in `icon_resolver.py` switched from `@lru_cache(maxsize=256)` to `@ttl_lru_cache(seconds_to_live=3600, maxsize=256)`. Animation math caches (`lerp`, `steps`, `cubic_bezier`) left as-is because TTL batch-invalidation would cause performance regressions mid-animation. `circle_image.py` `_load_pixbuf_cached` left as-is (maxsize=64 is already small).

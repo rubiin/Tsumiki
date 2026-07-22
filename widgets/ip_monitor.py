@@ -3,7 +3,6 @@ from __future__ import annotations
 import json
 from datetime import datetime
 from ipaddress import ip_address
-from urllib.request import Request, urlopen
 
 from fabric.utils import idle_add, logger
 from fabric.widgets.box import Box
@@ -12,7 +11,7 @@ from fabric.widgets.label import Label
 
 from shared.mixins import PopoverMixin
 from shared.widget_container import ButtonWidget
-from utils.functions import run_in_thread
+from utils.functions import get_http_client, run_in_thread
 from utils.widget_utils import nerd_font_icon
 
 
@@ -206,13 +205,10 @@ class IPMonitorPopoverContent(Box):
         ipv4_addr = "-"
 
         try:
-            ipv4_req = Request(
-                "https://api.ipify.org?format=json",
-                headers={"User-Agent": "tsumiki-ip-monitor/1.0"},
+            response = get_http_client().get(
+                "https://api.ipify.org?format=json", timeout=6
             )
-            with urlopen(ipv4_req, timeout=6) as response:
-                ipv4_payload = response.read().decode("utf-8", errors="replace")
-            ipv4_data = json.loads(ipv4_payload)
+            ipv4_data = json.loads(response.text)
             candidate = self._normalize_value(
                 ipv4_data.get("ip") if isinstance(ipv4_data, dict) else None
             )
@@ -237,11 +233,8 @@ class IPMonitorPopoverContent(Box):
                 else endpoint_template
             )
 
-        req = Request(endpoint, headers={"User-Agent": "tsumiki-ip-monitor/1.0"})
-
-        with urlopen(req, timeout=8) as response:
-            payload = response.read().decode("utf-8", errors="replace")
-        data = json.loads(payload)
+        response = get_http_client().get(endpoint, timeout=8)
+        data = json.loads(response.text)
 
         if not isinstance(data, dict):
             raise ValueError("IP API returned unexpected payload")

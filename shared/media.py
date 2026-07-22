@@ -1,6 +1,5 @@
 import tempfile
 import urllib.parse
-import urllib.request
 from functools import partial
 
 from fabric.utils import (
@@ -25,6 +24,7 @@ from services.mpris import MprisPlayer, MprisPlayerManager
 from utils.constants import APP_DATA_DIRECTORY, ASSETS_DIR, NEWLINE_RE
 from utils.functions import (
     ensure_directory,
+    get_http_client,
     get_simple_palette_threaded,
     mix_colors,
     rgb_to_css,
@@ -578,12 +578,11 @@ class PlayerBox(Box):
         try:
             parsed = urllib.parse.urlparse(arturl)
             suffix = os.path.splitext(parsed.path)[1] or ".png"
-            with urllib.request.urlopen(arturl, timeout=5) as response:
-                data = response.read()
+            response = get_http_client().get(arturl, timeout=5)
 
             old_temp_path = self._last_temp_art_path
             with tempfile.NamedTemporaryFile(delete=False, suffix=suffix) as temp_file:
-                temp_file.write(data)
+                temp_file.write(response.content)
                 local_arturl = temp_file.name
             self._last_temp_art_path = local_arturl
 

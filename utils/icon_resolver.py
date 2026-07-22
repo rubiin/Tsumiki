@@ -5,9 +5,6 @@ from utils.functions import read_json_file, ttl_lru_cache, write_json_file
 from .constants import ICON_CACHE_FILE
 from .icons import symbolic_icons
 
-# Pre-compiled regex for splitting app_id
-_APP_ID_SPLIT_RE = re.compile(r"-|\.|_|\s")
-
 # Debounce delay for batching icon cache writes (ms)
 _CACHE_WRITE_DELAY_MS = 2000
 
@@ -124,7 +121,12 @@ class IconResolver:
                     return "".join(line[5:].split())
             return symbolic_icons["fallback"]["executable"]
 
+    _app_id_split_re = None
+
     def _get_desktop_file(self, app_id: str) -> str | None:
+        if self._app_id_split_re is None:
+            self.__class__._app_id_split_re = re.compile(r"-|\.|_|\s")
+
         data_dirs = GLib.get_system_data_dirs()
         for data_dir in data_dirs:
             data_dir = data_dir + "/applications/"
@@ -137,7 +139,9 @@ class IconResolver:
                 if matching:
                     return data_dir + matching[0]
 
-                for word in list(filter(None, _APP_ID_SPLIT_RE.split(app_id))):
+                for word in list(
+                    filter(None, self.__class__._app_id_split_re.split(app_id))
+                ):
                     matching = [s for s in files if word.lower() in s.lower()]
                     if matching:
                         return data_dir + matching[0]

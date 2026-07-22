@@ -29,12 +29,16 @@ from shared.mixins import PopoverMixin
 from shared.widget_container import ButtonWidget, TeardownMixin
 from utils.widget_utils import get_text_icon, nerd_font_icon
 
-# Pre-compiled regex for HTML image tag detection
-_HTML_IMG_RE = re.compile(r"^\s*<img\s+")
-
 
 class ClipHistoryMenu(Box, TeardownMixin):
     """A widget to display and manage clipboard history."""
+
+    _html_img_re = None
+
+    def _get_html_img_re(self):
+        if self._html_img_re is None:
+            self.__class__._html_img_re = re.compile(r"^\s*<img\s+")
+        return self._html_img_re
 
     def __init__(
         self,
@@ -567,7 +571,7 @@ class ClipHistoryMenu(Box, TeardownMixin):
             or content.startswith("\x89PNG")
             or content.startswith("GIF8")
             or content.startswith("\xff\xd8\xff")  # JPEG
-            or _HTML_IMG_RE.match(content) is not None  # HTML image tag
+            or self._get_html_img_re().match(content) is not None  # HTML image tag
             or (
                 "binary" in content.lower()
                 and any(
