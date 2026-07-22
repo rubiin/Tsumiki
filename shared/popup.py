@@ -166,6 +166,8 @@ class PopupWindow(BaseWindow):
         self.enable_inhibitor = enable_inhibitor
 
         self.monitor_number: int | None = None
+        self._monitor_toggle_pending = False
+        self._monitor_toggle_gen = 0
         self.hyprland_monitor = HyprlandWithMonitors()
 
         self.reveal_child = PopupRevealer(
@@ -196,6 +198,9 @@ class PopupWindow(BaseWindow):
         self.set_property("pass-through", not self.enable_inhibitor)
 
     def _set_popup_visible(self, visible: bool):
+        if not visible:
+            self._monitor_toggle_pending = False
+
         if visible and not self.popup_visible:
             self.reveal_child.revealer.set_visible(True)
 
@@ -211,13 +216,32 @@ class PopupWindow(BaseWindow):
 
     def toggle_popup(self, monitor: bool = False):
         if monitor:
-            curr_monitor = self.hyprland_monitor.get_current_gdk_monitor_id()
-            if self.monitor_number != curr_monitor and self.popup_visible:
-                self.monitor_number = curr_monitor
-                return
+            self._monitor_toggle_pending = True
+            self._monitor_toggle_gen += 1
+            gen = self._monitor_toggle_gen
+            self.hyprland_monitor.get_current_gdk_monitor_id(
+                lambda curr_monitor: self._on_monitor_resolved(
+                    curr_monitor, gen
+                )
+            )
+            return
 
+        self._monitor_toggle_pending = False
+        self._set_popup_visible(not self.popup_visible)
+
+    def _on_monitor_resolved(self, curr_monitor, gen):
+        # If another toggle or dismiss happened while the async request was
+        # in flight, this callback is stale — ignore it to prevent double
+        # toggling or re-opening a popup the user just closed.
+        if not self._monitor_toggle_pending or gen != self._monitor_toggle_gen:
+            return
+        self._monitor_toggle_pending = False
+
+        if self.monitor_number != curr_monitor and self.popup_visible:
             self.monitor_number = curr_monitor
+            return
 
+        self.monitor_number = curr_monitor
         self._set_popup_visible(not self.popup_visible)
 
     def toggle(self):

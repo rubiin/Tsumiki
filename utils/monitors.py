@@ -5,7 +5,7 @@ from fabric.hyprland.widgets import get_hyprland_connection
 from fabric.utils import Gdk, GLib, bulk_connect, logger
 
 from .constants import MONITOR_HOTPLUG_DELAY_MS
-from .functions import parse_hyprland_reply, ttl_lru_cache
+from .functions import parse_hyprland_reply
 
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 
@@ -24,15 +24,25 @@ class HyprlandWithMonitors(Hyprland):
         super().__init__(commands_only, **kwargs)
         self.display: Gdk.Display = Gdk.Display.get_default()
 
-    @ttl_lru_cache(100, 5)
-    def get_all_monitors(self) -> dict | None:
+    def get_all_monitors(self, callback):
+        """Fetch all monitors asynchronously.
+
+        Calls callback(dict | None) with {monitor_id: monitor_name} mapping.
+        """
+        self.send_command_async(
+            "j/monitors",
+            lambda reply: self._handle_all_monitors_reply(reply, callback),
+        )
+
+    def _handle_all_monitors_reply(self, reply, callback):
         try:
-            reply = self.send_command("j/monitors")
-            monitors = parse_hyprland_reply(reply)
-            return {monitor["id"]: monitor["name"] for monitor in monitors}
+            monitors_data = parse_hyprland_reply(reply)
+            callback(
+                {monitor["id"]: monitor["name"] for monitor in monitors_data}
+            )
         except Exception as e:
-            logger.exception(f"[Monitors] Error getting all monitors: {e}")
-            return None
+            logger.exception(f"[Monitors] Error parsing monitors reply: {e}")
+            callback(None)
 
     def get_gdk_monitor_id_from_name(self, plug_name: str) -> int | None:
         for i in range(self.display.get_n_monitors()):
@@ -40,32 +50,51 @@ class HyprlandWithMonitors(Hyprland):
                 return i
         return None
 
-    def get_gdk_monitor_id(self, hyprland_id: int) -> int | None:
-        monitors = self.get_all_monitors()
-        if not monitors:
-            return None
-        if hyprland_id in monitors:
-            return self.get_gdk_monitor_id_from_name(monitors[hyprland_id])
-        return None
+    def get_gdk_monitor_id(self, hyprland_id: int, callback):
+        """Get GDK monitor ID asynchronously."""
+        self.get_all_monitors(
+            lambda monitors: callback(
+                self.get_gdk_monitor_id_from_name(monitors[hyprland_id])
+                if monitors and hyprland_id in monitors
+                else None
+            )
+        )
 
-    def get_current_gdk_monitor_id(self) -> int | None:
-        try:
-            cmd = self.send_command("j/activeworkspace")
-            active_workspace = parse_hyprland_reply(cmd)
-            return self.get_gdk_monitor_id_from_name(active_workspace["monitor"])
-        except Exception as e:
-            logger.exception(f"[Monitors] Error getting current GDK monitor ID: {e}")
-            return None
+    def get_current_gdk_monitor_id(self, callback):
+        """Get current GDK monitor ID asynchronously."""
+        self.send_command_async(
+            "j/activeworkspace",
+            lambda reply: self._handle_current_monitor_reply(reply, callback),
+        )
 
-    def get_monitor_names(self) -> list[str]:
-        """Get list of all connected monitor names."""
+    def _handle_current_monitor_reply(self, reply, callback):
         try:
-            reply = self.send_command("j/monitors")
-            monitors = parse_hyprland_reply(reply)
-            return [monitor["name"] for monitor in monitors]
+            active_workspace = parse_hyprland_reply(reply)
+            monitor_name = active_workspace.get("monitor")
+            if monitor_name:
+                callback(self.get_gdk_monitor_id_from_name(monitor_name))
+            else:
+                callback(None)
         except Exception as e:
-            logger.exception(f"[Monitors] Error getting monitor names: {e}")
-            return []
+            logger.exception(
+                f"[Monitors] Error parsing active workspace reply: {e}"
+            )
+            callback(None)
+
+    def get_monitor_names(self, callback):
+        """Get list of all connected monitor names asynchronously."""
+        self.send_command_async(
+            "j/monitors",
+            lambda reply: self._handle_monitor_names_reply(reply, callback),
+        )
+
+    def _handle_monitor_names_reply(self, reply, callback):
+        try:
+            monitors_data = parse_hyprland_reply(reply)
+            callback([monitor["name"] for monitor in monitors_data])
+        except Exception as e:
+            logger.exception(f"[Monitors] Error parsing monitor names: {e}")
+            callback([])
 
 
 class MonitorWatcher:

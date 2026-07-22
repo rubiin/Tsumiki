@@ -295,35 +295,58 @@ class Bar(BaseWindow):
     @staticmethod
     def create_bars(app: Application, config: BarConfig) -> list:
         multi_monitor = config.get("general", {}).get("multi_monitor", False)
-        bars = (
-            Bar._create_multi_monitor_bars(config) if multi_monitor else [Bar(config)]
-        )
-
-        for bar in bars:
-            app.add_window(bar)
-
         if multi_monitor:
-            Bar._setup_hotplug(app, config, bars)
-
-        return bars
+            Bar._create_multi_monitor_bars_async(
+                app,
+                config,
+                lambda bars: Bar._setup_hotplug(app, config, bars),
+            )
+            return []
+        else:
+            bar = Bar(config)
+            app.add_window(bar)
+            return [bar]
 
     @staticmethod
-    def _create_multi_monitor_bars(config: BarConfig):
+    def _create_multi_monitor_bars_async(
+        app: Application, config: BarConfig, callback
+    ):
+        """Fetch monitor names asynchronously, create per-monitor bars."""
         from utils.monitors import HyprlandWithMonitors
 
         monitor_util = HyprlandWithMonitors()
-        monitor_names = monitor_util.get_monitor_names()
+        monitor_util.get_monitor_names(
+            lambda names: Bar._on_monitor_names_fetched(
+                app, config, names, callback
+            )
+        )
+
+    @staticmethod
+    def _on_monitor_names_fetched(
+        app: Application, config: BarConfig, monitor_names: list[str], callback
+    ):
+        from utils.monitors import HyprlandWithMonitors
 
         if not monitor_names:
-            return [Bar(config)]
+            bar = Bar(config)
+            app.add_window(bar)
+            callback([bar])
+            return
 
+        monitor_util = HyprlandWithMonitors()
         bars = []
         for monitor_name in monitor_names:
             monitor_id = monitor_util.get_gdk_monitor_id_from_name(monitor_name)
             if monitor_id is not None:
                 bars.append(Bar(config, monitor=monitor_id))
 
-        return bars if bars else [Bar(config)]
+        if not bars:
+            bars = [Bar(config)]
+
+        for bar in bars:
+            app.add_window(bar)
+
+        callback(bars)
 
     @staticmethod
     def _setup_hotplug(app: Application, config: BarConfig, bars: list):
@@ -344,10 +367,8 @@ class Bar(BaseWindow):
             except Exception:
                 logger.exception("Error removing old bar during hotplug handling")
 
-        # Create new
+        # Create new bars asynchronously
         bars.clear()
-        new_bars = Bar._create_multi_monitor_bars(config)
-        bars.extend(new_bars)
-
-        for bar in bars:
-            app.add_window(bar)
+        Bar._create_multi_monitor_bars_async(
+            app, config, lambda new_bars: bars.extend(new_bars)
+        )

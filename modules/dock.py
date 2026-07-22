@@ -262,11 +262,19 @@ class AppBar(BoxWidget):
         event = _[1] if len(_) > 1 else None
         active_address = self._extract_active_address_from_event(event)
         if active_address is None:
-            active_address = self._get_active_address()
+            self._get_active_address(
+                lambda addr: self._on_active_address_fetched(addr)
+            )
+            return
 
         if active_address == self._active_address:
             return
 
+        self._apply_active_state(active_address)
+
+    def _on_active_address_fetched(self, active_address):
+        if active_address == self._active_address:
+            return
         self._apply_active_state(active_address)
 
     def _schedule_sync_clients(self, delay_ms: int = DOCK_SYNC_DEBOUNCE_MS):
@@ -289,39 +297,24 @@ class AppBar(BoxWidget):
             GLib.source_remove(self._sync_scheduled_id)
             self._sync_scheduled_id = None
 
-    def _get_active_address(self) -> str | None:
+    def _get_active_address(self, callback):
+        """Fetch active window address asynchronously."""
         try:
-            reply = self._hyprland_connection.send_command("j/activewindow")
+            self._hyprland_connection.send_command_async(
+                "j/activewindow",
+                lambda reply: self._handle_active_address_reply(reply, callback),
+            )
+        except Exception as e:
+            logger.warning(f"[Dock] Failed to request active window address: {e}")
+            callback(None)
+
+    def _handle_active_address_reply(self, reply, callback):
+        try:
             parsed = parse_hyprland_reply(reply)
+            callback(normalize_address(parsed.get("address")))
         except Exception as e:
-            logger.warning(f"[Dock] Failed to get active window address: {e}")
-            return None
-        return normalize_address(parsed.get("address"))
-
-    def _list_visible_clients(self) -> list[NativeClient]:
-        try:
-            res = self._hyprland_connection.send_command("j/clients")
-            raw_clients = parse_hyprland_reply(res)
-        except Exception as e:
-            logger.exception(f"[Dock] Failed to list clients: {e}")
-            return []
-
-        active_address = self._active_address
-        if active_address is None:
-            active_address = self._get_active_address()
-        self._active_address = active_address
-
-        clients = []
-        for item in raw_clients:
-            if item.get("workspace", {}).get("id", -1) <= 0:
-                continue
-
-            client = NativeClient(item, self._hyprland_connection, active_address)
-            app_id = client.get_app_id()
-            if not app_id or app_id in self.config.get("ignored_apps", []):
-                continue
-            clients.append(client)
-        return clients
+            logger.warning(f"[Dock] Failed to parse active window address: {e}")
+            callback(None)
 
     def _sync_clients(self):
         if self._sync_in_progress:
@@ -329,8 +322,50 @@ class AppBar(BoxWidget):
             return
 
         self._sync_in_progress = True
+        self._fetch_clients_async()
+
+    def _fetch_clients_async(self):
+        """Fetch Hyprland clients asynchronously."""
         try:
-            clients = self._list_visible_clients()
+            self._hyprland_connection.send_command_async(
+                "j/clients",
+                self._on_raw_clients_reply,
+            )
+        except Exception as e:
+            logger.exception(f"[Dock] Failed to request clients: {e}")
+            self._sync_in_progress = False
+
+    def _on_raw_clients_reply(self, reply):
+        try:
+            raw_clients = parse_hyprland_reply(reply)
+        except Exception as e:
+            logger.exception(f"[Dock] Failed to parse clients: {e}")
+            self._sync_in_progress = False
+            return
+
+        if self._active_address is None:
+            self._get_active_address(
+                lambda addr: self._process_clients(raw_clients, addr)
+            )
+        else:
+            self._process_clients(raw_clients, self._active_address)
+
+    def _process_clients(self, raw_clients, active_address):
+        self._active_address = active_address
+        try:
+            clients = []
+            for item in raw_clients:
+                if item.get("workspace", {}).get("id", -1) <= 0:
+                    continue
+
+                client = NativeClient(
+                    item, self._hyprland_connection, active_address
+                )
+                app_id = client.get_app_id()
+                if not app_id or app_id in self.config.get("ignored_apps", []):
+                    continue
+                clients.append(client)
+
             self._clients_by_address = {
                 c.get_address_str(): c for c in clients if c.get_address_str()
             }

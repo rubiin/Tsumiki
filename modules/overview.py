@@ -91,8 +91,9 @@ class HyprlandWindowButton(Button):
             size=size,
             on_clicked=self.on_click,
             on_button_press_event=lambda _, event: (
-                self._hyprland_connection.send_command(
-                    f"/dispatch closewindow address:{address}"
+                self._hyprland_connection.send_command_async(
+                    f"/dispatch closewindow address:{address}",
+                    lambda *_: None,
                 )
                 if event.button == 3
                 else None
@@ -122,8 +123,9 @@ class HyprlandWindowButton(Button):
             Gdk.KEY_KP_Enter,
             Gdk.KEY_space,
         ):
-            self._hyprland_connection.send_command(
-                f"/dispatch closewindow address:{self.address}"
+            self._hyprland_connection.send_command_async(
+                f"/dispatch closewindow address:{self.address}",
+                lambda *_: None,
             )
             return True
         return False
@@ -149,8 +151,9 @@ class HyprlandWindowButton(Button):
         )
 
     def on_click(self, *_):
-        self._hyprland_connection.send_command(
-            f"/dispatch focuswindow address:{self.address}"
+        self._hyprland_connection.send_command_async(
+            f"/dispatch focuswindow address:{self.address}",
+            lambda *_: None,
         )
 
 
@@ -185,8 +188,9 @@ class WorkspaceEventBox(EventBox):
                 label=f"{workspace_id}",
             ),
             on_drag_data_received=lambda _w, _c, _x, _y, data, *_: (
-                self._hyprland_connection.send_command(
-                    f"/dispatch movetoworkspacesilent {workspace_id},address:{data.get_data().decode()}"  # noqa: E501
+                self._hyprland_connection.send_command_async(
+                    f"/dispatch movetoworkspacesilent {workspace_id},address:{data.get_data().decode()}",  # noqa: E501
+                    lambda *_: None,
                 )
             ),
         )
@@ -210,6 +214,8 @@ class OverviewMenu(Box):
         self.clients: dict[str, HyprlandWindowButton] = {}
         self._client_meta: dict[str, tuple] = {}
         self._update_source_id: int | None = None
+        self._update_generation: int = 0
+        self._fetched_monitors: dict = {}
 
         self._hyprland_connection = get_hyprland_connection()
         self._app_util = None  # Lazy-load on first access
@@ -363,29 +369,65 @@ class OverviewMenu(Box):
         self._client_meta[address] = meta
         self.workspace_boxes[workspace_id].put(button, x, y)
 
-    def _fetch_monitors(self) -> dict[int, tuple[int, int, int]]:
-        reply = self._hyprland_connection.send_command("j/monitors")
-        monitors_data = parse_hyprland_reply(reply)
-        return {
-            monitor["id"]: (monitor["x"], monitor["y"], monitor["transform"])
-            for monitor in monitors_data
-        }
+    def _fetch_monitors_async(self, callback):
+        """Fetch monitors asynchronously and pass parsed result to callback."""
+        self._hyprland_connection.send_command_async(
+            "j/monitors",
+            lambda reply: self._parse_monitors_reply(reply, callback),
+        )
 
-    def _fetch_clients(self) -> list[dict]:
-        reply = self._hyprland_connection.send_command("j/clients")
-        return parse_hyprland_reply(reply)
+    def _parse_monitors_reply(self, reply, callback):
+        try:
+            monitors_data = parse_hyprland_reply(reply)
+            monitors = {
+                monitor["id"]: (
+                    monitor["x"],
+                    monitor["y"],
+                    monitor["transform"],
+                )
+                for monitor in monitors_data
+            }
+            callback(monitors)
+        except Exception as e:
+            logger.exception(f"[Overview] Failed to parse monitors: {e}")
+            callback({})
+
+    def _fetch_clients_async(self, callback):
+        """Fetch clients asynchronously and pass parsed result to callback."""
+        self._hyprland_connection.send_command_async(
+            "j/clients",
+            lambda reply: self._parse_clients_reply(reply, callback),
+        )
+
+    def _parse_clients_reply(self, reply, callback):
+        try:
+            raw_clients = parse_hyprland_reply(reply)
+            callback(raw_clients)
+        except Exception as e:
+            logger.exception(f"[Overview] Failed to parse clients: {e}")
+            callback([])
 
     def update(self, signal_update=False):
-        # Only refresh app cache if needed (marked dirty by unknown app_id)
+        """Update overview asynchronously — fetches monitors then chains clients."""
         self._refresh_app_cache_if_needed()
+        self._update_generation += 1
+        gen = self._update_generation
+        self._fetch_monitors_async(
+            lambda monitors: self._on_monitors_fetched(monitors, gen)
+        )
 
-        try:
-            monitors = self._fetch_monitors()
-            raw_clients = self._fetch_clients()
-        except Exception as e:
-            logger.exception(f"[Overview] Failed to update snapshot: {e}")
-            return
+    def _on_monitors_fetched(self, monitors, gen):
+        if gen != self._update_generation:
+            return  # Stale update superseded by a newer one
+        self._fetched_monitors = monitors
+        self._fetch_clients_async(
+            lambda clients: self._on_clients_fetched(clients, gen)
+        )
 
+    def _on_clients_fetched(self, raw_clients, gen):
+        if gen != self._update_generation:
+            return  # Stale update superseded by a newer one
+        monitors = self._fetched_monitors
         target_addresses = set()
         for client in raw_clients:
             target = self._build_client_target(client, monitors)
@@ -394,7 +436,9 @@ class OverviewMenu(Box):
 
             address, workspace_id, x, y, meta, monitor_info = target
             target_addresses.add(address)
-            self._upsert_client(address, workspace_id, x, y, meta, client, monitor_info)
+            self._upsert_client(
+                address, workspace_id, x, y, meta, client, monitor_info
+            )
 
         stale_addresses = [
             address for address in self.clients if address not in target_addresses
