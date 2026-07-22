@@ -89,6 +89,7 @@ class ClipHistoryMenu(Box, TeardownMixin):
             None  # Timestamp of last clipboard list load
         )
         self._search_timer_id = None  # Timer ID for search text change
+        self._item_widgets: dict[str, Button] = {}  # Cache of item_id -> button widget
 
         self.viewport = ListBox(
             name="viewport",
@@ -300,6 +301,7 @@ class ClipHistoryMenu(Box, TeardownMixin):
         """Display clipboard items in the viewport"""
         remove_handler(self._arranger_handler) if self._arranger_handler else None
         self.viewport.remove_all()
+        self._item_widgets.clear()
         self.selected_index = -1  # Reset selection
 
         # Filter items if search text is provided
@@ -468,7 +470,70 @@ class ClipHistoryMenu(Box, TeardownMixin):
         button.set_can_focus(True)
         button.add_events(Gdk.EventMask.KEY_PRESS_MASK)
 
+        # Cache the button for future reuse
+        self._item_widgets[item_id] = button
+
         return button
+
+    def _rebuild_viewport_from_cache(self):
+        """Rebuild viewport reusing cached item widgets instead of destroying+creating.
+
+        Called by toggle_pin_item to avoid the expensive full rebuild that
+        destroys and recreates every visible button widget.
+        """
+        children = list(self.viewport.get_children())
+
+        # Detach all children from viewport without destroying them
+        for child in children:
+            self.viewport.remove(child)
+
+        # Rebuild from cache in sorted order
+        visible_count = min(self.batch_size, len(self.filtered_items))
+        for i in range(visible_count):
+            item = self.filtered_items[i]
+            item_id = item.split("\t", 1)[0]
+
+            if item_id in self._item_widgets:
+                button = self._item_widgets[item_id]
+                # Update the button to reflect current pin state
+                self._refresh_button_pin_state(button, item_id, item)
+                self.viewport.add(button)
+            else:
+                button = self.create_clipboard_item(item)
+                self.viewport.add(button)
+
+        self.items_loaded = visible_count
+        self.max_items = len(self.filtered_items)
+
+        # Restore selection
+        if self.selected_index >= 0 and self.selected_index < len(
+            self.viewport.get_children()
+        ):
+            new_button = self.viewport.get_children()[self.selected_index]
+            new_button.get_style_context().add_class("selected")
+
+    def _refresh_button_pin_state(self, button, item_id, item):
+        """Update a cached button's label/tooltip when pin state changes."""
+        is_pinned = item_id in self.pinned_item_ids
+        parts = item.split("\t", 1)
+        content = parts[1] if len(parts) > 1 else item
+
+        display_text = content.strip()
+        if len(display_text) > 100:
+            display_text = display_text[:97] + "..."
+
+        # Find the label child and update it
+        child = button.get_child()
+        if isinstance(child, Box):
+            for sub in child.get_children():
+                if isinstance(sub, Label):
+                    sub.set_label(self._format_item_label(display_text, is_pinned))
+                    break
+        elif isinstance(child, Label):
+            child.set_label(self._format_item_label(display_text, is_pinned))
+
+        if self.item_tooltip:
+            button.set_tooltip_text(self._format_item_tooltip(display_text, is_pinned))
 
     def _load_image_preview_async(self, item_id, button):
         """Load image preview asynchronously"""
@@ -709,7 +774,20 @@ class ClipHistoryMenu(Box, TeardownMixin):
         else:
             self.pinned_item_ids.add(item_id)
 
-        self._display_clipboard_items(self.search_entry.get_text())
+        # Re-sort filtered_items (pinned float to top)
+        needle = self.search_entry.get_text().lower()
+        filtered_items = [
+            item
+            for item in self.clipboard_items
+            if needle in (item.split("\t", 1)[1] if "\t" in item else item).lower()
+        ]
+        filtered_items.sort(
+            key=lambda line: 0 if line.split("\t", 1)[0] in self.pinned_item_ids else 1
+        )
+        self.filtered_items = filtered_items
+
+        # Rebuild using cached widgets instead of full destroy+create
+        self._rebuild_viewport_from_cache()
 
     def update_selection(self, new_index):
         """Update the selected item in the viewport"""

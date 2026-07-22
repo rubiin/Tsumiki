@@ -147,13 +147,17 @@ Creates its own `GioDBusHelper` instance for UPower communication, adding a sepa
 
 **Fix**: Investigate sharing DBus connections between services or using fabric's built-in DBus integration.
 
-### 16. Widget Tree Rebuilds on Small State Changes
+Widget Tree Rebuilds on Small State Changes
 **Files**: `widgets/kanban.py`, `widgets/clipboard.py`
 **Effort**: Medium | **Impact**: Low
 
-Several widgets destroy and recreate entire GTK widget subtrees when a single item changes (clipboard history toggle, kanban card refresh).
+✅ Done — Added `_item_widgets` cache (`dict[str, Button]`) and `_rebuild_viewport_from_cache()` to `clipboard.py`:
+- `toggle_pin_item()` no longer calls the full `_display_clipboard_items()` rebuild
+- Instead, re-sorts `filtered_items` in-place and reuses cached button widgets via `_rebuild_viewport_from_cache()`
+- Full `_display_clipboard_items()` only happens on initial load, search filter changes, and clipboard data updates — not on pin toggles
+- `_refresh_button_pin_state()` updates label/tooltip on cached widgets without recreating them
 
-**Fix**: Add/remove individual list items instead of rebuilding whole containers. Pre-allocate widget pools for bounded lists.
+Kanban already adds/removes individual notes; no change needed there.
 
 ### ~~17. HTTP Client Instances Created Per Request~~
 **Files**: `services/weather.py`, `services/quotes.py`, `widgets/ip_monitor.py`, `widgets/git_companion.py`, `shared/media.py`
