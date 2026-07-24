@@ -308,17 +308,13 @@ class Bar(BaseWindow):
             return [bar]
 
     @staticmethod
-    def _create_multi_monitor_bars_async(
-        app: Application, config: BarConfig, callback
-    ):
+    def _create_multi_monitor_bars_async(app: Application, config: BarConfig, callback):
         """Fetch monitor names asynchronously, create per-monitor bars."""
         from utils.monitors import HyprlandWithMonitors
 
         monitor_util = HyprlandWithMonitors()
         monitor_util.get_monitor_names(
-            lambda names: Bar._on_monitor_names_fetched(
-                app, config, names, callback
-            )
+            lambda names: Bar._on_monitor_names_fetched(app, config, names, callback)
         )
 
     @staticmethod

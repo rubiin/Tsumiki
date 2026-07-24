@@ -55,10 +55,11 @@ matugen image -q ~/Pictures/wallpaper.jpg -t scheme-tonal-spot --mode dark --con
 
 ```python
 from services.matugen import MatugenService
+
 mat = MatugenService()
-mat.generate_sync('/home/user/Pictures/wallpaper.jpg')
+mat.generate_sync("/home/user/Pictures/wallpaper.jpg")
 # or
-mat.generate('/home/user/Pictures/wallpaper.jpg')  # async
+mat.generate("/home/user/Pictures/wallpaper.jpg")  # async
 ```
 
 ## Troubleshooting
@@ -85,8 +86,9 @@ Interactive (Python REPL within Tsumiki environment):
 
 ```py
 from services.matugen import MatugenService
+
 m = MatugenService()
-m.generate_sync('~/Pictures/wallpaper.jpg')
+m.generate_sync("~/Pictures/wallpaper.jpg")
 ```
 
 Enable `matugen` under styling in `config.toml`, ensure `matugen` is installed, and Tsumiki will generate colors on startup or when you run the service manually.

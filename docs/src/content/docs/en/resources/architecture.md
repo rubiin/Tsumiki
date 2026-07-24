@@ -103,9 +103,11 @@ Services are singletons initialized at startup:
 ```python
 from services.base import SingletonService
 
+
 class BatteryService(SingletonService):
     # Single instance shared across all widgets
     pass
+
 
 battery_service = BatteryService()
 ```
@@ -126,6 +128,7 @@ Widgets with popover menus use the `PopoverMixin`:
 ```python
 from shared.mixins import PopoverMixin
 from shared.widget_container import ButtonWidget
+
 
 class MyWidget(ButtonWidget, PopoverMixin):
     def __init__(self, **kwargs):
@@ -188,6 +191,7 @@ Config validation happens at startup through `tsumiki.schema.json`:
 
 ```python
 from utils.validation import validate_config_enums
+
 validate_config_enums(config_data, "tsumiki.schema.json")
 ```
 

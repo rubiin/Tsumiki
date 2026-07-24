@@ -135,8 +135,8 @@ class ClipHistoryMenu(Box, TeardownMixin):
             max_content_size=(300, 200),
             child=self.viewport,
         )
-        vadj = self.scrolled_window.get_vadjustment()
-        vadj.connect("value-changed", self.on_scroll)
+        self.vadj = self.scrolled_window.get_vadjustment()
+        self.vadj.connect("value-changed", self.on_scroll)
 
         self.header_box = Box(
             name="header_box",
@@ -188,8 +188,27 @@ class ClipHistoryMenu(Box, TeardownMixin):
         self.items_loaded += items_to_add
         self.loading = False
 
+        # Force GTK to recalculate sizes, then check if viewport needs more items
+        self.viewport.queue_resize()
+        GLib.idle_add(self._fill_viewport)
+
         if self.search_entry.get_text() and self.viewport.get_children():
             self.update_selection(0)
+
+    def _fill_viewport(self):
+        """Load more items if the viewport still has room.
+
+        This ensures the initial batch fills the visible area so that
+        scroll-to-load works correctly.
+        """
+        if self.loading or self.max_items == 0 or self.items_loaded >= self.max_items:
+            return False
+
+        vadj = self.scrolled_window.get_vadjustment()
+        # If content fits without scrolling, load more to fill the viewport
+        if vadj.get_upper() <= vadj.get_page_size():
+            self._load_next_batch()
+        return False
 
     def on_scroll(self, adjustment: Gtk.Adjustment):
         """Load next page when user scrolls near the bottom."""
@@ -234,18 +253,6 @@ class ClipHistoryMenu(Box, TeardownMixin):
     def open(self):
         """Open the clipboard history panel and load items"""
         if self._loading:
-            return
-
-        # Check TTL cache — skip subprocess if items were loaded recently
-        cache_ttl = (self.config or {}).get("cache_ttl", 3)
-        if (
-            self.clipboard_items
-            and self._cache_loaded_at is not None
-            and time.time() - self._cache_loaded_at < cache_ttl
-        ):
-            self._display_clipboard_items()
-            self.search_entry.set_text("")
-            self.search_entry.grab_focus()
             return
 
         self._loading = True
@@ -303,6 +310,9 @@ class ClipHistoryMenu(Box, TeardownMixin):
         self.viewport.remove_all()
         self._item_widgets.clear()
         self.selected_index = -1  # Reset selection
+
+        # Reset scroll to top
+        self.vadj.set_value(0)
 
         # Filter items if search text is provided
         needle = filter_text.lower()
@@ -488,7 +498,8 @@ class ClipHistoryMenu(Box, TeardownMixin):
             self.viewport.remove(child)
 
         # Rebuild from cache in sorted order
-        visible_count = min(self.batch_size, len(self.filtered_items))
+        # Use items_loaded to preserve scroll position and loaded state
+        visible_count = min(self.items_loaded, len(self.filtered_items))
         for i in range(visible_count):
             item = self.filtered_items[i]
             item_id = item.split("\t", 1)[0]
@@ -502,7 +513,7 @@ class ClipHistoryMenu(Box, TeardownMixin):
                 button = self.create_clipboard_item(item)
                 self.viewport.add(button)
 
-        self.items_loaded = visible_count
+        # Keep items_loaded unchanged - don't reset to batch_size
         self.max_items = len(self.filtered_items)
 
         # Restore selection

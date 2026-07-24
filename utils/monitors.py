@@ -37,9 +37,7 @@ class HyprlandWithMonitors(Hyprland):
     def _handle_all_monitors_reply(self, reply, callback):
         try:
             monitors_data = parse_hyprland_reply(reply)
-            callback(
-                {monitor["id"]: monitor["name"] for monitor in monitors_data}
-            )
+            callback({monitor["id"]: monitor["name"] for monitor in monitors_data})
         except Exception as e:
             logger.exception(f"[Monitors] Error parsing monitors reply: {e}")
             callback(None)
@@ -76,9 +74,7 @@ class HyprlandWithMonitors(Hyprland):
             else:
                 callback(None)
         except Exception as e:
-            logger.exception(
-                f"[Monitors] Error parsing active workspace reply: {e}"
-            )
+            logger.exception(f"[Monitors] Error parsing active workspace reply: {e}")
             callback(None)
 
     def get_monitor_names(self, callback):

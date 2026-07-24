@@ -220,9 +220,7 @@ class PopupWindow(BaseWindow):
             self._monitor_toggle_gen += 1
             gen = self._monitor_toggle_gen
             self.hyprland_monitor.get_current_gdk_monitor_id(
-                lambda curr_monitor: self._on_monitor_resolved(
-                    curr_monitor, gen
-                )
+                lambda curr_monitor: self._on_monitor_resolved(curr_monitor, gen)
             )
             return
 

@@ -436,9 +436,7 @@ class OverviewMenu(Box):
 
             address, workspace_id, x, y, meta, monitor_info = target
             target_addresses.add(address)
-            self._upsert_client(
-                address, workspace_id, x, y, meta, client, monitor_info
-            )
+            self._upsert_client(address, workspace_id, x, y, meta, client, monitor_info)
 
         stale_addresses = [
             address for address in self.clients if address not in target_addresses

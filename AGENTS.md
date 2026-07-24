@@ -119,8 +119,10 @@ from shared.mixins import PopoverMixin
 from shared.widget_container import ButtonWidget
 from utils.widget_utils import nerd_font_icon
 
+
 class MyWidgetMenu(Box):
     """Popover content."""
+
     def __init__(self, parent=None, **kwargs):
         super().__init__(
             name="my-widget-menu",
@@ -135,8 +137,10 @@ class MyWidgetMenu(Box):
         if self._parent:
             self._parent.hide_popover()
 
+
 class MyWidget(ButtonWidget, PopoverMixin):
     """Panel widget."""
+
     def __init__(self, **kwargs):
         super().__init__(name="my_widget", **kwargs)
 
@@ -206,6 +210,7 @@ from fabric.utils import GLib, logger
 
 from services.base import SingletonService
 
+
 class MyModuleService(SingletonService):
     @Signal
     def updated(self) -> None:
@@ -219,6 +224,7 @@ class MyModuleService(SingletonService):
         self.state = "active"
         self.emit("updated")
         logger.info("[MyModule] State updated")
+
 
 my_module_service = MyModuleService()
 ```
@@ -234,8 +240,10 @@ from shared.widget_container import ButtonWidget
 from services.my_module import my_module_service
 from utils.widget_utils import nerd_font_icon
 
+
 class MyModulePopover(Box):
     """Popover content for module."""
+
     def __init__(self, parent=None, **kwargs):
         super().__init__(
             name="my-module-popover",
@@ -261,8 +269,10 @@ class MyModulePopover(Box):
         if self._parent:
             self._parent.hide_popover()
 
+
 class MyModuleWidget(ButtonWidget, PopoverMixin):
     """Panel button for module."""
+
     def __init__(self, **kwargs):
         super().__init__(name="my_module", **kwargs)
 

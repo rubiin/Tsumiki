@@ -262,9 +262,7 @@ class AppBar(BoxWidget):
         event = _[1] if len(_) > 1 else None
         active_address = self._extract_active_address_from_event(event)
         if active_address is None:
-            self._get_active_address(
-                lambda addr: self._on_active_address_fetched(addr)
-            )
+            self._get_active_address(lambda addr: self._on_active_address_fetched(addr))
             return
 
         if active_address == self._active_address:
@@ -358,9 +356,7 @@ class AppBar(BoxWidget):
                 if item.get("workspace", {}).get("id", -1) <= 0:
                     continue
 
-                client = NativeClient(
-                    item, self._hyprland_connection, active_address
-                )
+                client = NativeClient(item, self._hyprland_connection, active_address)
                 app_id = client.get_app_id()
                 if not app_id or app_id in self.config.get("ignored_apps", []):
                     continue
