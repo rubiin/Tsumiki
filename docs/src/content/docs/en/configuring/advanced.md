@@ -5,92 +5,6 @@ description: Advanced Tsumiki configuration patterns
 
 Once you are comfortable with the [Configuration](/en/configuring/config) basics, these patterns help you tune Tsumiki further.
 
-## Widget Groups
-
-Group widgets together with shared spacing and style:
-Reference a group in your layout with `@group:N` (zero-based index) or `@group:id` (string id):
-
-```toml
-[[widget_groups]]
-id = "sys-group"
-widgets = ["updates", "battery"]
-spacing = 4
-style_classes = ["bordered"]
-
-[layout]
-right_section = ["@group:sys-group", "system_tray"]
-```
-
-## Collapsible Groups
-
-Hide less-used widgets behind a toggle:
-
-```toml
-[[collapsible_groups]]
-id = "utility-tools"
-widgets = ["ocr", "screenshot", "recorder"]
-spacing = 4
-icon = "󰒓"
-tooltip = "Utility Tools"
-style_classes = ["utility-tools"]
-```
-
-Reference in layout with `@collapsible:utility-tools`.
-
-## Custom Button
-
-A single standalone custom button that executes a shell command when clicked. Reference it directly by name in a layout section.
-
-```toml
-[widgets.custom_button]
-command = "firefox"
-icon = "󰈹"
-label_text = "Firefox"
-tooltip_text = "Open Firefox Browser"
-show_icon = true
-label = false
-tooltip = true
-```
-
-| Key | Type | Default | Description |
-|---|---|---|---|
-| `command` | string | required | Shell command to execute when clicked |
-| `icon` | string | — | Nerd Font icon to display |
-| `label_text` | string | — | Text label to display |
-| `tooltip_text` | string | — | Tooltip text on hover |
-| `show_icon` | bool | `true` | Whether to show the icon |
-| `label` | bool | `true` | Whether to show the label |
-| `tooltip` | bool | `true` | Whether to show the tooltip |
-| `style_classes` | array | — | CSS style classes to apply |
-
-Place it in the layout like any regular widget:
-
-```toml
-[layout]
-left_section = ["custom_button", "workspaces"]
-```
-
-## Custom Button Group
-
-A group of custom command buttons. Each button in the group can be referenced via `@custom_button:N` or `@custom_button:id`:
-
-```toml
-[widgets.custom_button_group]
-spacing = 4
-
-[[widgets.custom_button_group.buttons]]
-id = "firefox"
-command = "firefox"
-icon = "󰈹"
-label_text = "Firefox"
-tooltip_text = "Open Firefox Browser"
-show_icon = true
-label = false
-tooltip = true
-
-[layout]
-left_section = ["@custom_button:firefox"]
-```
 
 ## Custom Widget
 
@@ -133,23 +47,90 @@ Full configuration options:
 | `signal` | int | — | Signal number for sig* event triggers |
 | `restart_interval` | int | — | Restart interval for persistent scripts |
 
-## Multi-Monitor
 
-Enable per-monitor panels:
+## Widget Groups
 
-```toml
-[general]
-multi_monitor = true
-```
-
-## Auto Hide
+Group widgets together with shared spacing and style:
+Reference a group in your layout with `@group:N` (zero-based index) or `@group:id` (string id):
 
 ```toml
-[modules.bar]
-auto_hide = true
-auto_hide_timeout = 3000
+[[widget_groups]]
+id = "sys-group"
+widgets = ["updates", "battery"]
+spacing = 4
+style_classes = ["bordered"]
 ```
 
-## Custom Modules
+Reference in layout with `@group:sys-group`.
 
-Add your own module under `modules` and reference it from `layout`. Keep changes small and restart with `./init.sh -start` to validate.
+```toml
+[layout]
+right_section = ["@group:sys-group", "system_tray"]
+```
+
+## Collapsible Groups
+
+Hide less-used widgets behind a toggle:
+
+```toml
+[[collapsible_groups]]
+id = "utility-tools"
+widgets = ["ocr", "screenshot", "recorder"]
+spacing = 4
+icon = "󰒓"
+tooltip = "Utility Tools"
+style_classes = ["utility-tools"]
+```
+
+Reference in layout with `@collapsible:utility-tools`.
+
+```toml
+
+right_section = ["@collapsible:utility-tools", "system_tray"]
+
+```
+
+
+## Custom Button
+
+A single standalone custom button that executes a shell command when clicked. Reference it directly by name in a layout section.
+
+```toml
+[widgets.custom_button]
+command = "firefox"
+icon = "󰈹"
+label_text = "Firefox"
+tooltip_text = "Open Firefox Browser"
+show_icon = true
+label = false
+tooltip = true
+```
+
+Place it in the layout like any regular widget:
+
+```toml
+[layout]
+left_section = ["custom_button", "workspaces"]
+```
+
+## Custom Button Group
+
+A group of custom command buttons. Each button in the group can be referenced via `@custom_button:N` or `@custom_button:id`:
+
+```toml
+[widgets.custom_button_group]
+spacing = 4
+
+[[widgets.custom_button_group.buttons]]
+id = "firefox"
+command = "firefox"
+icon = "󰈹"
+label_text = "Firefox"
+tooltip_text = "Open Firefox Browser"
+show_icon = true
+label = false
+tooltip = true
+
+[layout]
+left_section = ["@custom_button:firefox"]
+```

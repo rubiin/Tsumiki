@@ -5,19 +5,74 @@ description: Geavanceerde Tsumiki-configuratiepatronen
 
 Zodra u vertrouwd bent met de [Configuratie](/nl/configuring/config) basisprincipes, helpen deze patronen u om Tsumiki verder af te stemmen.
 
+## Aangepaste Widget
+
+Waybar-compatibele aangepaste widgets die externe shell-commando's uitvoeren met configureerbare uitvoerparsing en klikafhandeling.
+
+```toml
+[[widgets.custom_widget]]
+id = "volume"
+exec = "pamixer --get-volume"
+format = "󰕾 {}%"
+interval = 1
+on_scroll_up = "pamixer -i 5"
+on_scroll_down = "pamixer -d 5"
+exec_on_event = true
+
+[layout]
+left_section = ["@custom_widget:volume", "workspaces"]
+```
+
+Volledige configuratie-opties:
+
+| Sleutel | Type | Standaard | Beschrijving |
+|---|---|---|---|
+| `id` | string | — | Unieke identificatie voor verwijzing in lay-out (`@custom_widget:mijn-id`) |
+| `exec` | string | vereist | Uit te voeren shell-commando |
+| `interval` | int | `0` | Vernieuwingsinterval in seconden (0 = eenmalig uitvoeren) |
+| `return_type` | string | `"plain"` | Uitvoerformaat: `"plain"` of `"json"` |
+| `label_format` | string | `"{}"` | Formaatstring waarbij `{}` wordt vervangen door uitvoer |
+| `exec_on_event` | bool | `false` | Commando opnieuw uitvoeren na klik/scroll |
+| `max_length` | int | `0` | Maximale tekstlengte (0 = geen limiet) |
+| `min_length` | int | `0` | Minimale tekstlengte (vult met spaties) |
+| `rotate` | int | `0` | Tekst roteren in graden |
+| `tooltip` | bool | `true` | Tooltip tonen met uitvoer |
+| `tooltip_format` | string | — | Tooltip-formaatstring |
+| `on_click` | string | — | Linksklik-commando |
+| `on_click_right` | string | — | Rechtsklik-commando |
+| `on_click_middle` | string | — | Middelste klik-commando |
+| `on_scroll_up` | string | — | Scroll-omhoog-commando |
+| `on_scroll_down` | string | — | Scroll-omlaag-commando |
+| `signal` | int | — | Signaalnummer voor sig* gebeurtenistriggers |
+| `restart_interval` | int | — | Herstartinterval voor persistente scripts |
+
 ## Widget Groepen
+
+Groepeer widgets met gedeelde spatiering en stijl:
+Verwijs naar een groep in uw lay-out met `@group:N` (nulgebaseerde index) of `@group:id` (tekst-ID):
 
 ```toml
 [[widget_groups]]
+id = "sys-group"
 widgets = ["updates", "battery"]
 spacing = 4
 style_classes = ["bordered"]
 ```
 
+Verwijs in de lay-out met `@group:sys-group`.
+
+```toml
+[layout]
+right_section = ["@group:sys-group", "system_tray"]
+```
+
 ## Inklapbare Groepen
+
+Verberg minder gebruikte widgets achter een schakelaar:
 
 ```toml
 [[collapsible_groups]]
+id = "utility-tools"
 widgets = ["ocr", "screenshot", "recorder"]
 spacing = 4
 icon = "󰒓"
@@ -25,17 +80,54 @@ tooltip = "Hulpmiddelen"
 style_classes = ["utility-tools"]
 ```
 
-## Multi-Monitor
+Verwijs in de lay-out met `@collapsible:utility-tools`.
 
 ```toml
-[general]
-multi_monitor = true
+
+right_section = ["@collapsible:utility-tools", "system_tray"]
+
 ```
 
-## Automatisch Verbergen
+## Aangepaste Knop
+
+Een zelfstandige aangepaste knop die een shell-commando uitvoert wanneer erop wordt geklikt. Verwijs er direct naar met de naam in een lay-out sectie.
 
 ```toml
-[modules.bar]
-auto_hide = true
-auto_hide_timeout = 3000
+[widgets.custom_button]
+command = "firefox"
+icon = "󰈹"
+label_text = "Firefox"
+tooltip_text = "Firefox Browser openen"
+show_icon = true
+label = false
+tooltip = true
+```
+
+Plaats het in de lay-out zoals elke normale widget:
+
+```toml
+[layout]
+left_section = ["custom_button", "workspaces"]
+```
+
+## Aangepaste Knop Groep
+
+Een groep aangepaste opdrachtknoppen. Elke knop in de groep kan worden gerefereerd via `@custom_button:N` of `@custom_button:id`:
+
+```toml
+[widgets.custom_button_group]
+spacing = 4
+
+[[widgets.custom_button_group.buttons]]
+id = "firefox"
+command = "firefox"
+icon = "󰈹"
+label_text = "Firefox"
+tooltip_text = "Firefox Browser openen"
+show_icon = true
+label = false
+tooltip = true
+
+[layout]
+left_section = ["@custom_button:firefox"]
 ```
