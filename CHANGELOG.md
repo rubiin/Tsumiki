@@ -1,5 +1,36 @@
 # Changelog
 
+## [4.0.0](https://github.com/rubiin/tsumiki/compare/v3.4.6...v4.0.0) (2026-07-25)
+
+
+### ⚠ BREAKING CHANGES
+
+* collapsible groups, widget groups, custom buttons, and custom widgets now support string-based id references (e.g., @group:workspaces-group) in addition to numeric indices. Config files using numeric-only indices remain compatible, but the new id fields are the recommended approach.
+
+### 🐛 Bug Fixes
+
+* cache os.path op ([db88691](https://github.com/rubiin/tsumiki/commit/db886910c340cc74f963fd780b1def93fe6d4878))
+* **deps:** update dependency sharp to ^0.35.0 [security] ([#340](https://github.com/rubiin/tsumiki/issues/340)) ([41aa774](https://github.com/rubiin/tsumiki/commit/41aa774dce5bf6e29384ff5cb92f074ebdb38001))
+* fkin clipboard ([a29c8b1](https://github.com/rubiin/tsumiki/commit/a29c8b1d748928ccc5e97c44e2c8a405624c3ef2))
+* manual destroy timers ([685a357](https://github.com/rubiin/tsumiki/commit/685a35739f2cc6487dce9fd5ebde8156ce5e97be))
+* optimizations - GTK frame clock, style churn, subprocess, polling ([a038326](https://github.com/rubiin/tsumiki/commit/a0383264ade5232326e509f248d4f6ad94a67817))
+* oxfmt format styles dir only ([7dc86f7](https://github.com/rubiin/tsumiki/commit/7dc86f74171f9715e684cb22bee4b3ba5e85671a))
+* Synchronous Hyprland send_command to async ([ad8289c](https://github.com/rubiin/tsumiki/commit/ad8289c635ca75c4780c7fd7a286afdd31b74679))
+* timers ([13a0eef](https://github.com/rubiin/tsumiki/commit/13a0eef93cbd6f92b3229aedc3ec4fba1290748e))
+* use a single httpx instance ([87e26e5](https://github.com/rubiin/tsumiki/commit/87e26e5f2f05744a5c70e89d63d58ce6ba8ec424))
+* use shared HTTP client ([8b30f6b](https://github.com/rubiin/tsumiki/commit/8b30f6bb13f93b73b0f5c96e2e9f41ae0e266fcc))
+* Widget Tree Rebuilds on Small State Changes ([435b9e8](https://github.com/rubiin/tsumiki/commit/435b9e833c9035eb420487594390c1ea26fd7d17))
+
+
+### 📚 Documentation
+
+* add i18n ([f8b5f14](https://github.com/rubiin/tsumiki/commit/f8b5f14e9ad0a7622efb0666b9e4816c17594b90))
+
+
+### ♻️ Code Refactoring
+
+* migrate indexed widget references to support string ids ([95ad263](https://github.com/rubiin/tsumiki/commit/95ad2633927a75a1bb7a8171d2fbcf331f1b9872))
+
 ## [3.4.6](https://github.com/rubiin/tsumiki/compare/v3.4.0...v3.4.6) (2026-07-20)
 
 
