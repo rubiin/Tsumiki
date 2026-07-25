@@ -180,4 +180,3 @@ No remaining `urllib` HTTP callers in the codebase.
 Multiple private methods defined but potentially never called (e.g., `_on_enter_notify`, `_recreate_bars`, `_start_polling` in lockkeys.py, various `_build_*` methods). Dead code adds compilation overhead and confuses maintainers.
 
 **Fix**: Audit for unreferenced methods with a tool like `vulture` or manual grep for method references. Remove or document.
-
