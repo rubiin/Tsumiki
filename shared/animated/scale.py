@@ -27,24 +27,18 @@ class AnimatedScale(Scale, BaseWidget):
     def _execute_animation(self):
         if self._pending_value is not None:
             target_value = self._pending_value
-
             self._pending_value = None
-
             self._animation_timeout = None
 
-            if abs(self.value - target_value) > 0.5:  # animation threshold
+            if abs(self.value - target_value) > 0.5:
                 self.animator.pause()
-
                 self.animator.min_value = self.value
-
                 self.animator.max_value = target_value
-
                 self.animator.play()
-
             else:
                 self.set_value(target_value)
 
-        return False
+        return GLib.SOURCE_REMOVE
 
     def animate_value(self, value: float):
         from ..animator import Animator
@@ -64,7 +58,10 @@ class AnimatedScale(Scale, BaseWidget):
         if self._animation_timeout:
             GLib.source_remove(self._animation_timeout)
 
+        # Use idle_add instead of a 50ms timeout for scheduling the animation.
+        # Multiple rapid calls to animate_value cancel the previous idle,
+        # providing natural debounce without an artificial delay.
         self._animation_timeout = self._register_repeater(
-            GLib.timeout_add(50, self._execute_animation)
+            GLib.idle_add(self._execute_animation)
         )
         return

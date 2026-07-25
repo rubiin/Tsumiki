@@ -9,9 +9,7 @@ from fabric.utils import (
     GLib,
     Gtk,
     bulk_connect,
-    invoke_repeater,
     logger,
-    remove_handler,
 )
 from fabric.widgets.box import Box
 from fabric.widgets.button import Button
@@ -391,21 +389,27 @@ class NotificationWidget(EventBox):
     def start_timeout(self):
         self.stop_timeout()
         self._time_remaining = self.get_timeout()
-        self._timeout_id = invoke_repeater(10, self._timer_tick)
+        self._timeout_start = (
+            GLib.get_monotonic_time()
+        )  # microseconds, for precise elapsed tracking
+        self._timeout_id = self.progress_timeout.add_tick_callback(self._tick_callback)
 
-    def _timer_tick(self) -> bool:
-        """Single unified tick: update progress bar and close when expired."""
+    def _tick_callback(self, widget, frame_clock) -> bool:
+        """Called on every frame (vsync). Updates progress bar smoothly."""
+        elapsed_ms = (GLib.get_monotonic_time() - self._timeout_start) / 1000
+        self._time_remaining = max(0, self.get_timeout() - elapsed_ms)
+
+        self.progress_timeout.queue_draw()
 
         if self._time_remaining <= 0:
             self.close_notification()
-            return False
-        self._time_remaining -= 10
-        self.progress_timeout.queue_draw()
-        return True
+            return False  # Stop ticking
+
+        return True  # Keep ticking on next frame
 
     def stop_timeout(self):
         if self._timeout_id is not None:
-            remove_handler(self._timeout_id)
+            self.progress_timeout.remove_tick_callback(self._timeout_id)
             self._timeout_id = None
 
     def close_notification(self):

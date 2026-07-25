@@ -107,7 +107,7 @@ Uses blocking `exec_shell_command("sass ...")` in a thread (subprocess spawn). C
 
 **Fix**: Replace `exec_shell_command("sass ...")` with Python `import sass` library.
 
-### 11. Notification Timer Fires at 10ms
+### ~~11. Notification Timer Fires at 10ms~~
 **Files**: `modules/notification.py`
 **Effort**: Trivial | **Impact**: Low
 

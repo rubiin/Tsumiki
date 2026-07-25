@@ -171,7 +171,6 @@ class Animator(Service):
         max_value: float = 1.0,
         repeat: bool = False,
         tick_widget: Gtk.Widget | None = None,
-        tick_interval: int = 16,
         **kwargs,
     ):
         super().__init__(**kwargs)
@@ -183,7 +182,6 @@ class Animator(Service):
         self._duration = 0.8
         self._timing_function = timing_function
         self._tick_widget = tick_widget
-        self._tick_interval = tick_interval
 
         self.timing_function = timing_function
         self.repeat = repeat
@@ -237,10 +235,7 @@ class Animator(Service):
         if not self._tick_handler:
             return
 
-        if self._tick_widget:
-            self._tick_widget.remove_tick_callback(self._tick_handler)
-        else:
-            GLib.source_remove(self._tick_handler)
+        self._tick_widget.remove_tick_callback(self._tick_handler)
         self._tick_handler = None
         return
 
@@ -248,19 +243,21 @@ class Animator(Service):
         if self._playing:
             return
 
+        if not self._tick_widget:
+            raise ValueError(
+                "Animator requires a tick_widget for frame-clock animation. "
+                "Pass a Gtk.Widget (e.g., self) when constructing the Animator."
+            )
+
         self.playing = True
         self._start_time = self.do_get_time_now()
 
         if self._tick_handler:
             return
 
-        if self._tick_widget:
-            self._tick_handler = self._tick_widget.add_tick_callback(
-                self.do_handle_tick
-            )
-            return
-
-        self._tick_handler = GLib.timeout_add(self._tick_interval, self.do_handle_tick)
+        self._tick_handler = self._tick_widget.add_tick_callback(
+            self.do_handle_tick
+        )
         return
 
     def pause(self):
