@@ -191,7 +191,7 @@ class EmojiPickerMenu(Box):
             self._build_page(page_idx)
         # Show first page
         if self.total_pages > 0:
-            self.stack.set_visible_child_name(f"page-0")
+            self.stack.set_visible_child_name("page-0")
 
         should_resize = not query
 

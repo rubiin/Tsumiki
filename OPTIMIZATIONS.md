@@ -199,4 +199,3 @@ Several module-level imports are only used in specific functions:
 These add import overhead at module load time even when the features are never used.
 
 **Fix**: Move these imports inside their respective functions (lazy imports). For `psutil`, it's already imported by `stats_poll()` in `widget_utils.py`, so it's already in memory — the import is fast but unnecessary.
-

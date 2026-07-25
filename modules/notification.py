@@ -1,3 +1,5 @@
+from typing import ClassVar
+
 from fabric.notifications import (
     Notification,
     NotificationAction,
@@ -483,7 +485,7 @@ class NotificationWidget(EventBox):
         self.notification_box.set_opacity(1.0)
         self.resume_timeout()
 
-    _DEFAULT_TIMEOUTS: dict[int, int] = {0: 3000, 1: 8000, 2: 15000}
+    _DEFAULT_TIMEOUTS: ClassVar[dict[int, int]] = {0: 3000, 1: 8000, 2: 15000}
 
     def get_timeout(self) -> int:
         if self.config.get("respect_expire", True) and self._notification.timeout != -1:
@@ -500,7 +502,9 @@ class NotificationWidget(EventBox):
                 return timeout_config.get("critical", self._DEFAULT_TIMEOUTS[2])
 
         # Fallback when timeout config is missing or not a dict
-        return self._DEFAULT_TIMEOUTS.get(self._notification.urgency, self._DEFAULT_TIMEOUTS[1])
+        return self._DEFAULT_TIMEOUTS.get(
+            self._notification.urgency, self._DEFAULT_TIMEOUTS[1]
+        )
 
     def pause_timeout(self):
         self.stop_timeout()
