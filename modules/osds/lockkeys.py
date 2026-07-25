@@ -1,7 +1,9 @@
+import contextlib
 import json
 from typing import ClassVar
 
-from fabric.utils import GLib, GObject, exec_shell_command_async, logger
+from fabric.hyprland.widgets import get_hyprland_connection
+from fabric.utils import GObject, logger
 
 from utils.icons import symbolic_icons
 
@@ -9,7 +11,12 @@ from ..osd import GenericOSDContainer
 
 
 class LockkeysOSDContainer(GenericOSDContainer):
-    """OSD for capslock and numlock state."""
+    """OSD for capslock and numlock state.
+
+    Driven by Hyprland ``event::activelayout`` — queries lock state
+    asynchronously via ``j/devices`` when the event fires, instead of
+    polling every 200ms.
+    """
 
     __gsignals__: ClassVar = {
         "locks-changed": (GObject.SignalFlags.RUN_FIRST, None, ())
@@ -23,7 +30,6 @@ class LockkeysOSDContainer(GenericOSDContainer):
         self.config = config
         self.previous_capslock = None
         self.previous_numlock = None
-        self.poll_interval = config.get("poll_interval", 200)
 
         # Create text display for locks
         from fabric.widgets.label import Label
@@ -37,44 +43,39 @@ class LockkeysOSDContainer(GenericOSDContainer):
         # Replace scale with lock display
         self.children = (self.icon, self.lock_label)
 
-        # Start polling
-        self._poll_timer = None
-        self._start_polling()
+        # Subscribe to Hyprland event — fires on keyboard layout changes
+        self._hyprland_connection = get_hyprland_connection()
+        self._event_handler_id = self._hyprland_connection.connect(
+            "event::activelayout", self._on_activelayout
+        )
 
-    def _start_polling(self):
-        """Start polling hyprctl devices state."""
+        # Initial query
+        self._query_lock_state()
 
-        def poll():
-            exec_shell_command_async(
-                "hyprctl devices -j",
-                self._on_devices_output,
-            )
-            return True
+    def _on_activelayout(self, *_):
+        """Hyprland layout-change event — query lock state."""
+        self._query_lock_state()
 
-        self._poll_timer = GLib.timeout_add(self.poll_interval, poll)
-        # Initial poll
-        poll()
+    def _query_lock_state(self) -> bool:
+        """Query current lock state via Hyprland socket (async)."""
+        self._hyprland_connection.send_command_async(
+            "j/devices",
+            self._on_devices_reply,
+        )
+        return True
 
-    def _on_devices_output(self, output: str):
-        """Parse hyprctl devices output."""
+    def _on_devices_reply(self, reply, *_):
+        """Parse j/devices reply for capslock/numlock."""
         try:
-            data = json.loads(output)
+            data = json.loads(reply.reply.decode().strip("\n"))
             keyboards = data.get("keyboards", [])
-
-            # Find main keyboard
-            main_kb = None
-            for kb in keyboards:
-                if kb.get("main"):
-                    main_kb = kb
-                    break
-
-            if not main_kb:
+            main_kb = next((kb for kb in keyboards if kb.get("main")), None)
+            if main_kb is None:
                 return
 
             caps = main_kb.get("capsLock", False)
             num = main_kb.get("numLock", False)
 
-            # Only emit if state changed
             if self.previous_capslock != caps or self.previous_numlock != num:
                 self.previous_capslock = caps
                 self.previous_numlock = num
@@ -82,7 +83,7 @@ class LockkeysOSDContainer(GenericOSDContainer):
                 self._update_display(caps, num)
                 self.emit("locks-changed")
 
-        except (json.JSONDecodeError, KeyError, TypeError) as e:
+        except (json.JSONDecodeError, KeyError, TypeError, AttributeError) as e:
             logger.warning(f"[LockkeysOSD] Parse error: {e}")
 
     def _update_display(self, caps: bool, num: bool):
@@ -108,10 +109,11 @@ class LockkeysOSDContainer(GenericOSDContainer):
         self.lock_label.set_label(label_text)
 
     def cleanup(self):
-        """Clean up timer on destroy."""
-        if self._poll_timer:
-            GLib.source_remove(self._poll_timer)
-            self._poll_timer = None
+        """Clean up signal handlers on destroy."""
+        if self._event_handler_id is not None:
+            with contextlib.suppress(Exception):
+                self._hyprland_connection.disconnect(self._event_handler_id)
+            self._event_handler_id = None
 
     def do_destroy(self):
         """Called when widget destroyed."""
