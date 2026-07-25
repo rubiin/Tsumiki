@@ -3426,19 +3426,25 @@
 						},
 						"timeout": {
 							"type": "object",
-							"description": "Timeout in milliseconds before notifications are dismissed",
+							"description": "Duration in milliseconds before a notification is auto-dismissed, keyed by urgency level (low/normal/critical).",
 							"properties": {
 								"low": {
 									"type": "integer",
-									"default": 3000
+									"minimum": 0,
+									"default": 3000,
+									"description": "Timeout in ms for low-urgency notifications."
 								},
 								"normal": {
 									"type": "integer",
-									"default": 8000
+									"minimum": 0,
+									"default": 8000,
+									"description": "Timeout in ms for normal-urgency notifications."
 								},
 								"critical": {
 									"type": "integer",
-									"default": 15000
+									"minimum": 0,
+									"default": 15000,
+									"description": "Timeout in ms for critical-urgency notifications."
 								}
 							}
 						},
