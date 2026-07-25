@@ -185,7 +185,13 @@ class EmojiPickerMenu(Box):
             else 0
         )
 
-        self._load_page(self.current_page_index)
+        self._page_cache: dict[int, Box] = {}
+        # Build all pages into cache so navigation just switches stack children
+        for page_idx in range(self.total_pages):
+            self._build_page(page_idx)
+        # Show first page
+        if self.total_pages > 0:
+            self.stack.set_visible_child_name(f"page-0")
 
         should_resize = not query
 
@@ -194,15 +200,15 @@ class EmojiPickerMenu(Box):
         if query.strip() != "" and self._get_all_emoji_buttons():
             self.update_selection(0)
 
-    def _load_page(self, page_index: int):
-        self.update_selection(-1)
-        page_box = Box(name=f"page-box-{page_index}", orientation="v", spacing=4)
+    def _build_page(self, page_index: int) -> Box:
+        """Build a single page of emoji buttons and cache it."""
         start_index = page_index * self.emojis_per_page
         end_index = min(
             (page_index + 1) * self.emojis_per_page, len(self.filtered_emojis)
         )
         page_emojis = self.filtered_emojis[start_index:end_index]
 
+        page_box = Box(name=f"page-box-{page_index}", orientation="v", spacing=4)
         grid_box = Box(name="emoji-grid-box", orientation="v", spacing=2)
 
         row_box = None
@@ -214,6 +220,14 @@ class EmojiPickerMenu(Box):
                 row_box.add(self._bake_emoji_slot(emoji_char, emoji_info))
         page_box.add(grid_box)
         self.stack.add_named(page_box, f"page-{page_index}")
+        self._page_cache[page_index] = page_box
+        return page_box
+
+    def _load_page(self, page_index: int):
+        self.update_selection(-1)
+        # Use cached page if available, otherwise build it
+        if page_index not in self._page_cache:
+            self._build_page(page_index)
         self.stack.set_visible_child_name(f"page-{page_index}")
 
         buttons = self._get_all_emoji_buttons()

@@ -11,6 +11,8 @@ from utils.constants import (
 )
 from utils.functions import read_json_file, write_json_file
 
+_MAX_CACHED_PIXBUF = 100  # Hard cap on pixbuf cache entries
+
 
 class CustomNotifications(Notifications):
     """A service to manage the notifications."""
@@ -147,6 +149,13 @@ class CustomNotifications(Notifications):
 
         return None
 
+    def _evict_oldest_pixbuf(self):
+        """Evict the oldest pixbuf entry when cache exceeds the cap."""
+        while len(self._pixbuf_cache) > _MAX_CACHED_PIXBUF:
+            # IDs are monotonically increasing, so the smallest ID is oldest
+            oldest_id = min(self._pixbuf_cache.keys())
+            del self._pixbuf_cache[oldest_id]
+
     def cache_pixbuf(
         self,
         notification_id: int,
@@ -158,6 +167,7 @@ class CustomNotifications(Notifications):
         if notification_id not in self._pixbuf_cache:
             self._pixbuf_cache[notification_id] = {}
         self._pixbuf_cache[notification_id][size] = pixbuf
+        self._evict_oldest_pixbuf()
 
     def cache_pixbuf_from_notification(
         self, notification_id: int, notification: Notification

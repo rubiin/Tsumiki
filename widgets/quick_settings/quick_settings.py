@@ -380,7 +380,8 @@ class QuickSettingsMenu(Box):
             uptime_label.set_label(uptime_text)
             return True
 
-        self._uptime_repeater_id = invoke_repeater(1000, _update_uptime)
+        # Register a repeater to update uptime every minute
+        self._uptime_repeater_id = invoke_repeater(60000, _update_uptime)
 
     def destroy(self):
         if getattr(self, "_uptime_repeater_id", None) is not None:

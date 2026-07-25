@@ -15,21 +15,6 @@
 
 **Fix**: Add `threading.Lock()` guard around creation and mutation of `_util_fabricator`, `_util_subscribers`, and `_util_changed_handler_ids`.
 
-### 2. ConfigWatcher Still Uses Raw subprocess
-**Files**: `utils/config_watcher.py`
-**Effort**: Small | **Impact**: Low
-
-`_restart_tsumiki()` uses `subprocess.Popen([self.init_script, "-restart"], ...)` — the last remaining raw `subprocess` call outside of `utils/functions.py`'s abstraction layer.
-
-**Fix**: Replace `subprocess.Popen(...)` with `exec_shell_command_async(f"{self.init_script} -restart", lambda *_: None)`.
-
-### 3. CloudflareWarpService Still Polls and Uses Raw subprocess
-**Files**: `services/cloudflare_warp.py`
-**Effort**: Small | **Impact**: Low
-
-Polls `warp-cli status` every 5 seconds unconditionally. Also uses raw `subprocess.run(["warp-cli", action], ...)` in `_run_warp_cli()`.
-
-**Fix**: Pause polling on widget unmap/resume on map. Replace `subprocess.run` with `exec_shell_command`.
 
 ### 4. Expensive gi.repository Imports at Module Level
 **Files**: `services/network.py`, `services/mpris.py`, `shared/scrollable_text.py`, `shared/popover.py`, `widgets/quick_settings/submenu/wifi.py`
@@ -43,14 +28,6 @@ Polls `warp-cli status` every 5 seconds unconditionally. Also uses raw `subproce
 
 ## 🥈 Medium Priority
 
-### ~~5. GTK Frame Clock for Animations~~
-**Files**: `shared/animator.py`, `shared/animated/scale.py`
-**Effort**: Medium | **Impact**: Medium
-
-- `shared/animator.py` — falls back to `GLib.timeout_add(16ms)` when no `tick_widget`. Misses vsync. The widget-path (`add_tick_callback`) already exists.
-- `shared/animated/scale.py` — uses `GLib.timeout_add(50ms)` instead of frame clock.
-
-**Fix**: Use `add_tick_callback` (GTK frame clock) for sub-second animations instead of `timeout_add`.
 
 ### 6. Signal Connection Leaks (Many Widgets Bypass TeardownMixin)
 **Files**: `widgets/battery.py`, `widgets/bluetooth.py`, `widgets/volume.py`, `widgets/datetime_menu.py`, `widgets/kanban.py`, `services/network.py`, `widgets/quick_settings/submenu/bluetooth.py`, `widgets/quick_settings/togglers.py`, `widgets/settings_gui.py`
@@ -60,19 +37,7 @@ Many widgets connect to signals directly without using `_register_handler()` fro
 
 **Fix**: Route all signal connections through `_register_handler()`. For singleton services, disconnect handlers on widget destroy.
 
-### ~~7. Timer Cleanup Gaps (Some Widgets Bypass TeardownMixin)~~
-**Files**: `widgets/clipboard.py`, `widgets/usb_manager.py`, `widgets/pomodoro.py`, `modules/desktop_clock.py`, `widgets/kanban.py`, `widgets/breathing.py`
-**Effort**: Medium | **Impact**: Medium
 
-✅ Done — Routed through TeardownMixin via `_register_repeater()`:
-- `clipboard.py` — `_search_timer_id` in `on_search_text_changed()`
-- `usb_manager.py` — `_refresh_timer_id` in `_on_action_done()`
-- `pomodoro.py` — `timer_id` in `start()` and `_transition_phase()`
-- `desktop_clock.py` — `_tick_id` for the clock tick
-
-**Intentionally left as-is:**
-- `kanban.py` — one-shot 50ms `GLib.timeout_add` on `KanbanNote` (inherits `EventBox`, not `TeardownMixin`). Self-cleaning, fires once and auto-removes. Harmless.
-- `breathing.py` — `BreathingMenu(BoxWidget)` manages `_timer_id` manually with `GLib.source_remove()` in `_stop_exercise()`, `_toggle_pause()`, and `_schedule_tick()`. Destroy handler calls `_stop_exercise()`. Already thorough.
 
 ### 8. Synchronous Hyprland send_command Blocks UI Thread
 **Files**: `modules/overview.py`, `modules/dock.py`, `utils/monitors.py`
@@ -81,19 +46,6 @@ Many widgets connect to signals directly without using `_register_handler()` fro
 `send_command("j/clients")`, `send_command("j/monitors")`, `send_command("j/activewindow")` block the GTK main loop. The overview's `update()` queries both `j/monitors` and `j/clients` sequentially — two synchronous round-trips.
 
 **Fix**: Use `send_command_async()` with callbacks. Combine related queries into fewer round-trips.
-
-### ~~9. Unbuffered os.path.exists Calls on Hot Paths~~
-**Files**: `utils/icon_resolver.py`, `services/weather.py`, `services/quotes.py`, `services/custom_notification.py`, `services/brightness.py`, `services/privacy.py`, `widgets/system_tray.py`
-**Effort**: Small | **Impact**: Low
-
-✅ Done — Added `path_exists_ttl(path, ttl=300)` to `utils/functions.py` and applied:
-- `widgets/system_tray.py` — `resolve_icon` now uses `path_exists_ttl(icon_name, ttl=60)` instead of raw `os.path.exists`
-- `services/privacy.py` — `_camera_video_devices()` result cached with 30s TTL, skipping `/sys` directory listing when cache is warm
-
-**Intentionally left as-is (one-shot or cold-path only):**
-- `utils/icon_resolver.py` — `ICON_CACHE_FILE` check is lazy-loaded, runs once per session
-- `services/weather.py`, `services/quotes.py`, `services/custom_notification.py` — cache file checks are one-shot or have their own higher-level caching
-- `services/brightness.py` — `_screen_brightness_cache` already prevents repeated `os.path.exists` calls
 
 ---
 
@@ -107,21 +59,6 @@ Uses blocking `exec_shell_command("sass ...")` in a thread (subprocess spawn). C
 
 **Fix**: Replace `exec_shell_command("sass ...")` with Python `import sass` library.
 
-### ~~11. Notification Timer Fires at 10ms~~
-**Files**: `modules/notification.py`
-**Effort**: Trivial | **Impact**: Low
-
-`invoke_repeater(10, self._timer_tick)` fires 100 times per second for notification timeouts measured in seconds.
-
-**Fix**: Change to `invoke_repeater(250, self._timer_tick)` — reduces CPU wake-ups by 96%.
-
-### ~~ 12. Excessive Style Class Churn ~~
-**Files**: `modules/dock.py`, `widgets/datetime_menu.py`, `widgets/cheatsheet.py`, `widgets/git_companion.py`, `widgets/quick_settings/submenu/power_profiles.py`
-**Effort**: Small | **Impact**: Low
-
-`add_style_class("active")` / `remove_style_class("active")` per-button triggers individual GTK style recalc. `dock.py` does this for every client button on every sync.
-
-**Fix**: Use `set_style_classes()` atomically. For bulk updates, collect changes and apply once.
 
 ### 13. ScreenRecording Service Uses Gio.Subprocess Directly
 **Files**: `services/screen_record.py`
@@ -131,13 +68,7 @@ Uses `Gio.Subprocess.new()` with manual `Gio.Task` callbacks instead of `exec_sh
 
 **Fix**: Refactor to use `exec_shell_command_async()` or `Gio.SubprocessLauncher`.
 
-### ~~14. Clipboard Widget Heavy Subprocess Launcher Usage~~
-**Files**: `widgets/clipboard.py`
-**Effort**: Small | **Impact**: Low
 
-✅ Done:
-- `_launcher_cache` class dict reuses `Gio.SubprocessLauncher` instances by flags — avoids allocating a new launcher on every `cliphist list` / `decode` / `delete` / `wipe` call
-- Clipboard history cached with 3s TTL (`_cache_loaded_at` timestamp) — re-opening the popover within 3s skips `cliphist list` entirely, falling back to the previously loaded items
 
 ### 15. Battery Service Creates Separate DBus Connection
 **Files**: `services/battery.py`
@@ -147,36 +78,125 @@ Creates its own `GioDBusHelper` instance for UPower communication, adding a sepa
 
 **Fix**: Investigate sharing DBus connections between services or using fabric's built-in DBus integration.
 
-Widget Tree Rebuilds on Small State Changes
-**Files**: `widgets/kanban.py`, `widgets/clipboard.py`
-**Effort**: Medium | **Impact**: Low
+---
 
-✅ Done — Added `_item_widgets` cache (`dict[str, Button]`) and `_rebuild_viewport_from_cache()` to `clipboard.py`:
-- `toggle_pin_item()` no longer calls the full `_display_clipboard_items()` rebuild
-- Instead, re-sorts `filtered_items` in-place and reuses cached button widgets via `_rebuild_viewport_from_cache()`
-- Full `_display_clipboard_items()` only happens on initial load, search filter changes, and clipboard data updates — not on pin toggles
-- `_refresh_button_pin_state()` updates label/tooltip on cached widgets without recreating them
+# New Findings (July 2026)
 
-Kanban already adds/removes individual notes; no change needed there.
+## 🔥 High Priority (New)
 
-### ~~17. HTTP Client Instances Created Per Request~~
-**Files**: `services/weather.py`, `services/quotes.py`, `widgets/ip_monitor.py`, `widgets/git_companion.py`, `shared/media.py`
+### 16. LockKeys OSD Polls hyprctl at 200ms — 5x/second Subprocess Spawn
+**Files**: `modules/osds/lockkeys.py`, `utils/constants.py`
+**Effort**: Small | **Impact**: Medium
+
+The LockKeys OSD polls `hyprctl devices -j` every **200ms** by default. Each poll spawns a subprocess, parses JSON output, and updates GTK widgets. That's 5 subprocess spawns/second just for capslock/numlock state detection — which changes maybe once per session.
+
+**Fix**:
+- Increase default `poll_interval` to 2000ms (2 seconds) — keyboard lock state doesn't change rapidly enough to warrant 200ms
+- Switch to listening for keyboard events via DBus or `hyprctl` event socket instead of polling
+- Or use `exec_shell_command_async` and cache the last result, only updating UI on actual changes
+
+### 17. DnsSwitcher Service Polls nmcli Every 3s Unconditionally
+**Files**: `services/dns_switcher.py`
+**Effort**: Small | **Impact**: Medium
+
+`DnsSwitcherService` polls `nmcli -t -f UUID con show --active` every 3 seconds via `GLib.timeout_add`. Each poll involves a blocking `exec_shell_command()` call. The poll never pauses — it runs even when no DNS switcher widget is visible.
+
+**Fix**: Add `pause_polling()`/`resume_polling()` methods (like CloudflareWarpService already has) and connect to widget map/unmap events. Increase default interval to 5000ms+.
+
+### 18. CloudflareWarp Service Polls warp-cli Every 5s Unconditionally at Module Level
+**Files**: `services/cloudflare_warp.py`
 **Effort**: Small | **Impact**: Low
 
-✅ Done — Added shared HTTP client in `utils/functions.py`:
-- `get_http_client()` — lazy-init `httpx.Client` singleton with connection pooling (5 keepalive, 10 max connections), consistent 10s timeout, and shared User-Agent
-- `services/weather.py` — `_make_session()` removed; all 3 fetch methods (`_geocode_location`, `_fetch_wttr_weather`, `_fetch_openmeteo_weather`) now use `get_http_client()`
-- `services/quotes.py` — `_make_session()` removed; `simple_quotes_info()` now uses `get_http_client()`
-- `widgets/ip_monitor.py` — `urllib.request.Request`/`urlopen` replaced with `get_http_client().get()` for both ipify and ipapi.co calls
-- `widgets/git_companion.py` — avatar download `urlopen` replaced with `get_http_client().get()`
-- `shared/media.py` — album artwork `urllib.request.urlopen` replaced with `get_http_client().get()`
+Similar to DnsSwitcher — polls `warp-cli status` every 5 seconds. The widget does connect map/unmap to pause/resume polling, but the **service singleton starts polling in `__init__`** — whenever `services/cloudflare_warp.py` is imported (typically at widget module load time), polling begins immediately, even before any widget is created or mapped.
 
-No remaining `urllib` HTTP callers in the codebase.
+**Fix**: Defer starting the poll timer to first widget map event instead of `__init__`. Or default to paused state and only start on first widget map.
 
-### 18. Dead Code: Unreferenced Private Methods
-**Files**: Potentially across the codebase
+
+### 20. Privacy Service Calls pw-dump Synchronously on Main Thread
+**Files**: `services/privacy.py`
+**Effort**: Small | **Impact**: Medium
+
+`_load_pipewire_objects()` calls `exec_shell_command("pw-dump")` synchronously. `pw-dump` can produce several megabytes of JSON output. This is called from the privacy indicator's repeater (every 3500ms). Blocks the GTK main loop during execution.
+
+**Fix**: Move `exec_shell_command("pw-dump")` to a background thread, parse the JSON there, then idle_add the result back to the main thread.
+
+
+---
+
+## 🥈 Medium Priority (New)
+
+
+
+
+
+### 25. LockKeys OSD Does Not Use TeardownMixin for Timer Cleanup
+**Files**: `modules/osds/lockkeys.py`
+**Effort**: Small | **Impact**: Low
+
+`LockkeysOSDContainer` manages `_poll_timer` manually with `do_destroy()` calling `cleanup()`. It does **not** use `TeardownMixin` from `shared/widget_container.py`. This is inconsistent with the pattern used by other widgets and could miss cleanup in edge cases.
+
+**Fix**: Switch to `TeardownMixin` and use `_register_repeater()` for the poll timer.
+
+### 26. CloudflareWarp Service Uses Raw exec_shell_command Instead of Async
+**Files**: `services/cloudflare_warp.py`
+**Effort**: Small | **Impact**: Low
+
+`_run_warp_cli()` calls `exec_shell_command(f"warp-cli {action}")` synchronously. The poll function uses `exec_shell_command_async` but action calls are synchronous.
+
+**Fix**: Replace synchronous `exec_shell_command` with `exec_shell_command_async` for all warp-cli invocations.
+
+
+---
+
+## 🥉 Lower Priority (New)
+
+### 29. Duplicate Functions Across shell.py and functions.py
+**Files**: `utils/shell.py`, `utils/functions.py`
+**Effort**: Small | **Impact**: Low
+
+Multiple functions are duplicated between these files:
+- `set_process_name()` — both files have the same `ctypes.CDLL("libc.so.6")` implementation
+- `kill_process()` — identical `pkill` wrapper in both
+- `is_app_running()` — identical `pidof` wrapper in both
+- `check_executable_exists()` — identical `GLib.find_program_in_path` wrapper in both
+- `play_sound()` — identical `pw-play` wrapper in both
+- `toggle_command()` — identical `subprocess.Popen` wrapper in both
+
+This creates maintenance burden and potential drift.
+
+**Fix**: Consolidate all process/shell utilities into `utils/shell.py` and import from there in `utils/functions.py`, or vice versa. Remove the duplicate definitions.
+
+
+### 34. Notification Timer Uses invoke_repeater at 250ms for Second-Level Timeouts
+**Files**: `modules/notification.py`
+**Effort**: Trivial | **Impact**: Low
+
+Although the old 10ms interval was already fixed to 250ms (per OPTIMIZATIONS.md fix notes), 250ms is still 4x more wake-ups than needed for timeouts measured in seconds. A 500ms or 1000ms tick would be sufficient for notification auto-dismiss.
+
+**Fix**: Change to 500ms interval.
+
+### 36. ConfigWatcher Uses Raw subprocess.Popen for Restart
+**Files**: `utils/config_watcher.py`
+**Effort**: Small | **Impact**: Low
+
+`_restart_tsumiki()` calls `subprocess.Popen([self.init_script, "-restart"], ...)` directly. This is a raw subprocess call outside the abstraction layer in `utils/functions.py`.
+
+**Fix**: Replace with `exec_shell_command_async()` or centralize via `utils/functions.py`'s `toggle_command()` pattern.
+
+### 37. utils/functions.py Imports Many Modules at Top Level Used Only in Specific Functions
+**Files**: `utils/functions.py`
 **Effort**: Medium | **Impact**: Low
 
-Multiple private methods defined but potentially never called (e.g., `_on_enter_notify`, `_recreate_bars`, `_start_polling` in lockkeys.py, various `_build_*` methods). Dead code adds compilation overhead and confuses maintainers.
+Several module-level imports are only used in specific functions:
+- `psutil` — only used in `uptime()`
+- `html` — only used in `parse_markup()`
+- `shutil` — only used in `cleanup_temp_resources()`
+- `importlib` — only used in `lazy_load_class()`
+- `string.Formatter` — only used in `_get_named_format_keys()`
+- `BytesIO` — only used in `make_qrcode()`
+- `Counter` — only used in `_pillow_worker()`
 
-**Fix**: Audit for unreferenced methods with a tool like `vulture` or manual grep for method references. Remove or document.
+These add import overhead at module load time even when the features are never used.
+
+**Fix**: Move these imports inside their respective functions (lazy imports). For `psutil`, it's already imported by `stats_poll()` in `widget_utils.py`, so it's already in memory — the import is fast but unnecessary.
+

@@ -41,7 +41,8 @@ class WorldClockWidget(ButtonWidget):
             else:
                 logger.info(f"[world_clock] Skipping invalid timezone: {tz_name}")
 
-        self._register_repeater(invoke_repeater(1000, self._update_ui))
+        # Most users don't need sub-minute precision for timezones
+        self._register_repeater(invoke_repeater(60000, self._update_ui))
 
     def _update_ui(self, *_):
         try:

@@ -34,14 +34,21 @@ class CavaWidget(ButtonWidget):
 
         script_path = f"{ASSETS_DIR}/scripts/cava.sh"
 
-        self.container_box.children = Box(spacing=1, children=[cava_label]).build(
-            lambda box, _: Fabricator(
-                poll_from=f"bash -c '{script_path} {bars}'",
-                stream=True,
-                on_changed=lambda f, line: cava_label.set_label(line),
-            )
+        self._fabricator = Fabricator(
+            poll_from=f"bash -c '{script_path} {bars}'",
+            stream=True,
+            on_changed=lambda f, line: cava_label.set_label(line),
         )
+
+        self.container_box.children = Box(spacing=1, children=[cava_label])
 
         self.connect(
             "clicked", lambda _: exec_shell_command_async(command, lambda *_: None)
         )
+
+        self.connect("destroy", self._on_cava_destroy)
+
+    def _on_cava_destroy(self, *_):
+        if hasattr(self, "_fabricator") and self._fabricator is not None:
+            self._fabricator.destroy()
+            self._fabricator = None

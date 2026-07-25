@@ -197,7 +197,7 @@ count = true
 hide_count_on_zero = true
 
 [widgets.divider]
-size = 2
+size = "2px"
 
 [widgets.hypridle]
 enabled_icon = ""

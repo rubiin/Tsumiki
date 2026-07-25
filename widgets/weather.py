@@ -250,7 +250,7 @@ class WeatherMenu(BoxWidget, BaseWeatherWidget):
             callback=self.update_data,
         )
 
-        self._register_repeater(invoke_repeater(1000, self.update_widget))
+        self._register_repeater(invoke_repeater(60000, self.update_widget))
 
     def update_data(self, data):
         self.update_app_data(data)
@@ -389,7 +389,7 @@ class WeatherWidget(ButtonWidget, BaseWeatherWidget, PopoverMixin):
 
         self._update_ui(forced=True)
 
-        self._register_repeater(invoke_repeater(1000, self._update_ui))
+        self._register_repeater(invoke_repeater(60000, self._update_ui))
 
     def update_data(self, data):
         self.update_time = datetime.now()

@@ -29,7 +29,7 @@ class StopWatchWidget(ButtonWidget):
         self.connect("clicked", self.on_click)
 
         self.timeout_id = self._register_repeater(
-            GLib.timeout_add(100, self.update_time)
+            GLib.timeout_add(1000, self.update_time)
         )
 
     # stop or run on click

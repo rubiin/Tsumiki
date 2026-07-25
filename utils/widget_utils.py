@@ -11,9 +11,6 @@ from fabric.widgets.label import Label
 from fabric.widgets.scale import ScaleMark
 from fabric.widgets.widget import Widget
 
-from shared.animated.circularprogress import AnimatedCircularProgressBar
-from shared.animated.scale import AnimatedScale
-
 from .config import tsumiki_config
 from .icons import get_text_icon, symbolic_icons
 
@@ -293,9 +290,11 @@ def create_scale(
     style_classes=[""],
     duration=0.8,
     **kwargs,
-) -> AnimatedScale:
+):
     if marks is None:
         marks = (ScaleMark(value=i) for i in range(1, 100, 10))
+
+    from shared.animated.scale import AnimatedScale
 
     return AnimatedScale(
         name=name,
@@ -345,6 +344,7 @@ def create_progress(
     name="circular-progress",
     **kwargs,
 ):
+    from shared.animated.circularprogress import AnimatedCircularProgressBar
 
     return AnimatedCircularProgressBar(
         name=name,

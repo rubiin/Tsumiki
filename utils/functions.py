@@ -27,7 +27,6 @@ from fabric.utils import (
     exec_shell_command_async,
     get_relative_path,
     idle_add,
-    invoke_repeater,
     logger,
     os,
     time,
@@ -791,8 +790,8 @@ def kill_process(process_name: str):
 
 
 def add_style_class_lazy(widget: Gtk.Widget, class_name: str | Iterable[str]) -> int:
-    return invoke_repeater(
-        50, lambda: widget.add_style_class(class_name), initial_call=False
+    return GLib.timeout_add(
+        50, lambda: widget.add_style_class(class_name) or False
     )
 
 
@@ -1223,21 +1222,31 @@ def get_http_client():
 # ── TTL-cached path existence ─────────────────────────────────
 
 _path_exists_cache: dict[str, tuple[bool, float]] = {}
+_PATH_EXISTS_CACHE_MAX = 500
 
 
 def path_exists_ttl(path: str, ttl: int = 300) -> bool:
-    """Check if a filesystem path exists, with TTL caching.
+    """Check if a filesystem path exists, with TTL and bounded caching.
 
     Caches ``os.path.exists`` results to avoid redundant syscalls on
     hot paths (system tray icon checks, device scans, etc.).  The
-    cache is a simple module-level dict; entries live at most *ttl*
-    seconds before a fresh stat is issued.
+    cache is a simple module-level dict capped at ``_PATH_EXISTS_CACHE_MAX``
+    entries; entries live at most *ttl* seconds before a fresh stat
+    is issued.  When the cache exceeds the cap the oldest entry is
+    evicted.
     """
     now = time.time()
     cached = _path_exists_cache.get(path)
     if cached is not None and now - cached[1] < ttl:
         return cached[0]
     result = os.path.exists(path)
+    if len(_path_exists_cache) >= _PATH_EXISTS_CACHE_MAX:
+        # Evict oldest entry
+        try:
+            oldest = next(iter(_path_exists_cache))
+            del _path_exists_cache[oldest]
+        except StopIteration:
+            pass
     _path_exists_cache[path] = (result, now)
     return result
 
