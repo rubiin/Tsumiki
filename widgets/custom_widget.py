@@ -1,10 +1,10 @@
+import contextlib
 import json
 import signal
-import subprocess
-import threading
 
 from fabric.utils import (
     Gdk,
+    Gio,
     GLib,
     bulk_connect,
     exec_shell_command_async,
@@ -167,7 +167,7 @@ class CustomWidgetExecutor:
         self._on_output = on_output
         self._exec_cmd = module_config.get("exec")
         self._interval = module_config.get("interval", 0)
-        self._process: subprocess.Popen | None = None
+        self._process: Gio.Subprocess | None = None
         self._repeater_handler_id: int | None = None
         self._restart_timer_id: int | None = None
         self._actual_signal: int | None = None
@@ -219,47 +219,33 @@ class CustomWidgetExecutor:
     def _start_continuous(self):
         if not self._exec_cmd:
             return
-        if self._process and self._process.poll() is None:
+        if self._process and self._process.get_if_running():
             return
 
+        restart = self._config.get("restart_interval", 0)
+
         try:
-            self._process = subprocess.Popen(
+            process, _ = exec_shell_command_async(
                 os.path.expanduser(self._exec_cmd),
-                shell=True,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.STDOUT,
-                text=True,
+                lambda line: idle_add(self._on_output, line.strip()),
             )
-            process = self._process
-            self._start_reader_thread(process)
+            self._process = process
+
+            if process and restart > 0:
+
+                def _on_exit(proc, task):
+                    with contextlib.suppress(Exception):
+                        proc.wait_finish(task)
+                    self._restart_timer_id = GLib.timeout_add(
+                        restart * 1000, self._start_continuous
+                    )
+
+                process.wait_async(GLib.PRIORITY_DEFAULT, None, _on_exit)
         except Exception as err:
             logger.exception(
-                ""
                 f"{Colors.ERROR}[CustomWidget] "
                 f"Failed to start continuous command: {err}"
             )
-
-    def _start_reader_thread(self, process: subprocess.Popen | None):
-        def read_output_loop():
-            if not process or not process.stdout:
-                return
-
-            for line in process.stdout:
-                if not line:
-                    break
-                idle_add(self._on_output, line.strip())
-
-            restart = self._config.get("restart_interval", 0)
-            if restart > 0:
-                idle_add(self._schedule_restart, restart)
-
-        threading.Thread(target=read_output_loop, daemon=True).start()
-
-    def _schedule_restart(self, restart_interval: int):
-        self._restart_timer_id = GLib.timeout_add(
-            restart_interval * 1000, self._start_continuous
-        )
-        return False
 
     def cleanup(self):
         if self._repeater_handler_id:
@@ -280,11 +266,7 @@ class CustomWidgetExecutor:
 
         if not self._process:
             return
-        self._process.terminate()
-        try:
-            self._process.wait(timeout=1)
-        except subprocess.TimeoutExpired:
-            self._process.kill()
+        self._process.force_exit()
         self._process = None
 
 

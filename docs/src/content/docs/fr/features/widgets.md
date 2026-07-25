@@ -177,6 +177,20 @@ provider = "open-meteo"
 icon = "󰖟"
 ```
 
+## Widgets de Disposition et de Groupement
+
+### Bouton Personnalisé
+
+Voir la [Configuration Avancée](/fr/configuring/advanced) pour la configuration et l'utilisation.
+
+### Groupe de Boutons Personnalisés
+
+Voir la [Configuration Avancée](/fr/configuring/advanced) pour la configuration et l'utilisation.
+
+### Widget Personnalisé
+
+Voir la [Configuration Avancée](/fr/configuring/advanced) pour la configuration et l'utilisation.
+
 ## Groupes de Widgets et Groupes Pliables
 
 ```toml

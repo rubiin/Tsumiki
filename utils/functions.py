@@ -7,7 +7,6 @@ import json
 import re
 import shutil
 import string
-import subprocess
 from collections import Counter
 from datetime import datetime
 from functools import lru_cache
@@ -760,15 +759,19 @@ def set_scale_adjustment(
 
 # Function to toggle a shell command
 def toggle_command(command: str, full_command: str):
+    full_command = full_command.strip(" ")
     if is_app_running(command):
         kill_process(command)
     else:
+        # Use subprocess directly so the launched app survives bar restart.
+        import subprocess
+
         subprocess.Popen(
-            full_command.split(" "),
-            stdin=subprocess.DEVNULL,  # No input stream
-            stdout=subprocess.DEVNULL,  # Optionally discard the output
-            stderr=subprocess.DEVNULL,  # Optionally discard the error output
-            start_new_session=True,  # This prevents the process from being killed
+            full_command,
+            stdin=subprocess.DEVNULL,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            start_new_session=True,
         )
 
 
@@ -818,25 +821,47 @@ def _get_config_collection(parsed_data: dict, widget_type: str) -> list:
 def _validate_indexed_reference(
     identifier: str, collection: list, collection_name: str, section: str
 ) -> int:
-    """Helper function to validate indexed references (groups, buttons, etc.)."""
-    if not identifier.isdigit():
+    """Helper function to validate indexed references (groups, buttons, etc.).
+
+    Supports both numeric indices and string-based ``id`` lookup for
+    collapsible groups.  When *collection_name* is ``"collapsible group"``
+    and the identifier is not a digit, it searches for an item whose
+    ``id`` property matches.
+    """
+    if identifier.isdigit():
+        idx = int(identifier)
+
+        if not isinstance(collection, list):
+            raise ValueError(f"{collection_name} must be an array")
+
+        if not (0 <= idx < len(collection)):
+            raise ValueError(
+                f"{collection_name.title()} index {idx} is out of range "
+                f"in section {section}. "
+                f"Available indices: 0-{len(collection) - 1}"
+            )
+
+        return idx
+
+    # String-based id lookup (supported for collapsible groups, custom widgets,
+    # custom buttons, and widget groups)
+    if collection_name in (
+        "collapsible group",
+        "custom widget",
+        "custom button",
+        "widget group",
+    ):
+        for idx, item in enumerate(collection):
+            if isinstance(item, dict) and item.get("id") == identifier:
+                return idx
         raise ValueError(
-            f"Invalid {collection_name} index '{identifier}' in section {section}. "
-            "Must be a number."
+            f"No {collection_name} with id '{identifier}' found in section {section}."
         )
 
-    idx = int(identifier)
-
-    if not isinstance(collection, list):
-        raise ValueError(f"{collection_name} must be an array")
-
-    if not (0 <= idx < len(collection)):
-        raise ValueError(
-            f"{collection_name.title()} index {idx} is out of range "
-            f"in section {section}. Available indices: 0-{len(collection) - 1}"
-        )
-
-    return idx
+    raise ValueError(
+        f"Invalid {collection_name} reference '{identifier}' in section {section}. "
+        "Must be a number."
+    )
 
 
 # Pre-defined collection names mapping

@@ -571,10 +571,26 @@ Custom_Button_Group = TypedDict(
     },
 )
 
+
+Custom_Button = TypedDict(
+    "Custom_Button",
+    {
+        "id": str,
+        "command": str,
+        "icon": str,
+        "label_text": str,
+        "tooltip_text": str,
+        "show_icon": bool,
+        "label": bool,
+        "tooltip": bool,
+    },
+)
+
 # Custom Widget configuration (Waybar-compatible)
 CustomWidgetConfig = TypedDict(
     "CustomWidgetConfig",
     {
+        "id": str,
         "exec": str,
         "exec_on_event": bool,
         "interval": int,
@@ -637,11 +653,13 @@ Collapsible_Group = TypedDict(
     "Collapsible_Group",
     {
         "widgets": list[str],
+        "id": str,
         "spacing": int,
         "icon": str,
         "tooltip": str,
         "style_classes": list[str],
     },
+    total=False,
 )
 
 
@@ -650,6 +668,7 @@ Widget_Groups = list[
         "WidgetGroup",
         {
             "widgets": list[str],
+            "id": str,
             "spacing": int,
             "style_classes": list[str],
         },
@@ -813,6 +832,9 @@ class Widgets(TypedDict):
     cava: Cava
     click_counter: ClickCounter
     cpu: Cpu
+    custom_button_group: Custom_Button_Group
+    custom_button: Custom_Button
+    custom_widget: list[CustomWidgetConfig]
     emoji_picker: EmojiPicker
     kanban: Kanban
     date_time: DateTimeMenu
@@ -823,8 +845,6 @@ class Widgets(TypedDict):
     app_launcher_button: App_Launcher_Button
     keyboard: Keyboard
     language: Language
-    custom_button_group: Custom_Button_Group
-    custom_widget: list[CustomWidgetConfig]
     gpu: Gpu
     memory: Memory
     microphone: MicroPhone

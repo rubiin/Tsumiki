@@ -2141,6 +2141,10 @@
 							"items": {
 								"type": "object",
 								"properties": {
+									"id": {
+										"type": "string",
+										"description": "Unique identifier for referencing this custom button in layout (e.g. @custom_button:my-id)"
+									},
 									"command": {
 										"type": "string",
 										"description": "Bash command to execute when button is clicked"
@@ -2287,6 +2291,10 @@
 								"default": 0,
 								"description": "Restart continuous command after N seconds"
 							},
+							"id": {
+								"type": "string",
+								"description": "Unique identifier for referencing this custom widget in layout (e.g. @custom_widget:my-id)"
+							},
 							"format_icons": {
 								"type": "object",
 								"additionalProperties": {
@@ -2370,22 +2378,22 @@
 							},
 							{
 								"type": "string",
-								"pattern": "^@group:\\d+$",
+								"pattern": "^@group:[\\w-]+$",
 								"description": "Specifies a group of widgets to display."
 							},
 							{
 								"type": "string",
-								"pattern": "^@collapsible:\\d+$",
+								"pattern": "^@collapsible:[\\w-]+$",
 								"description": "Specifies a collapsible group of widgets to display."
 							},
 							{
 								"type": "string",
-								"pattern": "^@custom_button:\\d+$",
+								"pattern": "^@custom_button:[\\w-]+$",
 								"description": "Specifies an individual custom button by index (e.g., @custom_button:0, @custom_button:1)."
 							},
 							{
 								"type": "string",
-								"pattern": "^@custom_widget:\\d+$",
+								"pattern": "^@custom_widget:[\\w-]+$",
 								"description": "Specifies a custom widget by index (e.g., @custom_widget:0). Runs external commands like Waybar."
 							},
 							{
@@ -2466,22 +2474,22 @@
 							},
 							{
 								"type": "string",
-								"pattern": "^@group:\\d+$",
+								"pattern": "^@group:[\\w-]+$",
 								"description": "Specifies a group of widgets to display."
 							},
 							{
 								"type": "string",
-								"pattern": "^@collapsible:\\d+$",
+								"pattern": "^@collapsible:[\\w-]+$",
 								"description": "Specifies a collapsible group of widgets to display."
 							},
 							{
 								"type": "string",
-								"pattern": "^@custom_button:\\d+$",
+								"pattern": "^@custom_button:[\\w-]+$",
 								"description": "Specifies an individual custom button by index (e.g., @custom_button:0, @custom_button:1)."
 							},
 							{
 								"type": "string",
-								"pattern": "^@custom_widget:\\d+$",
+								"pattern": "^@custom_widget:[\\w-]+$",
 								"description": "Specifies a custom widget by index (e.g., @custom_widget:0). Runs external commands like Waybar."
 							},
 							{
@@ -2562,22 +2570,22 @@
 							},
 							{
 								"type": "string",
-								"pattern": "^@group:\\d+$",
+								"pattern": "^@group:[\\w-]+$",
 								"description": "Specifies a group of widgets to display."
 							},
 							{
 								"type": "string",
-								"pattern": "^@collapsible:\\d+$",
+								"pattern": "^@collapsible:[\\w-]+$",
 								"description": "Specifies a collapsible group of widgets to display."
 							},
 							{
 								"type": "string",
-								"pattern": "^@custom_button:\\d+$",
+								"pattern": "^@custom_button:[\\w-]+$",
 								"description": "Specifies an individual custom button by index (e.g., @custom_button:0, @custom_button:1)."
 							},
 							{
 								"type": "string",
-								"pattern": "^@custom_widget:\\d+$",
+								"pattern": "^@custom_widget:[\\w-]+$",
 								"description": "Specifies a custom widget by index (e.g., @custom_widget:0). Runs external commands like Waybar."
 							},
 							{
@@ -2671,22 +2679,22 @@
 								},
 								{
 									"type": "string",
-									"pattern": "^@group:\\d+$",
+									"pattern": "^@group:[\\w-]+$",
 									"description": "Specifies a group of widgets to display."
 								},
 								{
 									"type": "string",
-									"pattern": "^@collapsible:\\d+$",
+									"pattern": "^@collapsible:[\\w-]+$",
 									"description": "Specifies a collapsible group of widgets to display."
 								},
 								{
 									"type": "string",
-									"pattern": "^@custom_button:\\d+$",
+									"pattern": "^@custom_button:[\\w-]+$",
 									"description": "Specifies an individual custom button by index (e.g., @custom_button:0, @custom_button:1)."
 								},
 								{
 									"type": "string",
-									"pattern": "^@custom_widget:\\d+$",
+									"pattern": "^@custom_widget:[\\w-]+$",
 									"description": "Specifies a custom widget by index (e.g., @custom_widget:0). Runs external commands like Waybar."
 								},
 								{
@@ -2697,6 +2705,10 @@
 							]
 						},
 						"minItems": 1
+					},
+					"id": {
+						"type": "string",
+						"description": "Unique identifier for referencing this widget group in layout (e.g. @group:my-id)"
 					},
 					"spacing": {
 						"type": "integer",
@@ -2786,22 +2798,22 @@
 								},
 								{
 									"type": "string",
-									"pattern": "^@group:\\d+$",
+									"pattern": "^@group:[\\w-]+$",
 									"description": "Specifies a group of widgets to display."
 								},
 								{
 									"type": "string",
-									"pattern": "^@collapsible:\\d+$",
+									"pattern": "^@collapsible:[\\w-]+$",
 									"description": "Specifies a collapsible group of widgets to display."
 								},
 								{
 									"type": "string",
-									"pattern": "^@custom_button:\\d+$",
+									"pattern": "^@custom_button:[\\w-]+$",
 									"description": "Specifies an individual custom button by index (e.g., @custom_button:0, @custom_button:1)."
 								},
 								{
 									"type": "string",
-									"pattern": "^@custom_widget:\\d+$",
+									"pattern": "^@custom_widget:[\\w-]+$",
 									"description": "Specifies a custom widget by index (e.g., @custom_widget:0). Runs external commands like Waybar."
 								},
 								{
@@ -2820,6 +2832,10 @@
 					},
 					"tooltip": {
 						"type": "string"
+					},
+					"id": {
+						"type": "string",
+						"description": "Unique identifier for referencing this collapsible group in layout (e.g. @collapsible:my-id)"
 					},
 					"style_classes": {
 						"type": "array",

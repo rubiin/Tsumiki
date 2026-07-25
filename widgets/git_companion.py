@@ -3,11 +3,16 @@ from __future__ import annotations
 import json
 import os
 import shlex
-import subprocess
 from contextlib import suppress
 from time import monotonic
 
-from fabric.utils import GdkPixbuf, exec_shell_command_async, idle_add, logger
+from fabric.utils import (
+    GdkPixbuf,
+    exec_shell_command,
+    exec_shell_command_async,
+    idle_add,
+    logger,
+)
 from fabric.widgets.box import Box
 from fabric.widgets.button import Button
 from fabric.widgets.label import Label
@@ -62,27 +67,31 @@ class GitHubClient:
         return f"https://github.com/{self.username}" if self.username else ""
 
     def _run_gh_api(self, endpoint: str, params: dict | None = None) -> dict | list:
-        command = ["gh", "api", endpoint, "--jq", ".", "-X", "GET"]
+        command_parts = ["gh", "api", endpoint, "--jq", ".", "-X", "GET"]
         if params:
             for key, value in params.items():
-                command.extend(["-f", f"{key}={value}"])
+                command_parts.extend(["-f", f"{key}={value}"])
 
-        env = os.environ.copy()
-        if self.token:
-            env["GH_TOKEN"] = self.token
+        cmd_str = " ".join(shlex.quote(p) for p in command_parts)
+        old_token = os.environ.get("GH_TOKEN")
+        try:
+            if self.token:
+                os.environ["GH_TOKEN"] = self.token
 
-        result = subprocess.run(
-            command,
-            capture_output=True,
-            text=True,
-            timeout=12,
-            check=True,
-            env=env,
-        )
-        payload = result.stdout.strip()
-        if not payload:
+            result = exec_shell_command(cmd_str)
+            if result is False:
+                return {}
+            payload = result.strip()
+            if not payload:
+                return {}
+            return json.loads(payload)
+        except Exception:
             return {}
-        return json.loads(payload)
+        finally:
+            if old_token is None:
+                os.environ.pop("GH_TOKEN", None)
+            else:
+                os.environ["GH_TOKEN"] = old_token
 
     def fetch_state(self, avatar_size: int) -> dict:
         profile = {

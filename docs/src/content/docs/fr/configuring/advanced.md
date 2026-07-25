@@ -36,6 +36,93 @@ tooltip = "Outils utilitaires"
 style_classes = ["utility-tools"]
 ```
 
+Référencez dans la disposition avec `@collapsible:utility-tools`.
+
+## Bouton Personnalisé
+
+Un bouton personnalisé autonome qui exécute une commande shell lorsqu'il est cliqué. Référencez-le directement par son nom dans une section de disposition.
+
+```toml
+[widgets.custom_button]
+command = "firefox"
+icon = "󰈹"
+label_text = "Firefox"
+tooltip_text = "Ouvrir le navigateur Firefox"
+show_icon = true
+label = false
+tooltip = true
+```
+
+Placez-le dans la disposition comme n'importe quel widget classique :
+
+```toml
+[layout]
+left_section = ["custom_button", "workspaces"]
+```
+
+## Groupe de Boutons Personnalisés
+
+Un groupe de boutons de commande personnalisés. Chaque bouton du groupe peut être référencé via `@custom_button:N` ou `@custom_button:id` :
+
+```toml
+[widgets.custom_button_group]
+spacing = 4
+
+[[widgets.custom_button_group.buttons]]
+id = "firefox"
+command = "firefox"
+icon = "󰈹"
+label_text = "Firefox"
+tooltip_text = "Ouvrir le navigateur Firefox"
+show_icon = true
+label = false
+tooltip = true
+
+[layout]
+left_section = ["@custom_button:firefox"]
+```
+
+## Widget Personnalisé
+
+Widgets personnalisés compatibles Waybar qui exécutent des commandes shell externes avec une analyse de sortie configurable et une gestion des clics.
+
+```toml
+[[widgets.custom_widget]]
+id = "volume"
+exec = "pamixer --get-volume"
+format = "󰕾 {}%"
+interval = 1
+on_scroll_up = "pamixer -i 5"
+on_scroll_down = "pamixer -d 5"
+exec_on_event = true
+
+[layout]
+left_section = ["@custom_widget:volume", "workspaces"]
+```
+
+Options de configuration complètes :
+
+| Clé | Type | Défaut | Description |
+|---|---|---|---|
+| `id` | string | — | Identifiant unique pour référencer dans la disposition (`@custom_widget:mon-id`) |
+| `exec` | string | requis | Commande shell à exécuter |
+| `interval` | int | `0` | Intervalle d'actualisation en secondes (0 = exécuter une fois) |
+| `return_type` | string | `"plain"` | Format de sortie : `"plain"` ou `"json"` |
+| `label_format` | string | `"{}"` | Chaîne de format où `{}` est remplacé par la sortie |
+| `exec_on_event` | bool | `false` | Ré-exécuter la commande après clic/défilement |
+| `max_length` | int | `0` | Longueur maximale du texte (0 = pas de limite) |
+| `min_length` | int | `0` | Longueur minimale du texte (remplit avec des espaces) |
+| `rotate` | int | `0` | Rotation du texte en degrés |
+| `tooltip` | bool | `true` | Afficher l'infobulle avec la sortie |
+| `tooltip_format` | string | — | Chaîne de format de l'infobulle |
+| `on_click` | string | — | Commande clic gauche |
+| `on_click_right` | string | — | Commande clic droit |
+| `on_click_middle` | string | — | Commande clic milieu |
+| `on_scroll_up` | string | — | Commande défilement vers le haut |
+| `on_scroll_down` | string | — | Commande défilement vers le bas |
+| `signal` | int | — | Numéro de signal pour les déclencheurs d'événements sig* |
+| `restart_interval` | int | — | Intervalle de redémarrage pour les scripts persistants |
+
 ## Multi-Moniteur
 
 Activez les panneaux par moniteur :

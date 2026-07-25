@@ -1,7 +1,6 @@
-import subprocess
 from pathlib import Path
 
-from fabric.utils import math
+from fabric.utils import exec_shell_command_async, math
 from fabric.widgets.box import Box
 from fabric.widgets.image import Image
 from fabric.widgets.revealer import Revealer
@@ -187,35 +186,15 @@ class Bgselector(BaseWindow):
             .get_child()
             .get_name()
         )
-        subprocess.run(
-            [
-                "swww",
-                "img",
-                WALLPAPER_DIR + file_name,
-                "-t",
-                "grow",
-                "--transition-duration",
-                "1",
-                "--transition-fps",
-                "75",
-                "-n",
-                "workspaces",
-            ]
+        exec_shell_command_async(
+            f"swww img {WALLPAPER_DIR + file_name} "
+            "-t grow --transition-duration 1 --transition-fps 75 -n workspaces",
+            lambda *_: None,
         )
-        subprocess.run(
-            [
-                "swww",
-                "img",
-                WALLPAPER_BLURRED_DIR + file_name,
-                "-t",
-                "grow",
-                "--transition-duration",
-                "1",
-                "--transition-fps",
-                "75",
-                "-n",
-                "overview",
-            ]
+        exec_shell_command_async(
+            f"swww img {WALLPAPER_BLURRED_DIR + file_name} "
+            "-t grow --transition-duration 1 --transition-fps 75 -n overview",
+            lambda *_: None,
         )
         self.toggle()
 

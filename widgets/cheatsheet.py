@@ -1,9 +1,8 @@
 import json
-import subprocess
 from collections import defaultdict
 from math import ceil
 
-from fabric.utils import logger
+from fabric.utils import exec_shell_command, logger
 from fabric.widgets.box import Box
 from fabric.widgets.button import Button
 from fabric.widgets.label import Label
@@ -141,7 +140,7 @@ class CheatSheetMenu(Box):
     def _load_hyprland_groups(self):
         """Load and group keybinds from hyprctl binds -j."""
         try:
-            output = subprocess.check_output(["hyprctl", "binds", "-j"], text=True)
+            output = exec_shell_command("hyprctl binds -j")
             binds = json.loads(output)
         except Exception as error:
             logger.debug(f"[Cheatsheet] Failed to load hyprctl binds: {error}")

@@ -1,7 +1,6 @@
 """Process and shell command utilities."""
 
 import ctypes
-import subprocess
 
 from fabric.utils import GLib, cooldown, exec_shell_command, exec_shell_command_async
 
@@ -27,15 +26,19 @@ def kill_process(process_name: str):
 
 # Function to toggle a shell command
 def toggle_command(command: str, full_command: str):
+    full_command = full_command.strip(" ")
     if is_app_running(command):
         kill_process(command)
     else:
+        # Use subprocess directly so the launched app survives bar restart.
+        import subprocess
+
         subprocess.Popen(
-            full_command.split(" "),
-            stdin=subprocess.DEVNULL,  # No input stream
-            stdout=subprocess.DEVNULL,  # Optionally discard the output
-            stderr=subprocess.DEVNULL,  # Optionally discard the error output
-            start_new_session=True,  # This prevents the process from being killed
+            full_command,
+            stdin=subprocess.DEVNULL,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            start_new_session=True,
         )
 
 

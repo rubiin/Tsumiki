@@ -3,9 +3,14 @@ Simple configuration file watcher for auto-reloading Tsumiki when config files c
 """
 
 import hashlib
-import subprocess
 
-from fabric.utils import Gio, GLib, get_relative_path, logger, os
+from fabric.utils import (
+    Gio,
+    GLib,
+    get_relative_path,
+    logger,
+    os,
+)
 
 from utils.colors import Colors
 from utils.config import tsumiki_config
@@ -164,7 +169,11 @@ class ConfigWatcher:
             logger.info(
                 f"{Colors.INFO}[ConfigWatcher] Restarting {APPLICATION_NAME.title()}..."
             )
-            # Run restart in background to avoid blocking
+            # Run restart in background to avoid blocking.
+            # Must detach with start_new_session so the child survives
+            # the parent bar being killed during restart.
+            import subprocess
+
             subprocess.Popen(
                 [self.init_script, "-restart"],
                 cwd=os.path.dirname(self.init_script),

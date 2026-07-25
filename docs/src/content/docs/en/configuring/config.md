@@ -102,9 +102,10 @@ Available reference types:
 | Reference | Example | Description |
 |---|---|---|
 | Widget name | `"workspaces"` | Direct widget reference |
-| `@group:N` | `"@group:0"` | Widget group by index |
-| `@collapsible:N` | `"@collapsible:0"` | Collapsible group by index |
-| `@custom_button:N` | `"@custom_button:0"` | Custom button by index |
+| `@group:N` / `@group:id` | `"@group:0"` / `"@group:workspaces-group"` | Widget group by index or string id |
+| `@collapsible:N` / `@collapsible:id` | `"@collapsible:0"` / `"@collapsible:utility-tools"` | Collapsible group by index or string id |
+| `@custom_button:N` / `@custom_button:id` | `"@custom_button:0"` / `"@custom_button:firefox"` | Custom button by index or string id |
+| `@custom_widget:N` / `@custom_widget:id` | `"@custom_widget:0"` / `"@custom_widget:volume"` | Custom widget by index or string id |
 
 ### `modules`
 
@@ -199,7 +200,29 @@ tooltip = "Utility Tools"
 style_classes = ["utility-tools"]
 ```
 
-Reference groups in layout with `@group:N` or `@collapsible:N`.
+Reference groups in layout with `@group:N` (numeric index) or `@group:id` (string id).
+
+Each group entry can include an optional `id` field for human-readable references:
+
+```toml
+[[widget_groups]]
+id = "workspaces-group"
+widgets = ["workspaces", "window_title"]
+spacing = 2
+style_classes = ["compact"]
+
+[[collapsible_groups]]
+id = "utility-tools"
+widgets = ["ocr", "screenshot", "recorder"]
+spacing = 4
+icon = "󰒓"
+tooltip = "Utility Tools"
+style_classes = ["utility-tools"]
+
+[layout]
+left_section = ["@group:workspaces-group"]
+right_section = ["@collapsible:utility-tools"]
+```
 
 ## Matugen Theme Generation
 

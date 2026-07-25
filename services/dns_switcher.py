@@ -1,7 +1,7 @@
 import re
 
 from fabric.core.service import Property, Signal
-from fabric.utils import GLib, exec_shell_command_async, logger
+from fabric.utils import GLib, exec_shell_command, exec_shell_command_async, logger
 
 from .base import SingletonService
 
@@ -124,19 +124,12 @@ class DnsSwitcherService(SingletonService):
 
     def _get_active_connection(self) -> str:
         """Return the UUID of the active connection, or empty string."""
-        import subprocess
-
         try:
-            result = subprocess.run(
-                ["nmcli", "-t", "-f", "UUID", "con", "show", "--active"],
-                capture_output=True,
-                text=True,
-                timeout=5,
-            )
+            result = exec_shell_command("nmcli -t -f UUID con show --active")
+            if result is False:
+                return ""
             lines = [
-                line.strip()
-                for line in result.stdout.strip().split("\n")
-                if line.strip()
+                line.strip() for line in result.strip().split("\n") if line.strip()
             ]
             return lines[0] if lines else ""
         except Exception:

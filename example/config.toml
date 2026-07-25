@@ -18,7 +18,7 @@ monitor_styles = true             # Watch and reload SCSS changes
 left_section = ["workspaces", "window_title"]
 middle_section = ["date_time"]
 right_section = [
-    "@group:0",
+    "@group:sys-stats",
     "system_tray",
     "volume",
     "battery",
@@ -29,6 +29,7 @@ right_section = [
 # Group related widgets together with shared styling.
 
 [[widget_groups]]
+id = "sys-stats"
 widgets = ["updates", "network_usage"]
 spacing = 4
 style_classes = ["bordered"]

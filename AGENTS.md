@@ -397,6 +397,49 @@ python3 -c "from widgets.my_module import MyModuleWidget; print('OK: widget')"
 - DBus is used for system integration (`utils/dbus_helper.py`).
 - Internationalization is via JSON files in `assets/i18n/`.
 
+### 14.1. Indexed Widget References with `id` Support
+
+Four special widget types support `@type:id` references in the layout:
+
+| Layout reference | Config key | Collection path |
+|---|---|---|
+| `@collapsible:` | `[[collapsible_groups]]` | `parsed_data.collapsible_groups[]` |
+| `@group:` | `[[widget_groups]]` | `parsed_data.widget_groups[]` |
+| `@custom_button:` | `[[widgets.custom_button_group.buttons]]` | `parsed_data.widgets.custom_button_group.buttons[]` |
+| `@custom_widget:` | `[[widgets.custom_widget]]` | `parsed_data.widgets.custom_widget[]` |
+
+**Referencing syntax:**
+- Numeric index (backward compatible): `@collapsible:0`, `@group:1`, `@custom_button:0`, `@custom_widget:0`
+- String id: `@collapsible:utility-tools`, `@group:workspaces-group`, `@custom_button:firefox`, `@custom_widget:volume`
+
+**Config example:**
+```toml
+[[collapsible_groups]]
+id = "utility-tools"
+widgets = ["ocr", "screenshot"]
+
+[[widget_groups]]
+id = "workspaces-group"
+widgets = ["workspaces", "window_title"]
+
+[[widgets.custom_widget]]
+id = "volume"
+exec = "pamixer --get-volume"
+
+[[widgets.custom_button_group.buttons]]
+id = "firefox"
+command = "firefox"
+```
+
+**Implementation layers (all must be kept in sync):**
+1. **Schema** (`tsumiki.schema.json`): Patterns use `^@type:[\\w-]+$` to accept both numeric and string ids. Each collection item has an optional `"id"` string property.
+2. **Python validation** (`utils/functions.py` and `utils/validation.py`): `_validate_indexed_reference()` checks `identifier.isdigit()` first for backward compat, then falls back to id lookup for supported collection names.
+3. **Runtime resolution** (`utils/widget_factory.py`): `IndexedWidgetHelper.validate_and_get_index()` does generic id lookup for all types without collection-name restriction.
+4. **TypedDict** (`utils/widget_settings.py`): Each indexed type's TypedDict includes an optional `"id": str` field.
+5. **Config examples** (`config.toml`, `example/config.toml`): Should include `id` fields in collection items and use string references in layout sections.
+
+**When adding `id` support to a new type, you must update all 5 layers.**
+
 ## 15. gi.repository Type Stubs
 
 `gi.repository` imports lack type checking by default. Stubs are generated

@@ -1,4 +1,3 @@
-import subprocess
 import tempfile
 from datetime import datetime
 
@@ -181,16 +180,14 @@ class ScreenRecorderService(SingletonService):
         def after_screenshot(*_):
             try:
                 if annotate:
-                    subprocess.run(
-                        [
-                            "satty",
-                            "--filename",
-                            temp_path,
-                            "--output-filename",
-                            file_path,
-                        ],
-                        check=True,
+                    # Must block until satty finishes so unlink doesn't
+                    # delete the temp file while satty is still reading it.
+                    result = exec_shell_command(
+                        f"satty --filename {temp_path} --output-filename {file_path}"
                     )
+                    if result is False:
+                        logger.warning("[SCREENSHOT] satty annotation failed")
+                        return  # satty failed, skip notification
                     os.unlink(temp_path)  # Clean up temp file after use
 
                 if config.get("capture_sound", False):
@@ -199,7 +196,7 @@ class ScreenRecorderService(SingletonService):
                 # Send notification after annotation or direct capture
                 self.send_screenshot_notification(file_path=file_path)
 
-            except (subprocess.CalledProcessError, OSError, FileNotFoundError) as e:
+            except OSError as e:
                 logger.exception(
                     f"[SCREENSHOT] Error in annotation or notification: {e}"
                 )

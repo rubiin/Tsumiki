@@ -401,15 +401,17 @@ modules = ["camera", "microphone", "screen"]
 spacing = 4
 
 [[widgets.custom_button_group.buttons]]
-command = "firefox"
-icon = "󰈹"
-label_text = "Firefox"
-tooltip_text = "Open Firefox Browser"
+id = "spotify"
+icon = ""
+label = "Spotify"
+command = "spotify"
+tooltip = "Launch Spotify"
+label_text = "Spotify"
+tooltip_text = "Open Spotify"
 show_icon = true
-label = false
-tooltip = true
 
 [[widgets.custom_button_group.buttons]]
+id = "spotify"
 command = "spotify"
 icon = ""
 label_text = "Spotify"
@@ -417,6 +419,7 @@ tooltip_text = "Open Spotify"
 show_icon = true
 label = false
 tooltip = true
+
 
 [widgets.cheatsheet]
 label = true
@@ -433,27 +436,48 @@ label = true
 label_text = "Pomo"
 tooltip = true
 
-[layout]
-left_section = ["@group:0"]
-middle_section = ["date_time", "weather", "mpris"]
-right_section = [ "@group:1","@group:2", "system_tray", "power"]
+
+[[widgets.custom_widget]]
+id = "volume"
+exec = "pamixer --get-volume"
+format = "󰕾 {}%"
+interval = 1
+on_scroll_up = "pamixer -i 5"
+on_scroll_down = "pamixer -d 5"
+exec_on_event = true
+
+
+[[widgets.custom_button]]
+id = "firefox"
+command = "firefox"
+icon = "󰈹"
+label_text = "Firefox"
+tooltip_text = "Open Firefox Browser"
+show_icon = true
+label = true
+tooltip = true
+
 
 [[widget_groups]]
+id = "workspaces-group"
 widgets = ["workspaces", "window_title"]
 spacing = 2
 style_classes = ["compact"]
 
 [[widget_groups]]
+id = "sys-group"
 widgets = ["quick_settings", "updates", "battery"]
 spacing = 2
 style_classes = ["compact"]
 
 [[widget_groups]]
+id = "utils-group"
 widgets = ["clipboard", "usb_manager"]
 spacing = 2
 style_classes = ["compact"]
 
 [[collapsible_groups]]
+id = "utility-tools"
 widgets = ["ocr", "screenshot", "recorder"]
 spacing = 4
 icon = "󰒓"
@@ -577,6 +601,12 @@ interval = 600
 enabled = false
 anchor = "bottom-right"
 layer = "bottom"
+
+
+[layout]
+left_section = ["@group:workspaces-group"]
+middle_section = ["date_time", "weather", "mpris"]
+right_section = ["@group:sys-group", "@group:utils-group", "system_tray", "power"]
 
 
 [general]
@@ -763,6 +793,26 @@ icon_size = "12px"
 spacing = "0.125em"
 
 [styling.bar.widgets.pomodoro.border]
+enabled = false
+radius = "16px"
+width = "1px"
+
+
+[styling.bar.widgets.custom_widget]
+icon_size = "12px"
+spacing = "0.125em"
+
+[styling.bar.widgets.custom_widget.border]
+enabled = false
+radius = "16px"
+width = "1px"
+
+
+[styling.bar.widgets.custom_button]
+icon_size = "12px"
+spacing = "0.125em"
+
+[styling.bar.widgets.custom_button.border]
 enabled = false
 radius = "16px"
 width = "1px"

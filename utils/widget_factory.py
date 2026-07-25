@@ -14,12 +14,16 @@ class IndexedWidgetHelper:
     def validate_and_get_index(
         identifier: str, collection: list, collection_name: str
     ) -> Optional[int]:
-        """Unified index validation - DRY principle.
+        """Unified index/id validation - DRY principle.
+
+        Supports both numeric indices and string-based ``id`` lookup for
+        collapsible groups.  When the identifier is not a digit, it
+        searches for an item whose ``id`` field matches.
 
         Returns:
             Valid index or None if invalid
         """
-        try:
+        if identifier.isdigit():
             index = int(identifier)
             if not isinstance(collection, list) or not (0 <= index < len(collection)):
                 logger.exception(
@@ -28,9 +32,17 @@ class IndexedWidgetHelper:
                 )
                 return None
             return index
+
+        # String-based id lookup
+        try:
+            for idx, item in enumerate(collection):
+                if isinstance(item, dict) and item.get("id") == identifier:
+                    return idx
         except (ValueError, TypeError):
-            logger.exception(f"Invalid {collection_name} index: {identifier}")
-            return None
+            pass
+
+        logger.exception(f"{collection_name}: no item with id '{identifier}' found")
+        return None
 
     @staticmethod
     def get_config_path(config: dict, *path_parts: str) -> list:

@@ -50,7 +50,7 @@
 ) {
   @include mixins.widget-border($border-radius, $border-enabled, $border-width);
 
-  @if $icon-size != null and $spacing != null {
+  @if $icon-size !=null and $spacing !=null {
     @include mixins.nerd-icon($icon-size, $spacing);
   }
 }
@@ -131,6 +131,22 @@ $widget-shell-widgets: (
     variable.$bar-widgets-brightness-border-width,
     variable.$bar-widgets-brightness-icon_size,
     variable.$bar-widgets-brightness-spacing
+  ),
+  (
+    "custom_button",
+    variable.$bar-widgets-custom_button-border-radius,
+    variable.$bar-widgets-custom_button-border-enabled,
+    variable.$bar-widgets-custom_button-border-width,
+    variable.$bar-widgets-custom_button-icon_size,
+    variable.$bar-widgets-custom_button-spacing
+  ),
+  (
+    "custom_widget",
+    variable.$bar-widgets-custom_widget-border-radius,
+    variable.$bar-widgets-custom_widget-border-enabled,
+    variable.$bar-widgets-custom_widget-border-width,
+    variable.$bar-widgets-custom_widget-icon_size,
+    variable.$bar-widgets-custom_widget-spacing
   ),
   (
     "click_counter",
