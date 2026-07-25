@@ -37,6 +37,36 @@
             ],
             "groupName": "all major dependencies",
             "groupSlug": "all-major-patch"
+        },
+        {
+            "matchManagers": [
+                "npm"
+            ],
+            "matchUpdateTypes": [
+                "minor",
+                "patch"
+            ],
+            "groupName": "all non-major npm dependencies",
+            "groupSlug": "npm-all-minor-patch"
+        },
+        {
+            "matchManagers": [
+                "npm"
+            ],
+            "matchUpdateTypes": [
+                "major"
+            ],
+            "groupName": "all major npm dependencies",
+            "groupSlug": "npm-all-major"
+        },
+        {
+            "matchFileNames": [
+                "docs/package.json"
+            ],
+            "labels": [
+                "dependencies",
+                "docs"
+            ]
         }
     ],
     "schedule": [
