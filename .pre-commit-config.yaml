@@ -43,9 +43,9 @@ repos:
     hooks:
       - id: oxfmt
         name: Format SCSS files with oxfmt
-        entry: oxfmt --write
+        entry: oxfmt styles
         language: node
         additional_dependencies: ['oxfmt']
-        files: '\.scss$'
+        files: '^styles/.*\.scss$'
 
 default_stages: [pre-commit]
