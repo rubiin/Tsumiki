@@ -171,6 +171,11 @@ class AppBar(BoxWidget):
             self.add(launcher_button)
 
         self.pinned_apps = read_json_file(PINNED_APPS_FILE) or []
+        self._button_base_classes = [
+            "buttons-basic",
+            "buttons-transition",
+            "dock-button",
+        ]
         self.icon_resolver = IconResolver()
         self._hyprland_connection = get_hyprland_connection()
 
@@ -228,6 +233,14 @@ class AppBar(BoxWidget):
                 return addr
         return None
 
+    def _set_active_state(self, button, is_active):
+        """Atomically toggle the active class, avoiding per-button style churn."""
+        button.set_style_classes(
+            [*self._button_base_classes, "active"]
+            if is_active
+            else self._button_base_classes
+        )
+
     def _apply_active_state(self, active_address: str | None):
         self._active_address = active_address
 
@@ -236,10 +249,8 @@ class AppBar(BoxWidget):
 
         if self._group_apps:
             for group in self._app_groups.values():
-                if any(c.get_activated() for c in group["clients"]):
-                    group["button"].add_style_class("active")
-                else:
-                    group["button"].remove_style_class("active")
+                is_active = any(c.get_activated() for c in group["clients"])
+                self._set_active_state(group["button"], is_active)
                 if self.config.get("tooltip", True) and group["clients"]:
                     active = next(
                         (c for c in group["clients"] if c.get_activated()),
@@ -249,10 +260,7 @@ class AppBar(BoxWidget):
         else:
             for entry in self._running_app_boxes.values():
                 client = entry["client"]
-                if client.get_activated():
-                    entry["button"].add_style_class("active")
-                else:
-                    entry["button"].remove_style_class("active")
+                self._set_active_state(entry["button"], client.get_activated())
 
     def _on_active_window_event(self, *_):
         if not self._clients_by_address:
@@ -700,10 +708,7 @@ class AppBar(BoxWidget):
         else:
             group["button"].set_tooltip_text(None)
 
-        if any(c.get_activated() for c in clients):
-            group["button"].add_style_class("active")
-        else:
-            group["button"].remove_style_class("active")
+        self._set_active_state(group["button"], any(c.get_activated() for c in clients))
 
     def _sync_grouped_clients(self, clients: list[NativeClient]):
         grouped = {}
@@ -822,10 +827,7 @@ class AppBar(BoxWidget):
 
         for entry in self._running_app_boxes.values():
             client = entry["client"]
-            if client.get_activated():
-                entry["button"].add_style_class("active")
-            else:
-                entry["button"].remove_style_class("active")
+            self._set_active_state(entry["button"], client.get_activated())
 
     def _show_context_menu(self, clients: list[NativeClient]):
         app_id = clients[0].get_app_id() if clients else ""

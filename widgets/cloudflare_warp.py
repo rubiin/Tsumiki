@@ -125,6 +125,9 @@ class CloudflareWarpWidget(ButtonWidget, PopoverMixin):
                 self._service,
                 self._service.connect("changed", self._on_status_changed),
             )
+            # Pause background polling when widget is hidden, resume when shown
+            self.connect("map", lambda *_: self._service.resume_polling())
+            self.connect("unmap", lambda *_: self._service.pause_polling())
         else:
             self._icon = nerd_font_icon(
                 icon="",

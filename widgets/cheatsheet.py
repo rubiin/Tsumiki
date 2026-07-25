@@ -314,15 +314,12 @@ class CheatSheetMenu(Box):
         self.prev_button.set_sensitive(not is_first)
         self.next_button.set_sensitive(not is_last)
 
-        if is_first:
-            self.prev_button.add_style_class("disabled")
-        else:
-            self.prev_button.remove_style_class("disabled")
-
-        if is_last:
-            self.next_button.add_style_class("disabled")
-        else:
-            self.next_button.remove_style_class("disabled")
+        self.prev_button.set_style_classes(
+            ["cheatsheet-nav-btn", "disabled"] if is_first else ["cheatsheet-nav-btn"]
+        )
+        self.next_button.set_style_classes(
+            ["cheatsheet-nav-btn", "disabled"] if is_last else ["cheatsheet-nav-btn"]
+        )
 
     def close(self, *_):
         if self._parent is not None:

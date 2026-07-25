@@ -255,9 +255,7 @@ class Animator(Service):
         if self._tick_handler:
             return
 
-        self._tick_handler = self._tick_widget.add_tick_callback(
-            self.do_handle_tick
-        )
+        self._tick_handler = self._tick_widget.add_tick_callback(self.do_handle_tick)
         return
 
     def pause(self):

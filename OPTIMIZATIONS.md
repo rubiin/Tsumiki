@@ -43,7 +43,7 @@ Polls `warp-cli status` every 5 seconds unconditionally. Also uses raw `subproce
 
 ## 🥈 Medium Priority
 
-### 5. GTK Frame Clock for Animations
+### ~~5. GTK Frame Clock for Animations~~
 **Files**: `shared/animator.py`, `shared/animated/scale.py`
 **Effort**: Medium | **Impact**: Medium
 
@@ -115,7 +115,7 @@ Uses blocking `exec_shell_command("sass ...")` in a thread (subprocess spawn). C
 
 **Fix**: Change to `invoke_repeater(250, self._timer_tick)` — reduces CPU wake-ups by 96%.
 
-### 12. Excessive Style Class Churn
+### ~~ 12. Excessive Style Class Churn ~~
 **Files**: `modules/dock.py`, `widgets/datetime_menu.py`, `widgets/cheatsheet.py`, `widgets/git_companion.py`, `widgets/quick_settings/submenu/power_profiles.py`
 **Effort**: Small | **Impact**: Low
 

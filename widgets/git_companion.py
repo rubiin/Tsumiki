@@ -356,10 +356,11 @@ class GitCompanionPopoverContent(Box):
     def _set_tab_button_state(self):
         for button in self.tabs.get_children():
             tab_name = getattr(button, "_tab_name", None)
-            if tab_name == self._active_tab:
-                button.add_style_class("active")
-            else:
-                button.remove_style_class("active")
+            button.set_style_classes(
+                ["git-companion-tab-btn", "active"]
+                if tab_name == self._active_tab
+                else ["git-companion-tab-btn"]
+            )
 
     def _update_tab_labels(self):
         issues_count = len(self._state.get("issues", []))

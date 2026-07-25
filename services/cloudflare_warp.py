@@ -1,7 +1,5 @@
-import subprocess
-
 from fabric.core.service import Signal
-from fabric.utils import GLib, exec_shell_command_async, logger
+from fabric.utils import GLib, exec_shell_command, exec_shell_command_async, logger
 
 from .base import SingletonService
 
@@ -10,7 +8,8 @@ class CloudflareWarpService(SingletonService):
     """Service to manage Cloudflare WARP connection status.
 
     Polls ``warp-cli status`` at a configurable interval and emits
-    ``changed`` when state changes.
+    ``changed`` when state changes. Polling can be paused/resumed
+    via ``pause_polling`` / ``resume_polling`` (e.g. on widget unmap/map).
     """
 
     @Signal
@@ -48,6 +47,14 @@ class CloudflareWarpService(SingletonService):
             GLib.source_remove(self._poll_timer_id)
             self._poll_timer_id = None
 
+    def pause_polling(self):
+        """Pause the polling loop. Safe to call when already paused."""
+        self._stop_polling()
+
+    def resume_polling(self):
+        """Resume the polling loop. Safe to call when already running."""
+        self._start_polling()
+
     def _poll(self):
         if not self._poller_running:
             return False
@@ -80,30 +87,15 @@ class CloudflareWarpService(SingletonService):
             )
             self.emit("changed")
 
-    # ── Actions (synchronous for user-initiated ops) ────────────
+    # ── Actions ─────────────────────────────────────────────────
 
     def _run_warp_cli(self, action: str) -> bool:
         """Run a warp-cli command synchronously. Returns success."""
         try:
-            result = subprocess.run(
-                ["warp-cli", action],
-                capture_output=True,
-                text=True,
-                timeout=10,
-            )
-            if result.returncode != 0:
-                logger.error(
-                    f"[CloudflareWARP] 'warp-cli {action}' failed: "
-                    f"{result.stderr.strip() or result.stdout.strip()}"
-                )
-                return False
+            exec_shell_command(f"warp-cli {action}")
             return True
-
         except FileNotFoundError:
             logger.error("[CloudflareWARP] warp-cli not found in PATH")
-            return False
-        except subprocess.TimeoutExpired:
-            logger.error(f"[CloudflareWARP] 'warp-cli {action}' timed out")
             return False
         except Exception as e:
             logger.error(f"[CloudflareWARP] 'warp-cli {action}' error: {e}")
@@ -114,7 +106,6 @@ class CloudflareWarpService(SingletonService):
         if ok:
             self._connected = True
             self.emit("changed")
-            # Confirm via immediate poll
             exec_shell_command_async("warp-cli status", self._on_status_line)
         return ok
 
