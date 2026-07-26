@@ -340,6 +340,13 @@ $widget-shell-widgets: (
       background-color: rgba(255, 255, 255, 0.2);
       margin-top: 1px;
       margin-right: functions.toEm(2);
+
+      #mpris-progress-fill {
+        min-height: 2px;
+        border-radius: 99px;
+        background-color: theme.$accent-blue;
+        transition: min-width 200ms ease-in-out;
+      }
     }
   }
 }

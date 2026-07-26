@@ -379,7 +379,9 @@ python3 -c "from widgets.my_module import MyModuleWidget; print('OK: widget')"
 **GTK3 CSS (SCSS) rules:**
 - Only use properties [GTK3 CSS supports](https://docs.gtk.org/gtk3/css-properties.html).
 - Not supported — do not use: `text-align`, `align-items`, `justify-content`,
-  `margin: auto`, `transition`.
+  `margin: auto`.
+- `transition` and `animation`/`@keyframes` **are** supported by GTK3 (they are
+  documented in the official CSS properties table).
 - To center a label, use `h_align="center"` in Python, not CSS.
 - To center a box, use the `h_align="center"` Python property, not CSS.
 

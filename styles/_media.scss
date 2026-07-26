@@ -4,131 +4,124 @@
 @use "variable";
 @use "common";
 
-%player_text {
-  color: theme.$text-main;
-  background-color: transparent;
-  text-shadow: 1px 1px 3px black;
-}
-
 #player-stack-button {
-  border-radius: 5px;
-  min-width: 7px;
-  min-height: 7px;
-  margin: 10px 3px;
-  background-color: theme.$text-main;
+  border-radius: 9999px;
+  min-width: 6px;
+  min-height: 6px;
+  margin: 10px 4px;
+  background-color: rgba(255, 255, 255, 0.3);
+  transition: all 150ms ease-in-out;
 
   &:hover {
-    background-color: theme.$surface-highlight;
+    background-color: rgba(255, 255, 255, 0.6);
+    min-width: 10px;
   }
 
   &.active {
-    border-radius: 5px;
-    background-color: color.mix(theme.$background-main, white, 15%);
-  }
-
-  &.empty {
-    min-width: 9px;
-    margin: common.toEm(14) common.toEm(2);
     background-color: theme.$text-main;
+    min-width: 20px;
   }
 }
 
 #player-box {
-  $player_width: variable.$quicksettings-width + 40;
-
-  $player_height: 130px;
-  $image_size: 120px;
-  min-height: $image_size + 4;
-
-  $inner_player_width: math.floor(calc($player_width - $image_size / 2));
-
-  #outer-player-box {
-    min-width: $player_width;
-    min-height: $image_size;
-  }
-
-  @include common.slider(
-    $min-length: $inner_player_width - 80,
-    $height: 7px,
-    $highlight-color: theme.$text-muted,
-    $knob: variable.$bar-widgets-quick_settings-sliders-knob
+  background: linear-gradient(
+    180deg,
+    rgba(66, 65, 48, 0.87) 0%,
+    rgba(62, 61, 45, 0.85) 100%
   );
+  border-radius: 20px;
+  padding: 12px;
+  min-width: 360px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.22);
 
-  #seek-bar {
-    padding-top: 10px;
-  }
-
-  #inner-player-box {
-    border-radius: 19px;
-    margin-left: math.floor(calc($image_size / 2));
-    min-width: $inner_player_width;
-    min-height: $player_height;
-    opacity: 0.6;
-  }
-
-  #player-info-box {
-    margin-left: $image_size + 10;
-    min-width: $player_width - $image_size - 20;
-  }
-
-  #track-info {
-    min-width: $player_width - $image_size - 20;
-  }
-
-  #player-image-stack {
-    border-radius: 100%;
-    box-shadow: 0 0 4px 0 black;
-  }
-
-  #player-title {
-    margin-top: 18px;
-    font-weight: 700;
-    font-size: 1rem;
-    @extend %player_text;
-  }
-
-  #player-artist,
-  #player-album {
-    font-weight: 500;
-    font-size: 12px;
-    @extend %player_text;
-  }
-
-  #player-controls {
-    margin-top: 5px;
-    margin-bottom: 15px;
-
-    .time-label {
-      @extend %caption;
-      @extend %player_text;
-      font-weight: 600;
+  #player-main-row {
+    #player-album-art {
+      min-width: 95px;
+      min-height: 95px;
+      border-radius: 3px;
+      background-size: cover;
+      background-position: center;
     }
 
-    #button-box {
-      margin: 0 common.toEm(10);
+    #player-meta-col {
+      min-width: 0;
 
-      .player-icon {
-        font-size: 1.3rem;
+      #player-title {
+        font-weight: 600;
+        font-size: 14px;
+        color: #B8B39F;
       }
 
-      .player-button {
-        min-width: 20px;
-        min-height: 20px;
-        padding: common.toEm(5);
-        border-radius: 100%;
+      #player-artist {
+        font-weight: 400;
+        font-size: 11px;
+        color: #8E8A79;
+        margin-top: 1px;
+      }
 
-        &:hover {
-          background: theme.$background-alt;
-          box-shadow: 0 0 2px -3px black;
+      #player-time {
+        font-weight: 400;
+        font-size: 12px;
+        color: #9A9788;
+        margin-top: 2px;
+      }
+
+      #player-controls-row {
+        margin-top: 8px;
+        min-height: 22px;
+
+        #player-waveform {
+          min-height: 22px;
+      
         }
 
-        &:active {
-          box-shadow: 0 0 4px -1px black;
-        }
+        #player-prev,
+        #player-next {
+          min-width: 20px;
+          min-height: 20px;
+          border-radius: 100%;
+          background: none;
+          padding: 0;
 
-        &:disabled {
-          color: theme.$text-disabled;
+          .player-icon-sm {
+            font-size: 10px;
+            color: #9C998A;
+          }
+
+          &:hover {
+            background-color: rgba(255, 255, 255, 0.08);
+          }
+
+          &:disabled {
+            opacity: 0.3;
+          }
         }
+      }
+    }
+
+    #player-play-pause {
+      min-width: 44px;
+      min-height: 44px;
+      border-radius: 100%;
+      background-color: #A5A890;
+      margin-top: 0;
+      padding: 0;
+
+      .player-icon-lg {
+        font-size: 16px;
+        color: #2A2A24;
+      }
+
+      &:hover {
+        background-color: color.mix(#A5A890, white, 85%);
+      }
+
+      &:active {
+        background-color: color.mix(#A5A890, black, 85%);
+      }
+
+      &:disabled {
+        opacity: 0.4;
       }
     }
   }

@@ -1,12 +1,12 @@
+import math
 import tempfile
 import urllib.parse
-from functools import partial
 
 from fabric.utils import (
     GLib,
     GObject,
+    Gtk,
     bulk_connect,
-    cooldown,
     idle_add,
     logger,
     os,
@@ -16,52 +16,191 @@ from fabric.widgets.button import Button
 from fabric.widgets.centerbox import CenterBox
 from fabric.widgets.image import Image
 from fabric.widgets.label import Label
-from fabric.widgets.overlay import Overlay
-from fabric.widgets.scale import Scale
 from fabric.widgets.stack import Stack
+from gi.repository import Gdk
+
+import cairo
 
 from services.mpris import MprisPlayer, MprisPlayerManager
 from utils.constants import APP_DATA_DIRECTORY, ASSETS_DIR, NEWLINE_RE
-from utils.functions import (
-    ensure_directory,
-    get_http_client,
-    get_simple_palette_threaded,
-    mix_colors,
-    rgb_to_css,
-    tint_color,
-)
+from utils.functions import ensure_directory, get_http_client
 from utils.icons import get_text_icon
-from utils.widget_utils import (
-    create_scale,
-    nerd_font_icon,
-    setup_cursor_hover,
-)
+from utils.widget_utils import nerd_font_icon
 
-from .animator import cubic_bezier
 from .buttons import HoverButton
-from .circle_image import CircularImage
+
+
+def _format_seconds(micro_seconds: int) -> str:
+    seconds = int(micro_seconds / 1_000_000)
+    minutes = seconds // 60
+    rem = seconds % 60
+    return f"{minutes}:{rem:02d}"
+
+
+def _format_time_combined(position_us: int, length_us: int) -> str:
+    return f"{_format_seconds(position_us)} / {_format_seconds(length_us)}"
+
+
+class WaveformProgress(Gtk.DrawingArea):
+    """Cairo-rendered wavy waveform with click/drag seeking."""
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self._progress = 0.0
+        self._seek_callback = None
+        self._dragging = False
+
+        self.set_hexpand(True)
+        self.set_size_request(50, 22)
+        self.set_name("player-waveform")
+
+        self.connect("draw", self._on_draw)
+        self.connect("button-press-event", self._on_press)
+        self.connect("motion-notify-event", self._on_motion)
+        self.connect("button-release-event", self._on_release)
+        self.set_events(
+            self.get_events()
+            | Gdk.EventMask.BUTTON_PRESS_MASK
+            | Gdk.EventMask.BUTTON_RELEASE_MASK
+            | Gdk.EventMask.POINTER_MOTION_MASK
+        )
+
+    def set_progress(self, value: float):
+        self._progress = max(0.0, min(1.0, value))
+        self.queue_draw()
+
+    def set_seek_callback(self, callback):
+        self._seek_callback = callback
+
+    def _fraction_from_x(self, x):
+        alloc = self.get_allocation()
+        return max(0.0, min(1.0, x / alloc.width)) if alloc.width > 0 else 0.0
+
+    def _on_press(self, _, event):
+        self._dragging = True
+        frac = self._fraction_from_x(event.x)
+        self.set_progress(frac)
+        if self._seek_callback:
+            self._seek_callback(frac)
+        return True
+
+    def _on_motion(self, _, event):
+        if self._dragging:
+            frac = self._fraction_from_x(event.x)
+            self.set_progress(frac)
+            if self._seek_callback:
+                self._seek_callback(frac)
+        return False
+
+    def _on_release(self, _, event):
+        self._dragging = False
+        return False
+
+    def _on_draw(self, widget, cr: cairo.Context):
+        alloc = self.get_allocation()
+        w, h = alloc.width, alloc.height
+        if w < 1 or h < 1:
+            return
+
+        pad_t = 4.0
+        pad_b = 4.0
+        pad_l = 4.0
+        pad_r = 4.0
+        dl = pad_l
+        dr = w - pad_r
+        dw = dr - dl
+        draw_top = pad_t
+        draw_bot = h - pad_b
+        mid_y = draw_top + (draw_bot - draw_top) / 2.0
+
+        if dw < 1:
+            return
+
+        pct = self._progress
+        px = dl + dw * pct
+
+        # Muted earthy palette
+        played_rgba = (0.90, 0.88, 0.78, 0.80)
+        remainder_rgba = (0.82, 0.80, 0.70, 0.20)
+        playhead_rgba = (0.85, 0.82, 0.72, 0.95)
+        track_bg_rgba = (0.85, 0.84, 0.76, 0.07)
+
+        # Helper: evaluate wave amplitude at a given x
+        def _wave_y(x_pos):
+            freq1 = 2.8 * math.pi / dw
+            freq2 = 6.5 * math.pi / dw
+            amp1 = (draw_bot - draw_top) * 0.32
+            amp2 = (draw_bot - draw_top) * 0.14
+            return mid_y + math.sin(x_pos * freq1) * amp1 + math.sin(x_pos * freq2) * amp2
+
+        # Steps for smoothness
+        step = 1.0
+
+        # 1. Subtle full-track wave background
+        cr.set_source_rgba(*track_bg_rgba)
+        cr.set_line_width(2.0)
+        cr.move_to(dl, _wave_y(dl))
+        x = dl + step
+        while x < dr:
+            cr.line_to(x, _wave_y(x))
+            x += step
+        cr.stroke()
+
+        # 2. Played-portion wave (brighter, slightly thicker)
+        if px > dl + 1:
+            cr.set_source_rgba(*played_rgba)
+            cr.set_line_width(2.5)
+            cr.move_to(dl, _wave_y(dl))
+            x_step = max(step, (px - dl) / 30.0)
+            x = dl + x_step
+            while x <= px:
+                cr.line_to(x, _wave_y(x))
+                x += x_step
+            cr.stroke()
+
+        # 3. Remainder wave (faded)
+        rem_start = px + 6.0
+        if rem_start < dr:
+            cr.set_source_rgba(*remainder_rgba)
+            cr.set_line_width(2.0)
+            cr.move_to(rem_start, _wave_y(rem_start))
+            x_step = max(step, (dr - rem_start) / 25.0)
+            x = rem_start + x_step
+            while x < dr:
+                cr.line_to(x, _wave_y(x))
+                x += x_step
+            cr.stroke()
+
+        # 4. Playhead vertical line
+        if 0.01 < pct < 1.0:
+            cr.set_source_rgba(*playhead_rgba)
+            cr.set_line_width(2.5)
+            cr.set_line_cap(cairo.LineCap.ROUND)
+            cr.move_to(px, draw_top + 2)
+            cr.line_to(px, draw_bot - 2)
+            cr.stroke()
+
+        # 5. End dot
+        if rem_start < dr:
+            cr.set_source_rgba(*remainder_rgba)
+            cr.arc(dr - 3.0, mid_y, 1.8, 0, 2 * math.pi)
+            cr.fill()
 
 
 class PlayerBoxStack(Box):
-    """A widget that displays the current player information."""
+    """Manages multiple player instances with navigation dots."""
 
     def __init__(self, mpris_manager: MprisPlayerManager, config, **kwargs):
         self.config = config
-
         ensure_directory(f"{APP_DATA_DIRECTORY}/media")
 
-        # The player stack
         self.player_stack = Stack(
             transition_type="slide-left-right",
             transition_duration=500,
             name="player-stack",
         )
         self.current_stack_pos = 0
-
-        # List to store player buttons
         self.player_buttons: list[Button] = []
-
-        # Box to contain all the buttons
         self.buttons_box = CenterBox()
 
         super().__init__(
@@ -70,7 +209,6 @@ class PlayerBoxStack(Box):
         self.hide()
 
         self.mpris_manager = mpris_manager
-
         bulk_connect(
             self.mpris_manager,
             {
@@ -79,28 +217,19 @@ class PlayerBoxStack(Box):
             },
         )
 
-        for player in self.mpris_manager.players:  # type: ignore
+        for player in self.mpris_manager.players:
             logger.info(
                 f"[PLAYER MANAGER] player found: {player.get_property('player-name')}",
             )
             self.on_new_player(self.mpris_manager, player)
 
-    def on_player_clicked(self, type):
-        # unset active from prev active button
+    def on_player_clicked(self, direction):
         self.player_buttons[self.current_stack_pos].remove_style_class("active")
-        if type == "next":
-            self.current_stack_pos = (
-                self.current_stack_pos + 1
-                if self.current_stack_pos != len(self.player_stack.get_children()) - 1
-                else 0
-            )
-        elif type == "prev":
-            self.current_stack_pos = (
-                self.current_stack_pos - 1
-                if self.current_stack_pos != 0
-                else len(self.player_stack.get_children()) - 1
-            )
-        # set new active button
+        count = len(self.player_stack.get_children())
+        if direction == "next":
+            self.current_stack_pos = (self.current_stack_pos + 1) % count
+        elif direction == "prev":
+            self.current_stack_pos = (self.current_stack_pos - 1) % count
         self.player_buttons[self.current_stack_pos].add_style_class("active")
         self.player_stack.set_visible_child(
             self.player_stack.get_children()[self.current_stack_pos],
@@ -108,21 +237,14 @@ class PlayerBoxStack(Box):
 
     def on_new_player(self, mpris_manager, player):
         player_name = player.props.player_name
-
         if player_name in self.config.get("ignore", []):
             return
-
         self.set_visible(True)
-        if len(self.player_stack.get_children()) == 0:
-            self.buttons_box.hide()
-        else:
-            self.buttons_box.set_visible(True)
-
+        self.buttons_box.set_visible(len(self.player_stack.get_children()) > 0)
         self.player_stack.children = [
             *self.player_stack.children,
             PlayerBox(player=MprisPlayer(player), config=self.config),
         ]
-
         self.make_new_player_button(self.player_stack.get_children()[-1])
         logger.info(
             f"[PLAYER MANAGER] adding new player: {player.get_property('player-name')}",
@@ -130,23 +252,19 @@ class PlayerBoxStack(Box):
         self.player_buttons[self.current_stack_pos].set_style_classes(["active"])
 
     def on_lost_player(self, mpris_manager, player_name):
-        # the playerBox is automatically removed from mprisbox children on being removed
         logger.info(f"[PLAYER_MANAGER] Player Removed {player_name}")
-        players: list[PlayerBox] = self.player_stack.get_children()
+        players: list = self.player_stack.get_children()
         if len(players) == 1 and player_name == players[0].player.player_name:
             self.hide()
             self.current_stack_pos = 0
             return
-
         if players[self.current_stack_pos].player.player_name == player_name:
             self.current_stack_pos = max(0, self.current_stack_pos - 1)
             self.player_stack.set_visible_child(
                 self.player_stack.get_children()[self.current_stack_pos],
             )
         self.player_buttons[self.current_stack_pos].set_style_classes(["active"])
-        self.buttons_box.hide() if len(players) == 2 else self.buttons_box.set_visible(
-            True
-        )
+        self.buttons_box.set_visible(len(players) > 2)
 
     def make_new_player_button(self, player_box):
         new_button = HoverButton(name="player-stack-button")
@@ -157,17 +275,12 @@ class PlayerBoxStack(Box):
             button.add_style_class("active")
             self.player_stack.set_visible_child(player_box)
 
-        new_button.connect(
-            "clicked",
-            on_player_button_click,
-        )
+        new_button.connect("clicked", on_player_button_click)
         self.player_buttons.append(new_button)
-
-        # This will automatically destroy our used button
         player_box.connect(
             "destroy",
             lambda *_: [
-                new_button.destroy(),  # type: ignore
+                new_button.destroy(),
                 self.player_buttons.pop(self.player_buttons.index(new_button)),
             ],
         )
@@ -175,417 +288,179 @@ class PlayerBoxStack(Box):
 
 
 class PlayerBox(Box):
-    """A widget that displays the current player information."""
+    """Compact glassmorphism player card — album art, metadata, waveform, play button."""
 
     def __init__(self, player: MprisPlayer, config: dict, **kwargs):
         super().__init__(
-            h_align="center",
             name="player-box",
+            spacing=0,
             **kwargs,
-            h_expand=True,
         )
-        # Setup
+
         self.player: MprisPlayer = player
+        self.config = config
         self.fallback_cover_path = f"{ASSETS_DIR}/images/disk.png"
         self._last_temp_art_path: str | None = None
-
-        self.image_size = 120
-
-        self.config = config
-
-        self.icon_size = 15
-
-        # State
-        self.exit = False
-        self.angle_direction = 1
-        self.skipped = False
         self._seekbar_timer_id: int | None = None
+        self.exit = False
 
-        self.image_box = CircularImage(
-            size=self.image_size, image_file=self.fallback_cover_path
+        # ─── Album Art ───
+        self.album_art = Box(
+            name="player-album-art",
+            style=f"background-image: url('{self.fallback_cover_path}');",
         )
 
-        self.image_stack = Box(
-            h_align="start", v_align="center", name="player-image-stack"
-        )
-        self.image_stack.children = [*self.image_stack.children, self.image_box]
-
-        self.art_animator = None
-        # Track Info
-        self.track_title = Label(
-            label="No Title",
+        # ─── Track Info ───
+        self.title_label = Label(
             name="player-title",
-            justfication="left",
-            max_chars_width=self.config.get("truncation_size", 50),
+            label="No Title",
+            max_chars_width=28,
             ellipsization="end",
             h_align="start",
         )
-
-        self.track_artist = Label(
-            label="No Artist",
+        self.artist_label = Label(
             name="player-artist",
-            justfication="left",
-            max_chars_width=self.config.get("truncation_size", 50),
+            label="No Artist",
+            max_chars_width=28,
             ellipsization="end",
             h_align="start",
             visible=self.config.get("show_artist", True),
         )
-
-        self.track_album = Label(
-            label="No Album",
-            name="player-album",
-            justfication="left",
-            max_chars_width=self.config.get("truncation_size", 50),
-            ellipsization="end",
+        self.time_label = Label(
+            name="player-time",
+            label="0:00 / 0:00",
             h_align="start",
-            visible=self.config.get("show_album", True),
+            visible=self.config.get("show_time", True),
         )
 
-        self.player.bind_property(
-            "title",
-            self.track_title,
-            "label",
-            GObject.BindingFlags.DEFAULT,
-            lambda _, x: (
-                NEWLINE_RE.sub(" ", x) if x != "" and x is not None else "No Title"
-            ),  # type: ignore
+        for prop, widget in [
+            ("title", self.title_label),
+            ("artist", self.artist_label),
+        ]:
+            fallback = f"No {prop.title()}"
+            self.player.bind_property(
+                prop,
+                widget,
+                "label",
+                GObject.BindingFlags.DEFAULT,
+                lambda _, x, f=fallback: (NEWLINE_RE.sub(" ", x) if x else f),
+            )
+
+        # ─── Progress Bar ───
+        self.progress_bar = WaveformProgress()
+        self.progress_bar.set_seek_callback(self._on_waveform_seek)
+
+        # ─── Bottom Controls Row ───
+        prev_icon = nerd_font_icon(
+            icon=get_text_icon("mpris.previous"),
+            props={"style_classes": ["player-icon-sm"]},
         )
-        self.player.bind_property(
-            "artist",
-            self.track_artist,
-            "label",
-            GObject.BindingFlags.DEFAULT,
-            lambda _, x: (
-                NEWLINE_RE.sub(" ", x) if x != "" and x is not None else "No Artist"
-            ),  # type: ignore
+        self.prev_btn = HoverButton(
+            name="player-prev",
+            child=prev_icon,
+            on_clicked=self.player.previous,
+        )
+        self.player.bind_property("can_go_previous", self.prev_btn, "sensitive")
+
+        next_icon = nerd_font_icon(
+            icon=get_text_icon("mpris.next"),
+            props={"style_classes": ["player-icon-sm"]},
+        )
+        self.next_btn = HoverButton(
+            name="player-next",
+            child=next_icon,
+            on_clicked=self.player.next,
+        )
+        self.player.bind_property("can_go_next", self.next_btn, "sensitive")
+
+        self.controls_row = Box(
+            name="player-controls-row",
+            spacing=6,
+            v_align="center",
+            children=[self.prev_btn, self.progress_bar, self.next_btn],
         )
 
-        self.player.bind_property(
-            "album",
-            self.track_album,
-            "label",
-            GObject.BindingFlags.DEFAULT,
-            lambda _, x: (
-                NEWLINE_RE.sub(" ", x) if x != "" and x is not None else "No Album"
-            ),  # type: ignore
-        )
-
-        self.track_info = Box(
-            name="track-info",
-            spacing=5,
+        # ─── Center Column ───
+        self.meta_col = Box(
+            name="player-meta-col",
             orientation="v",
-            v_align="start",
-            h_align="start",
+            spacing=3,
+            v_align="center",
+            h_expand=True,
             children=[
-                self.track_title,
-                self.track_artist,
-                self.track_album,
+                self.title_label,
+                self.artist_label,
+                self.time_label,
+                self.controls_row,
             ],
         )
 
-        # Buttons
-        self.button_box = Box(
-            name="button-box",
-            h_align="center",
-            spacing=2,
-        )
-
-        self.position_label = Label(
-            "00:00",
-            v_align="center",
-            style_classes=["time-label"],
-            visible=self.config.get("show_time", True),
-        )
-        self.length_label = Label(
-            "00:00",
-            v_align="center",
-            style_classes=["time-label"],
-            visible=self.config.get("show_time", True),
-        )
-
-        # Seek Bar
-        self.seek_bar = create_scale(name="seek-bar")
-
-        self.seek_bar.connect("change-value", self.on_scale_move)
-        self.player.bind("can-seek", "sensitive", self.seek_bar)
-
-        setup_cursor_hover(self.seek_bar)
-
-        self.controls_box = CenterBox(
-            name="player-controls",
-            start_children=self.position_label,
-            center_children=self.button_box,
-            end_children=self.length_label,
-        )
-
-        self.skip_next_icon = nerd_font_icon(
-            icon=get_text_icon("mpris.next"),
-            props={"style_classes": ["panel-font-icon", "player-icon"]},
-        )
-        self.skip_prev_icon = nerd_font_icon(
-            icon=get_text_icon("mpris.previous"),
-            props={"style_classes": ["panel-font-icon", "player-icon"]},
-        )
-        self.loop_icon = nerd_font_icon(
-            icon=get_text_icon("mpris.loop"),
-            props={"style_classes": ["panel-font-icon", "player-icon"]},
-        )
-        self.shuffle_icon = nerd_font_icon(
-            icon=get_text_icon("mpris.shuffle"),
-            props={"style_classes": ["panel-font-icon", "player-icon"]},
-        )
+        # ─── Play/Pause Button ───
         self.play_pause_icon = nerd_font_icon(
             icon=get_text_icon("mpris.paused"),
-            props={"style_classes": ["panel-font-icon", "player-icon"]},
+            props={"style_classes": ["player-icon-lg"]},
         )
-
-        self.play_pause_button = HoverButton(
-            name="player-button",
+        self.play_pause_btn = HoverButton(
+            name="player-play-pause",
             child=self.play_pause_icon,
             on_clicked=self.player.play_pause,
+            v_align="start",
         )
+        self.player.bind_property("can_pause", self.play_pause_btn, "sensitive")
 
-        self.player.bind_property("can_pause", self.play_pause_button, "sensitive")
+        # ─── Main Row ───
+        self.main_row = Box(
+            name="player-main-row",
+            spacing=12,
+            children=[self.album_art, self.meta_col, self.play_pause_btn],
+        )
+        self.children = [self.main_row]
 
-        self.next_button = HoverButton(
-            style_classes=["player-button"],
-            child=self.skip_next_icon,
-            on_clicked=self.on_player_next,
-        )
-        self.player.bind_property("can_go_next", self.next_button, "sensitive")
-
-        self.prev_button = HoverButton(
-            style_classes=["player-button"],
-            child=self.skip_prev_icon,
-            on_clicked=self.on_player_prev,
-        )
-        self.shuffle_button = HoverButton(
-            style_classes=["player-button"],
-            child=self.shuffle_icon,
-            on_clicked=self.player.toggle_shuffle,
-        )
-        self.player.bind_property("can_shuffle", self.shuffle_button, "sensitive")
-
-        self.button_box.children = (
-            self.shuffle_button,
-            self.prev_button,
-            self.play_pause_button,
-            self.next_button,
-        )
-        self.player_info_box = Box(
-            name="player-info-box",
-            v_align="center",
-            h_align="start",
-            orientation="v",
-            children=[self.track_info, self.seek_bar, self.controls_box],
-        )
-
-        self.inner_box = Box(
-            name="inner-player-box",
-            v_align="center",
-            h_align="start",
-        )
-        # resize the inner box
-        self.outer_box = Box(
-            name="outer-player-box",
-            h_align="start",
-        )
-
-        self.overlay_box = Overlay(
-            child=self.outer_box,
-            overlays=[
-                self.inner_box,
-                self.player_info_box,
-                self.image_stack,
-                Box(
-                    children=Image(icon_name=self.player.player_name, icon_size=18),
-                    h_align="end",
-                    v_align="start",
-                    style="margin-top: 5px; margin-right: 10px;",
-                    tooltip_text=self.player.player_name,  # type: ignore
-                ),
-            ],
-        )
-
-        self.children = [*self.children, self.overlay_box]
-
+        # ─── Signals ───
         bulk_connect(
             self.player,
             {
                 "exit": self.on_player_exit,
                 "notify::playback-status": self.on_playback_change,
-                "notify::shuffle": self.on_shuffle_update,
                 "notify::metadata": self.on_metadata,
             },
         )
 
+    # ─── Metadata & Artwork ─────────────────────────────────────────────────
+
     def on_metadata(self, *_):
         self._set_image()
-
-        duration = self.player.length
-
-        if duration:
-            self.length_label.set_label(self.length_str(self.player.length))
-            self.seek_bar.set_range(0, duration)
-
+        length = self.player.length
+        if length:
+            pos = self.player.position or 0
+            self.time_label.set_label(_format_time_combined(pos, length))
         self._stop_seekbar_timer()
         self._seekbar_timer_id = GLib.timeout_add(1000, self._move_seekbar)
 
-    def _stop_seekbar_timer(self):
-        if self._seekbar_timer_id is not None:
-            GLib.source_remove(self._seekbar_timer_id)
-            self._seekbar_timer_id = None
-
-    def _set_notify_value(self, p, *_):
-        self.image_box.angle = self.angle_direction * p.value
-
-    def on_player_exit(self, _, value):
-        self.exit = value
-        self._stop_seekbar_timer()
-        self.destroy()
-
-    def on_player_next(self, *_):
-        self.angle_direction = 1
-        self.seek_bar.set_value(0)
-
-        from .animator import Animator
-
-        if self.art_animator is None:
-            self.art_animator = Animator(
-                timing_function=partial(cubic_bezier, 0, 0, 1, 1),
-                duration=4,
-                min_value=0,
-                max_value=360,
-                tick_widget=self.image_box,
-                notify_value=self._set_notify_value,
-            )
-
-        self.art_animator.play()
-        self.player.next()
-
-    def on_player_prev(self, *_):
-        self.angle_direction = -1
-        self.seek_bar.set_value(0)
-        self.art_animator.play()
-        self.player.previous()
-
-    def on_shuffle_update(self, *_):
-        if self.player.shuffle is None:
-            return
-        if self.player.shuffle is True:
-            self.shuffle_icon.style_classes = []
-            self.shuffle_icon.add_style_class("shuffle-on")
-        else:
-            self.shuffle_icon.style_classes = []
-            self.shuffle_icon.add_style_class("shuffle-off")
-
-    def length_str(self, micro_seconds: int) -> str:
-        micro_to_seconds = 1000000
-        seconds = int(micro_seconds / micro_to_seconds)
-        minutes = seconds // 60
-        remaining_seconds = seconds % 60
-        return f"{minutes:02}:{remaining_seconds:02}"
-
-    def on_playback_change(self, player, status):
-        status = player.get_property("playback-status")
-
-        if status == "paused":
-            self.play_pause_icon.set_label(
-                get_text_icon("mpris.playing"),
-            )
-
-        if status == "playing":
-            self.play_pause_icon.set_label(
-                get_text_icon("mpris.paused"),
-            )
-
-    def _update_image(self, image_path):
-        if image_path and os.path.isfile(image_path):
-            self.image_box.set_image_from_file(image_path)
-            self.update_colors(image_path)
-        else:
-            self.image_box.set_image_from_file(self.fallback_cover_path)
-            self.update_colors(self.fallback_cover_path)
-
-    def on_accent_color(self, palette):
-        default_color = (255, 0, 0)  # fallback color
-
-        valid_palette: list[tuple[int, int, int]] = (
-            [
-                (int(color[0]), int(color[1]), int(color[2]))
-                for color in palette
-                if (
-                    isinstance(color, (list, tuple))
-                    and len(color) >= 3
-                    and color[0] is not None
-                    and color[1] is not None
-                    and color[2] is not None
-                )
-            ]
-            if isinstance(palette, (list, tuple))
-            else []
-        )
-
-        base_color = valid_palette[0] if valid_palette else default_color
-        mix_target = (247, 239, 209)  # #F7EFD1
-
-        # Mix base color with the target color
-        mixed_color = mix_colors(base_color, mix_target, 0.5)
-        # Then apply a tint to lighten it a bit more (e.g., 20%)
-        tinted_color = tint_color(mixed_color, 0.2)
-
-        mixed_css_color = rgb_to_css(tinted_color)
-
-        bg = f"background-color: {mixed_css_color};"
-        border = f"border-color: {mixed_css_color};"
-
-        self.seek_bar.set_style(
-            f"trough highlight {{ {bg} {border} }} slider {{ {bg} }}"
-        )
-
-        gradient_palette = (
-            valid_palette
-            if valid_palette
-            else [default_color, tint_color(default_color, 0.3)]
-        )
-        css_colors = [rgb_to_css(color) for color in gradient_palette]
-        gradient = f"linear-gradient(135deg, {', '.join(css_colors)})"
-
-        self.inner_box.set_style(f"background: {gradient};")
-
-    def update_colors(self, image_path):
-        get_simple_palette_threaded(
-            image_path=image_path, color_count=5, callback=self.on_accent_color
-        )
-
     def _set_image(self, *_):
         art_url = self.player.arturl
-
+        if not art_url:
+            self._update_art(self.fallback_cover_path)
+            return
         parsed = urllib.parse.urlparse(art_url)
         if parsed.scheme == "file":
             local_arturl = urllib.parse.unquote(parsed.path)
-            self._update_image(local_arturl)
+            self._update_art(local_arturl)
         elif parsed.scheme in ("http", "https"):
             GLib.Thread.new("download-artwork", self._download_and_set_artwork, art_url)
         else:
-            self._update_image(art_url)
+            self._update_art(art_url)
 
     def _download_and_set_artwork(self, arturl):
-        """
-        Download the artwork from the given URL asynchronously and update the cover
-        using idle_add to ensure UI updates occur on the main thread.
-        """
         try:
             parsed = urllib.parse.urlparse(arturl)
             suffix = os.path.splitext(parsed.path)[1] or ".png"
             response = get_http_client().get(arturl, timeout=5)
-
             old_temp_path = self._last_temp_art_path
             with tempfile.NamedTemporaryFile(delete=False, suffix=suffix) as temp_file:
                 temp_file.write(response.content)
                 local_arturl = temp_file.name
             self._last_temp_art_path = local_arturl
-
             if (
                 old_temp_path
                 and old_temp_path != local_arturl
@@ -597,22 +472,53 @@ class PlayerBox(Box):
                     logger.debug(f"[Media] Failed to remove temp file: {old_temp_path}")
         except Exception:
             local_arturl = self.fallback_cover_path
-        idle_add(self._update_image, local_arturl)
-        return None
+        idle_add(self._update_art, local_arturl)
+
+    def _update_art(self, image_path):
+        url = f"url('{image_path}')" if image_path and os.path.isfile(image_path) else f"url('{self.fallback_cover_path}')"
+        self.album_art.set_style(
+            f"background-image: {url}; background-size: cover; background-position: center;"
+        )
+
+    # ─── Playback Controls ──────────────────────────────────────────────────
+
+    def on_playback_change(self, player, _status):
+        status = player.get_property("playback-status")
+        if status == "paused":
+            self.play_pause_icon.set_label(get_text_icon("mpris.playing"))
+        elif status == "playing":
+            self.play_pause_icon.set_label(get_text_icon("mpris.paused"))
+
+    def _on_waveform_seek(self, fraction: float):
+        length = self.player.length
+        if length:
+            self.player.position = int(length * fraction)
 
     def _move_seekbar(self, *_):
         if self.player is None or self.exit:
             self._seekbar_timer_id = None
             return False
-
-        self.position_label.set_label(self.length_str(self.player.position))
-        self.seek_bar.set_value(self.player.position)
-
+        pos = self.player.position
+        length = self.player.length
+        if length:
+            self.time_label.set_label(_format_time_combined(pos, length))
+            self.progress_bar.set_progress(pos / length if length > 0 else 0.0)
         return True
+
+    def _stop_seekbar_timer(self):
+        if self._seekbar_timer_id is not None:
+            GLib.source_remove(self._seekbar_timer_id)
+            self._seekbar_timer_id = None
+
+    # ─── Lifecycle ──────────────────────────────────────────────────────────
+
+    def on_player_exit(self, _, value):
+        self.exit = value
+        self._stop_seekbar_timer()
+        self.destroy()
 
     def destroy(self):
         self._stop_seekbar_timer()
-        # Best-effort cleanup of the latest downloaded artwork temp file.
         if self._last_temp_art_path and os.path.exists(self._last_temp_art_path):
             try:
                 os.remove(self._last_temp_art_path)
@@ -623,9 +529,3 @@ class PlayerBox(Box):
             finally:
                 self._last_temp_art_path = None
         super().destroy()
-
-    @cooldown(0.1)
-    def on_scale_move(self, scale: Scale, event, pos: int):
-        self.player.position = pos
-        self.position_label.set_label(self.length_str(pos))
-        self.seek_bar.set_value(pos)

@@ -12,7 +12,7 @@ from utils.functions import char_limit_to_px, safe_disconnect
 
 
 class MprisWidget(ButtonWidget, PopoverMixin):
-    """A widget to control the MPRIS."""
+    """A compact bar widget showing the currently playing track."""
 
     def __init__(self, **kwargs):
         super().__init__(name="mpris", **kwargs)
@@ -23,6 +23,7 @@ class MprisWidget(ButtonWidget, PopoverMixin):
 
         self.default_cover = f"{ASSETS_DIR}/images/disk.png"
 
+        # Scrolling track label
         self.label = ScrollingLabel(
             name="mpris-label",
             style_classes=["panel-text"],
@@ -30,8 +31,20 @@ class MprisWidget(ButtonWidget, PopoverMixin):
             max_width=char_limit_to_px(self, self.config.get("truncation_size", 30)),
         )
 
-        self.cover = Box(name="mpris-cover")
+        # Cover art thumbnail
+        self.cover = Box(
+            name="mpris-cover",
+            style=f"background-image: url('{self.default_cover}');",
+        )
+
+        # Progress bar — styled via SCSS (#mpris-progress)
         self.progress = Box(name="mpris-progress")
+        self.progress_fill = Box(
+            name="mpris-progress-fill",
+            h_align="start",
+        )
+        self.progress.children = [self.progress_fill]
+
         self.meta_box = Box(
             name="mpris-meta-box",
             orientation="v",
@@ -40,9 +53,10 @@ class MprisWidget(ButtonWidget, PopoverMixin):
             v_align="start",
             children=[self.label, self.progress],
         )
+
+        self._last_progress_pct: float | None = None
         self._set_default_values()
         self.container_box.children = [self.cover, self.meta_box]
-        self._last_progress_pct: float | None = None
 
         bulk_connect(
             self,
@@ -51,16 +65,6 @@ class MprisWidget(ButtonWidget, PopoverMixin):
                 "leave-notify-event": self.on_hover_leave,
             },
         )
-
-        config = {
-            "enabled": True,
-            "ignore": [""],
-            "truncation_size": 30,
-            "show_album": True,
-            "show_artist": True,
-            "show_time": True,
-            "show_time_tooltip": True,
-        }
 
         self.label_format = self.config.get("label_format", "{title} - {artist}")
 
@@ -86,7 +90,7 @@ class MprisWidget(ButtonWidget, PopoverMixin):
             break
 
         self.setup_popover(
-            lambda: PlayerBoxStack(self.mpris_manager, config=config),
+            lambda: PlayerBoxStack(self.mpris_manager, config=self.config),
         )
         self._start_progress_timer()
 
@@ -112,7 +116,6 @@ class MprisWidget(ButtonWidget, PopoverMixin):
     def _start_progress_timer(self):
         if self._progress_timer_id is not None:
             return
-
         self._progress_timer_id = self._register_repeater(
             GLib.timeout_add(1000, self._on_progress_tick)
         )
@@ -120,7 +123,6 @@ class MprisWidget(ButtonWidget, PopoverMixin):
     def _stop_progress_timer(self):
         if self._progress_timer_id is None:
             return
-
         GLib.source_remove(self._progress_timer_id)
         self._progress_timer_id = None
 
@@ -140,15 +142,17 @@ class MprisWidget(ButtonWidget, PopoverMixin):
         else:
             title = (self.player.title or "").strip()
             show_progress = playback_status in {"playing", "paused"} and bool(title)
-            length_raw = getattr(self.player, "length", None)
-            position_raw = getattr(self.player, "position", 0)
             try:
-                track_length = int(length_raw) if length_raw is not None else 0
+                track_length = (
+                    int(self.player.length) if self.player.length is not None else 0
+                )
             except (TypeError, ValueError):
                 track_length = 0
 
             try:
-                position = int(position_raw) if position_raw is not None else 0
+                position = (
+                    int(self.player.position) if self.player.position is not None else 0
+                )
             except (TypeError, ValueError):
                 position = 0
 
@@ -161,23 +165,20 @@ class MprisWidget(ButtonWidget, PopoverMixin):
 
         if not show_progress:
             self._last_progress_pct = None
-            self.progress.set_style("")
+            self.progress_fill.set_style("")
             return
 
         rounded = round(progress_pct, 1)
-
         if rounded == self._last_progress_pct:
             return
 
         self._last_progress_pct = rounded
-
-        self.progress.set_style(
-            "background-image: linear-gradient(90deg, "
-            "rgba(103, 200, 255, 0.95) 0%, "
-            f"rgba(103, 200, 255, 0.95) {rounded:.1f}%, "
-            f"rgba(255,255,255,0.20) {rounded:.1f}%, "
-            "rgba(255,255,255,0.20) 100%);"
-        )
+        alloc_width = self.progress.get_allocated_width()
+        if alloc_width > 0:
+            fill_px = max(1, round(alloc_width * rounded / 100.0))
+            self.progress_fill.set_style(f"min-width: {fill_px}px;")
+        else:
+            self.progress_fill.set_style("")
 
     def _unbind_player_updates(self):
         if self.player is None:
@@ -198,15 +199,12 @@ class MprisWidget(ButtonWidget, PopoverMixin):
     def on_player_appeared(self, manager, raw_player):
         if raw_player.props.player_name in self.config.get("ignore", []):
             return
-
-        # Prefer active playback for the compact bar widget when players appear.
         if self.player is None or self.player.playback_status != "playing":
             self._set_player(raw_player)
 
     def on_player_vanished(self, manager, player_name):
         if self.player is None or self.player.player_name != player_name:
             return
-
         self._unbind_player_updates()
         self.player = None
 
@@ -215,7 +213,6 @@ class MprisWidget(ButtonWidget, PopoverMixin):
                 continue
             self._set_player(raw_player)
             return
-
         self.get_current()
 
     def on_hover_enter(self, *_):
@@ -242,14 +239,11 @@ class MprisWidget(ButtonWidget, PopoverMixin):
             album=self.player.album or "",
             name=self.player.player_name or "",
         )
-
         self.label.set_text(label_text)
 
-        art_url = getattr(self.player, "arturl", None)
-        if not art_url:
-            art_url = self.default_cover
+        art_url = getattr(self.player, "arturl", None) or self.default_cover
+        self.cover.set_style(f"background-image: url('{art_url}');")
 
-        self.cover.set_style("background-image: url('" + art_url + "');")
         self._update_progress()
 
         if self.config.get("tooltip", False) and self.tooltips_enabled:
@@ -257,11 +251,11 @@ class MprisWidget(ButtonWidget, PopoverMixin):
 
     def _set_default_values(self):
         self._last_progress_pct = None
-        self.cover.set_style("background-image: url('" + self.default_cover + "');")
+        self.cover.set_style(f"background-image: url('{self.default_cover}');")
         self.label.set_text("Nothing playing")
         self.meta_box.v_align = "center"
         self.progress.set_visible(False)
-        self.progress.set_style("")
+        self.progress_fill.set_style("")
         if self.config.get("hide_when_no_player", True):
             self.hide()
 
