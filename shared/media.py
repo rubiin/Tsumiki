@@ -1,27 +1,15 @@
-import math
 import tempfile
 import urllib.parse
 
-from fabric.utils import (
-    GLib,
-    GObject,
-    Gtk,
-    bulk_connect,
-    idle_add,
-    logger,
-    os,
-)
+from fabric.utils import GLib, GObject, bulk_connect, idle_add, logger, os
 from fabric.widgets.box import Box
 from fabric.widgets.button import Button
 from fabric.widgets.centerbox import CenterBox
-from fabric.widgets.image import Image
 from fabric.widgets.label import Label
 from fabric.widgets.stack import Stack
-from gi.repository import Gdk
-
-import cairo
 
 from services.mpris import MprisPlayer, MprisPlayerManager
+from shared.sinewave_slider import SineWaveSlider
 from utils.constants import APP_DATA_DIRECTORY, ASSETS_DIR, NEWLINE_RE
 from utils.functions import ensure_directory, get_http_client
 from utils.icons import get_text_icon
@@ -39,152 +27,6 @@ def _format_seconds(micro_seconds: int) -> str:
 
 def _format_time_combined(position_us: int, length_us: int) -> str:
     return f"{_format_seconds(position_us)} / {_format_seconds(length_us)}"
-
-
-class WaveformProgress(Gtk.DrawingArea):
-    """Cairo-rendered wavy waveform with click/drag seeking."""
-
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self._progress = 0.0
-        self._seek_callback = None
-        self._dragging = False
-
-        self.set_hexpand(True)
-        self.set_size_request(50, 22)
-        self.set_name("player-waveform")
-
-        self.connect("draw", self._on_draw)
-        self.connect("button-press-event", self._on_press)
-        self.connect("motion-notify-event", self._on_motion)
-        self.connect("button-release-event", self._on_release)
-        self.set_events(
-            self.get_events()
-            | Gdk.EventMask.BUTTON_PRESS_MASK
-            | Gdk.EventMask.BUTTON_RELEASE_MASK
-            | Gdk.EventMask.POINTER_MOTION_MASK
-        )
-
-    def set_progress(self, value: float):
-        self._progress = max(0.0, min(1.0, value))
-        self.queue_draw()
-
-    def set_seek_callback(self, callback):
-        self._seek_callback = callback
-
-    def _fraction_from_x(self, x):
-        alloc = self.get_allocation()
-        return max(0.0, min(1.0, x / alloc.width)) if alloc.width > 0 else 0.0
-
-    def _on_press(self, _, event):
-        self._dragging = True
-        frac = self._fraction_from_x(event.x)
-        self.set_progress(frac)
-        if self._seek_callback:
-            self._seek_callback(frac)
-        return True
-
-    def _on_motion(self, _, event):
-        if self._dragging:
-            frac = self._fraction_from_x(event.x)
-            self.set_progress(frac)
-            if self._seek_callback:
-                self._seek_callback(frac)
-        return False
-
-    def _on_release(self, _, event):
-        self._dragging = False
-        return False
-
-    def _on_draw(self, widget, cr: cairo.Context):
-        alloc = self.get_allocation()
-        w, h = alloc.width, alloc.height
-        if w < 1 or h < 1:
-            return
-
-        pad_t = 4.0
-        pad_b = 4.0
-        pad_l = 4.0
-        pad_r = 4.0
-        dl = pad_l
-        dr = w - pad_r
-        dw = dr - dl
-        draw_top = pad_t
-        draw_bot = h - pad_b
-        mid_y = draw_top + (draw_bot - draw_top) / 2.0
-
-        if dw < 1:
-            return
-
-        pct = self._progress
-        px = dl + dw * pct
-
-        # Muted earthy palette
-        played_rgba = (0.90, 0.88, 0.78, 0.80)
-        remainder_rgba = (0.82, 0.80, 0.70, 0.20)
-        playhead_rgba = (0.85, 0.82, 0.72, 0.95)
-        track_bg_rgba = (0.85, 0.84, 0.76, 0.07)
-
-        # Helper: evaluate wave amplitude at a given x
-        def _wave_y(x_pos):
-            freq1 = 2.8 * math.pi / dw
-            freq2 = 6.5 * math.pi / dw
-            amp1 = (draw_bot - draw_top) * 0.32
-            amp2 = (draw_bot - draw_top) * 0.14
-            return mid_y + math.sin(x_pos * freq1) * amp1 + math.sin(x_pos * freq2) * amp2
-
-        # Steps for smoothness
-        step = 1.0
-
-        # 1. Subtle full-track wave background
-        cr.set_source_rgba(*track_bg_rgba)
-        cr.set_line_width(2.0)
-        cr.move_to(dl, _wave_y(dl))
-        x = dl + step
-        while x < dr:
-            cr.line_to(x, _wave_y(x))
-            x += step
-        cr.stroke()
-
-        # 2. Played-portion wave (brighter, slightly thicker)
-        if px > dl + 1:
-            cr.set_source_rgba(*played_rgba)
-            cr.set_line_width(2.5)
-            cr.move_to(dl, _wave_y(dl))
-            x_step = max(step, (px - dl) / 30.0)
-            x = dl + x_step
-            while x <= px:
-                cr.line_to(x, _wave_y(x))
-                x += x_step
-            cr.stroke()
-
-        # 3. Remainder wave (faded)
-        rem_start = px + 6.0
-        if rem_start < dr:
-            cr.set_source_rgba(*remainder_rgba)
-            cr.set_line_width(2.0)
-            cr.move_to(rem_start, _wave_y(rem_start))
-            x_step = max(step, (dr - rem_start) / 25.0)
-            x = rem_start + x_step
-            while x < dr:
-                cr.line_to(x, _wave_y(x))
-                x += x_step
-            cr.stroke()
-
-        # 4. Playhead vertical line
-        if 0.01 < pct < 1.0:
-            cr.set_source_rgba(*playhead_rgba)
-            cr.set_line_width(2.5)
-            cr.set_line_cap(cairo.LineCap.ROUND)
-            cr.move_to(px, draw_top + 2)
-            cr.line_to(px, draw_bot - 2)
-            cr.stroke()
-
-        # 5. End dot
-        if rem_start < dr:
-            cr.set_source_rgba(*remainder_rgba)
-            cr.arc(dr - 3.0, mid_y, 1.8, 0, 2 * math.pi)
-            cr.fill()
 
 
 class PlayerBoxStack(Box):
@@ -288,7 +130,7 @@ class PlayerBoxStack(Box):
 
 
 class PlayerBox(Box):
-    """Compact glassmorphism player card — album art, metadata, waveform, play button."""
+    """Glassmorphism player card: album art, metadata, waveform, playback."""
 
     def __init__(self, player: MprisPlayer, config: dict, **kwargs):
         super().__init__(
@@ -343,12 +185,11 @@ class PlayerBox(Box):
                 widget,
                 "label",
                 GObject.BindingFlags.DEFAULT,
-                lambda _, x, f=fallback: (NEWLINE_RE.sub(" ", x) if x else f),
+                lambda _, x, f=fallback: NEWLINE_RE.sub(" ", x) if x else f,
             )
 
         # ─── Progress Bar ───
-        self.progress_bar = WaveformProgress()
-        self.progress_bar.set_seek_callback(self._on_waveform_seek)
+        self.progress_bar = SineWaveSlider(name="player-slider")
 
         # ─── Bottom Controls Row ───
         prev_icon = nerd_font_icon(
@@ -475,9 +316,14 @@ class PlayerBox(Box):
         idle_add(self._update_art, local_arturl)
 
     def _update_art(self, image_path):
-        url = f"url('{image_path}')" if image_path and os.path.isfile(image_path) else f"url('{self.fallback_cover_path}')"
+        url = (
+            f"url('{image_path}')"
+            if image_path and os.path.isfile(image_path)
+            else f"url('{self.fallback_cover_path}')"
+        )
         self.album_art.set_style(
-            f"background-image: {url}; background-size: cover; background-position: center;"
+            f"background-image: {url};"
+            " background-size: cover; background-position: center;"
         )
 
     # ─── Playback Controls ──────────────────────────────────────────────────
@@ -502,7 +348,7 @@ class PlayerBox(Box):
         length = self.player.length
         if length:
             self.time_label.set_label(_format_time_combined(pos, length))
-            self.progress_bar.set_progress(pos / length if length > 0 else 0.0)
+            self.progress_bar.set_value(pos / length if length > 0 else 0.0)
         return True
 
     def _stop_seekbar_timer(self):

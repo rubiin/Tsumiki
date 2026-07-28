@@ -23,11 +23,42 @@
   }
 }
 
+
+#player-slider {
+  background-color: transparent;
+}
+
+#player-slider wave {
+  color: rgba(130, 133, 166, 0.9);
+  min-width: 4px;
+  /* wave thickness */
+  min-height: 3px;
+  /* wave amplitude */
+}
+
+#player-slider track {
+  color: rgba(54, 56, 77, 0.4);
+  min-width: 2px;
+  /* track thickness*/
+}
+
+#player-slider handle {
+  color: theme.$text-main;
+  min-width: 3px;
+  /* handle thickness*/
+  min-height: 22px;
+  /* handle length*/
+  margin-left: 5px;
+  /* gap between handle and wave(will be mathematically adjusted to look better)*/
+  border-radius: 2px;
+  /* handle corner radii*/
+}
+
 #player-box {
   background: linear-gradient(
     180deg,
-    rgba(66, 65, 48, 0.87) 0%,
-    rgba(62, 61, 45, 0.85) 100%
+    theme.$background-main 0%,
+    theme.$background-alt 100%
   );
   border-radius: 20px;
   padding: 12px;
@@ -38,7 +69,7 @@
     #player-album-art {
       min-width: 95px;
       min-height: 95px;
-      border-radius: 3px;
+      border-radius: 8px;
       background-size: cover;
       background-position: center;
     }
@@ -72,7 +103,7 @@
 
         #player-waveform {
           min-height: 22px;
-      
+
         }
 
         #player-prev,
@@ -84,7 +115,7 @@
           padding: 0;
 
           .player-icon-sm {
-            font-size: 10px;
+            font-size: 15px;
             color: #9C998A;
           }
 
@@ -102,8 +133,9 @@
     #player-play-pause {
       min-width: 44px;
       min-height: 44px;
-      border-radius: 100%;
+      border-radius: 40%;
       background-color: #A5A890;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
       margin-top: 0;
       padding: 0;
 

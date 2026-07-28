@@ -790,9 +790,7 @@ def kill_process(process_name: str):
 
 
 def add_style_class_lazy(widget: Gtk.Widget, class_name: str | Iterable[str]) -> int:
-    return GLib.timeout_add(
-        50, lambda: widget.add_style_class(class_name) or False
-    )
+    return GLib.timeout_add(50, lambda: widget.add_style_class(class_name) or False)
 
 
 def lazy_load_class(module_name: str, class_name: str):
