@@ -99,14 +99,6 @@
             #notification-group-deck {
               transition: opacity 200ms ease-in-out;
 
-              .notification-group-top {
-                border-bottom-width: 0;
-                border-bottom-left-radius: 0;
-                border-bottom-right-radius: 0;
-                border-top-left-radius: variable.$modules-notification-border-radius;
-                border-top-right-radius: variable.$modules-notification-border-radius;
-              }
-
               #notification-group-badge-label {
                 min-width: 12px;
                 min-height: 12px;
@@ -206,9 +198,18 @@
 
                   &:last-child {
                     margin-bottom: 0;
+                    border-bottom: none;
                   }
                 }
               }
+
+              #datemenu-notification-box {
+                transition: background-color 150ms ease-in-out;
+              }
+            }
+
+            #notification-group-deck #datemenu-notification-box:hover {
+              background-color: color.mix(theme.$background-main, theme.$surface-highlight, 85%);
             }
           }
         }
