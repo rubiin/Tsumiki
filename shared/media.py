@@ -3,8 +3,6 @@ import urllib.parse
 
 from fabric.utils import GLib, GObject, bulk_connect, idle_add, logger, os
 from fabric.widgets.box import Box
-from fabric.widgets.button import Button
-from fabric.widgets.centerbox import CenterBox
 from fabric.widgets.label import Label
 from fabric.widgets.stack import Stack
 
@@ -30,7 +28,7 @@ def _format_time_combined(position_us: int, length_us: int) -> str:
 
 
 class PlayerBoxStack(Box):
-    """Manages multiple player instances with navigation dots."""
+    """Manages multiple player instances with navigation dots inside each PlayerBox."""
 
     def __init__(self, mpris_manager: MprisPlayerManager, config, **kwargs):
         self.config = config
@@ -42,12 +40,8 @@ class PlayerBoxStack(Box):
             name="player-stack",
         )
         self.current_stack_pos = 0
-        self.player_buttons: list[Button] = []
-        self.buttons_box = CenterBox()
 
-        super().__init__(
-            orientation="v", children=[self.player_stack, self.buttons_box]
-        )
+        super().__init__(orientation="v", children=[self.player_stack])
         self.hide()
 
         self.mpris_manager = mpris_manager
@@ -65,33 +59,38 @@ class PlayerBoxStack(Box):
             )
             self.on_new_player(self.mpris_manager, player)
 
-    def on_player_clicked(self, direction):
-        self.player_buttons[self.current_stack_pos].remove_style_class("active")
+    def _sync_dots(self):
         count = len(self.player_stack.get_children())
-        if direction == "next":
-            self.current_stack_pos = (self.current_stack_pos + 1) % count
-        elif direction == "prev":
-            self.current_stack_pos = (self.current_stack_pos - 1) % count
-        self.player_buttons[self.current_stack_pos].add_style_class("active")
+        for child in self.player_stack.get_children():
+            child.update_dots(count, self.current_stack_pos)
+
+    def switch_to_player(self, index):
+        count = len(self.player_stack.get_children())
+        if index < 0 or index >= count:
+            return
+        self.current_stack_pos = index
         self.player_stack.set_visible_child(
-            self.player_stack.get_children()[self.current_stack_pos],
+            self.player_stack.get_children()[index],
         )
+        self._sync_dots()
 
     def on_new_player(self, mpris_manager, player):
         player_name = player.props.player_name
         if player_name in self.config.get("ignore", []):
             return
         self.set_visible(True)
-        self.buttons_box.set_visible(len(self.player_stack.get_children()) > 0)
+        player_box = PlayerBox(
+            player=MprisPlayer(player), config=self.config, parent=self
+        )
+        player_box.connect("destroy", lambda *_: self._sync_dots())
         self.player_stack.children = [
             *self.player_stack.children,
-            PlayerBox(player=MprisPlayer(player), config=self.config),
+            player_box,
         ]
-        self.make_new_player_button(self.player_stack.get_children()[-1])
+        self._sync_dots()
         logger.info(
             f"[PLAYER MANAGER] adding new player: {player.get_property('player-name')}",
         )
-        self.player_buttons[self.current_stack_pos].set_style_classes(["active"])
 
     def on_lost_player(self, mpris_manager, player_name):
         logger.info(f"[PLAYER_MANAGER] Player Removed {player_name}")
@@ -105,52 +104,27 @@ class PlayerBoxStack(Box):
             self.player_stack.set_visible_child(
                 self.player_stack.get_children()[self.current_stack_pos],
             )
-        self.player_buttons[self.current_stack_pos].set_style_classes(["active"])
-        self.buttons_box.set_visible(len(players) > 2)
-
-    def make_new_player_button(self, player_box):
-        new_button = HoverButton(name="player-stack-button")
-
-        def on_player_button_click(button: Button):
-            self.player_buttons[self.current_stack_pos].remove_style_class("active")
-            self.current_stack_pos = self.player_buttons.index(button)
-            button.add_style_class("active")
-            self.player_stack.set_visible_child(player_box)
-
-        new_button.connect("clicked", on_player_button_click)
-        self.player_buttons.append(new_button)
-        player_box.connect(
-            "destroy",
-            lambda *_: [
-                new_button.destroy(),
-                self.player_buttons.pop(self.player_buttons.index(new_button)),
-            ],
-        )
-        self.buttons_box.add_center(self.player_buttons[-1])
+        self._sync_dots()
 
 
 class PlayerBox(Box):
-    """Glassmorphism player card: album art, metadata, waveform, playback."""
+    """Glassmorphism player card: metadata, waveform, playback."""
 
-    def __init__(self, player: MprisPlayer, config: dict, **kwargs):
+    def __init__(self, player: MprisPlayer, config: dict, parent=None, **kwargs):
         super().__init__(
             name="player-box",
+            orientation="v",
             spacing=0,
             **kwargs,
         )
 
         self.player: MprisPlayer = player
+        self.parent = parent
         self.config = config
         self.fallback_cover_path = f"{ASSETS_DIR}/images/disk.png"
         self._last_temp_art_path: str | None = None
         self._seekbar_timer_id: int | None = None
         self.exit = False
-
-        # ─── Album Art ───
-        self.album_art = Box(
-            name="player-album-art",
-            style=f"background-image: url('{self.fallback_cover_path}');",
-        )
 
         # ─── Track Info ───
         self.title_label = Label(
@@ -214,11 +188,27 @@ class PlayerBox(Box):
         )
         self.player.bind_property("can_go_next", self.next_btn, "sensitive")
 
+        shuffle_icon = nerd_font_icon(
+            icon=get_text_icon("mpris.shuffle"),
+            props={"style_classes": ["player-icon-sm"]},
+        )
+        self.shuffle_btn = HoverButton(
+            name="player-shuffle",
+            child=shuffle_icon,
+            on_clicked=self.player.toggle_shuffle,
+        )
+        self.player.bind_property("can_shuffle", self.shuffle_btn, "sensitive")
+
         self.controls_row = Box(
             name="player-controls-row",
             spacing=6,
             v_align="center",
-            children=[self.prev_btn, self.progress_bar, self.next_btn],
+            children=[
+                self.prev_btn,
+                self.progress_bar,
+                self.next_btn,
+                self.shuffle_btn,
+            ],
         )
 
         # ─── Center Column ───
@@ -253,9 +243,17 @@ class PlayerBox(Box):
         self.main_row = Box(
             name="player-main-row",
             spacing=12,
-            children=[self.album_art, self.meta_col, self.play_pause_btn],
+            children=[self.meta_col, self.play_pause_btn],
         )
-        self.children = [self.main_row]
+
+        # ─── Player Dot Navigation ───
+        self.dot_box = Box(
+            name="player-dot-box",
+            spacing=4,
+            h_align="center",
+        )
+
+        self.children = [self.main_row, self.dot_box]
 
         # ─── Signals ───
         bulk_connect(
@@ -264,10 +262,11 @@ class PlayerBox(Box):
                 "exit": self.on_player_exit,
                 "notify::playback-status": self.on_playback_change,
                 "notify::metadata": self.on_metadata,
+                "notify::shuffle": self.on_shuffle_change,
             },
         )
 
-    # ─── Metadata & Artwork ─────────────────────────────────────────────────
+    # ─── Metadata ─────────────────────────────────────────────────────────────
 
     def on_metadata(self, *_):
         self._set_image()
@@ -321,24 +320,38 @@ class PlayerBox(Box):
             if image_path and os.path.isfile(image_path)
             else f"url('{self.fallback_cover_path}')"
         )
-        self.album_art.set_style(
-            f"background-image: {url};"
-            " background-size: cover; background-position: center;"
-        )
+        self.set_style(f"background-image: {url};")
+
+    def update_dots(self, count: int, active_index: int):
+        """Rebuild dot navigation for player switching."""
+        self.dot_box.children = []
+        for i in range(count):
+            dot = HoverButton(
+                name="player-stack-button",
+                style_classes=["active"] if i == active_index else [],
+                on_clicked=lambda *_, idx=i: (
+                    self.parent.switch_to_player(idx) if self.parent else None
+                ),
+            )
+            self.dot_box.add(dot)
+        self.dot_box.set_visible(count > 1)
 
     # ─── Playback Controls ──────────────────────────────────────────────────
+
+    def on_shuffle_change(self, *_):
+        if self.player.shuffle:
+            self.shuffle_btn.add_style_class("active")
+        else:
+            self.shuffle_btn.remove_style_class("active")
 
     def on_playback_change(self, player, _status):
         status = player.get_property("playback-status")
         if status == "paused":
             self.play_pause_icon.set_label(get_text_icon("mpris.playing"))
+            self.progress_bar.set_active(False)
         elif status == "playing":
             self.play_pause_icon.set_label(get_text_icon("mpris.paused"))
-
-    def _on_waveform_seek(self, fraction: float):
-        length = self.player.length
-        if length:
-            self.player.position = int(length * fraction)
+            self.progress_bar.set_active(True)
 
     def _move_seekbar(self, *_):
         if self.player is None or self.exit:

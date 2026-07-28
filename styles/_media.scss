@@ -1,19 +1,16 @@
 @use "sass:color";
-@use "sass:math";
 @use "theme";
-@use "variable";
-@use "common";
 
 #player-stack-button {
   border-radius: 9999px;
   min-width: 6px;
   min-height: 6px;
   margin: 10px 4px;
-  background-color: rgba(255, 255, 255, 0.3);
+  background-color: color.mix(theme.$surface-disabled, transparent, 70%);
   transition: all 150ms ease-in-out;
 
   &:hover {
-    background-color: rgba(255, 255, 255, 0.6);
+    background-color: color.mix(theme.$surface-highlight, transparent, 40%);
     min-width: 10px;
   }
 
@@ -23,91 +20,73 @@
   }
 }
 
-
 #player-slider {
   background-color: transparent;
 }
 
 #player-slider wave {
-  color: rgba(130, 133, 166, 0.9);
+  color: theme.$accent-teal;
   min-width: 4px;
-  /* wave thickness */
   min-height: 3px;
-  /* wave amplitude */
 }
 
 #player-slider track {
-  color: rgba(54, 56, 77, 0.4);
+  color: color.adjust(theme.$accent-teal, $alpha: -0.6);
   min-width: 2px;
-  /* track thickness*/
 }
 
 #player-slider handle {
   color: theme.$text-main;
   min-width: 3px;
-  /* handle thickness*/
   min-height: 22px;
-  /* handle length*/
   margin-left: 5px;
-  /* gap between handle and wave(will be mathematically adjusted to look better)*/
   border-radius: 2px;
-  /* handle corner radii*/
 }
 
 #player-box {
-  background: linear-gradient(
-    180deg,
-    theme.$background-main 0%,
-    theme.$background-alt 100%
-  );
-  border-radius: 20px;
-  padding: 12px;
-  min-width: 360px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.22);
+  border-radius: 25px;
+  padding: 20px;
+  background-color: color.mix(theme.$general-shadow-color, transparent, 40%);
+  background-blend-mode: multiply;
+  background-position: center;
+  background-size: cover;
+  border: 1px solid color.adjust(theme.$surface-disabled, $alpha: -0.6);
+
+  #player-dot-box {
+    margin-top: 8px;
+  }
 
   #player-main-row {
-    #player-album-art {
-      min-width: 95px;
-      min-height: 95px;
-      border-radius: 8px;
-      background-size: cover;
-      background-position: center;
-    }
-
     #player-meta-col {
       min-width: 0;
 
       #player-title {
         font-weight: 600;
         font-size: 14px;
-        color: #B8B39F;
+        color: theme.$text-main;
       }
 
       #player-artist {
         font-weight: 400;
         font-size: 11px;
-        color: #8E8A79;
-        margin-top: 1px;
+        color: theme.$text-secondary;
+        margin-top: 2px;
       }
 
       #player-time {
         font-weight: 400;
         font-size: 12px;
-        color: #9A9788;
-        margin-top: 2px;
+        color: theme.$text-muted;
+        margin-top: 3px;
       }
 
       #player-controls-row {
         margin-top: 8px;
         min-height: 22px;
 
-        #player-waveform {
-          min-height: 22px;
-
-        }
-
         #player-prev,
-        #player-next {
+        #player-next,
+        #player-shuffle {
           min-width: 20px;
           min-height: 20px;
           border-radius: 100%;
@@ -116,15 +95,17 @@
 
           .player-icon-sm {
             font-size: 15px;
-            color: #9C998A;
-          }
-
-          &:hover {
-            background-color: rgba(255, 255, 255, 0.08);
+            color: theme.$text-main;
           }
 
           &:disabled {
             opacity: 0.3;
+          }
+        }
+
+        #player-shuffle.active {
+          .player-icon-sm {
+            color: color.mix(theme.$text-main, theme.$accent-teal, 50%);
           }
         }
       }
@@ -133,28 +114,37 @@
     #player-play-pause {
       min-width: 44px;
       min-height: 44px;
-      border-radius: 40%;
-      background-color: #A5A890;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      background-color: theme.$accent-teal;
+      box-shadow: 0 4px 12px color.mix(theme.$general-shadow-color, transparent, 70%);
       margin-top: 0;
       padding: 0;
+      border-radius: 16px;
+      transition: border-radius 0.25s cubic-bezier(0.5, 0.25, 0, 1);
 
       .player-icon-lg {
         font-size: 16px;
-        color: #2A2A24;
+        color: theme.$background-dark;
       }
 
       &:hover {
-        background-color: color.mix(#A5A890, white, 85%);
+        border-radius: 100%;
+        box-shadow: inset color.adjust(theme.$text-main, $alpha: -0.4) 0 0 10px;
       }
 
       &:active {
-        background-color: color.mix(#A5A890, black, 85%);
+        background-color: color.mix(theme.$accent-teal, black, 75%);
       }
 
       &:disabled {
         opacity: 0.4;
       }
+    }
+
+    #player-shuffle:hover,
+    #player-next:hover,
+    #player-prev:hover {
+      border-radius: 100%;
+      box-shadow: inset color.adjust(theme.$text-main, $alpha: -0.4) 0 0 10px;
     }
   }
 }
