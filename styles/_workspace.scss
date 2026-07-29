@@ -80,15 +80,31 @@ $workspace-transition:
   }
 
   .pill {
-    padding: 0.4em 1em;
+    @include workspace-variant {
+      padding: 0.4em 1em;
+    }
   }
 
   .numbered {
-    padding: 0.19em 1em;
+    @include workspace-variant {
+      padding: 0.19em 1em;
+
+      &:hover {
+        padding-left: 20px;
+        padding-right: 20px;
+        border-radius: 40px;
+
+        label {
+          color: theme.$background-dark;
+        }
+      }
+    }
   }
 
   .icon {
-    padding: 0.4em;
+    @include workspace-variant {
+      padding: 0.4em;
+    }
   }
 }
 
