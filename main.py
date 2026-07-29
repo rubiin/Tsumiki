@@ -25,7 +25,6 @@ def main():
     def module_enabled(name: str) -> bool:
         return bool((module_options.get(name) or {}).get("enabled", False))
 
-    helpers.check_executable_exists("sass")
     helpers.ensure_directory(APP_DATA_DIRECTORY)
 
     # Initialize theme service and apply the configured theme

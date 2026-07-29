@@ -1,3 +1,4 @@
+import json
 import threading
 
 from fabric import Signal
@@ -50,7 +51,7 @@ class CustomNotifications(Notifications):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self._lock = threading.Lock()
+        self._lock = threading.RLock()
         self.all_notifications = []
         self._count = 0  # Will be updated to highest ID when loading
         self.deserialized_notifications = []
@@ -282,32 +283,40 @@ class CustomNotifications(Notifications):
         return Notification.deserialize(notification)
 
     def _persist_and_emit(self):
-        """Persist notifications and emit relevant signals."""
-        write_json_file(
-            NOTIFICATION_CACHE_FILE,
-            self.all_notifications,
-        )
+        """Persist notifications synchronously, then emit signals.
+
+        Writes the file synchronously before emitting so that any receiver
+        of ``notification_count`` who reads the file sees the latest data.
+        """
+        try:
+            with open(NOTIFICATION_CACHE_FILE, "w") as f:
+                json.dump(self.all_notifications, f, indent=4, ensure_ascii=False)
+        except (IOError, OSError, TypeError) as e:
+            logger.exception(f"Failed to persist notifications: {e}")
         self.emit("notification_count", len(self.all_notifications))
 
     def clear_all_notifications(self):
-        """Empty the notifications."""
+        """Empty the notifications (thread-safe)."""
         logger.info("[Notification] Clearing all notifications")
 
-        # Clear notifications but preserve the highest ID we've seen
-        highest_id = self._count
+        with self._lock:
+            # Clear notifications but preserve the highest ID we've seen
+            highest_id = self._count
 
-        self.all_notifications = []
-        # Clear all cached pixbufs
-        self._pixbuf_cache.clear()
+            self.all_notifications = []
+            # Clear all cached pixbufs
+            self._pixbuf_cache.clear()
 
-        self._persist_and_emit()
+            self._persist_and_emit()
 
-        logger.info(f"{Colors.INFO}[Notification] Notifications written successfully.")
+            logger.info(
+                f"{Colors.INFO}[Notification] Notifications written successfully."
+            )
 
-        self.emit("clear_all", True)
+            self.emit("clear_all", True)
 
-        # Restore the ID counter so new notifications get unique IDs
-        self._count = highest_id
+            # Restore the ID counter so new notifications get unique IDs
+            self._count = highest_id
 
     def deserialize_with_id(self, notification):
         """Helper to deserialize and return result with ID."""

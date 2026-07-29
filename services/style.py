@@ -1,4 +1,5 @@
 import json
+import threading
 
 from fabric import Application
 from fabric.core.service import Signal
@@ -62,6 +63,9 @@ class StyleService(SingletonService):
 
         self._themes_dir = get_relative_path("../themes")
         self._styles_dir = get_relative_path("../styles")
+
+        self._compile_lock = threading.Lock()
+        self._compiling = False
 
         self._config = tsumiki_config
         self._styling_config = self._config.get("styling", {})
@@ -353,7 +357,17 @@ class StyleService(SingletonService):
 
     @run_in_thread
     def _compile_css(self):
-        """Run ``sass`` to compile SCSS into CSS."""
+        """Run ``sass`` to compile SCSS into CSS.
+
+        Uses a ``_compiling`` flag + lock to skip concurrent compilations
+        — if sass is already running, subsequent calls return early.
+        """
+        with self._compile_lock:
+            if self._compiling:
+                logger.info(f"{Colors.INFO}[Theme] CSS compilation already in progress")
+                return
+            self._compiling = True
+
         try:
             check_executable_exists("sass")
             logger.info(f"{Colors.INFO}[Theme] Recompiling CSS")
@@ -369,6 +383,9 @@ class StyleService(SingletonService):
                 logger.exception(f"{Colors.ERROR}[Theme] {output}")
         except Exception as e:
             logger.exception(f"{Colors.ERROR}[Theme] Error recompiling CSS: {e}")
+        finally:
+            with self._compile_lock:
+                self._compiling = False
 
     def write_settings_css(self):
         self.write_css_settings(

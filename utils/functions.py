@@ -7,6 +7,7 @@ import json
 import re
 import shutil
 import string
+import threading
 from collections import Counter
 from datetime import datetime
 from functools import lru_cache
@@ -1099,10 +1100,11 @@ def take_snapshot():
 # ── Shared HTTP client ───────────────────────────────────────
 
 _shared_http_client = None
+_shared_http_client_lock = threading.Lock()
 
 
 def get_http_client():
-    """Return a shared ``httpx.Client`` with connection pooling.
+    """Return a shared ``httpx.Client`` with connection pooling (thread-safe).
 
     Services that make HTTP requests (weather, quotes, etc.) should use
     this instead of creating throwaway ``httpx.Client`` or ``urlopen``
@@ -1113,23 +1115,24 @@ def get_http_client():
     import cost for configurations that never make HTTP requests.
     """
     global _shared_http_client
-    if _shared_http_client is None:
-        import httpx
+    with _shared_http_client_lock:
+        if _shared_http_client is None:
+            import httpx
 
-        _shared_http_client = httpx.Client(
-            headers={
-                "User-Agent": (
-                    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-                    "AppleWebKit/537.36 (KHTML, like Gecko) "
-                    "Chrome/58.0.3029.110 Safari/537.3"
-                )
-            },
-            timeout=httpx.Timeout(10.0),
-            limits=httpx.Limits(
-                max_keepalive_connections=5,
-                max_connections=10,
-            ),
-        )
+            _shared_http_client = httpx.Client(
+                headers={
+                    "User-Agent": (
+                        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                        "AppleWebKit/537.36 (KHTML, like Gecko) "
+                        "Chrome/58.0.3029.110 Safari/537.3"
+                    )
+                },
+                timeout=httpx.Timeout(10.0),
+                limits=httpx.Limits(
+                    max_keepalive_connections=5,
+                    max_connections=10,
+                ),
+            )
     return _shared_http_client
 
 
@@ -1137,10 +1140,11 @@ def get_http_client():
 
 _path_exists_cache: dict[str, tuple[bool, float]] = {}
 _PATH_EXISTS_CACHE_MAX = 500
+_path_exists_cache_lock = threading.Lock()
 
 
 def path_exists_ttl(path: str, ttl: int = 300) -> bool:
-    """Check if a filesystem path exists, with TTL and bounded caching.
+    """Check if a filesystem path exists, with TTL and bounded caching (thread-safe).
 
     Caches ``os.path.exists`` results to avoid redundant syscalls on
     hot paths (system tray icon checks, device scans, etc.).  The
@@ -1149,19 +1153,23 @@ def path_exists_ttl(path: str, ttl: int = 300) -> bool:
     is issued.  When the cache exceeds the cap the oldest entry is
     evicted.
     """
-    now = time.time()
-    cached = _path_exists_cache.get(path)
-    if cached is not None and now - cached[1] < ttl:
-        return cached[0]
+    with _path_exists_cache_lock:
+        now = time.time()
+        cached = _path_exists_cache.get(path)
+        if cached is not None and now - cached[1] < ttl:
+            return cached[0]
+
     result = os.path.exists(path)
-    if len(_path_exists_cache) >= _PATH_EXISTS_CACHE_MAX:
-        # Evict oldest entry
-        try:
-            oldest = next(iter(_path_exists_cache))
-            del _path_exists_cache[oldest]
-        except StopIteration:
-            pass
-    _path_exists_cache[path] = (result, now)
+
+    with _path_exists_cache_lock:
+        if len(_path_exists_cache) >= _PATH_EXISTS_CACHE_MAX:
+            # Evict oldest entry
+            try:
+                oldest = next(iter(_path_exists_cache))
+                del _path_exists_cache[oldest]
+            except StopIteration:
+                pass
+        _path_exists_cache[path] = (result, now)
     return result
 
 

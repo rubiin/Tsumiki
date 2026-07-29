@@ -1,5 +1,6 @@
 import atexit
 import os
+import threading
 from collections.abc import Callable
 from concurrent.futures import ThreadPoolExecutor
 from time import monotonic
@@ -11,6 +12,7 @@ from fabric.utils import GLib, logger
 _cpu_count = os.cpu_count() or 4
 thread_pool: ThreadPoolExecutor | None = None
 _thread_pool_atexit_registered = False
+_thread_pool_lock = threading.Lock()
 
 T = TypeVar("T")
 
@@ -42,13 +44,14 @@ def safe_operation(func):
 
 
 def _get_thread_pool() -> ThreadPoolExecutor:
-    """Lazy-initialize thread pool on first use."""
+    """Lazy-initialize thread pool on first use (thread-safe)."""
     global thread_pool, _thread_pool_atexit_registered
-    if thread_pool is None:
-        thread_pool = ThreadPoolExecutor(max_workers=_cpu_count)
-        if not _thread_pool_atexit_registered:
-            atexit.register(_shutdown_thread_pool)
-            _thread_pool_atexit_registered = True
+    with _thread_pool_lock:
+        if thread_pool is None:
+            thread_pool = ThreadPoolExecutor(max_workers=_cpu_count)
+            if not _thread_pool_atexit_registered:
+                atexit.register(_shutdown_thread_pool)
+                _thread_pool_atexit_registered = True
     return thread_pool
 
 
@@ -60,18 +63,19 @@ def _shutdown_thread_pool() -> None:
     """
 
     global thread_pool
-    if thread_pool is None:
-        return
+    with _thread_pool_lock:
+        if thread_pool is None:
+            return
 
-    try:
-        thread_pool.shutdown(wait=False, cancel_futures=True)
-    except KeyboardInterrupt:
-        # Suppress noisy traceback during interpreter teardown.
-        pass
-    except Exception:
-        pass
-    finally:
-        thread_pool = None
+        try:
+            thread_pool.shutdown(wait=False, cancel_futures=True)
+        except KeyboardInterrupt:
+            # Suppress noisy traceback during interpreter teardown.
+            pass
+        except Exception:
+            pass
+        finally:
+            thread_pool = None
 
 
 def thread(target: Callable[..., T], *args: Any, **kwargs: Any) -> Any:
