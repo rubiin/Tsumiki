@@ -28,7 +28,7 @@
     #overview-workspace-bg,
     #overview-frame {
       border-radius: variable.$radius;
-      transition: all 0.1s ease;
+      transition: background-color 0.1s ease;
     }
 
     #overview-client-box {
