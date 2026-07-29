@@ -208,3 +208,36 @@ Several module-level imports are only used in specific functions:
 These add import overhead at module load time even when the features are never used.
 
 **Fix**: Move these imports inside their respective functions (lazy imports). For `psutil`, it's already imported by `stats_poll()` in `widget_utils.py`, so it's already in memory — the import is fast but unnecessary.
+
+
+
+### 43. Remaining Hardcoded `rgba()` Values (14 instances) ✅ FIXED
+**Files**: `styles/_quicksettings.scss`, `styles/_usb_manager.scss`, `styles/_power.scss`, `styles/_notification.scss`, `styles/common/_widgets.scss`
+**Effort**: Small | **Impact**: Medium
+
+10 literal `rgba()` values using `0,0,0` (black) or `255,255,255` (white) replaced with `color.adjust()` using theme variables. Now adapts to light/dark themes. Added missing `@use "sass:color";` to `_widgets.scss`. 3 notification shadow instances left as-is (intentional).
+
+### 44. Bare `transition: 200ms` Without Property Specified ✅ FIXED
+**Files**: `styles/common/_mixins.scss`, `styles/_datemenu.scss`
+**Effort**: Small | **Impact**: Low
+
+4 bare `transition: 200ms` replaced with explicit property lists:
+- `trough`: `background-color, border-color`
+- `slider` knob: `background-color, border-color, box-shadow`
+- `.calendar`: `background-color, color, border-radius`
+- `calendar.button`: `color, border-radius, box-shadow`
+
+### 45. Deep Nesting in `_datemenu.scss` (7-9 levels)
+**Files**: `styles/_datemenu.scss`
+**Effort**: Medium | **Impact**: Low
+
+Selectors compile to deeply nested paths like:
+```css
+#date_time-menu #notification-column .notification-scrollable #notification-list #notification-group-row #notification-group-deck #notification-group-header .notification-group-title
+```
+The deepest ~100 lines in the notification group deck/header/items section are at depth 7+. This bloats the compiled CSS output and makes debugging harder.
+
+**Fix**: Extract deeply nested sub-components into flat top-level selectors. For example, `#notification-group-header` can be a standalone rule instead of nested 7 levels deep.
+
+
+

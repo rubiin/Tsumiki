@@ -13,12 +13,12 @@
   @include common.nerd-icon(variable.$bar-widgets-power-icon_size, null);
 
   &-menu-overlay {
-    background: rgba(0, 0, 0, 0.4);
+    background: color.adjust(theme.$general-shadow-color, $alpha: -0.2);
   }
 
   &-button-menu {
     background-color: theme.$background-main;
-    box-shadow: -2px 2px 10px 4px rgba(0, 0, 0, 0.75);
+    box-shadow: -2px 2px 10px 4px color.adjust(theme.$general-shadow-color, $alpha: 0.15);
     border-radius: 8px;
   }
 
@@ -42,7 +42,7 @@
       padding: 3px 6px;
       font-size: 12px;
       font-weight: 700;
-      background-color: rgba(255, 255, 255, 0.16);
+      background-color: color.adjust(theme.$text-main, $alpha: -0.84);
       color: theme.$text-secondary;
     }
 

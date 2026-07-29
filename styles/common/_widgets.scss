@@ -1,3 +1,4 @@
+@use "sass:color";
 @use "mixins";
 @use "../_variable.scss";
 @use "../_theme.scss";
@@ -337,7 +338,7 @@ $widget-shell-widgets: (
     #mpris-progress {
       min-height: 2px;
       border-radius: 99px;
-      background-color: rgba(255, 255, 255, 0.2);
+      background-color: color.adjust(theme.$text-main, $alpha: -0.8);
       margin-top: 1px;
       margin-right: functions.toEm(2);
     }

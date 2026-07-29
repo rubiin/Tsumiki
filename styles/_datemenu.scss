@@ -244,7 +244,7 @@
       }
 
       .calendar {
-        transition: 200ms;
+        transition: background-color 200ms, color 200ms, border-radius 200ms;
         border-radius: variable.$radius * 2;
         color: theme.$text-main;
         background-color: theme.$background-alt;
@@ -258,7 +258,7 @@
           padding: 0.28em;
 
           &.button {
-            transition: 200ms;
+            transition: color 200ms, border-radius 200ms, box-shadow 200ms;
             border-radius: variable.$radius;
             color: theme.$text-main;
           }

@@ -9,15 +9,8 @@ $workspace-transition:
   border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
 /// Shared skeleton for workspace style variants.
-/// Each variant injects its unique button/label/hover/active styles via @content.
 @mixin workspace-variant {
   & > button {
-    transition: $workspace-transition;
-
-    label {
-      transition: inherit;
-    }
-
     @content;
   }
 }
@@ -39,6 +32,7 @@ $workspace-transition:
       variable.$bar-widgets-workspaces-border-width
     );
 
+    // Base button styles shared by all variants — transition emitted once
     & > button {
       padding: variable.$bar-widgets-workspaces-pill-height
         variable.$bar-widgets-workspaces-pill-width;
