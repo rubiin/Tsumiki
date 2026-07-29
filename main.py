@@ -1,9 +1,7 @@
 from fabric import Application
 from fabric.utils import (
     GLib,
-    exec_shell_command,
     get_relative_path,
-    idle_add,
     logger,
     monitor_file,
     os,
@@ -13,27 +11,7 @@ import utils.functions as helpers
 from modules.bar import Bar
 from utils.colors import Colors
 from utils.config import tsumiki_config
-from utils.constants import APP_DATA_DIRECTORY, APPLICATION_NAME, CSS_PATH
-
-
-def process_and_apply_css(app: Application):
-    """Compile and apply CSS in background thread."""
-
-    @helpers.run_in_thread
-    def _compile():
-        logger.info(f"{Colors.INFO}[Main] Compiling CSS")
-        output = exec_shell_command(f"sass styles/main.scss {CSS_PATH} --no-source-map")
-
-        if output == "":
-            logger.info(f"{Colors.INFO}[Main] CSS applied")
-            idle_add(lambda: app.set_stylesheet_from_file(get_relative_path(CSS_PATH)))
-        else:
-            logger.exception(f"{Colors.ERROR}[Main]Failed to compile sass!")
-            logger.exception(f"{Colors.ERROR}[Main] {output}")
-
-            idle_add(lambda: app.set_stylesheet_from_string(""))
-
-    _compile()
+from utils.constants import APP_DATA_DIRECTORY, APPLICATION_NAME
 
 
 def main():
@@ -50,18 +28,11 @@ def main():
     helpers.check_executable_exists("sass")
     helpers.ensure_directory(APP_DATA_DIRECTORY)
 
-    # Check if matugen is enabled and generate palette
-    style_config = tsumiki_config.get("styling", {})
-    matugen_config = style_config.get("matugen", {})
-    if matugen_config.get("enabled", False):
-        from services import matugen_service
+    # Initialize theme service and apply the configured theme
+    from services import style_service
 
-        matugen_service.generate_sync()
-    else:
-        helpers.copy_themev2(
-            style_config.get("theme_name", "catppuccin-mocha"),
-            style_config.get("mode", "dark"),
-        )
+    style_service.write_settings_css()
+    style_service.apply_theme_from_config()
 
     helpers.set_process_name(APPLICATION_NAME)
 
@@ -151,13 +122,13 @@ def main():
 
             css_reload_timeout_id = GLib.timeout_add(
                 css_reload_debounce_ms,
-                lambda: (process_and_apply_css(app), False),
+                lambda: (style_service.refresh(), False),
             )
 
         main_css_file.connect("changed", schedule_css_reload)
         common_css_file.connect("changed", schedule_css_reload)
 
-    process_and_apply_css(app)
+    style_service.refresh()
 
     logger.info(f"{Colors.INFO}[Main] Starting {APPLICATION_NAME}...")
     logger.info(f"Starting shell... pid:{os.getpid()}")

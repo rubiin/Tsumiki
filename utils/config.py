@@ -3,12 +3,9 @@ from fabric.utils import get_relative_path, logger, os
 from .constants import APPLICATION_NAME, DEFAULT_CONFIG
 from .functions import (
     deep_merge,
-    exclude_keys,
-    flatten_dict,
     read_toml_file,
     validate_config_enums,
     validate_widgets,
-    write_css_settings,
 )
 from .widget_settings import BarConfig
 
@@ -43,10 +40,6 @@ class TsumikiConfig:
         self.toml_config_file = f"{self.root_dir}/config.toml"
         self.config = self._load_config()
 
-        write_css_settings(
-            flatten_dict(exclude_keys(self.config.get("styling", {}), ["matugen"])),
-            f"{self.root_dir}/styles/_settings.scss",
-        )
         self._initialized = True
 
     def _load_config(self) -> BarConfig:

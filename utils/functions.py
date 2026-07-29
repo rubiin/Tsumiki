@@ -14,7 +14,6 @@ from io import BytesIO
 from typing import Any, Callable, Iterable, List, Literal, Optional, TypeVar
 
 import psutil
-from fabric import Application
 from fabric.hyprland import HyprlandReply
 from fabric.utils import (
     Gdk,
@@ -444,34 +443,6 @@ def ttl_lru_cache(seconds_to_live: int, maxsize: int = 128):
     return wrapper
 
 
-# Function to copy the selected theme to the main styles directory
-@run_in_thread
-def copy_themev2(theme: str, mode: str = "dark"):
-    source_theme_dir = get_relative_path("../themes")
-    destination_file = f"{get_relative_path('../styles')}/_theme.scss"
-    source_file = f"{source_theme_dir}/{theme}.toml"
-
-    if not os.path.exists(source_file):
-        logger.warning(
-            f"{Colors.WARNING}Warning: The theme file '{theme}.toml' was not found. Using default theme."  # noqa: E501
-        )
-        source_file = f"{source_theme_dir}/catpuccin-mocha.toml"
-
-    try:
-        contents = read_toml_file(source_file)
-        if not contents:
-            raise FileNotFoundError(source_file)
-
-        selected_theme = contents.get(mode, contents)
-        write_css_settings(flatten_dict(selected_theme), destination_file)
-
-    except FileNotFoundError:
-        logger.exception(
-            f"{Colors.ERROR}Error: The theme file '{source_file}' was not found."
-        )
-        exit(1)
-
-
 # Function to parse hyprland reply
 def parse_hyprland_reply(reply: HyprlandReply) -> dict:
     try:
@@ -511,43 +482,6 @@ def update_theme_config(theme_name: str):
         logger.exception(f"{Colors.ERROR}[Theme] Error updating theme config: {e}")
 
 
-def _apply_css_to_app():
-    try:
-        app = Application.get_default()
-        if app:
-            app.set_stylesheet_from_file(get_relative_path("../dist/main.css"))
-            logger.info(f"{Colors.INFO}[Theme] CSS applied to application")
-    except Exception as e:
-        logger.exception(f"{Colors.ERROR}[Theme] Error applying CSS to app: {e}")
-
-
-def _compile_css():
-    """Compile SCSS in background thread."""
-    try:
-        check_executable_exists("sass")
-        logger.info(f"{Colors.INFO}[Theme] Recompiling CSS")
-        output = exec_shell_command(
-            "sass styles/main.scss dist/main.css --no-source-map"
-        )
-
-        if output == "":
-            logger.info(f"{Colors.INFO}[Theme] CSS recompiled successfully")
-            idle_add(_apply_css_to_app)
-        else:
-            logger.exception(f"{Colors.ERROR}[Theme] Failed to compile sass!")
-            logger.exception(f"{Colors.ERROR}[Theme] {output}")
-    except Exception as e:
-        logger.exception(f"{Colors.ERROR}[Theme] Error recompiling CSS: {e}")
-
-
-# Function to recompile SCSS and apply the new CSS
-def recompile_and_apply_css():
-    """Recompile SCSS and apply the new CSS to the application."""
-
-    # Run compilation in background thread
-    thread(_compile_css)
-
-
 # Function to convert celsius to fahrenheit
 def celsius_to_fahrenheit(celsius: float) -> float:
     return (celsius * 9 / 5) + 32
@@ -582,24 +516,6 @@ def flatten_dict(d: dict, parent_key: str = "", sep: str = "-") -> dict:
         else:
             items.append((new_key, v))
     return dict(items)
-
-
-@run_in_thread
-def write_css_settings(contents, file):
-    """Generate SCSS settings file from theme config."""
-    logger.info("[CONFIG] Applying css settings...")
-
-    css_styles = contents
-
-    # Use list comprehension and join for faster string building
-    lines = [
-        f"${setting}: {json.dumps(value) if isinstance(value, bool) else value};"
-        for setting, value in css_styles.items()
-    ]
-
-    with open(file, "w") as f:
-        f.write("\n".join(lines))
-        f.write("\n")
 
 
 # Function to exclude keys from a dictionary
@@ -790,9 +706,7 @@ def kill_process(process_name: str):
 
 
 def add_style_class_lazy(widget: Gtk.Widget, class_name: str | Iterable[str]) -> int:
-    return GLib.timeout_add(
-        50, lambda: widget.add_style_class(class_name) or False
-    )
+    return GLib.timeout_add(50, lambda: widget.add_style_class(class_name) or False)
 
 
 def lazy_load_class(module_name: str, class_name: str):
