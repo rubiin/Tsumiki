@@ -29,7 +29,7 @@ $base_margin: common.toEm(4);
     #weather-header-grid {
       // header
       font-size: 11pt;
-      color: white;
+      color: theme.$text-main;
       font-weight: 500;
 
       .header-label {

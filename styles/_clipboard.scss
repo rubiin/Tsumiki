@@ -79,7 +79,7 @@
       &:selected,
       &.selected {
         background-color: theme.$accent-teal;
-        color: black;
+        color: theme.$general-shadow-color;
       }
     }
 

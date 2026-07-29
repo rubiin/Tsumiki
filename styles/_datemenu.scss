@@ -25,6 +25,7 @@
     margin-right: 6px;
   }
 
+  // Vertical bar separator between notification indicator and clock
   separator {
     background-color: variable.$border-color;
     border-radius: variable.$radius;
@@ -105,7 +106,7 @@
                 padding: 0 4px;
                 border-radius: 9999px;
                 background-color: theme.$accent-red;
-                color: white;
+                color: theme.$text-main;
                 font-size: 10px;
                 font-weight: 700;
               }
@@ -226,7 +227,8 @@
       }
     }
 
-    separator {
+    // Menu separator between notification column and date column
+    > separator {
       background-color: color.mix(variable.$popover-border-color, black, 60%);
       border-radius: variable.$radius;
       margin-right: variable.$spacing;

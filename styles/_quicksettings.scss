@@ -7,7 +7,7 @@ $slider-height: 12px;
 
 $toggler-radius: variable.$radius * 1.4;
 
-$qs-active-text: color.mix(#000000, white, 8%);
+$qs-active-text: color.mix(theme.$text-main, white, 8%);
 
 @mixin setting-slider($min-length) {
   @include common.slider(

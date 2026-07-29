@@ -1,13 +1,12 @@
 @use "sass:color";
-@use "sass:math";
 @use "theme";
 @use "variable";
 @use "common";
 
-%player_text {
+%player-text {
   color: theme.$text-main;
   background-color: transparent;
-  text-shadow: 1px 1px 3px black;
+  text-shadow: 1px 1px 3px theme.$general-shadow-color;
 }
 
 #player-stack-button {
@@ -34,21 +33,21 @@
 }
 
 #player-box {
-  $player_width: variable.$quicksettings-width + 40;
+  $player-width: variable.$quicksettings-width + 40;
 
-  $player_height: 130px;
-  $image_size: 120px;
-  min-height: $image_size + 4;
+  $player-height: 130px;
+  $image-size: 120px;
+  min-height: $image-size + 4;
 
-  $inner_player_width: math.floor(calc($player_width - $image_size / 2));
+  $inner-player-width: $player-width - $image-size / 2;
 
   #outer-player-box {
-    min-width: $player_width;
-    min-height: $image_size;
+    min-width: $player-width;
+    min-height: $image-size;
   }
 
   @include common.slider(
-    $min-length: $inner_player_width - 80,
+    $min-length: $inner-player-width - 80,
     $height: 7px,
     $highlight-color: theme.$text-muted,
     $knob: variable.$bar-widgets-quick_settings-sliders-knob
@@ -60,38 +59,38 @@
 
   #inner-player-box {
     border-radius: 19px;
-    margin-left: math.floor(calc($image_size / 2));
-    min-width: $inner_player_width;
-    min-height: $player_height;
+    margin-left: $image-size / 2;
+    min-width: $inner-player-width;
+    min-height: $player-height;
     opacity: 0.6;
   }
 
   #player-info-box {
-    margin-left: $image_size + 10;
-    min-width: $player_width - $image_size - 20;
+    margin-left: $image-size + 10;
+    min-width: $player-width - $image-size - 20;
   }
 
   #track-info {
-    min-width: $player_width - $image_size - 20;
+    min-width: $player-width - $image-size - 20;
   }
 
   #player-image-stack {
     border-radius: 100%;
-    box-shadow: 0 0 4px 0 black;
+    box-shadow: 0 0 4px 0 theme.$general-shadow-color;
   }
 
   #player-title {
     margin-top: 18px;
     font-weight: 700;
     font-size: 1rem;
-    @extend %player_text;
+    @extend %player-text;
   }
 
   #player-artist,
   #player-album {
     font-weight: 500;
     font-size: 12px;
-    @extend %player_text;
+    @extend %player-text;
   }
 
   #player-controls {
@@ -100,7 +99,7 @@
 
     .time-label {
       @extend %caption;
-      @extend %player_text;
+      @extend %player-text;
       font-weight: 600;
     }
 
@@ -119,11 +118,11 @@
 
         &:hover {
           background: theme.$background-alt;
-          box-shadow: 0 0 2px -3px black;
+          box-shadow: 0 0 2px -3px theme.$general-shadow-color;
         }
 
         &:active {
-          box-shadow: 0 0 4px -1px black;
+          box-shadow: 0 0 4px -1px theme.$general-shadow-color;
         }
 
         &:disabled {

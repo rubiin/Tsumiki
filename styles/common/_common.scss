@@ -268,7 +268,9 @@ radio:indeterminate:active {
 }
 
 switch {
-  transition: background-color 75ms cubic-bezier(0, 0, 0.2, 1), opacity 75ms cubic-bezier(0, 0, 0.2, 1);
+  transition:
+    background-color 75ms cubic-bezier(0, 0, 0.2, 1),
+    opacity 75ms cubic-bezier(0, 0, 0.2, 1);
   margin: functions.toEm(4) 0;
   border-radius: variable.$radius-large;
   background-color: color.mix(theme.$background-main, white, 90%);
@@ -277,7 +279,9 @@ switch {
   color: transparent;
 
   slider {
-    transition: background-color 75ms cubic-bezier(0, 0, 0.2, 1), margin 75ms cubic-bezier(0, 0, 0.2, 1);
+    transition:
+      background-color 75ms cubic-bezier(0, 0, 0.2, 1),
+      margin 75ms cubic-bezier(0, 0, 0.2, 1);
     min-width: 12px;
     min-height: 12px;
     margin: functions.toEm(4);
@@ -473,7 +477,7 @@ scrolledwindow {
 }
 
 .stat-circle {
-  border: solid 0 rgb(151, 151, 177);
+  border: solid 0 theme.$surface-disabled;
 }
 
 .stat-graph {

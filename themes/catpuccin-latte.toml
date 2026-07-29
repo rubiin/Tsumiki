@@ -9,8 +9,8 @@ main =  "#4c4f69"  # Primary text color
 secondary =  "#5b6078"  # Secondary text color
 muted =  "#74788b"  # Tertiary text, muted
 disabled =  "#b3b9d1"  # Text for disabled elements
-muted_light =  "#a8b0c2"  # Light-muted text for hints
-muted_dark =  "#9298a7"  # Dark-muted text
+muted-light =  "#a8b0c2"  # Light-muted text for hints
+muted-dark =  "#9298a7"  # Dark-muted text
 
 
 [dark.surface]
@@ -29,13 +29,13 @@ yellow =  "#f9e2af"  # Yellow for highlights
 green =  "#a6e3a1"  # Green for success
 teal =  "#94e2d5"  # Teal for information
 blue =  "#89b4fa"  # Blue for links and actions
-light_blue =  "#89dceb"  # Sky blue accent
+light-blue =  "#89dceb"  # Sky blue accent
 lavender =  "#b4befe"  # Lavender for subtle highlights
 
 
 [dark.general]
-bar_background =  "rgba(46, 46, 46, 0.1)"
-shadow_color =  "rgba(0, 0, 0, 0.3)"
+bar-background =  "rgba(46, 46, 46, 0.1)"
+shadow-color =  "rgba(0, 0, 0, 0.3)"
 
 
 [light.background]
@@ -49,8 +49,8 @@ main =  "#b3b096"  # Primary text color
 secondary =  "#a49f87"  # Secondary text color
 muted =  "#8b8774"  # Tertiary text, muted
 disabled =  "#4c462e"  # Text for disabled elements
-muted_light =  "#574f3d"  # Light-muted text for hints
-muted_dark =  "#6d6758"  # Dark-muted text
+muted-light =  "#574f3d"  # Light-muted text for hints
+muted-dark =  "#6d6758"  # Dark-muted text
 
 
 [light.surface]
@@ -69,10 +69,10 @@ yellow =  "#061d50"  # Yellow for highlights
 green =  "#591c5e"  # Green for success
 teal =  "#6b1d2a"  # Teal for information
 blue =  "#764b05"  # Blue for links and actions
-light_blue =  "#762314"  # Sky blue accent
+light-blue =  "#762314"  # Sky blue accent
 lavender =  "#4b4101"  # Lavender for subtle highlights
 
 
 [light.general]
-bar_background =  "rgba(46, 46, 46, 0.1)"
-shadow_color =  "rgba(0, 0, 0, 0.3)"
+bar-background =  "rgba(46, 46, 46, 0.1)"
+shadow-color =  "rgba(0, 0, 0, 0.3)"

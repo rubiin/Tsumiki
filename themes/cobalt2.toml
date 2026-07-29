@@ -9,8 +9,8 @@ main =  "#f5f2f0"  # Primary text color (light beige)
 secondary =  "#d0d0d0"  # Secondary text color (light gray)
 muted =  "#7c7c7c"  # Tertiary text, muted (soft gray)
 disabled =  "#6c6c6c"  # Disabled text (gray)
-muted_light =  "#999999"  # Light-muted text for hints (light gray)
-muted_dark =  "#333333"  # Dark-muted text (very dark gray)
+muted-light =  "#999999"  # Light-muted text for hints (light gray)
+muted-dark =  "#333333"  # Dark-muted text (very dark gray)
 
 
 [dark.surface]
@@ -29,13 +29,13 @@ yellow =  "#f1c40f"  # Yellow for highlights (golden yellow)
 green =  "#2ecc71"  # Green for success (neon green)
 teal =  "#1abc9c"  # Teal for information (cyan)
 blue =  "#3498db"  # Blue for links and actions (bright blue)
-light_blue =  "#5dade2"  # Sky blue accent (soft blue)
+light-blue =  "#5dade2"  # Sky blue accent (soft blue)
 lavender =  "#9b59b6"  # Lavender for subtle highlights (muted purple)
 
 
 [dark.general]
-bar_background =  "rgba(45, 42, 74, 0.8)"  # Panel background (semi-transparent dark purple)
-shadow_color =  "rgba(0, 0, 0, 0.6)"  # Shadow color (dark, soft shadows)
+bar-background =  "rgba(45, 42, 74, 0.8)"  # Panel background (semi-transparent dark purple)
+shadow-color =  "rgba(0, 0, 0, 0.6)"  # Shadow color (dark, soft shadows)
 
 
 [light.background]
@@ -49,8 +49,8 @@ main =  "#0a0d0f"  # Primary text color (light beige)
 secondary =  "#2f2f2f"  # Secondary text color (light gray)
 muted =  "#838383"  # Tertiary text, muted (soft gray)
 disabled =  "#939393"  # Disabled text (gray)
-muted_light =  "#666666"  # Light-muted text for hints (light gray)
-muted_dark =  "#cccccc"  # Dark-muted text (very dark gray)
+muted-light =  "#666666"  # Light-muted text for hints (light gray)
+muted-dark =  "#cccccc"  # Dark-muted text (very dark gray)
 
 
 [light.surface]
@@ -69,10 +69,10 @@ yellow =  "#0e3bf0"  # Yellow for highlights (golden yellow)
 green =  "#d1338e"  # Green for success (neon green)
 teal =  "#e54363"  # Teal for information (cyan)
 blue =  "#cb6724"  # Blue for links and actions (bright blue)
-light_blue =  "#a2521d"  # Sky blue accent (soft blue)
+light-blue =  "#a2521d"  # Sky blue accent (soft blue)
 lavender =  "#64a649"  # Lavender for subtle highlights (muted purple)
 
 
 [light.general]
-bar_background =  "rgba(210, 213, 181, 0.8)"  # Panel background (semi-transparent dark purple)
-shadow_color =  "rgba(255, 255, 255, 0.6)"  # Shadow color (dark, soft shadows)
+bar-background =  "rgba(210, 213, 181, 0.8)"  # Panel background (semi-transparent dark purple)
+shadow-color =  "rgba(255, 255, 255, 0.6)"  # Shadow color (dark, soft shadows)
