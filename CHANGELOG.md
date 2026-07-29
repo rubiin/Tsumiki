@@ -1,5 +1,37 @@
 # Changelog
 
+## [4.0.1](https://github.com/rubiin/tsumiki/compare/v4.0.0...v4.0.1) (2026-07-29)
+
+
+### 🐛 Bug Fixes
+
+* add threading.Lock to prevent check-then-act races ([de2fe8a](https://github.com/rubiin/tsumiki/commit/de2fe8ad11e05ba24031c06b94a8a369892e5ff1))
+* notification urgency handle ([6e99138](https://github.com/rubiin/tsumiki/commit/6e9913802526ed3fe3831737eaa8328af630201e))
+
+
+### ⚡️ Performance Improvements
+
+* optimize polling intervals, caching, imports, and lifecycle cleanup ([ac51bae](https://github.com/rubiin/tsumiki/commit/ac51baebb57ee902c01958e3a1e27d40c8563198))
+* replace lockkeys 200ms polling with hyprland event-driven updates ([9428fb1](https://github.com/rubiin/tsumiki/commit/9428fb1836d50de8d88c2c1415a15cc3504ad25a))
+
+
+### 📚 Documentation
+
+* add renovaye config ([d3dcd3c](https://github.com/rubiin/tsumiki/commit/d3dcd3c5d0e51870c157cd1aeaeea3f424075e35))
+* advanced usage ([954c5cf](https://github.com/rubiin/tsumiki/commit/954c5cfa7fed13e9b19b259fa897d38d52f1f8a2))
+
+
+### ⚙️ Chores
+
+* **deps:** update all non-major dependencies ([#342](https://github.com/rubiin/tsumiki/issues/342)) ([1a5b95b](https://github.com/rubiin/tsumiki/commit/1a5b95bd42506aa01b829085b760ec77f6eb4a61))
+* **deps:** update node.js to &gt;=24.18.0 ([#343](https://github.com/rubiin/tsumiki/issues/343)) ([b92f9d4](https://github.com/rubiin/tsumiki/commit/b92f9d44d2dec2509214a779975a212c3c15b0d7))
+* ruff lint fix in notification.py ([cd1bbc5](https://github.com/rubiin/tsumiki/commit/cd1bbc5604cc9f6f0bf42ccbbfc3ee67f3b148d3))
+
+
+### ♻️ Code Refactoring
+
+* consolidate theme/CSS logic into centralized StyleService ([64e7cc3](https://github.com/rubiin/tsumiki/commit/64e7cc328f1919afd5cb698547594b9688a70bca))
+
 ## [4.0.0](https://github.com/rubiin/tsumiki/compare/v3.4.6...v4.0.0) (2026-07-25)
 
 
