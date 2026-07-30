@@ -1,5 +1,6 @@
 import contextlib
 import importlib
+import threading
 from numbers import Number
 from time import sleep
 from typing import Literal
@@ -24,6 +25,7 @@ _util_fabricator = None
 _util_polling_enabled = False
 _util_subscribers = 0
 _util_changed_handler_ids: set[int] = set()
+_fabricator_lock = threading.Lock()
 
 
 # Function to get the system stats using psutil
@@ -55,26 +57,28 @@ def stats_poll(*_):
 def _stop_util_fabricator() -> None:
     global _util_fabricator, _util_polling_enabled, _util_subscribers
 
-    _util_polling_enabled = False
+    with _fabricator_lock:
+        _util_polling_enabled = False
 
-    if _util_fabricator is not None:
-        destroy = getattr(_util_fabricator, "destroy", None)
-        if callable(destroy):
-            destroy()
+        if _util_fabricator is not None:
+            destroy = getattr(_util_fabricator, "destroy", None)
+            if callable(destroy):
+                destroy()
 
-    _util_fabricator = None
-    _util_subscribers = 0
-    _util_changed_handler_ids.clear()
+        _util_fabricator = None
+        _util_subscribers = 0
+        _util_changed_handler_ids.clear()
 
 
 def get_util_fabricator():
-    """Get the stats fabricator, creating it on first access."""
+    """Get the stats fabricator, creating it on first access (thread-safe)."""
     global _util_fabricator, _util_polling_enabled
-    if _util_fabricator is None:
-        from fabric import Fabricator
+    with _fabricator_lock:
+        if _util_fabricator is None:
+            from fabric import Fabricator
 
-        _util_polling_enabled = True
-        _util_fabricator = Fabricator(poll_from=stats_poll, stream=True)
+            _util_polling_enabled = True
+            _util_fabricator = Fabricator(poll_from=stats_poll, stream=True)
     return _util_fabricator
 
 

@@ -1,70 +1,51 @@
-import threading
+from fabric.utils import logger
 
-from fabric.utils import get_relative_path, os
-
+from services import style_service
 from shared.widget_container import ButtonWidget
-from utils.config import tsumiki_config
-from utils.functions import (
-    copy_themev2,
-    send_notification,
-    update_theme_config,
-)
+from utils.colors import Colors
+from utils.functions import send_notification
 from utils.widget_utils import nerd_font_icon
 
 
-# TODO: fix this to work with the new theme system, and add a way to preview themes
-# needs more tests
 class ThemeSwitcherWidget(ButtonWidget):
-    """A widget to switch themes."""
+    """A widget to cycle through available themes.
+
+    Uses the centralized ``ThemeService`` for theme switching, CSS
+    recompilation, and config persistence.
+    """
 
     def __init__(self, **kwargs):
         super().__init__(name="theme_switcher", **kwargs)
 
-        # Lock to prevent concurrent theme switching
-        self._switching_lock = threading.Lock()
-        self._is_switching = False
+        self._style_service = style_service
 
-        theme_files = os.listdir(get_relative_path("../themes"))
-
-        # Remove the '.toml' part from each string in the list
-        self.themes_list = [style.replace(".toml", "") for style in theme_files]
-
-        # Get current theme from theme config, with fallback
-        self.current_theme = tsumiki_config.get("styling", {}).get(
-            "theme_name", "catppuccin-mocha"
-        )
-
-        # Ensure current theme is in the themes list, fallback to first available theme
-        if self.current_theme not in self.themes_list:
-            self.current_theme = (
-                self.themes_list[0] if self.themes_list else "catppuccin-mocha"
-            )
+        # Get current theme from service
+        self._current_theme = self._style_service.current_theme
 
         self.children = nerd_font_icon(
             icon=self.config.get("icon"),
             props={"style_classes": ["panel-font-icon"]},
         )
-        self.set_tooltip_text(self.current_theme)
+        self.set_tooltip_text(self._current_theme)
         self.connect("clicked", self.on_click)
 
-    ## Cycle through the themes on click
+        # Keep tooltip in sync with theme changes
+        self._style_service.connect("theme_changed", self._on_theme_changed)
+
+    def _on_theme_changed(self, _service, theme_name: str):
+        """Update tooltip when the theme changes externally."""
+        self._current_theme = theme_name
+        self.set_tooltip_text(theme_name)
+
     def on_click(self, *_):
-        """Cycle through the themes."""
-        if not self.themes_list:
-            return  # No themes available
+        """Cycle to the next theme via StyleService."""
+        if not self._style_service.available_themes:
+            logger.warning(f"{Colors.WARNING}[ThemeSwitcher] No themes available")
+            return
 
-        try:
-            current_index = self.themes_list.index(self.current_theme)
-        except ValueError:
-            # Current theme not in list, start from beginning
-            current_index = -1
-
-        self.current_theme = self.themes_list[
-            (current_index + 1) % len(self.themes_list)
-        ]
+        new_theme = self._style_service.next_theme()
 
         if self.config.get("notify", True):
-            send_notification("Tsumiki", f"Theme switched to {self.current_theme}")
-        copy_themev2(self.current_theme, tsumiki_config.get("mode", "dark"))
-        update_theme_config(self.current_theme)
-        self.set_tooltip_text(self.current_theme)
+            send_notification("Tsumiki", f"Theme switched to {new_theme}")
+
+        self.set_tooltip_text(new_theme)

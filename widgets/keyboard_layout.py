@@ -1,11 +1,9 @@
-from fabric.hyprland import HyprlandReply
-from fabric.hyprland.widgets import HyprlandEvent, get_hyprland_connection
-from fabric.utils import logger, re
+from fabric.utils import logger
 from fabric.widgets.label import Label
 
 from shared.widget_container import ButtonWidget
 from utils.constants import get_kblayout_map
-from utils.functions import parse_hyprland_reply
+from utils.hyprland import hyprland_service
 from utils.widget_utils import nerd_font_icon
 
 
@@ -27,42 +25,22 @@ class KeyboardLayoutWidget(ButtonWidget):
 
         self.container_box.add(self.kb_label)
 
-        self._hyprland_connection = get_hyprland_connection()
-
         # all aboard...
-        if self._hyprland_connection.ready:
-            self.on_ready(None)
-        else:
-            self._register_handler(
-                self._hyprland_connection,
-                self._hyprland_connection.connect("event::ready", self.on_ready),
-            )
+        hyprland_service.on_ready(lambda: self.on_ready(None))
 
     def on_ready(self, _):
-        return self._get_keyboard(), logger.info(
-            "[Keyboard] Connected to the hyprland socket"
-        )
+        self._get_keyboard()
+        logger.info("[Keyboard] Connected to the hyprland socket")
 
-    def on_activelayout(self, _, event: HyprlandEvent):
-        if len(event.data) < 2:
-            return logger.warning("[Keyboard] got invalid event data from hyprland")
-        keyboard, language = event.data
-        matched: bool = False
-
-        if re.match(self.keyboard, keyboard) and (matched := True):
-            self.kb_label.set_label(self.formatter.format(language=language))
-
-        return logger.debug(
-            f"[Keyboard] Keyboard: {keyboard}, Language: {language}, Match: {matched}"
-        )
-
-    def _handle_reply(self, res: HyprlandReply, *_):
+    def _handle_devices_data(self, data, *_):
+        if data is None:
+            return
         try:
-            data = parse_hyprland_reply(res)
             keyboards = data.get("keyboards", [])
             if not keyboards:
                 self.kb_label.set_label("Unknown")
-                return logger.warning("[Keyboard] No keyboards found in the data")
+                logger.warning("[Keyboard] No keyboards found in the data")
+                return
 
             main_kb = next((kb for kb in keyboards if kb.get("main")), keyboards[-1])
 
@@ -82,11 +60,4 @@ class KeyboardLayoutWidget(ButtonWidget):
             logger.exception(f"[Keyboard] Failed to parse keyboard data: {e}")
 
     def _get_keyboard(self):
-        try:
-            self._hyprland_connection.send_command_async(
-                "j/devices",
-                self._handle_reply,
-            )
-
-        except Exception as e:
-            logger.exception(f"[Keyboard] Error getting keyboard layout: {e}")
+        hyprland_service.get_devices_async(self._handle_devices_data)

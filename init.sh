@@ -190,7 +190,6 @@ install_packages() {
 		tesseract-data-eng
 		ttf-jetbrains-mono-nerd
 		grimblast-git
-		glace-git
 		matugen-bin
 	)
 

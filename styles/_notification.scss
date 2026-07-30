@@ -35,7 +35,7 @@ $hover-transition: background 0.15s ease-in-out;
     .app-icon {
       /* Notification app icon (only visible when the primary image is set) */
       -gtk-icon-effect: none;
-      -gtk-icon-shadow: 0 1px 4px black;
+      -gtk-icon-shadow: 0 1px 4px theme.$general-shadow-color;
       margin: common.toEm(6);
     }
 
@@ -132,7 +132,7 @@ $hover-transition: background 0.15s ease-in-out;
   }
 
   #notification-circular-progress-bar {
-    border: solid 0 rgb(151, 151, 177);
+    border: solid 0 theme.$surface-disabled;
     color: transparent;
   }
 

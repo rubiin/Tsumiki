@@ -2,7 +2,6 @@ import contextlib
 from typing import ClassVar
 
 from fabric import Signal
-from fabric.hyprland.widgets import get_hyprland_connection
 from fabric.utils import Gdk, GLib, GObject, bulk_connect, logger
 from fabric.widgets.box import Box
 from fabric.widgets.widget import Widget
@@ -10,6 +9,7 @@ from gi.repository import GtkLayerShell
 
 from shared.widget_container import BaseWindow
 from utils.functions import safe_disconnect
+from utils.hyprland import hyprland_service
 
 POPOVER_BAR_GAP = -70
 
@@ -61,7 +61,7 @@ class PopoverManager:
             self._overlay.connect("button-press-event", self.on_overlay_clicked)
 
             # Connect hyprland monitor change handler
-            self._hyprland_connection = get_hyprland_connection()
+            self._hyprland_connection = hyprland_service.connection
             self._hyprland_connection.connect(
                 "event::focusedmonv2", self.on_monitor_change
             )
@@ -365,7 +365,7 @@ class Popover(Widget):
         # This helps with keyboard focus issues
         if self._focus_out_timeout_id is not None:
             GLib.source_remove(self._focus_out_timeout_id)
-        self._focus_out_timeout_id = GLib.timeout_add(100, self._hide_after_focus_out)
+        self._focus_out_timeout_id = GLib.timeout_add(200, self._hide_after_focus_out)
         return False
 
     def _hide_after_focus_out(self):

@@ -83,9 +83,9 @@
   #usb-manager-item {
     padding: 8px;
     border-radius: 12px;
-    background-color: rgba(255, 255, 255, 0.045);
+    background-color: color.adjust(theme.$text-main, $alpha: -0.955);
     margin-top: 8px;
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border: 1px solid color.adjust(theme.$text-main, $alpha: -0.92);
 
     &-header {
       margin-bottom: 1px;
@@ -118,7 +118,7 @@
       }
 
       trough {
-        background-color: rgba(255, 255, 255, 0.14);
+        background-color: color.adjust(theme.$text-main, $alpha: -0.86);
       }
 
       progress {
@@ -133,7 +133,7 @@
     }
 
     .usb-manager-status-badge {
-      background-color: rgba(255, 255, 255, 0.95);
+      background-color: color.adjust(theme.$text-main, $alpha: -0.05);
       color: theme.$background-dark;
       border-radius: 999px;
       padding: 1px 7px;

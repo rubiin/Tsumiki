@@ -3,6 +3,39 @@
 @use "common";
 @use "variable";
 
+// ──────────────────────────────────────────────
+// Mixin used by notification-group sub-components
+// Defined first so @include works in @at-root block
+// ──────────────────────────────────────────────
+@mixin notification-header-button($hover-bg: null) {
+  min-height: 0;
+  min-width: 0;
+  padding: 2px 6px;
+  border-radius: variable.$radius;
+  border: variable.$border;
+
+  .panel-font-icon {
+    font-size: 11px;
+    color: theme.$text-main;
+  }
+
+  &:hover {
+    @extend %widget_hover;
+    color: theme.$background-dark;
+
+    @if $hover-bg {
+      background-color: $hover-bg;
+    }
+
+    .panel-font-icon {
+      color: theme.$background-dark;
+    }
+  }
+}
+
+// ──────────────────────────────────────────────
+// Bar widget (max 2 levels deep)
+// ──────────────────────────────────────────────
 #date_time {
   @include common.widget-border(
     variable.$bar-widgets-date_time-border-radius,
@@ -25,16 +58,30 @@
     margin-right: 6px;
   }
 
+  // Vertical bar separator between notification indicator and clock
   separator {
     background-color: variable.$border-color;
     border-radius: variable.$radius;
     margin: 2px 0px;
     min-width: 2px;
   }
+}
 
-  /************** DATE MENU **************/
-
+// ──────────────────────────────────────────────
+// Menu container
+// Shallow nesting: notification column (max 3-4 levels)
+//                  date column (max 3-4 levels)
+// ──────────────────────────────────────────────
+#date_time {
   &-menu {
+    // Menu separator between notification column and date column
+    > separator {
+      background-color: color.mix(variable.$popover-border-color, black, 60%);
+      border-radius: variable.$radius;
+      margin-right: variable.$spacing;
+    }
+
+    // Notification column — max 3 levels deep
     #notification-column {
       min-width: 435px;
       min-height: 380px;
@@ -48,159 +95,39 @@
           padding-left: 1.5 * variable.$padding;
           padding-right: 1 * variable.$padding;
         }
+      }
 
-        #clear-button {
-          padding: 3px 4px;
-          border: variable.$border;
-          border-radius: variable.$radius;
-          background-color: theme.$background-main;
-          margin-right: 10px;
-          border-width: 2px;
+      #clear-button {
+        padding: 3px 4px;
+        border: variable.$border;
+        border-radius: variable.$radius;
+        background-color: theme.$background-main;
+        margin-right: 10px;
+        border-width: 2px;
 
-          label {
-            padding-left: common.toEm(5);
-          }
+        label {
+          padding-left: common.toEm(5);
+        }
+
+        #clear-icon {
+          padding: 0;
+          font-size: 13px;
+        }
+
+        &:hover {
+          @extend %widget_hover;
+          color: theme.$background-dark;
 
           #clear-icon {
-            padding: 0;
+            @extend %clear_icon;
             font-size: 13px;
-          }
-
-          &:hover {
-            @extend %widget_hover;
             color: theme.$background-dark;
-
-            #clear-icon {
-              @extend %clear_icon;
-              font-size: 13px;
-              color: theme.$background-dark;
-            }
-          }
-        }
-      }
-
-      .notification-scrollable {
-        #notification-list {
-          margin-right: variable.$spacing;
-
-          #notification-group-row {
-            margin-top: 5px;
-            margin-bottom: 7px;
-            border-radius: variable.$modules-notification-border-radius;
-
-            &:first-child {
-              margin-top: 0;
-            }
-
-            &:last-child {
-              margin-bottom: 0;
-            }
-
-            #notification-group-deck {
-              transition: opacity 200ms ease-in-out;
-
-              #notification-group-header {
-                padding: variable.$padding;
-                margin-bottom: 8px;
-
-                .notification-group-title {
-                  font-size: 0.95em;
-                  font-weight: 700;
-                }
-
-                @mixin notification-header-button($hover-bg: null) {
-                  min-height: 0;
-                  min-width: 0;
-                  padding: 2px 6px;
-                  border-radius: variable.$radius;
-                  border: variable.$border;
-
-                  .panel-font-icon {
-                    font-size: 11px;
-                    color: theme.$text-main;
-                  }
-
-                  &:hover {
-                    @extend %widget_hover;
-                    color: theme.$background-dark;
-
-                    @if $hover-bg {
-                      background-color: $hover-bg;
-                    }
-
-                    .panel-font-icon {
-                      color: theme.$background-dark;
-                    }
-                  }
-                }
-
-                #notification-group-collapse-button {
-                  @include notification-header-button;
-                }
-
-                #notification-group-close-all-button {
-                  @include notification-header-button($hover-bg: theme.$accent-red);
-                }
-              }
-
-              #notification-group-peek {
-                margin-bottom: 0;
-
-                .notification-group-peek-layer {
-                  min-height: 5px;
-                  border-radius: 0 0 variable.$modules-notification-border-radius
-                    variable.$modules-notification-border-radius;
-                  background-color: theme.$background-main;
-                  border: variable.$border;
-                  border-width: variable.$modules-notification-border-width;
-                }
-
-                .notification-group-peek-layer-depth-1 {
-                  margin-left: 10px;
-                  margin-right: 10px;
-                  opacity: 0.88;
-                }
-
-                .notification-group-peek-layer-depth-2 {
-                  margin-left: 16px;
-                  margin-right: 16px;
-                  opacity: 0.7;
-                }
-              }
-
-              #notification-group-items {
-                margin-top: 6px;
-
-                #datemenu-notification-box {
-                  margin-bottom: 6px;
-
-                  &:last-child {
-                    margin-bottom: 0;
-                  }
-                }
-              }
-            }
-          }
-        }
-
-        .placeholder {
-          label {
-            font-size: 1em;
-          }
-
-          .panel-font-icon {
-            font-size: 6rem;
           }
         }
       }
     }
 
-    separator {
-      background-color: color.mix(variable.$popover-border-color, black, 60%);
-      border-radius: variable.$radius;
-      margin-right: variable.$spacing;
-    }
-
+    // Date column — max 4 levels deep
     .date-column {
       #clock {
         padding: variable.$padding;
@@ -211,21 +138,19 @@
       }
 
       .calendar {
-        transition: 200ms;
+        transition: background-color 200ms, color 200ms, border-radius 200ms;
         border-radius: variable.$radius * 2;
         color: theme.$text-main;
         background-color: theme.$background-alt;
-
         padding: variable.$padding * 2 variable.$padding * 2 0;
 
         calendar {
           all: unset;
-
           font-size: 14px;
           padding: 0.28em;
 
           &.button {
-            transition: 200ms;
+            transition: color 200ms, border-radius 200ms, box-shadow 200ms;
             border-radius: variable.$radius;
             color: theme.$text-main;
           }
@@ -254,5 +179,132 @@
         }
       }
     }
+
+    // ──────────────────────────────────────────
+    // Flat notification-group sub-components
+    // Lifted from 7-9 levels → max 2-3 levels via @at-root
+    // ──────────────────────────────────────────
+    @at-root {
+      #date_time-menu .notification-scrollable {
+        #notification-list {
+          margin-right: variable.$spacing;
+        }
+
+        .placeholder {
+          label {
+            font-size: 1em;
+          }
+
+          .panel-font-icon {
+            font-size: 6rem;
+          }
+        }
+      }
+
+      #date_time-menu #notification-group-row {
+        margin-top: 5px;
+        margin-bottom: 7px;
+        border-radius: variable.$modules-notification-border-radius;
+
+        &:first-child {
+          margin-top: 0;
+        }
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+
+      #date_time-menu #notification-group-deck {
+        transition: opacity 200ms ease-in-out;
+
+        #datemenu-notification-box {
+          transition: background-color 150ms ease-in-out;
+
+          &:hover {
+            background-color: color.mix(theme.$background-main, theme.$surface-highlight, 85%);
+          }
+        }
+      }
+
+      #date_time-menu #notification-group-badge-label {
+        min-width: 12px;
+        min-height: 12px;
+        padding: 0 4px;
+        border-radius: 9999px;
+        background-color: theme.$accent-red;
+        color: theme.$text-main;
+        font-size: 10px;
+        font-weight: 700;
+      }
+
+      #date_time-menu #notification-group-header {
+        padding: variable.$padding;
+        margin-bottom: 8px;
+
+        .notification-group-title {
+          font-size: 0.95em;
+          font-weight: 700;
+        }
+
+        .notification-group-count {
+          min-width: 18px;
+          min-height: 18px;
+          padding: 0 6px;
+          border-radius: 9999px;
+          background-color: theme.$surface-disabled;
+          color: theme.$text-main;
+          font-size: 11px;
+          font-weight: 700;
+        }
+
+        #notification-group-collapse-button {
+          @include notification-header-button;
+        }
+
+        #notification-group-close-all-button {
+          @include notification-header-button($hover-bg: theme.$accent-red);
+        }
+      }
+
+      #date_time-menu #notification-group-peek {
+        margin-bottom: 0;
+
+        .notification-group-peek-layer {
+          min-height: 5px;
+          border-radius: 0 0 variable.$modules-notification-border-radius
+            variable.$modules-notification-border-radius;
+          background-color: theme.$background-main;
+          border: variable.$border;
+          border-width: variable.$modules-notification-border-width;
+        }
+
+        .notification-group-peek-layer-depth-1 {
+          margin-left: 10px;
+          margin-right: 10px;
+          opacity: 0.88;
+        }
+
+        .notification-group-peek-layer-depth-2 {
+          margin-left: 16px;
+          margin-right: 16px;
+          opacity: 0.7;
+        }
+      }
+
+      #date_time-menu #notification-group-items {
+        margin-top: 6px;
+
+        #datemenu-notification-box {
+          margin-bottom: 6px;
+
+          &:last-child {
+            margin-bottom: 0;
+            border-bottom: none;
+          }
+        }
+      }
+    }
   }
 }
+

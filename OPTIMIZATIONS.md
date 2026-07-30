@@ -70,14 +70,6 @@ Uses `Gio.Subprocess.new()` with manual `Gio.Task` callbacks instead of `exec_sh
 
 
 
-### 15. Battery Service Creates Separate DBus Connection
-**Files**: `services/battery.py`
-**Effort**: Small | **Impact**: Low
-
-Creates its own `GioDBusHelper` instance for UPower communication, adding a separate DBus connection.
-
-**Fix**: Investigate sharing DBus connections between services or using fabric's built-in DBus integration.
-
 ---
 
 # New Findings (July 2026)
@@ -126,9 +118,6 @@ Similar to DnsSwitcher — polls `warp-cli status` every 5 seconds. The widget d
 ## 🥈 Medium Priority (New)
 
 
-
-
-
 ### 25. LockKeys OSD Does Not Use TeardownMixin for Timer Cleanup
 **Files**: `modules/osds/lockkeys.py`
 **Effort**: Small | **Impact**: Low
@@ -144,6 +133,9 @@ Similar to DnsSwitcher — polls `warp-cli status` every 5 seconds. The widget d
 `_run_warp_cli()` calls `exec_shell_command(f"warp-cli {action}")` synchronously. The poll function uses `exec_shell_command_async` but action calls are synchronous.
 
 **Fix**: Replace synchronous `exec_shell_command` with `exec_shell_command_async` for all warp-cli invocations.
+
+
+
 
 
 ---
@@ -199,3 +191,20 @@ Several module-level imports are only used in specific functions:
 These add import overhead at module load time even when the features are never used.
 
 **Fix**: Move these imports inside their respective functions (lazy imports). For `psutil`, it's already imported by `stats_poll()` in `widget_utils.py`, so it's already in memory — the import is fast but unnecessary.
+
+
+
+### 45. Deep Nesting in `_datemenu.scss` (7-9 levels)
+**Files**: `styles/_datemenu.scss`
+**Effort**: Medium | **Impact**: Low
+
+Selectors compile to deeply nested paths like:
+```css
+#date_time-menu #notification-column .notification-scrollable #notification-list #notification-group-row #notification-group-deck #notification-group-header .notification-group-title
+```
+The deepest ~100 lines in the notification group deck/header/items section are at depth 7+. This bloats the compiled CSS output and makes debugging harder.
+
+**Fix**: Extract deeply nested sub-components into flat top-level selectors. For example, `#notification-group-header` can be a standalone rule instead of nested 7 levels deep.
+
+
+

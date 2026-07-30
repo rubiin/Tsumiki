@@ -4,15 +4,19 @@ Services are initialized on first access, not at import time.
 This avoids establishing D-Bus connections until they're actually needed.
 """
 
+import threading
+
 # Internal cache for lazy-loaded services
 _services_cache = {}
+_services_cache_lock = threading.Lock()
 
 
 def _get_service(name: str, factory):
-    """Lazy-load a service on first access."""
-    if name not in _services_cache:
-        _services_cache[name] = factory()
-    return _services_cache[name]
+    """Lazy-load a service on first access (thread-safe)."""
+    with _services_cache_lock:
+        if name not in _services_cache:
+            _services_cache[name] = factory()
+        return _services_cache[name]
 
 
 def get_audio_service():
@@ -57,18 +61,28 @@ def get_matugen_service():
     return _get_service("matugen", MatugenService)
 
 
+def get_style_service():
+    """Get the style service (lazy-loaded)."""
+    from .style import StyleService
+
+    return _get_service("style", StyleService)
+
+
 # Backward compatibility - these now trigger lazy loading on access
 class _LazyServiceProxy:
-    """Proxy that lazily loads a service on first attribute access."""
+    """Proxy that lazily loads a service on first attribute access (thread-safe)."""
 
     def __init__(self, getter):
         object.__setattr__(self, "_getter", getter)
         object.__setattr__(self, "_service", None)
+        object.__setattr__(self, "_lock", threading.Lock())
 
     def _ensure_loaded(self):
-        if object.__getattribute__(self, "_service") is None:
-            getter = object.__getattribute__(self, "_getter")
-            object.__setattr__(self, "_service", getter())
+        lock = object.__getattribute__(self, "_lock")
+        with lock:
+            if object.__getattribute__(self, "_service") is None:
+                getter = object.__getattribute__(self, "_getter")
+                object.__setattr__(self, "_service", getter())
         return object.__getattribute__(self, "_service")
 
     def __getattr__(self, name):
@@ -85,3 +99,4 @@ bluetooth_service = _LazyServiceProxy(get_bluetooth_service)
 power_pfl_service = _LazyServiceProxy(get_power_profiles_service)
 matugen_service = _LazyServiceProxy(get_matugen_service)
 privacy_service = _LazyServiceProxy(get_privacy_service)
+style_service = _LazyServiceProxy(get_style_service)

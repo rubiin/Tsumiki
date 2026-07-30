@@ -31,8 +31,8 @@ main =  "#e0e0e0"  # Color de texto principal (gris claro, casi blanco)
 secondary =  "#c5c5c5"  # Color de texto secundario (gris claro suave)
 muted =  "#8e8e8e"  # Texto terciario, atenuado (gris oscuro)
 disabled =  "#666666"  # Texto deshabilitado (gris atenuado)
-muted_light =  "#999999"  # Texto claro atenuado para sugerencias (gris claro)
-muted_dark =  "#444444"  # Texto oscuro atenuado (gris con un ligero tinte violáceo)
+muted-light =  "#999999"  # Texto claro atenuado para sugerencias (gris claro)
+muted-dark =  "#444444"  # Texto oscuro atenuado (gris con un ligero tinte violáceo)
 
 
 [dark.surface]
@@ -51,13 +51,13 @@ yellow =  "#ffea00"  # Amarillo para resaltados (amarillo eléctrico)
 green =  "#00ff00"  # Verde para éxito (verde neón)
 teal =  "#00b3b3"  # Verde azulado para información (cian brillante)
 blue =  "#00d0ff"  # Azul para enlaces y acciones (azul eléctrico)
-light_blue =  "#00d0ff"  # Acento azul cielo (azul eléctrico)
+light-blue =  "#00d0ff"  # Acento azul cielo (azul eléctrico)
 lavender =  "#b084ff"  # Lavanda para resaltados sutiles (lavanda neón)
 
 
 [dark.general]
-bar_background =  "rgba(18, 18, 18, 0.8)"  # Fondo del panel (fondo oscuro semi-transparente)
-shadow_color =  "rgba(0, 0, 0, 0.6)"  # Color de sombra (sombras profundas con alto contraste)
+bar-background =  "rgba(18, 18, 18, 0.8)"  # Fondo del panel (fondo oscuro semi-transparente)
+shadow-color =  "rgba(0, 0, 0, 0.6)"  # Color de sombra (sombras profundas con alto contraste)
 
 
 [light.background]
@@ -71,8 +71,8 @@ main =  "#1f1f1f"  # Color de texto principal
 secondary =  "#3a3a3a"  # Color de texto secundario
 muted =  "#717171"  # Texto terciario, atenuado
 disabled =  "#999999"  # Texto deshabilitado
-muted_light =  "#666666"  # Texto claro atenuado para sugerencias
-muted_dark =  "#bbbbbb"  # Texto oscuro atenuado
+muted-light =  "#666666"  # Texto claro atenuado para sugerencias
+muted-dark =  "#bbbbbb"  # Texto oscuro atenuado
 
 
 [light.surface]
@@ -91,13 +91,13 @@ yellow =  "#0015ff"  # Amarillo para resaltados
 green =  "#ff00ff"  # Verde para éxito
 teal =  "#ff4c4c"  # Verde azulado para información
 blue =  "#ff2f00"  # Azul para enlaces y acciones
-light_blue =  "#ff2f00"  # Acento azul cielo
+light-blue =  "#ff2f00"  # Acento azul cielo
 lavender =  "#4f7b00"  # Lavanda para resaltados sutiles
 
 
 [light.general]
-bar_background =  "rgba(237, 237, 237, 0.8)"  # Fondo del panel
-shadow_color =  "rgba(255, 255, 255, 0.6)"  # Color de sombra
+bar-background =  "rgba(237, 237, 237, 0.8)"  # Fondo del panel
+shadow-color =  "rgba(255, 255, 255, 0.6)"  # Color de sombra
 
 ```
 
@@ -143,8 +143,8 @@ main =  "#cdd6f4"  # Color de texto principal
 secondary =  "#bac2de"  # Color de texto secundario
 muted =  "#a6adc8"  # Texto terciario, atenuado
 disabled =  "#6c7086"  # Texto para elementos deshabilitados
-muted_light =  "#7f849c"  # Texto claro atenuado para sugerencias
-muted_dark =  "#9399b2"  # Texto oscuro atenuado
+muted-light =  "#7f849c"  # Texto claro atenuado para sugerencias
+muted-dark =  "#9399b2"  # Texto oscuro atenuado
 
 
 [dark.surface]
@@ -163,13 +163,13 @@ yellow =  "#f9e2af"  # Amarillo para resaltados
 green =  "#a6e3a1"  # Verde para éxito
 teal =  "#94e2d5"  # Verde azulado para información
 blue =  "#89b4fa"  # Azul para enlaces y acciones
-light_blue =  "#89dceb"  # Acento azul cielo
+light-blue =  "#89dceb"  # Acento azul cielo
 lavender =  "#b4befe"  # Lavanda para resaltados sutiles
 
 
 [dark.general]
-bar_background =  "rgb(36, 35, 35)"
-shadow_color =  "rgba(0, 0, 0, 0.6)"
+bar-background =  "rgb(36, 35, 35)"
+shadow-color =  "rgba(0, 0, 0, 0.6)"
 
 
 [light.background]
@@ -183,8 +183,8 @@ main =  "#32290b"  # Color de texto principal
 secondary =  "#453d21"  # Color de texto secundario
 muted =  "#595237"  # Texto terciario, atenuado
 disabled =  "#938f79"  # Texto para elementos deshabilitados
-muted_light =  "#807b63"  # Texto claro atenuado para sugerencias
-muted_dark =  "#6c664d"  # Texto oscuro atenuado
+muted-light =  "#807b63"  # Texto claro atenuado para sugerencias
+muted-dark =  "#6c664d"  # Texto oscuro atenuado
 
 
 [light.surface]
@@ -203,13 +203,13 @@ yellow =  "#061d50"  # Amarillo para resaltados
 green =  "#591c5e"  # Verde para éxito
 teal =  "#6b1d2a"  # Verde azulado para información
 blue =  "#764b05"  # Azul para enlaces y acciones
-light_blue =  "#762314"  # Acento azul cielo
+light-blue =  "#762314"  # Acento azul cielo
 lavender =  "#4b4101"  # Lavanda para resaltados sutiles
 
 
 [light.general]
-bar_background =  "rgb(36, 35, 35)"
-shadow_color =  "rgba(0, 0, 0, 0.6)"
+bar-background =  "rgb(36, 35, 35)"
+shadow-color =  "rgba(0, 0, 0, 0.6)"
 
 
 ```

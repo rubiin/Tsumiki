@@ -19,7 +19,7 @@
     padding: 5px;
 
     #overview-window {
-      background-color: color.mix(black, transparent, 90%);
+      background-color: color.mix(theme.$general-shadow-color, transparent, 90%);
       border-radius: 50px;
       padding: common.toEm(10);
     }
@@ -28,7 +28,7 @@
     #overview-workspace-bg,
     #overview-frame {
       border-radius: variable.$radius;
-      transition: all 0.1s ease;
+      transition: background-color 0.1s ease;
     }
 
     #overview-client-box {
@@ -37,7 +37,7 @@
       #overview-icon {
         margin: common.toEm(5);
         background-color: theme.$general-shadow-color;
-        border-color: black;
+        border-color: theme.$surface-disabled;
         border-radius: 15px;
         border-width: 2px;
         border-style: solid;
@@ -59,7 +59,7 @@
       #overview-add-label {
         font-size: 2rem;
         font-weight: 400;
-        color: color.mix(theme.$text-main, black, 30%);
+        color: theme.$text-muted;
       }
     }
   }

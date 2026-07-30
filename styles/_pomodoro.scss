@@ -15,7 +15,7 @@
     padding: 16px;
 
     #pomodoro-session {
-      color: #cccccc;
+      color: theme.$text-muted;
       font-size: 12px;
       margin-bottom: 8px;
     }
@@ -32,14 +32,14 @@
       }
 
       #pomodoro-phase {
-        color: #ffffff;
+        color: theme.$text-main;
         font-size: 14px;
         font-weight: 500;
         margin-bottom: 4px;
       }
 
       #pomodoro-timer {
-        color: #f0d0d0;
+        color: color.mix(theme.$accent-pink, theme.$text-main, 40%);
         font-size: 52px;
         font-weight: bold;
         font-family: "JetBrainsMono Nerd Font Mono", monospace;
@@ -56,8 +56,8 @@
     #pomodoro-btn-skip,
     #pomodoro-btn-reset,
     #pomodoro-btn-reset-all {
-      background-color: rgba(240, 190, 190, 0.85);
-      color: rgba(30, 15, 30, 0.9);
+      background-color: color.adjust(theme.$accent-pink, $alpha: -0.15);
+      color: color.adjust(theme.$background-dark, $alpha: -0.1);
       border-radius: 12px;
       padding: 10px 16px;
       font-size: 13px;
@@ -66,11 +66,11 @@
       min-width: 100px;
 
       &:hover {
-        background-color: rgba(255, 210, 210, 0.95);
+        background-color: theme.$accent-pink;
       }
 
       &:active {
-        background-color: rgba(220, 160, 160, 0.9);
+        background-color: color.adjust(theme.$accent-red, $alpha: -0.1);
       }
     }
   }

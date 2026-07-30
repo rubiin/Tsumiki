@@ -9,7 +9,10 @@
   background-color: color.mix(theme.$general-bar-background, transparent, $transparency-value);
   padding: variable.$modules-dock-padding_y variable.$modules-dock-padding_x;
   margin: variable.$modules-dock-margin_y variable.$modules-dock-margin_x;
-  transition: all 0.25s cubic-bezier(0.5, 0.25, 0, 1);
+  transition:
+    background-color 0.25s cubic-bezier(0.5, 0.25, 0, 1),
+    border-radius 0.25s cubic-bezier(0.5, 0.25, 0, 1),
+    border-color 0.25s cubic-bezier(0.5, 0.25, 0, 1);
 
   @include common.widget_border(
     variable.$modules-dock-border-radius,

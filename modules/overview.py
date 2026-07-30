@@ -1,6 +1,5 @@
 from contextlib import suppress
 
-from fabric.hyprland.widgets import get_hyprland_connection
 from fabric.utils import Gdk, GdkPixbuf, GLib, Gtk, logger
 from fabric.widgets.box import Box
 from fabric.widgets.button import Button
@@ -12,7 +11,8 @@ from fabric.widgets.overlay import Overlay
 
 from shared.popup import PopupWindow
 from utils.app import AppUtils
-from utils.functions import parse_hyprland_reply, safe_disconnect, ttl_lru_cache
+from utils.functions import safe_disconnect, ttl_lru_cache
+from utils.hyprland import HyprlandClient, hyprland_service
 from utils.icon_resolver import IconResolver
 from utils.widget_settings import BarConfig
 from utils.widget_utils import create_surface_from_widget
@@ -55,51 +55,40 @@ class HyprlandWindowButton(Button):
     def __init__(
         self,
         window: Box,
-        title: str,
-        address: str,
-        app_id: str,
+        client: HyprlandClient,
         size,
         transform: int = 0,
-        hyprland_connection=None,
         app_util=None,
     ):
         self.transform = transform % 4
         self.size = size if transform in [0, 2] else (size[1], size[0])
-        self.address = address
-        self.app_id = app_id
-        self.title = title
+        self.client = client
         self.window: Box = window
         self.icon_resolver = IconResolver()
-        self._hyprland_connection = hyprland_connection or get_hyprland_connection()
 
         # Compute dynamic icon sizes based on the button size.
         # Using the minimum dimension of the button for scaling.
-        icon_size_main = int(min(self.size) * 0.5)  # adjust factor as needed
+        icon_size_main = int(min(self.size) * 0.5)
 
         # Enhanced icon resolution using desktop apps
         if app_util is None:
             app_util = AppUtils()
-        desktop_app = app_util.find_app(app_id)
+        desktop_app = app_util.find_app(client.get_app_id())
         icon_pixbuf = _resolve_icon_pixbuf(
-            self.icon_resolver, app_id, icon_size_main, desktop_app
+            self.icon_resolver, client.get_app_id(), icon_size_main, desktop_app
         )
 
         super().__init__(
             name="overview-client-box",
             image=Image(pixbuf=icon_pixbuf),
-            tooltip_text=title,
+            tooltip_text=client.get_title(),
             size=size,
             on_clicked=self.on_click,
             on_button_press_event=lambda _, event: (
-                self._hyprland_connection.send_command_async(
-                    f"/dispatch closewindow address:{address}",
-                    lambda *_: None,
-                )
-                if event.button == 3
-                else None
+                self.client.close() if event.button == 3 else None
             ),
             on_drag_data_get=lambda _s, _c, data, *_: data.set_text(
-                address, len(address)
+                client.get_address_str(), len(client.get_address_str())
             ),
             on_drag_begin=lambda _, context: Gtk.drag_set_icon_surface(
                 context, create_surface_from_widget(self, (255, 255, 255, 0))
@@ -123,18 +112,18 @@ class HyprlandWindowButton(Button):
             Gdk.KEY_KP_Enter,
             Gdk.KEY_space,
         ):
-            self._hyprland_connection.send_command_async(
-                f"/dispatch closewindow address:{self.address}",
-                lambda *_: None,
-            )
+            self.client.close()
             return True
         return False
 
     def update_image(self, image):
         # Compute overlay icon size dynamically.
-        icon_size_overlay = int(min(self.size) * 0.5)  # adjust factor as needed
+        icon_size_overlay = int(min(self.size) * 0.5)
         icon_pixbuf = _resolve_icon_pixbuf(
-            self.icon_resolver, self.app_id, icon_size_overlay, self.desktop_app
+            self.icon_resolver,
+            self.client.get_app_id(),
+            icon_size_overlay,
+            self.desktop_app,
         )
 
         self.set_image(
@@ -145,16 +134,13 @@ class HyprlandWindowButton(Button):
                     pixbuf=icon_pixbuf,
                     h_align="center",
                     v_align="end",
-                    tooltip_text=self.title,
+                    tooltip_text=self.client.get_title(),
                 ),
             )
         )
 
     def on_click(self, *_):
-        self._hyprland_connection.send_command_async(
-            f"/dispatch focuswindow address:{self.address}",
-            lambda *_: None,
-        )
+        self.client.activate()
 
 
 class WorkspaceEventBox(EventBox):
@@ -172,7 +158,7 @@ class WorkspaceEventBox(EventBox):
         current_width = screen.get_width()
         current_height = screen.get_height()
 
-        self._hyprland_connection = hyprland_connection or get_hyprland_connection()
+        self._service = hyprland_service
 
         super().__init__(
             name="overview-workspace-bg",
@@ -188,7 +174,7 @@ class WorkspaceEventBox(EventBox):
                 label=f"{workspace_id}",
             ),
             on_drag_data_received=lambda _w, _c, _x, _y, data, *_: (
-                self._hyprland_connection.send_command_async(
+                self._service.connection.send_command_async(
                     f"/dispatch movetoworkspacesilent {workspace_id},address:{data.get_data().decode()}",  # noqa: E501
                     lambda *_: None,
                 )
@@ -217,29 +203,20 @@ class OverviewMenu(Box):
         self._update_generation: int = 0
         self._fetched_monitors: dict = {}
 
-        self._hyprland_connection = get_hyprland_connection()
+        self._service = hyprland_service
         self._app_util = None  # Lazy-load on first access
         self._app_cache_dirty = False
         self._handler_ids: list[int] = []
 
-        # Remove the window_class_aliases dictionary completely
-        # TODO: replace with glace
-
         self._handler_ids = [
-            self._hyprland_connection.connect(
-                "event::openwindow", self._schedule_update
-            ),
-            self._hyprland_connection.connect(
-                "event::closewindow", self._schedule_update
-            ),
-            self._hyprland_connection.connect(
-                "event::movewindow", self._schedule_update
-            ),
+            self._service.connect("event::openwindow", self._schedule_update),
+            self._service.connect("event::closewindow", self._schedule_update),
+            self._service.connect("event::movewindow", self._schedule_update),
         ]
 
         self.connect("destroy", self._on_destroy)
         self._init_grid()
-        self.update()
+        self._service.on_ready(lambda: self.update())
 
     def _init_grid(self):
         self.grid = Grid(
@@ -267,7 +244,7 @@ class OverviewMenu(Box):
 
     def _on_destroy(self, *_):
         for hid in self._handler_ids:
-            safe_disconnect(self._hyprland_connection, hid)
+            safe_disconnect(self._service.connection, hid)
 
     @property
     def app_util(self) -> AppUtils:
@@ -285,7 +262,7 @@ class OverviewMenu(Box):
     def _schedule_update(self, *_):
         if self._update_source_id is not None:
             return
-        self._update_source_id = GLib.timeout_add(80, self._run_scheduled_update)
+        self._update_source_id = GLib.timeout_add(200, self._run_scheduled_update)
 
     def _run_scheduled_update(self):
         self._update_source_id = None
@@ -293,16 +270,16 @@ class OverviewMenu(Box):
         return False
 
     def _create_client_button(
-        self, client: dict, monitor_info: tuple
+        self, client: HyprlandClient, monitor_info: tuple
     ) -> HyprlandWindowButton:
         return HyprlandWindowButton(
             window=self,
-            title=client["title"],
-            address=client["address"],
-            app_id=client["initialClass"],
-            size=(client["size"][0] * SCALE, client["size"][1] * SCALE),
+            client=client,
+            size=(
+                client.raw_data["size"][0] * SCALE,
+                client.raw_data["size"][1] * SCALE,
+            ),
             transform=monitor_info[2],
-            hyprland_connection=self._hyprland_connection,
             app_util=self.app_util,
         )
 
@@ -354,7 +331,7 @@ class OverviewMenu(Box):
         x: float,
         y: float,
         meta: tuple,
-        client_data: dict,
+        client: HyprlandClient,
         monitor_info: tuple,
     ):
         existing = self.clients.get(address)
@@ -364,21 +341,22 @@ class OverviewMenu(Box):
         if existing is not None:
             self._remove_client(address)
 
-        button = self._create_client_button(client_data, monitor_info)
+        button = self._create_client_button(client, monitor_info)
         self.clients[address] = button
         self._client_meta[address] = meta
         self.workspace_boxes[workspace_id].put(button, x, y)
 
     def _fetch_monitors_async(self, callback):
         """Fetch monitors asynchronously and pass parsed result to callback."""
-        self._hyprland_connection.send_command_async(
-            "j/monitors",
-            lambda reply: self._parse_monitors_reply(reply, callback),
+        self._service.get_monitors_async(
+            lambda data: self._on_monitors_raw(data, callback),
         )
 
-    def _parse_monitors_reply(self, reply, callback):
+    def _on_monitors_raw(self, monitors_data, callback):
+        if monitors_data is None:
+            callback({})
+            return
         try:
-            monitors_data = parse_hyprland_reply(reply)
             monitors = {
                 monitor["id"]: (
                     monitor["x"],
@@ -394,18 +372,7 @@ class OverviewMenu(Box):
 
     def _fetch_clients_async(self, callback):
         """Fetch clients asynchronously and pass parsed result to callback."""
-        self._hyprland_connection.send_command_async(
-            "j/clients",
-            lambda reply: self._parse_clients_reply(reply, callback),
-        )
-
-    def _parse_clients_reply(self, reply, callback):
-        try:
-            raw_clients = parse_hyprland_reply(reply)
-            callback(raw_clients)
-        except Exception as e:
-            logger.exception(f"[Overview] Failed to parse clients: {e}")
-            callback([])
+        self._service.get_clients_async(callback)
 
     def update(self, signal_update=False):
         """Update overview asynchronously — fetches monitors then chains clients."""
@@ -429,14 +396,17 @@ class OverviewMenu(Box):
             return  # Stale update superseded by a newer one
         monitors = self._fetched_monitors
         target_addresses = set()
-        for client in raw_clients:
-            target = self._build_client_target(client, monitors)
+        for raw_client in raw_clients:
+            target = self._build_client_target(raw_client, monitors)
             if target is None:
                 continue
 
             address, workspace_id, x, y, meta, monitor_info = target
             target_addresses.add(address)
-            self._upsert_client(address, workspace_id, x, y, meta, client, monitor_info)
+            hyprland_client = HyprlandClient(raw_client)
+            self._upsert_client(
+                address, workspace_id, x, y, meta, hyprland_client, monitor_info
+            )
 
         stale_addresses = [
             address for address in self.clients if address not in target_addresses

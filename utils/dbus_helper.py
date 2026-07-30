@@ -1,5 +1,15 @@
 from fabric.utils import Gio, GLib
 
+# Cache shared D-Bus connections by bus type to avoid redundant connections
+_bus_cache = {}
+
+
+def _get_shared_bus(bus_type):
+    """Get or create a shared D-Bus connection for the given bus type."""
+    if bus_type not in _bus_cache:
+        _bus_cache[bus_type] = Gio.bus_get_sync(bus_type, None)
+    return _bus_cache[bus_type]
+
 
 class GioDBusHelper:
     """A helper class for interacting with D-Bus using the Gio library."""
@@ -11,7 +21,7 @@ class GioDBusHelper:
         interface_name,
         bus_type=Gio.BusType.SYSTEM,
     ):
-        self.bus = Gio.bus_get_sync(bus_type, None)
+        self.bus = _get_shared_bus(bus_type)
 
         self.bus_name = bus_name
         self.object_path = object_path

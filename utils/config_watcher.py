@@ -3,6 +3,7 @@ Simple configuration file watcher for auto-reloading Tsumiki when config files c
 """
 
 import hashlib
+import threading
 
 from fabric.utils import (
     Gio,
@@ -202,18 +203,21 @@ class ConfigWatcher:
 
 # Global watcher instance
 _watcher: ConfigWatcher | None = None
+_watcher_lock = threading.Lock()
 
 
 def start_config_watching():
-    """Start watching config files for changes."""
+    """Start watching config files for changes (thread-safe)."""
     global _watcher
-    if _watcher is None:
-        _watcher = ConfigWatcher()
+    with _watcher_lock:
+        if _watcher is None:
+            _watcher = ConfigWatcher()
 
 
 def stop_config_watching():
-    """Stop watching config files."""
+    """Stop watching config files (thread-safe)."""
     global _watcher
-    if _watcher is not None:
-        _watcher.stop()
-        _watcher = None
+    with _watcher_lock:
+        if _watcher is not None:
+            _watcher.stop()
+            _watcher = None

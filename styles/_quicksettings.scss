@@ -7,7 +7,7 @@ $slider-height: 12px;
 
 $toggler-radius: variable.$radius * 1.4;
 
-$qs-active-text: color.mix(#000000, white, 8%);
+$qs-active-text: color.mix(theme.$text-main, white, 8%);
 
 @mixin setting-slider($min-length) {
   @include common.slider(
@@ -241,11 +241,11 @@ $qs-active-text: color.mix(#000000, white, 8%);
         border-radius: variable.$radius;
 
         &.activated {
-          background-color: rgba(255, 255, 255, 0.15);
+          background-color: color.adjust(theme.$text-main, $alpha: -0.85);
           border-style: solid;
           border-color: transparent;
           border-bottom-style: solid;
-          border-bottom-color: rgba(255, 255, 255, 0.5);
+          border-bottom-color: color.adjust(theme.$text-main, $alpha: -0.5);
         }
 
         &:hover {

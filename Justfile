@@ -14,4 +14,4 @@ restore_config:
     cp config.toml.bak config.toml
 
 stubs_gen:
-    fabric-cli gs Glace-0.1 GtkLayerShell-0.1 Playerctl-2.0 NM-1.0
+    fabric-cli gs GtkLayerShell-0.1 Playerctl-2.0 NM-1.0

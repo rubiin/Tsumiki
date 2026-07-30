@@ -9,8 +9,8 @@ main =  "#f0f4f8"  # Primary text color (soft off-white, for contrast)
 secondary =  "#b0bec5"  # Secondary text color (light gray with a hint of blue)
 muted =  "#7f8c8d"  # Tertiary text, muted (subtle gray, neutral tone)
 disabled =  "#90a4ae"  # Disabled text (muted slate gray)
-muted_light =  "#b0bec5"  # Light-muted text for hints (soft blue-gray)
-muted_dark =  "#263238"  # Dark-muted text (very dark blue-gray)
+muted-light =  "#b0bec5"  # Light-muted text for hints (soft blue-gray)
+muted-dark =  "#263238"  # Dark-muted text (very dark blue-gray)
 
 
 [dark.surface]
@@ -29,13 +29,13 @@ yellow =  "#ffeb3b"  # Yellow for highlights (golden yellow, warm and inviting)
 green =  "#388e3c"  # Green for success (earthy green, nature-inspired)
 teal =  "#009688"  # Teal for information (seafoam green, fresh and calming)
 blue =  "#0277bd"  # Blue for links and actions (deep sea blue)
-light_blue =  "#81d4fa"  # Sky blue accent (light and airy blue)
+light-blue =  "#81d4fa"  # Sky blue accent (light and airy blue)
 lavender =  "#7986cb"  # Lavender for subtle highlights (soft lavender hue)
 
 
 [dark.general]
-bar_background =  "rgba(27, 38, 51, 0.9)"  # Panel background (semi-transparent deep ocean blue)
-shadow_color =  "rgba(0, 0, 0, 0.7)"  # Shadow color (soft shadows with a hint of depth)
+bar-background =  "rgba(27, 38, 51, 0.9)"  # Panel background (semi-transparent deep ocean blue)
+shadow-color =  "rgba(0, 0, 0, 0.7)"  # Shadow color (soft shadows with a hint of depth)
 
 
 [light.background]
@@ -49,8 +49,8 @@ main =  "#0f0b07"  # Primary text color (soft off-white, for contrast)
 secondary =  "#4f413a"  # Secondary text color (light gray with a hint of blue)
 muted =  "#807372"  # Tertiary text, muted (subtle gray, neutral tone)
 disabled =  "#6f5b51"  # Disabled text (muted slate gray)
-muted_light =  "#4f413a"  # Light-muted text for hints (soft blue-gray)
-muted_dark =  "#d9cdc7"  # Dark-muted text (very dark blue-gray)
+muted-light =  "#4f413a"  # Light-muted text for hints (soft blue-gray)
+muted-dark =  "#d9cdc7"  # Dark-muted text (very dark blue-gray)
 
 
 [light.surface]
@@ -69,10 +69,10 @@ yellow =  "#0014c4"  # Yellow for highlights (golden yellow, warm and inviting)
 green =  "#c771c3"  # Green for success (earthy green, nature-inspired)
 teal =  "#ff6977"  # Teal for information (seafoam green, fresh and calming)
 blue =  "#fd8842"  # Blue for links and actions (deep sea blue)
-light_blue =  "#7e2b05"  # Sky blue accent (light and airy blue)
+light-blue =  "#7e2b05"  # Sky blue accent (light and airy blue)
 lavender =  "#867934"  # Lavender for subtle highlights (soft lavender hue)
 
 
 [light.general]
-bar_background =  "rgba(228, 217, 204, 0.9)"  # Panel background (semi-transparent deep ocean blue)
-shadow_color =  "rgba(255, 255, 255, 0.7)"  # Shadow color (soft shadows with a hint of depth)
+bar-background =  "rgba(228, 217, 204, 0.9)"  # Panel background (semi-transparent deep ocean blue)
+shadow-color =  "rgba(255, 255, 255, 0.7)"  # Shadow color (soft shadows with a hint of depth)

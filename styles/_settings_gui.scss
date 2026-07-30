@@ -1,4 +1,3 @@
-/* Settings GUI Styles */
 @use "theme";
 @use "variable";
 
@@ -148,7 +147,7 @@ switch {
     min-width: 18px;
     min-height: 18px;
     border-radius: 9px;
-    background-color: white;
+    background-color: theme.$text-main;
     margin: 2px;
   }
 }

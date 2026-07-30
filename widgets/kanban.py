@@ -196,7 +196,7 @@ class KanbanNote(EventBox):
         row.remove(self)
         row.add(editor)
         row.show_all()
-        GLib.timeout_add(50, lambda: (editor.text_view.grab_focus(), False))
+        GLib.timeout_add(200, lambda: (editor.text_view.grab_focus(), False))
 
 
 class KanbanColumn(Gtk.Frame):

@@ -384,7 +384,6 @@ empty_scroll = false
 label_format = "{id}"
 icon_map = {}
 
-
 [widgets.world_clock]
 icon = "󰃰"
 use_24hr = true
@@ -395,7 +394,6 @@ timezones = ["America/New_York", "Asia/Tokyo"]
 tooltip = true
 hide_when_inactive = true
 modules = ["camera", "microphone", "screen"]
-
 
 [widgets.custom_button_group]
 spacing = 4
@@ -420,7 +418,6 @@ show_icon = true
 label = false
 tooltip = true
 
-
 [widgets.cheatsheet]
 label = true
 label_text = "Keys"
@@ -436,6 +433,17 @@ label = true
 label_text = "Pomo"
 tooltip = true
 
+[widgets.dns_switcher]
+icon = "󰚘"
+label_text = "DNS"
+tooltip = true
+
+[widgets.cloudflare_warp]
+connected_icon = ""
+disconnected_icon = ""
+label = false
+label_text = "WARP"
+tooltip = true
 
 [[widgets.custom_widget]]
 id = "volume"
@@ -446,7 +454,6 @@ on_scroll_up = "pamixer -i 5"
 on_scroll_down = "pamixer -d 5"
 exec_on_event = true
 
-
 [[widgets.custom_button]]
 id = "firefox"
 command = "firefox"
@@ -456,7 +463,6 @@ tooltip_text = "Open Firefox Browser"
 show_icon = true
 label = true
 tooltip = true
-
 
 [[widget_groups]]
 id = "workspaces-group"
@@ -602,12 +608,10 @@ enabled = false
 anchor = "bottom-right"
 layer = "bottom"
 
-
 [layout]
 left_section = ["@group:workspaces-group"]
-middle_section = ["date_time", "weather", "mpris"]
+middle_section = ["date_time", "weather", "mpris","taskbar"]
 right_section = ["@group:sys-group", "@group:utils-group", "system_tray", "power"]
-
 
 [general]
 check_updates = false
@@ -618,7 +622,6 @@ restart_delay = 1500
 multi_monitor = false
 tooltips = true
 
-
 [styling]
 border-radius = "10px"
 border-width = "1px"
@@ -626,7 +629,6 @@ mode = "dark"
 theme_name = "catpuccin-mocha"
 padding = "7pt"
 spacing = "12pt"
-
 
 [styling.font]
 name = "JetBrainsMono Nerd Font Propo"
@@ -640,7 +642,6 @@ enabled = false
 scheme = "scheme-tonal-spot"
 wallpaper = "~/2.jpg"
 
-
 [styling.bar]
 margin_x = "0"
 margin_y = "1.25em"
@@ -648,7 +649,6 @@ opacity = 10
 padding_x = "0.8em"
 padding_y = "0.6em"
 scaling = 100
-
 
 [styling.bar.border]
 enabled = true
@@ -750,6 +750,25 @@ radius = "16px"
 width = "1px"
 
 
+[styling.bar.widgets.dns_switcher]
+icon_size = "12px"
+spacing = "0.125em"
+
+[styling.bar.widgets.dns_switcher.border]
+enabled = false
+radius = "16px"
+width = "1px"
+
+[styling.bar.widgets.cloudflare_warp]
+icon_size = "12px"
+spacing = "0.125em"
+
+[styling.bar.widgets.cloudflare_warp.border]
+enabled = false
+radius = "16px"
+width = "1px"
+
+
 [styling.bar.widgets.cheatsheet]
 icon_size = "12px"
 spacing = "0.125em"
@@ -768,7 +787,6 @@ enabled = false
 radius = "16px"
 width = "1px"
 
-
 [styling.bar.widgets.ip_monitor]
 icon_size = "14px"
 spacing = "0.125em"
@@ -777,7 +795,6 @@ spacing = "0.125em"
 enabled = false
 radius = "16px"
 width = "1px"
-
 
 [styling.bar.widgets.git_companion]
 icon_size = "12px"
@@ -797,7 +814,6 @@ enabled = false
 radius = "16px"
 width = "1px"
 
-
 [styling.bar.widgets.custom_widget]
 icon_size = "12px"
 spacing = "0.125em"
@@ -806,7 +822,6 @@ spacing = "0.125em"
 enabled = false
 radius = "16px"
 width = "1px"
-
 
 [styling.bar.widgets.custom_button]
 icon_size = "12px"
@@ -1141,7 +1156,6 @@ enabled = false
 radius = "16px"
 width = "1px"
 
-
 [styling.bar.widgets.privacy_indicator]
 icon_size = "12px"
 spacing = "0.125em"
@@ -1150,7 +1164,6 @@ spacing = "0.125em"
 enabled = false
 radius = "16px"
 width = "1px"
-
 
 [styling.bar.widgets.workspaces]
 icon_size = "12px"

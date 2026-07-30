@@ -9,8 +9,8 @@ main =  "#dcdccc"  # Primary text color (light gray)
 secondary =  "#b5b5b5"  # Secondary text color (medium gray)
 muted =  "#8c8c8c"  # Tertiary text, muted (soft gray)
 disabled =  "#6c6c6c"  # Disabled text (gray)
-muted_light =  "#7c7c7c"  # Light-muted text for hints (medium gray)
-muted_dark =  "#3c3c3c"  # Dark-muted text (charcoal)
+muted-light =  "#7c7c7c"  # Light-muted text for hints (medium gray)
+muted-dark =  "#3c3c3c"  # Dark-muted text (charcoal)
 
 
 [dark.surface]
@@ -29,13 +29,13 @@ yellow =  "#d7afaf"  # Yellow for highlights (soft yellow)
 green =  "#5f7f5f"  # Green for success (muted green)
 teal =  "#8fbc8f"  # Teal for information (muted teal)
 blue =  "#87afaf"  # Blue for links and actions (cool grayish blue)
-light_blue =  "#87afaf"  # Sky blue accent (soft teal)
+light-blue =  "#87afaf"  # Sky blue accent (soft teal)
 lavender =  "#9f7f8d"  # Lavender for subtle highlights (muted lavender)
 
 
 [dark.general]
-bar_background =  "rgba(63, 63, 63, 0.8)"
-shadow_color =  "rgba(0, 0, 0, 0.6)"
+bar-background =  "rgba(63, 63, 63, 0.8)"
+shadow-color =  "rgba(0, 0, 0, 0.6)"
 
 
 [light.background]
@@ -49,8 +49,8 @@ main =  "#232333"  # Primary text color (light gray)
 secondary =  "#4a4a4a"  # Secondary text color (medium gray)
 muted =  "#737373"  # Tertiary text, muted (soft gray)
 disabled =  "#939393"  # Disabled text (gray)
-muted_light =  "#838383"  # Light-muted text for hints (medium gray)
-muted_dark =  "#c3c3c3"  # Dark-muted text (charcoal)
+muted-light =  "#838383"  # Light-muted text for hints (medium gray)
+muted-dark =  "#c3c3c3"  # Dark-muted text (charcoal)
 
 
 [light.surface]
@@ -69,10 +69,10 @@ yellow =  "#285050"  # Yellow for highlights (soft yellow)
 green =  "#a080a0"  # Green for success (muted green)
 teal =  "#704370"  # Teal for information (muted teal)
 blue =  "#785050"  # Blue for links and actions (cool grayish blue)
-light_blue =  "#785050"  # Sky blue accent (soft teal)
+light-blue =  "#785050"  # Sky blue accent (soft teal)
 lavender =  "#608072"  # Lavender for subtle highlights (muted lavender)
 
 
 [light.general]
-bar_background =  "rgba(63, 63, 63, 0.8)"
-shadow_color =  "rgba(0, 0, 0, 0.6)"
+bar-background =  "rgba(63, 63, 63, 0.8)"
+shadow-color =  "rgba(0, 0, 0, 0.6)"

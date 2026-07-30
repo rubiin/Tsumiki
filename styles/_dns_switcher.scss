@@ -1,9 +1,14 @@
 @use "theme";
 @use "common";
+@use "variable";
 @use "sass:color";
 
 #dns_switcher {
-  @include common.widget_border(16px, false, 1px);
+  @include common.widget_border(
+    variable.$bar-widgets-dns_switcher-border-radius,
+    variable.$bar-widgets-dns_switcher-border-enabled,
+    variable.$bar-widgets-dns_switcher-border-width
+  );
 }
 
 #dns-switcher-popover {

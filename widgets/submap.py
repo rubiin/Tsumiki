@@ -1,10 +1,9 @@
-from fabric.hyprland import HyprlandReply
-from fabric.hyprland.widgets import get_hyprland_connection
+from fabric.hyprland.widgets import HyprlandEvent
 from fabric.utils import logger
 from fabric.widgets.label import Label
 
 from shared.widget_container import ButtonWidget
-from utils.functions import parse_hyprland_reply
+from utils.hyprland import hyprland_service
 from utils.widget_utils import nerd_font_icon
 
 
@@ -26,53 +25,45 @@ class SubMapWidget(ButtonWidget):
             )
             self.container_box.add(self.icon)
 
-        self._hyprland_connection = get_hyprland_connection()
-
         self._register_handler(
-            self._hyprland_connection,
-            self._hyprland_connection.connect("event::submap", self._get_submap),
+            hyprland_service.connection,
+            hyprland_service.connect("event::submap", self.on_submap_event),
         )
 
         # all aboard...
-        if self._hyprland_connection.ready:
-            self.on_ready(None)
-        else:
-            self._register_handler(
-                self._hyprland_connection,
-                self._hyprland_connection.connect("event::ready", self.on_ready),
-            )
+        hyprland_service.on_ready(lambda: self.on_ready(None))
 
     def on_ready(self, _):
-        return self._get_submap(), logger.info(
-            "[Submap] Connected to the hyprland socket"
-        )
+        self._fetch_submap()
+        logger.info("[Submap] Connected to the hyprland socket")
 
-    def _handle_reply(self, res: HyprlandReply, *_):
-        try:
-            # TODO: check this
-            submap = parse_hyprland_reply(res)
-            if submap == "unknown request":
-                submap = "default"
+    def _update_display(self, submap: str):
+        """Update label, visibility, and tooltip with the given submap name."""
+        if submap == "unknown request":
+            submap = "default"
 
-            self.submap_label.set_label(submap)
+        self.submap_label.set_label(submap)
 
-            if self.config.get("hide_on_default", False) and submap == "default":
-                self.hide()
+        if self.config.get("hide_on_default", False) and submap == "default":
+            self.hide()
 
-            if self.config.get("tooltip", False) and self.tooltips_enabled:
-                self.set_tooltip_text(
-                    f"Current submap: {submap}",
-                )
-        except Exception as e:
-            logger.exception(f"[Submap] Failed to parse submap data: {e}")
+        if self.config.get("tooltip", False) and self.tooltips_enabled:
+            self.set_tooltip_text(f"Current submap: {submap}")
 
-    def _get_submap(self, *_):
-        try:
-            # TODO use the data from the event
-            self._hyprland_connection.send_command_async(
-                "submap",
-                self._handle_reply,
-            )
+    def on_submap_event(self, _, event: HyprlandEvent):
+        """Handle event::submap — use the event data directly, no extra hyprctl call."""
+        if not event.data:
+            return
+        # event.data is a tuple with the submap name as the first element
+        submap = event.data[0] if isinstance(event.data, (list, tuple)) else event.data
+        self._update_display(str(submap))
 
-        except Exception as e:
-            logger.exception(f"[Submap] Error getting submap: {e}")
+    def _handle_submap_data(self, data, *_):
+        if data is None:
+            return
+        submap = data if isinstance(data, str) else str(data)
+        self._update_display(submap)
+
+    def _fetch_submap(self):
+        """Send an async hyprctl submap query — used only for initial load."""
+        hyprland_service.get_submap_async(self._handle_submap_data)
