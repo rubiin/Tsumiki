@@ -1,8 +1,9 @@
 import warnings
 
 from fabric.hyprland import Hyprland
-from fabric.hyprland.widgets import get_hyprland_connection
 from fabric.utils import Gdk, GLib, bulk_connect, logger
+
+from utils.hyprland import hyprland_service
 
 from .constants import MONITOR_HOTPLUG_DELAY_MS
 from .functions import parse_hyprland_reply
@@ -109,8 +110,7 @@ class MonitorWatcher:
         if self._hyprland_connection:
             return
 
-        self._hyprland_connection = get_hyprland_connection()
-
+        self._hyprland_connection = hyprland_service.connection
         bulk_connect(
             self._hyprland_connection,
             {

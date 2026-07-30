@@ -2,7 +2,7 @@ import json
 from collections import defaultdict
 from math import ceil
 
-from fabric.utils import exec_shell_command, logger
+from fabric.utils import logger
 from fabric.widgets.box import Box
 from fabric.widgets.button import Button
 from fabric.widgets.label import Label
@@ -10,6 +10,7 @@ from fabric.widgets.stack import Stack
 
 from shared.mixins import PopoverMixin
 from shared.widget_container import ButtonWidget
+from utils.hyprland import hyprland_service
 from utils.widget_utils import nerd_font_icon
 
 _MODMASK_MAP = {
@@ -121,30 +122,35 @@ class CheatSheetMenu(Box):
         self._build_pages()
 
     def _load_groups(self):
-        loaded_groups = self._load_hyprland_groups()
-        if loaded_groups:
-            return loaded_groups
+        # Start async load of Hyprland binds via the IPC connection
+        hyprland_service.send_command_async(
+            "binds -j", self._on_binds_reply
+        )
 
+        # Show fallback groups until the async reply comes
         return [
             {
-                "title": "Hyprland",
+                "title": "Loading…",
                 "entries": [
                     {
                         "keys": "N/A",
-                        "description": "No keybinds from hyprctl binds -j",
+                        "description": "Loading keybinds from Hyprland…",
                     }
                 ],
             }
         ]
 
-    def _load_hyprland_groups(self):
-        """Load and group keybinds from hyprctl binds -j."""
+    def _on_binds_reply(self, reply, *_):
+        """Handle the async binds -j reply."""
+        if reply is None:
+            logger.debug("[Cheatsheet] Failed to load hyprctl binds")
+            return
+
         try:
-            output = exec_shell_command("hyprctl binds -j")
-            binds = json.loads(output)
+            binds = json.loads(reply.reply.decode().strip("\n"))
         except Exception as error:
-            logger.debug(f"[Cheatsheet] Failed to load hyprctl binds: {error}")
-            return []
+            logger.debug(f"[Cheatsheet] Failed to parse hyprctl binds: {error}")
+            return
 
         grouped_entries: dict[str, list[dict[str, str]]] = defaultdict(list)
 
@@ -177,7 +183,7 @@ class CheatSheetMenu(Box):
                 }
             )
 
-        groups = [
+        self.groups = [
             {
                 "title": title,
                 "entries": entries,
@@ -186,7 +192,9 @@ class CheatSheetMenu(Box):
             if entries
         ]
 
-        return groups
+        # Recalculate page count and rebuild pages with the real data
+        self.total_pages = max(1, ceil(len(self.groups) / self.groups_per_page))
+        self._build_pages()
 
     def _build_pages(self):
         self.stack.children = []

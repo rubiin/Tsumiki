@@ -1,7 +1,6 @@
 import json
 
 from fabric.hyprland import HyprlandReply
-from fabric.hyprland.widgets import get_hyprland_connection
 from fabric.utils import Gdk, GLib, Gtk, bulk_connect, logger, truncate
 from fabric.widgets.box import Box
 from fabric.widgets.button import Button
@@ -20,7 +19,7 @@ from utils.functions import (
     read_json_file,
     write_json_file,
 )
-from utils.hyprland import NativeClient
+from utils.hyprland import HyprlandClient, hyprland_service
 from utils.icon_resolver import IconResolver
 from utils.widget_settings import BarConfig
 
@@ -177,7 +176,8 @@ class AppBar(BoxWidget):
             "dock-button",
         ]
         self.icon_resolver = IconResolver()
-        self._hyprland_connection = get_hyprland_connection()
+        self._service = hyprland_service
+        self._hyprland_connection = self._service.connection
 
         pinned_align = "h_align" if is_vertical else "v_align"
         self.pinned_apps_container = Box(
@@ -364,7 +364,7 @@ class AppBar(BoxWidget):
                 if item.get("workspace", {}).get("id", -1) <= 0:
                     continue
 
-                client = NativeClient(item, self._hyprland_connection, active_address)
+                client = HyprlandClient(item, active_address)
                 app_id = client.get_app_id()
                 if not app_id or app_id in self.config.get("ignored_apps", []):
                     continue
@@ -421,18 +421,18 @@ class AppBar(BoxWidget):
             return True
         return False
 
-    def _check_if_pinned(self, client: NativeClient) -> bool:
+    def _check_if_pinned(self, client: HyprlandClient) -> bool:
         """Check if a client is pinned."""
         return client.get_app_id() in self.pinned_apps
 
-    def _open_new_window(self, client: NativeClient):
+    def _open_new_window(self, client: HyprlandClient):
         app = self.app_util.find_app(client.get_app_id())
         if app:
             app.launch()
         else:
             logger.warning(f"[Dock] No application found for {client.get_app_id()}")
 
-    def _toggle_floating(self, client: NativeClient):
+    def _toggle_floating(self, client: HyprlandClient):
         hex_address = client.get_address_str()
         if hex_address:
             self._hyprland_connection.send_command_async(
@@ -440,7 +440,7 @@ class AppBar(BoxWidget):
                 lambda _: None,
             )
 
-    def _toggle_fullscreen(self, client: NativeClient):
+    def _toggle_fullscreen(self, client: HyprlandClient):
         try:
             if client.get_fullscreen():
                 client.unfullscreen()
@@ -449,7 +449,7 @@ class AppBar(BoxWidget):
         except Exception as e:
             logger.exception(f"[Dock] Failed to toggle fullscreen: {e}")
 
-    def _move_to_workspace(self, client: NativeClient, workspace: int):
+    def _move_to_workspace(self, client: HyprlandClient, workspace: int):
         hex_address = client.get_address_str()
         if hex_address:
             self._hyprland_connection.send_command_async(
@@ -457,7 +457,7 @@ class AppBar(BoxWidget):
                 lambda _: None,
             )
 
-    def _close_running_app(self, client: NativeClient):
+    def _close_running_app(self, client: HyprlandClient):
         try:
             # Try to close the client gracefully first
             client.close()
@@ -489,7 +489,7 @@ class AppBar(BoxWidget):
                 self.menu.remove(item)
                 item.destroy()
 
-    def _build_client_submenu(self, client: NativeClient) -> Gtk.Menu:
+    def _build_client_submenu(self, client: HyprlandClient) -> Gtk.Menu:
         """Build a submenu for a single client with toggle, close, workspace."""
         submenu = Gtk.Menu()
 
@@ -523,7 +523,7 @@ class AppBar(BoxWidget):
         return submenu
 
     def _build_common_menu_items(
-        self, client: NativeClient, clients: list | None = None
+        self, client: HyprlandClient, clients: list | None = None
     ):
         """Build common menu items (close all, pin/unpin, new window)."""
         items = []
@@ -571,14 +571,14 @@ class AppBar(BoxWidget):
         """Save pinned apps to file."""
         write_json_file(PINNED_APPS_FILE, self.pinned_apps)
 
-    def _pin_running_app(self, client: NativeClient):
+    def _pin_running_app(self, client: HyprlandClient):
         app_id = client.get_app_id()
         if not self._check_if_pinned(client):
             self.pinned_apps.append(app_id)
             self._add_pinned_app_button(app_id)
             self._save_pinned_apps()
 
-    def _unpin_app(self, client: NativeClient):
+    def _unpin_app(self, client: HyprlandClient):
         app_id = client.get_app_id()
         if self._check_if_pinned(client):
             self.pinned_apps.remove(app_id)
@@ -597,7 +597,7 @@ class AppBar(BoxWidget):
             client.get_title() if self.config.get("tooltip", True) else None
         )
 
-    def _get_app_id_safe(self, client: NativeClient) -> str | None:
+    def _get_app_id_safe(self, client: HyprlandClient) -> str | None:
         """Safely get app_id, returning None if not available yet."""
         try:
             app_id = client.get_app_id()
@@ -616,7 +616,7 @@ class AppBar(BoxWidget):
         active_idx = next((i for i, c in enumerate(clients) if c.get_activated()), -1)
         clients[(active_idx + 1) % len(clients)].activate()
 
-    def _create_app_group(self, app_id: str, clients: list[NativeClient]):
+    def _create_app_group(self, app_id: str, clients: list[HyprlandClient]):
         is_vertical = self.orientation == "vertical"
         indicator = MultiDotIndicator(
             count=max(1, len(clients)),
@@ -710,7 +710,7 @@ class AppBar(BoxWidget):
 
         self._set_active_state(group["button"], any(c.get_activated() for c in clients))
 
-    def _sync_grouped_clients(self, clients: list[NativeClient]):
+    def _sync_grouped_clients(self, clients: list[HyprlandClient]):
         grouped = {}
         for client in clients:
             grouped.setdefault(client.get_app_id(), []).append(client)
@@ -734,7 +734,7 @@ class AppBar(BoxWidget):
             entry["box"].destroy()
         self._running_app_count = 0
 
-    def _add_ungrouped_client(self, client: NativeClient):
+    def _add_ungrouped_client(self, client: HyprlandClient):
         client_image = Image(size=self.icon_size)
         client_image.set_from_pixbuf(
             self.icon_resolver.get_icon_pixbuf(client.get_app_id(), self.icon_size)
@@ -799,7 +799,7 @@ class AppBar(BoxWidget):
             self.remove(group["box"])
             group["box"].destroy()
 
-    def _sync_ungrouped_clients(self, clients: list[NativeClient]):
+    def _sync_ungrouped_clients(self, clients: list[HyprlandClient]):
         self._clear_grouped_clients()
 
         target = {c.get_address_str(): c for c in clients if c.get_address_str()}
@@ -829,7 +829,7 @@ class AppBar(BoxWidget):
             client = entry["client"]
             self._set_active_state(entry["button"], client.get_activated())
 
-    def _show_context_menu(self, clients: list[NativeClient]):
+    def _show_context_menu(self, clients: list[HyprlandClient]):
         app_id = clients[0].get_app_id() if clients else ""
         self._render_context_menu(
             {
@@ -961,7 +961,7 @@ class Dock(BaseWindow):
             self.config.get("show_when_no_windows", False)
             and self.config.get("behavior", "always_hide") == "intellihide"
         ):
-            self._hyprland_connection = get_hyprland_connection()
+            self._hyprland_connection = hyprland_service.connection
 
             bulk_connect(
                 self._hyprland_connection,

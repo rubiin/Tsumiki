@@ -1,7 +1,7 @@
 import mimetypes
 
 from fabric.core.service import Signal
-from fabric.utils import Gtk, exec_shell_command_async, logger, os
+from fabric.utils import Gtk, logger, os
 from fabric.widgets.box import Box
 from fabric.widgets.grid import Grid
 from fabric.widgets.image import Image
@@ -13,6 +13,7 @@ from shared.popup import PopupWindow
 from utils.constants import WALLPAPER_DIR, WALLPAPER_THUMBS_DIR
 from utils.decorators import run_in_thread
 from utils.functions import ensure_directory
+from utils.hyprland import hyprland_service
 
 
 class ImageButton(HoverButton):
@@ -39,8 +40,9 @@ class ImageButton(HoverButton):
         self.wallpaper_change(self.wp_path)
 
     def _set_wallpaper_from_image(self):
-        exec_shell_command_async(
-            f"hyprctl hyprpaper reload ,'{self.wp_path}'", self.on_wallpaper_change
+        hyprland_service.send_command_async(
+            f"hyprpaper reload ,'{self.wp_path}'",
+            lambda *_: self.on_wallpaper_change(),
         )
 
     @run_in_thread

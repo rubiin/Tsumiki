@@ -1,7 +1,5 @@
-from fabric.hyprland.widgets import get_hyprland_connection
 from fabric.utils import (
     cooldown,
-    exec_shell_command_async,
     invoke_repeater,
     remove_handler,
 )
@@ -10,6 +8,7 @@ from fabric.widgets.scale import Scale
 from shared.buttons import QSChevronButton
 from shared.submenu import QuickSubMenu
 from utils.functions import is_app_running, toggle_command
+from utils.hyprland import hyprland_service
 from utils.icons import get_text_icon
 from utils.widget_utils import (
     create_scale,
@@ -21,8 +20,6 @@ class HyprSunsetSubMenu(QuickSubMenu):
 
     def __init__(self, **kwargs):
         self.scan_button = None
-
-        self._hyprland_connection = get_hyprland_connection()
 
         self.scale = create_scale(
             name="hyprsunset-scale",
@@ -54,18 +51,27 @@ class HyprSunsetSubMenu(QuickSubMenu):
     @cooldown(0.1)
     def on_scale_move(self, scale: Scale):
         temperature = int(scale.get_value())
-        exec_shell_command_async(
-            f"hyprctl hyprsunset temperature {temperature}",
+        hyprland_service.send_command_async(
+            f"hyprsunset temperature {temperature}",
             lambda *_: self._update_ui(temperature),
         )
         return True
 
+    def _on_temp_reply(self, reply, *_):
+        if reply is None:
+            return
+        try:
+            temp_str = reply.reply.decode().strip("\n").strip('"')
+            self._update_ui(temp_str)
+        except Exception:
+            pass
+
     def update_scale(self, *_):
         if is_app_running("hyprsunset"):
             self.scale.set_sensitive(True)
-            exec_shell_command_async(
-                "hyprctl hyprsunset temperature",
-                self._update_ui,
+            hyprland_service.send_command_async(
+                "hyprsunset temperature",
+                self._on_temp_reply,
             )
         else:
             self.scale.set_sensitive(False)

@@ -1,10 +1,9 @@
 import contextlib
-import json
 from typing import ClassVar
 
-from fabric.hyprland.widgets import get_hyprland_connection
 from fabric.utils import GObject, logger
 
+from utils.hyprland import hyprland_service
 from utils.icons import symbolic_icons
 
 from ..osd import GenericOSDContainer
@@ -30,6 +29,7 @@ class LockkeysOSDContainer(GenericOSDContainer):
         self.config = config
         self.previous_capslock = None
         self.previous_numlock = None
+        self._event_handler_id = None
 
         # Create text display for locks
         from fabric.widgets.label import Label
@@ -44,8 +44,7 @@ class LockkeysOSDContainer(GenericOSDContainer):
         self.children = (self.icon, self.lock_label)
 
         # Subscribe to Hyprland event — fires on keyboard layout changes
-        self._hyprland_connection = get_hyprland_connection()
-        self._event_handler_id = self._hyprland_connection.connect(
+        self._event_handler_id = hyprland_service.connect(
             "event::activelayout", self._on_activelayout
         )
 
@@ -58,16 +57,14 @@ class LockkeysOSDContainer(GenericOSDContainer):
 
     def _query_lock_state(self) -> bool:
         """Query current lock state via Hyprland socket (async)."""
-        self._hyprland_connection.send_command_async(
-            "j/devices",
-            self._on_devices_reply,
-        )
+        hyprland_service.get_devices_async(self._on_devices_data)
         return True
 
-    def _on_devices_reply(self, reply, *_):
+    def _on_devices_data(self, data, *_):
         """Parse j/devices reply for capslock/numlock."""
+        if data is None:
+            return
         try:
-            data = json.loads(reply.reply.decode().strip("\n"))
             keyboards = data.get("keyboards", [])
             main_kb = next((kb for kb in keyboards if kb.get("main")), None)
             if main_kb is None:
@@ -83,7 +80,7 @@ class LockkeysOSDContainer(GenericOSDContainer):
                 self._update_display(caps, num)
                 self.emit("locks-changed")
 
-        except (json.JSONDecodeError, KeyError, TypeError, AttributeError) as e:
+        except (KeyError, TypeError, AttributeError) as e:
             logger.warning(f"[LockkeysOSD] Parse error: {e}")
 
     def _update_display(self, caps: bool, num: bool):
@@ -112,7 +109,7 @@ class LockkeysOSDContainer(GenericOSDContainer):
         """Clean up signal handlers on destroy."""
         if self._event_handler_id is not None:
             with contextlib.suppress(Exception):
-                self._hyprland_connection.disconnect(self._event_handler_id)
+                hyprland_service.disconnect(self._event_handler_id)
             self._event_handler_id = None
 
     def do_destroy(self):
