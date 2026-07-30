@@ -105,19 +105,6 @@ self.add(self.container_box)
 **Savings**: Removes 1 Box per button widget (~30+ widgets × 1 Box = 30+ fewer nodes).
 
 
-### 41. Unnecessary Widget Nesting — Bar CenterBox Wraps Each Section in Redundant Box
-**Files**: `modules/bar.py`
-**Effort**: Medium | **Impact**: Low
-
-`Bar.__init__()` creates a `CenterBox` where each section (`start_children`, `center_children`, `end_children`) is wrapped in its own `Box(... spacing=4, orientation="h", children=...)`. Each widget in those lists is already a `ButtonWidget` (or similar) that handles its own padding and styling.
-
-```python
-# Current — CenterBox → 3 Boxes → N buttons
-self.box = CenterBox(
-    start_children=Box(spacing=4, orientation="h", children=layout["left_section"]),
-    center_children=Box(spacing=4, orientation="h", children=layout["middle_section"]),
-    end_children=Box(spacing=4, orientation="h", children=layout["right_section"]),
-)
 
 # Fix — Pass lists directly if CenterBox accepts them, or add spacing via CSS
 ```
@@ -135,11 +122,11 @@ Check if `CenterBox` accepts flat lists. If not, the 3 Box wrappers are required
 
 ```python
 # Current
-children=[Box(v_align="center", children=[indicator]), client_button]
+children = [Box(v_align="center", children=[indicator]), client_button]
 
 # Fix — set valign on indicator directly
 indicator.set_valign(Gtk.Align.CENTER)
-children=[indicator, client_button]
+children = [indicator, client_button]
 ```
 
 Same issue in `_add_ungrouped_client()` where `DotIndicator()` is wrapped in a single-child Box.
@@ -147,25 +134,7 @@ Same issue in `_add_ungrouped_client()` where `DotIndicator()` is wrapped in a s
 **Savings**: Removes 1 Box per running app / group — could be dozens.
 
 
-### 43. Unnecessary Widget Nesting — Dock Auto-Hide Uses Box Spacers Instead of CSS Padding
-**Files**: `modules/dock.py` (lines 943-950)
-**Effort**: Small | **Impact**: Low
 
-When dock behavior is `intellihide` or `always_hide`, `Dock.__init__()` creates:
-
-```python
-CenterBox(
-    start_children=Box(style="min-height: 5px; min-width: 10px;"),  ← spacer widget
-    center_children=self.revealer,
-    end_children=Box(style="min-height: 5px; min-width: 10px;"),   ← spacer widget
-)
-```
-
-These are invisible spacer widgets. The same effect can be achieved with CSS `padding` on the CenterBox or EventBox parent.
-
-**Fix**: Move `min-height` / `min-width` to parent CSS padding or margin.
-
-**Savings**: 2 Box widgets per dock instantiation.
 
 
 ## 🥈 Medium Priority (New)
@@ -199,27 +168,7 @@ The `Padding` EventBox can just receive the `style` directly and skip the inner 
 **Savings**: 1-3 container widgets removed per popup.
 
 
-### 45. Unnecessary Widget Nesting — NotificationRevealer Wraps NotificationWidget in Extra Box
-**Files**: `modules/notification.py` (lines 562-568)
-**Effort**: Small | **Impact**: Low
-
-`NotificationRevealer.__init__()` creates:
-```python
-self._content_box = Box(
-    style="margin: 12px;",
-    children=[self.notification_box],
-)
-super().__init__(
-    child=self._content_box,
-    ...
-)
-```
-
-This is `Revealer` → `Box` (margin) → `NotificationWidget(EventBox)` → `Box` (notification) → children. The `margin: 12px` on the Box can be applied as `padding` on the `NotificationWidget`'s inner `notification_box` directly.
-
-**Fix**: Move `margin: 12px` into the `#notification` CSS selector and remove the `_content_box` wrapper.
-
-**Savings**: 1 Box per active notification.
+#
 
 
 ### 46. Unnecessary Widget Nesting — Dock Revealer Extra Box Wrapper
@@ -257,17 +206,6 @@ Many widgets only have **one child** (just the icon) or **two** (icon + text lab
 
 ## 🥉 Lower Priority (New)
 
-### 48. Redundant `style_classes` List Arguments in Widget Constructors — ✅ Fixed
-**Files**: `shared/buttons.py`, `shared/widget_container.py`, multiple widgets
-**Effort**: Small | **Impact**: Low
-
-~~Several places pass string literals as single-element lists for `style_classes`:~~
-
-~~`style_classes=["panel-box"]`~~ → `style_classes="panel-box"`
-
-**Fix**: Use bare strings for single classes.
-
-**Resolution**: 177 occurrences converted across 56 files. Fabric's `Widget.__init__` accepts `style_classes: Iterable[str] | str | None`, and internally calls `add_style_class()` which splits strings by whitespace and iterates lists identically. ✓
 
 
 ### 49. `shared/widget_container.py` — `EventBoxWidget` Always Creates `container_box` Even if Empty
@@ -278,16 +216,6 @@ Many widgets only have **one child** (just the icon) or **two** (icon + text lab
 
 **Fix**: Lazily create `container_box` only when children are actually added, or allow opting out.
 
-
-### 50. `modules/bar.py` — `CenterBox` Section Boxes With `spacing=4` Where CSS Could Suffice — ✅ Fixed
-**Files**: `modules/bar.py`, `styles/common/_common.scss`
-**Effort**: Trivial | **Impact**: Trivial
-
-~~`start_children=Box(spacing=4, orientation="h", children=...)`~~
-
-**Fix**: Move section spacing to CSS. CSS selector `#panel-inner > * > * { margin: 0 2px; }` replaced `spacing=4` on the three section Boxes in `modules/bar.py`.
-
-**Note**: The suggested selector `#panel-inner > *` in the original analysis was incorrect — that targets the section Boxes themselves, not the widget children within them. The correct selector is `#panel-inner > * > *`.
 
 
 ## 🔥 High Priority (New)

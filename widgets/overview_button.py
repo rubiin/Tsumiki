@@ -19,9 +19,7 @@ class OverviewButtonWidget(ButtonWidget):
         )
 
         if self.config.get("label", True):
-            self.container_box.add(
-                Label(label="overview", style_classes="panel-text")
-            )
+            self.container_box.add(Label(label="overview", style_classes="panel-text"))
 
         # Lazy-init overview popup
         self._overview_popup = None

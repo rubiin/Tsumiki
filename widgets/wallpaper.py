@@ -25,9 +25,7 @@ class WallpaperWidget(ButtonWidget):
 
         # Optional label
         if cfg.get("label", True):
-            self.container_box.add(
-                Label(label="wallpaper", style_classes="panel-text")
-            )
+            self.container_box.add(Label(label="wallpaper", style_classes="panel-text"))
 
         # Lazy-init wallpaper popup
         self._wallpaper_popup = None

@@ -265,9 +265,7 @@ class BreathingMenu(BoxWidget):
             h_align="start",
         )
 
-        self._cycle_label = Label(
-            label="", style_classes="info-label", h_align="start"
-        )
+        self._cycle_label = Label(label="", style_classes="info-label", h_align="start")
 
         text_col.pack_start(self._phase_label, False, False, 0)
         text_col.pack_start(self._countdown_label, False, False, 0)

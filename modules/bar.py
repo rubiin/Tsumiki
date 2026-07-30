@@ -151,18 +151,9 @@ class Bar(BaseWindow):
         # Main bar content (back to original CenterBox layout)
         self.box = CenterBox(
             name="panel-inner",
-            start_children=Box(
-                orientation="h",
-                children=layout["left_section"],
-            ),
-            center_children=Box(
-                orientation="h",
-                children=layout["middle_section"],
-            ),
-            end_children=Box(
-                orientation="h",
-                children=layout["right_section"],
-            ),
+            start_children=layout["left_section"],
+            center_children=layout["middle_section"],
+            end_children=layout["right_section"],
         )
 
         anchor = f"left {bar_config.get('location', 'top')} right"

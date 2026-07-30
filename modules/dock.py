@@ -936,19 +936,11 @@ class Dock(BaseWindow):
             child = self.revealer
         else:
             # Adjust CenterBox for vertical orientation
-            if is_vertical:
-                centerbox = CenterBox(
-                    orientation="vertical",
-                    center_children=self.revealer,
-                    start_children=Box(style="min-height: 5px; min-width: 10px;"),
-                    end_children=Box(style="min-height: 5px; min-width: 10px;"),
-                )
-            else:
-                centerbox = CenterBox(
-                    center_children=self.revealer,
-                    start_children=Box(style="min-height: 10px; min-width: 5px;"),
-                    end_children=Box(style="min-height: 10px; min-width: 5px;"),
-                )
+            centerbox = CenterBox(
+                orientation="vertical" if is_vertical else "horizontal",
+                start_children=Box(style="min-height: 5px; min-width: 10px;"),
+                center_children=self.revealer,
+            )
 
             child = EventBox(
                 events=["enter-notify", "leave-notify"],

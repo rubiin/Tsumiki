@@ -541,14 +541,9 @@ class NotificationRevealer(Revealer):
         self._is_closing = False
         self._closed_handler_id = None
 
-        self._content_box = Box(
-            style="margin: 12px;",
-            children=[self.notification_box],
-        )
-
         super().__init__(
             name="notification-revealer",
-            child=self._content_box,
+            child=self.notification_box,
             transition_duration=config.get("transition_duration", 200),
             transition_type=config.get("transition_type", "slide-up"),
             **kwargs,
@@ -569,7 +564,8 @@ class NotificationRevealer(Revealer):
             notification,
         )
         self.timeout = self.notification_box.get_timeout()
-        self._content_box.children = [self.notification_box]
+
+        self.add(self.notification_box)
 
         self._closed_handler_id = self._notification.connect("closed", self.on_resolved)
 
