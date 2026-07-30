@@ -34,9 +34,9 @@ $workspace-transition:
 
     // Base button styles shared by all variants — transition emitted once
     & > button {
-      padding: variable.$bar-widgets-workspaces-pill-height
-        variable.$bar-widgets-workspaces-pill-width;
       transition: $workspace-transition;
+      min-height: variable.$bar-widgets-workspaces-pill-height;
+      min-width: variable.$bar-widgets-workspaces-pill-width;
       border-radius: variable.$radius-large;
       background-color: color.adjust(theme.$accent-orange, $alpha: -0.2);
 
@@ -81,7 +81,7 @@ $workspace-transition:
 
   .numbered {
     @include workspace-variant {
-      padding: 0.19em 1em;
+      padding: 0em 1em;
 
       &:hover {
         padding-left: 20px;
