@@ -1,19 +1,10 @@
 @use "sass:color";
 @use "theme";
-@use "variable";
-@use "common";
-
-%player-text {
-  color: theme.$text-main;
-  background-color: transparent;
-  text-shadow: 1px 1px 3px theme.$general-shadow-color;
-}
 
 #player-stack-button {
   border-radius: 9999px;
   min-width: 6px;
   min-height: 6px;
-  margin: 10px 4px;
   background-color: color.mix(theme.$surface-disabled, transparent, 70%);
   transition: all 150ms ease-in-out;
 
@@ -52,25 +43,21 @@
 }
 
 #player-box {
-  $player-width: variable.$quicksettings-width + 40;
+  border-radius: 25px;
+  padding: 20px;
+  background-color: color.mix(theme.$general-shadow-color, transparent, 40%);
+  background-blend-mode: multiply;
+  background-position: center;
+  background-size: cover;
+  border: 1px solid color.adjust(theme.$surface-disabled, $alpha: -0.6);
 
-  $player-height: 130px;
-  $image-size: 120px;
-  min-height: $image-size + 4;
-
-  $inner-player-width: $player-width - $image-size / 2;
-
-  #outer-player-box {
-    min-width: $player-width;
-    min-height: $image-size;
+  #player-dot-box {
+    margin-top: 8px;
   }
 
-  @include common.slider(
-    $min-length: $inner-player-width - 80,
-    $height: 7px,
-    $highlight-color: theme.$text-muted,
-    $knob: variable.$bar-widgets-quick_settings-sliders-knob
-  );
+  #player-main-row {
+    #player-meta-col {
+      min-width: 0;
 
       #player-title {
         font-weight: 600;
@@ -78,50 +65,49 @@
         color: theme.$text-main;
       }
 
-  #inner-player-box {
-    border-radius: 19px;
-    margin-left: $image-size / 2;
-    min-width: $inner-player-width;
-    min-height: $player-height;
-    opacity: 0.6;
-  }
+      #player-artist {
+        font-weight: 400;
+        font-size: 11px;
+        color: theme.$text-secondary;
+        margin-top: 2px;
+      }
 
-  #player-info-box {
-    margin-left: $image-size + 10;
-    min-width: $player-width - $image-size - 20;
-  }
+      #player-time {
+        font-weight: 400;
+        font-size: 12px;
+        color: theme.$text-muted;
+        margin-top: 3px;
+      }
 
-  #track-info {
-    min-width: $player-width - $image-size - 20;
-  }
+      #player-controls-row {
+        margin-top: 8px;
+        min-height: 22px;
 
-  #player-image-stack {
-    border-radius: 100%;
-    box-shadow: 0 0 4px 0 theme.$general-shadow-color;
-  }
+        #player-prev,
+        #player-next,
+        #player-shuffle {
+          min-width: 20px;
+          min-height: 20px;
+          border-radius: 100%;
+          background: none;
+          padding: 0;
 
-  #player-title {
-    margin-top: 18px;
-    font-weight: 700;
-    font-size: 1rem;
-    @extend %player-text;
-  }
+          .player-icon-sm {
+            font-size: 15px;
+            color: theme.$text-main;
+          }
 
-  #player-artist,
-  #player-album {
-    font-weight: 500;
-    font-size: 12px;
-    @extend %player-text;
-  }
+          &:disabled {
+            opacity: 0.3;
+          }
+        }
 
-  #player-controls {
-    margin-top: 5px;
-    margin-bottom: 15px;
-
-    .time-label {
-      @extend %caption;
-      @extend %player-text;
-      font-weight: 600;
+        #player-shuffle.active {
+          .player-icon-sm {
+            color: color.mix(theme.$text-main, theme.$accent-teal, 50%);
+          }
+        }
+      }
     }
 
     #player-play-pause {
@@ -141,19 +127,7 @@
 
       &:hover {
         border-radius: 100%;
-
-        &:hover {
-          background: theme.$background-alt;
-          box-shadow: 0 0 2px -3px theme.$general-shadow-color;
-        }
-
-        &:active {
-          box-shadow: 0 0 4px -1px theme.$general-shadow-color;
-        }
-
-        &:disabled {
-          color: theme.$text-disabled;
-        }
+        box-shadow: inset color.adjust(theme.$text-main, $alpha: -0.4) 0 0 10px;
       }
 
       &:active {

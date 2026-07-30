@@ -151,7 +151,9 @@
   $min-length: ""
 ) {
   trough {
-    transition: background-color 200ms, border-color 200ms;
+    transition:
+      background-color 200ms,
+      border-color 200ms;
     border-radius: $radius;
     border: variable.$border;
     background-color: $slider-color;
@@ -182,7 +184,10 @@
       border-color: variable.$border-color;
       box-shadow: 0 0 3px 0 theme.$general-shadow-color;
       border: variable.$border-width solid transparent;
-      transition: background-color 200ms, border-color 200ms, box-shadow 200ms;
+      transition:
+        background-color 200ms,
+        border-color 200ms,
+        box-shadow 200ms;
       border-radius: variable.$radius-large;
       min-height: $height;
       min-width: $height;

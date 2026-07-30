@@ -67,6 +67,8 @@ class StyleService(SingletonService):
         self._compile_lock = threading.Lock()
         self._compiling = False
 
+        check_executable_exists("sass")
+
         self._config = tsumiki_config
         self._styling_config = self._config.get("styling", {})
 
@@ -345,12 +347,12 @@ class StyleService(SingletonService):
     # ── CSS compilation (moved from utils/functions.py) ─────────
 
     @staticmethod
-    def _apply_css_to_app():
+    def _apply_css_to_app(file):
         """Load the compiled CSS file into the running application."""
         try:
             app = Application.get_default()
             if app:
-                app.set_stylesheet_from_file(get_relative_path(CSS_PATH))
+                app.set_stylesheet_from_file(file)
                 logger.info(f"{Colors.INFO}[Theme] CSS applied to application")
         except Exception as e:
             logger.exception(f"{Colors.ERROR}[Theme] Error applying CSS to app: {e}")
@@ -361,6 +363,7 @@ class StyleService(SingletonService):
 
         Uses a ``_compiling`` flag + lock to skip concurrent compilations
         — if sass is already running, subsequent calls return early.
+        Errors are printed to stderr and logged.
         """
         with self._compile_lock:
             if self._compiling:
@@ -369,18 +372,22 @@ class StyleService(SingletonService):
             self._compiling = True
 
         try:
-            check_executable_exists("sass")
             logger.info(f"{Colors.INFO}[Theme] Recompiling CSS")
             output = exec_shell_command(
                 f"sass styles/main.scss {CSS_PATH} --no-source-map"
             )
 
+            print(f"{Colors.INFO}[Theme] CSS compilation output:\n{output}")
+
             if output == "":
-                logger.info(f"{Colors.INFO}[Theme] CSS recompiled successfully")
-                idle_add(self._apply_css_to_app)
+                logger.info(f"{Colors.INFO}[Main] CSS applied")
+                idle_add(lambda: self._apply_css_to_app(get_relative_path(CSS_PATH)))
             else:
-                logger.exception(f"{Colors.ERROR}[Theme] Failed to compile sass!")
-                logger.exception(f"{Colors.ERROR}[Theme] {output}")
+                logger.exception(f"{Colors.ERROR}[Main]Failed to compile sass!")
+                logger.exception(f"{Colors.ERROR}[Main] {output}")
+
+                idle_add(lambda: self._apply_css_to_app(""))
+
         except Exception as e:
             logger.exception(f"{Colors.ERROR}[Theme] Error recompiling CSS: {e}")
         finally:
