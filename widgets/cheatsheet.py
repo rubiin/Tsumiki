@@ -123,9 +123,7 @@ class CheatSheetMenu(Box):
 
     def _load_groups(self):
         # Start async load of Hyprland binds via the IPC connection
-        hyprland_service.send_command_async(
-            "binds -j", self._on_binds_reply
-        )
+        hyprland_service.send_command_async("binds -j", self._on_binds_reply)
 
         # Show fallback groups until the async reply comes
         return [

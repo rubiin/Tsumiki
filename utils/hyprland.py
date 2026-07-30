@@ -52,9 +52,7 @@ class HyprlandService:
 
     def send_command_async(self, command: str, callback=None):
         """Send a raw hyprctl command asynchronously."""
-        self._connection.send_command_async(
-            command, callback or self._send_noop
-        )
+        self._connection.send_command_async(command, callback or self._send_noop)
 
     def on_ready(self, callback):
         """Invoke *callback* when the Hyprland socket is ready.
