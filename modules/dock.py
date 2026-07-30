@@ -624,6 +624,12 @@ class AppBar(BoxWidget):
             spacing=3,
             orientation="vertical" if is_vertical else "horizontal",
         )
+        # Center indicator within the group box
+        if is_vertical:
+            indicator.set_valign(Gtk.Align.CENTER)
+        else:
+            indicator.set_halign(Gtk.Align.CENTER)
+
         client_image = Image(size=self.icon_size)
         client_button = self._bake_button(image=client_image)
 
@@ -632,14 +638,14 @@ class AppBar(BoxWidget):
                 orientation="horizontal",
                 spacing=0,
                 h_align="center",
-                children=[Box(v_align="center", children=[indicator]), client_button],
+                children=[indicator, client_button],
             )
         else:
             box = Box(
                 orientation="vertical",
                 spacing=4,
                 v_align="center",
-                children=[client_button, Box(h_align="center", children=[indicator])],
+                children=[client_button, indicator],
             )
 
         box._dock_app_id = app_id
@@ -746,20 +752,27 @@ class AppBar(BoxWidget):
 
         client_button = self._bake_button(image=client_image)
 
+        indicator = DotIndicator()
         is_vertical = self.orientation == "vertical"
+        # Center indicator within the group box
+        if is_vertical:
+            indicator.set_valign(Gtk.Align.CENTER)
+        else:
+            indicator.set_halign(Gtk.Align.CENTER)
+
         if is_vertical:
             box = Box(
                 orientation="horizontal",
                 spacing=0,
                 h_align="center",
-                children=[DotIndicator(), client_button],
+                children=[indicator, client_button],
             )
         else:
             box = Box(
                 orientation="vertical",
                 spacing=4,
                 v_align="center",
-                children=[client_button, DotIndicator()],
+                children=[client_button, indicator],
             )
 
         box._dock_client_address = address

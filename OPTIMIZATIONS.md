@@ -106,37 +106,6 @@ self.add(self.container_box)
 
 
 
-# Fix — Pass lists directly if CenterBox accepts them, or add spacing via CSS
-```
-
-Check if `CenterBox` accepts flat lists. If not, the 3 Box wrappers are required but `spacing=4` could be moved to CSS (`#panel-inner > * > * { margin: 0 2px; }`).
-
-**Savings**: 3 redundant Box nodes per bar instantiation.
-
-
-### 42. Unnecessary Widget Nesting — Dock AppGroup Wraps Single Widget in Inner Box
-**Files**: `modules/dock.py` (lines 631-643)
-**Effort**: Small | **Impact**: Low
-
-`_create_app_group()` creates a Box with `children=[Box(v_align="center", children=[indicator]), client_button]`. The inner `Box(v_align="center", children=[indicator])` wraps a **single child** just for `v_align` alignment. `MultiDotIndicator` (a `Gtk.DrawingArea`) supports `v_align` directly as a constructor kwarg or can be set with `.set_valign()`.
-
-```python
-# Current
-children = [Box(v_align="center", children=[indicator]), client_button]
-
-# Fix — set valign on indicator directly
-indicator.set_valign(Gtk.Align.CENTER)
-children = [indicator, client_button]
-```
-
-Same issue in `_add_ungrouped_client()` where `DotIndicator()` is wrapped in a single-child Box.
-
-**Savings**: Removes 1 Box per running app / group — could be dozens.
-
-
-
-
-
 ## 🥈 Medium Priority (New)
 
 ### 44. Unnecessary Widget Nesting — Popup Layout Creates Up to 5 Nested Containers
