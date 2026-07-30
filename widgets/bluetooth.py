@@ -24,7 +24,7 @@ class BlueToothWidget(ButtonWidget):
         )
 
         if self.config.get("label", True):
-            self.bt_label = Label(label="On", style_classes=["panel-text"])
+            self.bt_label = Label(label="On", style_classes="panel-text")
             self.container_box.add(self.bt_label)
 
         self.bluetooth_client = BluetoothClient()

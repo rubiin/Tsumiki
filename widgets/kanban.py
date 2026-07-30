@@ -42,13 +42,13 @@ class InlineEditor(Box):
             name="kanban-btn",
             child=Label(name="kanban-btn-label", markup=get_text_icon("ui.tick")),
             on_clicked=self.on_confirm,
-            style_classes=["flat"],
+            style_classes="flat",
         )
 
         cancel_btn = Button(
             name="kanban-btn",
             child=Label(name="kanban-btn-neg", markup=get_text_icon("ui.window_close")),
-            style_classes=["flat"],
+            style_classes="flat",
             on_clicked=self.on_cancel,
         )
 
@@ -402,7 +402,7 @@ class KanbanWidget(ButtonWidget, PopoverMixin):
         )
 
         if self.config.get("label", True):
-            self.container_box.add(Label(label="Kanban", style_classes=["panel-text"]))
+            self.container_box.add(Label(label="Kanban", style_classes="panel-text"))
 
         if self.config.get("tooltip", False) and self.tooltips_enabled:
             self.set_tooltip_text("Kanban Board")

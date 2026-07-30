@@ -14,7 +14,6 @@ from functools import lru_cache
 from io import BytesIO
 from typing import Any, Callable, Iterable, List, Literal, Optional, TypeVar
 
-import psutil
 from fabric.hyprland import HyprlandReply
 from fabric.utils import (
     Gdk,
@@ -628,20 +627,6 @@ def is_valid_gjs_color(color: str) -> bool:
         return True
 
     return bool(RGB_RE.match(color_lower) or RGBA_RE.match(color_lower))
-
-
-# Function to get the system uptime
-def uptime() -> str:
-    boot_time = psutil.boot_time()
-    now = datetime.now()
-
-    diff = now.timestamp() - boot_time
-
-    # Convert the difference in seconds to hours and minutes
-    hours, remainder = divmod(diff, 3600)
-    minutes, _ = divmod(remainder, 60)
-
-    return f"{int(hours):02}:{int(minutes):02}"
 
 
 # Function to convert seconds to milliseconds

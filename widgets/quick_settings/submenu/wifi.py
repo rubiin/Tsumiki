@@ -204,14 +204,14 @@ class WifiSubMenu(QuickSubMenu):
 
         ap_container.end_children = Label(
             markup=f"<b>{security_label}</b>",
-            style_classes=["wifi-ap-status-label"],
+            style_classes="wifi-ap-status-label",
             v_align="center",
         )
 
         ap_btn_container = Button(
             child=ap_container,
             h_expand=True,
-            style_classes=["wifi-ap-button"],
+            style_classes="wifi-ap-button",
         )
 
         wifi_item.add(ap_btn_container)

@@ -40,7 +40,7 @@ class CustomButtonWidget(ButtonWidget):
         # Setup label if specified
         if self.config.get("label", True):
             label_text = self.config.get("label_text", "Button")
-            self.label = Label(label=label_text, style_classes=["panel-text"])
+            self.label = Label(label=label_text, style_classes="panel-text")
             self.container_box.add(self.label)
 
         # Connect click handler

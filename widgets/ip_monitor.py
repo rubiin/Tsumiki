@@ -52,14 +52,14 @@ class IPMonitorPopoverContent(Box):
     def _build_ui(self):
         self.title = Label(
             label="IP Information",
-            style_classes=["ip-monitor-title"],
+            style_classes="ip-monitor-title",
             h_align="start",
             h_expand=True,
         )
 
         self.refresh_btn = Button(
             name="ip-monitor-refresh-btn",
-            style_classes=["ip-monitor-refresh-btn"],
+            style_classes="ip-monitor-refresh-btn",
             child=Box(
                 spacing=6,
                 children=[
@@ -69,7 +69,7 @@ class IPMonitorPopoverContent(Box):
                     ),
                     Label(
                         label="Refresh",
-                        style_classes=["ip-monitor-refresh-label"],
+                        style_classes="ip-monitor-refresh-label",
                     ),
                 ],
             ),
@@ -89,12 +89,12 @@ class IPMonitorPopoverContent(Box):
         )
         self.hero_ip = Label(
             label="-",
-            style_classes=["ip-monitor-hero-ip"],
+            style_classes="ip-monitor-hero-ip",
             h_align="center",
         )
         self.hero_location = Label(
             label="-",
-            style_classes=["ip-monitor-hero-location"],
+            style_classes="ip-monitor-hero-location",
             h_align="center",
         )
 
@@ -108,7 +108,7 @@ class IPMonitorPopoverContent(Box):
 
         self.details_title = Label(
             label="Details",
-            style_classes=["ip-monitor-section-title"],
+            style_classes="ip-monitor-section-title",
             h_align="start",
         )
 
@@ -133,12 +133,12 @@ class IPMonitorPopoverContent(Box):
         ]:
             key_label = Label(
                 label=f"{field_label}:",
-                style_classes=["ip-monitor-detail-key"],
+                style_classes="ip-monitor-detail-key",
                 h_align="start",
             )
             value_label = Label(
                 label="-",
-                style_classes=["ip-monitor-detail-value"],
+                style_classes="ip-monitor-detail-value",
                 h_align="start",
             )
             row = Box(
@@ -151,7 +151,7 @@ class IPMonitorPopoverContent(Box):
 
         self.last_updated = Label(
             label="",
-            style_classes=["ip-monitor-last-updated"],
+            style_classes="ip-monitor-last-updated",
             h_align="end",
         )
 
@@ -309,7 +309,7 @@ class IPMonitorWidget(ButtonWidget, PopoverMixin):
             self.container_box.add(
                 Label(
                     label=self.config.get("label_text", "IP"),
-                    style_classes=["panel-text"],
+                    style_classes="panel-text",
                 )
             )
 

@@ -40,7 +40,7 @@ class USBManagerMenu(Box, TeardownMixin):
             label="USB Manager",
             h_align="start",
             name="usb-manager-title",
-            style_classes=["panel-text"],
+            style_classes="panel-text",
         )
 
         self.title_icon = nerd_font_icon(
@@ -80,7 +80,7 @@ class USBManagerMenu(Box, TeardownMixin):
 
         self.unmount_all_button = HoverButton(
             name="usb-manager-unmount-all",
-            style_classes=["usb-manager-btn"],
+            style_classes="usb-manager-btn",
             child=self._build_button_content(
                 icon="󱘖",
                 label="Unmount All",
@@ -89,7 +89,7 @@ class USBManagerMenu(Box, TeardownMixin):
         )
         self.eject_all_button = HoverButton(
             name="usb-manager-eject-all",
-            style_classes=["usb-manager-btn"],
+            style_classes="usb-manager-btn",
             child=self._build_button_content(
                 icon="⏏",
                 label="Eject All",
@@ -469,7 +469,7 @@ class USBManagerMenu(Box, TeardownMixin):
                     icon=icon,
                     props={"style_classes": ["panel-font-icon", "btn-icon"]},
                 ),
-                Label(label=label, style_classes=["panel-text"]),
+                Label(label=label, style_classes="panel-text"),
             ],
         )
 
@@ -555,7 +555,7 @@ class USBManagerWidget(ButtonWidget, PopoverMixin):
         )
 
         if self.config.get("label", False):
-            self.container_box.add(Label(label="USB", style_classes=["panel-text"]))
+            self.container_box.add(Label(label="USB", style_classes="panel-text"))
 
         if self.config.get("tooltip", True) and self.tooltips_enabled:
             self.set_tooltip_text("USB Manager")

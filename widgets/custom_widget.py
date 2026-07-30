@@ -313,7 +313,7 @@ class CustomWidget(ButtonWidget):
         else:
             self.icon = None
 
-        self.text_label = Label(label="", style_classes=["panel-text"])
+        self.text_label = Label(label="", style_classes="panel-text")
         self.container_box.add(self.text_label)
 
         rotation = self.module_config.get("rotate", 0)

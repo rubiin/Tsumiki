@@ -36,7 +36,7 @@ class LockkeysOSDContainer(GenericOSDContainer):
 
         self.lock_label = Label(
             label="",
-            style_classes=["osd-lock-label"],
+            style_classes="osd-lock-label",
             name="lock-label",
         )
 

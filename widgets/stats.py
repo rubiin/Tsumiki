@@ -304,7 +304,7 @@ class NetworkUsageWidget(FabricatorBoundWidget):
         self.mb_digits = self.config.get("mb_digits", 2)
 
         self.network_label = Label(
-            name="network_label", label="0 MB", style_classes=["panel-text"]
+            name="network_label", label="0 MB", style_classes="panel-text"
         )
 
         self.container_box.children = [self.network_label]

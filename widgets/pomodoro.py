@@ -340,7 +340,7 @@ class PomodoroWidget(ButtonWidget, PopoverMixin):
             self.container_box.add(
                 Label(
                     label=self.config.get("label_text", "Pomo"),
-                    style_classes=["panel-text"],
+                    style_classes="panel-text",
                 )
             )
 

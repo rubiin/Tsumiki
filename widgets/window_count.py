@@ -13,7 +13,7 @@ class WindowCountWidget(ButtonWidget):
 
         self._service = hyprland_service
 
-        self.count_label = Label(label="0", style_classes=["panel-text"])
+        self.count_label = Label(label="0", style_classes="panel-text")
         self.container_box.add(self.count_label)
 
         for hid in bulk_connect(

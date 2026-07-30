@@ -952,7 +952,7 @@ class ClipBoardWidget(ButtonWidget, PopoverMixin):
         )
 
         if self.config.get("label", True):
-            self.container_box.add(Label(label="Clip", style_classes=["panel-text"]))
+            self.container_box.add(Label(label="Clip", style_classes="panel-text"))
 
         if self.config.get("tooltip", False) and self.tooltips_enabled:
             self.set_tooltip_text("Clipboard History")

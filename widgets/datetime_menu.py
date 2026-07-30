@@ -89,7 +89,7 @@ class DateMenuNotification(Box):
         self.close_button = Button(
             name="close-button",
             v_align="center",
-            style_classes=["close-button"],
+            style_classes="close-button",
             child=nerd_font_icon(
                 icon=get_text_icon("ui.window_close"),
                 props={"style_classes": ["panel-font-icon", "close-icon"]},
@@ -100,7 +100,7 @@ class DateMenuNotification(Box):
         header_row = Box(
             spacing=4,
             orientation="h",
-            style_classes=["notification-header"],
+            style_classes="notification-header",
         )
         header_row.children = (
             Label(
@@ -108,19 +108,19 @@ class DateMenuNotification(Box):
                 h_align="start",
                 h_expand=True,
                 line_wrap="word-char",
-                style_classes=["summary"],
+                style_classes="summary",
                 name="date-menu-notification-summary",
             ),
             Label(
                 label=self._format_time(),
                 v_align="center",
-                style_classes=["timestamp"],
+                style_classes="timestamp",
             ),
         )
         if badge_count is not None:
             self.badge_label = Label(
                 label=str(badge_count),
-                style_classes=["notification-group-badge-label"],
+                style_classes="notification-group-badge-label",
                 name="notification-group-badge-label",
             )
             header_row.pack_end(
@@ -137,7 +137,7 @@ class DateMenuNotification(Box):
             orientation="v",
             h_expand=True,
             spacing=4,
-            style_classes=["notification-content"],
+            style_classes="notification-content",
             v_align="center",
         )
         content_box.children = (
@@ -224,7 +224,7 @@ class DateNotificationMenu(Box):
 
             # Placeholder for when there are no notifications
             self.placeholder = Box(
-                style_classes=["placeholder"],
+                style_classes="placeholder",
                 orientation="v",
                 h_align="center",
                 v_align="center",
@@ -240,7 +240,7 @@ class DateNotificationMenu(Box):
                     ),
                     Label(
                         label="Your all caught up!",
-                        style_classes=["placeholder-text"],
+                        style_classes="placeholder-text",
                     ),
                 ),
             )
@@ -253,7 +253,7 @@ class DateNotificationMenu(Box):
             )
 
             notification_column_header = Box(
-                style_classes=["header"],
+                style_classes="header",
                 orientation="h",
                 children=(
                     Label(label="Do Not Disturb", name="dnd-text"),
@@ -284,7 +284,7 @@ class DateNotificationMenu(Box):
 
             self.scrolled_window = ScrolledWindow(
                 v_expand=True,
-                style_classes=["notification-scrollable"],
+                style_classes="notification-scrollable",
                 v_scrollbar_policy="automatic",
                 h_scrollbar_policy="never",
                 child=Box(children=(self.placeholder, self.notifications_listbox)),
@@ -306,7 +306,7 @@ class DateNotificationMenu(Box):
 
         if config.get("calendar", True):
             date_column = Box(
-                style_classes=["date-column"],
+                style_classes="date-column",
                 orientation="v",
                 children=(
                     DateTime(
@@ -316,7 +316,7 @@ class DateNotificationMenu(Box):
                         name="clock",
                     ),
                     Box(
-                        style_classes=["calendar"],
+                        style_classes="calendar",
                         v_expand=True,
                         children=(
                             Gtk.Calendar(
@@ -495,7 +495,7 @@ class DateNotificationMenu(Box):
         close_all_button = Button(
             name="notification-group-close-all-button",
             v_align="center",
-            style_classes=["close-button"],
+            style_classes="close-button",
             child=nerd_font_icon(
                 icon=get_text_icon("ui.window_close"),
                 props={"style_classes": ["panel-font-icon", "close-icon"]},
@@ -507,7 +507,7 @@ class DateNotificationMenu(Box):
 
         group_header = Box(
             name="notification-group-header",
-            style_classes=["notification-group-header"],
+            style_classes="notification-group-header",
             orientation="h",
             h_expand=True,
             spacing=6,
@@ -518,11 +518,11 @@ class DateNotificationMenu(Box):
                     label=app_name,
                     h_expand=True,
                     h_align="start",
-                    style_classes=["notification-group-title"],
+                    style_classes="notification-group-title",
                 ),
                 Label(
                     label=str(count),
-                    style_classes=["notification-group-count"],
+                    style_classes="notification-group-count",
                 ),
                 collapse_button,
                 close_all_button,
@@ -533,7 +533,7 @@ class DateNotificationMenu(Box):
             notification=notifications[0],
             id=self._notification_id(notifications[0]) or 0,
             badge_count=count,
-            style_classes=["notification-group-top"],
+            style_classes="notification-group-top",
         )
         top_notification.close_button.set_visible(expanded)
         if top_notification.badge_label is not None:

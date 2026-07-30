@@ -176,13 +176,13 @@ class DnsSwitcherPopover(Box):
                             h_align="start",
                             v_align="center",
                             h_expand=True,
-                            style_classes=["dns-provider-label"],
+                            style_classes="dns-provider-label",
                         ),
                         Label(
                             label=f"{prov['primary']}",
                             h_align="end",
                             v_align="center",
-                            style_classes=["dns-provider-ip"],
+                            style_classes="dns-provider-ip",
                         ),
                     ],
                 ),
@@ -275,7 +275,7 @@ class DnsSwitcherWidget(ButtonWidget, PopoverMixin):
         # ── Dynamic label (like original: shows current provider name) ──
         self._label = Label(
             label=self.config.get("label_text", "DNS"),
-            style_classes=["panel-text"],
+            style_classes="panel-text",
         )
         self.container_box.add(self._label)
 

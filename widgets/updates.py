@@ -40,7 +40,7 @@ class UpdatesWidget(ButtonWidget):
             self.container_box.add(self.icon)
 
         if self.config.get("label", True):
-            self.update_label = Label(label="0", style_classes=["panel-text"])
+            self.update_label = Label(label="0", style_classes="panel-text")
 
             if self.config.get("hover_reveal", True):
                 self.revealer = Revealer(

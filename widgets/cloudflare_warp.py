@@ -141,7 +141,7 @@ class CloudflareWarpWidget(ButtonWidget, PopoverMixin):
             self.container_box.add(
                 Label(
                     label=self.config.get("label_text", "WARP"),
-                    style_classes=["panel-text"],
+                    style_classes="panel-text",
                 )
             )
 

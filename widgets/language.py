@@ -17,7 +17,7 @@ class LanguageWidget(ButtonWidget):
         if language_widget is None:
             self.lang = Label(
                 label=self.config.get("fallback_label", "N/A"),
-                style_classes=["panel-text"],
+                style_classes="panel-text",
             )
         else:
             self.lang = language_widget(
@@ -27,7 +27,7 @@ class LanguageWidget(ButtonWidget):
                     length=self.config.get("truncation_size", 10),
                     suffix="",
                 ),
-                style_classes=["panel-text"],
+                style_classes="panel-text",
             )
 
         if self.config.get("show_icon", True):

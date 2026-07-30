@@ -41,7 +41,7 @@ class PowerProfileItem(HoverButton):
                 ),
                 Label(
                     label=profile,
-                    style_classes=["submenu-item-label"],
+                    style_classes="submenu-item-label",
                 ),
             ),
         )
@@ -79,7 +79,7 @@ class PowerProfileSubMenu(QuickSubMenu):
             orientation="v",
             name="power-profile-container",
             spacing=8,
-            style_classes=["power-profile-container"],
+            style_classes="power-profile-container",
         )
 
         super().__init__(

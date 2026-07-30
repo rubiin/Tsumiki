@@ -159,7 +159,7 @@ class EmojiPickerMenu(Box):
             h_align="center",
             v_align="center",
             children=[
-                Label(label="Loading emojis...", style_classes=["dim-label"]),
+                Label(label="Loading emojis...", style_classes="dim-label"),
             ],
         )
         self.stack.add(loading_box)
@@ -423,7 +423,7 @@ class EmojiPickerWidget(ButtonWidget, PopoverMixin):
         )
 
         if self.config.get("label", True):
-            self.container_box.add(Label(label="Emoji", style_classes=["panel-text"]))
+            self.container_box.add(Label(label="Emoji", style_classes="panel-text"))
 
         if self.config.get("tooltip", False) and self.tooltips_enabled:
             self.set_tooltip_text("Emoji Picker")

@@ -76,6 +76,222 @@ Uses `Gio.Subprocess.new()` with manual `Gio.Task` callbacks instead of `exec_sh
 
 ## 🔥 High Priority (New)
 
+### 40. Unnecessary Widget Nesting — EventBoxWidget Wraps Single-Child in Extra Box
+**Files**: `shared/widget_container.py`
+**Effort**: Small | **Impact**: Medium
+
+`EventBoxWidget.__init__()` creates an `EventBox` → adds a `Box(container_box)` → adds children to that Box. Every widget using `EventBoxWidget` gets an extra Box node in the widget tree for no reason — the EventBox can hold children directly.
+
+```python
+# Current — 2 levels
+self.container_box = Box(name="widget-container", style_classes=["panel-box"])
+self.add(self.container_box)  # EventBox → unnecessary Box
+
+# Fix — 1 level; apply style_classes + name directly to EventBox
+self.add(self.container_box)  # → remove, add children to self directly
+```
+
+Similarly `ButtonWidget` does `Button` → `Box` (`container_box`) → children. Buttons can hold child widgets directly. The `widget-container` CSS class can be applied to the Button itself.
+
+```python
+# Current
+self.container_box = Box(style_classes=["widget-container"])
+self.add(self.container_box)
+
+# Fix — remove container_box, add children directly to Button
+# Button inherits from Bin — supports single child natively
+```
+
+**Savings**: Removes 1 Box per button widget (~30+ widgets × 1 Box = 30+ fewer nodes).
+
+
+### 41. Unnecessary Widget Nesting — Bar CenterBox Wraps Each Section in Redundant Box
+**Files**: `modules/bar.py`
+**Effort**: Medium | **Impact**: Low
+
+`Bar.__init__()` creates a `CenterBox` where each section (`start_children`, `center_children`, `end_children`) is wrapped in its own `Box(... spacing=4, orientation="h", children=...)`. Each widget in those lists is already a `ButtonWidget` (or similar) that handles its own padding and styling.
+
+```python
+# Current — CenterBox → 3 Boxes → N buttons
+self.box = CenterBox(
+    start_children=Box(spacing=4, orientation="h", children=layout["left_section"]),
+    center_children=Box(spacing=4, orientation="h", children=layout["middle_section"]),
+    end_children=Box(spacing=4, orientation="h", children=layout["right_section"]),
+)
+
+# Fix — Pass lists directly if CenterBox accepts them, or add spacing via CSS
+```
+
+Check if `CenterBox` accepts flat lists. If not, the 3 Box wrappers are required but `spacing=4` could be moved to CSS (`#panel-inner > * > * { margin: 0 2px; }`).
+
+**Savings**: 3 redundant Box nodes per bar instantiation.
+
+
+### 42. Unnecessary Widget Nesting — Dock AppGroup Wraps Single Widget in Inner Box
+**Files**: `modules/dock.py` (lines 631-643)
+**Effort**: Small | **Impact**: Low
+
+`_create_app_group()` creates a Box with `children=[Box(v_align="center", children=[indicator]), client_button]`. The inner `Box(v_align="center", children=[indicator])` wraps a **single child** just for `v_align` alignment. `MultiDotIndicator` (a `Gtk.DrawingArea`) supports `v_align` directly as a constructor kwarg or can be set with `.set_valign()`.
+
+```python
+# Current
+children=[Box(v_align="center", children=[indicator]), client_button]
+
+# Fix — set valign on indicator directly
+indicator.set_valign(Gtk.Align.CENTER)
+children=[indicator, client_button]
+```
+
+Same issue in `_add_ungrouped_client()` where `DotIndicator()` is wrapped in a single-child Box.
+
+**Savings**: Removes 1 Box per running app / group — could be dozens.
+
+
+### 43. Unnecessary Widget Nesting — Dock Auto-Hide Uses Box Spacers Instead of CSS Padding
+**Files**: `modules/dock.py` (lines 943-950)
+**Effort**: Small | **Impact**: Low
+
+When dock behavior is `intellihide` or `always_hide`, `Dock.__init__()` creates:
+
+```python
+CenterBox(
+    start_children=Box(style="min-height: 5px; min-width: 10px;"),  ← spacer widget
+    center_children=self.revealer,
+    end_children=Box(style="min-height: 5px; min-width: 10px;"),   ← spacer widget
+)
+```
+
+These are invisible spacer widgets. The same effect can be achieved with CSS `padding` on the CenterBox or EventBox parent.
+
+**Fix**: Move `min-height` / `min-width` to parent CSS padding or margin.
+
+**Savings**: 2 Box widgets per dock instantiation.
+
+
+## 🥈 Medium Priority (New)
+
+### 44. Unnecessary Widget Nesting — Popup Layout Creates Up to 5 Nested Containers
+**Files**: `shared/popup.py`
+**Effort**: Medium | **Impact**: Medium
+
+`PopupWindow` uses `make_layout()` which creates:
+`BaseWindow` → `Box` (horizontal) → `Box` (_make_v_column) → `Padding(EventBox → Box)` → `PopupRevealer(EventBox → Revealer → child)`
+
+That's **6 container widgets** before the actual content. The `Padding` class is itself `EventBox(child=Box(...))` — an EventBox wrapping a Box.
+
+```python
+# Current — Padding class
+class Padding(EventBox):
+    def __init__(self, ..., style=""):
+        super().__init__(
+            child=Box(style=style, h_expand=True, v_expand=True),  # ← redundant Box
+            ...
+        )
+```
+
+The `Padding` EventBox can just receive the `style` directly and skip the inner `Box`. Also, for the `top`, `bottom`, and `center` layouts, the padding could be CSS on the parent Box instead of extra EventBox children.
+
+**Fix**:
+- Remove `Padding` inner Box, apply style to EventBox directly (or use CSS on parent)
+- For `top`/`bottom` layouts, use CSS `margin` on the popup instead of spacer Padding widgets
+- For `center` layout, use CSS flexbox-style centering instead of 3 Padding widgets
+
+**Savings**: 1-3 container widgets removed per popup.
+
+
+### 45. Unnecessary Widget Nesting — NotificationRevealer Wraps NotificationWidget in Extra Box
+**Files**: `modules/notification.py` (lines 562-568)
+**Effort**: Small | **Impact**: Low
+
+`NotificationRevealer.__init__()` creates:
+```python
+self._content_box = Box(
+    style="margin: 12px;",
+    children=[self.notification_box],
+)
+super().__init__(
+    child=self._content_box,
+    ...
+)
+```
+
+This is `Revealer` → `Box` (margin) → `NotificationWidget(EventBox)` → `Box` (notification) → children. The `margin: 12px` on the Box can be applied as `padding` on the `NotificationWidget`'s inner `notification_box` directly.
+
+**Fix**: Move `margin: 12px` into the `#notification` CSS selector and remove the `_content_box` wrapper.
+
+**Savings**: 1 Box per active notification.
+
+
+### 46. Unnecessary Widget Nesting — Dock Revealer Extra Box Wrapper
+**Files**: `modules/dock.py` (lines 928-931)
+**Effort**: Trivial | **Impact**: Low
+
+```python
+self.revealer = Revealer(
+    child=Box(children=[self._app_bar], style=padding_style),
+    ...
+)
+```
+
+The `Box` wrapping `self._app_bar` is unnecessary. The `padding_style` can be applied directly to the AppBar (`BoxWidget`) or to the Revealer itself (GTK3 Revealer supports CSS padding).
+
+**Fix**: Apply `padding_style` to `self._app_bar` styling instead of wrapping in a Box.
+
+**Savings**: 1 Box per dock.
+
+
+### 47. Many Widgets Use `nerd_font_icon()` Result Wrapped in Additional Container
+**Files**: `widgets/battery.py`, `widgets/volume.py`, `widgets/brightness.py`, `widgets/power_button.py`, etc.
+**Effort**: Medium | **Impact**: Low
+
+`nerd_font_icon()` returns a `Label`. Many widgets then add this Label to a `ButtonWidget.container_box` (which is a `Box`). That means `ButtonWidget(Button)` → `Box(container_box)` → `Label(nerd_font_icon)`. Since `Button` is a `Gtk.Bin` (single-child container), the middle Box is often serving as a pass-through just for multiple children.
+
+Many widgets only have **one child** (just the icon) or **two** (icon + text label). For the single-child case, the icon Label can be set directly as the Button's child, skipping container_box entirely. For two-child cases, a Box is still needed but could be the direct container without the widget-container name/style overhead.
+
+**Fix**: Add a `set_child()` method to `ButtonWidget` that sets the button's direct child for single-child widgets, bypassing `container_box`.
+
+**Savings**: 1 Box per single-child widget (~half of all widgets).
+
+
+---
+
+## 🥉 Lower Priority (New)
+
+### 48. Redundant `style_classes` List Arguments in Widget Constructors — ✅ Fixed
+**Files**: `shared/buttons.py`, `shared/widget_container.py`, multiple widgets
+**Effort**: Small | **Impact**: Low
+
+~~Several places pass string literals as single-element lists for `style_classes`:~~
+
+~~`style_classes=["panel-box"]`~~ → `style_classes="panel-box"`
+
+**Fix**: Use bare strings for single classes.
+
+**Resolution**: 177 occurrences converted across 56 files. Fabric's `Widget.__init__` accepts `style_classes: Iterable[str] | str | None`, and internally calls `add_style_class()` which splits strings by whitespace and iterates lists identically. ✓
+
+
+### 49. `shared/widget_container.py` — `EventBoxWidget` Always Creates `container_box` Even if Empty
+**Files**: `shared/widget_container.py` (line 144)
+**Effort**: Trivial | **Impact**: Low
+
+`EventBoxWidget.__init__()` always creates `self.container_box = Box(name=..., style_classes=...)` and adds it, even if the subclass never adds children. At minimum this is an invisible empty Box in the widget tree.
+
+**Fix**: Lazily create `container_box` only when children are actually added, or allow opting out.
+
+
+### 50. `modules/bar.py` — `CenterBox` Section Boxes With `spacing=4` Where CSS Could Suffice — ✅ Fixed
+**Files**: `modules/bar.py`, `styles/common/_common.scss`
+**Effort**: Trivial | **Impact**: Trivial
+
+~~`start_children=Box(spacing=4, orientation="h", children=...)`~~
+
+**Fix**: Move section spacing to CSS. CSS selector `#panel-inner > * > * { margin: 0 2px; }` replaced `spacing=4` on the three section Boxes in `modules/bar.py`.
+
+**Note**: The suggested selector `#panel-inner > *` in the original analysis was incorrect — that targets the section Boxes themselves, not the widget children within them. The correct selector is `#panel-inner > * > *`.
+
+
+## 🔥 High Priority (New)
+
 ### 16. LockKeys OSD Polls hyprctl at 200ms — 5x/second Subprocess Spawn
 **Files**: `modules/osds/lockkeys.py`, `utils/constants.py`
 **Effort**: Small | **Impact**: Medium
@@ -142,21 +358,6 @@ Similar to DnsSwitcher — polls `warp-cli status` every 5 seconds. The widget d
 
 ## 🥉 Lower Priority (New)
 
-### 29. Duplicate Functions Across shell.py and functions.py
-**Files**: `utils/shell.py`, `utils/functions.py`
-**Effort**: Small | **Impact**: Low
-
-Multiple functions are duplicated between these files:
-- `set_process_name()` — both files have the same `ctypes.CDLL("libc.so.6")` implementation
-- `kill_process()` — identical `pkill` wrapper in both
-- `is_app_running()` — identical `pidof` wrapper in both
-- `check_executable_exists()` — identical `GLib.find_program_in_path` wrapper in both
-- `play_sound()` — identical `pw-play` wrapper in both
-- `toggle_command()` — identical `subprocess.Popen` wrapper in both
-
-This creates maintenance burden and potential drift.
-
-**Fix**: Consolidate all process/shell utilities into `utils/shell.py` and import from there in `utils/functions.py`, or vice versa. Remove the duplicate definitions.
 
 
 ### 34. Notification Timer Uses invoke_repeater at 250ms for Second-Level Timeouts
@@ -191,20 +392,6 @@ Several module-level imports are only used in specific functions:
 These add import overhead at module load time even when the features are never used.
 
 **Fix**: Move these imports inside their respective functions (lazy imports). For `psutil`, it's already imported by `stats_poll()` in `widget_utils.py`, so it's already in memory — the import is fast but unnecessary.
-
-
-
-### 45. Deep Nesting in `_datemenu.scss` (7-9 levels)
-**Files**: `styles/_datemenu.scss`
-**Effort**: Medium | **Impact**: Low
-
-Selectors compile to deeply nested paths like:
-```css
-#date_time-menu #notification-column .notification-scrollable #notification-list #notification-group-row #notification-group-deck #notification-group-header .notification-group-title
-```
-The deepest ~100 lines in the notification group deck/header/items section are at depth 7+. This bloats the compiled CSS output and makes debugging harder.
-
-**Fix**: Extract deeply nested sub-components into flat top-level selectors. For example, `#notification-group-header` can be a standalone rule instead of nested 7 levels deep.
 
 
 

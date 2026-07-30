@@ -53,7 +53,7 @@ class CollapsibleGroupWidget(ButtonWidget):
             self.container_box.add(icon)
 
         if self.show_label:
-            label = Label(label=self.label_text, style_classes=["panel-text"])
+            label = Label(label=self.label_text, style_classes="panel-text")
             self.container_box.add(label)
 
     def _setup_popup(self):

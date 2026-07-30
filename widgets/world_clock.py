@@ -34,7 +34,7 @@ class WorldClockWidget(ButtonWidget):
 
         for tz_name in timezones:
             if tz_name in valid_zones:
-                label = Label(style_classes=["world-clock-label"])
+                label = Label(style_classes="world-clock-label")
                 self.container_box.pack_start(label, True, True, 0)
                 tz = ZoneInfo(tz_name)
                 self.clocks.append((label, tz))

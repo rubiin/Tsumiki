@@ -377,8 +377,6 @@ class StyleService(SingletonService):
                 f"sass styles/main.scss {CSS_PATH} --no-source-map"
             )
 
-            print(f"{Colors.INFO}[Theme] CSS compilation output:\n{output}")
-
             if output == "":
                 logger.info(f"{Colors.INFO}[Main] CSS applied")
                 idle_add(lambda: self._apply_css_to_app(get_relative_path(CSS_PATH)))

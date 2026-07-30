@@ -96,7 +96,7 @@ class BaseSystemTray:
             )
 
     def _bake_item_button(self, item: SystemTrayItemService) -> HoverButton:
-        button = HoverButton(style_classes=["flat"])
+        button = HoverButton(style_classes="flat")
 
         if self.config.get("tooltip", True) and self.tooltips_enabled:
             button.set_tooltip_text(item.get_property("title") or "")
@@ -121,7 +121,7 @@ class SystemTrayMenu(Box, BaseSystemTray):
         super().__init__(
             name="system_tray-menu",
             orientation="vertical",
-            style_classes=["panel-menu"],
+            style_classes="panel-menu",
             **kwargs,
         )
 

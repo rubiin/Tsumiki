@@ -328,7 +328,7 @@ class PlayerBox(Box):
         for i in range(count):
             dot = HoverButton(
                 name="player-stack-button",
-                style_classes=["active"] if i == active_index else [],
+                style_classes="active" if i == active_index else [],
                 on_clicked=lambda *_, idx=i: (
                     self.parent.switch_to_player(idx) if self.parent else None
                 ),

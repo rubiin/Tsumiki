@@ -22,7 +22,7 @@ class HyprPickerWidget(ButtonWidget):
             )
 
         if self.config.get("label", True):
-            self.container_box.add(Label(label="picker", style_classes=["panel-text"]))
+            self.container_box.add(Label(label="picker", style_classes="panel-text"))
 
         self.connect("button-press-event", self.on_button_press)
 

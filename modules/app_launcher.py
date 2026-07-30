@@ -75,7 +75,7 @@ class AppWidgetFactory:
             child_widget = AppWidgetFactory._create_list_layout(app, icon_size)
 
         return Button(
-            style_classes=["launcher-button"],
+            style_classes="launcher-button",
             child=child_widget,
             tooltip_text=(app.description if config.show_tooltips else None),
             h_expand=layout_mode == "grid",
@@ -100,7 +100,7 @@ class AppWidgetFactory:
             chars_width=12,
             max_chars_width=12,
             ellipsization="end",
-            style_classes=["grid-item-label"],
+            style_classes="grid-item-label",
         )
         label.set_lines(2)
 
@@ -132,7 +132,7 @@ class AppWidgetFactory:
             name="list-item",
             orientation="h",
             spacing=12,
-            style_classes=["launcher-list-item"],
+            style_classes="launcher-list-item",
             children=[
                 Image(
                     pixbuf=app.get_icon_pixbuf(icon_size),

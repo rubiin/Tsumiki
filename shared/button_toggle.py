@@ -22,7 +22,7 @@ class CommandSwitcher(ButtonWidget):
         label=True,
         args="",
         tooltip=True,
-        style_classes=[""],
+        style_classes="",
         **kwargs,
     ):
         self.command = command
@@ -54,7 +54,7 @@ class CommandSwitcher(ButtonWidget):
         if self.label:
             self.label_text = Label(
                 label="Enabled",
-                style_classes=["panel-text"],
+                style_classes="panel-text",
             )
             self.container_box.add(self.label_text)
 

@@ -26,7 +26,7 @@ class MprisWidget(ButtonWidget, PopoverMixin):
         # Scrolling track label
         self.label = ScrollingLabel(
             name="mpris-label",
-            style_classes=["panel-text"],
+            style_classes="panel-text",
             scroll_on_hover=True,
             max_width=char_limit_to_px(self, self.config.get("truncation_size", 30)),
         )

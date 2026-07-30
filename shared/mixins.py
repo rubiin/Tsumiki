@@ -199,7 +199,7 @@ class StatDisplayMixin:
 
         self.level_label = Label(
             label="0%",
-            style_classes=["panel-text"],
+            style_classes="panel-text",
         )
         container.children = (self.icon, self.level_label)
 

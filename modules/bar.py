@@ -152,17 +152,14 @@ class Bar(BaseWindow):
         self.box = CenterBox(
             name="panel-inner",
             start_children=Box(
-                spacing=4,
                 orientation="h",
                 children=layout["left_section"],
             ),
             center_children=Box(
-                spacing=4,
                 orientation="h",
                 children=layout["middle_section"],
             ),
             end_children=Box(
-                spacing=4,
                 orientation="h",
                 children=layout["right_section"],
             ),

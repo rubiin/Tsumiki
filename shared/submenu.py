@@ -51,7 +51,7 @@ class QuickSubMenu(Box):
         self.set_visible(revealer.get_reveal_child())
 
     def make_submenu_title_box(self) -> Box | None:
-        submenu_box = Box(spacing=4, style_classes=["submenu-title-box"])
+        submenu_box = Box(spacing=4, style_classes="submenu-title-box")
 
         if not self.title_icon and not self.title:
             return None
@@ -67,7 +67,7 @@ class QuickSubMenu(Box):
             )
         if self.title:
             submenu_box.add(
-                Label(style_classes=["submenu-title-label"], label=self.title)
+                Label(style_classes="submenu-title-label", label=self.title)
             )
 
         if self.scan_button is not None:

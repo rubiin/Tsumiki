@@ -20,7 +20,7 @@ class BluetoothDeviceBox(CenterBox):
     def __init__(self, device: BluetoothDevice, **kwargs):
         super().__init__(
             spacing=2,
-            style_classes=["submenu-button"],
+            style_classes="submenu-button",
             h_expand=True,
             name="bluetooth-device-box",
             **kwargs,
@@ -41,7 +41,7 @@ class BluetoothDeviceBox(CenterBox):
             "bluetooth": get_text_icon("bluetooth.enabled"),
         }
 
-        self.connect_button = HoverButton(style_classes=["submenu-button"])
+        self.connect_button = HoverButton(style_classes="submenu-button")
         self.connect_button.connect(
             "clicked",
             lambda _: self.device.set_property("connecting", not self.device.connected),
@@ -69,7 +69,7 @@ class BluetoothDeviceBox(CenterBox):
         self.add_start(
             Label(
                 label=device_name,
-                style_classes=["submenu-item-label"],
+                style_classes="submenu-item-label",
                 ellipsization="end",
             )
         )
@@ -108,7 +108,7 @@ class BluetoothSubMenu(QuickSubMenu):
                 Label(
                     label="Paired Devices",
                     h_align="start",
-                    style_classes=["panel-text"],
+                    style_classes="panel-text",
                 ),
                 self.paired_devices_listbox,
             ],
@@ -126,7 +126,7 @@ class BluetoothSubMenu(QuickSubMenu):
                     label="Available Devices",
                     h_align="start",
                     name="available-devices-label",
-                    style_classes=["panel-text"],
+                    style_classes="panel-text",
                 ),
                 self.available_devices_listbox,
             ],

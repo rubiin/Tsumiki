@@ -177,10 +177,10 @@ class WallPaperPickerOverlay(PopupWindow):
                 orientation="v",
                 spacing=10,
                 children=[
-                    Label("Wallpaper Picker", style_classes=["label-title"]),
+                    Label("Wallpaper Picker", style_classes="label-title"),
                     self.wallpaper_box,
                 ],
-                style_classes=["wallpaper-picker-box"],
+                style_classes="wallpaper-picker-box",
             ),
             transition_duration=300,
             transition_type="slide-down",

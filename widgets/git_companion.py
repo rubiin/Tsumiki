@@ -238,7 +238,7 @@ class GitCompanionPopoverContent(Box):
                 ),
                 Label(
                     label="Git Companion",
-                    style_classes=["git-companion-title"],
+                    style_classes="git-companion-title",
                     h_align="start",
                 ),
             ],
@@ -273,7 +273,7 @@ class GitCompanionPopoverContent(Box):
 
         self.avatar_box = Box(
             name="git-companion-avatar-box",
-            style_classes=["git-companion-avatar-box"],
+            style_classes="git-companion-avatar-box",
             size_request=(self.avatar_size, self.avatar_size),
         )
 
@@ -284,12 +284,12 @@ class GitCompanionPopoverContent(Box):
             children=[
                 Label(
                     label=self.client.username,
-                    style_classes=["git-companion-name"],
+                    style_classes="git-companion-name",
                     h_align="start",
                 ),
                 Label(
                     label="No bio",
-                    style_classes=["git-companion-bio"],
+                    style_classes="git-companion-bio",
                     h_align="start",
                 ),
             ],
@@ -335,7 +335,7 @@ class GitCompanionPopoverContent(Box):
     def _make_action_button(self, icon: str, tooltip: str, callback):
         return Button(
             name="git-companion-action-btn",
-            style_classes=["git-companion-action-btn"],
+            style_classes="git-companion-action-btn",
             child=nerd_font_icon(
                 icon=icon,
                 props={"style_classes": ["git-companion-action-icon"]},
@@ -347,8 +347,8 @@ class GitCompanionPopoverContent(Box):
     def _make_tab_button(self, tab: str, label: str):
         button = Button(
             name=f"git-companion-tab-{tab}",
-            style_classes=["git-companion-tab-btn"],
-            child=Label(label=label, style_classes=["git-companion-tab-label"]),
+            style_classes="git-companion-tab-btn",
+            child=Label(label=label, style_classes="git-companion-tab-label"),
             on_clicked=lambda *_: self.set_tab(tab),
         )
         button._tab_name = tab  # type: ignore[attr-defined]
@@ -475,12 +475,12 @@ class GitCompanionPopoverContent(Box):
         item_children = [
             Label(
                 label=title,
-                style_classes=["git-companion-item-title"],
+                style_classes="git-companion-item-title",
                 h_align="start",
             ),
             Label(
                 label=subtitle,
-                style_classes=["git-companion-item-subtitle"],
+                style_classes="git-companion-item-subtitle",
                 h_align="start",
             ),
         ]
@@ -488,7 +488,7 @@ class GitCompanionPopoverContent(Box):
         if description:
             description_label = Label(
                 label=description,
-                style_classes=["git-companion-item-description"],
+                style_classes="git-companion-item-description",
                 h_align="start",
                 line_wrap="word-char",
                 max_chars_width=34,
@@ -505,7 +505,7 @@ class GitCompanionPopoverContent(Box):
 
         return Button(
             name="git-companion-item",
-            style_classes=["git-companion-item"],
+            style_classes="git-companion-item",
             child=item_box,
             on_clicked=(lambda *_: exec_shell_command_async(command))
             if number
@@ -572,7 +572,7 @@ class GitCompanionWidget(ButtonWidget, PopoverMixin):
         if self.config.get("label", False):
             self.container_box.add(
                 Label(
-                    label=self.config("label_text", "Git"), style_classes=["panel-text"]
+                    label=self.config("label_text", "Git"), style_classes="panel-text"
                 )
             )
 

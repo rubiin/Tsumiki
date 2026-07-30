@@ -159,7 +159,7 @@ $hover-transition: background 0.15s ease-in-out;
 
   // circular fallback app icon
   #app-icon {
-    border-radius: 9999px;
+    border-radius: variable.$radius-large;
     background-color: color.mix(theme.$surface-neutral, theme.$background-dark, 30%);
     padding: 6px;
     min-width: 36px;

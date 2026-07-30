@@ -34,7 +34,7 @@ class OCRWidget(ButtonWidget):
             self.container_box.add(self.icon)
 
         if self.config.get("label", True):
-            self.container_box.add(Label(label="Ocr", style_classes=["panel-text"]))
+            self.container_box.add(Label(label="Ocr", style_classes="panel-text"))
 
         # Left click for OCR
         self.connect("button-press-event", self.on_button_press)

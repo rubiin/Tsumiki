@@ -68,7 +68,7 @@ class CheatSheetMenu(Box):
 
         self.title = Label(
             name="cheatsheet-title",
-            style_classes=["cheatsheet-title"],
+            style_classes="cheatsheet-title",
             label=self.config.get("title", "Hyprland Cheatsheet"),
             h_align="start",
         )
@@ -84,33 +84,33 @@ class CheatSheetMenu(Box):
 
         self.prev_button = Button(
             name="cheatsheet-nav-btn",
-            style_classes=["cheatsheet-nav-btn"],
+            style_classes="cheatsheet-nav-btn",
             child=Label(
                 name="cheatsheet-nav-icon",
-                style_classes=["cheatsheet-nav-icon"],
+                style_classes="cheatsheet-nav-icon",
                 label="<",
             ),
             on_clicked=lambda *_: self._change_page(-1),
         )
         self.next_button = Button(
             name="cheatsheet-nav-btn",
-            style_classes=["cheatsheet-nav-btn"],
+            style_classes="cheatsheet-nav-btn",
             child=Label(
                 name="cheatsheet-nav-icon",
-                style_classes=["cheatsheet-nav-icon"],
+                style_classes="cheatsheet-nav-icon",
                 label=">",
             ),
             on_clicked=lambda *_: self._change_page(1),
         )
         self.page_label = Label(
             name="cheatsheet-page-label",
-            style_classes=["cheatsheet-page-label"],
+            style_classes="cheatsheet-page-label",
             label="1/1",
         )
 
         self.pagination = Box(
             name="cheatsheet-pagination",
-            style_classes=["cheatsheet-pagination"],
+            style_classes="cheatsheet-pagination",
             orientation="h",
             spacing=8,
             h_align="center",
@@ -204,7 +204,7 @@ class CheatSheetMenu(Box):
 
             page = Box(
                 name="cheatsheet-page",
-                style_classes=["cheatsheet-page"],
+                style_classes="cheatsheet-page",
                 orientation="v",
                 spacing=8,
             )
@@ -213,7 +213,7 @@ class CheatSheetMenu(Box):
                 row_groups = page_groups[row_start : row_start + self.columns]
                 row = Box(
                     name="cheatsheet-row",
-                    style_classes=["cheatsheet-row"],
+                    style_classes="cheatsheet-row",
                     orientation="h",
                     spacing=8,
                     homogeneous=True,
@@ -226,7 +226,7 @@ class CheatSheetMenu(Box):
                 for _ in range(self.columns - len(row_groups)):
                     placeholder = Box(
                         name="cheatsheet-group-placeholder",
-                        style_classes=["cheatsheet-group-placeholder"],
+                        style_classes="cheatsheet-group-placeholder",
                         h_expand=True,
                     )
                     placeholder.set_size_request(self.group_width, -1)
@@ -241,7 +241,7 @@ class CheatSheetMenu(Box):
     def _build_group(self, group):
         box = Box(
             name="cheatsheet-group",
-            style_classes=["cheatsheet-group"],
+            style_classes="cheatsheet-group",
             orientation="v",
             spacing=6,
             h_expand=True,
@@ -250,7 +250,7 @@ class CheatSheetMenu(Box):
         box.add(
             Label(
                 name="cheatsheet-group-title",
-                style_classes=["cheatsheet-group-title"],
+                style_classes="cheatsheet-group-title",
                 label=group["title"],
                 h_align="start",
             )
@@ -261,14 +261,14 @@ class CheatSheetMenu(Box):
         for entry in shown_entries:
             row = Box(
                 name="cheatsheet-entry",
-                style_classes=["cheatsheet-entry"],
+                style_classes="cheatsheet-entry",
                 orientation="h",
                 spacing=6,
             )
             row.add(
                 Label(
                     name="cheatsheet-key",
-                    style_classes=["cheatsheet-key"],
+                    style_classes="cheatsheet-key",
                     label=entry["keys"],
                     h_align="start",
                     ellipsization="end",
@@ -278,7 +278,7 @@ class CheatSheetMenu(Box):
             row.add(
                 Label(
                     name="cheatsheet-description",
-                    style_classes=["cheatsheet-description"],
+                    style_classes="cheatsheet-description",
                     label=entry["description"],
                     h_align="start",
                     h_expand=True,
@@ -292,7 +292,7 @@ class CheatSheetMenu(Box):
             box.add(
                 Label(
                     name="cheatsheet-more",
-                    style_classes=["cheatsheet-more"],
+                    style_classes="cheatsheet-more",
                     label=f"+{len(entries) - self.max_entries_per_group} more",
                     h_align="start",
                 )
@@ -348,7 +348,7 @@ class CheatSheetWidget(ButtonWidget, PopoverMixin):
             self.container_box.add(
                 Label(
                     label=self.config.get("label_text", "Keys"),
-                    style_classes=["panel-text"],
+                    style_classes="panel-text",
                 )
             )
 

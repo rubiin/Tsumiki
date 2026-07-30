@@ -42,7 +42,7 @@ class QuickSettingsIconLabelRow(Box):
             spacing=10,
             h_align="start",
             v_align="center",
-            style_classes=["quicksettings-row"] + (row_classes or []),
+            style_classes="quicksettings-row" + (row_classes or []),
             children=(self.icon, self.label),
             **kwargs,
         )

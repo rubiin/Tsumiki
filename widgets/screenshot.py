@@ -22,7 +22,7 @@ class ScreenShotWidget(ButtonWidget):
 
         if self.config.get("label", True):
             self.container_box.add(
-                Label(label="screenshot", style_classes=["panel-text"])
+                Label(label="screenshot", style_classes="panel-text")
             )
 
         if self.config.get("tooltip", False) and self.tooltips_enabled:

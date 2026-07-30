@@ -237,7 +237,7 @@
         min-width: 12px;
         min-height: 12px;
         padding: 0 4px;
-        border-radius: 9999px;
+        border-radius: variable.$radius-large;
         background-color: theme.$accent-red;
         color: theme.$text-main;
         font-size: 10px;
@@ -257,7 +257,7 @@
           min-width: 18px;
           min-height: 18px;
           padding: 0 6px;
-          border-radius: 9999px;
+          border-radius: variable.$radius-large;
           background-color: theme.$surface-disabled;
           color: theme.$text-main;
           font-size: 11px;

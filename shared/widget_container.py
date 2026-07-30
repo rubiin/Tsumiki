@@ -135,13 +135,13 @@ class EventBoxWidget(EventBox, BaseWidget):
 
     def __init__(self, **kwargs):
         super().__init__(
-            style_classes=["panel-eventbox"],
+            style_classes="panel-eventbox",
             **kwargs,
         )
 
         widget_name = kwargs.get("name", "eventbox")
         self._init_widget_settings(widget_name)
-        self.container_box = Box(name="widget-container", style_classes=["panel-box"])
+        self.container_box = Box(name="widget-container", style_classes="panel-box")
         self.add(
             self.container_box,
         )
@@ -156,14 +156,14 @@ class ButtonWidget(Button, BaseWidget):
 
     def __init__(self, **kwargs):
         super().__init__(
-            style_classes=["panel-button"],
+            style_classes="panel-button",
             **kwargs,
         )
 
         widget_name = kwargs.get("name", "button")
         self._init_widget_settings(widget_name)
 
-        self.container_box = Box(style_classes=["widget-container"])
+        self.container_box = Box(style_classes="widget-container")
         self.add(self.container_box)
         self._connect_hover_reveal()
 

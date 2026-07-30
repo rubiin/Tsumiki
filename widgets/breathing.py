@@ -140,17 +140,17 @@ class ExerciseTile(Button):
 
         name = Label(
             label=exercise["name"],
-            style_classes=["exercise-name"],
+            style_classes="exercise-name",
             h_align="start",
             ellipsization="end",
         )
 
         timing = f"{exercise['inhale']}-{exercise['hold']}-{exercise['exhale']}"
-        tim_lbl = Label(label=timing, style_classes=["exercise-timing"], halign="start")
+        tim_lbl = Label(label=timing, style_classes="exercise-timing", halign="start")
 
         desc = Label(
             label=exercise["description"],
-            style_classes=["exercise-desc"],
+            style_classes="exercise-desc",
             h_align="start",
             ellipsization="end",
             max_chars_width=24,
@@ -200,7 +200,7 @@ class BreathingMenu(BoxWidget):
         outer = Box(orientation="vertical", spacing=0)
 
         # Header
-        hbar = Box(orientation="horizontal", spacing=0, style_classes=["header-bar"])
+        hbar = Box(orientation="horizontal", spacing=0, style_classes="header-bar")
         hbar.set_size_request(-1, 48)
 
         title_col = Box(
@@ -234,7 +234,7 @@ class BreathingMenu(BoxWidget):
         )
 
         # Status card (click to pause)
-        self._status_card = EventBox(style_classes=["status-card"])
+        self._status_card = EventBox(style_classes="status-card")
         self._status_card.connect("button-press-event", lambda *_: self._toggle_pause())
 
         card_inner = Box(
@@ -252,21 +252,21 @@ class BreathingMenu(BoxWidget):
         text_col = Box(orientation="vertical", spacing=2, v_align="center")
 
         self._phase_label = Label(
-            label="—", style_classes=["phase-label"], h_align="start"
+            label="—", style_classes="phase-label", h_align="start"
         )
 
         self._countdown_label = Label(
-            label="", style_classes=["countdown-label"], h_align="start"
+            label="", style_classes="countdown-label", h_align="start"
         )
 
         self._total_label = Label(
             label="Select an exercise and press Start",
-            style_classes=["info-label"],
+            style_classes="info-label",
             h_align="start",
         )
 
         self._cycle_label = Label(
-            label="", style_classes=["info-label"], h_align="start"
+            label="", style_classes="info-label", h_align="start"
         )
 
         text_col.pack_start(self._phase_label, False, False, 0)
@@ -282,7 +282,7 @@ class BreathingMenu(BoxWidget):
         self._grid_frame = Box(orientation="vertical", spacing=8)
 
         grid_lbl = Label(
-            label="CHOOSE AN EXERCISE", style_classes=["section-label"], h_align="start"
+            label="CHOOSE AN EXERCISE", style_classes="section-label", h_align="start"
         )
         self._grid_frame.pack_start(grid_lbl, False, False, 0)
 
@@ -309,7 +309,7 @@ class BreathingMenu(BoxWidget):
         self._duration_frame = Box(orientation="vertical", spacing=6)
 
         dur_lbl = Label(
-            label="DURATION", style_classes=["section-label"], h_align="start"
+            label="DURATION", style_classes="section-label", h_align="start"
         )
         self._duration_frame.pack_start(dur_lbl, False, False, 0)
 
@@ -328,7 +328,7 @@ class BreathingMenu(BoxWidget):
         self._dur_spin.get_style_context().add_class("dur-spin")
         self._dur_spin.connect("value-changed", self._on_spin_value_changed)
 
-        dur_unit = Label(label="min", style_classes=["section-label"])
+        dur_unit = Label(label="min", style_classes="section-label")
 
         dur_row.pack_start(self._dur_spin, True, True, 0)
         dur_row.pack_start(dur_unit, False, False, 0)
@@ -341,7 +341,7 @@ class BreathingMenu(BoxWidget):
 
         self._start_btn = Button(
             label="▶  Start",
-            style_classes=["start-btn"],
+            style_classes="start-btn",
             h_expand=True,
             on_clicked=self._on_start_clicked,
         )
@@ -349,7 +349,7 @@ class BreathingMenu(BoxWidget):
 
         self._stop_btn = Button(
             label="■  Stop",
-            style_classes=["stop-btn"],
+            style_classes="stop-btn",
             h_expand=True,
             sensitive=False,
             on_clicked=self._stop_exercise,
@@ -557,7 +557,7 @@ class BreatheWidget(ButtonWidget):
 
         self.connect("clicked", self.on_click)
 
-        self.label = Label(label="Breathe", style_classes=["breathe-label"])
+        self.label = Label(label="Breathe", style_classes="breathe-label")
         self.icon = nerd_font_icon(
             icon=get_text_icon("notifications.noisy"),
             props={

@@ -24,6 +24,7 @@ from utils.widget_utils import (
     get_audio_icon_name,
     get_brightness_icon_name,
     nerd_font_icon,
+    uptime,
 )
 
 from .components import LazyWidgetContainer
@@ -187,12 +188,12 @@ class QuickSettingsMenu(Box):
             label=username_label,
             v_align="center",
             h_align="start",
-            style_classes=["user"],
+            style_classes="user",
         )
 
         uptime_label = Label(
             label=f"{_HOURGLASS_ICON} {helpers.uptime()}",
-            style_classes=["uptime"],
+            style_classes="uptime",
             v_align="center",
             h_align="start",
             tooltip_text="System Uptime",
@@ -318,7 +319,7 @@ class QuickSettingsMenu(Box):
         main_grid = Grid(
             column_spacing=10,
             h_expand=True,
-            style_classes=["section-box"],
+            style_classes="section-box",
         )
 
         if shortcuts_enabled:
@@ -329,7 +330,7 @@ class QuickSettingsMenu(Box):
                 children=(
                     ShortcutsContainer(
                         shortcuts_config=shortcuts_items,
-                        style_classes=["shortcuts-grid"],
+                        style_classes="shortcuts-grid",
                         v_align="start",
                         h_align="fill",
                     ),
@@ -344,12 +345,12 @@ class QuickSettingsMenu(Box):
             main_grid.attach(sliders_box, 0, 0, 3, 1)
         box = CenterBox(
             orientation="v",
-            style_classes=["quick-settings-box"],
+            style_classes="quick-settings-box",
             start_children=Box(
                 orientation="v",
                 spacing=10,
                 v_align="center",
-                style_classes=["section-box"],
+                style_classes="section-box",
                 children=(self.user_box, QuickSettingsButtonBox(popup=popup)),
             ),
             center_children=main_grid,
@@ -373,7 +374,7 @@ class QuickSettingsMenu(Box):
         self.add(box)
 
         def _update_uptime(*_):
-            uptime_text = f"{_HOURGLASS_ICON} {helpers.uptime()}"
+            uptime_text = f"{_HOURGLASS_ICON} {uptime()}"
             if uptime_text == self._last_uptime_text:
                 return True
             self._last_uptime_text = uptime_text

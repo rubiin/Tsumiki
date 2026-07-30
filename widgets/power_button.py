@@ -209,7 +209,7 @@ class PowerControlButtons(HoverButton):
         self.parent = parent
 
         self.container_box = Box(
-            style_classes=["power-button-container"],
+            style_classes="power-button-container",
             orientation="v",
             children=[
                 Svg(
@@ -222,7 +222,7 @@ class PowerControlButtons(HoverButton):
 
         self.shortcut_label = Label(
             label="",
-            style_classes=["power-shortcut-label"],
+            style_classes="power-shortcut-label",
             h_align="start",
             v_align="start",
             visible=False,
@@ -246,7 +246,7 @@ class PowerControlButtons(HoverButton):
             self.container_box.add(
                 Label(
                     label=name.capitalize(),
-                    style_classes=["panel-text"],
+                    style_classes="panel-text",
                 )
             )
 
@@ -296,7 +296,7 @@ class PowerWidget(ButtonWidget):
             self.container_box.add(self.icon)
 
         if self.config.get("label", True):
-            self.container_box.add(Label(label="power", style_classes=["panel-text"]))
+            self.container_box.add(Label(label="power", style_classes="panel-text"))
 
         if self.config.get("tooltip", False) and self.tooltips_enabled:
             self.set_tooltip_text("Power")

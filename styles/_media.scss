@@ -1,8 +1,9 @@
 @use "sass:color";
 @use "theme";
+@use "variable";
 
 #player-stack-button {
-  border-radius: 9999px;
+  border-radius: variable.$radius-large;
   min-width: 6px;
   min-height: 6px;
   background-color: color.mix(theme.$surface-disabled, transparent, 70%);

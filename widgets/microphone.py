@@ -23,7 +23,7 @@ class MicrophoneIndicatorWidget(ButtonWidget):
         if self.config.get("label", True):
             self.mic_label = Label(
                 label="",
-                style_classes=["panel-text"],
+                style_classes="panel-text",
             )
             self.container_box.add(self.mic_label)
 

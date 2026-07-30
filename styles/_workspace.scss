@@ -177,7 +177,7 @@ $workspace-transition:
     min-width: 2em;
     min-height: 1.8em;
     padding: 0.15em 0.3em;
-    border-radius: 9999px;
+    border-radius: variable.$radius-large;
     background-color: color.adjust(theme.$accent-orange, $alpha: -0.7);
 
     label {

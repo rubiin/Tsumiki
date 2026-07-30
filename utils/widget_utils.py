@@ -1,6 +1,7 @@
 import contextlib
 import importlib
 import threading
+from datetime import datetime
 from numbers import Number
 from time import sleep
 from typing import Literal
@@ -26,6 +27,20 @@ _util_polling_enabled = False
 _util_subscribers = 0
 _util_changed_handler_ids: set[int] = set()
 _fabricator_lock = threading.Lock()
+
+
+# Function to get the system uptime
+def uptime() -> str:
+    boot_time = psutil.boot_time()
+    now = datetime.now()
+
+    diff = now.timestamp() - boot_time
+
+    # Convert the difference in seconds to hours and minutes
+    hours, remainder = divmod(diff, 3600)
+    minutes, _ = divmod(remainder, 60)
+
+    return f"{int(hours):02}:{int(minutes):02}"
 
 
 # Function to get the system stats using psutil
@@ -291,7 +306,7 @@ def create_scale(
     orientation="h",
     h_expand=True,
     h_align="center",
-    style_classes=[""],
+    style_classes="",
     duration=0.8,
     **kwargs,
 ):
@@ -352,7 +367,7 @@ def create_progress(
 
     return AnimatedCircularProgressBar(
         name=name,
-        style_classes=["stat-circle"],
+        style_classes="stat-circle",
         line_style="round",
         line_width=line_width,
         start_angle=start_angle,

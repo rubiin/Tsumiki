@@ -20,7 +20,7 @@ class SettingsWidget(ButtonWidget):
 
         if self.config.get("label", False):
             self.container_box.add(
-                Label(label="Settings", style_classes=["panel-text"])
+                Label(label="Settings", style_classes="panel-text")
             )
 
         if self.config.get("tooltip", True) and self.tooltips_enabled:

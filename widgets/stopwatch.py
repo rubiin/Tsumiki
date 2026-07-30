@@ -23,7 +23,7 @@ class StopWatchWidget(ButtonWidget):
             props={"style_classes": ["panel-font-icon"]},
         )
 
-        self.time_label = Label(label="00:00", style_classes=["panel-text"])
+        self.time_label = Label(label="00:00", style_classes="panel-text")
         self.container_box.children = (self.icon, self.time_label)
 
         self.connect("clicked", self.on_click)

@@ -243,7 +243,7 @@ class NotificationWidget(EventBox):
     ) -> Box:
         """Build notification header: icon, summary, optional expand, close."""
         header_container = Box(
-            spacing=8, orientation="h", style_classes=["notification-header"]
+            spacing=8, orientation="h", style_classes="notification-header"
         )
 
         header_container.children = (
@@ -255,7 +255,7 @@ class NotificationWidget(EventBox):
                     else notification.app_name,
                 ),
                 h_align="start",
-                style_classes=["summary"],
+                style_classes="summary",
                 max_chars_width=30,
                 line_wrap="word-char",
             ),
@@ -265,7 +265,7 @@ class NotificationWidget(EventBox):
         if is_long_content:
             self._is_expanded = False
             self.expand_button = Button(
-                style_classes=["expand-button"],
+                style_classes="expand-button",
                 child=nerd_font_icon(
                     icon=get_text_icon("chevron.down"),
                     props={"style_classes": ["panel-font-icon", "expand-icon"]},
@@ -278,7 +278,7 @@ class NotificationWidget(EventBox):
         close_btn = Button(
             v_align="center",
             h_align="center",
-            style_classes=["close-button"],
+            style_classes="close-button",
             child=nerd_font_icon(
                 icon=get_text_icon("ui.window_close"),
                 props={"style_classes": ["panel-font-icon", "close-icon"]},
@@ -304,7 +304,7 @@ class NotificationWidget(EventBox):
         body_container = Box(
             spacing=4,
             orientation="h",
-            style_classes=["notification-body"],
+            style_classes="notification-body",
             v_align="start",
             h_align="start",
         )
@@ -332,7 +332,7 @@ class NotificationWidget(EventBox):
                 markup=helpers.parse_markup(body_text),
                 v_align="start",
                 h_align="start",
-                style_classes=["body"],
+                style_classes="body",
                 line_wrap="word-char",
                 max_chars_width=38,
             )
@@ -345,7 +345,7 @@ class NotificationWidget(EventBox):
                     markup=helpers.parse_markup(body_text),
                     v_align="start",
                     h_align="start",
-                    style_classes=["body"],
+                    style_classes="body",
                     line_wrap="word-char",
                     max_chars_width=38,
                 ),
@@ -610,7 +610,7 @@ class ActionButton(HoverButton):
             label=action.label,
             h_expand=True,
             on_clicked=self.on_click,
-            style_classes=["notification-action"],
+            style_classes="notification-action",
             **kwargs,
         )
 
