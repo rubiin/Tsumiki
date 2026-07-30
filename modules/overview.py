@@ -208,9 +208,6 @@ class OverviewMenu(Box):
         self._app_cache_dirty = False
         self._handler_ids: list[int] = []
 
-        # Remove the window_class_aliases dictionary completely
-        # TODO: replace with glace
-
         self._handler_ids = [
             self._service.connect("event::openwindow", self._schedule_update),
             self._service.connect("event::closewindow", self._schedule_update),

@@ -39,7 +39,7 @@ framework). Main code is Python; styles are SCSS; docs are an Astro site.
 just --list                 # list all available task recipes
 python -m pytest tests/     # run the test suite
 cd docs && pnpm install && pnpm build   # build the docs site
-fabric-cli gs Glace-0.1 GtkLayerShell-0.1 Playerctl-2.0 NM-1.0  # regenerate gi stubs
+fabric-cli gs GtkLayerShell-0.1 Playerctl-2.0 NM-1.0  # regenerate gi stubs
 ```
 
 The following are **one-off/maintainer commands** — run only when explicitly
