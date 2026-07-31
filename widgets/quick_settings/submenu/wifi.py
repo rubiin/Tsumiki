@@ -1,3 +1,5 @@
+from collections.abc import Callable
+
 import gi
 from fabric.utils import GObject, Gtk, bulk_connect, logger
 from fabric.widgets.button import Button
@@ -61,11 +63,6 @@ class WifiSubMenu(QuickSubMenu):
             adjustment = self.child.get_vadjustment()
 
             adjustment.connect("value-changed", self.on_scroll)
-
-        self.revealer.connect(
-            "notify::child-revealed",
-            self.start_new_scan,
-        )
 
     def on_child_revealed(self, *_):
         self.scan_button.set_sensitive(False)
@@ -133,7 +130,8 @@ class WifiSubMenu(QuickSubMenu):
     def build_wifi_options(self):
         self.refresh_wifi_list()
 
-    def _prompt_for_password(self, ssid: str) -> str | None:
+    def _prompt_for_password(self, ssid: str, on_submit) -> None:
+        """Prompt for a wifi password without blocking the GTK main loop."""
         dialog = Gtk.Dialog(
             title=f"Connect to {ssid}",
             modal=True,
@@ -156,15 +154,18 @@ class WifiSubMenu(QuickSubMenu):
             content.pack_start(prompt_label, False, False, 4)
             content.pack_start(password_entry, False, False, 4)
 
+        def on_response(dialog, response):
+            password = password_entry.get_text().strip()
+            dialog.destroy()
+            if response != Gtk.ResponseType.OK:
+                return
+            if not password:
+                logger.warning("[WifiService] Empty password, aborting connection")
+                return
+            on_submit(password)
+
+        dialog.connect("response", on_response)
         dialog.show_all()
-        response = dialog.run()
-        password = password_entry.get_text().strip()
-        dialog.destroy()
-
-        if response != Gtk.ResponseType.OK:
-            return None
-
-        return password
 
     def make_button_from_ap(self, ap: NM.AccessPoint) -> Button:
         ssid = ap.get("ssid")
@@ -212,6 +213,11 @@ class WifiSubMenu(QuickSubMenu):
             child=ap_container,
             h_expand=True,
             style_classes="wifi-ap-button",
+            on_clicked=lambda *_: (
+                self.on_disconnect_clicked(ap)
+                if is_active
+                else self.on_connect_clicked(ap)
+            ),
         )
 
         wifi_item.add(ap_btn_container)
@@ -228,14 +234,10 @@ class WifiSubMenu(QuickSubMenu):
             return
 
         if ap.get("secured"):
-            password = self._prompt_for_password(ssid)
-            if password is None:
-                return
-            if not password:
-                logger.warning("[WifiService] Empty password, aborting connection")
-                return
-
-            self.wifi_device.connect_network(ssid, password=password)
+            self._prompt_for_password(
+                ssid,
+                lambda pwd: self.wifi_device.connect_network(ssid, password=pwd),
+            )
             return
 
         # Open network, attempt direct connection.
@@ -245,11 +247,15 @@ class WifiSubMenu(QuickSubMenu):
 class WifiToggle(QSChevronButton):
     """A widget to display a toggle button for Wifi."""
 
-    def __init__(self, submenu: QuickSubMenu, **kwargs):
+    def __init__(
+        self,
+        submenu_factory: Callable[[], QuickSubMenu] | None = None,
+        **kwargs,
+    ):
         super().__init__(
             action_icon=get_text_icon("wifi.generic"),
             action_label=" Wifi Disabled",
-            submenu=submenu,
+            submenu_factory=submenu_factory,
             **kwargs,
         )
         self.client = NetworkService()
@@ -274,6 +280,18 @@ class WifiToggle(QSChevronButton):
                 )
                 self._bound_wifi = wifi
 
+                wifi.bind_property(
+                    "icon-name",
+                    self.action_icon,
+                    "label",
+                    GObject.BindingFlags.DEFAULT,
+                    lambda _, x: network_icon_to_text_icons.get(
+                        x,
+                        get_text_icon("wifi.generic"),
+                    ),
+                )
+                wifi.bind_property("ssid", self.action_label, "label")
+
             self.action_icon.set_label(
                 network_icon_to_text_icons.get(
                     wifi.get_property("icon-name"),
@@ -281,19 +299,7 @@ class WifiToggle(QSChevronButton):
                 ),
             )
 
-            wifi.bind_property(
-                "icon-name",
-                self.action_icon,
-                "label",
-                GObject.BindingFlags.DEFAULT,
-                lambda _, x: network_icon_to_text_icons.get(
-                    x,
-                    get_text_icon("wifi.generic"),
-                ),
-            )
-
             self.action_label.set_label(wifi.get_property("ssid"))
-            wifi.bind_property("ssid", self.action_label, "label")
 
         else:
             self.action_button.set_sensitive(False)

@@ -1,3 +1,5 @@
+from collections.abc import Callable
+
 from fabric.hyprland.widgets import get_hyprland_connection
 from fabric.utils import (
     cooldown,
@@ -44,6 +46,9 @@ class HyprSunsetSubMenu(QuickSubMenu):
         # Connect the slider immediately
         self.scale.connect("value-changed", self.on_scale_move)
         self._repeater_id = invoke_repeater(1000, self.update_scale)
+        # Refresh when first shown; the repeater's initial call may run before
+        # mapping, when the visibility gate skips it.
+        self.connect("map", self.update_scale)
         self.connect("destroy", self._on_destroy)
 
     def _on_destroy(self, *_):
@@ -61,6 +66,8 @@ class HyprSunsetSubMenu(QuickSubMenu):
         return True
 
     def update_scale(self, *_):
+        if not self.get_mapped():
+            return True
         if is_app_running("hyprsunset"):
             self.scale.set_sensitive(True)
             exec_shell_command_async(
@@ -69,6 +76,7 @@ class HyprSunsetSubMenu(QuickSubMenu):
             )
         else:
             self.scale.set_sensitive(False)
+        return True
 
     def _update_ui(self, moved_pos: str | int):
         # Update the scale value based on the current temperature
@@ -87,12 +95,17 @@ class HyprSunsetSubMenu(QuickSubMenu):
 class HyprSunsetToggle(QSChevronButton):
     """A widget to display a toggle button for Wifi."""
 
-    def __init__(self, submenu: QuickSubMenu, popup, **kwargs):
+    def __init__(
+        self,
+        submenu_factory: Callable[[], QuickSubMenu] | None = None,
+        popup=None,
+        **kwargs,
+    ):
         super().__init__(
             action_icon=get_text_icon("nightlight.disabled"),
             pixel_size=20,
             action_label="Enabled",
-            submenu=submenu,
+            submenu_factory=submenu_factory,
             **kwargs,
         )
 
@@ -102,16 +115,26 @@ class HyprSunsetToggle(QSChevronButton):
         self.connect("action-clicked", self.on_action)
 
         self._register_repeater(invoke_repeater(1000, self.update_action_button))
+        # Refresh when first shown; the repeater's initial call may run before
+        # mapping, when the visibility gate skips it.
+        self.connect("map", self.update_action_button)
 
     def on_action(self, *_):
         """Handle the action button click event."""
+        submenu = self.ensure_submenu()
+        if submenu is None:
+            return True
         # Get current slider value for dynamic command
-        current_temp = int(self.submenu.scale.get_value())
+        current_temp = int(submenu.scale.get_value())
         toggle_command("hyprsunset", f"hyprsunset -t {current_temp}")
-        self.popup.hide_popover()
+        if self.popup is not None:
+            self.popup.hide_popover()
         return True
 
     def update_action_button(self, *_):
+        if not self.get_mapped():
+            return True
+
         self.is_running = is_app_running("hyprsunset")
 
         if self.is_running:
@@ -122,3 +145,4 @@ class HyprSunsetToggle(QSChevronButton):
             self.action_icon.set_label(get_text_icon("nightlight.disabled"))
             self.action_label.set_label("Disabled")
             self.set_active_style(False)
+        return True

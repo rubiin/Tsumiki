@@ -1,6 +1,6 @@
 import os
 
-from fabric.utils import GLib, Gtk, bulk_connect, invoke_repeater, logger
+from fabric.utils import GLib, Gtk, invoke_repeater, logger
 from fabric.widgets.box import Box
 from fabric.widgets.centerbox import CenterBox
 from fabric.widgets.grid import Grid
@@ -52,7 +52,7 @@ class QuickSettingsButtonBox(Box):
     ):
         submenu_cls = lazy_load_class(module_path, submenu_cls_name)
         toggle_cls = lazy_load_class(module_path, toggle_cls_name)
-        return toggle_cls(submenu=submenu_cls(), **kwargs)
+        return toggle_cls(submenu_factory=submenu_cls, **kwargs)
 
     def close_all_submenus(self, *_):
         if self.active_submenu is not None:
@@ -124,22 +124,23 @@ class QuickSettingsButtonBox(Box):
         ):
             toggle.connect("reveal-clicked", self.set_active_submenu)
 
-        self.children = (
-            self.grid,
-            self.wifi_toggle.submenu,
-            self.bluetooth_toggle.submenu,
-            self.power_pfl.submenu,
-            self.hyprsunset.submenu,
-        )
+        self.children = (self.grid,)
 
         self.connect("unmap", self.close_all_submenus)
 
     def set_active_submenu(self, btn: QSChevronButton):
-        if btn.submenu != self.active_submenu and self.active_submenu is not None:
+        submenu = btn.ensure_submenu()
+        if submenu is None:
+            return
+
+        if submenu.get_parent() is None:
+            self.add(submenu)
+
+        if submenu != self.active_submenu and self.active_submenu is not None:
             self.active_submenu._reveal(False)
 
-        self.active_submenu = btn.submenu
-        self.active_submenu.toggle_reveal() if self.active_submenu else None
+        self.active_submenu = submenu
+        self.active_submenu.toggle_reveal()
 
 
 class QuickSettingsMenu(Box):
@@ -192,7 +193,7 @@ class QuickSettingsMenu(Box):
         )
 
         uptime_label = Label(
-            label=f"{_HOURGLASS_ICON} {helpers.uptime()}",
+            label=f"{_HOURGLASS_ICON} {uptime()}",
             style_classes="uptime",
             v_align="center",
             h_align="start",
@@ -419,9 +420,17 @@ class QuickSettingsButtonWidget(ButtonWidget, PopoverMixin):
 
         self.brightness_service = BrightnessService()
 
-        self.brightness_service.connect("brightness_changed", self.update_brightness)
+        self._register_handler(
+            self.brightness_service,
+            self.brightness_service.connect(
+                "brightness_changed", self.update_brightness
+            ),
+        )
 
-        self.network_service.connect("device-ready", self._get_network_icon)
+        self._register_handler(
+            self.network_service,
+            self.network_service.connect("device-ready", self._get_network_icon),
+        )
 
         self.popup = None
 
@@ -454,12 +463,13 @@ class QuickSettingsButtonWidget(ButtonWidget, PopoverMixin):
             )
         )
 
-        bulk_connect(
+        self._register_handler(
             self.audio_service,
-            {
-                "notify::speaker": self.on_speaker_changed,
-                "changed": self.check_mute,
-            },
+            self.audio_service.connect("notify::speaker", self.on_speaker_changed),
+        )
+        self._register_handler(
+            self.audio_service,
+            self.audio_service.connect("changed", self.check_mute),
         )
 
         self.setup_popover(

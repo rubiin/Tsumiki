@@ -41,13 +41,13 @@ class MicrophoneSlider(SettingSlider):
             def init_device_audio(*_):
                 if not self.client.microphone:
                     return
-                self.audio_stream = self.client.speaker
+                self.audio_stream = self.client.microphone
                 self.update_state()
                 self.client.disconnect_by_func(init_device_audio)
                 self.client.connect("microphone-changed", self.update_state)
 
             self.client.connect("changed", init_device_audio)
-            if self.client.speaker:
+            if self.client.microphone:
                 init_device_audio()
         else:
             self.update_state()
@@ -68,12 +68,14 @@ class MicrophoneSlider(SettingSlider):
         volume = round(self.audio_stream.volume)
         is_muted = self.audio_stream.muted
 
-        # Avoid unnecessary updates if the value hasn't changed
-        if round(volume) == round(self.scale.get_value()):
-            return
-
+        # Update mute-dependent UI even when the volume is unchanged.
         self.scale.set_sensitive(not is_muted)
         self.toggle_css_class("muted", is_muted)
+
+        # Avoid unnecessary updates if the value hasn't changed
+        if volume == round(self.scale.get_value()):
+            return
+
         self.scale.set_value(volume)
         self.scale.set_tooltip_text(f"{volume}%")
         self.icon.set_label(self._get_icon_name())

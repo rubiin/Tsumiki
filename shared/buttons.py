@@ -1,3 +1,4 @@
+from collections.abc import Callable
 from functools import partial
 
 from fabric.core.service import Signal
@@ -143,9 +144,11 @@ class QSChevronButton(QSToggleButton):
         action_icon: str = symbolic_icons["fallback"]["package"],
         pixel_size: int = 18,
         submenu: QuickSubMenu | None = None,
+        submenu_factory: Callable[[], QuickSubMenu] | None = None,
         **kwargs,
     ):
         self.submenu = submenu
+        self._submenu_factory = submenu_factory
 
         self.button_image = Image(
             icon_name=symbolic_icons["ui"]["arrow"]["right"], icon_size=20
@@ -166,12 +169,26 @@ class QSChevronButton(QSToggleButton):
         )
         self.box.add(self.reveal_button)
 
-        self.submenu.revealer.connect(
-            "notify::reveal-child",
-            self.set_chevron_icon,
-        )
+        if self.submenu is not None:
+            self.submenu.revealer.connect(
+                "notify::reveal-child",
+                self.set_chevron_icon,
+            )
+
+    def ensure_submenu(self) -> QuickSubMenu | None:
+        """Build the submenu lazily on first use, then return it."""
+        if self.submenu is None and self._submenu_factory is not None:
+            self.submenu = self._submenu_factory()
+            if self.submenu is not None:
+                self.submenu.revealer.connect(
+                    "notify::reveal-child",
+                    self.set_chevron_icon,
+                )
+        return self.submenu
 
     def set_chevron_icon(self, *_):
+        if self.submenu is None:
+            return
         icon_name = (
             symbolic_icons["ui"]["arrow"]["down"]
             if self.submenu.revealer.get_reveal_child()
@@ -180,4 +197,6 @@ class QSChevronButton(QSToggleButton):
         self.button_image.set_from_icon_name(icon_name, 20)
 
     def _reveal_toggle(self, *_):
+        if self.ensure_submenu() is None:
+            return
         self.emit("reveal-clicked")

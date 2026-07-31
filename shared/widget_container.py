@@ -87,7 +87,7 @@ class BaseWidget(Widget, TeardownMixin):
             self.show()
 
     def toggle_css_class(self, class_name: str | Iterable[str], condition: bool):
-        if condition and self.get_style_context().has_class(class_name):
+        if condition:
             self.add_style_class(class_name)
         else:
             self.remove_style_class(class_name)

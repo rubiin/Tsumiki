@@ -62,6 +62,9 @@ class CommandSwitcher(ButtonWidget):
 
         # reusing the fabricator to call specified intervals
         self._register_repeater(invoke_repeater(1000, self._update_ui))
+        # Refresh as soon as the widget is actually shown (the repeater's
+        # initial call may run before mapping, when the visibility gate skips it).
+        self.connect("map", self._update_ui)
         self._update_ui()  # Initial update
 
     # toggle the command on click
@@ -74,6 +77,9 @@ class CommandSwitcher(ButtonWidget):
         return True
 
     def _update_ui(self, *_):
+        if not self.get_mapped():
+            return True
+
         is_running = helpers.is_app_running(self.command)
 
         self.toggle_css_class("active", is_running)

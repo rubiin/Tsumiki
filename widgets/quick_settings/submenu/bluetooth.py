@@ -1,3 +1,5 @@
+from collections.abc import Callable
+
 from fabric.bluetooth.service import BluetoothClient, BluetoothDevice
 from fabric.utils import Gtk, bulk_connect
 from fabric.widgets.box import Box
@@ -159,11 +161,12 @@ class BluetoothSubMenu(QuickSubMenu):
 
         # Track device rows for easy update
         self.device_rows = {}
+        self._paired_devices = set()
 
         # Populate initial devices
         for device in self.client.devices:
             self.add_device_row(device)
-            device.connect("notify::paired", self.on_device_paired_changed)
+            self._connect_paired(device)
 
     def on_scan_toggle(self, btn: Button):
         self.client.toggle_scan()
@@ -172,10 +175,17 @@ class BluetoothSubMenu(QuickSubMenu):
         ) if self.client.scanning else btn.remove_style_class(["active"])
         self.scan_button.play_animation()
 
+    def _connect_paired(self, device: BluetoothDevice):
+        """Connect the paired handler once per device."""
+        if device.address in self._paired_devices:
+            return
+        self._paired_devices.add(device.address)
+        device.connect("notify::paired", self.on_device_paired_changed)
+
     def populate_new_device(self, client: BluetoothClient, address: str):
         device: BluetoothDevice = client.get_device(address)
         self.add_device_row(device)
-        device.connect("notify::paired", self.on_device_paired_changed)
+        self._connect_paired(device)
 
     def add_device_row(self, device: BluetoothDevice):
         # Remove existing row if present
@@ -200,16 +210,21 @@ class BluetoothSubMenu(QuickSubMenu):
 class BluetoothToggle(QSChevronButton):
     """A widget to display the Bluetooth status."""
 
-    def __init__(self, submenu: QuickSubMenu, **kwargs):
+    def __init__(
+        self,
+        submenu_factory: Callable[[], QuickSubMenu] | None = None,
+        **kwargs,
+    ):
         super().__init__(
             action_label="Enabled",
             action_icon=get_text_icon("bluetooth.enabled"),
-            submenu=submenu,
+            submenu_factory=submenu_factory,
             **kwargs,
         )
 
         # Client Signals
         self.client = bluetooth_service
+        self._bound_devices = set()
 
         bulk_connect(
             self.client,
@@ -239,6 +254,9 @@ class BluetoothToggle(QSChevronButton):
 
     def new_device(self, client: BluetoothClient, address: str):
         device: BluetoothDevice = client.get_device(address)
+        if address in self._bound_devices:
+            return
+        self._bound_devices.add(address)
         device.connect("changed", self.device_connected)
 
     def device_connected(self, device: BluetoothDevice):
