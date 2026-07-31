@@ -163,7 +163,7 @@ class PlayerBox(Box):
             )
 
         # ─── Progress Bar ───
-        self.progress_bar = SineWaveSlider(name="player-slider")
+        self.progress_bar = SineWaveSlider(name="player-slider", h_expand=True)
 
         # ─── Bottom Controls Row ───
         prev_icon = nerd_font_icon(
@@ -203,6 +203,7 @@ class PlayerBox(Box):
             name="player-controls-row",
             spacing=6,
             v_align="center",
+            h_expand=True,
             children=[
                 self.prev_btn,
                 self.progress_bar,
@@ -222,7 +223,6 @@ class PlayerBox(Box):
                 self.title_label,
                 self.artist_label,
                 self.time_label,
-                self.controls_row,
             ],
         )
 
@@ -253,7 +253,7 @@ class PlayerBox(Box):
             h_align="center",
         )
 
-        self.children = [self.main_row, self.dot_box]
+        self.children = [self.main_row, self.controls_row, self.dot_box]
 
         # ─── Signals ───
         bulk_connect(
