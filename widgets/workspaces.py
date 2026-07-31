@@ -47,6 +47,7 @@ class WorkSpacesWidget(BoxWidget):
     def _setup_button(self, ws_id: int) -> WorkspaceButton:
         button = WorkspaceButton(
             id=ws_id,
+            v_align="center",
             label=self._create_workspace_label(ws_id) if self.style != "pill" else None,
             visible=ws_id not in self.ignored_ws,
         )
