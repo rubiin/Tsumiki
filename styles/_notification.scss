@@ -151,6 +151,7 @@ $hover-transition: background 0.15s ease-in-out;
 
 #datemenu-notification-box {
   @extend %notification_widget;
+  padding-top: 3px;
 
   background-color: theme.$background-main;
   border: 1px solid color.mix(theme.$surface-disabled, transparent, 40%);
