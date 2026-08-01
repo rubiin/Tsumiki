@@ -51,7 +51,7 @@
 ) {
   @include mixins.widget-border($border-radius, $border-enabled, $border-width);
 
-  @if $icon-size !=null and $spacing !=null {
+  @if $icon-size != null {
     @include mixins.nerd-icon($icon-size, $spacing);
   }
 }
@@ -284,6 +284,102 @@ $widget-shell-widgets: (
     variable.$bar-widgets-world_clock-border-width,
     variable.$bar-widgets-world_clock-icon_size,
     variable.$bar-widgets-world_clock-spacing
+  ),
+  (
+    "weather",
+    variable.$bar-widgets-weather-border-radius,
+    variable.$bar-widgets-weather-border-enabled,
+    variable.$bar-widgets-weather-border-width,
+    variable.$bar-widgets-weather-icon_size,
+    variable.$bar-widgets-weather-spacing
+  ),
+  (
+    "kanban",
+    variable.$bar-widgets-kanban-border-radius,
+    variable.$bar-widgets-kanban-border-enabled,
+    variable.$bar-widgets-kanban-border-width,
+    variable.$bar-widgets-kanban-icon_size,
+    variable.$bar-widgets-kanban-spacing
+  ),
+  (
+    "emoji_picker",
+    variable.$bar-widgets-emoji_picker-border-radius,
+    variable.$bar-widgets-emoji_picker-border-enabled,
+    variable.$bar-widgets-emoji_picker-border-width,
+    variable.$bar-widgets-emoji_picker-icon_size,
+    variable.$bar-widgets-emoji_picker-spacing
+  ),
+  (
+    "cheatsheet",
+    variable.$bar-widgets-cheatsheet-border-radius,
+    variable.$bar-widgets-cheatsheet-border-enabled,
+    variable.$bar-widgets-cheatsheet-border-width,
+    variable.$bar-widgets-cheatsheet-icon_size,
+    variable.$bar-widgets-cheatsheet-spacing
+  ),
+  (
+    "overview_button",
+    variable.$bar-widgets-overview-border-radius,
+    variable.$bar-widgets-overview-border-enabled,
+    variable.$bar-widgets-overview-border-width,
+    variable.$bar-widgets-overview-icon_size,
+    variable.$bar-widgets-overview-spacing
+  ),
+  (
+    "clipboard",
+    variable.$bar-widgets-clipboard-border-radius,
+    variable.$bar-widgets-clipboard-border-enabled,
+    variable.$bar-widgets-clipboard-border-width,
+    variable.$bar-widgets-clipboard-icon_size,
+    variable.$bar-widgets-clipboard-spacing
+  ),
+  (
+    "power",
+    variable.$bar-widgets-power-border-radius,
+    variable.$bar-widgets-power-border-enabled,
+    variable.$bar-widgets-power-border-width,
+    variable.$bar-widgets-power-icon_size,
+    null
+  ),
+  (
+    "pomodoro",
+    variable.$bar-widgets-pomodoro-border-radius,
+    variable.$bar-widgets-pomodoro-border-enabled,
+    variable.$bar-widgets-pomodoro-border-width,
+    variable.$bar-widgets-pomodoro-icon_size,
+    null
+  ),
+  (
+    "git_companion",
+    variable.$bar-widgets-git_companion-border-radius,
+    variable.$bar-widgets-git_companion-border-enabled,
+    variable.$bar-widgets-git_companion-border-width,
+    variable.$bar-widgets-git_companion-icon_size,
+    null
+  ),
+  (
+    "ip_monitor",
+    variable.$bar-widgets-ip_monitor-border-radius,
+    variable.$bar-widgets-ip_monitor-border-enabled,
+    variable.$bar-widgets-ip_monitor-border-width,
+    variable.$bar-widgets-ip_monitor-icon_size,
+    null
+  ),
+  (
+    "usb_manager",
+    variable.$bar-widgets-usb_manager-border-radius,
+    variable.$bar-widgets-usb_manager-border-enabled,
+    variable.$bar-widgets-usb_manager-border-width,
+    variable.$bar-widgets-usb_manager-icon_size,
+    null
+  ),
+  (
+    "quick_settings",
+    variable.$bar-widgets-quick_settings-border-radius,
+    variable.$bar-widgets-quick_settings-border-enabled,
+    variable.$bar-widgets-quick_settings-border-width,
+    variable.$bar-widgets-quick_settings-icon_size,
+    variable.$bar-widgets-quick_settings-spacing
   )
 );
 
@@ -337,14 +433,14 @@ $widget-shell-widgets: (
 
     #mpris-progress {
       min-height: 2px;
-      border-radius: 99px;
+      border-radius: variable.$radius;
       background-color: color.adjust(theme.$text-main, $alpha: -0.8);
       margin-top: 1px;
       margin-right: functions.toEm(2);
 
       #mpris-progress-fill {
         min-height: 2px;
-        border-radius: 99px;
+        border-radius: variable.$radius;
         background-color: theme.$accent-blue;
         transition: min-width 200ms ease-in-out;
       }

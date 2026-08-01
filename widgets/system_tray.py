@@ -55,8 +55,7 @@ class BaseSystemTray:
                     )
 
                 logger.info(
-                    f"""[SystemTray] Resolving icon: {icon_name}, size: {icon_size},
-                    theme path: {icon_theme}"""
+                    f"""[SystemTray] Resolving icon: {icon_name}, size: {icon_size}"""
                 )
 
                 # Use custom theme path if available

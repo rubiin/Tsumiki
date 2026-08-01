@@ -18,8 +18,7 @@
     box-shadow: none;
 
     &:hover {
-      @extend %widget_hover;
-      color: theme.$background-dark;
+      @include common.widget-hover;
     }
   }
 

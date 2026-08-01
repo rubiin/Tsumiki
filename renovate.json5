@@ -14,7 +14,7 @@
     ],
     "packageRules": [
     {
-      "matchPackageNames": ["PyGObject"],
+      "matchPackageNames": ["PyGObject","PyGObject-stubs"],
       "enabled": false
     },
         {

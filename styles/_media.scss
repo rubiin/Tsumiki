@@ -2,6 +2,11 @@
 @use "theme";
 @use "variable";
 
+%player-hover-shadow {
+  border-radius: 100%;
+  box-shadow: inset color.adjust(theme.$text-main, $alpha: -0.4) 0 0 10px;
+}
+
 #player-stack-button {
   border-radius: variable.$radius-large;
   min-width: 6px;
@@ -84,8 +89,7 @@
     #player-shuffle:hover,
     #player-next:hover,
     #player-prev:hover {
-      border-radius: 100%;
-      box-shadow: inset color.adjust(theme.$text-main, $alpha: -0.4) 0 0 10px;
+      @extend %player-hover-shadow;
     }
   }
 
@@ -134,8 +138,7 @@
       }
 
       &:hover {
-        border-radius: 100%;
-        box-shadow: inset color.adjust(theme.$text-main, $alpha: -0.4) 0 0 10px;
+        @extend %player-hover-shadow;
       }
 
       &:active {

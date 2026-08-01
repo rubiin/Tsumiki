@@ -15,7 +15,7 @@ $hover-transition: background 0.15s ease-in-out;
   background-color: theme.$background-alt;
   transition: border 100ms ease-in-out;
 
-  @include common.widget_border(
+  @include common.widget-border(
     variable.$modules-notification-border-radius,
     variable.$modules-notification-border-enabled,
     variable.$modules-notification-border-width
@@ -98,11 +98,11 @@ $hover-transition: background 0.15s ease-in-out;
     &:hover {
       box-shadow: none;
       border: 0;
-      @extend %widget_hover;
+      @extend %widget-hover;
 
       .close-icon {
         color: theme.$background-dark;
-        @extend %clear_icon;
+        @extend %clear-icon;
       }
     }
   }

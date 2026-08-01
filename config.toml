@@ -615,7 +615,7 @@ right_section = ["@group:sys-group", "@group:utils-group", "system_tray", "power
 
 [general]
 check_updates = false
-debug = false
+debug = true
 monitor_styles = true
 auto_restart = true
 restart_delay = 1500

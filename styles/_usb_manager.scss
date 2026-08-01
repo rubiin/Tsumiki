@@ -31,7 +31,7 @@
     }
 
     &:hover {
-      @extend %widget_hover;
+      @extend %widget-hover;
     }
   }
 
@@ -135,7 +135,7 @@
     .usb-manager-status-badge {
       background-color: color.adjust(theme.$text-main, $alpha: -0.05);
       color: theme.$background-dark;
-      border-radius: 999px;
+      border-radius: variable.$radius-large;
       padding: 1px 7px;
       font-size: 10px;
       font-weight: 700;

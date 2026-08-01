@@ -1,12 +1,9 @@
 @use "theme";
 @use "variable";
 @use "common";
-@use "sass:color";
 
 #dock-bar {
-  $modules-dock-opacity-ratio: variable.$modules-dock-opacity * 0.01;
-  $transparency-value: (1 - $modules-dock-opacity-ratio) * 100%;
-  background-color: color.mix(theme.$general-bar-background, transparent, $transparency-value);
+  @include common.bar-background(variable.$modules-dock-opacity);
   padding: variable.$modules-dock-padding_y variable.$modules-dock-padding_x;
   margin: variable.$modules-dock-margin_y variable.$modules-dock-margin_x;
   transition:
@@ -14,7 +11,7 @@
     border-radius 0.25s cubic-bezier(0.5, 0.25, 0, 1),
     border-color 0.25s cubic-bezier(0.5, 0.25, 0, 1);
 
-  @include common.widget_border(
+  @include common.widget-border(
     variable.$modules-dock-border-radius,
     variable.$modules-dock-border-enabled,
     variable.$modules-dock-border-width

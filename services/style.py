@@ -311,11 +311,11 @@ class StyleService(SingletonService):
             exit(1)
 
         selected_theme = contents.get(mode, contents)
-        self.write_css_settings(flatten_dict(selected_theme), destination_file)
+        logger.info("[CONFIG] Generating theme css...")
+        self.write_css_file(flatten_dict(selected_theme), destination_file)
 
-    def write_css_settings(self, contents, file):
+    def write_css_file(self, contents, file):
         """Generate SCSS settings file from theme config."""
-        logger.info("[CONFIG] Applying css settings...")
 
         css_styles = contents
 
@@ -393,7 +393,8 @@ class StyleService(SingletonService):
                 self._compiling = False
 
     def write_settings_css(self):
-        self.write_css_settings(
+        logger.info("[CONFIG] Generating settings css...")
+        self.write_css_file(
             flatten_dict(exclude_keys(self._config.get("styling", {}), ["matugen"])),
             f"{self._styles_dir}/_settings.scss",
         )

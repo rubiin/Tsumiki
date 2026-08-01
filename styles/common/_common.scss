@@ -32,9 +32,7 @@
 
 #panel {
   &-inner {
-    $bar-opacity-ratio: variable.$bar-opacity * 0.01;
-    $transparency-value: (1 - $bar-opacity-ratio) * 100%;
-    background-color: color.mix(theme.$general-bar-background, transparent, $transparency-value);
+    @include mixins.bar-background(variable.$bar-opacity);
     padding: variable.$bar-padding_y variable.$bar-padding_x;
 
     @include mixins.module-shadow(
@@ -101,13 +99,8 @@
   );
 
   &:hover {
-    .panel-font-icon {
-      color: theme.$background-dark;
-    }
-
-    @extend %widget_hover;
+    @include mixins.widget-hover(true);
     opacity: variable.$bar-buttons-hover-opacity * 0.01;
-    color: theme.$background-dark;
   }
 }
 
@@ -473,14 +466,7 @@ scrolledwindow {
 }
 
 #setting-slider-scale {
-  .overamplified trough highlight {
-    background-color: theme.$accent-red;
-  }
-
-  .muted trough highlight,
-  .muted slider {
-    background-color: theme.$surface-disabled;
-  }
+  @include mixins.slider-states;
 }
 
 .stat-circle {
@@ -517,7 +503,6 @@ scrolledwindow {
   }
 
   &:hover {
-    @extend %widget_hover;
-    color: theme.$background-dark;
+    @include mixins.widget-hover;
   }
 }

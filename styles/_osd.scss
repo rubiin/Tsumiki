@@ -34,14 +34,7 @@
     color: rgba(theme.$text-main, 0.7);
   }
 
-  .overamplified trough highlight {
-    background-color: theme.$accent-red;
-  }
-
-  .muted trough highlight,
-  .muted slider {
-    background-color: theme.$surface-disabled;
-  }
+  @include common.slider-states;
 
   @include common.slider(
     $knob: variable.$modules-osd-sliders-knob,

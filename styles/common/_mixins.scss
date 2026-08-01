@@ -35,7 +35,7 @@
 }
 
 /// Styles for clear/close icons with slight scaling and highlight effect
-%clear_icon {
+%clear-icon {
   -gtk-icon-transform: scale(1.05);
   -gtk-icon-effect: highlight;
 }
@@ -47,7 +47,7 @@
   font-weight: variable.$font-weight;
 }
 
-%entry_default {
+%entry-default {
   font-weight: bold;
   background-color: theme.$background-main;
   color: theme.$text-main;
@@ -61,7 +61,7 @@
 }
 
 /// Hover state styling for widgets with background transition
-%widget_hover {
+%widget-hover {
   background-color: theme.$accent-teal;
   transition: border-color 400ms ease-in-out;
 }
@@ -349,4 +349,52 @@
       margin-right: $spacing;
     }
   }
+}
+
+/// Mixin for the overamplified/muted slider state colors.
+/// Used by OSD, quick settings and the settings GUI sliders.
+/// @param {Boolean} $self - When true, use `&.class` (class on the widget itself,
+///   as in quick settings) instead of `.class` descendant selectors.
+@mixin slider-states($self: false) {
+  @if $self {
+    &.overamplified trough highlight {
+      background-color: theme.$accent-red;
+    }
+
+    &.muted trough highlight,
+    &.muted slider {
+      background-color: theme.$surface-disabled;
+    }
+  } @else {
+    .overamplified trough highlight {
+      background-color: theme.$accent-red;
+    }
+
+    .muted trough highlight,
+    .muted slider {
+      background-color: theme.$surface-disabled;
+    }
+  }
+}
+
+/// Standard widget hover state: accent-teal background + dark text,
+/// optionally darkening the panel icon to match.
+/// @param {Boolean} $icon - Also set `.panel-font-icon` color to the dark text color
+@mixin widget-hover($icon: false) {
+  @extend %widget-hover;
+  color: theme.$background-dark;
+
+  @if $icon {
+    .panel-font-icon {
+      color: theme.$background-dark;
+    }
+  }
+}
+
+/// Semi-transparent bar/dock background derived from an opacity percentage.
+/// @param {Number} $opacity - Bar opacity percentage (0-100)
+@mixin bar-background($opacity) {
+  $opacity-ratio: $opacity * 0.01;
+  $transparency-value: (1 - $opacity-ratio) * 100%;
+  background-color: color.mix(theme.$general-bar-background, transparent, $transparency-value);
 }

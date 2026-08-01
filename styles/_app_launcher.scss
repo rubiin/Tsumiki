@@ -31,7 +31,7 @@
 }
 
 #launcher {
-  @include common.widget_border(
+  @include common.widget-border(
     variable.$modules-app_launcher-border-radius,
     variable.$modules-app_launcher-border-enabled,
     variable.$modules-app_launcher-border-width
@@ -46,7 +46,7 @@
   );
 
   &-prompt {
-    @extend %entry_default;
+    @extend %entry-default;
     border-bottom: 1px solid theme.$surface-disabled;
     font-size: 15px;
     margin-bottom: 10px;

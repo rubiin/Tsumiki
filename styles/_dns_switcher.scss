@@ -4,7 +4,7 @@
 @use "sass:color";
 
 #dns_switcher {
-  @include common.widget_border(
+  @include common.widget-border(
     variable.$bar-widgets-dns_switcher-border-radius,
     variable.$bar-widgets-dns_switcher-border-enabled,
     variable.$bar-widgets-dns_switcher-border-width

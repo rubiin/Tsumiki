@@ -38,7 +38,7 @@
   .git-companion-action-btn {
     min-width: 30px;
     min-height: 30px;
-    border-radius: 999px;
+    border-radius: variable.$radius-large;
     background-color: theme.$background-alt;
     border: 1px solid theme.$surface-disabled;
     color: theme.$text-muted;
@@ -60,13 +60,13 @@
   #git-companion-avatar-box {
     min-width: 44px;
     min-height: 44px;
-    border-radius: 999px;
+    border-radius: variable.$radius-large;
     background-color: theme.$background-alt;
     border: 2px solid theme.$accent-blue;
   }
 
   #git-companion-avatar {
-    border-radius: 999px;
+    border-radius: variable.$radius-large;
   }
 
   #git-companion-avatar-fallback {

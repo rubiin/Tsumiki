@@ -20,15 +20,10 @@
   }
 
   &:hover {
-    @extend %widget_hover;
-    color: theme.$background-dark;
+    @include common.widget-hover(true);
 
     @if $hover-bg {
       background-color: $hover-bg;
-    }
-
-    .panel-font-icon {
-      color: theme.$background-dark;
     }
   }
 }
@@ -115,11 +110,11 @@
         }
 
         &:hover {
-          @extend %widget_hover;
+          @extend %widget-hover;
           color: theme.$background-dark;
 
           #clear-icon {
-            @extend %clear_icon;
+            @extend %clear-icon;
             font-size: 13px;
             color: theme.$background-dark;
           }

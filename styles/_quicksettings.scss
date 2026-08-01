@@ -17,27 +17,7 @@ $qs-active-text: color.mix(theme.$text-main, white, 8%);
     $height: variable.$bar-widgets-quick_settings-sliders-height
   );
 
-  &.overamplified trough highlight {
-    background-color: theme.$accent-red;
-  }
-
-  &.muted trough highlight,
-  &.muted slider {
-    background-color: theme.$surface-disabled;
-  }
-}
-
-#quick_settings {
-  @include common.widget_border(
-    variable.$bar-widgets-quick_settings-border-radius,
-    variable.$bar-widgets-quick_settings-border-enabled,
-    variable.$bar-widgets-quick_settings-border-width
-  );
-
-  @include common.nerd-icon(
-    variable.$bar-widgets-quick_settings-icon_size,
-    variable.$bar-widgets-quick_settings-spacing
-  );
+  @include common.slider-states(true);
 }
 
 /************** QUICKSETTINGS MENU **************/
@@ -79,12 +59,7 @@ $qs-active-text: color.mix(theme.$text-main, white, 8%);
           font-weight: 600;
 
           &:hover {
-            @extend %widget_hover;
-            color: theme.$background-dark;
-
-            .panel-font-icon {
-              color: theme.$background-dark;
-            }
+            @include common.widget-hover(true);
           }
 
           &:last-child {
@@ -249,8 +224,7 @@ $qs-active-text: color.mix(theme.$text-main, white, 8%);
         }
 
         &:hover {
-          @extend %widget_hover;
-          color: theme.$background-dark;
+          @include common.widget-hover;
         }
 
         &:active {
@@ -267,8 +241,7 @@ $qs-active-text: color.mix(theme.$text-main, white, 8%);
         border-radius: variable.$radius;
 
         &:hover {
-          @extend %widget_hover;
-          color: theme.$background-dark;
+          @include common.widget-hover;
         }
       }
 
