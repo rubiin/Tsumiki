@@ -155,6 +155,11 @@ tooltip > * {
   padding: variable.$bar-menus-tooltip-padding-y variable.$bar-menus-tooltip-padding-x;
 }
 
+entry image.left {
+  margin-right: 10px;
+  /* space between icon and text */
+}
+
 menu {
   margin: functions.toEm(6);
   padding: functions.toEm(6);
@@ -162,6 +167,32 @@ menu {
   background-clip: border-box;
   border-radius: 12px;
   border: variable.$border;
+
+  > menuitem {
+    &:hover {
+      background-color: theme.$surface-highlight;
+    }
+  }
+
+  > arrow {
+    min-height: 16px;
+    min-width: 16px;
+    padding: functions.toEm(4);
+    color: theme.$background-alt;
+
+    &.top {
+      margin-top: 0;
+      border-radius: 6px;
+      -gtk-icon-source: -gtk-icontheme("pan-up-symbolic");
+    }
+
+    &.bottom {
+      margin-top: 8px;
+      margin-bottom: -12px;
+      border-radius: 6px;
+      -gtk-icon-source: -gtk-icontheme("pan-down-symbolic");
+    }
+  }
 }
 
 menuitem {
@@ -183,35 +214,6 @@ menuitem {
     margin: functions.toEm(4) 0;
     background-color: theme.$background-main;
   }
-}
-
-menu > menuitem:hover {
-  background-color: theme.$surface-highlight;
-}
-
-entry image.left {
-  margin-right: 10px;
-  /* space between icon and text */
-}
-
-menu > arrow {
-  min-height: 16px;
-  min-width: 16px;
-  padding: functions.toEm(4);
-  color: theme.$background-alt;
-}
-
-menu > arrow.top {
-  margin-top: 0;
-  border-radius: 6px;
-  -gtk-icon-source: -gtk-icontheme("pan-up-symbolic");
-}
-
-menu > arrow.bottom {
-  margin-top: 8px;
-  margin-bottom: -12px;
-  border-radius: 6px;
-  -gtk-icon-source: -gtk-icontheme("pan-down-symbolic");
 }
 
 check,
@@ -347,11 +349,11 @@ spinner {
   background: none;
   opacity: 0;
   -gtk-icon-source: -gtk-icontheme("process-working-symbolic");
-}
 
-spinner:checked {
-  opacity: 1;
-  animation: spin 1s linear infinite;
+  &:checked {
+    opacity: 1;
+    animation: spin 1s linear infinite;
+  }
 }
 
 separator {
@@ -501,18 +503,14 @@ scrolledwindow {
 
 // apply the widget style to the widget group container, ensuring consistent styling for grouped widgets in the panel
 
-#widget-group {
+#widget-group,
+.panel-button .widget-container,
+#collapsible_group {
   @include mixins.widget_style(variable.$bar-style-widget);
-}
-
-.panel-button {
-  .widget-container {
-    @include mixins.widget_style(variable.$bar-style-widget);
-  }
+  margin: 0 2px;
 }
 
 #collapsible_group {
-  @include mixins.widget_style(variable.$bar-style-widget);
   &.active {
     background: theme.$accent-blue;
     color: theme.$text-main;
