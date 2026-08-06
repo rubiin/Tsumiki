@@ -32,6 +32,7 @@ class DateMenuNotification(Box):
         id: int,
         notification: Notification,
         badge_count: int | None = None,
+        on_close=None,
         **kwargs,
     ):
         super().__init__(
@@ -94,8 +95,11 @@ class DateMenuNotification(Box):
                 icon=get_text_icon("ui.window_close"),
                 props={"style_classes": ["panel-font-icon", "close-icon"]},
             ),
-            on_clicked=self.remove_notification,
+            on_clicked=on_close or self.remove_notification,
         )
+        if on_close is not None:
+            self.close_button.set_tooltip_text("Clear group")
+            self.close_button.add_style_class("group-clear-button")
 
         header_row = Box(
             spacing=4,
@@ -177,7 +181,10 @@ class DateMenuNotification(Box):
 
     def remove_notification(self, *_):
         notification_service.remove_notification(self._id)
-        self.destroy()
+        # The notification_count handler may already have reloaded the list,
+        # destroying this row - only destroy if it is still in the tree.
+        if self.get_parent() is not None:
+            self.destroy()
 
 
 class DateNotificationMenu(Box):
@@ -337,6 +344,7 @@ class DateNotificationMenu(Box):
                 {
                     "notification-added": self.on_new_notification,
                     "notification-closed": self.on_notification_closed,
+                    "notification_count": self.on_notification_count,
                     "clear_all": self.on_clear_all_notifications,
                     "dnd": self.on_dnd_switch,
                 },
@@ -463,7 +471,6 @@ class DateNotificationMenu(Box):
             revealer.set_reveal_child(is_expanded)
             peek_box.set_visible(not is_expanded and len(notifications) > 1)
             group_header.set_visible(is_expanded)
-            top_notification.close_button.set_visible(is_expanded)
             if top_notification.badge_label is not None:
                 top_notification.badge_label.set_visible(not is_expanded)
             if is_expanded:
@@ -475,11 +482,9 @@ class DateNotificationMenu(Box):
             ids = {self._notification_id(n) for n in notifications}
             ids.discard(None)
             for nid in ids:
+                # Each removal emits notification_count, which triggers the
+                # on_notification_count handler to re-sync and reload the list.
                 notification_service.remove_notification(nid)
-            self.all_notifications = [
-                n for n in self.all_notifications if self._notification_id(n) not in ids
-            ]
-            self._reload_grouped_list()
 
         # Unified expanded group header: icon + name + collapse + close-all
         collapse_button = Button(
@@ -505,6 +510,11 @@ class DateNotificationMenu(Box):
 
         count = len(notifications)
 
+        count_label = Label(
+            label=str(count),
+            style_classes="notification-group-count",
+        )
+
         group_header = Box(
             name="notification-group-header",
             style_classes="notification-group-header",
@@ -520,10 +530,7 @@ class DateNotificationMenu(Box):
                     h_align="start",
                     style_classes="notification-group-title",
                 ),
-                Label(
-                    label=str(count),
-                    style_classes="notification-group-count",
-                ),
+                count_label,
                 collapse_button,
                 close_all_button,
             ),
@@ -534,8 +541,8 @@ class DateNotificationMenu(Box):
             id=self._notification_id(notifications[0]) or 0,
             badge_count=count,
             style_classes="notification-group-top",
+            on_close=_close_group,
         )
-        top_notification.close_button.set_visible(expanded)
         if top_notification.badge_label is not None:
             top_notification.badge_label.set_visible(not expanded)
 
@@ -663,6 +670,26 @@ class DateNotificationMenu(Box):
         self.notifications_listbox.set_visible(False)
         self.notifications_listbox.remove_all()
 
+    def on_notification_count(self, *_):
+        """Re-sync notifications from the service when the count changes.
+
+        The service emits ``notification_count`` on every add/remove (unlike
+        ``notification-closed``, which is only emitted for limit evictions), so
+        this keeps per-group badge counts accurate when a notification inside
+        a group is dismissed.
+        """
+        if getattr(self, "_syncing_notification_count", False):
+            return
+        if notification_service.count == len(self.all_notifications):
+            return
+
+        self._syncing_notification_count = True
+        try:
+            self.all_notifications = notification_service.get_deserialized()
+            self._reload_grouped_list()
+        finally:
+            self._syncing_notification_count = False
+
     def on_notification_closed(self, _, id, reason):
         """Handle notification being closed."""
         if reason not in {"dismissed-by-user", "dismissed-by-limit"}:
@@ -680,6 +707,11 @@ class DateNotificationMenu(Box):
         fabric_notification: Notification = (
             fabric_notification.get_notification_from_id(id)
         )
+
+        # The notification_count handler may already have synced this
+        # notification in from the service - avoid inserting it twice.
+        if any(self._notification_id(n) == id for n in self.all_notifications):
+            return
 
         self.all_notifications.insert(0, fabric_notification)
         self._reload_grouped_list()

@@ -226,6 +226,14 @@
             background-color: color.mix(theme.$background-main, theme.$surface-highlight, 85%);
           }
         }
+
+        // Collapsed-group clear cross: destructive action, red hover
+        // (matches #notification-group-close-all-button in the expanded header)
+        #close-button.group-clear-button {
+          &:hover {
+            background-color: theme.$accent-red;
+          }
+        }
       }
 
       #date_time-menu #notification-group-badge-label {
