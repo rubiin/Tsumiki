@@ -1,5 +1,46 @@
 # Changelog
 
+## [4.0.2](https://github.com/rubiin/tsumiki/compare/v4.0.1...v4.0.2) (2026-08-06)
+
+
+### 🐛 Bug Fixes
+
+* center dock indicators directly via valign/halign instead of Box wrappers ([744af38](https://github.com/rubiin/tsumiki/commit/744af3885661fdf7bee46fd9297ee2dc88b0f252))
+* **deps:** update all non-major npm dependencies ([#346](https://github.com/rubiin/tsumiki/issues/346)) ([92f0824](https://github.com/rubiin/tsumiki/commit/92f08246d1e498a8ac181c6208f201568594a96d))
+* player structurre ([0b609ee](https://github.com/rubiin/tsumiki/commit/0b609eef9ed38f406d8dfa2c9bf2c9965a13860e))
+* quicksettings ([4c0b6ba](https://github.com/rubiin/tsumiki/commit/4c0b6ba3dcf3d465e28c0cc4de67d1546f9a13cb))
+* remove glace all together ([b3d0978](https://github.com/rubiin/tsumiki/commit/b3d097872044249b524841750d43a8b4c6cb9c84))
+* style service ([a48f105](https://github.com/rubiin/tsumiki/commit/a48f105ca4fb27b633039c7199b3f534c81d2a29))
+* workspace button ([781d937](https://github.com/rubiin/tsumiki/commit/781d937b5d493e4552dde998326dc7098b3d469e))
+* workspace styles ([b3e587c](https://github.com/rubiin/tsumiki/commit/b3e587ca5012647c36428909accd70824b4b5f72))
+
+
+### ⚡️ Performance Improvements
+
+* optimize imports, style_classes, and widget nesting ([5a08ced](https://github.com/rubiin/tsumiki/commit/5a08cedb0f25de63e67586ce20ae09438236bda6))
+* remove unnecessary widget nesting in notification, dock, bar, and other widgets ([639c2e9](https://github.com/rubiin/tsumiki/commit/639c2e9653a107da17ceca348ba2b55cfa40e34f))
+
+
+### 🎨 Code Style
+
+* add hover effect for close button in notification group ([48b8ccc](https://github.com/rubiin/tsumiki/commit/48b8cccdfd78ae209f3f786de96e8e657f0ca259))
+* change notification count color ([77c0ec5](https://github.com/rubiin/tsumiki/commit/77c0ec5aa00c9cdb0389aeb1df8290b9f134175b))
+* css duplication ([ab475ac](https://github.com/rubiin/tsumiki/commit/ab475ac5f035cefb1fcef82c27a8fa4f39699303))
+* css optimized ([7cb9af7](https://github.com/rubiin/tsumiki/commit/7cb9af7158e4cdeda1214518b402aafb8da930f8))
+* player border radius ([018194b](https://github.com/rubiin/tsumiki/commit/018194bb624be090e7dc85c6459ed13a9f27f4b2))
+
+
+### ⚙️ Chores
+
+* **deps:** update actions/stale action to v11 ([#347](https://github.com/rubiin/tsumiki/issues/347)) ([d6d7fa5](https://github.com/rubiin/tsumiki/commit/d6d7fa574b1d073c669fd34c6c71b6901bd31340))
+
+
+### ♻️ Code Refactoring
+
+* centralize Hyprland IPC into HyprlandService + flatten _datemenu.scss ([025daaf](https://github.com/rubiin/tsumiki/commit/025daaf8727d9762497d0c8eb9db34eddeb973be))
+* fix hardcoded rgba() values and bare transitions in SCSS ([16f886b](https://github.com/rubiin/tsumiki/commit/16f886b0cb9b6167d792395db711f74b0044202b))
+* SCSS perf, theme key normalization, and hardcoded color cleanup ([ce5cae7](https://github.com/rubiin/tsumiki/commit/ce5cae708ef712217b87fb59c25e5f79196e73ce))
+
 ## [4.0.1](https://github.com/rubiin/tsumiki/compare/v4.0.0...v4.0.1) (2026-07-29)
 
 
