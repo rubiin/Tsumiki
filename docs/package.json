@@ -4,7 +4,7 @@
 	"type": "module",
 	"version": "0.1.1",
 	"engines": {
-		"node": ">=24.18.1"
+		"node": ">=24.19.0"
 	},
 	"scripts": {
 		"dev": "astro dev",
@@ -15,8 +15,8 @@
 	},
 	"dependencies": {
 		"@astrojs/check": "0.9.10",
-		"@astrojs/starlight": "^0.41.6",
-		"astro": "^7.1.6",
+		"@astrojs/starlight": "^0.41.7",
+		"astro": "^7.2.0",
 		"sharp": "^0.35.3",
 		"tslib": "^2.8.1",
 		"typescript": "^5.9.3"
