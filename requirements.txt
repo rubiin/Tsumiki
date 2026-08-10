@@ -5,7 +5,7 @@ ijson==3.5.1
 loguru==0.7.3
 pillow==12.3.0  # Consider: audit for lighter alternatives if memory footprint is a concern
 psutil==7.2.2  # Consider: audit for lighter alternatives if memory footprint is a concern
-pycairo==1.29.0
+pycairo==1.29.1
 PyGObject==3.50.0
 PyGObject-stubs==2.16.0
 pytomlpp==1.1.0
