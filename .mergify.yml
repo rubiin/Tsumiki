@@ -6,9 +6,8 @@
 # required checks pass. Human PRs are left for manual review.
 queue_rules:
   - name: default
-    conditions:
-      - -conflict
-      - check-success=pre-commit.ci - pr
+    merge_conditions:
+      - status-success=pre-commit.ci - pr
       - check-success=GitGuardian Security Checks
 
 pull_request_rules:
@@ -21,5 +20,3 @@ pull_request_rules:
     actions:
       queue:
         name: default
-        method: merge
-        update_method: merge
