@@ -1,0 +1,25 @@
+---
+# Mergify configuration
+# https://docs.mergify.com/
+#
+# Auto-merges bot PRs (pre-commit.ci, dependabot, imgbot, ...) once all
+# required checks pass. Human PRs are left for manual review.
+queue_rules:
+  - name: default
+    conditions:
+      - -conflict
+      - check-success=pre-commit.ci - pr
+      - check-success=GitGuardian Security Checks
+
+pull_request_rules:
+  - name: Queue bot PRs when all checks pass
+    conditions:
+      - author~=^.*\[bot\]$
+      - base=master
+      - -draft
+      - -conflict
+    actions:
+      queue:
+        name: default
+        method: merge
+        update_method: merge
