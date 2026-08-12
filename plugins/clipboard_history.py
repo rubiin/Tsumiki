@@ -40,7 +40,7 @@ class ClipboardHistoryPlugin(LauncherPlugin):
     name = "clipboard-history"
     description = "Search clipboard history (cliphist)"
     icon = "edit-paste-symbolic"
-    aliases: ClassVar[list[str]] = ["clip", "cb", "history"]
+    aliases: ClassVar[list[str]] = ["clip", "cb"]  # "history" belongs to /history
 
     def handle(self, args: str) -> list[PluginResult]:
         query = args.strip().casefold()

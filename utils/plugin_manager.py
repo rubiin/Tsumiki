@@ -325,8 +325,24 @@ def copy_to_clipboard(text: str) -> bool:
 class PluginManager:
     """Loads launcher plugins from a directory and registers their commands."""
 
-    def __init__(self, plugins_dir: str):
+    def __init__(
+        self,
+        plugins_dir: str,
+        plugin_names: list[str] | None = None,
+    ):
         self.plugins_dir = os.path.expanduser(plugins_dir)
+        #: Allowlist of plugin names to load (case-insensitive, whitespace
+        #: trimmed). ``None`` loads every discovered plugin; an empty list
+        #: loads none.
+        self._plugin_names = (
+            {
+                name.strip().casefold()
+                for name in plugin_names
+                if name and name.strip()
+            }
+            if plugin_names is not None
+            else None
+        )
         self._plugins: dict[str, LauncherPlugin] = {}
         self._instances: list[LauncherPlugin] = []
 
@@ -346,6 +362,7 @@ class PluginManager:
                 f"[LauncherPlugin] Plugins directory "
                 f"'{self.plugins_dir}' not found, no slash commands loaded"
             )
+            self._warn_unknown_allowlist_entries()
             return 0
 
         count = 0
@@ -370,10 +387,23 @@ class PluginManager:
             if module_name:
                 count += self._register_from_module(module_name, path)
 
+        self._warn_unknown_allowlist_entries()
         logger.info(
             f"[LauncherPlugin] Loaded {count} slash command(s) from {self.plugins_dir}"
         )
         return count
+
+    def _warn_unknown_allowlist_entries(self) -> None:
+        """Warn about ``plugins`` names that matched no loaded plugin."""
+        if self._plugin_names is None:
+            return
+        registered = {plugin.name.casefold() for plugin in self._instances}
+        missing = sorted(self._plugin_names - registered)
+        if missing:
+            logger.warning(
+                "[LauncherPlugin] plugins listed in launcher config were not "
+                f"found: {', '.join(missing)}"
+            )
 
     def _import_file(self, path: str) -> str | None:
         """Import a single-file plugin under a unique synthetic module name."""
@@ -419,7 +449,25 @@ class PluginManager:
         return count
 
     def _register(self, plugin_cls: type, source: str) -> bool:
-        """Instantiate a plugin and register it under its name + aliases."""
+        """Instantiate a plugin and register it under its name + aliases.
+
+        Disallowed plugins are skipped before instantiation so their
+        ``__init__`` (and any side effects) never run. The class-level
+        ``name`` covers every bundled/documented plugin; the post-
+        instantiation check below is the fallback for plugins that set
+        ``self.name`` inside ``__init__``.
+        """
+        if (
+            self._plugin_names is not None
+            and plugin_cls.name
+            and plugin_cls.name.casefold() not in self._plugin_names
+        ):
+            logger.info(
+                f"[LauncherPlugin] Plugin '{plugin_cls.name}' in {source} is not "
+                f"in launcher config plugins allowlist — skipped"
+            )
+            return False
+
         try:
             instance = plugin_cls()
         except Exception as exc:
@@ -433,6 +481,16 @@ class PluginManager:
             logger.warning(
                 f"[LauncherPlugin] Plugin {plugin_cls.__name__} in {source} "
                 f"has no name — skipped"
+            )
+            return False
+
+        if (
+            self._plugin_names is not None
+            and instance.name.casefold() not in self._plugin_names
+        ):
+            logger.info(
+                f"[LauncherPlugin] Plugin '{instance.name}' in {source} is not "
+                f"in launcher config plugins allowlist — skipped"
             )
             return False
 
@@ -472,14 +530,33 @@ class PluginManager:
 
 _manager: PluginManager | None = None
 _manager_dir: str = ""
+_manager_names: frozenset[str] | None = None
 
 
-def get_plugin_manager(plugins_dir: str) -> PluginManager:
-    """Return a cached :class:`PluginManager`, reloading if the dir changed."""
-    global _manager, _manager_dir
+def get_plugin_manager(
+    plugins_dir: str,
+    plugin_names: list[str] | None = None,
+) -> PluginManager:
+    """Return a cached :class:`PluginManager`.
+
+    Reloads when either the directory or the ``plugins`` allowlist changes.
+    ``None`` (or omitting *plugin_names*) keeps the legacy behavior of
+    loading every plugin in the directory.
+    """
+    global _manager, _manager_dir, _manager_names
     plugins_dir = os.path.expanduser(plugins_dir)
-    if _manager is None or _manager_dir != plugins_dir:
-        _manager = PluginManager(plugins_dir)
+    names = (
+        frozenset(
+            name.strip().casefold()
+            for name in plugin_names
+            if name and name.strip()
+        )
+        if plugin_names is not None
+        else None
+    )
+    if _manager is None or _manager_dir != plugins_dir or _manager_names != names:
+        _manager = PluginManager(plugins_dir, plugin_names)
         _manager.load()
         _manager_dir = plugins_dir
+        _manager_names = names
     return _manager

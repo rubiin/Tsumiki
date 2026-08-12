@@ -525,6 +525,18 @@ width = 280
 height = 320
 layout = "list"
 grid_columns = 3
+plugins = [
+    "calc",
+    "clipboard-history",
+    "currency",
+    "define",
+    "emoji",
+    "history",
+    "kill",
+    "search",
+    "shorten",
+    "translate",
+]
 
 [modules.notification]
 enabled = true

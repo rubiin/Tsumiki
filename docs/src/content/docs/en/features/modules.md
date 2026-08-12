@@ -151,6 +151,7 @@ layout = "grid"                    # "grid" | "list"
 grid_columns = 3
 plugins_enabled = true              # slash-command plugins (/calc, /translate)
 plugins_dir = ""                    # default: <config>/plugins
+plugins = ["calc", "emoji"]          # allowlist of plugins to load (empty = none)
 ```
 
 - **`layout`**: `grid` shows app icons in a grid; `list` shows them as a list with names.
@@ -158,6 +159,10 @@ plugins_dir = ""                    # default: <config>/plugins
 - **`ignored`**: List of desktop file names to exclude from search results.
 - **`plugins_enabled`**: Enables slash-command plugins (`/calc`, `/translate`, ...).
 - **`plugins_dir`**: Directory containing Python plugins; defaults to `<config>/plugins`.
+- **`plugins`**: Strict allowlist of plugin names to load (e.g. `["calc", "emoji"]`).
+  An empty list loads **no** plugins — list every plugin you want to use.
+  Names are matched case-insensitively against the plugin's `name` (the slash
+  command), **not** its aliases.
 
 ### Keybindings
 
@@ -171,9 +176,11 @@ plugins_dir = ""                    # default: <config>/plugins
 ### Slash Commands & Plugins
 
 Type `/` in the search box to browse the available slash commands, or use one
-straight away, e.g. `/calc 2+2` or `/translate bonjour`. Plugins are written
-in Python — drop a `.py` file (or a package directory) into `plugins/` and
-restart the bar.
+straight away, e.g. `/calc 2+2` or `/translate bonjour`. Only plugins listed
+under `plugins` in `[modules.launcher]` are loaded — an empty list means no
+slash commands are available. Plugins are written in Python — drop a `.py`
+file (or a package directory) into `plugins/`, add its name to `plugins`,
+and restart the bar.
 
 Bundled plugins:
 
@@ -192,6 +199,14 @@ Bundled plugins:
 - **`/search`** — search the web (DuckDuckGo, no API key) and open a result
   in your browser while copying its URL to the clipboard, e.g.
   `/search fabric hyprland`.
+- **`/history`** — search your shell command history (bash, zsh, fish) and
+  copy a command back to the clipboard, e.g. `/history git`. Nothing is ever
+  executed.
+- **`/define`** — look up a word on dict.org's WordNet (DICT protocol, no API
+  key), e.g. `/define serendipity`; pick another database with
+  `/define -d foldoc monad`.
+- **`/shorten`** — shorten a URL via is.gd (TinyURL fallback), e.g.
+  `/shorten github.com/rubiin/tsumiki` — Enter copies the short link.
 
 Keyboard: `Up`/`Down` move the selection, `Enter` activates the highlighted
 row, `Escape` closes.

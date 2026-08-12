@@ -3621,6 +3621,14 @@
 							"description": "Directory containing launcher plugins (Python files). Defaults to <config>/plugins",
 							"default": ""
 						},
+						"plugins": {
+							"type": "array",
+							"items": {
+								"type": "string"
+							},
+							"description": "Allowlist of plugin names to load (e.g. [\"calc\", \"emoji\"]). An empty list loads no plugins.",
+							"default": []
+						},
 						"ignored": {
 							"type": "array",
 							"items": {

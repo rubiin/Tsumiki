@@ -431,6 +431,7 @@ DEFAULT_CONFIG = {
             "tooltip": True,
             "icon_size": 16,
             "plugins_enabled": True,
+            "plugins": [],
         },
         "notification": {
             "enabled": True,

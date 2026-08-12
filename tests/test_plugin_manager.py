@@ -106,6 +106,93 @@ class PluginManagerTest(unittest.TestCase):
             with tempfile.TemporaryDirectory() as other:
                 self.assertIsNot(get_plugin_manager(tmp), get_plugin_manager(other))
 
+    def _write_two_plugins(self, plugins_dir: Path):
+        _write(
+            plugins_dir,
+            "from utils.plugin_manager import LauncherPlugin\n"
+            "class Alpha(LauncherPlugin):\n"
+            "    name = 'alpha'\n"
+            "    description = 'first'\n",
+            name="alpha.py",
+        )
+        _write(
+            plugins_dir,
+            "from utils.plugin_manager import LauncherPlugin\n"
+            "class Beta(LauncherPlugin):\n"
+            "    name = 'beta'\n"
+            "    description = 'second'\n",
+            name="beta.py",
+        )
+
+    def test_plugins_allowlist_loads_only_named_plugins(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            plugins_dir = Path(tmp)
+            self._write_two_plugins(plugins_dir)
+            manager = PluginManager(str(plugins_dir), plugin_names=["alpha"])
+            self.assertEqual(manager.load(), 1)
+            self.assertIsNotNone(manager.get("alpha"))
+            self.assertIsNone(manager.get("beta"))
+
+    def test_plugins_allowlist_is_case_insensitive(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            plugins_dir = Path(tmp)
+            self._write_two_plugins(plugins_dir)
+            manager = PluginManager(str(plugins_dir), plugin_names=["ALPHA"])
+            self.assertEqual(manager.load(), 1)
+            self.assertIsNotNone(manager.get("alpha"))
+
+    def test_empty_plugins_allowlist_loads_nothing(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            plugins_dir = Path(tmp)
+            self._write_two_plugins(plugins_dir)
+            manager = PluginManager(str(plugins_dir), plugin_names=[])
+            self.assertEqual(manager.load(), 0)
+            self.assertIsNone(manager.get("alpha"))
+            self.assertIsNone(manager.get("beta"))
+
+    def test_plugins_allowlist_keeps_aliases_of_allowed_plugins(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            plugins_dir = Path(tmp)
+            _write(
+                plugins_dir,
+                "from utils.plugin_manager import LauncherPlugin\n"
+                "class Gamma(LauncherPlugin):\n"
+                "    name = 'gamma'\n"
+                "    aliases = ['g']\n"
+                "    description = 'third'\n",
+                name="gamma.py",
+            )
+            manager = PluginManager(str(plugins_dir), plugin_names=["gamma"])
+            self.assertEqual(manager.load(), 1)
+            self.assertIsNotNone(manager.get("g"))
+            # Allowlisting an alias alone does not load the plugin — the
+            # allowlist matches plugin names, not aliases.
+            manager = PluginManager(str(plugins_dir), plugin_names=["g"])
+            self.assertEqual(manager.load(), 0)
+            self.assertIsNone(manager.get("gamma"))
+
+    def test_plugins_allowlist_none_loads_everything(self):
+        # ``plugin_names=None`` keeps the legacy load-all behavior.
+        with tempfile.TemporaryDirectory() as tmp:
+            plugins_dir = Path(tmp)
+            self._write_two_plugins(plugins_dir)
+            manager = PluginManager(str(plugins_dir), plugin_names=None)
+            self.assertEqual(manager.load(), 2)
+            self.assertIsNotNone(manager.get("alpha"))
+            self.assertIsNotNone(manager.get("beta"))
+
+    def test_singleton_caches_per_allowlist(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            plugins_dir = Path(tmp)
+            self._write_two_plugins(plugins_dir)
+            all_plugins = get_plugin_manager(tmp)
+            subset = get_plugin_manager(tmp, plugin_names=["alpha"])
+            self.assertIsNot(all_plugins, subset)
+            self.assertIsNotNone(subset.get("alpha"))
+            self.assertIsNone(subset.get("beta"))
+            # Same allowlist again reuses the cached instance.
+            self.assertIs(get_plugin_manager(tmp, plugin_names=["alpha"]), subset)
+
 
 class CalcPluginTest(unittest.TestCase):
     """Test the bundled /calc plugin (libqalculate backend)."""
@@ -1031,6 +1118,323 @@ class SearchPluginTest(unittest.TestCase):
         # /search hits a network endpoint per query, so it must debounce
         # harder than the launcher default (150ms), like /translate.
         self.assertGreaterEqual(self.plugin.debounce_ms or 0, 400)
+
+
+class HistoryPluginTest(unittest.TestCase):
+    """Test the bundled /history plugin (history files mocked)."""
+
+    def setUp(self):
+        from plugins.history import (
+            HistoryPlugin,
+            load_history,
+            parse_bash_history,
+            parse_fish_history,
+            parse_zsh_history,
+        )
+
+        self.plugin = HistoryPlugin()
+        self.load_history = load_history
+        self.parse_bash_history = parse_bash_history
+        self.parse_fish_history = parse_fish_history
+        self.parse_zsh_history = parse_zsh_history
+
+    def test_parse_bash_history(self):
+        content = "ls\ncd /tmp\n\n# a comment\n"
+        self.assertEqual(self.parse_bash_history(content), ["ls", "cd /tmp"])
+
+    def test_parse_zsh_extended_history(self):
+        content = ": 1700000001:0;cd /tmp\n: 1700000002:3;git status\n"
+        self.assertEqual(
+            self.parse_zsh_history(content),
+            [(1700000001, "cd /tmp"), (1700000002, "git status")],
+        )
+
+    def test_parse_zsh_plain_lines_are_ordered(self):
+        entries = self.parse_zsh_history("first\nsecond\nthird\n")
+        # Plain lines sort newer-first by their position in the file.
+        self.assertEqual(
+            [cmd for _, cmd in sorted(entries, reverse=True)],
+            ["third", "second", "first"],
+        )
+
+    def test_parse_fish_history(self):
+        content = (
+            "- cmd: ls\n  when: 1700000001\n"
+            "- cmd: git pull\n  when: 1700000002\n"
+        )
+        self.assertEqual(
+            self.parse_fish_history(content),
+            [(1700000001, "ls"), (1700000002, "git pull")],
+        )
+
+    def test_load_history_dedupes_and_sorts_newest_first(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            bash = Path(tmp) / ".bash_history"
+            zsh = Path(tmp) / ".zsh_history"
+            bash.write_text("oldcmd\ngit status\n")
+            zsh.write_text(": 1700000005:0;git status\n: 1700000006:0;ls -la\n")
+            commands = self.load_history([str(bash), str(zsh)])
+        # "git status" appears twice — the zsh copy (newer epoch) wins, and
+        # the list is most-recent-first.
+        self.assertEqual(commands[:3], ["ls -la", "git status", "oldcmd"])
+
+    def test_handle_filters_by_query(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            bash = Path(tmp) / ".bash_history"
+            bash.write_text("git commit\ngit push\ncd /tmp\n")
+            with unittest.mock.patch(
+                "plugins.history.default_history_files", return_value=[str(bash)]
+            ):
+                results = self.plugin.handle("git")
+        self.assertEqual([row.title for row in results], ["git push", "git commit"])
+        self.assertEqual(results[0].data, "git push")
+
+    def test_handle_no_history(self):
+        with unittest.mock.patch(
+            "plugins.history.default_history_files", return_value=["/nonexistent"]
+        ):
+            results = self.plugin.handle("anything")
+        self.assertIn("No shell history", results[0].title)
+
+    def test_handle_no_match(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            bash = Path(tmp) / ".bash_history"
+            bash.write_text("git push\n")
+            with unittest.mock.patch(
+                "plugins.history.default_history_files", return_value=[str(bash)]
+            ):
+                results = self.plugin.handle("zzz")
+        self.assertIn("No history entry", results[0].title)
+
+    def test_execute_copies_command(self):
+        import unittest.mock
+
+        from utils.plugin_manager import PluginResult
+
+        with unittest.mock.patch("plugins.history.copy_to_clipboard") as mock_copy:
+            self.plugin.execute(PluginResult("git push", data="git push"))
+        mock_copy.assert_called_once_with("git push")
+
+
+class DefinePluginTest(unittest.TestCase):
+    """Test the bundled /define plugin (dict.org transcript mocked)."""
+
+    _RESPONSE = (
+        "220 dictd 1.12.1/rf on Linux <system.mail.dict.org>\r\n"
+        "CLIENT tsumiki/1.0\r\n"
+        "250 ok\r\n"
+        "DEFINE wn serendipity\r\n"
+        "150 1 definitions retrieved\r\n"
+        '151 "serendipity" wn "WordNet (r) 3.0 (2006)"\r\n'
+        "Serendipity\r\n"
+        "n 1: good luck in making unexpected discoveries [syn: {serendipity}]\r\n"
+        "n 2: a fortunate discovery happening by chance\r\n"
+        ".\r\n"
+        "250 ok [d/m/c = 1/1/1; 0.000r 0.000u 0.000s]\r\n"
+        "QUIT\r\n"
+        "221 bye [d/m/c = 1/0/0; 0.000r 0.000u 0.000s]\r\n"
+    )
+
+    def setUp(self):
+        from plugins.define import (
+            DefinePlugin,
+            parse_define_args,
+            parse_dict_response,
+            query_dict,
+            split_senses,
+        )
+
+        self.plugin = DefinePlugin()
+        self.parse_define_args = parse_define_args
+        self.parse_dict_response = parse_dict_response
+        self.query_dict = query_dict
+        self.split_senses = split_senses
+
+    def test_parse_dict_response(self):
+        blocks = self.parse_dict_response(self._RESPONSE)
+        self.assertEqual(len(blocks), 1)
+        block = blocks[0]
+        self.assertEqual(block["word"], "serendipity")
+        self.assertEqual(block["database"], "wn")
+        self.assertEqual(block["description"], "WordNet (r) 3.0 (2006)")
+        self.assertEqual(block["body"][0], "Serendipity")
+
+    def test_parse_dict_response_no_match(self):
+        self.assertEqual(self.parse_dict_response("552 No match\r\n"), [])
+
+    def test_split_senses(self):
+        block = {"body": ["Serendipity", "n 1: first sense", "n 2: second sense"]}
+        self.assertEqual(
+            self.split_senses(block), ["n 1: first sense", "n 2: second sense"]
+        )
+
+    def test_split_senses_falls_back_to_plain_text(self):
+        block = {"body": ["a plain gcide-style definition"]}
+        self.assertEqual(self.split_senses(block), ["a plain gcide-style definition"])
+
+    def test_split_senses_handles_indented_dictorg_format(self):
+        # dict.org WordNet indents senses and uses full part-of-speech
+        # markers; continuation senses of the same POS are bare numbers.
+        block = {
+            "body": [
+                "set",
+                "    adj 1: on the point of doing something",
+                "    2: fixed and unmoving",
+                "    n 1: a group of things",
+            ]
+        }
+        self.assertEqual(
+            self.split_senses(block),
+            [
+                "adj 1: on the point of doing something",
+                "2: fixed and unmoving",
+                "n 1: a group of things",
+            ],
+        )
+
+    def test_parse_define_args(self):
+        self.assertEqual(self.parse_define_args("serendipity"), ("wn", "serendipity"))
+        self.assertEqual(self.parse_define_args("-d gcide apple"), ("gcide", "apple"))
+        self.assertEqual(self.parse_define_args("--database foldoc x"), ("foldoc", "x"))
+
+    def test_handle_without_args_returns_usage(self):
+        results = self.plugin.handle("")
+        self.assertIn("Usage:", results[0].title)
+
+    def test_handle_builds_sense_rows(self):
+        block = {
+            "word": "serendipity",
+            "database": "wn",
+            "description": "WordNet (r) 3.0 (2006)",
+            "body": ["Serendipity", "n 1: good luck in making unexpected discoveries"],
+        }
+        with unittest.mock.patch("plugins.define.query_dict", return_value=[block]):
+            results = self.plugin.handle("serendipity")
+        self.assertEqual(len(results), 1)
+        self.assertIn("good luck", results[0].title)
+        self.assertIn("WordNet", results[0].subtitle)
+        self.assertIn("serendipity", results[0].data)
+
+    def test_handle_no_match(self):
+        with unittest.mock.patch("plugins.define.query_dict", return_value=[]):
+            results = self.plugin.handle("zzz")
+        self.assertIn("No definition", results[0].title)
+
+    def test_handle_network_failure(self):
+        with unittest.mock.patch(
+            "plugins.define.query_dict", side_effect=OSError("down")
+        ):
+            results = self.plugin.handle("serendipity")
+        self.assertIn("failed", results[0].title.casefold())
+
+    def test_debounce_before_lookup(self):
+        # /define opens a TCP connection per query, so it must debounce
+        # harder than the launcher default (150ms), like /translate.
+        self.assertGreaterEqual(self.plugin.debounce_ms or 0, 400)
+
+    def test_execute_copies_definition(self):
+        import unittest.mock
+
+        from utils.plugin_manager import PluginResult
+
+        with unittest.mock.patch("plugins.define.copy_to_clipboard") as mock_copy:
+            self.plugin.execute(PluginResult("x", data="serendipity: ..."))
+        mock_copy.assert_called_once_with("serendipity: ...")
+
+
+class ShortenPluginTest(unittest.TestCase):
+    """Test the bundled /shorten plugin (HTTP mocked)."""
+
+    @staticmethod
+    def _fake_client(response, responses=None):
+        """Build a get_http_client stand-in returning *response* per call."""
+        iterator = iter(responses) if responses is not None else None
+
+        class Client:
+            def get(self, url, params=None):
+                return next(iterator) if iterator is not None else response
+
+        return Client()
+
+    def setUp(self):
+        from plugins.shorten import ShortenPlugin, normalize_url, shorten_url
+
+        self.plugin = ShortenPlugin()
+        self.normalize_url = normalize_url
+        self.shorten_url = shorten_url
+
+    def test_normalize_url(self):
+        self.assertEqual(
+            self.normalize_url("github.com/rubiin/tsumiki"),
+            "https://github.com/rubiin/tsumiki",
+        )
+        self.assertEqual(
+            self.normalize_url("https://example.com/a?b=c"),
+            "https://example.com/a?b=c",
+        )
+        self.assertIsNone(self.normalize_url(""))
+        self.assertIsNone(self.normalize_url("not a url"))
+        self.assertIsNone(self.normalize_url("ftp://example.com/x"))
+
+    def test_handle_shortens_with_is_gd(self):
+        from types import SimpleNamespace
+
+        response = SimpleNamespace(
+            text="https://is.gd/AbCdEf", raise_for_status=lambda: None
+        )
+        with unittest.mock.patch(
+            "plugins.shorten.get_http_client",
+            return_value=self._fake_client(response),
+        ):
+            results = self.plugin.handle("https://example.com/very/long")
+        self.assertEqual(results[0].data, "https://is.gd/AbCdEf")
+        self.assertIn("is.gd", results[0].subtitle)
+
+    def test_handle_falls_back_to_tinyurl(self):
+        from types import SimpleNamespace
+
+        error = SimpleNamespace(
+            text="Error: rate limited", raise_for_status=lambda: None
+        )
+        success = SimpleNamespace(
+            text="https://tinyurl.com/abc123", raise_for_status=lambda: None
+        )
+        with unittest.mock.patch(
+            "plugins.shorten.get_http_client",
+            return_value=self._fake_client(None, responses=[error, success]),
+        ):
+            results = self.plugin.handle("https://example.com/x")
+        self.assertEqual(results[0].data, "https://tinyurl.com/abc123")
+        self.assertIn("tinyurl", results[0].subtitle)
+
+    def test_handle_invalid_url(self):
+        results = self.plugin.handle("not a url")
+        self.assertIn("doesn't look like a URL", results[0].title)
+
+    def test_handle_all_providers_fail(self):
+        from types import SimpleNamespace
+
+        error = SimpleNamespace(text="Error: nope", raise_for_status=lambda: None)
+        with unittest.mock.patch(
+            "plugins.shorten.get_http_client",
+            return_value=self._fake_client(error),
+        ):
+            results = self.plugin.handle("https://example.com/x")
+        self.assertIn("failed", results[0].title.casefold())
+
+    def test_debounce_before_shorten(self):
+        # /shorten hits a network endpoint per query, so it must debounce
+        # harder than the launcher default (150ms), like /search.
+        self.assertGreaterEqual(self.plugin.debounce_ms or 0, 400)
+
+    def test_execute_copies_short_url(self):
+        import unittest.mock
+
+        from utils.plugin_manager import PluginResult
+
+        with unittest.mock.patch("plugins.shorten.copy_to_clipboard") as mock_copy:
+            self.plugin.execute(PluginResult("x", data="https://is.gd/x"))
+        mock_copy.assert_called_once_with("https://is.gd/x")
 
 
 if __name__ == "__main__":

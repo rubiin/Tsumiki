@@ -101,6 +101,12 @@ layout = "grid"
 grid_columns = 3
 plugins_enabled = true
 plugins_dir = ""
+# Allowlist of slash-command plugins to load, by plugin name.
+# An empty list loads no plugins.
+plugins = [
+    "calc",
+    "currency"
+]
 
 [modules.desktop_clock]
 enabled = false

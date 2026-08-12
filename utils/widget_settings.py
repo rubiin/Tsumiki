@@ -291,6 +291,7 @@ Launcher = TypedDict(
         "icon_size": int,
         "plugins_enabled": bool,
         "plugins_dir": str,
+        "plugins": list[str],
     },
 )
 

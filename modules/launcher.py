@@ -91,6 +91,13 @@ class LauncherConfig:
         self.plugins_dir = os.path.expanduser(
             configured_dir or get_relative_path("../plugins/")
         )
+        # Strict allowlist of plugin names to load — an empty list loads none.
+        raw_plugins = self.raw_config.get("plugins", [])
+        self.plugins = (
+            [str(plugin) for plugin in raw_plugins]
+            if isinstance(raw_plugins, list)
+            else []
+        )
 
 
 class AppWidgetFactory:
@@ -228,7 +235,7 @@ class Launcher(PopupWindow):
 
         # Slash-command plugin state
         self.plugin_manager = (
-            get_plugin_manager(self.config.plugins_dir)
+            get_plugin_manager(self.config.plugins_dir, self.config.plugins)
             if self.config.plugins_enabled
             else None
         )
