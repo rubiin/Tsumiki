@@ -129,3 +129,46 @@ transition_duration = 350
 ```
 
 تفتح باختصار لوحة مفاتيح قابل للتكوين (افتراضي: `Super+W`). تعرض صوراً مصغرة لمساحات العمل مع النقر للتركيز.
+
+---
+
+## مشغل التطبيقات
+
+مشغل تطبيقات يعمل بلوحة المفاتيح مع البحث وتخطيط شبكة/قائمة والسحب للتثبيت.
+
+```toml
+[modules.app_launcher]
+enabled = false
+tooltip = true
+icon_size = 35
+ignored = []
+anchor = "center"
+width = 280
+height = 320
+layout = "grid"                    # "grid" | "list"
+grid_columns = 3
+plugins_enabled = true              # إضافات الأوامر المائلة (/calc, /translate)
+plugins_dir = ""                    # الافتراضي: <config>/plugins
+```
+
+- **`layout`**: `grid` يعرض أيقونات التطبيقات في شبكة؛ `list` يعرضها كقائمة بالأسماء.
+- **`anchor`**: الموضع على الشاشة (`center`, `top`, `bottom`, إلخ).
+- **`ignored`**: قائمة أسماء ملفات .desktop لاستبعادها من نتائج البحث.
+- **`plugins_enabled`**: تفعيل إضافات الأوامر المائلة (`/calc`, `/translate`, ...).
+- **`plugins_dir`**: مجلد يحتوي على إضافات بايثون؛ الافتراضي `<config>/plugins`.
+
+### الأوامر المائلة والإضافات
+
+اكتب `/` في مربع البحث لتصفح الأوامر المتاحة أو استخدم واحداً مباشرة، مثل `/calc 2+2` أو `/translate bonjour`. الإضافات مكتوبة بلغة بايثون — ضع ملف `.py` (أو مجلد حزمة) في `plugins/` وأعد تشغيل الشريط.
+
+الإضافات المضمنة:
+
+- **`/calc`** — رياضيات ووحدات وعملات عبر libqalculate (`qalc`)، مثل `/calc 100 cm to inches`.
+- **`/translate`** — ترجمة مع اكتشاف تلقائي للغة المصدر، مثل `/translate bonjour`.
+- **`/emoji`** — بحث رموز تعبيرية دون اتصال، مثل `/emoji rocket`.
+- **`/clipboard-history`** — يبحث في سجل `cliphist` وينسخ عنصراً مرة أخرى، مثل `/clipboard-history https://`.
+- **`/currency`** — تحويل بين العملات بأسعار حية (Frankfurter، بدون مفتاح API)، مثل `/currency 100 usd to eur`.
+- **`/kill`** — يبحث في العمليات قيد التشغيل ويقتل المحددة (SIGTERM، أو SIGKILL مع `-9`)، مثل `/kill firefox`. الاستعلام الرقمي يُعامل كمنفذ — `/kill 3000` يقتل ما يستمع على المنفذ 3000.
+- **`/search`** — بحث على الويب (DuckDuckGo، بدون مفتاح API) وفتح نتيجة في المتصفح مع نسخ رابطها إلى الحافظة، مثل `/search fabric hyprland`.
+
+لوحة المفاتيح: `أعلى`/`أسفل` ينقلان التحديد، `Enter` ينشّط الصف المميز، `Escape` يغلق.

@@ -1,6 +1,8 @@
 import unittest
 from pathlib import Path
+from unittest import mock
 
+from utils import functions
 from utils.functions import (
     celsius_to_fahrenheit,
     check_if_day,
@@ -10,6 +12,7 @@ from utils.functions import (
     convert_to_percent,
     deep_merge,
     exclude_keys,
+    find_executable,
     flatten_dict,
     format_seconds_to_hours_minutes,
     get_relative_time,
@@ -19,7 +22,6 @@ from utils.functions import (
     rgb_to_hex,
     tint_color,
     unique_list,
-    uptime,
     validate_config_enums,
 )
 
@@ -129,6 +131,12 @@ class FunctionsTest(unittest.TestCase):
         self.assertFalse(is_valid_gjs_color("invalidcolor"))
 
     def test_uptime(self):
+        # uptime() lives in utils/widget_utils (needs psutil/fabric widgets),
+        # so import it lazily and skip when those deps aren't available.
+        try:
+            from utils.widget_utils import uptime
+        except ImportError:
+            self.skipTest("widget_utils dependencies unavailable")
         # Just test format, it should be HH:MM
         result = uptime()
         self.assertRegex(result, r"^\d{2}:\d{2}$")
@@ -178,6 +186,55 @@ class FunctionsTest(unittest.TestCase):
             validate_config_enums(
                 {"modules": {"bar": {"location": "middle"}}}, str(schema_path)
             )
+
+
+class FindExecutableTest(unittest.TestCase):
+    """Test the TTL-cached find_executable() PATH lookup helper.
+
+    Probe names are unique per test because the helper is wrapped in
+    ``ttl_lru_cache`` (keyed on the time bucket + argument), so the shared
+    cache must not leak between tests. Time is pinned to control the bucket.
+    """
+
+    def test_finds_executable_on_path(self):
+        with mock.patch.object(
+            functions.GLib, "find_program_in_path", return_value="/usr/bin/ss"
+        ) as mock_lookup:
+            self.assertEqual(find_executable("fe-found-probe"), "/usr/bin/ss")
+        mock_lookup.assert_called_once_with("fe-found-probe")
+
+    def test_missing_executable_returns_none(self):
+        with mock.patch.object(
+            functions.GLib, "find_program_in_path", return_value=None
+        ) as mock_lookup:
+            self.assertIsNone(find_executable("fe-missing-probe"))
+        mock_lookup.assert_called_once_with("fe-missing-probe")
+
+    def test_results_are_cached_within_ttl_window(self):
+        with mock.patch.object(
+            functions.GLib, "find_program_in_path", return_value="/usr/bin/ss"
+        ) as mock_lookup, mock.patch.object(
+            functions.time, "time", return_value=1000.0
+        ):
+            self.assertEqual(find_executable("fe-cache-probe"), "/usr/bin/ss")
+            self.assertEqual(find_executable("fe-cache-probe"), "/usr/bin/ss")
+        # The second call is served from the TTL cache, not PATH.
+        self.assertEqual(mock_lookup.call_count, 1)
+
+    def test_cache_expires_after_ttl_window(self):
+        lookup = mock.Mock(return_value="/usr/bin/ss")
+        with mock.patch.object(
+            functions.GLib, "find_program_in_path", lookup
+        ), mock.patch.object(functions.time, "time", return_value=1000.0):
+            self.assertEqual(find_executable("fe-expiry-probe"), "/usr/bin/ss")
+
+        # Same key, new TTL bucket, tool no longer on PATH: fresh lookup.
+        lookup.return_value = None
+        with mock.patch.object(
+            functions.GLib, "find_program_in_path", lookup
+        ), mock.patch.object(functions.time, "time", return_value=1600.0):
+            self.assertIsNone(find_executable("fe-expiry-probe"))
+        self.assertEqual(lookup.call_count, 2)
 
 
 if __name__ == "__main__":

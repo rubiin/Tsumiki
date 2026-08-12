@@ -993,6 +993,17 @@ def check_executable_exists(executable_name):
         )  # Raise an error if the executable is not found and exit the application
 
 
+# Function to locate an executable on PATH
+@ttl_lru_cache(600, 64)
+def find_executable(executable_name: str) -> str | None:
+    """Return the absolute path of *executable_name*, or None if not found.
+
+    TTL-cached (10 min) so repeated lookups — e.g. plugins probing for a
+    required tool on every query — don't re-scan PATH each time.
+    """
+    return GLib.find_program_in_path(executable_name)
+
+
 # Function to send a notification
 @cooldown(1)
 def send_notification(

@@ -55,7 +55,23 @@ transition_type = "crossfade"
 enabled = false
 layout = "grid"
 grid_columns = 3
+plugins_enabled = true
+plugins_dir = ""
 ```
+
+Tippe `/` ein, um Slash-Befehle wie `/calc` oder `/translate` zu verwenden. Plugins sind Python-Dateien im `plugins/`-Verzeichnis.
+
+Gebündelte Plugins:
+
+- **`/calc`** — Mathematik, Einheiten und Währungen über libqalculate (`qalc`), z. B. `/calc 100 cm to inches`.
+- **`/translate`** — Übersetzung mit automatisch erkannter Ausgangssprache, z. B. `/translate bonjour`.
+- **`/emoji`** — Offline-Emoji-Suche, z. B. `/emoji rocket`.
+- **`/clipboard-history`** — durchsucht den `cliphist`-Verlauf und kopiert einen Eintrag zurück, z. B. `/clipboard-history https://`.
+- **`/currency`** — Währungsumrechnung mit Live-Kursen (Frankfurter, kein API-Schlüssel), z. B. `/currency 100 usd to eur`.
+- **`/kill`** — sucht laufende Prozesse und beendet den ausgewählten (SIGTERM oder SIGKILL mit `-9`), z. B. `/kill firefox`. Ein numerisches Argument wird als Port behandelt — `/kill 3000` beendet, was auf Port 3000 lauscht.
+- **`/search`** — Websuche (DuckDuckGo, kein API-Schlüssel) und öffnet ein Ergebnis im Browser, während die URL in die Zwischenablage kopiert wird, z. B. `/search fabric hyprland`.
+
+Tastatur: `Auf`/`Ab` bewegen die Auswahl, `Enter` aktiviert die markierte Zeile, `Escape` schließt.
 
 ## OSD
 

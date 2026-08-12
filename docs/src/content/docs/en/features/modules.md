@@ -149,11 +149,15 @@ width = 280
 height = 320
 layout = "grid"                    # "grid" | "list"
 grid_columns = 3
+plugins_enabled = true              # slash-command plugins (/calc, /translate)
+plugins_dir = ""                    # default: <config>/plugins
 ```
 
 - **`layout`**: `grid` shows app icons in a grid; `list` shows them as a list with names.
 - **`anchor`**: Position on screen (`center`, `top`, `bottom`, etc.).
 - **`ignored`**: List of desktop file names to exclude from search results.
+- **`plugins_enabled`**: Enables slash-command plugins (`/calc`, `/translate`, ...).
+- **`plugins_dir`**: Directory containing Python plugins; defaults to `<config>/plugins`.
 
 ### Keybindings
 
@@ -163,6 +167,69 @@ grid_columns = 3
 | Navigate | Arrow keys |
 | Launch app | `Enter` |
 | Close | `Escape` |
+
+### Slash Commands & Plugins
+
+Type `/` in the search box to browse the available slash commands, or use one
+straight away, e.g. `/calc 2+2` or `/translate bonjour`. Plugins are written
+in Python — drop a `.py` file (or a package directory) into `plugins/` and
+restart the bar.
+
+Bundled plugins:
+
+- **`/calc`** — math, units and currency via libqalculate (`qalc`), e.g.
+  `/calc 100 cm to inches`.
+- **`/translate`** — translation with auto-detected source language, e.g.
+  `/translate bonjour`.
+- **`/emoji`** — offline emoji search, e.g. `/emoji rocket`.
+- **`/clipboard-history`** — search `cliphist` history and copy an item back,
+  e.g. `/clipboard-history https://`.
+- **`/currency`** — convert between currencies with live rates (Frankfurter,
+  no API key), e.g. `/currency 100 usd to eur`.
+- **`/kill`** — search running processes and kill the selected one
+  (SIGTERM, or SIGKILL with `-9`), e.g. `/kill firefox`. A numeric query is
+  treated as a port — `/kill 3000` kills whatever is listening on port 3000.
+- **`/search`** — search the web (DuckDuckGo, no API key) and open a result
+  in your browser while copying its URL to the clipboard, e.g.
+  `/search fabric hyprland`.
+
+Keyboard: `Up`/`Down` move the selection, `Enter` activates the highlighted
+row, `Escape` closes.
+
+#### Writing a plugin
+
+Each plugin subclasses `LauncherPlugin`:
+
+```python
+# plugins/hello.py
+from utils.plugin_manager import LauncherPlugin, PluginResult, copy_to_clipboard
+
+
+class HelloPlugin(LauncherPlugin):
+    name = "hello"  # slash command: /hello
+    description = "Say hello"
+    icon = "face-smile-symbolic"
+    aliases = ["hi"]
+
+    def handle(self, args):
+        # Runs on a worker thread - no GTK calls allowed here.
+        who = args.strip() or "world"
+        return [PluginResult(f"Hello, {who}!", subtitle="Press Enter to copy")]
+
+    def execute(self, result):
+        if result:
+            copy_to_clipboard(result.title)
+        return False  # False closes the launcher
+```
+
+- `name` is the slash command; `aliases` registers additional names.
+- `handle(args)` returns the rows shown live while you type.
+- `execute(result)` runs when a row is activated (Enter/click); return `True`
+  to keep the launcher open.
+- `handle()` runs on a worker thread — keep it free of GTK calls. Broken
+  plugins are skipped with a warning and never crash the bar.
+- For multi-file plugins, use a package (a directory with `__init__.py`) and
+  re-export the plugin class from `__init__.py`.
 
 ---
 

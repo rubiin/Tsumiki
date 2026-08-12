@@ -3611,6 +3611,16 @@
 							"maximum": 128,
 							"default": 30
 						},
+						"plugins_enabled": {
+							"type": "boolean",
+							"description": "Enables launcher slash-command plugins (/calc, /translate, ...)",
+							"default": true
+						},
+						"plugins_dir": {
+							"type": "string",
+							"description": "Directory containing launcher plugins (Python files). Defaults to <config>/plugins",
+							"default": ""
+						},
 						"ignored": {
 							"type": "array",
 							"items": {

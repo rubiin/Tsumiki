@@ -49,7 +49,23 @@ anchor = "center"
 enabled = false
 layout = "grid"
 grid_columns = 3
+plugins_enabled = true
+plugins_dir = ""
 ```
+
+输入 `/` 可使用 `/calc`、`/translate` 等斜杠命令。插件是放在 `plugins/` 目录中的 Python 文件。
+
+内置插件：
+
+- **`/calc`** — 通过 libqalculate（`qalc`）计算数学、单位和货币，例如 `/calc 100 cm to inches`。
+- **`/translate`** — 翻译，自动检测源语言，例如 `/translate bonjour`。
+- **`/emoji`** — 离线表情搜索，例如 `/emoji rocket`。
+- **`/clipboard-history`** — 搜索 `cliphist` 历史记录并重新复制条目，例如 `/clipboard-history https://`。
+- **`/currency`** — 使用实时汇率（Frankfurter，无需 API 密钥）进行货币换算，例如 `/currency 100 usd to eur`。
+- **`/kill`** — 搜索运行中的进程并终止选中的进程（SIGTERM，或使用 `-9` 强制 SIGKILL），例如 `/kill firefox`。纯数字参数视为端口——`/kill 3000` 会终止监听 3000 端口的进程。
+- **`/search`** — 网页搜索（DuckDuckGo，无需 API 密钥），在浏览器中打开结果并将 URL 复制到剪贴板，例如 `/search fabric hyprland`。
+
+键盘：`上`/`下` 移动选择，`Enter` 激活高亮行，`Escape` 关闭。
 
 ## OSD
 

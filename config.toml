@@ -610,7 +610,7 @@ layer = "bottom"
 
 [layout]
 left_section = ["@group:workspaces-group"]
-middle_section = ["date_time", "weather", "mpris"]
+middle_section = ["date_time", "weather", "mpris","app_launcher_button"]
 right_section = ["@group:sys-group", "@group:utils-group", "system_tray", "power"]
 
 [general]

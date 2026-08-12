@@ -21,6 +21,7 @@ APP_DATA_DIRECTORY = f"{SYSTEM_CACHE_DIR}/{APPLICATION_NAME}"
 
 NOTIFICATION_CACHE_FILE = f"{APP_DATA_DIRECTORY}/notifications.json"
 WEATHER_CACHE_FILE = f"{APP_DATA_DIRECTORY}/weather.json"
+FX_RATES_CACHE_FILE = f"{APP_DATA_DIRECTORY}/fx_rates.json"
 QUOTES_CACHE_FILE = f"{APP_DATA_DIRECTORY}/quotes.json"
 ICON_CACHE_FILE = f"{APP_DATA_DIRECTORY}/icons.json"
 PINNED_APPS_FILE = f"{APP_DATA_DIRECTORY}/pinned_apps.json"
@@ -429,6 +430,7 @@ DEFAULT_CONFIG = {
             "enabled": False,
             "tooltip": True,
             "icon_size": 16,
+            "plugins_enabled": True,
         },
         "notification": {
             "enabled": True,

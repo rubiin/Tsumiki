@@ -1,7 +1,17 @@
+import os
 from collections.abc import Iterator
 from contextlib import suppress
 
-from fabric.utils import DesktopApp, Gdk, GLib, Gtk, idle_add, logger, remove_handler
+from fabric.utils import (
+    DesktopApp,
+    Gdk,
+    GLib,
+    Gtk,
+    get_relative_path,
+    idle_add,
+    logger,
+    remove_handler,
+)
 from fabric.widgets.box import Box
 from fabric.widgets.button import Button
 from fabric.widgets.entry import Entry
@@ -12,7 +22,17 @@ from fabric.widgets.scrolledwindow import ScrolledWindow
 
 from shared.popup import PopupWindow
 from utils.app import AppUtils
+from utils.decorators import thread
+from utils.plugin_manager import (
+    PluginResult,
+    get_plugin_manager,
+)
 from utils.widget_settings import BarConfig
+
+# Default debounce for plugin queries: live-preview plugins (e.g. /translate)
+# would otherwise fire one network request per keystroke. Plugins can override
+# this per-plugin via LauncherPlugin.debounce_ms.
+_PLUGIN_DEBOUNCE_MS = 150
 
 
 class LauncherConfig:
@@ -59,6 +79,13 @@ class LauncherConfig:
 
         self.anchor = self.raw_config.get("anchor", self.DEFAULT_ANCHOR)
         self.show_tooltips = bool(self.raw_config.get("tooltip", False))
+
+        # Slash-command plugin system
+        self.plugins_enabled = bool(self.raw_config.get("plugins_enabled", True))
+        configured_dir = self.raw_config.get("plugins_dir", "")
+        self.plugins_dir = os.path.expanduser(
+            configured_dir or get_relative_path("../plugins/")
+        )
 
 
 class AppWidgetFactory:
@@ -192,6 +219,21 @@ class AppLauncher(PopupWindow):
         self.app_util = AppUtils()
         self._all_apps = self.app_util.all_applications
         self._grid_position = 0  # Track current position in grid
+        self._first_app = None  # First app matching the current query (Enter)
+
+        # Slash-command plugin state
+        self.plugin_manager = (
+            get_plugin_manager(self.config.plugins_dir)
+            if self.config.plugins_enabled
+            else None
+        )
+        self._plugin_mode = False
+        self._plugin_command = ""
+        self._plugin_args = ""
+        self._plugin_rows: list[Button] = []
+        self._plugin_selected = 0
+        self._plugin_gen = 0
+        self._plugin_query_timer = 0
 
         # Create widgets - viewport depends on layout mode
         if self.config.layout_mode == "grid":
@@ -264,7 +306,10 @@ class AppLauncher(PopupWindow):
             **kwargs,
         )
 
-        # Set up key handling
+        # Set up key handling: the entry handler gets first crack at keys so
+        # we can intercept Return/arrows for plugin navigation. The window
+        # handler remains as a fallback when focus is elsewhere.
+        self.search_entry.connect("key-press-event", self.on_search_key_press)
         self.connect("key-press-event", self.on_key_press)
 
     def on_icon_press(self, entry, icon_pos, event):
@@ -276,10 +321,58 @@ class AppLauncher(PopupWindow):
         self.popup_visible = False
         self.reveal_child.revealer.set_reveal_child(self.popup_visible)
         self.search_entry.set_text("")
+        self._reset_plugin_state()
 
     def on_key_press(self, _, event):
         if event.keyval == Gdk.KEY_Escape:
             self.close_launcher()
+
+    def on_search_key_press(self, entry, event) -> bool:
+        """Handle launcher keyboard shortcuts on the search entry.
+
+        Returning True stops the entry's default handling (e.g. arrow-key
+        cursor movement) so we can drive plugin selection instead.
+        """
+        keyval = event.keyval
+        if keyval == Gdk.KEY_Escape:
+            self.close_launcher()
+            return True
+        if self._plugin_mode:
+            if keyval in (Gdk.KEY_Up, Gdk.KEY_KP_Up):
+                self._move_plugin_selection(-1)
+                return True
+            if keyval in (Gdk.KEY_Down, Gdk.KEY_KP_Down):
+                self._move_plugin_selection(1)
+                return True
+            if keyval in (Gdk.KEY_Return, Gdk.KEY_KP_Enter):
+                self._activate_plugin_selection()
+                return True
+        elif keyval in (Gdk.KEY_Return, Gdk.KEY_KP_Enter):
+            # App-search mode: Enter launches the first match.
+            self._launch_first_app()
+            return True
+        return False
+
+    def _launch_first_app(self):
+        """Launch the first app matching the current query (Enter in app mode)."""
+        if self._first_app is None:
+            return
+        try:
+            self._first_app.launch()
+        except Exception as exc:
+            logger.warning(f"[Launcher] Failed to launch app: {exc}")
+            return
+        self.close_launcher()
+
+    def _reset_plugin_state(self):
+        """Invalidate pending plugin queries and clear selection state."""
+        self._cancel_plugin_query_timer()
+        self._plugin_gen += 1
+        self._plugin_mode = False
+        self._plugin_rows = []
+        self._plugin_selected = 0
+        self._plugin_command = ""
+        self._plugin_args = ""
 
     def _clear_viewport_safely(self):
         """Clear viewport widgets with proper error handling."""
@@ -313,6 +406,7 @@ class AppLauncher(PopupWindow):
         """Clear viewport state before scheduling a new render pass."""
         self._clear_viewport_safely()
         self._grid_position = 0
+        self._first_app = None
 
     def _filter_applications(self, query: str) -> tuple[Iterator[DesktopApp], bool]:
         """Filter applications by query and return iterator + resize hint."""
@@ -329,6 +423,7 @@ class AppLauncher(PopupWindow):
                 + (app.generic_name or "")
             ).casefold()
         ]
+        self._first_app = filtered_apps[0] if filtered_apps else None
         should_resize = len(filtered_apps) == len(self._all_apps)
         return iter(filtered_apps), should_resize
 
@@ -358,17 +453,342 @@ class AppLauncher(PopupWindow):
         )
 
     def arrange_viewport(self, query: str = ""):
-        """Arrange viewport with filtered applications."""
+        """Arrange viewport with filtered applications or plugin results."""
         with HandlerManager(self) as handler_mgr:
             self._prepare_viewport_render()
-            filtered_apps_iter, should_resize = self._filter_applications(query)
-            handler_id = self._schedule_viewport_render(
-                filtered_apps_iter,
-                should_resize,
-            )
+
+            if self.plugin_manager is not None and query.startswith("/"):
+                handler_id = self._arrange_plugins(query)
+            else:
+                self._plugin_mode = False
+                if self.plugin_manager is None and query.startswith("/"):
+                    # Plugins are disabled in config — show a helpful hint.
+                    self._render_plugin_hint(
+                        "Slash commands are disabled",
+                        "Enable modules.app_launcher.plugins_enabled in config.toml",
+                    )
+                    handler_id = 0
+                else:
+                    filtered_apps_iter, should_resize = self._filter_applications(query)
+                    handler_id = self._schedule_viewport_render(
+                        filtered_apps_iter,
+                        should_resize,
+                    )
+
             handler_mgr.set_new_handler(handler_id)
 
         return False
+
+    # ------------------------------------------------------------------
+    # Slash-command plugins
+    # ------------------------------------------------------------------
+
+    def _arrange_plugins(self, query: str) -> int:
+        """Dispatch a ``/command args`` query to the plugin system."""
+        self._cancel_plugin_query_timer()
+        self._plugin_mode = True
+        self._plugin_rows = []
+        self._plugin_selected = 0
+        self._plugin_gen += 1
+        gen = self._plugin_gen
+
+        command, _, args = query[1:].partition(" ")
+        command = command.casefold().strip()
+        args = args.strip()
+
+        self._plugin_command = command
+        self._plugin_args = args
+
+        if not command:
+            # Query is just "/" — browse every available command.
+            self._render_command_list("")
+            return 0
+
+        plugin = self.plugin_manager.get(command)
+        if plugin is None:
+            matches = self.plugin_manager.match(command)
+            if matches:
+                # Partial command name — show matching commands.
+                self._render_command_list(command)
+            else:
+                self._render_plugin_hint(
+                    f"Unknown command '/{command}'",
+                    "Type / to see available commands",
+                )
+            return 0
+
+        # Full command match — run the plugin off the main thread and render
+        # a lightweight "working" row until the results come back.
+        self._render_plugin_hint(
+            f"/{plugin.name}{' ' + args if args else ''}",
+            "Running...",
+        )
+        self._schedule_plugin_query(plugin, args, gen)
+        return 0
+
+    def _schedule_plugin_query(self, plugin, args: str, gen: int):
+        """Debounce plugin dispatch so typing doesn't fire a query per keystroke.
+
+        Uses the plugin's ``debounce_ms`` override when set, falling back to
+        the global default — expensive plugins (e.g. /calc) debounce harder.
+        """
+        self._cancel_plugin_query_timer()
+
+        def _fire() -> bool:
+            self._plugin_query_timer = 0
+            thread(self._plugin_worker, plugin, args, gen)
+            return False
+
+        delay = (
+            plugin.debounce_ms
+            if plugin.debounce_ms and plugin.debounce_ms > 0
+            else _PLUGIN_DEBOUNCE_MS
+        )
+        self._plugin_query_timer = GLib.timeout_add(delay, _fire)
+
+    def _cancel_plugin_query_timer(self):
+        """Cancel a pending debounced plugin query, if any."""
+        if self._plugin_query_timer:
+            GLib.source_remove(self._plugin_query_timer)
+            self._plugin_query_timer = 0
+
+    def _plugin_worker(self, plugin, args: str, gen: int):
+        """Run a plugin query on a worker thread, then render via idle_add."""
+        try:
+            results = plugin.handle(args)
+        except Exception as exc:
+            logger.warning(f"[Launcher] Plugin '/{plugin.name}' failed: {exc}")
+            results = [
+                PluginResult(
+                    f"Plugin '/{plugin.name}' crashed",
+                    subtitle=f"{exc}",
+                    icon="dialog-error-symbolic",
+                )
+            ]
+        if isinstance(results, PluginResult):
+            results = [results]
+        elif not isinstance(results, list):
+            # Harden against third-party plugins returning a bare value.
+            results = [PluginResult(str(results))] if results else []
+        idle_add(self._on_plugin_results, gen, plugin, results)
+
+    def _on_plugin_results(self, gen: int, plugin, results: list[PluginResult]) -> bool:
+        """Render plugin results, dropping stale queries."""
+        if gen != self._plugin_gen or not self._plugin_mode:
+            return False
+        self._render_plugin_results(plugin, results)
+        return False
+
+    def _render_command_list(self, partial: str):
+        """Render available slash commands (browse mode)."""
+        plugins = (
+            self.plugin_manager.match(partial) if partial else self.plugin_manager.all()
+        )
+        for plugin in plugins:
+            self._append_plugin_row(self._create_command_row(plugin))
+
+    def _render_plugin_results(self, plugin, results: list[PluginResult]):
+        """Render plugin result rows, replacing any working/status row."""
+        self._prepare_viewport_render()
+        if not results:
+            self._render_plugin_hint(
+                f"No results for '/{self._plugin_command} {self._plugin_args}'".rstrip(),
+                "Try a different input or type / for available commands",
+            )
+            return
+        for result in results:
+            self._append_plugin_row(self._create_plugin_result_row(plugin, result))
+
+    def _render_plugin_hint(self, title: str, subtitle: str = ""):
+        """Render a non-interactive status row (hint/error/working)."""
+        children = [
+            Label(
+                label=title,
+                h_align="start",
+                v_align="center",
+                style_classes="launcher-plugin-title",
+            )
+        ]
+        if subtitle:
+            children.append(
+                Label(
+                    label=subtitle,
+                    h_align="start",
+                    v_align="center",
+                    style_classes="launcher-plugin-subtitle",
+                )
+            )
+        box = Box(
+            name="launcher-plugin-hint",
+            orientation="v",
+            spacing=1,
+            style_classes=["launcher-list-item"],
+            children=children,
+        )
+        if self.config.layout_mode == "grid":
+            self.viewport.attach(box, 0, 0, self.config.grid_columns, 1)
+        else:
+            self.viewport.add(box)
+
+    def _create_command_row(self, plugin) -> Button:
+        """Create a selectable row for a slash command (browse mode)."""
+        children = []
+        icon = self._plugin_icon_widget(plugin.icon)
+        if icon is not None:
+            children.append(icon)
+        children.append(
+            Box(
+                orientation="v",
+                spacing=1,
+                children=[
+                    Label(
+                        label=f"/{plugin.name}",
+                        h_align="start",
+                        v_align="center",
+                        style_classes="launcher-plugin-title",
+                    ),
+                    Label(
+                        label=plugin.description,
+                        h_align="start",
+                        v_align="center",
+                        style_classes="launcher-plugin-subtitle",
+                    ),
+                ],
+            )
+        )
+        button = Button(
+            style_classes=["launcher-plugin-button"],
+            child=Box(
+                name="launcher-command-item",
+                orientation="h",
+                spacing=12,
+                style_classes=["launcher-list-item"],
+                children=children,
+            ),
+        )
+        # ``on_clicked`` only works as a constructor kwarg in Fabric; assigning
+        # it afterwards never connects the ``clicked`` signal, so connect it
+        # explicitly to make click (and Enter via emit) actually work.
+        button.connect(
+            "clicked",
+            lambda *_, p=plugin: self._insert_command(p.name),
+        )
+        return button
+
+    def _create_plugin_result_row(self, plugin, result: PluginResult) -> Button:
+        """Create a selectable row for a single plugin result."""
+        children = []
+        icon = self._plugin_icon_widget(result.icon or plugin.icon)
+        if icon is not None:
+            children.append(icon)
+
+        title = Label(
+            label=result.title,
+            h_align="start",
+            v_align="center",
+            justification="left",
+            ellipsization="end",
+            style_classes="launcher-plugin-title",
+        )
+        if result.subtitle:
+            children.append(
+                Box(
+                    orientation="v",
+                    spacing=1,
+                    children=[
+                        title,
+                        Label(
+                            label=result.subtitle,
+                            h_align="start",
+                            v_align="center",
+                            justification="left",
+                            ellipsization="end",
+                            style_classes="launcher-plugin-subtitle",
+                        ),
+                    ],
+                )
+            )
+        else:
+            children.append(title)
+
+        button = Button(
+            style_classes=["launcher-plugin-button"],
+            child=Box(
+                name="launcher-plugin-item",
+                orientation="h",
+                spacing=12,
+                style_classes=["launcher-list-item"],
+                children=children,
+            ),
+        )
+        button.connect(
+            "clicked",
+            lambda *_, p=plugin, r=result: self._execute_plugin_result(p, r),
+        )
+        return button
+
+    def _plugin_icon_widget(self, icon: str | None):
+        """Build an icon widget from a GTK icon name or a Nerd Font glyph."""
+        if not icon:
+            return None
+        if any(ord(ch) > 127 for ch in icon):
+            return Label(
+                label=icon,
+                name="launcher-plugin-icon",
+                style_classes=["launcher-plugin-icon-glyph"],
+                v_align="center",
+            )
+        return Image(
+            icon_name=icon,
+            icon_size=self.config.icon_size,
+            name="launcher-plugin-icon",
+        )
+
+    def _append_plugin_row(self, button: Button):
+        """Add a plugin/command row to the viewport and track selection."""
+        index = len(self._plugin_rows)
+        self._plugin_rows.append(button)
+        if self.config.layout_mode == "grid":
+            # Plugin rows span the full width, like list items.
+            self.viewport.attach(button, 0, index, self.config.grid_columns, 1)
+        else:
+            self.viewport.add(button)
+        if index == 0:
+            button.add_style_class("selected")
+
+    def _move_plugin_selection(self, delta: int):
+        """Move the highlighted plugin row by *delta* steps."""
+        if not self._plugin_rows:
+            return
+        old = self._plugin_selected
+        new = max(0, min(len(self._plugin_rows) - 1, old + delta))
+        if new == old:
+            return
+        self._plugin_selected = new
+        self._plugin_rows[old].remove_style_class("selected")
+        self._plugin_rows[new].add_style_class("selected")
+
+    def _activate_plugin_selection(self):
+        """Activate the currently selected plugin row (Enter)."""
+        if not self._plugin_rows:
+            return
+        self._plugin_rows[self._plugin_selected].emit("clicked")
+
+    def _insert_command(self, command: str):
+        """Fill the entry with '/<command> ' so the user can type arguments."""
+        self.search_entry.set_text(f"/{command} ")
+        self.search_entry.grab_focus_without_selecting()
+
+    def _execute_plugin_result(self, plugin, result: PluginResult):
+        """Run a plugin action; close the launcher unless it asks to stay open."""
+        keep_open = bool(plugin.keep_open)
+        try:
+            keep_open = keep_open or bool(plugin.execute(result))
+        except Exception as exc:
+            logger.warning(f"[Launcher] Plugin '/{plugin.name}' execute failed: {exc}")
+            keep_open = True
+        if not keep_open:
+            self.close_launcher()
 
     def add_next_application(self, apps_iter: Iterator[DesktopApp]):
         """Add the next application widget to the viewport."""
@@ -378,7 +798,9 @@ class AppLauncher(PopupWindow):
         app_widget = AppWidgetFactory.create_widget(
             app, self.config.layout_mode, self.config.icon_size, self.config
         )
-        app_widget.on_clicked = lambda *_: (app.launch(), self.close_launcher())
+        # Same as above: on_clicked must be a constructor kwarg — connect the
+        # signal explicitly so clicking an app tile actually launches it.
+        app_widget.connect("clicked", lambda *_: (app.launch(), self.close_launcher()))
 
         if self.config.layout_mode == "grid":
             app_widget.set_hexpand(True)
@@ -411,6 +833,7 @@ class AppLauncher(PopupWindow):
             self.close_launcher()
         else:
             # Refresh apps list
+            self._reset_plugin_state()
             self._all_apps = self.app_util.all_applications
             self.search_entry.set_text("")
 

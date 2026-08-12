@@ -149,11 +149,29 @@ width = 280
 height = 320
 layout = "grid"                    # "grid" | "list"
 grid_columns = 3
+plugins_enabled = true              # comandos slash (/calc, /translate)
+plugins_dir = ""                    # predeterminado: <config>/plugins
 ```
 
 - **`layout`**: `grid` muestra iconos en cuadrícula; `list` los muestra como lista con nombres.
 - **`anchor`**: Posición en pantalla (`center`, `top`, `bottom`, etc.).
 - **`ignored`**: Lista de nombres de archivos .desktop a excluir de los resultados de búsqueda.
+- **`plugins_enabled`**: Activa los plugins de comandos slash (`/calc`, `/translate`, ...).
+- **`plugins_dir`**: Directorio con los plugins Python; por defecto `<config>/plugins`.
+
+### Comandos Slash y Plugins
+
+Escribe `/` para explorar los comandos disponibles o úsalos directamente, p. ej. `/calc 2+2` o `/translate bonjour`. Los plugins se escriben en Python: coloca un archivo `.py` (o un paquete) en `plugins/` y reinicia la barra.
+
+Plugins incluidos:
+
+- **`/calc`** — matemáticas, unidades y moneda mediante libqalculate (`qalc`), p. ej. `/calc 100 cm to inches`.
+- **`/translate`** — traducción con idioma de origen automático, p. ej. `/translate bonjour`.
+- **`/emoji`** — búsqueda de emojis sin conexión, p. ej. `/emoji rocket`.
+- **`/clipboard-history`** — busca en el historial de `cliphist` y copia un elemento, p. ej. `/clipboard-history https://`.
+- **`/currency`** — convierte entre monedas con tasas en vivo (Frankfurter, sin clave de API), p. ej. `/currency 100 usd to eur`.
+- **`/kill`** — busca procesos en ejecución y termina el seleccionado (SIGTERM, o SIGKILL con `-9`), p. ej. `/kill firefox`. Una consulta numérica se trata como un puerto — `/kill 3000` termina lo que esté escuchando en el puerto 3000.
+- **`/search`** — busca en la web (DuckDuckGo, sin clave de API) y abre un resultado en el navegador mientras copia su URL al portapapeles, p. ej. `/search fabric hyprland`.
 
 ### Atajos de Teclado
 

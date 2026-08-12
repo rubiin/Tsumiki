@@ -76,4 +76,40 @@
       background-color: theme.$accent-red;
     }
   }
+
+  .launcher-plugin-button {
+    border-radius: 10px;
+    padding: 6px 8px;
+
+    #launcher-plugin-icon {
+      -gtk-icon-effect: highlight;
+      font-size: 18px;
+    }
+
+    #launcher-plugin-title {
+      font-size: 14px;
+      color: theme.$text-main;
+    }
+
+    #launcher-plugin-subtitle {
+      font-size: 11px;
+      color: theme.$text-muted;
+    }
+
+    &:hover,
+    &:focus,
+    &.selected {
+      background-color: theme.$accent-teal;
+
+      #launcher-plugin-title,
+      #launcher-plugin-subtitle {
+        color: black;
+      }
+    }
+  }
+
+  #launcher-plugin-hint {
+    padding: 8px;
+    opacity: 0.8;
+  }
 }

@@ -1,0 +1,113 @@
+"""Launcher slash command: /calc — evaluate math expressions via libqalculate."""
+
+import os
+import re
+import subprocess
+import threading
+from typing import ClassVar
+
+from utils.functions import find_executable
+from utils.plugin_manager import LauncherPlugin, PluginResult, copy_to_clipboard
+
+_QALC_EXE = "qalc"
+_EVAL_TIMEOUT_SECONDS = 10
+# qalc prints a Unicode minus sign (U+2212) — normalize it for copy/paste.
+_UNICODE_MINUS = "\u2212"
+_ANSI_ESCAPE_RE = re.compile(r"\x1b\[[0-9;]*m")
+# Serialize qalc invocations: concurrent processes can contend on qalc's
+# config/lock file (debounced typing can still overlap on the worker pool).
+_QALC_LOCK = threading.Lock()
+
+
+def find_qalc() -> str | None:
+    """Return the qalc binary path, or None if libqalculate is not installed."""
+    return find_executable(_QALC_EXE)
+
+
+def evaluate(expr: str, qalc_path: str | None = None) -> str:
+    """Evaluate *expr* with qalc and return the result string.
+
+    Raises ValueError when qalc is missing, the expression fails, or the
+    calculation times out.
+    """
+    qalc = qalc_path or find_qalc()
+    if qalc is None:
+        raise ValueError("qalc not found — install libqalculate")
+
+    try:
+        with _QALC_LOCK:
+            result = subprocess.run(
+                [qalc, "-t", "--", expr],
+                capture_output=True,
+                text=True,
+                timeout=_EVAL_TIMEOUT_SECONDS,
+                # Deterministic decimal separator while keeping UTF-8 output.
+                env={**os.environ, "LC_ALL": "C.UTF-8"},
+            )
+    except subprocess.TimeoutExpired as exc:
+        raise ValueError("calculation timed out") from exc
+
+    output = _ANSI_ESCAPE_RE.sub("", result.stdout).strip()
+    error = result.stderr.strip()
+    if result.returncode != 0 or not output:
+        raise ValueError(error or f"qalc failed (exit {result.returncode})")
+
+    return output.replace(_UNICODE_MINUS, "-")
+
+
+class CalcPlugin(LauncherPlugin):
+    """Slash command: /calc — evaluate math/units/currency via libqalculate."""
+
+    name = "calc"
+    description = "Evaluate math, units and currency (libqalculate)"
+    icon = "accessories-calculator-symbolic"
+    aliases: ClassVar[list[str]] = ["calculator", "math"]
+    # Each query forks a qalc subprocess, so wait for the user to pause
+    # typing before calculating instead of re-evaluating on every keystroke.
+    debounce_ms = 400
+
+    def __init__(self):
+        super().__init__()
+        self._qalc = find_qalc()
+
+    def handle(self, args: str) -> list[PluginResult]:
+        expr = args.strip()
+        if not expr:
+            return [
+                PluginResult(
+                    "Usage: /calc <expression>",
+                    subtitle="e.g. /calc 100 cm to inches  or  /calc sqrt(2)",
+                    icon=self.icon,
+                )
+            ]
+        if self._qalc is None:
+            return [
+                PluginResult(
+                    "/calc requires libqalculate",
+                    subtitle="Install qalc, e.g. sudo pacman -S libqalculate",
+                    icon="dialog-error-symbolic",
+                )
+            ]
+        try:
+            result = evaluate(expr, self._qalc)
+        except Exception as exc:
+            return [
+                PluginResult(
+                    "Invalid expression",
+                    subtitle=f"{exc}",
+                    icon="dialog-error-symbolic",
+                )
+            ]
+        return [
+            PluginResult(
+                f"{expr} = {result}",
+                subtitle="Press Enter to copy the result",
+                icon=self.icon,
+                data=result,
+            )
+        ]
+
+    def execute(self, result: PluginResult | None = None) -> bool:
+        if result is not None and result.data:
+            copy_to_clipboard(str(result.data))
+        return False  # close the launcher after copying

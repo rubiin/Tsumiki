@@ -4,6 +4,10 @@
 freeze:
     pip freeze > requirements.txt
 
+# Run the test suite
+test:
+    python3 -m unittest discover tests -q
+
 doc_gen:
     python doc_gen.py
 

@@ -285,7 +285,13 @@ Dock = TypedDict(
 # Dock configuration
 AppLauncher = TypedDict(
     "AppLauncher",
-    {"enabled": bool, "tooltip": bool, "icon_size": int},
+    {
+        "enabled": bool,
+        "tooltip": bool,
+        "icon_size": int,
+        "plugins_enabled": bool,
+        "plugins_dir": str,
+    },
 )
 
 

@@ -55,7 +55,23 @@ transition_type = "crossfade"
 enabled = false
 layout = "grid"
 grid_columns = 3
+plugins_enabled = true
+plugins_dir = ""
 ```
+
+Typ `/` om slash-commando's zoals `/calc` of `/translate` te gebruiken. Plugins zijn Python-bestanden in de map `plugins/`.
+
+Ingebouwde plugins:
+
+- **`/calc`** — rekenen, eenheden en valuta via libqalculate (`qalc`), bv. `/calc 100 cm to inches`.
+- **`/translate`** — vertaling met automatisch gedetecteerde brontaal, bv. `/translate bonjour`.
+- **`/emoji`** — offline emoji-zoekopdracht, bv. `/emoji rocket`.
+- **`/clipboard-history`** — doorzoek de `cliphist`-geschiedenis en kopieer een item terug, bv. `/clipboard-history https://`.
+- **`/currency`** — valuta omrekenen met live wisselkoersen (Frankfurter, geen API-sleutel), bv. `/currency 100 usd to eur`.
+- **`/kill`** — zoek actieve processen en beëindig het geselecteerde (SIGTERM, of SIGKILL met `-9`), bv. `/kill firefox`. Een numeriek argument wordt als poort behandeld — `/kill 3000` beëindigt wat er op poort 3000 luistert.
+- **`/search`** — zoek op het web (DuckDuckGo, geen API-sleutel) en open een resultaat in je browser terwijl de URL naar het klembord wordt gekopieerd, bv. `/search fabric hyprland`.
+
+Toetsenbord: `Omhoog`/`Omlaag` verplaatst de selectie, `Enter` activeert de gemarkeerde rij, `Escape` sluit.
 
 ## OSD
 

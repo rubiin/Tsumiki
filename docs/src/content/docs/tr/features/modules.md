@@ -49,7 +49,23 @@ anchor = "center"
 enabled = false
 layout = "grid"
 grid_columns = 3
+plugins_enabled = true
+plugins_dir = ""
 ```
+
+`/` yazarak `/calc` veya `/translate` gibi komutları kullanabilirsiniz. Eklentiler `plugins/` klasöründeki Python dosyalarıdır.
+
+Dahil edilen eklentiler:
+
+- **`/calc`** — libqalculate (`qalc`) ile matematik, birim ve para birimi, örn. `/calc 100 cm to inches`.
+- **`/translate`** — kaynak dili otomatik algılanan çeviri, örn. `/translate bonjour`.
+- **`/emoji`** — çevrimdışı emoji arama, örn. `/emoji rocket`.
+- **`/clipboard-history`** — `cliphist` geçmişinde arama yapar ve bir öğeyi tekrar kopyalar, örn. `/clipboard-history https://`.
+- **`/currency`** — canlı kurlarla para birimi çevirme (Frankfurter, API anahtarı gerekmez), örn. `/currency 100 usd to eur`.
+- **`/kill`** — çalışan süreçleri arar ve seçileni sonlandırır (SIGTERM veya `-9` ile SIGKILL), örn. `/kill firefox`. Sayısal bir argüman bağlantı noktası olarak ele alınır — `/kill 3000`, 3000 bağlantı noktasını dinleyen süreci sonlandırır.
+- **`/search`** — web araması (DuckDuckGo, API anahtarı gerekmez); sonucu tarayıcıda açar ve URL'yi panoya kopyalar, örn. `/search fabric hyprland`.
+
+Klavye: `Yukarı`/`Aşağı` seçimi taşır, `Enter` vurgulanan satırı etkinleştirir, `Escape` kapatır.
 
 ## OSD
 

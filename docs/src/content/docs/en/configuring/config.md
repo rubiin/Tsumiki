@@ -118,7 +118,7 @@ Enables and configures larger UI modules such as:
 | Dock | `modules.dock` | Application dock with intellihide |
 | Overview | `modules.overview` | Workspace exposé view |
 | OSD | `modules.osd` | On-screen display for volume, etc. |
-| App Launcher | `modules.app_launcher` | Application search & launch |
+| App Launcher | `modules.app_launcher` | Application search & launch, slash commands (`/calc`, `/translate`) |
 | Desktop Clock | `modules.desktop_clock` | Decorative desktop clock |
 | Desktop Quotes | `modules.desktop_quotes` | Inspirational quote overlay |
 | Screen Corners | `modules.screen_corners` | Hot corners |
