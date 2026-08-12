@@ -31,7 +31,7 @@ class ImageButton(HoverButton):
         )
         super().__init__(
             on_clicked=lambda *_: self._set_wallpaper_from_image(),
-            name="wallpaper-button",
+            name="wallpaper_button",
             **kwargs,
         )
         self._load_thumbnail()

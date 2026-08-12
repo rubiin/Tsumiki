@@ -235,6 +235,12 @@ class Launcher(PopupWindow):
         self._plugin_gen = 0
         self._plugin_query_timer = 0
 
+        # Tab-completion cycle state: the candidate list is snapshotted from
+        # the query that started the cycle, so completing to a full name
+        # doesn't shrink the match set on the next Tab press.
+        self._completion_candidates: list[str] = []
+        self._completion_index = -1
+
         # Create widgets - viewport depends on layout mode
         if self.config.layout_mode == "grid":
             self.viewport = Grid(
@@ -337,6 +343,15 @@ class Launcher(PopupWindow):
         if keyval == Gdk.KEY_Escape:
             self.close_launcher()
             return True
+        if keyval in (Gdk.KEY_Tab, Gdk.KEY_KP_Tab):
+            # Tab cycles the query through every matching result instead of
+            # moving focus away from the entry.
+            self._autocomplete_query(1)
+            return True
+        if keyval == Gdk.KEY_ISO_Left_Tab:
+            # Shift+Tab cycles backwards.
+            self._autocomplete_query(-1)
+            return True
         if self._plugin_mode:
             if keyval in (Gdk.KEY_Up, Gdk.KEY_KP_Up):
                 self._move_plugin_selection(-1)
@@ -352,6 +367,70 @@ class Launcher(PopupWindow):
             self._launch_first_app()
             return True
         return False
+
+    def _autocomplete_query(self, direction: int = 1):
+        """Cycle the query through matching results (Tab: +1, Shift+Tab: -1).
+
+        The candidate list is snapshotted when a cycle starts, so repeated
+        Tab presses walk every match — completing to a full name doesn't
+        narrow the pool for the next press. Any edit to the entry restarts
+        the cycle from the new query.
+        """
+        text = self.search_entry.get_text()
+        if not text:
+            self._reset_completion_state()
+            return
+
+        # Mid-cycle: the entry still holds the candidate we last set, so just
+        # advance/rewind through the snapshot and wrap around.
+        if (
+            self._completion_candidates
+            and 0 <= self._completion_index < len(self._completion_candidates)
+            and text == self._completion_candidates[self._completion_index]
+        ):
+            self._completion_index = (self._completion_index + direction) % len(
+                self._completion_candidates
+            )
+            self._set_search_text(self._completion_candidates[self._completion_index])
+            return
+
+        # New query — build a fresh candidate list and start the cycle.
+        candidates = self._completion_candidates_for(text)
+        if not candidates:
+            self._reset_completion_state()
+            return
+        self._completion_candidates = candidates
+        self._completion_index = 0 if direction > 0 else len(candidates) - 1
+        self._set_search_text(candidates[self._completion_index])
+
+    def _completion_candidates_for(self, text: str) -> list[str]:
+        """Return the cycle candidates for *text* (apps or slash commands)."""
+        if self._plugin_mode and text.startswith("/"):
+            command, _, args = text[1:].partition(" ")
+            command = command.casefold().strip()
+            if args or self.plugin_manager is None:
+                return []  # already typing args — leave results alone
+            return [f"/{p.name} " for p in self.plugin_manager.match(command)]
+
+        query_lower = text.casefold()
+        candidates: list[str] = []
+        for app in self._all_apps:
+            if not self._matches_query(app, query_lower):
+                continue
+            name = app.display_name or app.name
+            if name and name not in candidates:
+                candidates.append(name)
+        return candidates
+
+    def _reset_completion_state(self):
+        """Forget the in-progress Tab cycle (new query / launcher closed)."""
+        self._completion_candidates = []
+        self._completion_index = -1
+
+    def _set_search_text(self, text: str):
+        """Set the search entry text and keep focus for continued typing."""
+        self.search_entry.set_text(text)
+        self.search_entry.grab_focus_without_selecting()
 
     def _launch_first_app(self):
         """Launch the first app matching the current query (Enter in app mode)."""
@@ -373,6 +452,7 @@ class Launcher(PopupWindow):
         self._plugin_selected = 0
         self._plugin_command = ""
         self._plugin_args = ""
+        self._reset_completion_state()
 
     def _clear_viewport_safely(self):
         """Clear viewport widgets with proper error handling."""
@@ -408,13 +488,11 @@ class Launcher(PopupWindow):
         self._grid_position = 0
         self._first_app = None
 
-    def _filter_applications(self, query: str) -> tuple[Iterator[DesktopApp], bool]:
-        """Filter applications by query and return iterator + resize hint."""
-        query_lower = query.casefold()
-        filtered_apps = [
-            app
-            for app in self._all_apps
-            if query_lower
+    @staticmethod
+    def _matches_query(app: DesktopApp, query_lower: str) -> bool:
+        """Whether *app* matches a lowercased query (name/description search)."""
+        return (
+            query_lower
             in (
                 (app.display_name or "")
                 + " "
@@ -422,6 +500,13 @@ class Launcher(PopupWindow):
                 + " "
                 + (app.generic_name or "")
             ).casefold()
+        )
+
+    def _filter_applications(self, query: str) -> tuple[Iterator[DesktopApp], bool]:
+        """Filter applications by query and return iterator + resize hint."""
+        query_lower = query.casefold()
+        filtered_apps = [
+            app for app in self._all_apps if self._matches_query(app, query_lower)
         ]
         self._first_app = filtered_apps[0] if filtered_apps else None
         should_resize = len(filtered_apps) == len(self._all_apps)
@@ -592,8 +677,7 @@ class Launcher(PopupWindow):
         self._prepare_viewport_render()
         if not results:
             self._render_plugin_hint(
-                f"No results for '/{self._plugin_command} {self._plugin_args}'"
-                .rstrip(),
+                f"No results for '/{self._plugin_command} {self._plugin_args}'".rstrip(),
                 "Try a different input or type / for available commands",
             )
             return
@@ -777,8 +861,8 @@ class Launcher(PopupWindow):
 
     def _insert_command(self, command: str):
         """Fill the entry with '/<command> ' so the user can type arguments."""
-        self.search_entry.set_text(f"/{command} ")
-        self.search_entry.grab_focus_without_selecting()
+        self._reset_completion_state()
+        self._set_search_text(f"/{command} ")
 
     def _execute_plugin_result(self, plugin, result: PluginResult):
         """Run a plugin action; close the launcher unless it asks to stay open."""
@@ -845,4 +929,5 @@ class Launcher(PopupWindow):
             self.toggle_popup()
 
     def launch(self, command: str):
+        self._reset_completion_state()
         self.search_entry.set_text(command)

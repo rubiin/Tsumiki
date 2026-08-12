@@ -318,6 +318,14 @@ $widget-shell-widgets: (
     variable.$bar-widgets-cheatsheet-spacing
   ),
   (
+    "launcher_button",
+    variable.$bar-widgets-launcher_button-border-radius,
+    variable.$bar-widgets-launcher_button-border-enabled,
+    variable.$bar-widgets-launcher_button-border-width,
+    variable.$bar-widgets-launcher_button-icon_size,
+    variable.$bar-widgets-launcher_button-spacing
+  ),
+  (
     "overview_button",
     variable.$bar-widgets-overview-border-radius,
     variable.$bar-widgets-overview-border-enabled,

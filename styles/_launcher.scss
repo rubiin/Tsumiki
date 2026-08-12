@@ -3,8 +3,15 @@
 @use "variable";
 @use "common";
 
+// Consistent micro-interaction easing, matching the rest of the bar
+// (buttons-transition and notifications both use ~150ms ease-in-out).
+$launcher-transition:
+  background-color 150ms ease-in-out,
+  color 150ms ease-in-out;
+
 .launcher-button {
   border-radius: 10px;
+  transition: $launcher-transition;
 
   #icon {
     -gtk-icon-effect: highlight;
@@ -13,20 +20,34 @@
   &:hover,
   &:focus {
     background-color: theme.$accent-teal;
+    color: theme.$background-dark;
 
     label {
-      color: black;
+      color: theme.$background-dark;
     }
   }
 
-  &:focus {
+  &:active {
+    background-color: color.mix(theme.$accent-teal, black, 15%);
+
     label {
-      color: theme.$text-main;
+      color: theme.$background-dark;
     }
   }
 
   #grid-item {
     padding: 8px;
+
+    label {
+      font-size: 0.75em;
+      color: theme.$text-muted;
+      transition: color 150ms ease-in-out;
+    }
+  }
+
+  &:hover #grid-item label,
+  &:focus #grid-item label {
+    color: theme.$background-dark;
   }
 }
 
@@ -51,35 +72,47 @@
     font-size: 15px;
     margin-bottom: 10px;
     padding: 10px 0;
+    transition:
+      border-color 150ms ease-in-out,
+      background-color 150ms ease-in-out;
+    caret-color: theme.$accent-teal;
+
+    &:focus {
+      background-color: color.mix(theme.$background-main, white, 88%);
+      border-bottom-color: theme.$accent-teal;
+    }
+
+    placeholder {
+      color: theme.$text-muted;
+    }
 
     image.left {
       padding-left: 10px;
+      color: theme.$text-muted;
     }
 
     image.right {
       padding-right: 10px;
+      color: theme.$text-muted;
+
+      &:hover {
+        color: theme.$accent-red;
+      }
     }
   }
 
   &-contents {
     border-radius: 15px;
-    border: 0.5px solid theme.$surface-disabled;
+    border: variable.$border;
     background-color: theme.$background-alt;
     padding: 10px;
     min-width: 600px;
   }
 
-  &-close-button {
-    border-radius: 15px;
-
-    &:hover {
-      background-color: theme.$accent-red;
-    }
-  }
-
   .launcher-plugin-button {
     border-radius: 10px;
     padding: 6px 8px;
+    transition: $launcher-transition;
 
     #launcher-plugin-icon {
       -gtk-icon-effect: highlight;
@@ -100,16 +133,28 @@
     &:focus,
     &.selected {
       background-color: theme.$accent-teal;
+      color: theme.$background-dark;
 
       #launcher-plugin-title,
       #launcher-plugin-subtitle {
-        color: black;
+        color: theme.$background-dark;
+      }
+    }
+
+    &:active {
+      background-color: color.mix(theme.$accent-teal, black, 15%);
+
+      #launcher-plugin-title,
+      #launcher-plugin-subtitle {
+        color: theme.$background-dark;
       }
     }
   }
 
   #launcher-plugin-hint {
-    padding: 8px;
-    opacity: 0.8;
+    padding: 8px 10px;
+    border-radius: 10px;
+    background-color: color.mix(theme.$surface-neutral, transparent, 50%);
+    opacity: 0.85;
   }
 }

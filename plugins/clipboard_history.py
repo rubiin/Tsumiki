@@ -6,7 +6,7 @@ from typing import ClassVar
 from utils.functions import find_executable
 from utils.plugin_manager import LauncherPlugin, PluginResult, copy_to_clipboard
 
-_MAX_RESULTS = 20
+_MAX_RESULTS = 100
 _TIMEOUT_SECONDS = 5
 # Null bytes or UTF-8 replacement chars in a listing usually mean binary
 # content (images) — show a marker instead of garbled text.
@@ -90,6 +90,7 @@ class ClipboardHistoryPlugin(LauncherPlugin):
                 )
             ]
 
+        total = len(items)
         rows = []
         for item_id, content in items[:_MAX_RESULTS]:
             preview = content.replace("\n", " ").strip()
@@ -105,12 +106,25 @@ class ClipboardHistoryPlugin(LauncherPlugin):
                     data=item_id,
                 )
             )
+        if total > _MAX_RESULTS:
+            # Tell the user the list is truncated instead of hiding it — the
+            # row is non-actionable (data=None) and keeps the launcher open.
+            rows.append(
+                PluginResult(
+                    f"… and {total - _MAX_RESULTS} more matches",
+                    subtitle="Keep typing to narrow the list",
+                    icon="go-down-symbolic",
+                )
+            )
         return rows
 
     def execute(self, result: PluginResult | None = None) -> bool:
-        if result is not None and result.data:
-            self._recopy(str(result.data))
-        return False  # close the launcher after copying
+        if result is not None:
+            if result.data:
+                self._recopy(str(result.data))
+                return False  # close the launcher after copying
+            return True  # non-actionable row (truncation hint) — stay open
+        return False
 
     @staticmethod
     def _recopy(item_id: str):

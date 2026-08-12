@@ -211,10 +211,11 @@ class FindExecutableTest(unittest.TestCase):
         mock_lookup.assert_called_once_with("fe-missing-probe")
 
     def test_results_are_cached_within_ttl_window(self):
-        with mock.patch.object(
-            functions.GLib, "find_program_in_path", return_value="/usr/bin/ss"
-        ) as mock_lookup, mock.patch.object(
-            functions.time, "time", return_value=1000.0
+        with (
+            mock.patch.object(
+                functions.GLib, "find_program_in_path", return_value="/usr/bin/ss"
+            ) as mock_lookup,
+            mock.patch.object(functions.time, "time", return_value=1000.0),
         ):
             self.assertEqual(find_executable("fe-cache-probe"), "/usr/bin/ss")
             self.assertEqual(find_executable("fe-cache-probe"), "/usr/bin/ss")
@@ -223,16 +224,18 @@ class FindExecutableTest(unittest.TestCase):
 
     def test_cache_expires_after_ttl_window(self):
         lookup = mock.Mock(return_value="/usr/bin/ss")
-        with mock.patch.object(
-            functions.GLib, "find_program_in_path", lookup
-        ), mock.patch.object(functions.time, "time", return_value=1000.0):
+        with (
+            mock.patch.object(functions.GLib, "find_program_in_path", lookup),
+            mock.patch.object(functions.time, "time", return_value=1000.0),
+        ):
             self.assertEqual(find_executable("fe-expiry-probe"), "/usr/bin/ss")
 
         # Same key, new TTL bucket, tool no longer on PATH: fresh lookup.
         lookup.return_value = None
-        with mock.patch.object(
-            functions.GLib, "find_program_in_path", lookup
-        ), mock.patch.object(functions.time, "time", return_value=1600.0):
+        with (
+            mock.patch.object(functions.GLib, "find_program_in_path", lookup),
+            mock.patch.object(functions.time, "time", return_value=1600.0),
+        ):
             self.assertIsNone(find_executable("fe-expiry-probe"))
         self.assertEqual(lookup.call_count, 2)
 

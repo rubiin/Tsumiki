@@ -346,11 +346,14 @@ class CurrencyPluginTest(unittest.TestCase):
         self.assertEqual(payload, stale)
 
     def test_load_rates_raises_when_no_cache_and_download_fails(self):
-        with unittest.mock.patch.object(
-            self.currency_module,
-            "_download_rates",
-            side_effect=RuntimeError("down"),
-        ), self.assertRaises(RuntimeError):
+        with (
+            unittest.mock.patch.object(
+                self.currency_module,
+                "_download_rates",
+                side_effect=RuntimeError("down"),
+            ),
+            self.assertRaises(RuntimeError),
+        ):
             self.load_rates()
 
     def test_fetch_rate_reads_cross_rates_from_cache(self):
@@ -389,10 +392,18 @@ class CurrencyPluginTest(unittest.TestCase):
 
             def json(self):
                 rows = [
-                    {"date": "2026-08-12", "base": "EUR", "quote": "USD",
-                     "rate": 1.1552},
-                    {"date": "2026-08-12", "base": "EUR", "quote": "JPY",
-                     "rate": 183.91},
+                    {
+                        "date": "2026-08-12",
+                        "base": "EUR",
+                        "quote": "USD",
+                        "rate": 1.1552,
+                    },
+                    {
+                        "date": "2026-08-12",
+                        "base": "EUR",
+                        "quote": "JPY",
+                        "rate": 183.91,
+                    },
                 ]
                 # Pad with more currencies so the payload passes the size
                 # sanity check (_MIN_RATES_COUNT).
@@ -400,8 +411,12 @@ class CurrencyPluginTest(unittest.TestCase):
                     ["GBP", "CHF", "CAD", "AUD", "INR", "CNY", "KRW", "MXN"]
                 ):
                     rows.append(
-                        {"date": "2026-08-12", "base": "EUR", "quote": code,
-                         "rate": 10.0 + i}
+                        {
+                            "date": "2026-08-12",
+                            "base": "EUR",
+                            "quote": code,
+                            "rate": 10.0 + i,
+                        }
                     )
                 return rows
 
@@ -416,10 +431,9 @@ class CurrencyPluginTest(unittest.TestCase):
                 return FakeResponse()
 
         flaky = FlakyClient()
-        with unittest.mock.patch.object(
-            self.currency_module.time, "sleep"
-        ), unittest.mock.patch(
-            "plugins.currency.get_http_client", return_value=flaky
+        with (
+            unittest.mock.patch.object(self.currency_module.time, "sleep"),
+            unittest.mock.patch("plugins.currency.get_http_client", return_value=flaky),
         ):
             payload = self.load_rates()
         self.assertEqual(flaky.calls, 2)
@@ -442,11 +456,13 @@ class CurrencyPluginTest(unittest.TestCase):
                 return FakeResponse()
 
         sparse = SparseClient()
-        with unittest.mock.patch.object(
-            self.currency_module.time, "sleep"
-        ), unittest.mock.patch(
-            "plugins.currency.get_http_client", return_value=sparse
-        ), self.assertRaises(ValueError):
+        with (
+            unittest.mock.patch.object(self.currency_module.time, "sleep"),
+            unittest.mock.patch(
+                "plugins.currency.get_http_client", return_value=sparse
+            ),
+            self.assertRaises(ValueError),
+        ):
             self.load_rates()
         # A nearly-empty table must not be cached as a valid daily snapshot.
         self.assertFalse(Path(self.cache_file).exists())
@@ -473,11 +489,11 @@ class CurrencyPluginTest(unittest.TestCase):
                 return BadResponse()
 
         bad = BadClient()
-        with unittest.mock.patch.object(
-            self.currency_module.time, "sleep"
-        ), unittest.mock.patch(
-            "plugins.currency.get_http_client", return_value=bad
-        ), self.assertRaises(ClientError):
+        with (
+            unittest.mock.patch.object(self.currency_module.time, "sleep"),
+            unittest.mock.patch("plugins.currency.get_http_client", return_value=bad),
+            self.assertRaises(ClientError),
+        ):
             self.load_rates()
         # 4xx (e.g. a bad request) is a client error — exactly one attempt.
         self.assertEqual(bad.calls, 1)
