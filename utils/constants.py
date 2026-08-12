@@ -45,7 +45,7 @@ LOG_FORMAT = "{time:YYYY-MM-DD HH:mm:ss} [<level>{level}</level>] {message}"
 DEFAULT_CONFIG = {
     "$schema": f"./{APPLICATION_NAME}.schema.json",
     "widgets": {
-        "app_launcher_button": {
+        "launcher_button": {
             "icon": "view-app-grid-symbolic",
             "icon_size": 16,
             "tooltip": True,
@@ -426,7 +426,7 @@ DEFAULT_CONFIG = {
             "osds": ["brightness", "volume"],
             "poll_interval": 200,
         },
-        "app_launcher": {
+        "launcher": {
             "enabled": False,
             "tooltip": True,
             "icon_size": 16,

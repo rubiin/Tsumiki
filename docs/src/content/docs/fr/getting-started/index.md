@@ -39,7 +39,7 @@ exec-once = sleep 5; ~/.config/tsumiki/init.sh -start
 Voici un `config.toml` minimal pour commencer :
 
 ```toml
-$schema = "./tsumiki.schema.json"
+"$schema" = "./tsumiki.schema.json"
 
 [general]
 debug = false

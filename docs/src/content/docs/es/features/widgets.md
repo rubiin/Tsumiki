@@ -559,7 +559,7 @@ Se oculta automáticamente cuando el submapa activo es el predeterminado.
 Abre el popup del lanzador de aplicaciones.
 
 ```toml
-[widgets.app_launcher_button]
+[widgets.launcher_button]
 icon = "view-app-grid-symbolic"
 icon_size = 20
 tooltip = true

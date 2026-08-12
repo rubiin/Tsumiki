@@ -282,9 +282,9 @@ Dock = TypedDict(
 )
 
 
-# Dock configuration
-AppLauncher = TypedDict(
-    "AppLauncher",
+# Launcher configuration
+Launcher = TypedDict(
+    "Launcher",
     {
         "enabled": bool,
         "tooltip": bool,
@@ -317,7 +317,7 @@ Modules = TypedDict(
         "desktop_clock": DesktopClock,
         "screen_corners": ScreenCorners,
         "notification": Notification,
-        "app_launcher": AppLauncher,
+        "launcher": Launcher,
         "activate_linux": ActivateLinux,
         "cheatsheet": Cheatsheet,
     },
@@ -504,8 +504,8 @@ Weather = TypedDict(
     },
 )
 
-App_Launcher_Button = TypedDict(
-    "AppLauncher", {"tooltip": bool, "icon": str, "icon_size": int}
+Launcher_Button = TypedDict(
+    "LauncherButton", {"tooltip": bool, "icon": str, "icon_size": int}
 )
 
 # Keyboard configuration
@@ -848,7 +848,7 @@ class Widgets(TypedDict):
     hypridle: HyprIdle
     hyprsunset: HyprSunset
     hyprpicker: HyprPicker
-    app_launcher_button: App_Launcher_Button
+    launcher_button: Launcher_Button
     keyboard: Keyboard
     language: Language
     gpu: Gpu

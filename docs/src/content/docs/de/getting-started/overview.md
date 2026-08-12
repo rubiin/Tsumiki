@@ -47,7 +47,7 @@ Module sind größere UI-Oberflächen, die über die Leiste hinausgehen — eige
 - **Benachrichtigungssystem** — Desktop-Benachrichtigungsanzeige
 - **Dock** — Anwendungs-Dock mit Intellihide
 - **Übersicht** — Vollbild-Arbeitsbereichs-Exposé
-- **App-Launcher** — Tastaturgesteuerte Anwendungssuche
+- **Launcher** — Tastaturgesteuerte Anwendungssuche
 - **OSD** — Bildschirmanzeigen für Lautstärke, Helligkeit usw.
 - **Desktop-Uhr** — Dekorative Uhren-Überlagerung
 - **Desktop-Zitate** — Inspirierende Zitate-Anzeige

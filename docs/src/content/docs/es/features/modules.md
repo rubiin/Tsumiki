@@ -139,7 +139,7 @@ Se abre con un atajo de teclado configurable (predeterminado: `Super+W`). Muestr
 Lanzador de aplicaciones controlado por teclado con búsqueda, diseño de cuadrícula/lista y arrastrar para anclar.
 
 ```toml
-[modules.app_launcher]
+[modules.launcher]
 enabled = false
 tooltip = true
 icon_size = 35

@@ -3,13 +3,13 @@ from fabric.widgets.image import Image
 from shared.widget_container import ButtonWidget
 
 
-class AppLauncherButton(ButtonWidget):
+class LauncherButton(ButtonWidget):
     """Button widget to launch the application launcher."""
 
     def __init__(self, **kwargs):
-        super().__init__(name="app_launcher_button", **kwargs)
+        super().__init__(name="launcher_button", **kwargs)
 
-        self.app_launcher = None
+        self.launcher = None
 
         # Get icon from config or use default
         icon = self.config.get("icon", "view-app-grid-symbolic")
@@ -32,13 +32,13 @@ class AppLauncherButton(ButtonWidget):
 
     def _get_or_create_launcher(self):
         """Get or create the app launcher instance."""
-        from modules.app_launcher import AppLauncher
+        from modules.launcher import Launcher
         from utils.config import tsumiki_config
 
-        if self.app_launcher is None:
-            self.app_launcher = AppLauncher(tsumiki_config)
+        if self.launcher is None:
+            self.launcher = Launcher(tsumiki_config)
 
-        return self.app_launcher
+        return self.launcher
 
     def on_click(self, *_):
         """Toggle the app launcher visibility."""

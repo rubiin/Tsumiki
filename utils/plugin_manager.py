@@ -2,7 +2,7 @@
 
 Plugins are plain Python files (or packages) placed inside the launcher's
 plugins directory — by default ``<tsumiki-config>/plugins`` (overridable via
-``modules.app_launcher.plugins_dir``). Each plugin subclasses
+``modules.launcher.plugins_dir``). Each plugin subclasses
 :class:`LauncherPlugin` and is registered under its ``name`` (used as the
 slash command, e.g. ``/calc``) together with any aliases.
 

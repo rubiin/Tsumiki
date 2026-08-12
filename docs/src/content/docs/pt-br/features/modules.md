@@ -45,8 +45,14 @@ anchor = "center"
 ## Lançador de Aplicativos
 
 ```toml
-[modules.app_launcher]
+[modules.launcher]
 enabled = false
+tooltip = true
+icon_size = 35
+ignored = []
+anchor = "center"
+width = 280
+height = 320
 layout = "grid"
 grid_columns = 3
 plugins_enabled = true

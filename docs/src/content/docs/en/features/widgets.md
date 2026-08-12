@@ -554,12 +554,12 @@ Hides automatically when the active submap is the default.
 
 ## UI & Application Widgets
 
-### Application Launcher Button
+### Launcher Button
 
 Opens the application launcher popup.
 
 ```toml
-[widgets.app_launcher_button]
+[widgets.launcher_button]
 icon = "view-app-grid-symbolic"
 icon_size = 20
 tooltip = true

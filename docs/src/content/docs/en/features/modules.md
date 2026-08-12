@@ -134,12 +134,12 @@ Opens with a configurable keybinding (default: `Super+W`). Shows workspace thumb
 
 ---
 
-## Application Launcher
+## Launcher
 
 Keyboard-driven application launcher with search, grid/list layout, and drag-to-pin.
 
 ```toml
-[modules.app_launcher]
+[modules.launcher]
 enabled = false
 tooltip = true
 icon_size = 35

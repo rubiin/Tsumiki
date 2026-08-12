@@ -137,7 +137,7 @@ transition_duration = 350
 مشغل تطبيقات يعمل بلوحة المفاتيح مع البحث وتخطيط شبكة/قائمة والسحب للتثبيت.
 
 ```toml
-[modules.app_launcher]
+[modules.launcher]
 enabled = false
 tooltip = true
 icon_size = 35

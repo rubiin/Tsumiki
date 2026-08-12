@@ -18,7 +18,7 @@ Beginnen met `example/config.toml` is de veiligste manier om schema-geldig te bl
 ## Snelstart Voorbeeld
 
 ```toml
-$schema = "./tsumiki.schema.json"
+"$schema" = "./tsumiki.schema.json"
 
 [general]
 debug = false

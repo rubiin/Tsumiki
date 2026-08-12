@@ -93,7 +93,7 @@ Probeer interactie met je widgets:
 
 - **Verander kleuren** — Zie [Thema's maken](/nl/theming/making-themes) voor SCSS-aanpassing of [Matugen](/nl/theming/matugen) voor automatische theming op basis van achtergrond.
 - **Voeg meer widgets toe** — Blader door de [Widgets-referentie](/nl/features/widgets) voor alle 45+ beschikbare widgets.
-- **Schakel modules in** — Probeer de [Dock](/nl/features/modules#dock), [App Launcher](/nl/features/modules#app-launcher) of [OSD](/nl/features/modules#osd-schermweergave).
+- **Schakel modules in** — Probeer de [Dock](/nl/features/modules#dock), [Launcher](/nl/features/modules#launcher) of [OSD](/nl/features/modules#osd-schermweergave).
 - **Configureer gedrag** — Zie de volledige [Configuratie](/nl/configuring/config) referentie voor elke optie.
 
 ## Probleemoplossing

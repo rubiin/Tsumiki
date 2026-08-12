@@ -32,17 +32,17 @@
 
 #launcher {
   @include common.widget-border(
-    variable.$modules-app_launcher-border-radius,
-    variable.$modules-app_launcher-border-enabled,
-    variable.$modules-app_launcher-border-width
+    variable.$modules-launcher-border-radius,
+    variable.$modules-launcher-border-enabled,
+    variable.$modules-launcher-border-width
   );
 
   @include common.module-shadow(
-    variable.$modules-app_launcher-shadow-enabled,
-    variable.$modules-app_launcher-shadow-offset,
-    variable.$modules-app_launcher-shadow-blur,
-    variable.$modules-app_launcher-shadow-spread,
-    variable.$modules-app_launcher-shadow-opacity
+    variable.$modules-launcher-shadow-enabled,
+    variable.$modules-launcher-shadow-offset,
+    variable.$modules-launcher-shadow-blur,
+    variable.$modules-launcher-shadow-spread,
+    variable.$modules-launcher-shadow-opacity
   );
 
   &-prompt {

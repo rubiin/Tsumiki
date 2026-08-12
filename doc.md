@@ -3,7 +3,7 @@
 - **`$schema`**: `str` (default: "./tsumiki.schema.json")
 
 - **`widgets`**: `object`
-  - **`app_launcher_button`**: `object`
+  - **`launcher_button`**: `object`
     - **`icon`**: `str` (default: "view-app-grid-symbolic")
     - **`icon_size`**: `int` (default: 16)
     - **`tooltip`**: `bool` (default: true)
@@ -318,7 +318,7 @@
     - **`transition_duration`**: `int` (default: 500)
     - **`osds`**: `list[str]` (default: ["brightness", "volume"])
     - **`poll_interval`**: `int` (default: 200)
-  - **`app_launcher`**: `object`
+  - **`launcher`**: `object`
     - **`enabled`**: `bool` (default: false)
     - **`tooltip`**: `bool` (default: true)
     - **`icon_size`**: `int` (default: 16)

@@ -47,7 +47,7 @@ Modules are larger UI surfaces that go beyond the bar — they are standalone wi
 - **Notification System** — Desktop notification display
 - **Dock** — Application dock with intellihide
 - **Overview** — Full-screen workspace exposé
-- **App Launcher** — Keyboard-driven application search
+- **Launcher** — Keyboard-driven application search
 - **OSD** — On-screen displays for volume, brightness, etc.
 - **Desktop Clock** — Decorative clock overlay
 - **Desktop Quotes** — Inspirational quote display

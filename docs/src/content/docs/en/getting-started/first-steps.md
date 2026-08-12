@@ -93,7 +93,7 @@ Try interacting with your widgets:
 
 - **Change colors** — See [Making Themes](/en/theming/making-themes) for SCSS customization or [Matugen](/en/theming/matugen) for automatic wallpaper-based theming.
 - **Add more widgets** — Browse the [Widgets Reference](/en/features/widgets) for all 45+ available widgets.
-- **Enable modules** — Try the [Dock](/en/features/modules#dock), [App Launcher](/en/features/modules#application-launcher), or [OSD](/en/features/modules#osd-on-screen-display).
+- **Enable modules** — Try the [Dock](/en/features/modules#dock), [Launcher](/en/features/modules#launcher), or [OSD](/en/features/modules#osd-on-screen-display).
 - **Configure behavior** — See the full [Configuration](/en/configuring/config) reference for every option.
 
 ## Troubleshooting

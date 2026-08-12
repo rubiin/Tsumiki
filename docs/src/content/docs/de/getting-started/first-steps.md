@@ -93,7 +93,7 @@ Interagieren Sie mit Ihren Widgets:
 
 - **Farben ändern** — Siehe [Themes erstellen](/de/theming/making-themes) für SCSS-Anpassung oder [Matugen](/de/theming/matugen) für automatische Hintergrundbild-basierte Theming.
 - **Weitere Widgets hinzufügen** — Durchsuchen Sie die [Widgets-Referenz](/de/features/widgets) für alle über 45 verfügbaren Widgets.
-- **Module aktivieren** — Probieren Sie das [Dock](/de/features/modules#dock), den [App-Launcher](/de/features/modules#app-launcher) oder das [OSD](/de/features/modules#osd-bildschirmanzeige) aus.
+- **Module aktivieren** — Probieren Sie das [Dock](/de/features/modules#dock), den [Launcher](/de/features/modules#launcher) oder das [OSD](/de/features/modules#osd-bildschirmanzeige) aus.
 - **Verhalten konfigurieren** — Siehe die vollständige [Konfigurations](/de/configuring/config)-Referenz für jede Option.
 
 ## Fehlerbehebung

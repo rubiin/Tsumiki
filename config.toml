@@ -1,6 +1,6 @@
 "$schema" = "https://raw.githubusercontent.com/rubiin/tsumiki/refs/heads/dev/tsumiki.schema.json"
 
-[widgets.app_launcher_button]
+[widgets.launcher_button]
 icon = "view-app-grid-symbolic"
 icon_size = 20
 tooltip = true
@@ -515,7 +515,7 @@ transition_type = "slide-up"
 transition_duration = 500
 osds = ["brightness", "volume"]
 
-[modules.app_launcher]
+[modules.launcher]
 enabled = true
 tooltip = true
 icon_size = 35
@@ -610,7 +610,7 @@ layer = "bottom"
 
 [layout]
 left_section = ["@group:workspaces-group"]
-middle_section = ["date_time", "weather", "mpris","app_launcher_button"]
+middle_section = ["date_time", "weather", "mpris","launcher_button"]
 right_section = ["@group:sys-group", "@group:utils-group", "system_tray", "power"]
 
 [general]
@@ -1201,7 +1201,7 @@ enabled = false
 radius = "16px"
 width = "1px"
 
-[styling.modules.app_launcher]
+[styling.modules.launcher]
 margin_x = "8px"
 margin_y = "8px"
 opacity = 50
@@ -1209,12 +1209,12 @@ padding_x = "8px"
 padding_y = "8px"
 scaling = 100
 
-[styling.modules.app_launcher.border]
+[styling.modules.launcher.border]
 enabled = false
 radius = "1.5rem"
 width = "1px"
 
-[styling.modules.app_launcher.shadow]
+[styling.modules.launcher.shadow]
 blur = 0
 enabled = false
 offset = 0

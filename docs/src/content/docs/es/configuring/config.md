@@ -18,7 +18,7 @@ Comenzar desde `example/config.toml` es la forma más segura de mantenerse váli
 ## Ejemplo de Inicio Rápido
 
 ```toml
-$schema = "./tsumiki.schema.json"
+"$schema" = "./tsumiki.schema.json"
 
 [general]
 debug = false
@@ -117,7 +117,7 @@ Activa y configura módulos de UI más grandes como:
 | Dock | `modules.dock` | Dock de aplicaciones con intellihide |
 | Overview | `modules.overview` | Vista exposé de espacios de trabajo |
 | OSD | `modules.osd` | Visualización en pantalla para volumen, etc. |
-| Lanzador de Apps | `modules.app_launcher` | Búsqueda y lanzamiento de aplicaciones |
+| Lanzador de Apps | `modules.launcher` | Búsqueda y lanzamiento de aplicaciones |
 | Reloj de Escritorio | `modules.desktop_clock` | Reloj decorativo del escritorio |
 | Citas de Escritorio | `modules.desktop_quotes` | Superposición de citas inspiradoras |
 | Esquinas de Pantalla | `modules.screen_corners` | Esquinas activas |

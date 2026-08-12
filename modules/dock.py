@@ -104,11 +104,11 @@ class AppBar(BoxWidget):
 
     def on_launcher_clicked(self, *_):
         """Toggle the app launcher visibility."""
-        if self.app_launcher is None:
-            from modules.app_launcher import AppLauncher
+        if self.launcher is None:
+            from modules.launcher import Launcher
 
-            self.app_launcher = AppLauncher(tsumiki_config)
-        self.app_launcher.toggle()
+            self.launcher = Launcher(tsumiki_config)
+        self.launcher.toggle()
 
     def _bake_button(self, **kwargs) -> Button:
         return Button(
@@ -125,7 +125,7 @@ class AppBar(BoxWidget):
 
         self.config = parent.config
         self.menu = None
-        self.app_launcher = None
+        self.launcher = None
         self.icon_size = self.config.get("icon_size", 30)
         self.orientation = self.config.get("orientation", "horizontal")
         self._group_apps = self.config.get("group_apps", True)

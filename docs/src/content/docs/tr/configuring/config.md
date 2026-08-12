@@ -8,7 +8,7 @@ Tsumiki, yapılandırma için TOML kullanır.
 ## Hızlı Başlangıç Örneği
 
 ```toml
-$schema = "./tsumiki.schema.json"
+"$schema" = "./tsumiki.schema.json"
 
 [general]
 debug = false

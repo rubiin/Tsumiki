@@ -9,7 +9,7 @@
 		"widgets": {
 			"type": "object",
 			"properties": {
-				"app_launcher_button": {
+				"launcher_button": {
 					"type": "object",
 					"properties": {
 						"tooltip": {
@@ -2320,7 +2320,7 @@
 							{
 								"type": "string",
 								"enum": [
-									"app_launcher_button",
+									"launcher_button",
 									"git_companion",
 									"ip_monitor",
 									"battery",
@@ -2416,7 +2416,7 @@
 							{
 								"type": "string",
 								"enum": [
-									"app_launcher_button",
+									"launcher_button",
 									"git_companion",
 									"ip_monitor",
 									"battery",
@@ -2512,7 +2512,7 @@
 							{
 								"type": "string",
 								"enum": [
-									"app_launcher_button",
+									"launcher_button",
 									"git_companion",
 									"ip_monitor",
 									"battery",
@@ -2621,7 +2621,7 @@
 								{
 									"type": "string",
 									"enum": [
-										"app_launcher_button",
+										"launcher_button",
 										"git_companion",
 										"ip_monitor",
 										"battery",
@@ -2742,7 +2742,7 @@
 								{
 									"type": "string",
 									"enum": [
-										"app_launcher_button",
+										"launcher_button",
 										"battery",
 										"bluetooth",
 										"brightness",
@@ -3591,7 +3591,7 @@
 						}
 					}
 				},
-				"app_launcher": {
+				"launcher": {
 					"type": "object",
 					"properties": {
 						"enabled": {

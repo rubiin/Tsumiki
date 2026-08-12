@@ -68,10 +68,10 @@ def main():
 
         app.add_window(ActivateLinux(tsumiki_config))
 
-    if module_enabled("app_launcher"):
-        from modules.app_launcher import AppLauncher
+    if module_enabled("launcher"):
+        from modules.launcher import Launcher
 
-        app.add_window(AppLauncher(tsumiki_config))
+        app.add_window(Launcher(tsumiki_config))
 
     if module_enabled("dock"):
         from modules.dock import Dock

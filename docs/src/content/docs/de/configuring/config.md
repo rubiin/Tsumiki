@@ -18,7 +18,7 @@ Der sicherste Weg, schema-konform zu bleiben, ist mit `example/config.toml` zu b
 ## Schnellstart-Beispiel
 
 ```toml
-$schema = "./tsumiki.schema.json"
+"$schema" = "./tsumiki.schema.json"
 
 [general]
 debug = false
@@ -117,7 +117,7 @@ Aktiviert und konfiguriert größere UI-Module wie:
 | Dock | `modules.dock` | App-Dock mit Intellihide |
 | Übersicht | `modules.overview` | Arbeitsbereichs-Exposé-Ansicht |
 | OSD | `modules.osd` | Bildschirmanzeige für Lautstärke usw. |
-| App-Launcher | `modules.app_launcher` | Anwendungssuche und -start |
+| Launcher | `modules.launcher` | Anwendungssuche und -start |
 | Desktop-Uhr | `modules.desktop_clock` | Dekorative Desktop-Uhr |
 | Desktop-Zitate | `modules.desktop_quotes` | Inspirierende Zitate-Überlagerung |
 | Bildschirmecken | `modules.screen_corners` | Aktive Ecken |

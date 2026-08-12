@@ -69,8 +69,11 @@ transition_duration = 350
 Lanceur d'applications piloté par clavier.
 
 ```toml
-[modules.app_launcher]
+[modules.launcher]
 enabled = false
+tooltip = true
+icon_size = 35
+ignored = []
 anchor = "center"
 width = 280
 height = 320

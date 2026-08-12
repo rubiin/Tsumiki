@@ -18,7 +18,7 @@ description: خيارات إعداد تسوميكي وإعدادات الأدو�
 ## مثال بداية سريعة
 
 ```toml
-$schema = "./tsumiki.schema.json"
+"$schema" = "./tsumiki.schema.json"
 
 [general]
 debug = false
@@ -117,7 +117,7 @@ right_section = ["@group:1", "system_tray", "power"]
 | الإرساء | `modules.dock` | إرساء التطبيقات مع الإخفاء الذكي |
 | النظرة العامة | `modules.overview` | عرض مساحات العمل |
 | OSD | `modules.osd` | شاشة عرض للصوت وغيرها |
-| مشغل التطبيقات | `modules.app_launcher` | بحث وتشغيل التطبيقات |
+| مشغل التطبيقات | `modules.launcher` | بحث وتشغيل التطبيقات |
 | ساعة سطح المكتب | `modules.desktop_clock` | ساعة سطح مكتب زخرفية |
 | اقتباسات سطح المكتب | `modules.desktop_quotes` | تراكب اقتباسات ملهمة |
 | زوايا الشاشة | `modules.screen_corners` | زوايا نشطة |

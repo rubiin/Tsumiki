@@ -207,7 +207,7 @@ class HandlerManager:
         self.launcher._arranger_handler = handler_id
 
 
-class AppLauncher(PopupWindow):
+class Launcher(PopupWindow):
     """Launcher widget for launching applications and commands."""
 
     def __init__(self, config: dict, **kwargs):
@@ -592,7 +592,8 @@ class AppLauncher(PopupWindow):
         self._prepare_viewport_render()
         if not results:
             self._render_plugin_hint(
-                f"No results for '/{self._plugin_command} {self._plugin_args}'".rstrip(),
+                f"No results for '/{self._plugin_command} {self._plugin_args}'"
+                .rstrip(),
                 "Try a different input or type / for available commands",
             )
             return

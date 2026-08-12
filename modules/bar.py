@@ -72,7 +72,7 @@ class LazyWidgetDict(dict):
 # Lazy widget loading - widgets are imported on-demand to speed up startup
 # Format: "widget_name": "module.path.ClassName"
 LAZY_WIDGETS_LIST = {
-    "app_launcher_button": "widgets.app_launcher_button.AppLauncherButton",
+    "launcher_button": "widgets.launcher_button.LauncherButton",
     "battery": "widgets.battery.BatteryWidget",
     "bluetooth": "widgets.bluetooth.BlueToothWidget",
     "brightness": "widgets.brightness.BrightnessWidget",
