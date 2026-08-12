@@ -123,7 +123,7 @@ class SearchPlugin(LauncherPlugin):
     icon = "web-browser-symbolic"
     aliases: ClassVar[list[str]] = ["s", "web"]
     # Each query is a network request — debounce like /translate.
-    debounce_ms = 400
+    debounce_ms = 500
 
     def handle(self, args: str) -> list[PluginResult]:
         query = args.strip()

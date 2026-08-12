@@ -1,12 +1,18 @@
 """Launcher slash command: /translate — translate text.
 
-Uses Google's public (keyless) translate endpoint through the shared httpx
-client. ``handle`` runs on a worker thread, so typing stays responsive while
-the request is in flight.
+Uses Google's public (keyless) translate API (``translate_a/single``) through
+the shared httpx client. ``handle`` runs on a worker thread, so typing stays
+responsive while the request is in flight.
+
+The target language can be given with "in <language>" or "to <language>":
+    /translate hello in nepali      -> translate "hello" into Nepali
+    /translate hello to german      -> translate "hello" into German
+    /translate bonjour              -> translate into the default language
 
 Examples:
     /translate bonjour
     /translate こんにちは
+    /translate hello in nepali
 """
 
 from typing import ClassVar
@@ -15,28 +21,164 @@ from utils.functions import get_http_client
 from utils.plugin_manager import LauncherPlugin, PluginResult, copy_to_clipboard
 
 _TRANSLATE_URL = "https://translate.googleapis.com/translate_a/single"
+#: Google rejects longer payloads ("400. That's an error...").
+_MAX_TEXT_LENGTH = 1830
+
+#: Language name -> Google language code. Covers common languages; unknown
+#: names fall back to the plugin default target language.
+_LANGUAGES = {
+    "afrikaans": "af",
+    "albanian": "sq",
+    "amharic": "am",
+    "arabic": "ar",
+    "armenian": "hy",
+    "azerbaijani": "az",
+    "basque": "eu",
+    "belarusian": "be",
+    "bengali": "bn",
+    "bosnian": "bs",
+    "bulgarian": "bg",
+    "catalan": "ca",
+    "cebuano": "ceb",
+    "chichewa": "ny",
+    "chinese": "zh-CN",
+    "chinese simplified": "zh-CN",
+    "chinese traditional": "zh-TW",
+    "corsican": "co",
+    "croatian": "hr",
+    "czech": "cs",
+    "danish": "da",
+    "dutch": "nl",
+    "english": "en",
+    "esperanto": "eo",
+    "estonian": "et",
+    "filipino": "tl",
+    "finnish": "fi",
+    "french": "fr",
+    "frisian": "fy",
+    "galician": "gl",
+    "georgian": "ka",
+    "german": "de",
+    "greek": "el",
+    "gujarati": "gu",
+    "haitian creole": "ht",
+    "hausa": "ha",
+    "hawaiian": "haw",
+    "hebrew": "he",
+    "hindi": "hi",
+    "hmong": "hmn",
+    "hungarian": "hu",
+    "icelandic": "is",
+    "igbo": "ig",
+    "indonesian": "id",
+    "irish": "ga",
+    "italian": "it",
+    "japanese": "ja",
+    "javanese": "jw",
+    "kannada": "kn",
+    "kazakh": "kk",
+    "khmer": "km",
+    "korean": "ko",
+    "kurdish (kurmanji)": "ku",
+    "kyrgyz": "ky",
+    "lao": "lo",
+    "latin": "la",
+    "latvian": "lv",
+    "lithuanian": "lt",
+    "luxembourgish": "lb",
+    "macedonian": "mk",
+    "malagasy": "mg",
+    "malay": "ms",
+    "malayalam": "ml",
+    "maltese": "mt",
+    "maori": "mi",
+    "marathi": "mr",
+    "mongolian": "mn",
+    "myanmar (burmese)": "my",
+    "nepali": "ne",
+    "norwegian": "no",
+    "odia": "or",
+    "pashto": "ps",
+    "persian": "fa",
+    "polish": "pl",
+    "portuguese": "pt",
+    "punjabi": "pa",
+    "romanian": "ro",
+    "russian": "ru",
+    "samoan": "sm",
+    "scots gaelic": "gd",
+    "serbian": "sr",
+    "sesotho": "st",
+    "shona": "sn",
+    "sindhi": "sd",
+    "sinhala": "si",
+    "slovak": "sk",
+    "slovenian": "sl",
+    "somali": "so",
+    "spanish": "es",
+    "sundanese": "su",
+    "swahili": "sw",
+    "swedish": "sv",
+    "tajik": "tg",
+    "tamil": "ta",
+    "telugu": "te",
+    "thai": "th",
+    "turkish": "tr",
+    "ukrainian": "uk",
+    "urdu": "ur",
+    "uzbek": "uz",
+    "vietnamese": "vi",
+    "welsh": "cy",
+    "xhosa": "xh",
+    "yiddish": "yi",
+    "yoruba": "yo",
+    "zulu": "zu",
+}
+
+
+def parse_target_language(text: str) -> tuple[str, str]:
+    """Split *text* into (translate_text, target_lang).
+
+    Recognises a trailing "in <language>" / "to <language>" directive, e.g.
+    ``"hello in nepali"`` -> ``("hello", "ne")``.  Unknown language names and
+    queries without a directive keep the caller's default language (``None``).
+    """
+    lowered = text.casefold().strip()
+    for separator in (" in ", " to "):
+        if separator in lowered:
+            phrase, _, lang_name = lowered.rpartition(separator)
+            code = _LANGUAGES.get(lang_name.strip())
+            if code is not None:
+                return text[: len(phrase)], code
+    # Bare directive with no text, e.g. "/translate in nepali".
+    for prefix in ("in ", "to "):
+        if lowered.startswith(prefix):
+            code = _LANGUAGES.get(lowered[len(prefix):])
+            if code is not None:
+                return "", code
+    return text, None
 
 
 class TranslatePlugin(LauncherPlugin):
     """Slash command: /translate — translate text and copy the result."""
 
     name = "translate"
-    description = "Translate text (auto-detect source language)"
+    description = "Translate text (e.g. 'hello in nepali')"
     icon = "preferences-desktop-locale-symbolic"
     aliases: ClassVar[list[str]] = ["tr", "t"]
     # Each query is a network request, so wait for the user to pause typing
     # before translating instead of hitting the API on every keystroke.
-    debounce_ms = 400
-    #: Target language code — change by editing this file.
+    debounce_ms = 500
+    #: Default target language code (used when the query has no "in <lang>").
     target_lang = "en"
 
-    def _fetch(self, text: str) -> str:
+    def _fetch(self, text: str, target_lang: str) -> str:
         response = get_http_client().get(
             _TRANSLATE_URL,
             params={
                 "client": "gtx",
                 "sl": "auto",
-                "tl": self.target_lang,
+                "tl": target_lang,
                 "dt": "t",
                 "q": text,
             },
@@ -50,18 +192,43 @@ class TranslatePlugin(LauncherPlugin):
 
     def handle(self, args: str) -> list[PluginResult]:
         text = args.strip()
+        if len(text) > _MAX_TEXT_LENGTH:
+            return [
+                PluginResult(
+                    "Text is too long",
+                    subtitle=f"Google accepts up to {_MAX_TEXT_LENGTH} characters",
+                    icon="dialog-warning-symbolic",
+                )
+            ]
         if not text:
             return [
                 PluginResult(
                     "Usage: /translate <text>",
                     subtitle=(
-                        "e.g. /translate bonjour  (source language is auto-detected)"
+                        "e.g. /translate bonjour  or  "
+                        "/translate hello in nepali"
                     ),
                     icon=self.icon,
                 )
             ]
+
+        text, target_lang = parse_target_language(text)
+        if not text:
+            # Query was only a language directive, e.g. "/translate in nepali".
+            return [
+                PluginResult(
+                    "Usage: /translate <text> [in <language>]",
+                    subtitle=(
+                        "e.g. /translate hello in nepali  "
+                        "(source language is auto-detected)"
+                    ),
+                    icon=self.icon,
+                )
+            ]
+        target_lang = target_lang or self.target_lang
+
         try:
-            translation = self._fetch(text)
+            translation = self._fetch(text, target_lang)
         except Exception as exc:
             return [
                 PluginResult(
@@ -80,7 +247,11 @@ class TranslatePlugin(LauncherPlugin):
         return [
             PluginResult(
                 translation,
-                subtitle="Press Enter to copy the translation",
+                subtitle=(
+                    f"Press Enter to copy ({target_lang})"
+                    if target_lang != self.target_lang
+                    else "Press Enter to copy the translation"
+                ),
                 icon=self.icon,
                 data=translation,
             )
