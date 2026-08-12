@@ -2,12 +2,17 @@
 
 import os
 import re
-import subprocess
 import threading
 from typing import ClassVar
 
 from utils.functions import find_executable
-from utils.plugin_manager import LauncherPlugin, PluginResult, copy_to_clipboard
+from utils.plugin_manager import (
+    LauncherPlugin,
+    PluginResult,
+    SubprocessTimeoutError,
+    copy_to_clipboard,
+    run_subprocess,
+)
 
 _QALC_EXE = "qalc"
 _EVAL_TIMEOUT_SECONDS = 10
@@ -24,8 +29,12 @@ def find_qalc() -> str | None:
     return find_executable(_QALC_EXE)
 
 
-def evaluate(expr: str, qalc_path: str | None = None) -> str:
+def evaluate(expr: str, qalc_path: str | None = None, runner=None) -> str:
     """Evaluate *expr* with qalc and return the result string.
+
+    *runner* is an optional :func:`run_subprocess`-compatible callable so
+    the caller can track/kill the spawned qalc process (see
+    :meth:`LauncherPlugin.run_subprocess`).
 
     Raises ValueError when qalc is missing, the expression fails, or the
     calculation times out.
@@ -33,10 +42,11 @@ def evaluate(expr: str, qalc_path: str | None = None) -> str:
     qalc = qalc_path or find_qalc()
     if qalc is None:
         raise ValueError("qalc not found — install libqalculate")
+    run = runner or run_subprocess
 
     try:
         with _QALC_LOCK:
-            result = subprocess.run(
+            result = run(
                 [qalc, "-t", "--", expr],
                 capture_output=True,
                 text=True,
@@ -44,7 +54,7 @@ def evaluate(expr: str, qalc_path: str | None = None) -> str:
                 # Deterministic decimal separator while keeping UTF-8 output.
                 env={**os.environ, "LC_ALL": "C.UTF-8"},
             )
-    except subprocess.TimeoutExpired as exc:
+    except SubprocessTimeoutError as exc:
         raise ValueError("calculation timed out") from exc
 
     output = _ANSI_ESCAPE_RE.sub("", result.stdout).strip()
@@ -88,8 +98,10 @@ class CalcPlugin(LauncherPlugin):
                     icon="dialog-error-symbolic",
                 )
             ]
+        if self.is_cancelled():
+            return []  # superseded before we even started
         try:
-            result = evaluate(expr, self._qalc)
+            result = evaluate(expr, self._qalc, runner=self.run_subprocess)
         except Exception as exc:
             return [
                 PluginResult(

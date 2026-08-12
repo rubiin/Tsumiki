@@ -176,6 +176,7 @@ install_packages() {
 		gobject-introspection-runtime
 		python-pip
 		libnotify
+		libqalculate
 		cliphist
 		satty
 		nvtop

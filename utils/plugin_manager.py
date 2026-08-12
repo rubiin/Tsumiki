@@ -41,9 +41,11 @@ import importlib.util
 import inspect
 import os
 import sys
+import threading
+from contextlib import suppress
 from typing import Any, ClassVar
 
-from fabric.utils import Gio, logger
+from fabric.utils import Gio, GLib, logger
 
 from utils.functions import find_executable
 
@@ -73,6 +75,129 @@ class PluginResult:
         return f"<PluginResult title={self.title!r}>"
 
 
+class SubprocessResult:
+    """Captured output of a command run via :func:`run_subprocess`.
+
+    Attribute-compatible with ``subprocess.CompletedProcess`` (``args``,
+    ``returncode``, ``stdout``, ``stderr``) so callers read the same fields
+    — built on :class:`Gio.Subprocess` (the engine behind Fabric's
+    ``exec_shell_command_async``) instead of the stdlib subprocess module.
+    """
+
+    __slots__ = ("args", "returncode", "stderr", "stdout")
+
+    def __init__(
+        self,
+        args: list[str],
+        returncode: int,
+        stdout: str = "",
+        stderr: str = "",
+    ):
+        self.args = args
+        self.returncode = returncode
+        self.stdout = stdout
+        self.stderr = stderr
+
+    def __repr__(self) -> str:  # pragma: no cover - debug helper
+        return f"<SubprocessResult args={self.args!r} returncode={self.returncode}>"
+
+
+class SubprocessTimeoutError(TimeoutError):
+    """Raised when a command run via :func:`run_subprocess` exceeds its timeout."""
+
+    def __init__(self, args: list[str], timeout: float | None):
+        super().__init__(f"command timed out after {timeout}s: {args!r}")
+
+
+def _spawn_subprocess(
+    args: list[str],
+    *,
+    input: str | None = None,
+    env: dict | None = None,
+) -> Gio.Subprocess:
+    """Spawn *args* and return the :class:`Gio.Subprocess` handle.
+
+    Uses ``Gio.SubprocessLauncher`` when *env* is given (``setenv`` per key),
+    mirroring what Fabric's ``exec_shell_command_async`` does internally.
+    Note the keys are merged over the inherited environment (like
+    ``subprocess.run`` without a full env) — pass a full environment dict if
+    replacement is desired. Spawn failures are surfaced as ``OSError`` for
+    compatibility with the previous ``subprocess.run`` based runner.
+    """
+    flags = Gio.SubprocessFlags.STDOUT_PIPE | Gio.SubprocessFlags.STDERR_PIPE
+    if input is not None:
+        flags |= Gio.SubprocessFlags.STDIN_PIPE
+    try:
+        if env:
+            launcher = Gio.SubprocessLauncher.new(flags)
+            for key, value in env.items():
+                launcher.setenv(str(key), str(value), True)
+            return launcher.spawnv(list(args))
+        return Gio.Subprocess.new(list(args), flags)
+    except GLib.Error as exc:
+        raise OSError(f"failed to spawn {' '.join(args)}: {exc}") from exc
+
+
+def _communicate_subprocess(
+    proc: Gio.Subprocess,
+    args: list[str],
+    *,
+    input: str | None = None,
+    timeout: float | None = None,
+) -> SubprocessResult:
+    """Wait for *proc* to finish and return its captured output.
+
+    A watchdog thread force-exits the process when *timeout* elapses and
+    :class:`SubprocessTimeoutError` is raised. Killed-by-signal processes
+    (timeout or cancellation) report a negative ``returncode``, matching
+    ``subprocess`` semantics.
+    """
+    timed_out = threading.Event()
+
+    def _on_timeout():
+        timed_out.set()
+        with suppress(Exception):
+            proc.force_exit()
+
+    timer = threading.Timer(timeout, _on_timeout) if timeout is not None else None
+    if timer is not None:
+        timer.start()
+    try:
+        _, stdout, stderr = proc.communicate_utf8(input, None)
+    except GLib.Error as exc:
+        raise OSError(f"failed to run {' '.join(args)}: {exc}") from exc
+    finally:
+        if timer is not None:
+            timer.cancel()
+    if timed_out.is_set():
+        raise SubprocessTimeoutError(args, timeout)
+    returncode = (
+        -proc.get_term_sig() if proc.get_if_signaled() else proc.get_exit_status()
+    )
+    return SubprocessResult(args, returncode, stdout or "", stderr or "")
+
+
+def run_subprocess(
+    args: list[str],
+    *,
+    timeout: float | None = None,
+    text: bool = True,
+    input: str | None = None,
+    env: dict | None = None,
+    **kwargs: Any,
+) -> SubprocessResult:
+    """Run *args* and return a :class:`SubprocessResult`.
+
+    Gio-based replacement for ``subprocess.run`` in plugins — the same
+    engine Fabric's ``exec_shell_command`` helpers use, so no stdlib
+    ``subprocess`` machinery is needed. Accepts ``capture_output=True`` for
+    drop-in compatibility (ignored; output is always captured as text).
+    """
+    kwargs.pop("capture_output", None)
+    proc = _spawn_subprocess(args, input=input, env=env)
+    return _communicate_subprocess(proc, args, input=input, timeout=timeout)
+
+
 class LauncherPlugin:
     """Base class for launcher slash-command plugins.
 
@@ -97,10 +222,17 @@ class LauncherPlugin:
     #: return True to keep the launcher open.
     keep_open: bool = False
 
+    def __init__(self) -> None:
+        self._cancel_event = threading.Event()
+        self._subprocess: Gio.Subprocess | None = None
+
     def handle(self, args: str) -> list[PluginResult]:
         """Return the result rows for the given argument string.
 
-        Runs on a worker thread — no GTK calls allowed here.
+        Runs on a worker thread — no GTK calls allowed here. Long-running
+        work should be cancellable: check :meth:`is_cancelled` at safe
+        points, and run subprocesses via :meth:`run_subprocess` so the
+        launcher can kill them when the user keeps typing.
         """
         return []
 
@@ -110,6 +242,59 @@ class LauncherPlugin:
         Return True to keep the launcher open.
         """
         return False
+
+    # -- cancellation -------------------------------------------------
+
+    def cancel(self) -> None:
+        """Cancel any in-flight ``handle()`` work.
+
+        Sets the cancellation flag and force-exits a tracked process
+        (started via :meth:`run_subprocess`) if one is still referenced.
+        ``force_exit`` is a no-op on an already-finished process. Called by
+        the launcher when the user keeps typing and the current results are
+        about to be superseded.
+        """
+        self._cancel_event.set()
+        if self._subprocess is not None:
+            with suppress(Exception):
+                self._subprocess.force_exit()
+
+    def _reset_cancel(self) -> None:
+        """Clear the cancellation flag before dispatching a fresh query."""
+        self._cancel_event.clear()
+        self._subprocess = None
+
+    def is_cancelled(self) -> bool:
+        """True when :meth:`cancel` was called since the last dispatch."""
+        return self._cancel_event.is_set()
+
+    def run_subprocess(
+        self,
+        args: list[str],
+        *,
+        timeout: float | None = None,
+        text: bool = True,
+        input: str | None = None,
+        env: dict | None = None,
+        **kwargs: Any,
+    ) -> SubprocessResult:
+        """Run *args* and return a :class:`SubprocessResult`.
+
+        Like the module-level :func:`run_subprocess` but tracks the spawned
+        :class:`Gio.Subprocess` so :meth:`cancel` can force-exit it
+        mid-flight instead of letting a superseded query run to completion
+        and waste CPU/network. The ``capture_output`` kwarg is accepted for
+        drop-in compatibility and ignored since output is always captured
+        as text.
+        """
+        kwargs.pop("capture_output", None)
+        proc = _spawn_subprocess(args, input=input, env=env)
+        self._subprocess = proc
+        try:
+            return _communicate_subprocess(proc, args, input=input, timeout=timeout)
+        finally:
+            if self._subprocess is proc:
+                self._subprocess = None
 
     def __repr__(self) -> str:  # pragma: no cover - debug helper
         return f"<{type(self).__name__} name={self.name!r}>"

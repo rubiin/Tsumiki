@@ -95,9 +95,20 @@ def parse_results(page: str, limit: int = _MAX_RESULTS) -> list[tuple[str, str, 
     return parser.results[:limit]
 
 
-def search(query: str, limit: int = _MAX_RESULTS) -> list[tuple[str, str, str]]:
-    """Search DuckDuckGo and return (title, url, snippet) triples."""
+def search(
+    query: str, limit: int = _MAX_RESULTS, cancelled=None
+) -> list[tuple[str, str, str]]:
+    """Search DuckDuckGo and return (title, url, snippet) triples.
+
+    *cancelled* is an optional zero-arg callable returning True when the
+    query has been superseded; the request result is then discarded instead
+    of parsed.
+    """
+    if cancelled is not None and cancelled():
+        return []
     response = get_http_client().get(_DDG_HTML_URL, params={"q": query})
+    if cancelled is not None and cancelled():
+        return []  # superseded while in flight — skip HTML parsing
     response.raise_for_status()
     return parse_results(response.text, limit=limit)
 
@@ -135,8 +146,10 @@ class SearchPlugin(LauncherPlugin):
                     icon=self.icon,
                 )
             ]
+        if self.is_cancelled():
+            return []  # superseded before the request went out
         try:
-            results = search(query)
+            results = search(query, cancelled=self.is_cancelled)
         except Exception as exc:
             return [
                 PluginResult(

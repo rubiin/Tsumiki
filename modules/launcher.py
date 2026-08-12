@@ -56,6 +56,11 @@ class LauncherConfig:
         """Validate configuration and set defaults."""
         self.width = max(200, self.raw_config.get("width", self.DEFAULT_WIDTH))
         self.height = max(200, self.raw_config.get("height", self.DEFAULT_HEIGHT))
+        # The results area may grow a little beyond the configured height so
+        # taller plugin result sets are visible without scrolling; width stays
+        # fixed so long rows (e.g. /search) ellipsize instead of widening the
+        # window.
+        self.max_height = max(self.height, int(self.height * 1.5))
 
         icon_size = self.raw_config.get("icon_size", self.DEFAULT_ICON_SIZE)
         self.icon_size = max(16, min(128, icon_size))
@@ -234,6 +239,10 @@ class Launcher(PopupWindow):
         self._plugin_selected = 0
         self._plugin_gen = 0
         self._plugin_query_timer = 0
+        # Plugin whose worker may still be running — cancel it when a newer
+        # query supersedes it so in-flight subprocesses/requests are killed
+        # instead of running to completion and being discarded.
+        self._active_plugin = None
 
         # Tab-completion cycle state: the candidate list is snapshotted from
         # the query that started the cycle, so completing to a full name
@@ -274,7 +283,8 @@ class Launcher(PopupWindow):
 
         self.scrolled_window = ScrolledWindow(
             min_content_size=(self.config.width, self.config.height),
-            max_content_size=(self.config.width, self.config.height),
+            max_content_size=(self.config.width, self.config.max_height),
+            h_expand=True,
             child=self.viewport,
         )
 
@@ -428,9 +438,15 @@ class Launcher(PopupWindow):
         self._completion_index = -1
 
     def _set_search_text(self, text: str):
-        """Set the search entry text and keep focus for continued typing."""
+        """Set the search entry text and keep focus for continued typing.
+
+        ``set_text`` resets the cursor to the start, so move it to the end —
+        after a Tab-completed ``/command`` the user can immediately type
+        arguments instead of the caret snapping back to the first character.
+        """
         self.search_entry.set_text(text)
         self.search_entry.grab_focus_without_selecting()
+        self.search_entry.set_position(len(text))
 
     def _launch_first_app(self):
         """Launch the first app matching the current query (Enter in app mode)."""
@@ -446,6 +462,7 @@ class Launcher(PopupWindow):
     def _reset_plugin_state(self):
         """Invalidate pending plugin queries and clear selection state."""
         self._cancel_plugin_query_timer()
+        self._cancel_active_plugin()
         self._plugin_gen += 1
         self._plugin_mode = False
         self._plugin_rows = []
@@ -518,11 +535,7 @@ class Launcher(PopupWindow):
         should_resize: bool,
     ) -> bool:
         """Lazy renderer callback used by GLib idle loop."""
-        if self.add_next_application(apps_iter):
-            return True
-        if should_resize:
-            self.resize_viewport()
-        return False
+        return bool(self.add_next_application(apps_iter))
 
     def _schedule_viewport_render(
         self,
@@ -618,9 +631,14 @@ class Launcher(PopupWindow):
         the global default — expensive plugins (e.g. /calc) debounce harder.
         """
         self._cancel_plugin_query_timer()
+        # A newer query is superseding whatever is still in flight — cancel
+        # it now so its subprocess/request is killed rather than wasted.
+        self._cancel_active_plugin()
 
         def _fire() -> bool:
             self._plugin_query_timer = 0
+            plugin._reset_cancel()
+            self._active_plugin = plugin
             thread(self._plugin_worker, plugin, args, gen)
             return False
 
@@ -636,6 +654,12 @@ class Launcher(PopupWindow):
         if self._plugin_query_timer:
             GLib.source_remove(self._plugin_query_timer)
             self._plugin_query_timer = 0
+
+    def _cancel_active_plugin(self):
+        """Kill the in-flight plugin worker, if any."""
+        if self._active_plugin is not None:
+            self._active_plugin.cancel()
+            self._active_plugin = None
 
     def _plugin_worker(self, plugin, args: str, gen: int):
         """Run a plugin query on a worker thread, then render via idle_add."""
@@ -658,9 +682,11 @@ class Launcher(PopupWindow):
         idle_add(self._on_plugin_results, gen, plugin, results)
 
     def _on_plugin_results(self, gen: int, plugin, results: list[PluginResult]) -> bool:
-        """Render plugin results, dropping stale queries."""
+        """Render plugin results, dropping stale or cancelled queries."""
         if gen != self._plugin_gen or not self._plugin_mode:
             return False
+        if plugin.is_cancelled():
+            return False  # superseded mid-flight — don't render
         self._render_plugin_results(plugin, results)
         return False
 
@@ -676,8 +702,9 @@ class Launcher(PopupWindow):
         """Render plugin result rows, replacing any working/status row."""
         self._prepare_viewport_render()
         if not results:
+            hint = f"No results for '/{self._plugin_command} {self._plugin_args}'"
             self._render_plugin_hint(
-                f"No results for '/{self._plugin_command} {self._plugin_args}'".rstrip(),
+                hint.rstrip(),
                 "Try a different input or type / for available commands",
             )
             return
@@ -898,19 +925,6 @@ class Launcher(PopupWindow):
             self.viewport.add(app_widget)
 
         return True
-
-    def resize_viewport(self):
-        """Resize viewport to fit content."""
-        try:
-            allocation_width = self.viewport.get_allocation().width
-            if allocation_width > 0:
-                # Clear max_content_width constraint to avoid conflicts
-                self.scrolled_window.set_max_content_width(-1)
-                self.scrolled_window.set_min_content_width(allocation_width)
-        except (AttributeError, TypeError):
-            # Ignore resize errors
-            pass
-        return False
 
     def toggle(self):
         """Toggle launcher visibility."""

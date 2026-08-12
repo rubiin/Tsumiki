@@ -173,6 +173,8 @@ class TranslatePlugin(LauncherPlugin):
     target_lang = "en"
 
     def _fetch(self, text: str, target_lang: str) -> str:
+        if self.is_cancelled():
+            return ""  # superseded before the request went out
         response = get_http_client().get(
             _TRANSLATE_URL,
             params={
@@ -183,6 +185,8 @@ class TranslatePlugin(LauncherPlugin):
                 "q": text,
             },
         )
+        if self.is_cancelled():
+            return ""  # superseded while in flight — skip parsing
         response.raise_for_status()
         payload = response.json()
         segments = payload[0] if isinstance(payload, list) and payload else []

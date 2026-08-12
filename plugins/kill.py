@@ -13,13 +13,17 @@ Examples:
 import os
 import re
 import signal
-import subprocess
 from typing import ClassVar
 
 from fabric.utils import logger
 
 from utils.functions import find_executable
-from utils.plugin_manager import LauncherPlugin, PluginResult
+from utils.plugin_manager import (
+    LauncherPlugin,
+    PluginResult,
+    SubprocessTimeoutError,
+    run_subprocess,
+)
 
 _MAX_RESULTS = 24
 # Never offer to kill PID 1 (init) or our own bar process.
@@ -100,12 +104,17 @@ def parse_ss_output(output: str, port: int) -> list[int]:
     return sorted(pids)
 
 
-def find_pids_on_port(port: int) -> list[int]:
-    """Return PIDs listening on *port* (via ss, falling back to lsof)."""
+def find_pids_on_port(port: int, runner=None) -> list[int]:
+    """Return PIDs listening on *port* (via ss, falling back to lsof).
+
+    *runner* is an optional :func:`run_subprocess`-compatible callable so
+    the caller can kill the scan when the query is superseded.
+    """
+    run = runner or run_subprocess
     ss = find_executable("ss")
     if ss is not None:
         try:
-            proc = subprocess.run(
+            proc = run(
                 [ss, "-tulpn"],
                 capture_output=True,
                 text=True,
@@ -115,13 +124,13 @@ def find_pids_on_port(port: int) -> list[int]:
                 pids = parse_ss_output(proc.stdout, port)
                 if pids:
                     return pids
-        except (OSError, subprocess.TimeoutExpired, ValueError):
+        except (OSError, SubprocessTimeoutError, ValueError):
             pass
 
     lsof = find_executable("lsof")
     if lsof is not None:
         try:
-            proc = subprocess.run(
+            proc = run(
                 [lsof, f"-tiTCP:{port}", "-sTCP:LISTEN"],
                 capture_output=True,
                 text=True,
@@ -131,15 +140,17 @@ def find_pids_on_port(port: int) -> list[int]:
                 return sorted(
                     {int(pid) for pid in proc.stdout.split() if pid.isdigit()}
                 )
-        except (OSError, subprocess.TimeoutExpired, ValueError):
+        except (OSError, SubprocessTimeoutError, ValueError):
             pass
     return []
 
 
-def list_port_processes(port: int, proc_dir: str = "/proc") -> list[tuple[int, str]]:
+def list_port_processes(
+    port: int, proc_dir: str = "/proc", runner=None
+) -> list[tuple[int, str]]:
     """Return (pid, comm) pairs for the processes listening on *port*."""
     rows = []
-    for pid in find_pids_on_port(port):
+    for pid in find_pids_on_port(port, runner=runner):
         comm = read_comm(pid, proc_dir) or f"pid {pid}"
         rows.append((pid, comm))
     return rows
@@ -192,6 +203,8 @@ class KillPlugin(LauncherPlugin):
                     icon=self.icon,
                 )
             ]
+        if self.is_cancelled():
+            return []  # superseded before we started scanning
         force, query = parse_kill_args(args)
         if query.isdigit():
             return self._handle_port(force, query)
@@ -220,7 +233,7 @@ class KillPlugin(LauncherPlugin):
     def _handle_port(self, force: bool, query: str) -> list[PluginResult]:
         """Handle a numeric query: kill the process(es) listening on a port."""
         port = int(query)
-        matches = list_port_processes(port)
+        matches = list_port_processes(port, runner=self.run_subprocess)
         if not matches:
             return [
                 PluginResult(

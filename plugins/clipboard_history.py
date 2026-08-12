@@ -1,10 +1,14 @@
 """Launcher slash command: /clipboard-history — search clipboard history."""
 
-import subprocess
 from typing import ClassVar
 
 from utils.functions import find_executable
-from utils.plugin_manager import LauncherPlugin, PluginResult, copy_to_clipboard
+from utils.plugin_manager import (
+    LauncherPlugin,
+    PluginResult,
+    copy_to_clipboard,
+    run_subprocess,
+)
 
 _MAX_RESULTS = 100
 _TIMEOUT_SECONDS = 5
@@ -51,10 +55,11 @@ class ClipboardHistoryPlugin(LauncherPlugin):
             ]
 
         try:
-            result = subprocess.run(
+            # ``cliphist list`` can be slow with large histories (and gets
+            # slower as you scroll through it) — run it via the cancellable
+            # helper so a superseding query kills it instead of waiting.
+            result = self.run_subprocess(
                 ["cliphist", "list"],
-                capture_output=True,
-                text=True,
                 timeout=_TIMEOUT_SECONDS,
             )
             lines = result.stdout
@@ -130,16 +135,15 @@ class ClipboardHistoryPlugin(LauncherPlugin):
     def _recopy(item_id: str):
         """Decode a history item and copy it back to the clipboard."""
         try:
-            decoded = subprocess.run(
+            decoded = run_subprocess(
                 ["cliphist", "decode", item_id],
-                capture_output=True,
                 timeout=_TIMEOUT_SECONDS,
             )
         except Exception:
             return
         if decoded.returncode != 0 or not decoded.stdout:
             return
-        if b"\x00" in decoded.stdout:
+        if "\x00" in decoded.stdout:
             # Binary content (images) can't be copied as text — skip it.
             return
-        copy_to_clipboard(decoded.stdout.decode("utf-8", errors="replace"))
+        copy_to_clipboard(decoded.stdout)

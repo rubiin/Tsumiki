@@ -152,13 +152,13 @@ class CalcPluginTest(unittest.TestCase):
             self.evaluate("2 + 2")
 
     def test_evaluate_raises_on_timeout(self):
-        import subprocess
+        from utils.plugin_manager import SubprocessTimeoutError
 
         with (
             unittest.mock.patch.object(
-                self.calc_module.subprocess,
-                "run",
-                side_effect=subprocess.TimeoutExpired("qalc", 10),
+                self.calc_module,
+                "run_subprocess",
+                side_effect=SubprocessTimeoutError(["qalc"], 10),
             ),
             self.assertRaises(ValueError),
         ):
@@ -513,6 +513,60 @@ class CurrencyPluginTest(unittest.TestCase):
         mock_copy.assert_called_once_with("87.39 EUR")
 
 
+class RunSubprocessTest(unittest.TestCase):
+    """Test the Gio-based run_subprocess helper (no stdlib subprocess)."""
+
+    def test_module_level_run_subprocess_captures_output(self):
+        from utils.plugin_manager import SubprocessResult, run_subprocess
+
+        result = run_subprocess(["echo", "hello world"])
+        self.assertIsInstance(result, SubprocessResult)
+        self.assertEqual(result.stdout.strip(), "hello world")
+        self.assertEqual(result.returncode, 0)
+
+    def test_module_level_run_subprocess_reports_nonzero_status(self):
+        from utils.plugin_manager import run_subprocess
+
+        result = run_subprocess(["sh", "-c", "echo oops >&2; exit 3"])
+        self.assertEqual(result.returncode, 3)
+        self.assertIn("oops", result.stderr)
+
+    def test_run_subprocess_raises_on_timeout(self):
+        from utils.plugin_manager import SubprocessTimeoutError, run_subprocess
+
+        with self.assertRaises(SubprocessTimeoutError):
+            run_subprocess(["sleep", "30"], timeout=0.2)
+
+    def test_plugin_run_subprocess_is_cancellable(self):
+        import threading
+        import time
+
+        from utils.plugin_manager import LauncherPlugin
+
+        plugin = LauncherPlugin()
+        done = threading.Event()
+        result: dict = {}
+
+        def _run():
+            try:
+                result["value"] = plugin.run_subprocess(["sleep", "30"])
+            finally:
+                done.set()
+
+        worker = threading.Thread(target=_run)
+        worker.start()
+        # Give the worker a moment to spawn and track the process.
+        for _ in range(100):
+            if plugin._subprocess is not None:
+                break
+            time.sleep(0.01)
+        plugin.cancel()
+        self.assertTrue(done.wait(5))
+        worker.join(timeout=5)
+        self.assertIn("value", result)
+        self.assertNotEqual(result["value"].returncode, 0)  # killed, not exited
+
+
 class KillPluginTest(unittest.TestCase):
     """Test the bundled /kill plugin (proc tree mocked)."""
 
@@ -647,17 +701,34 @@ class KillPluginTest(unittest.TestCase):
         self.assertEqual(self.parse_ss_output(output, 9999), [])
 
     def test_find_pids_on_port_falls_back_to_lsof(self):
-        import subprocess as sp
+        from utils.plugin_manager import SubprocessResult
 
-        fake = sp.CompletedProcess(["lsof"], 0, stdout="1234\n5678\n", stderr="")
+        fake = SubprocessResult(["lsof"], 0, stdout="1234\n5678\n", stderr="")
         with (
             unittest.mock.patch(
                 "plugins.kill.find_executable",
                 side_effect=lambda name: None if name == "ss" else "/usr/bin/lsof",
             ),
-            unittest.mock.patch("plugins.kill.subprocess.run", return_value=fake),
+            unittest.mock.patch("plugins.kill.run_subprocess", return_value=fake),
         ):
             self.assertEqual(self.find_pids_on_port(3000), [1234, 5678])
+
+    def test_handle_port_mode_uses_cancellable_runner(self):
+        from utils.plugin_manager import SubprocessResult
+
+        fake = SubprocessResult(["lsof"], 0, stdout="1234\n", stderr="")
+        with (
+            unittest.mock.patch(
+                "plugins.kill.find_executable",
+                side_effect=lambda name: None if name == "ss" else "/usr/bin/lsof",
+            ),
+            unittest.mock.patch.object(
+                self.plugin, "run_subprocess", return_value=fake
+            ),
+        ):
+            results = self.plugin.handle("3000")
+        self.assertEqual(results[0].data, (1234, False))
+        self.assertIn("Port 3000", results[0].title)
 
     def test_find_pids_on_port_returns_empty_when_no_tools(self):
         with unittest.mock.patch("plugins.kill.find_executable", return_value=None):
@@ -750,9 +821,9 @@ class ClipboardHistoryPluginTest(unittest.TestCase):
         self.assertFalse(self.is_binary("hello world"))
 
     def test_handle_filters_by_query(self):
-        import subprocess
+        from utils.plugin_manager import SubprocessResult
 
-        fake = subprocess.CompletedProcess(
+        fake = SubprocessResult(
             ["cliphist", "list"],
             0,
             stdout="1\taaa\n2\tbbb\n",
@@ -763,8 +834,8 @@ class ClipboardHistoryPluginTest(unittest.TestCase):
                 "plugins.clipboard_history.find_executable",
                 return_value="/usr/bin/cliphist",
             ),
-            unittest.mock.patch(
-                "plugins.clipboard_history.subprocess.run", return_value=fake
+            unittest.mock.patch.object(
+                self.plugin, "run_subprocess", return_value=fake
             ),
         ):
             results = self.plugin.handle("bbb")
@@ -773,18 +844,16 @@ class ClipboardHistoryPluginTest(unittest.TestCase):
         self.assertEqual(results[0].title, "bbb")
 
     def test_handle_empty_history(self):
-        import subprocess
+        from utils.plugin_manager import SubprocessResult
 
-        fake = subprocess.CompletedProcess(
-            ["cliphist", "list"], 0, stdout="", stderr=""
-        )
+        fake = SubprocessResult(["cliphist", "list"], 0, stdout="", stderr="")
         with (
             unittest.mock.patch(
                 "plugins.clipboard_history.find_executable",
                 return_value="/usr/bin/cliphist",
             ),
-            unittest.mock.patch(
-                "plugins.clipboard_history.subprocess.run", return_value=fake
+            unittest.mock.patch.object(
+                self.plugin, "run_subprocess", return_value=fake
             ),
         ):
             results = self.plugin.handle("anything")
@@ -798,28 +867,26 @@ class ClipboardHistoryPluginTest(unittest.TestCase):
         self.assertIn("cliphist", results[0].title)
 
     def test_execute_recopies_decoded_item(self):
-        import subprocess
+        from utils.plugin_manager import PluginResult, SubprocessResult
 
-        from utils.plugin_manager import PluginResult
-
-        fake = subprocess.CompletedProcess(
-            ["cliphist", "decode", "5"], 0, stdout=b"decoded text", stderr=b""
+        fake = SubprocessResult(
+            ["cliphist", "decode", "5"], 0, stdout="decoded text", stderr=""
         )
         with (
             unittest.mock.patch(
                 "plugins.clipboard_history.copy_to_clipboard"
             ) as mock_copy,
             unittest.mock.patch(
-                "plugins.clipboard_history.subprocess.run", return_value=fake
+                "plugins.clipboard_history.run_subprocess", return_value=fake
             ),
         ):
             self.plugin.execute(PluginResult("x", data="5"))
         mock_copy.assert_called_once_with("decoded text")
 
     def test_handle_marks_binary_items(self):
-        import subprocess
+        from utils.plugin_manager import SubprocessResult
 
-        fake = subprocess.CompletedProcess(
+        fake = SubprocessResult(
             ["cliphist", "list"], 0, stdout="9\tPNG\x00\x01\x02\n", stderr=""
         )
         with (
@@ -827,27 +894,25 @@ class ClipboardHistoryPluginTest(unittest.TestCase):
                 "plugins.clipboard_history.find_executable",
                 return_value="/usr/bin/cliphist",
             ),
-            unittest.mock.patch(
-                "plugins.clipboard_history.subprocess.run", return_value=fake
+            unittest.mock.patch.object(
+                self.plugin, "run_subprocess", return_value=fake
             ),
         ):
             results = self.plugin.handle("")
         self.assertEqual(results[0].title, "[Image or binary]")
 
     def test_execute_skips_binary_content(self):
-        import subprocess
+        from utils.plugin_manager import PluginResult, SubprocessResult
 
-        from utils.plugin_manager import PluginResult
-
-        fake = subprocess.CompletedProcess(
-            ["cliphist", "decode", "9"], 0, stdout=b"PNG\x00\x01", stderr=b""
+        fake = SubprocessResult(
+            ["cliphist", "decode", "9"], 0, stdout="PNG\x00\x01", stderr=""
         )
         with (
             unittest.mock.patch(
                 "plugins.clipboard_history.copy_to_clipboard"
             ) as mock_copy,
             unittest.mock.patch(
-                "plugins.clipboard_history.subprocess.run", return_value=fake
+                "plugins.clipboard_history.run_subprocess", return_value=fake
             ),
         ):
             self.plugin.execute(PluginResult("x", data="9"))

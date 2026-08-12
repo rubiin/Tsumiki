@@ -110,11 +110,19 @@ def normalize_rows(rows: list) -> tuple[str, dict[str, float]]:
     return latest_date or _today(), rates
 
 
-def _download_rates() -> tuple[str, dict[str, float]]:
+class _DownloadCancelledError(RuntimeError):
+    """Raised when a superseded query aborts a rates download mid-retry."""
+
+
+def _download_rates(cancelled=None) -> tuple[str, dict[str, float]]:
     """Download the latest EUR-based rates; returns (date, {quote: rate})."""
     for attempt in range(_RETRY_ATTEMPTS):
+        if cancelled is not None and cancelled():
+            raise _DownloadCancelledError()
         try:
             response = get_http_client().get(_FRANKFURTER_RATES_URL)
+            if cancelled is not None and cancelled():
+                raise _DownloadCancelledError()
             response.raise_for_status()
             fx_date, rates = normalize_rows(response.json())
             # Guard against malformed/empty payloads: a nearly-empty table
@@ -125,6 +133,8 @@ def _download_rates() -> tuple[str, dict[str, float]]:
                     f"Frankfurter returned only {len(rates)} currency rate(s)"
                 )
             return fx_date, rates
+        except _DownloadCancelledError:
+            raise
         except Exception as exc:
             status = getattr(getattr(exc, "response", None), "status_code", None)
             is_client_error = status is not None and 400 <= status < 500
@@ -156,19 +166,23 @@ def _write_cache(payload: dict) -> None:
         pass  # caching is best-effort; conversions still work this session
 
 
-def load_rates() -> dict:
+def load_rates(cancelled=None) -> dict:
     """Return the daily rates payload, downloading it at most once a day.
 
     The cache counts as fresh when it was fetched today; otherwise the file
     is re-downloaded. A failed download falls back to the last snapshot
-    rather than failing the conversion.
+    rather than failing the conversion. *cancelled* is an optional zero-arg
+    callable; when it turns True mid-download, RuntimeError("cancelled")
+    is raised so a superseded query bails out instead of blocking on retries.
     """
     with _RATES_LOCK:
         cached = _read_cache()
         if cached and cached.get("fetched") == _today():
             return cached
         try:
-            fx_date, rates = _download_rates()
+            fx_date, rates = _download_rates(cancelled=cancelled)
+        except _DownloadCancelledError:
+            raise  # superseded — propagate so handle() bails out
         except Exception:
             if cached:  # network hiccup — use the last snapshot
                 return cached
@@ -178,15 +192,16 @@ def load_rates() -> dict:
         return payload
 
 
-def fetch_rate(from_code: str, to_code: str) -> tuple[float, str]:
+def fetch_rate(from_code: str, to_code: str, cancelled=None) -> tuple[float, str]:
     """Return the (rate, date) converting *from_code* to *to_code*.
 
     Reads the locally cached per-day rates file; the network is only touched
-    when the daily snapshot is missing or stale.
+    when the daily snapshot is missing or stale. *cancelled* is forwarded to
+    :func:`load_rates` so superseded downloads abort instead of retrying.
     """
     if from_code == to_code:
         return 1.0, _today()
-    payload = load_rates()
+    payload = load_rates(cancelled=cancelled)
     rates = payload["rates"]
     if from_code not in rates or to_code not in rates:
         raise ValueError(f"Unknown currency codes '{from_code}' / '{to_code}'")
@@ -279,7 +294,9 @@ class CurrencyPlugin(LauncherPlugin):
             ]
         amount, from_code, to_code = parsed
         try:
-            rate, date = fetch_rate(from_code, to_code)
+            rate, date = fetch_rate(from_code, to_code, cancelled=self.is_cancelled)
+        except _DownloadCancelledError:
+            return []  # superseded — launcher already dropped this query
         except Exception as exc:
             return [
                 PluginResult(
