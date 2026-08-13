@@ -3,7 +3,7 @@ import threading
 
 from fabric import Signal
 from fabric.notifications import Notification, Notifications, NotificationSerializedData
-from fabric.utils import GdkPixbuf, GLib, logger, math, os
+from fabric.utils import GdkPixbuf, logger, math, os
 
 from utils.colors import Colors
 from utils.constants import (
@@ -11,6 +11,7 @@ from utils.constants import (
     NOTIFICATION_IMAGE_SIZE,
 )
 from utils.functions import read_json_file, write_json_file
+from utils.widget_utils import get_notification_image_pixbuf
 
 _MAX_CACHED_PIXBUF = 100  # Hard cap on pixbuf cache entries
 
@@ -174,25 +175,22 @@ class CustomNotifications(Notifications):
         self, notification_id: int, notification: Notification
     ) -> None:
         """Cache a notification's image pixbuf at common sizes."""
-        try:
-            if pixbuf := notification.image_pixbuf:
-                # Cache at the base size
-                base_size = NOTIFICATION_IMAGE_SIZE
-                scaled = pixbuf.scale_simple(
-                    base_size, base_size, GdkPixbuf.InterpType.BILINEAR
-                )
-                if scaled:
-                    self.cache_pixbuf(notification_id, scaled, base_size)
+        if pixbuf := get_notification_image_pixbuf(notification):
+            # Cache at the base size
+            base_size = NOTIFICATION_IMAGE_SIZE
+            scaled = pixbuf.scale_simple(
+                base_size, base_size, GdkPixbuf.InterpType.BILINEAR
+            )
+            if scaled:
+                self.cache_pixbuf(notification_id, scaled, base_size)
 
-                # Also cache smaller size used in date menu (75% of base)
-                smaller_size = math.ceil(0.75 * base_size)
-                scaled_small = pixbuf.scale_simple(
-                    smaller_size, smaller_size, GdkPixbuf.InterpType.BILINEAR
-                )
-                if scaled_small:
-                    self.cache_pixbuf(notification_id, scaled_small, smaller_size)
-        except GLib.GError:
-            logger.debug(f"[Notification] Could not cache pixbuf for {notification_id}")
+            # Also cache smaller size used in date menu (75% of base)
+            smaller_size = math.ceil(0.75 * base_size)
+            scaled_small = pixbuf.scale_simple(
+                smaller_size, smaller_size, GdkPixbuf.InterpType.BILINEAR
+            )
+            if scaled_small:
+                self.cache_pixbuf(notification_id, scaled_small, smaller_size)
 
     def cache_notification(self, widget_config, data: Notification, max_count: int):
         """Cache a notification, ensuring thread safety."""

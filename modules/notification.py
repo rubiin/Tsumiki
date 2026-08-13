@@ -30,7 +30,7 @@ from shared.widget_container import BaseWindow
 from utils.colors import Colors
 from utils.icons import get_text_icon
 from utils.widget_settings import BarConfig
-from utils.widget_utils import get_icon, nerd_font_icon
+from utils.widget_utils import get_icon, get_notification_image_pixbuf, nerd_font_icon
 
 # Swipe threshold for dismissing notifications (normalized: 0.0 to 1.0)
 _SWIPE_DISMISS_THRESHOLD = 0.35
@@ -309,23 +309,22 @@ class NotificationWidget(EventBox):
             h_align="start",
         )
 
-        try:
-            if image_pixbuf := self._notification.image_pixbuf:
+        if image_pixbuf := get_notification_image_pixbuf(self._notification):
+            scaled = image_pixbuf.scale_simple(
+                constants.NOTIFICATION_IMAGE_SIZE,
+                constants.NOTIFICATION_IMAGE_SIZE,
+                GdkPixbuf.InterpType.BILINEAR,
+            )
+            if scaled:
                 body_container.add(
                     CircularImage(
-                        pixbuf=image_pixbuf.scale_simple(
-                            constants.NOTIFICATION_IMAGE_SIZE,
-                            constants.NOTIFICATION_IMAGE_SIZE,
-                            GdkPixbuf.InterpType.BILINEAR,
-                        ),
+                        pixbuf=scaled,
                         h_expand=True,
                         v_expand=True,
                         size=constants.NOTIFICATION_IMAGE_SIZE,
                     ),
                 )
-                del image_pixbuf
-        except GLib.GError:
-            logger.exception(f"{Colors.WARNING}[Notification] Image not available.")
+            del image_pixbuf
 
         if is_long_content:
             self.body_label = Label(

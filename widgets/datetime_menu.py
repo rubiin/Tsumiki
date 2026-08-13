@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from fabric.notifications import Notification
-from fabric.utils import GdkPixbuf, GLib, Gtk, bulk_connect, logger, math
+from fabric.utils import GdkPixbuf, Gtk, bulk_connect, logger, math
 from fabric.widgets.box import Box
 from fabric.widgets.button import Button
 from fabric.widgets.datetime import DateTime
@@ -19,9 +19,12 @@ from shared.circle_image import CircularImage
 from shared.list import ListBox
 from shared.mixins import PopoverMixin
 from shared.widget_container import ButtonWidget
-from utils.colors import Colors
 from utils.icons import get_text_icon
-from utils.widget_utils import get_icon, nerd_font_icon
+from utils.widget_utils import (
+    get_icon,
+    get_notification_image_pixbuf,
+    nerd_font_icon,
+)
 
 
 class DateMenuNotification(Box):
@@ -51,32 +54,31 @@ class DateMenuNotification(Box):
 
         # Left: large circular icon (notification image or app icon fallback)
         icon_widget = None
-        try:
-            cached_pixbuf = notification_service.get_cached_pixbuf(
-                self._id, notification_image_size
+        cached_pixbuf = notification_service.get_cached_pixbuf(
+            self._id, notification_image_size
+        )
+        if cached_pixbuf:
+            icon_widget = CircularImage(
+                pixbuf=cached_pixbuf,
+                size=notification_image_size,
             )
-            if cached_pixbuf:
+        elif image_pixbuf := get_notification_image_pixbuf(
+            self._notification, notification_image_size
+        ):
+            scaled = image_pixbuf.scale_simple(
+                notification_image_size,
+                notification_image_size,
+                GdkPixbuf.InterpType.BILINEAR,
+            )
+            if scaled:
+                notification_service.cache_pixbuf(
+                    self._id, scaled, notification_image_size
+                )
                 icon_widget = CircularImage(
-                    pixbuf=cached_pixbuf,
+                    pixbuf=scaled,
                     size=notification_image_size,
                 )
-            elif image_pixbuf := self._notification.image_pixbuf:
-                scaled = image_pixbuf.scale_simple(
-                    notification_image_size,
-                    notification_image_size,
-                    GdkPixbuf.InterpType.BILINEAR,
-                )
-                if scaled:
-                    notification_service.cache_pixbuf(
-                        self._id, scaled, notification_image_size
-                    )
-                    icon_widget = CircularImage(
-                        pixbuf=scaled,
-                        size=notification_image_size,
-                    )
-                del image_pixbuf
-        except GLib.GError:
-            logger.warning(f"{Colors.WARNING}[Notification] Image not available.")
+            del image_pixbuf
 
         if icon_widget is None:
             icon_widget = get_icon(notification.app_icon)

@@ -1,5 +1,6 @@
 import contextlib
 import importlib
+import os
 import threading
 from datetime import datetime
 from numbers import Number
@@ -7,13 +8,14 @@ from time import sleep
 from typing import Literal
 
 import psutil
-from fabric.utils import Gdk, GdkPixbuf, GLib, bulk_connect, cairo
+from fabric.utils import Gdk, GdkPixbuf, GLib, Gtk, bulk_connect, cairo
 from fabric.widgets.image import Image
 from fabric.widgets.label import Label
 from fabric.widgets.scale import ScaleMark
 from fabric.widgets.widget import Widget
 
 from .config import tsumiki_config
+from .constants import NOTIFICATION_IMAGE_SIZE
 from .icons import get_text_icon, symbolic_icons
 
 storage_config = tsumiki_config.get("widgets", {}).get("storage", {})
@@ -198,6 +200,50 @@ def get_icon(app_icon, size=25) -> Image:
             icon_name=symbolic_icons["fallback"]["notification"],
             icon_size=icon_size,
         )
+
+
+# Function to resolve a notification image to a pixbuf, safely
+def get_notification_image_pixbuf(
+    notification, size: int = NOTIFICATION_IMAGE_SIZE
+) -> GdkPixbuf.Pixbuf | None:
+    """Resolve a notification's image to a pixbuf, or ``None`` when unavailable.
+
+    The ``image-path`` hint sent by apps can be either a file path or a
+    themed icon name (e.g. ``xfce4-battery-critical``). Fabric's
+    ``Notification.image_pixbuf`` property only handles file paths and
+    raises ``GLib.GError`` for icon names, so resolve both cases here and
+    return ``None`` instead of raising.
+    """
+    if notification is None:
+        return None
+
+    # Prefer raw pixmap data when the sender provided it
+    if getattr(notification, "image_pixmap", None):
+        try:
+            return notification.image_pixmap.as_pixbuf()
+        except Exception:
+            return None
+
+    image_file = getattr(notification, "image_file", None)
+    if not image_file:
+        return None
+
+    if image_file.startswith("file://"):
+        image_file = image_file[7:]
+
+    if os.path.isfile(image_file):
+        try:
+            return GdkPixbuf.Pixbuf.new_from_file(image_file)
+        except GLib.GError:
+            return None
+
+    # Not a file path - try resolving it as a themed icon name
+    try:
+        return Gtk.IconTheme.get_default().load_icon(
+            image_file, size, Gtk.IconLookupFlags.FORCE_SIZE
+        )
+    except GLib.GError:
+        return None
 
 
 # Function to get the widget class dynamically
