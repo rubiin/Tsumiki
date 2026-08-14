@@ -335,11 +335,7 @@ class PluginManager:
         #: trimmed). ``None`` loads every discovered plugin; an empty list
         #: loads none.
         self._plugin_names = (
-            {
-                name.strip().casefold()
-                for name in plugin_names
-                if name and name.strip()
-            }
+            {name.strip().casefold() for name in plugin_names if name and name.strip()}
             if plugin_names is not None
             else None
         )
@@ -547,9 +543,7 @@ def get_plugin_manager(
     plugins_dir = os.path.expanduser(plugins_dir)
     names = (
         frozenset(
-            name.strip().casefold()
-            for name in plugin_names
-            if name and name.strip()
+            name.strip().casefold() for name in plugin_names if name and name.strip()
         )
         if plugin_names is not None
         else None

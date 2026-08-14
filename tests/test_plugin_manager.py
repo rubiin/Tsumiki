@@ -1158,10 +1158,7 @@ class HistoryPluginTest(unittest.TestCase):
         )
 
     def test_parse_fish_history(self):
-        content = (
-            "- cmd: ls\n  when: 1700000001\n"
-            "- cmd: git pull\n  when: 1700000002\n"
-        )
+        content = "- cmd: ls\n  when: 1700000001\n- cmd: git pull\n  when: 1700000002\n"
         self.assertEqual(
             self.parse_fish_history(content),
             [(1700000001, "ls"), (1700000002, "git pull")],

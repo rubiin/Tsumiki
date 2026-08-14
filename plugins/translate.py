@@ -153,7 +153,7 @@ def parse_target_language(text: str) -> tuple[str, str]:
     # Bare directive with no text, e.g. "/translate in nepali".
     for prefix in ("in ", "to "):
         if lowered.startswith(prefix):
-            code = _LANGUAGES.get(lowered[len(prefix):])
+            code = _LANGUAGES.get(lowered[len(prefix) :])
             if code is not None:
                 return "", code
     return text, None
@@ -209,8 +209,7 @@ class TranslatePlugin(LauncherPlugin):
                 PluginResult(
                     "Usage: /translate <text>",
                     subtitle=(
-                        "e.g. /translate bonjour  or  "
-                        "/translate hello in nepali"
+                        "e.g. /translate bonjour  or  /translate hello in nepali"
                     ),
                     icon=self.icon,
                 )

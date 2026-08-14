@@ -7,7 +7,6 @@ from fabric.notifications import (
 )
 from fabric.utils import (
     Gdk,
-    GdkPixbuf,
     GLib,
     Gtk,
     bulk_connect,
@@ -310,20 +309,14 @@ class NotificationWidget(EventBox):
         )
 
         if image_pixbuf := get_notification_image_pixbuf(self._notification):
-            scaled = image_pixbuf.scale_simple(
-                constants.NOTIFICATION_IMAGE_SIZE,
-                constants.NOTIFICATION_IMAGE_SIZE,
-                GdkPixbuf.InterpType.BILINEAR,
+            body_container.add(
+                CircularImage(
+                    pixbuf=image_pixbuf,
+                    h_expand=True,
+                    v_expand=True,
+                    size=constants.NOTIFICATION_IMAGE_SIZE,
+                ),
             )
-            if scaled:
-                body_container.add(
-                    CircularImage(
-                        pixbuf=scaled,
-                        h_expand=True,
-                        v_expand=True,
-                        size=constants.NOTIFICATION_IMAGE_SIZE,
-                    ),
-                )
             del image_pixbuf
 
         if is_long_content:

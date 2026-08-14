@@ -176,13 +176,9 @@ class CustomNotifications(Notifications):
     ) -> None:
         """Cache a notification's image pixbuf at common sizes."""
         if pixbuf := get_notification_image_pixbuf(notification):
-            # Cache at the base size
+            # Cache at the base size (already scaled to NOTIFICATION_IMAGE_SIZE)
             base_size = NOTIFICATION_IMAGE_SIZE
-            scaled = pixbuf.scale_simple(
-                base_size, base_size, GdkPixbuf.InterpType.BILINEAR
-            )
-            if scaled:
-                self.cache_pixbuf(notification_id, scaled, base_size)
+            self.cache_pixbuf(notification_id, pixbuf, base_size)
 
             # Also cache smaller size used in date menu (75% of base)
             smaller_size = math.ceil(0.75 * base_size)

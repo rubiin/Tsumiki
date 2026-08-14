@@ -167,6 +167,15 @@ def setup_cursor_hover(
     )
 
 
+def _scale_pixbuf_to_size(
+    pixbuf: GdkPixbuf.Pixbuf, size: int
+) -> GdkPixbuf.Pixbuf | None:
+    """Scale ``pixbuf`` to a square ``size`` x ``size`` if not already."""
+    if pixbuf.get_width() == size and pixbuf.get_height() == size:
+        return pixbuf
+    return pixbuf.scale_simple(size, size, GdkPixbuf.InterpType.BILINEAR)
+
+
 # Function to get the system stats using
 def get_icon(app_icon, size=25) -> Image:
     icon_size = size - 5
@@ -220,7 +229,7 @@ def get_notification_image_pixbuf(
     # Prefer raw pixmap data when the sender provided it
     if getattr(notification, "image_pixmap", None):
         try:
-            return notification.image_pixmap.as_pixbuf()
+            return _scale_pixbuf_to_size(notification.image_pixmap, size)
         except Exception:
             return None
 
@@ -240,7 +249,7 @@ def get_notification_image_pixbuf(
     # Not a file path - try resolving it as a themed icon name
     try:
         return Gtk.IconTheme.get_default().load_icon(
-            image_file, size, Gtk.IconLookupFlags.FORCE_SIZE
+            image_file, size - 5, Gtk.IconLookupFlags.FORCE_SIZE
         )
     except GLib.GError:
         return None

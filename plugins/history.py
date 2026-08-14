@@ -76,11 +76,11 @@ def parse_fish_history(content: str) -> list[tuple[int, str]]:
         if stripped.startswith("- cmd:"):
             if cmd is not None and cmd:
                 entries.append((when, cmd))
-            cmd = stripped[len("- cmd:"):].strip()
+            cmd = stripped[len("- cmd:") :].strip()
             when = 0
         elif cmd is not None and stripped.startswith("when:"):
             try:
-                when = int(stripped[len("when:"):].strip())
+                when = int(stripped[len("when:") :].strip())
             except ValueError:
                 when = 0
     if cmd:

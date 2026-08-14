@@ -30,9 +30,7 @@ _DATABASE_FLAGS = {"-d", "--database"}
 #: them and prefixes the part of speech — ``    adj 1: ...``, ``    n 1: ...``,
 #: ``    adv 1: ...`` — while continuation senses of the same POS drop the
 #: marker (``    2: ...``).
-_SENSE_RE = re.compile(
-    r"^[ \t]*(?:(?:n|v|adj|adv|sat|prep)\s+)?\d+:", re.MULTILINE
-)
+_SENSE_RE = re.compile(r"^[ \t]*(?:(?:n|v|adj|adv|sat|prep)\s+)?\d+:", re.MULTILINE)
 #: ``151 "<word>" <database> "<description>" - text follows``
 _151_RE = re.compile(r'^151\s+(?:"([^"]*)"|(\S+))\s+(\S+)\s+"([^"]*)"')
 
@@ -191,8 +189,7 @@ class DefinePlugin(LauncherPlugin):
                 PluginResult(
                     f"No definition for '{word}'",
                     subtitle=(
-                        f"Not found in {database} on dict.org — "
-                        "check the spelling"
+                        f"Not found in {database} on dict.org — check the spelling"
                     ),
                     icon="dialog-info-symbolic",
                 )

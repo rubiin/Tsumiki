@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from fabric.notifications import Notification
-from fabric.utils import GdkPixbuf, Gtk, bulk_connect, logger, math
+from fabric.utils import Gtk, bulk_connect, logger, math
 from fabric.widgets.box import Box
 from fabric.widgets.button import Button
 from fabric.widgets.datetime import DateTime
@@ -65,19 +65,13 @@ class DateMenuNotification(Box):
         elif image_pixbuf := get_notification_image_pixbuf(
             self._notification, notification_image_size
         ):
-            scaled = image_pixbuf.scale_simple(
-                notification_image_size,
-                notification_image_size,
-                GdkPixbuf.InterpType.BILINEAR,
+            notification_service.cache_pixbuf(
+                self._id, image_pixbuf, notification_image_size
             )
-            if scaled:
-                notification_service.cache_pixbuf(
-                    self._id, scaled, notification_image_size
-                )
-                icon_widget = CircularImage(
-                    pixbuf=scaled,
-                    size=notification_image_size,
-                )
+            icon_widget = CircularImage(
+                pixbuf=image_pixbuf,
+                size=notification_image_size,
+            )
             del image_pixbuf
 
         if icon_widget is None:
