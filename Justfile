@@ -14,6 +14,9 @@ doc_gen:
 docs-dev:
     cd docs && pnpm dev
 
+docs-build:
+    cd docs && pnpm build
+
 restore_config:
     cp config.toml.bak config.toml
 
