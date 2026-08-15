@@ -107,16 +107,20 @@ class QSToggleButton(Box, BaseWidget):
             style_classes="quicksettings-toggle-action",
             on_clicked=self._action,
             child=self._action_content,
+            h_expand=True,
         )
 
         self.action_button.set_size_request(170, 20)
 
         # Container box for action button and optional chevron (used by subclass)
-        self.box = Box(children=[self.action_button])
+        # h_expand lets the card fill its grid cell when the popup is wider
+        # than the toggles' natural size (e.g. with the media section); the
+        # action button absorbs the extra width so the chevron stays pinned
+        # to the right edge.
+        self.box = Box(children=[self.action_button], h_expand=True)
 
         super().__init__(
             name="quicksettings-togglebutton",
-            h_align="start",
             v_align="start",
             children=[self.box],
             **kwargs,
@@ -157,7 +161,6 @@ class QSChevronButton(QSToggleButton):
         self.reveal_button = HoverButton(
             style_classes="toggle-revealer",
             image=self.button_image,
-            h_expand=True,
             on_clicked=self._reveal_toggle,
         )
 
@@ -167,7 +170,11 @@ class QSChevronButton(QSToggleButton):
             pixel_size,
             **kwargs,
         )
-        self.box.add(self.reveal_button)
+        # Anchor the chevron to the right edge, fixed width. The action
+        # button (h_expand in QSToggleButton) absorbs the remaining width so
+        # the chevron stays pinned even when the card stretches to fill a
+        # wider popup.
+        self.box.pack_end(self.reveal_button, False, False, 0)
 
         if self.submenu is not None:
             self.submenu.revealer.connect(

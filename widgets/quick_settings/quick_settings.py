@@ -115,7 +115,6 @@ class QuickSettingsButtonBox(Box):
             orientation="v",
             name="quick-settings-button-box",
             spacing=4,
-            h_align="start",
             v_align="start",
             v_expand=True,
             **kwargs,

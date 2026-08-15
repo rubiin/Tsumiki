@@ -1,4 +1,5 @@
 from collections.abc import Callable
+from typing import Literal
 
 from fabric.widgets.box import Box
 from fabric.widgets.label import Label
@@ -17,6 +18,7 @@ class QuickSettingsIconLabelRow(Box):
         label_classes: list[str] | None = None,
         row_classes: list[str] | None = None,
         icon_size: int = 16,
+        h_align: Literal["start", "fill", "center", "end", "baseline"] = "start",
         **kwargs,
     ):
         self.icon = nerd_font_icon(
@@ -40,7 +42,7 @@ class QuickSettingsIconLabelRow(Box):
         super().__init__(
             orientation="h",
             spacing=10,
-            h_align="start",
+            h_align=h_align,
             v_align="center",
             style_classes=["quicksettings-row"] + (row_classes or []),
             children=(self.icon, self.label),

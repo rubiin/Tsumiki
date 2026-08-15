@@ -10,6 +10,20 @@ from utils.icons import get_text_icon
 from widgets.quick_settings.components import QuickSettingsIconLabelRow
 
 
+def _toggle_row(icon: str, label: str) -> QuickSettingsIconLabelRow:
+    """Build the icon+label row for a simple quick settings toggle card.
+
+    h_align="fill" makes the row span the full card width so it lines up
+    with the chevron toggles when the popup is wider than the toggles.
+    """
+    return QuickSettingsIconLabelRow(
+        icon=icon,
+        label=label,
+        row_classes=["quicksettings-toggle-row"],
+        h_align="fill",
+    )
+
+
 class QuickSettingToggler(CommandSwitcher):
     """A button widget to toggle a command."""
 
@@ -62,11 +76,7 @@ class NotificationQuickSetting(HoverButton):
 
         self.popup = popup
 
-        self.row = QuickSettingsIconLabelRow(
-            icon=get_text_icon("notifications.noisy"),
-            label="Noisy",
-            row_classes=["quicksettings-toggle-row"],
-        )
+        self.row = _toggle_row(get_text_icon("notifications.noisy"), "Noisy")
 
         self.notification_icon = self.row.icon
         self.notification_label = self.row.label
@@ -135,11 +145,7 @@ class FlightModeToggle(HoverButton):
 
         self.popup = popup
 
-        self.row = QuickSettingsIconLabelRow(
-            icon=get_text_icon("flight.disabled"),
-            label="Disabled",
-            row_classes=["quicksettings-toggle-row"],
-        )
+        self.row = _toggle_row(get_text_icon("flight.disabled"), "Disabled")
 
         self.flight_icon = self.row.icon
         self.flight_label = self.row.label
@@ -194,11 +200,7 @@ class DarkModeToggle(HoverButton):
 
         self.popup = popup
 
-        self.row = QuickSettingsIconLabelRow(
-            icon=get_text_icon("color.dark"),
-            label="Dark",
-            row_classes=["quicksettings-toggle-row"],
-        )
+        self.row = _toggle_row(get_text_icon("color.dark"), "Dark")
 
         self.mode_icon = self.row.icon
         self.mode_label = self.row.label
