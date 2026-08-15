@@ -34,7 +34,7 @@ padding = "4px 12px"
 margin = "0 8px"
 
 [styling.bar.widgets]
-spacing = 8
+gap = 2
 
 [styling.bar.widgets.workspaces]
 spacing = 4
@@ -68,6 +68,7 @@ Variables are defined in `styles/_variable.scss` and `styles/_settings.scss`.
 | `$bar-border-width` | `1px` | Bar border thickness |
 | `$bar-padding` | `4px 12px` | Bar internal padding |
 | `$bar-margin` | `0 8px` | Bar external margin |
+| `$bar-widgets-gap` | `2px` | Gap between bar widgets (applied on each side) |
 
 ### Workspace Variables
 

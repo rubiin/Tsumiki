@@ -277,6 +277,9 @@ class Bar(BaseWindow):
                 # Use unified widget resolver for ALL widget types
                 widget = resolver.resolve_widget(widget_name, context)
                 if widget:
+                    # Mark top-level bar widgets so CSS can target them directly
+                    # (e.g. for spacing) without depending on the CenterBox tree
+                    widget.add_style_class("panel-widget")
                     layout[key].append(widget)
 
         return layout

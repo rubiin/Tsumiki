@@ -744,6 +744,9 @@ spread = 0
 panel = "default"
 widget = "default"
 
+[styling.bar.widgets]
+gap = "2px"
+
 [styling.bar.widgets.battery]
 icon_size = "14px"
 spacing = "0.125em"

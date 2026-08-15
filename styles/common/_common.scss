@@ -43,9 +43,11 @@
       variable.$bar-shadow-opacity
     );
 
-    // Section spacing for widgets (replaces Box spacing=4 in Python)
-    > * > * {
-      margin: 0 2px;
+    // Widget spacing (replaces Box spacing=4 in Python). Top-level bar widgets
+    // get the `panel-widget` class in modules/bar.py, so no child combinator is
+    // needed here and widgets nested inside groups stay unaffected.
+    .panel-widget {
+      margin: 0 variable.$bar-widgets-gap;
     }
 
     @if (variable.$bar-style-panel ==floating) {
