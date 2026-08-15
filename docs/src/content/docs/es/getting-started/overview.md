@@ -20,6 +20,7 @@ Antes de instalar Tsumiki, asegúrate de que tu sistema cumpla con estos requisi
 | [Hyprland](https://hyprland.org) | Se requiere una instalación funcional de Hyprland |
 | [JetBrains Nerd Font](https://www.nerdfonts.com) | Necesario para la renderización de iconos y glifos |
 | **Python 3.12+** | Tsumiki requiere Python 3.12 |
+| **uv** | Administrador de paquetes de Python usado para instalar dependencias (`uv sync`) |
 | **Arch Linux** (recomendado) | Paquetes optimizados para Arch; otras distros pueden necesitar configuración manual |
 | **NetworkManager** | Necesario para widgets y servicios de red |
 | **PipeWire** | Necesario para widgets de audio y OSD |

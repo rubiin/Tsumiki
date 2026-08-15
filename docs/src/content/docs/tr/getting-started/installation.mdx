@@ -84,7 +84,7 @@ sudo pacman -S --noconfirm --needed \
   pipewire playerctl dart-sass power-profiles-daemon networkmanager \
   brightnessctl pkgconf wf-recorder kitty python pacman-contrib \
   gtk3 cairo gtk-layer-shell libgirepository noto-fonts-emoji \
-  gobject-introspection gobject-introspection-runtime python-pip \
+  gobject-introspection gobject-introspection-runtime uv \
   python-gobject python-psutil python-cairo python-loguru libnotify \
   cliphist libqalculate python-httpx satty nvtop
 
@@ -95,7 +95,7 @@ yay -S --needed \
   ttf-jetbrains-mono-nerd grimblast-git python-ijson
 
 # Python bağımlılıklarını kurun
-pip install -r requirements.txt
+uv sync
 
 # Başlatın
 ./init.sh -start
@@ -127,7 +127,7 @@ alias tsumiki='~/.config/tsumiki/init.sh -start'
 2. Tsumiki çubuğu ekranınızın üst kısmında görünmelidir.
 3. Hata mesajları görürseniz şunları kontrol edin:
    - Tüm sistem paketleri kurulu (`./init.sh -setup` bu kontrolü yeniden çalıştırır)
-   - Python bağımlılıkları kurulu (`pip install -r requirements.txt`)
+   - Python bağımlılıkları kurulu (`uv sync`)
    - Hyprland altında çalışıyorsunuz (başka bir birleştirici veya X11 değil)
 
 Çubuk görünmüyorsa, [Sorun Giderme](/tr/help/troubleshooting) bölümüne bakın.

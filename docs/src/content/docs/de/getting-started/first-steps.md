@@ -102,7 +102,7 @@ Wenn etwas nicht stimmt:
 
 - **Leiste erscheint nicht** — Überprüfen Sie, ob Hyprland läuft und keine anderen Leisten aktiv sind (`pkill waybar`).
 - **Keine Symbole** — Stellen Sie sicher, dass [JetBrains Nerd Font](https://www.nerdfonts.com) installiert und als Terminal-/UI-Schriftart konfiguriert ist.
-- **Fehlende Funktionalität** — Einige Widgets erfordern externe Tools (z.B. `playerctl` für Medien, `brightnessctl` für Helligkeit). Führen Sie `./init.sh -setup` aus, um sicherzustellen, dass alle Abhängigkeiten installiert sind.
+- **Fehlende Funktionalität** — Einige Widgets erfordern externe Tools (z.B. `playerctl` für Medien, `brightnessctl` für Helligkeit). Führen Sie `./init.sh -setup` aus, um sicherzustellen, dass alle Abhängigkeiten installiert sind (Python-Abhängigkeiten werden mit `uv sync` installiert).
 - **SASS-Fehler** — Ihre `config.toml` könnte ungültig sein. Vergleichen Sie sie mit `example/config.toml`.
 
 Weitere Hilfe finden Sie auf den Seiten [FAQ](/de/help/faq) oder [Fehlerbehebung](/de/help/troubleshooting).

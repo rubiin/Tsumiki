@@ -112,7 +112,7 @@ fabric-cli gs GtkLayerShell-0.1 Playerctl-2.0 NM-1.0
 To start contributing, you can clone the repository and set up your local development environment:
 
 1. Clone the repo:
-2. Install dependencies with pip
+2. Install dependencies with uv (`uv sync --group dev`)
 
 ## License
 

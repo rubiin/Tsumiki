@@ -47,7 +47,7 @@ tsu -start
 Bei `ModuleNotFoundError` Abhängigkeiten installieren:
 
 ```sh
-pip install -r requirements.txt
+uv sync
 ```
 
 </div>

@@ -34,7 +34,7 @@ enter_install_dir() {
 
 check_prerequisites() {
 	local cmd
-	for cmd in git python3; do
+	for cmd in git uv; do
 		command -v "$cmd" &>/dev/null || die "$cmd is not installed. Please install it first. 📦"
 	done
 }
@@ -56,15 +56,6 @@ ensure_venv() {
 			die "❌ Virtual environment does not exist. Please run -setup first."
 		fi
 		;;
-	setup)
-		if [ ! -d .venv ]; then
-			log_info "⚙️  Creating virtual environment..."
-			python3 -m venv .venv || die "❌ Failed to create virtual environment."
-			log_success "🎉 Virtual environment created successfully."
-		else
-			log_info "♻️  Using existing virtual environment."
-		fi
-		;;
 	activate)
 		source .venv/bin/activate || die "❌ Failed to activate virtual environment."
 		;;
@@ -75,19 +66,18 @@ ensure_venv() {
 }
 
 setup_venv() {
-	ensure_venv setup
+	enter_install_dir
 
-	log_info "📦 Installing Python dependencies..."
-	local pip_args=(-r requirements.txt)
-	local venv_python=.venv/bin/python
+	log_info "📦 Syncing Python dependencies with uv..."
+	local uv_args=()
 
 	if [ "$FORCE_REINSTALL" = true ]; then
 		log_warning "🔄 Force reinstalling packages..."
-		pip_args=(--force-reinstall "${pip_args[@]}")
+		uv_args+=(--reinstall)
 	fi
 
-	"$venv_python" -m pip install "${pip_args[@]}" || {
-		die "❌ Failed to install packages from requirements.txt."
+	uv sync "${uv_args[@]}" || {
+		die "❌ Failed to sync packages with uv (pyproject.toml / uv.lock)."
 	}
 
 	log_success "✅ Python dependencies installed successfully."
@@ -166,6 +156,7 @@ install_packages() {
 		wf-recorder
 		kitty
 		python
+		uv
 		pacman-contrib
 		gtk3
 		cairo
@@ -174,7 +165,6 @@ install_packages() {
 		noto-fonts-emoji
 		gobject-introspection
 		gobject-introspection-runtime
-		python-pip
 		libnotify
 		libqalculate
 		cliphist
@@ -313,7 +303,10 @@ fi
 
 if [ "$NEEDS_ENV_CHECK" = true ]; then
 	check_arch_distro
-	check_prerequisites
+	# uv is installed by -install below; only require it upfront otherwise
+	if [ "$SHOULD_INSTALL" = false ]; then
+		check_prerequisites
+	fi
 fi
 
 if [ "$SHOULD_STOP" = true ]; then
@@ -326,8 +319,8 @@ if [ "$SHOULD_UPDATE" = true ]; then
 	cd "$INSTALL_DIR" && git fetch --all && git reset --hard origin/$(git rev-parse --abbrev-ref HEAD)
 	log_success "✅ Update completed."
 
-	if ! git diff --quiet HEAD@{1} HEAD -- requirements.txt; then
-		echo "📌 requirements.txt changed in the last update. Please update packages."
+	if ! git diff --quiet HEAD@{1} HEAD -- uv.lock; then
+		echo "📌 uv.lock changed in the last update. Please update packages."
 	fi
 fi
 
@@ -337,7 +330,7 @@ if [ "$SHOULD_INSTALL" = true ]; then
 fi
 
 if [ "$SHOULD_SETUP" = true ]; then
-	log_info "=== 🐍 Setting up Virtual Environment ==="
+	log_info "=== 🐍 Setting up Virtual Environment (uv) ==="
 	setup_venv
 fi
 
