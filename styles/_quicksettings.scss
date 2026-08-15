@@ -281,7 +281,9 @@ $qs-active-fg: theme.$accent-purple;
       border-radius: $toggler-radius;
       background-color: theme.$background-main;
       margin: common.toEm(2) 0;
-      transition: background-color 200ms ease, color 200ms ease;
+      transition:
+        background-color 200ms ease,
+        color 200ms ease;
 
       &:hover {
         background-color: theme.$background-alt;
@@ -404,7 +406,7 @@ $qs-active-fg: theme.$accent-purple;
   );
 }
 
-#app-list {
+#quicksettings-menu #app-list {
   margin-top: 4px;
 
   row {
@@ -416,7 +418,8 @@ $qs-active-fg: theme.$accent-purple;
     }
 
     #setting-slider-scale {
-      @include setting-slider(140px);
+      min-width: 150px;
+      @include setting-slider(100px);
     }
   }
 }

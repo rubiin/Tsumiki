@@ -44,11 +44,16 @@ class WifiSubMenu(QuickSubMenu):
         self.child = ScrolledWindow(
             min_content_size=(-1, 120),
             max_content_size=(-1, 260),
-            propagate_width=True,
+            # Don't propagate the list's natural width: long SSIDs would
+            # otherwise widen the whole quick settings popup when the submenu
+            # is revealed. The list fills the popup width instead and rows
+            # ellipsize. The horizontal policy must stay "automatic": GTK3
+            # ignores propagate_width when it is "never".
+            propagate_width=False,
             propagate_height=True,
             v_expand=True,
             v_scrollbar_policy="automatic",
-            h_scrollbar_policy="never",
+            h_scrollbar_policy="automatic",
             child=self.available_networks_listbox,
         )
 

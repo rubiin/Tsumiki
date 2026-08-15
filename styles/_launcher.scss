@@ -15,10 +15,11 @@ $launcher-transition:
 
   #icon {
     -gtk-icon-effect: highlight;
-  }    &:hover,
-    &:focus {
-      background-color: theme.$accent-purple;
-      color: theme.$background-dark;
+  }
+  &:hover,
+  &:focus {
+    background-color: theme.$accent-purple;
+    color: theme.$background-dark;
 
     label {
       color: theme.$background-dark;

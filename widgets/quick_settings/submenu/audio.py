@@ -32,7 +32,13 @@ class AudioSubMenu(QuickSubMenu):
             max_content_size=(-1, 320),
             propagate_width=False,
             propagate_height=True,
-            h_scrollbar_policy="never",
+            # GTK3 ignores propagate_width when the horizontal policy is
+            # NEVER (the child must always fit, so its full natural width is
+            # requested). With AUTOMATIC, propagate_width=False is honored
+            # and long app names don't widen the whole quick settings popup;
+            # rows ellipsize instead. The vertical scrollbar handles the case
+            # where many apps exceed the max height.
+            h_scrollbar_policy="automatic",
             v_scrollbar_policy="automatic",
             child=self.app_list,
         )
