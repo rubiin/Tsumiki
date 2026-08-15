@@ -1,3 +1,4 @@
+import contextlib
 from collections.abc import Callable
 
 import gi
@@ -59,10 +60,23 @@ class WifiSubMenu(QuickSubMenu):
             **kwargs,
         )
 
+        self._adjustment_handler = None
         if self.child:
             adjustment = self.child.get_vadjustment()
+            self._adjustment_handler = adjustment.connect(
+                "value-changed", self.on_scroll
+            )
 
-            adjustment.connect("value-changed", self.on_scroll)
+        self.connect("destroy", self._on_destroy)
+
+    def _on_destroy(self, *_):
+        # Submenus are rebuilt on every reveal; without this, the scrolled
+        # window's adjustment outlives the widget and fires value-changed on
+        # a freed adjustment (gtk_adjustment_get_upper crash).
+        if self.child is not None and self._adjustment_handler is not None:
+            with contextlib.suppress(Exception):
+                self.child.get_vadjustment().disconnect(self._adjustment_handler)
+            self._adjustment_handler = None
 
     def on_child_revealed(self, *_):
         self.scan_button.set_sensitive(False)

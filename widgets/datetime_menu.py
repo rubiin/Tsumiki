@@ -1,3 +1,4 @@
+import contextlib
 from datetime import datetime
 
 from fabric.notifications import Notification
@@ -202,6 +203,7 @@ class DateNotificationMenu(Box):
         self.config = config
         self.pixel_size = 13
         self.notification_enabled = config.get("notification", True)
+        self._vadj_handler = None
 
         if self.notification_enabled:
             self.all_notifications: list[Notification] = (
@@ -294,7 +296,8 @@ class DateNotificationMenu(Box):
             )
 
             vadj = self.scrolled_window.get_vadjustment()
-            vadj.connect("value-changed", self.on_scroll)
+            self._vadj_handler = vadj.connect("value-changed", self.on_scroll)
+            self.connect("destroy", self._on_destroy)
 
             notification_column = Box(
                 name="notification-column",
@@ -639,6 +642,12 @@ class DateNotificationMenu(Box):
 
         self.loaded_count += items_to_add
         self.loading = False
+
+    def _on_destroy(self, *_):
+        if self._vadj_handler is not None and self.scrolled_window is not None:
+            with contextlib.suppress(Exception):
+                self.scrolled_window.get_vadjustment().disconnect(self._vadj_handler)
+            self._vadj_handler = None
 
     def on_scroll(self, adjustment: Gtk.Adjustment):
         """Load more notifications when user scrolls near the bottom."""

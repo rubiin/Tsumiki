@@ -48,22 +48,37 @@ class AudioSlider(SettingSlider):
             )
             self.children = (*self.children, self.chevron_btn)
 
+        self._stream_handler = None
+        self._destroyed = False
         if not audio_stream:
             self.client.connect("changed", self.init_device_audio)
             if self.client.speaker:
                 self.init_device_audio()
         else:
             self.update_state()
-            self.audio_stream.connect("changed", self.update_state)
+            self._stream_handler = self.audio_stream.connect(
+                "changed", self.update_state
+            )
 
         # Connect signals
         self.scale.connect("change-value", self.on_scale_move)
 
         self.icon_button.connect("clicked", self.on_mute_click)
 
+        self.connect("destroy", self._on_destroy)
+
+    def _on_destroy(self, *_):
+        # The stream's `changed` signal outlives this widget (the submenu
+        # rebuilds and destroys sliders while streams keep emitting), so
+        # disconnect here to avoid calling set_value on a destroyed scale.
+        self._destroyed = True
+        if self._stream_handler is not None and self.audio_stream is not None:
+            self.audio_stream.disconnect(self._stream_handler)
+            self._stream_handler = None
+
     def update_state(self, *_):
         """Update the slider state from the audio stream."""
-        if not self.audio_stream:
+        if not self.audio_stream or self._destroyed:
             return
 
         volume = int(self.audio_stream.volume)

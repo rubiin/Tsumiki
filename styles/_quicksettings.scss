@@ -287,7 +287,7 @@ $qs-active-fg: theme.$accent-purple;
         background-color: theme.$background-alt;
       }
 
-      &:insensitive {
+      &:disabled {
         background-color: color.adjust(theme.$surface-disabled, $alpha: -0.6);
       }
 
@@ -377,7 +377,7 @@ $qs-active-fg: theme.$accent-purple;
           box-shadow: inset 0 0 0 2px theme.$accent-blue;
         }
 
-        &:insensitive {
+        &:disabled {
           color: theme.$text-disabled;
         }
       }
@@ -407,16 +407,16 @@ $qs-active-fg: theme.$accent-purple;
 #app-list {
   margin-top: 4px;
 
-  #audio-source-item {
+  row {
     padding: 2px 0;
 
-    .audio-source-name {
-      font-size: 12px;
+    .submenu-item-label {
+      font-size: 11px;
       font-weight: 600;
     }
 
     #setting-slider-scale {
-      @include setting-slider(180px);
+      @include setting-slider(140px);
     }
   }
 }

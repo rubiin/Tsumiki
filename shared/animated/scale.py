@@ -16,15 +16,30 @@ class AnimatedScale(Scale, BaseWidget):
         self.duration = duration
         self.animator = None
         self._pending_value = None
+        self._destroyed = False
 
         self._animation_timeout = None
 
+        self.connect("destroy", self._on_destroy)
+
+    def _on_destroy(self, *_):
+        # The animator's tick callback and any queued idle animation can outlive
+        # this widget (e.g. when a quick settings submenu rebuild destroys the
+        # scale mid-animation); calling set_value afterwards touches a freed
+        # GtkAdjustment (gtk_adjustment_animate_to_value crash).
+        self._destroyed = True
+        if self.animator is not None:
+            self.animator.pause()
+
     def set_notify_value(self, p, *_):
-        if p.value == self.value:
+        if self._destroyed or p.value == self.value:
             return
         self.set_value(p.value)
 
     def _execute_animation(self):
+        if self._destroyed:
+            return GLib.SOURCE_REMOVE
+
         if self._pending_value is not None:
             target_value = self._pending_value
             self._pending_value = None

@@ -67,7 +67,13 @@ class QuickSubMenu(Box):
             )
         if self.title:
             submenu_box.add(
-                Label(style_classes="submenu-title-label", label=self.title)
+                Label(
+                    style_classes="submenu-title-label",
+                    label=self.title,
+                    h_expand=True,
+                    h_align="start",
+                    ellipsization="end",
+                )
             )
 
         if self.scan_button is not None:
