@@ -41,8 +41,8 @@ class WifiSubMenu(QuickSubMenu):
         )
 
         self.child = ScrolledWindow(
-            min_content_size=(-1, 190),
-            max_content_size=(-1, 190),
+            min_content_size=(-1, 120),
+            max_content_size=(-1, 260),
             propagate_width=True,
             propagate_height=True,
             v_expand=True,
@@ -52,7 +52,7 @@ class WifiSubMenu(QuickSubMenu):
         )
 
         super().__init__(
-            title="network",
+            title="Network",
             title_icon=get_text_icon("wifi.generic"),
             scan_button=self.scan_button,
             child=self.child,

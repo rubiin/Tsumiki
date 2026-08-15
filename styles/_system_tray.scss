@@ -1,3 +1,4 @@
+@use "sass:color";
 @use "theme";
 @use "variable";
 @use "common";
@@ -44,7 +45,7 @@
         }
 
         &:active {
-          background-color: theme.$text-main;
+          background-color: color.adjust(theme.$accent-purple, $alpha: -0.7);
         }
       }
     }

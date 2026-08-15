@@ -45,7 +45,7 @@ $workspace-transition:
       }
 
       &:hover {
-        background-color: theme.$accent-teal;
+        background-color: theme.$accent-purple;
 
         label {
           color: theme.$background-dark;
@@ -112,7 +112,7 @@ $workspace-transition:
     }
 
     &:hover {
-      background-color: color.adjust(theme.$accent-orange, $alpha: -0.5);
+      background-color: color.adjust(theme.$accent-purple, $alpha: -0.5);
 
       label {
         color: theme.$background-dark;
@@ -152,19 +152,19 @@ $workspace-transition:
 
     &.active {
       background-color: transparent;
-      border-bottom-color: theme.$accent-teal;
+      border-bottom-color: theme.$accent-purple;
       border-bottom-width: 2px;
       font-weight: 700;
 
       label {
-        color: theme.$accent-teal;
+        color: theme.$accent-purple;
       }
 
       &:hover {
-        background-color: color.adjust(theme.$accent-teal, $alpha: -0.7);
+        background-color: color.adjust(theme.$accent-purple, $alpha: -0.7);
 
         label {
-          color: theme.$accent-teal;
+          color: theme.$accent-purple;
         }
       }
     }
@@ -177,7 +177,7 @@ $workspace-transition:
     min-height: 1.8em;
     padding: 0.15em 0.3em;
     border-radius: variable.$radius-large;
-    background-color: color.adjust(theme.$accent-orange, $alpha: -0.7);
+    background-color: color.adjust(theme.$accent-purple, $alpha: -0.7);
 
     label {
       font-weight: 500;
@@ -185,7 +185,7 @@ $workspace-transition:
     }
 
     &:hover {
-      background-color: color.adjust(theme.$accent-teal, $alpha: -0.3);
+      background-color: color.adjust(theme.$accent-purple, $alpha: -0.3);
 
       label {
         color: theme.$background-dark;
@@ -206,10 +206,10 @@ $workspace-transition:
 #workspaces_widget.slanted {
   @include workspace-variant {
     padding: 0.25em 0.7em;
-    background-color: color.adjust(theme.$accent-orange, $alpha: -0.2);
+    background-color: color.adjust(theme.$accent-purple, $alpha: -0.2);
     border-radius: 0;
-    border-left: 3px solid color.adjust(theme.$accent-orange, $alpha: -0.3);
-    border-right: 3px solid color.adjust(theme.$accent-orange, $alpha: -0.3);
+    border-left: 3px solid color.adjust(theme.$accent-purple, $alpha: -0.3);
+    border-right: 3px solid color.adjust(theme.$accent-purple, $alpha: -0.3);
 
     label {
       color: theme.$background-dark;
@@ -217,9 +217,9 @@ $workspace-transition:
     }
 
     &:hover {
-      background-color: theme.$accent-teal;
-      border-left-color: theme.$accent-teal;
-      border-right-color: theme.$accent-teal;
+      background-color: theme.$accent-purple;
+      border-left-color: theme.$accent-purple;
+      border-right-color: theme.$accent-purple;
 
       label {
         color: theme.$background-dark;
@@ -243,14 +243,14 @@ $workspace-transition:
 #workspaces_widget.slanted-right {
   @include workspace-variant {
     padding: 0.25em 1em;
-    background-color: color.adjust(theme.$accent-orange, $alpha: -0.2);
+    background-color: color.adjust(theme.$accent-purple, $alpha: -0.2);
     background-image: linear-gradient(
       190deg,
-      color.adjust(theme.$accent-orange, $alpha: -0.1) 0%,
+      color.adjust(theme.$accent-purple, $alpha: -0.1) 0%,
       transparent 100%
     );
     border-radius: 0;
-    border-right: 3px solid color.adjust(theme.$accent-orange, $alpha: -0.3);
+    border-right: 3px solid color.adjust(theme.$accent-purple, $alpha: -0.3);
 
     label {
       color: theme.$background-dark;
@@ -258,13 +258,13 @@ $workspace-transition:
     }
 
     &:hover {
-      background-color: theme.$accent-teal;
+      background-color: theme.$accent-purple;
       background-image: linear-gradient(
         190deg,
-        color.adjust(theme.$accent-teal, $alpha: -0.1) 0%,
+        color.adjust(theme.$accent-purple, $alpha: -0.1) 0%,
         transparent 100%
       );
-      border-right-color: theme.$accent-teal;
+      border-right-color: theme.$accent-purple;
 
       label {
         color: theme.$background-dark;

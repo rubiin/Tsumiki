@@ -29,6 +29,7 @@ from utils.widget_utils import (
 
 from .components import LazyWidgetContainer
 from .shortcuts import ShortcutsContainer
+from .submenu.audio import AudioSubMenu
 from .togglers import (
     DarkModeToggle,
     FlightModeToggle,
@@ -138,9 +139,13 @@ class QuickSettingsButtonBox(Box):
             if toggle is not None:
                 built_toggles.append(toggle)
 
-        # Toggles flow left-to-right, two per row.
+        # Toggles flow left-to-right, two per row; the last odd toggle spans
+        # the full row width so there's no dangling half-width card.
         for i, toggle in enumerate(built_toggles):
-            self.grid.attach(toggle, i % 2, i // 2, 1, 1)
+            if i == len(built_toggles) - 1 and len(built_toggles) % 2 == 1:
+                self.grid.attach(toggle, 0, i // 2, 2, 1)
+            else:
+                self.grid.attach(toggle, i % 2, i // 2, 1, 1)
 
         for toggle in built_toggles:
             if hasattr(toggle, "ensure_submenu"):
@@ -319,7 +324,16 @@ class QuickSettingsMenu(Box):
                 continue
 
             slider_cls = lazy_load_class(*slider_path)
-            sliders_box.add(slider_cls())
+            if slider_name == "volume":
+                sliders_box.add(slider_cls(show_chevron=True))
+            else:
+                sliders_box.add(slider_cls())
+
+        # Per-application audio controls revealed by the volume slider chevron.
+        if "volume" in controls_config.get("sliders", []):
+            self.audio_submenu = AudioSubMenu()
+            sliders_box.audio_submenu = self.audio_submenu
+            sliders_box.add(self.audio_submenu)
 
         # Determine slider box class and main grid based on shortcuts
         shortcuts_enabled = shortcuts_config.get("enabled", False)

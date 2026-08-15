@@ -37,7 +37,7 @@ class QuickSubMenu(Box):
         self.revealer = Revealer(
             child=self.revealer_child,
             transition_type="slide-down",
-            transition_duration=600,
+            transition_duration=250,
             h_expand=True,
         )
         self.revealer.connect(

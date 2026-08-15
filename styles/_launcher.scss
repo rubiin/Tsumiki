@@ -15,12 +15,10 @@ $launcher-transition:
 
   #icon {
     -gtk-icon-effect: highlight;
-  }
-
-  &:hover,
-  &:focus {
-    background-color: theme.$accent-teal;
-    color: theme.$background-dark;
+  }    &:hover,
+    &:focus {
+      background-color: theme.$accent-purple;
+      color: theme.$background-dark;
 
     label {
       color: theme.$background-dark;
@@ -28,7 +26,7 @@ $launcher-transition:
   }
 
   &:active {
-    background-color: color.mix(theme.$accent-teal, black, 15%);
+    background-color: color.mix(theme.$accent-purple, black, 15%);
 
     label {
       color: theme.$background-dark;
@@ -75,11 +73,11 @@ $launcher-transition:
     transition:
       border-color 150ms ease-in-out,
       background-color 150ms ease-in-out;
-    caret-color: theme.$accent-teal;
+    caret-color: theme.$accent-purple;
 
     &:focus {
-      background-color: color.mix(theme.$background-main, white, 88%);
-      border-bottom-color: theme.$accent-teal;
+      background-color: theme.$surface-neutral;
+      border-bottom-color: theme.$accent-purple;
     }
 
     placeholder {
@@ -132,7 +130,7 @@ $launcher-transition:
     &:hover,
     &:focus,
     &.selected {
-      background-color: theme.$accent-teal;
+      background-color: theme.$accent-purple;
       color: theme.$background-dark;
 
       #launcher-plugin-title,
@@ -142,7 +140,7 @@ $launcher-transition:
     }
 
     &:active {
-      background-color: color.mix(theme.$accent-teal, black, 15%);
+      background-color: color.mix(theme.$accent-purple, black, 15%);
 
       #launcher-plugin-title,
       #launcher-plugin-subtitle {

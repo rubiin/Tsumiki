@@ -69,8 +69,8 @@ text_nerd_icons = {
         "disabled": "󰛨",
     },
     "bluetooth": {"enabled": "󰂱", "disabled": "󰂲"},
-    "flight": {"enabled": "✈️", "disabled": "✈️"},  # TODO: replace placeholders
-    "color": {"dark": "🌙", "light": "☀️"},  # TODO: replace placeholders
+    "flight": {"enabled": "󰗕", "disabled": "󰗔"},
+    "color": {"dark": "󰖔", "light": "󰖙"},
     "power_menu": {
         "shutdown": "󰐥",
         "reboot": "",

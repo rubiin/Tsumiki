@@ -62,8 +62,10 @@
 
 /// Hover state styling for widgets with background transition
 %widget-hover {
-  background-color: theme.$accent-teal;
-  transition: border-color 400ms ease-in-out;
+  background-color: theme.$accent-purple;
+  transition:
+    background-color 200ms ease-in-out,
+    border-color 200ms ease-in-out;
 }
 
 /// Base styling for desktop widgets with smooth color transitions
@@ -377,7 +379,7 @@
   }
 }
 
-/// Standard widget hover state: accent-teal background + dark text,
+/// Standard widget hover state: accent-purple background + dark text,
 /// optionally darkening the panel icon to match.
 /// @param {Boolean} $icon - Also set `.panel-font-icon` color to the dark text color
 @mixin widget-hover($icon: false) {

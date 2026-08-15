@@ -84,7 +84,9 @@ class AudioSlider(SettingSlider):
         self.update_icon(volume)
 
     def update_icon(self, volume=0):
-        icon_name = get_audio_icon_name(volume, self.client.speaker.muted)["icon_text"]
+        if not self.audio_stream:
+            return
+        icon_name = get_audio_icon_name(volume, self.audio_stream.muted)["icon_text"]
 
         self.icon.set_label(icon_name)
 
@@ -102,7 +104,11 @@ class AudioSlider(SettingSlider):
         if parent and hasattr(parent, "audio_submenu"):
             is_visible = parent.audio_submenu.toggle_reveal()
 
-            self.chevron_icon.set_label("" if is_visible else "")
+            self.chevron_icon.set_label(
+                get_text_icon("chevron.down")
+                if is_visible
+                else get_text_icon("chevron.right")
+            )
 
     def on_mute_click(self, *_):
         """Toggle mute state."""

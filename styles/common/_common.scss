@@ -293,7 +293,7 @@ switch {
   }
 
   &:checked {
-    background-color: #06aa58;
+    background-color: theme.$accent-green;
   }
 
   &:disabled {
@@ -424,12 +424,12 @@ scrolledwindow {
     margin: 0 1rem;
 
     &:nth-child(1):hover {
-      background-color: #4caf50;
+      background-color: theme.$accent-green;
       color: theme.$background-main;
     }
 
     &:nth-child(2):hover {
-      background-color: #e53935;
+      background-color: theme.$accent-red;
       color: theme.$background-main;
     }
   }
