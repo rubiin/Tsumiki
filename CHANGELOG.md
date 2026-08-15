@@ -1,5 +1,65 @@
 # Changelog
 
+## [4.1.0](https://github.com/rubiin/tsumiki/compare/v4.0.2...v4.1.0) (2026-08-15)
+
+
+### 🚀 New Features
+
+* add plugin allowlist support for slash commands ([275a626](https://github.com/rubiin/tsumiki/commit/275a6265b9a1c90614fdf164bda12aa0921ff11e))
+* add plugin system for launcher slash commands ([60174a3](https://github.com/rubiin/tsumiki/commit/60174a3f10f3d23ed4ef561376271b453777d871))
+* configurable quick settings toggles with dark and flight mode ([c14f292](https://github.com/rubiin/tsumiki/commit/c14f29220364a97baa5294645834428acbb82e63))
+* **launcher:** implement tab-completion for application search ([0f09ecc](https://github.com/rubiin/tsumiki/commit/0f09ecc74e8c37dd0fcd71ecdbd8990f25d3da3e))
+* **translate:** enhance translation command with language parsing and validation ([1b2ea4a](https://github.com/rubiin/tsumiki/commit/1b2ea4a0489bed36cb0a99c87cdfbe252f2a6373))
+* update installation instructions and add libqalculate dependency ([6b08184](https://github.com/rubiin/tsumiki/commit/6b081848962bc83f1756e6c91a92b94777657141))
+
+
+### 🐛 Bug Fixes
+
+* **clipboard_history:** increase max results and improve truncation handling ([0f09ecc](https://github.com/rubiin/tsumiki/commit/0f09ecc74e8c37dd0fcd71ecdbd8990f25d3da3e))
+* **deps:** update all non-major npm dependencies ([#350](https://github.com/rubiin/tsumiki/issues/350)) ([75abfce](https://github.com/rubiin/tsumiki/commit/75abfce50eb9d86e21432db0e74b44e96b16dc55))
+* **deps:** update dependency astro to ^7.2.2 ([#357](https://github.com/rubiin/tsumiki/issues/357)) ([bc6579f](https://github.com/rubiin/tsumiki/commit/bc6579f705ea7a5f9908b99596d267d5c7a5781e))
+* Refactor app launcher module to launcher ([d7f38ef](https://github.com/rubiin/tsumiki/commit/d7f38ef3fbbe9d793079f8c05817a5d019df7721))
+* update astro dependency to version 7.2.1 ([d4fa119](https://github.com/rubiin/tsumiki/commit/d4fa11917717d0892d63e03d3782fcb46702d118))
+* **wallpaper:** rename wallpaper button for consistency ([0f09ecc](https://github.com/rubiin/tsumiki/commit/0f09ecc74e8c37dd0fcd71ecdbd8990f25d3da3e))
+
+
+### 🎨 Code Style
+
+* **common:** update wallpaper button styling ([0f09ecc](https://github.com/rubiin/tsumiki/commit/0f09ecc74e8c37dd0fcd71ecdbd8990f25d3da3e))
+* **launcher:** improve button transitions and hover effects ([0f09ecc](https://github.com/rubiin/tsumiki/commit/0f09ecc74e8c37dd0fcd71ecdbd8990f25d3da3e))
+* **settings:** add new variables for launcher button styling ([0f09ecc](https://github.com/rubiin/tsumiki/commit/0f09ecc74e8c37dd0fcd71ecdbd8990f25d3da3e))
+* **widgets:** add launcher button to widget styles ([0f09ecc](https://github.com/rubiin/tsumiki/commit/0f09ecc74e8c37dd0fcd71ecdbd8990f25d3da3e))
+
+
+### ⚙️ Chores
+
+* **deps:** update actions/checkout action to v7 ([#354](https://github.com/rubiin/tsumiki/issues/354)) ([da3c181](https://github.com/rubiin/tsumiki/commit/da3c18171c7ddb1cc03f46d7624572a8584aaf1a))
+* **deps:** update dependency node to v24.19.0 ([#358](https://github.com/rubiin/tsumiki/issues/358)) ([f244b8e](https://github.com/rubiin/tsumiki/commit/f244b8e1a30dc865a39d1ea1b344c35c73c8e823))
+* **deps:** update dependency pnpm to v11.21.0 ([#359](https://github.com/rubiin/tsumiki/issues/359)) ([c611903](https://github.com/rubiin/tsumiki/commit/c61190341c781a26e6b9b4d0c037f6572db1eac2))
+* **deps:** update dependency pycairo to v1.29.1 ([#349](https://github.com/rubiin/tsumiki/issues/349)) ([bc5c8db](https://github.com/rubiin/tsumiki/commit/bc5c8db040f3d129bd0145db624beb209edf5d92))
+* **deps:** update github/codeql-action action to v4 ([#355](https://github.com/rubiin/tsumiki/issues/355)) ([092cdf4](https://github.com/rubiin/tsumiki/commit/092cdf491b05b58c6b166a12dbe763ea132d2681))
+* **deps:** update googleapis/release-please-action action to v5 ([#356](https://github.com/rubiin/tsumiki/issues/356)) ([5456e14](https://github.com/rubiin/tsumiki/commit/5456e14db0bfa796f142ca5d634ff7a73e442264))
+* **docs:** migrate docs to TypeScript 7 native compiler ([83840e6](https://github.com/rubiin/tsumiki/commit/83840e62e2d2f1b245e7c108509141820a481a04))
+* update logo image asset ([e700a8f](https://github.com/rubiin/tsumiki/commit/e700a8fd0437800c64a7d5f7eb76e6a5689afc06))
+
+
+### ♻️ Code Refactoring
+
+* simplify image handling and regex patterns across multiple modules ([8f55495](https://github.com/rubiin/tsumiki/commit/8f5549583d1b990deb78e7926f6c304631118791))
+* streamline notification image handling and caching logic ([3d94542](https://github.com/rubiin/tsumiki/commit/3d94542bd84d33059a50e1409a77aacff87cdc3c))
+
+
+### ✅ Automated Testing
+
+* **tests:** refactor tests for better readability and maintainability ([0f09ecc](https://github.com/rubiin/tsumiki/commit/0f09ecc74e8c37dd0fcd71ecdbd8990f25d3da3e))
+
+
+### 🚀 CI Improvements
+
+* Change schedule from Monday to Saturday ([a554397](https://github.com/rubiin/tsumiki/commit/a554397af81f52e3dcc5b517567ab8e0f310f73d))
+* mergify config ([cbeb57b](https://github.com/rubiin/tsumiki/commit/cbeb57b77caa441a23382e534ca559ed291fd28b))
+* Update merge conditions for bot PRs in Mergify config ([e0eac9d](https://github.com/rubiin/tsumiki/commit/e0eac9db376e0d3a1f63723a9e3b6cdd6ba399fe))
+
 ## [4.0.2](https://github.com/rubiin/tsumiki/compare/v4.0.1...v4.0.2) (2026-08-06)
 
 
