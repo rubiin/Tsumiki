@@ -30,6 +30,8 @@ from utils.widget_utils import (
 from .components import LazyWidgetContainer
 from .shortcuts import ShortcutsContainer
 from .togglers import (
+    DarkModeToggle,
+    FlightModeToggle,
     HyprIdleQuickSetting,
     NotificationQuickSetting,
 )
@@ -38,6 +40,15 @@ _WIFI_GENERIC_ICON = get_text_icon("wifi.generic")
 _ETHERNET_ICON = get_text_icon("ethernet")
 _BRIGHTNESS_MEDIUM_ICON = get_text_icon("brightness.medium")
 _HOURGLASS_ICON = get_text_icon("hourglass")
+
+_DEFAULT_TOGGLES = [
+    "wifi",
+    "bluetooth",
+    "power_profiles",
+    "hyprsunset",
+    "hypridle",
+    "notification",
+]
 
 
 class QuickSettingsButtonBox(Box):
@@ -54,12 +65,51 @@ class QuickSettingsButtonBox(Box):
         toggle_cls = lazy_load_class(module_path, toggle_cls_name)
         return toggle_cls(submenu_factory=submenu_cls, **kwargs)
 
+    def _create_toggle(self, name: str):
+        """Build a quick settings toggle by name, or None if unknown."""
+        if name == "wifi":
+            return self._build_toggle(
+                "widgets.quick_settings.submenu.wifi",
+                "WifiSubMenu",
+                "WifiToggle",
+            )
+        if name == "bluetooth":
+            return self._build_toggle(
+                "widgets.quick_settings.submenu.bluetooth",
+                "BluetoothSubMenu",
+                "BluetoothToggle",
+            )
+        if name == "power_profiles":
+            return self._build_toggle(
+                "widgets.quick_settings.submenu.power_profiles",
+                "PowerProfileSubMenu",
+                "PowerProfileToggle",
+                popup=self.popup,
+            )
+        if name == "hyprsunset":
+            return self._build_toggle(
+                "widgets.quick_settings.submenu.hyprsunset",
+                "HyprSunsetSubMenu",
+                "HyprSunsetToggle",
+                popup=self.popup,
+            )
+        if name == "hypridle":
+            return HyprIdleQuickSetting(popup=self.popup)
+        if name == "notification":
+            return NotificationQuickSetting(popup=self.popup)
+        if name == "darkmode":
+            return DarkModeToggle(popup=self.popup)
+        if name == "flightmode":
+            return FlightModeToggle(popup=self.popup)
+        logger.warning(f"Unknown quick settings toggle: {name}")
+        return None
+
     def close_all_submenus(self, *_):
         if self.active_submenu is not None:
             self.active_submenu._reveal(False)
             self.active_submenu = None
 
-    def __init__(self, popup, **kwargs):
+    def __init__(self, popup, toggles=None, **kwargs):
         super().__init__(
             orientation="v",
             name="quick-settings-button-box",
@@ -70,6 +120,9 @@ class QuickSettingsButtonBox(Box):
             **kwargs,
         )
 
+        self.popup = popup
+        self.toggles = _DEFAULT_TOGGLES if toggles is None else toggles
+
         self.grid = Grid(
             row_spacing=10,
             column_spacing=10,
@@ -79,52 +132,21 @@ class QuickSettingsButtonBox(Box):
 
         self.active_submenu = None
 
-        self.bluetooth_toggle = self._build_toggle(
-            "widgets.quick_settings.submenu.bluetooth",
-            "BluetoothSubMenu",
-            "BluetoothToggle",
-        )
-        self.wifi_toggle = self._build_toggle(
-            "widgets.quick_settings.submenu.wifi",
-            "WifiSubMenu",
-            "WifiToggle",
-        )
-        self.power_pfl = self._build_toggle(
-            "widgets.quick_settings.submenu.power_profiles",
-            "PowerProfileSubMenu",
-            "PowerProfileToggle",
-            popup=popup,
-        )
-        self.hyprsunset = self._build_toggle(
-            "widgets.quick_settings.submenu.hyprsunset",
-            "HyprSunsetSubMenu",
-            "HyprSunsetToggle",
-            popup=popup,
-        )
-        self.hypridle = HyprIdleQuickSetting(popup=popup)
-        self.notification_btn = NotificationQuickSetting(popup=popup)
+        built_toggles = []
+        for name in self.toggles:
+            toggle = self._create_toggle(name)
+            if toggle is not None:
+                built_toggles.append(toggle)
 
-        toggles_with_positions = (
-            (self.wifi_toggle, (0, 0, 1, 1)),
-            (self.bluetooth_toggle, (1, 0, 1, 1)),
-            (self.power_pfl, (0, 1, 1, 1)),
-            (self.hyprsunset, (1, 1, 1, 1)),
-            (self.hypridle, (0, 2, 1, 1)),
-            (self.notification_btn, (1, 2, 1, 1)),
-        )
+        # Toggles flow left-to-right, two per row.
+        for i, toggle in enumerate(built_toggles):
+            self.grid.attach(toggle, i % 2, i // 2, 1, 1)
 
-        for widget, (col, row, width, height) in toggles_with_positions:
-            self.grid.attach(widget, col, row, width, height)
+        for toggle in built_toggles:
+            if hasattr(toggle, "ensure_submenu"):
+                toggle.connect("reveal-clicked", self.set_active_submenu)
 
-        for toggle in (
-            self.wifi_toggle,
-            self.bluetooth_toggle,
-            self.power_pfl,
-            self.hyprsunset,
-        ):
-            toggle.connect("reveal-clicked", self.set_active_submenu)
-
-        self.children = (self.grid,)
+        self.children = (self.grid,) if built_toggles else ()
 
         self.connect("unmap", self.close_all_submenus)
 
@@ -344,6 +366,13 @@ class QuickSettingsMenu(Box):
             main_grid.attach(shortcuts_box, 2, 0, 1, 1)
         else:
             main_grid.attach(sliders_box, 0, 0, 3, 1)
+        toggles = self.config.get("toggles", _DEFAULT_TOGGLES)
+
+        # An empty toggles list hides the toggle section entirely.
+        start_children = [self.user_box]
+        if toggles:
+            start_children.append(QuickSettingsButtonBox(popup=popup, toggles=toggles))
+
         box = CenterBox(
             orientation="v",
             style_classes="quick-settings-box",
@@ -352,7 +381,7 @@ class QuickSettingsMenu(Box):
                 spacing=10,
                 v_align="center",
                 style_classes="section-box",
-                children=(self.user_box, QuickSettingsButtonBox(popup=popup)),
+                children=start_children,
             ),
             center_children=main_grid,
         )

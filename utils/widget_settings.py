@@ -732,6 +732,7 @@ QuickSettings = TypedDict(
         "shortcuts": ShortcutsConfig,
         "user": UserConfig,
         "controls": ControlsConfig,
+        "toggles": list[str],
     },
 )
 

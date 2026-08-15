@@ -1,4 +1,9 @@
-from services import notification_service
+import contextlib
+
+from fabric.utils import invoke_repeater
+
+from services import bluetooth_service, notification_service, style_service
+from services.network import NetworkService
 from shared.button_toggle import CommandSwitcher
 from shared.buttons import HoverButton
 from utils.icons import get_text_icon
@@ -97,3 +102,127 @@ class NotificationQuickSetting(HoverButton):
         else:
             self.notification_label.set_label("Noisy")
             self.notification_icon.set_label(get_text_icon("notifications.noisy"))
+
+
+def _wifi_device():
+    """Return the wifi device if available, else None."""
+    try:
+        return NetworkService().wifi_device
+    except Exception:
+        return None
+
+
+def flight_mode_enabled() -> bool:
+    """Return whether flight mode is on (wifi and bluetooth both disabled)."""
+    try:
+        wifi = _wifi_device()
+        wifi_on = bool(wifi and wifi.enabled)
+        bluetooth_on = bool(bluetooth_service.enabled)
+    except Exception:
+        return False
+    return not wifi_on and not bluetooth_on
+
+
+class FlightModeToggle(HoverButton):
+    """A button to toggle flight mode."""
+
+    def __init__(self, popup, **kwargs):
+        super().__init__(
+            name="quicksettings-togglebutton",
+            style_classes="quicksettings-toggler",
+            **kwargs,
+        )
+
+        self.popup = popup
+
+        self.row = QuickSettingsIconLabelRow(
+            icon=get_text_icon("flight.disabled"),
+            label="Disabled",
+            row_classes=["quicksettings-toggle-row"],
+        )
+
+        self.flight_icon = self.row.icon
+        self.flight_label = self.row.label
+
+        self.children = self.row
+
+        self.connect("clicked", self.on_click)
+
+        self._register_repeater(invoke_repeater(1000, self.update_state))
+        # Refresh when first shown; the repeater's initial call may run before
+        # mapping, when the visibility gate skips it.
+        self.connect("map", self.update_state)
+
+    def on_click(self, *_):
+        """Toggle flight mode on/off."""
+        turn_on = not flight_mode_enabled()
+
+        # Turn off WiFi and Bluetooth when enabling flight mode.
+        wifi = _wifi_device()
+        if wifi:
+            wifi.enabled = not turn_on
+        with contextlib.suppress(Exception):
+            bluetooth_service.enabled = not turn_on
+
+        if self.popup is not None:
+            self.popup.hide_popover()
+
+        self.update_state()
+
+    def update_state(self, *_):
+        if not self.get_mapped():
+            return True
+
+        enabled = flight_mode_enabled()
+        self.toggle_css_class("active", enabled)
+        self.flight_icon.set_label(
+            get_text_icon("flight.enabled" if enabled else "flight.disabled")
+        )
+        self.flight_label.set_label("Enabled" if enabled else "Disabled")
+        return True
+
+
+class DarkModeToggle(HoverButton):
+    """A button to toggle between dark and light mode."""
+
+    def __init__(self, popup, **kwargs):
+        super().__init__(
+            name="quicksettings-togglebutton",
+            style_classes="quicksettings-toggler",
+            **kwargs,
+        )
+
+        self.popup = popup
+
+        self.row = QuickSettingsIconLabelRow(
+            icon=get_text_icon("color.dark"),
+            label="Dark",
+            row_classes=["quicksettings-toggle-row"],
+        )
+
+        self.mode_icon = self.row.icon
+        self.mode_label = self.row.label
+
+        self.children = self.row
+
+        self._register_handler(
+            style_service,
+            style_service.connect("theme_changed", self.update_state),
+        )
+
+        self.connect("clicked", self.on_click)
+
+        self.update_state()
+
+    def on_click(self, *_):
+        """Toggle between dark and light mode."""
+        new_mode = "light" if style_service.mode == "dark" else "dark"
+        style_service.set_mode(new_mode)
+        if self.popup is not None:
+            self.popup.hide_popover()
+
+    def update_state(self, *_):
+        dark = style_service.mode == "dark"
+        self.toggle_css_class("active", dark)
+        self.mode_icon.set_label(get_text_icon("color.dark" if dark else "color.light"))
+        self.mode_label.set_label("Dark" if dark else "Light")

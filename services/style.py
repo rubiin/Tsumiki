@@ -20,6 +20,7 @@ from utils.functions import (
     exclude_keys,
     flatten_dict,
     read_toml_file,
+    update_styling_mode,
     update_theme_config,
 )
 
@@ -219,6 +220,9 @@ class StyleService(SingletonService):
 
         self._mode = mode
         self.apply_theme(self._current_theme)
+        # Persist the choice to config.toml (theme is unchanged here, so the
+        # write from apply_theme and this one don't conflict).
+        update_styling_mode(mode)
 
     def refresh(self) -> None:
         """Recompile and re-apply the current CSS without changing the theme."""

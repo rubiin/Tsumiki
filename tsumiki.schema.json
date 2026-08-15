@@ -624,12 +624,37 @@
 				"quick_settings": {
 					"type": "object",
 					"properties": {
-						"hover_reveal": {
-							"type": "boolean",
-							"default": false,
-							"description": "Determines whether to reveal the quick settings on hover."
+					"hover_reveal": {
+						"type": "boolean",
+						"default": false,
+						"description": "Determines whether to reveal the quick settings on hover."
+					},
+					"toggles": {
+						"type": "array",
+						"items": {
+							"type": "string",
+							"enum": [
+								"wifi",
+								"bluetooth",
+								"power_profiles",
+								"hyprsunset",
+								"hypridle",
+								"notification",
+								"darkmode",
+								"flightmode"
+							]
 						},
-						"user": {
+						"default": [
+							"wifi",
+							"bluetooth",
+							"power_profiles",
+							"hyprsunset",
+							"hypridle",
+							"notification"
+						],
+						"description": "The list of toggles to display in the quick settings. Toggles flow two per row; an empty list hides the toggle section entirely."
+					},
+					"user": {
 							"type": "object",
 							"properties": {
 								"avatar": {
@@ -805,6 +830,7 @@
 					},
 					"required": [
 						"hover_reveal",
+						"toggles",
 						"user",
 						"controls",
 						"media",

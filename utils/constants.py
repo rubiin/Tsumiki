@@ -90,6 +90,14 @@ DEFAULT_CONFIG = {
         },
         "quick_settings": {
             "hover_reveal": False,
+            "toggles": [
+                "wifi",
+                "bluetooth",
+                "power_profiles",
+                "hyprsunset",
+                "hypridle",
+                "notification",
+            ],
             "user": {"avatar": "~/.face", "name": "system", "distro_icon": True},
             "controls": {
                 "sliders": ["brightness", "volume"],

@@ -569,9 +569,15 @@ tooltip = true
 
 A comprehensive quick settings panel with user info, controls, media, and shortcuts.
 
+The `toggles` array selects which quick settings buttons appear. Available
+toggles: wifi, bluetooth, power_profiles, hyprsunset, hypridle, notification,
+darkmode, flightmode. They flow two per row; an empty array hides the toggle
+section entirely. darkmode and flightmode are opt-in and not enabled by default.
+
 ```toml
 [widgets.quick_settings]
 hover_reveal = false
+toggles = ["wifi", "bluetooth", "power_profiles", "hyprsunset", "hypridle", "notification"]
 
 [widgets.quick_settings.user]
 avatar = "~/.face"

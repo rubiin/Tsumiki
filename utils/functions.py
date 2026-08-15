@@ -482,6 +482,29 @@ def update_theme_config(theme_name: str):
         logger.exception(f"{Colors.ERROR}[Theme] Error updating theme config: {e}")
 
 
+# Function to update the styling mode (dark/light)
+def update_styling_mode(mode: str):
+    """Update the config.toml file with the new styling mode."""
+    try:
+        config_file = get_relative_path("../config.toml")
+
+        # Read current theme config
+        config = read_toml_file(config_file)
+
+        if config is None:
+            return
+
+        # Update the styling mode
+        config["styling"]["mode"] = mode
+
+        # Write back to file
+        write_toml_file(config_file, config)
+
+        logger.info(f"{Colors.INFO}[Theme] Updated styling mode to {mode}")
+    except (IOError, OSError, KeyError, TypeError) as e:
+        logger.exception(f"{Colors.ERROR}[Theme] Error updating styling mode: {e}")
+
+
 # Function to convert celsius to fahrenheit
 def celsius_to_fahrenheit(celsius: float) -> float:
     return (celsius * 9 / 5) + 32

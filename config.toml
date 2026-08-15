@@ -61,6 +61,7 @@ charging = false
 
 [widgets.quick_settings]
 hover_reveal = false
+toggles = ["wifi", "bluetooth", "power_profiles", "hyprsunset", "hypridle", "notification"]
 
 [widgets.quick_settings.user]
 avatar = "~/.face"
