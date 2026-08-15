@@ -145,6 +145,7 @@ class NotificationWidget(EventBox):
         self._notification = notification
         self._timeout_id = None
         self._time_remaining = 0
+        self._last_tick_time = 0
 
         # Swipe gesture state
         self._drag_start_x: float | None = None
@@ -383,15 +384,15 @@ class NotificationWidget(EventBox):
     def start_timeout(self):
         self.stop_timeout()
         self._time_remaining = self.get_timeout()
-        self._timeout_start = (
-            GLib.get_monotonic_time()
-        )  # microseconds, for precise elapsed tracking
+        self._last_tick_time = GLib.get_monotonic_time()
         self._timeout_id = self.progress_timeout.add_tick_callback(self._tick_callback)
 
     def _tick_callback(self, widget, frame_clock) -> bool:
         """Called on every frame (vsync). Updates progress bar smoothly."""
-        elapsed_ms = (GLib.get_monotonic_time() - self._timeout_start) / 1000
-        self._time_remaining = max(0, self.get_timeout() - elapsed_ms)
+        now = GLib.get_monotonic_time()
+        elapsed_ms = (now - self._last_tick_time) / 1000
+        self._last_tick_time = now
+        self._time_remaining = max(0, self._time_remaining - elapsed_ms)
 
         self.progress_timeout.queue_draw()
 
@@ -502,7 +503,11 @@ class NotificationWidget(EventBox):
         self.stop_timeout()
 
     def resume_timeout(self):
-        self.start_timeout()
+        """Resume the countdown from where it left off after a pause."""
+        if self._timeout_id is not None:
+            return
+        self._last_tick_time = GLib.get_monotonic_time()
+        self._timeout_id = self.progress_timeout.add_tick_callback(self._tick_callback)
 
     def on_hover(self, *_):
         self.pause_timeout()
