@@ -9,10 +9,12 @@
     ],
     "enabledManagers": [
         "pep621",
-        "uv",
         "npm",
         "github-actions"
     ],
+    "lockFileMaintenance": {
+        "enabled": true
+    },
     "packageRules": [
     {
       "matchPackageNames": ["PyGObject","PyGObject-stubs"],
@@ -20,8 +22,7 @@
     },
         {
             "matchManagers": [
-                "pep621",
-                "uv"
+                "pep621"
             ],
             "matchUpdateTypes": [
                 "minor",
@@ -32,8 +33,7 @@
         },
         {
             "matchManagers": [
-                "pep621",
-                "uv"
+                "pep621"
             ],
             "matchUpdateTypes": [
                 "major"
