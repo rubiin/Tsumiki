@@ -246,6 +246,9 @@ class HelloPlugin(LauncherPlugin):
 - For multi-file plugins, use a package (a directory with `__init__.py`) and
   re-export the plugin class from `__init__.py`.
 
+For the full plugin API — class attributes, helpers, cancellation,
+debouncing, and package layout — see the [Plugin Development guide](/en/resources/plugins).
+
 ---
 
 ## OSD (On-Screen Display)
