@@ -8,7 +8,13 @@ import re
 import socket
 from typing import ClassVar
 
-from utils.plugin_manager import LauncherPlugin, PluginResult, copy_to_clipboard
+from utils.plugin_manager import (
+    LauncherPlugin,
+    PluginCancelledError,
+    PluginResult,
+    cached_handle,
+    copy_to_clipboard,
+)
 
 _DICT_HOST = "dict.org"
 _DICT_PORT = 2628
@@ -89,11 +95,18 @@ def query_dict(
     host: str = _DICT_HOST,
     port: int = _DICT_PORT,
     timeout: float = _TIMEOUT_SECONDS,
+    cancelled=None,
 ) -> list[dict]:
-    """Return definition blocks for *word* over the DICT protocol."""
+    """Return definition blocks for *word* over the DICT protocol.
+
+    *cancelled* aborts a superseded lookup between socket reads, raising
+    :class:`PluginCancelledError`.
+    """
     word = word.strip()
     if not word or "\r" in word or "\n" in word:
         raise ValueError("invalid word")
+    if cancelled is not None and cancelled():
+        raise PluginCancelledError()
     blocks: list[dict] = []
     try:
         with socket.create_connection((host, port), timeout=timeout) as sock:
@@ -107,6 +120,8 @@ def query_dict(
             sock.sendall(f"DEFINE {database} {word}\r\n".encode())
             current: dict | None = None
             for raw in stream:
+                if cancelled is not None and cancelled():
+                    raise PluginCancelledError()
                 line = raw.rstrip("\r\n")
                 if line.startswith("151 "):
                     current = _parse_151(line)
@@ -148,7 +163,10 @@ class DefinePlugin(LauncherPlugin):
     # Each query opens a TCP connection — debounce like the other network
     # plugins so we don't look the word up on every keystroke.
     debounce_ms = 500
+    #: Definitions barely change — cache them for the session (1 hour).
+    cache_ttl_seconds = 3600
 
+    @cached_handle()
     def handle(self, args: str) -> list[PluginResult]:
         database, word = parse_define_args(args)
         if not word:
@@ -165,7 +183,9 @@ class DefinePlugin(LauncherPlugin):
         if self.is_cancelled():
             return []  # superseded before the request went out
         try:
-            blocks = query_dict(word, database)
+            blocks = query_dict(word, database, cancelled=self.is_cancelled)
+        except PluginCancelledError:
+            return []  # superseded — launcher already dropped this query
         except Exception as exc:
             return [
                 PluginResult(

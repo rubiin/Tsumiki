@@ -12,8 +12,13 @@ from datetime import date
 from typing import ClassVar
 
 from utils.constants import FX_RATES_CACHE_FILE
-from utils.functions import get_http_client
-from utils.plugin_manager import LauncherPlugin, PluginResult, copy_to_clipboard
+from utils.plugin_manager import (
+    LauncherPlugin,
+    PluginCancelledError,
+    PluginResult,
+    copy_to_clipboard,
+    http_request,
+)
 
 #: Returns all EUR-based rates as a list of {date, base, quote, rate} rows.
 _FRANKFURTER_RATES_URL = "https://api.frankfurter.dev/v2/rates"
@@ -104,12 +109,8 @@ class _DownloadCancelledError(RuntimeError):
 def _download_rates(cancelled=None) -> tuple[str, dict[str, float]]:
     """Download the latest EUR-based rates; returns (date, {quote: rate})."""
     for attempt in range(_RETRY_ATTEMPTS):
-        if cancelled is not None and cancelled():
-            raise _DownloadCancelledError()
         try:
-            response = get_http_client().get(_FRANKFURTER_RATES_URL)
-            if cancelled is not None and cancelled():
-                raise _DownloadCancelledError()
+            response = http_request(cancelled, "GET", _FRANKFURTER_RATES_URL)
             response.raise_for_status()
             fx_date, rates = normalize_rows(response.json())
             # Guard against malformed/empty payloads: a nearly-empty table
@@ -120,8 +121,8 @@ def _download_rates(cancelled=None) -> tuple[str, dict[str, float]]:
                     f"Frankfurter returned only {len(rates)} currency rate(s)"
                 )
             return fx_date, rates
-        except _DownloadCancelledError:
-            raise
+        except PluginCancelledError:
+            raise _DownloadCancelledError()
         except Exception as exc:
             status = getattr(getattr(exc, "response", None), "status_code", None)
             is_client_error = status is not None and 400 <= status < 500

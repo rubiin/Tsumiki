@@ -3,8 +3,14 @@
 from typing import ClassVar
 from urllib.parse import urlparse
 
-from utils.functions import get_http_client
-from utils.plugin_manager import LauncherPlugin, PluginResult, copy_to_clipboard
+from utils.plugin_manager import (
+    LauncherPlugin,
+    PluginCancelledError,
+    PluginResult,
+    cached_handle,
+    copy_to_clipboard,
+    http_request,
+)
 
 #: provider -> (endpoint, extra params). Both return the short URL as plain
 #: text when ``format=simple`` / ``api-create.php`` are used.
@@ -33,10 +39,13 @@ def normalize_url(text: str) -> str | None:
     return text
 
 
-def shorten_url(url: str, provider: str = "is.gd") -> str:
-    """Shorten *url* with *provider*; returns the short URL or raises."""
+def shorten_url(url: str, provider: str = "is.gd", cancelled=None) -> str:
+    """Shorten *url* with *provider*; returns the short URL or raises.
+
+    *cancelled* aborts a superseded request mid-flight.
+    """
     base, extra_params = _SHORTENERS[provider]
-    response = get_http_client().get(base, params={**extra_params, "url": url})
+    response = http_request(cancelled, "GET", base, params={**extra_params, "url": url})
     response.raise_for_status()
     short = response.text.strip()
     if short.startswith("Error:"):
@@ -55,7 +64,10 @@ class ShortenPlugin(LauncherPlugin):
     aliases: ClassVar[list[str]] = ["short", "tiny"]
     # Each query is a network request — debounce like the other plugins.
     debounce_ms = 500
+    #: Short URLs are permanent — cache them for the session (1 hour).
+    cache_ttl_seconds = 3600
 
+    @cached_handle()
     def handle(self, args: str) -> list[PluginResult]:
         url = normalize_url(args)
         if url is None:
@@ -77,7 +89,9 @@ class ShortenPlugin(LauncherPlugin):
             if self.is_cancelled():
                 return []
             try:
-                short = shorten_url(url, provider)
+                short = shorten_url(url, provider, cancelled=self.is_cancelled)
+            except PluginCancelledError:
+                return []  # superseded — launcher already dropped this query
             except Exception as exc:
                 errors.append(f"{provider}: {exc}")
                 continue

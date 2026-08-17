@@ -1,6 +1,7 @@
 import os
 from collections.abc import Iterator
 from contextlib import suppress
+from difflib import SequenceMatcher
 
 from fabric.utils import (
     DesktopApp,
@@ -31,6 +32,10 @@ from utils.widget_settings import BarConfig
 
 # Default debounce for plugin queries; plugins can override via debounce_ms.
 _PLUGIN_DEBOUNCE_MS = 150
+
+#: Minimum SequenceMatcher ratio for a fuzzy (non-substring) app match.
+#: Below this the query is considered too different to be a match.
+_FUZZY_MATCH_THRESHOLD = 0.6
 
 
 class LauncherConfig:
@@ -422,7 +427,7 @@ class Launcher(PopupWindow):
         query_lower = text.casefold()
         candidates: list[str] = []
         for app in self._all_apps:
-            if not self._matches_query(app, query_lower):
+            if self._match_score(app, query_lower) <= 0:
                 continue
             name = app.display_name or app.name
             if name and name not in candidates:
@@ -505,25 +510,57 @@ class Launcher(PopupWindow):
         self._app_selected = -1
 
     @staticmethod
-    def _matches_query(app: DesktopApp, query_lower: str) -> bool:
-        """Whether *app* matches a lowercased query (name/description search)."""
-        return (
-            query_lower
-            in (
-                (app.display_name or "")
-                + " "
-                + (app.name or "")
-                + " "
-                + (app.generic_name or "")
-            ).casefold()
-        )
+    def _match_score(app: DesktopApp, query_lower: str) -> float:
+        """Return a match score for *app* against a lowercased query.
+
+        ``0.0`` means no match. Substring matches score highest (with a bonus
+        for word-boundary prefixes); otherwise an ordered subsequence match
+        via :func:`difflib.SequenceMatcher` is accepted above a similarity
+        threshold, so "ffx" still finds Firefox but "xyz" doesn't.
+        """
+        if not query_lower:
+            return 0.0
+        text = (
+            (app.display_name or "")
+            + " "
+            + (app.name or "")
+            + " "
+            + (app.generic_name or "")
+        ).casefold()
+
+        # Substring is the strongest signal — keep the old behavior on top.
+        if query_lower in text:
+            idx = text.find(query_lower)
+            if idx == 0 or (idx > 0 and text[idx - 1].isspace()):
+                return 110.0  # starts a word (e.g. "fire" finds "Firefox")
+            return 100.0
+
+        # Fuzzy fallback: best similarity against any single field, so long
+        # generic names ("Web Browser") don't dilute the ratio.
+        best = 0.0
+        for field in (app.display_name, app.name, app.generic_name):
+            if not field:
+                continue
+            ratio = SequenceMatcher(None, query_lower, field.casefold()).ratio()
+            if ratio >= _FUZZY_MATCH_THRESHOLD:
+                best = max(best, ratio)
+        return best * 100.0
 
     def _filter_applications(self, query: str) -> tuple[Iterator[DesktopApp], bool]:
-        """Filter applications by query and return iterator + resize hint."""
+        """Filter applications by query and return iterator + resize hint.
+
+        Matches are ranked by :meth:`_match_score` (best first); ties keep the
+        original application order.
+        """
         query_lower = query.casefold()
-        filtered_apps = [
-            app for app in self._all_apps if self._matches_query(app, query_lower)
-        ]
+        if not query_lower:
+            filtered_apps = list(self._all_apps)
+        else:
+            scored = [
+                (self._match_score(app, query_lower), app) for app in self._all_apps
+            ]
+            scored.sort(key=lambda pair: pair[0], reverse=True)
+            filtered_apps = [app for score, app in scored if score > 0]
         self._first_app = filtered_apps[0] if filtered_apps else None
         should_resize = len(filtered_apps) == len(self._all_apps)
         return iter(filtered_apps), should_resize

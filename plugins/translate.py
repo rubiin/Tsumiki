@@ -6,8 +6,13 @@ e.g. ``/translate hello in nepali``; otherwise the plugin default is used.
 
 from typing import ClassVar
 
-from utils.functions import get_http_client
-from utils.plugin_manager import LauncherPlugin, PluginResult, copy_to_clipboard
+from utils.plugin_manager import (
+    LauncherPlugin,
+    PluginCancelledError,
+    PluginResult,
+    cached_handle,
+    copy_to_clipboard,
+)
 
 _TRANSLATE_URL = "https://translate.googleapis.com/translate_a/single"
 #: Google rejects longer payloads ("400. That's an error...").
@@ -154,13 +159,15 @@ class TranslatePlugin(LauncherPlugin):
     # Each query is a network request, so wait for the user to pause typing
     # before translating instead of hitting the API on every keystroke.
     debounce_ms = 500
+    #: Session cache TTL — repeating a translation within 5 minutes is served
+    #: from memory instead of hitting Google again.
+    cache_ttl_seconds = 300
     #: Default target language code (used when the query has no "in <lang>").
     target_lang = "en"
 
     def _fetch(self, text: str, target_lang: str) -> str:
-        if self.is_cancelled():
-            return ""  # superseded before the request went out
-        response = get_http_client().get(
+        response = self.run_http(
+            "GET",
             _TRANSLATE_URL,
             params={
                 "client": "gtx",
@@ -170,8 +177,6 @@ class TranslatePlugin(LauncherPlugin):
                 "q": text,
             },
         )
-        if self.is_cancelled():
-            return ""  # superseded while in flight — skip parsing
         response.raise_for_status()
         payload = response.json()
         segments = payload[0] if isinstance(payload, list) and payload else []
@@ -179,6 +184,7 @@ class TranslatePlugin(LauncherPlugin):
             part[0] for part in segments if isinstance(part, list) and part and part[0]
         ).strip()
 
+    @cached_handle()
     def handle(self, args: str) -> list[PluginResult]:
         text = args.strip()
         if len(text) > _MAX_TEXT_LENGTH:
@@ -217,6 +223,8 @@ class TranslatePlugin(LauncherPlugin):
 
         try:
             translation = self._fetch(text, target_lang)
+        except PluginCancelledError:
+            return []  # superseded — launcher already dropped this query
         except Exception as exc:
             return [
                 PluginResult(

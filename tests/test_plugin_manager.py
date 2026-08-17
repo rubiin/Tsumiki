@@ -383,7 +383,7 @@ class CurrencyPluginTest(unittest.TestCase):
     def test_load_rates_reads_fresh_cache_without_network(self):
         self._write_cache()
         with unittest.mock.patch(
-            "plugins.currency.get_http_client",
+            "plugins.currency.http_request",
             side_effect=AssertionError("network must not be touched"),
         ):
             payload = self.load_rates()
@@ -507,23 +507,20 @@ class CurrencyPluginTest(unittest.TestCase):
                     )
                 return rows
 
-        class FlakyClient:
-            def __init__(self):
-                self.calls = 0
+        calls = {"n": 0}
 
-            def get(self, url):
-                self.calls += 1
-                if self.calls == 1:
-                    raise TimeoutError("first attempt timed out")
-                return FakeResponse()
+        def fake_http(cancelled, method, url, **kwargs):
+            calls["n"] += 1
+            if calls["n"] == 1:
+                raise TimeoutError("first attempt timed out")
+            return FakeResponse()
 
-        flaky = FlakyClient()
         with (
             unittest.mock.patch.object(self.currency_module.time, "sleep"),
-            unittest.mock.patch("plugins.currency.get_http_client", return_value=flaky),
+            unittest.mock.patch("plugins.currency.http_request", side_effect=fake_http),
         ):
             payload = self.load_rates()
-        self.assertEqual(flaky.calls, 2)
+        self.assertEqual(calls["n"], 2)
         self.assertEqual(payload["rates"]["USD"], 1.1552)
 
     def test_load_rates_rejects_sparse_download(self):
@@ -534,19 +531,10 @@ class CurrencyPluginTest(unittest.TestCase):
             def json(self):
                 return []  # malformed / empty payload
 
-        class SparseClient:
-            def __init__(self):
-                self.calls = 0
-
-            def get(self, url):
-                self.calls += 1
-                return FakeResponse()
-
-        sparse = SparseClient()
         with (
             unittest.mock.patch.object(self.currency_module.time, "sleep"),
             unittest.mock.patch(
-                "plugins.currency.get_http_client", return_value=sparse
+                "plugins.currency.http_request", return_value=FakeResponse()
             ),
             self.assertRaises(ValueError),
         ):
@@ -560,30 +548,20 @@ class CurrencyPluginTest(unittest.TestCase):
                 super().__init__("unknown")
                 self.response = type("Resp", (), {"status_code": 404})()
 
-        class BadResponse:
-            def raise_for_status(self):
-                raise ClientError()
+        calls = {"n": 0}
 
-            def json(self):
-                return {}
+        def fake_http(cancelled, method, url, **kwargs):
+            calls["n"] += 1
+            raise ClientError()
 
-        class BadClient:
-            def __init__(self):
-                self.calls = 0
-
-            def get(self, url):
-                self.calls += 1
-                return BadResponse()
-
-        bad = BadClient()
         with (
             unittest.mock.patch.object(self.currency_module.time, "sleep"),
-            unittest.mock.patch("plugins.currency.get_http_client", return_value=bad),
+            unittest.mock.patch("plugins.currency.http_request", side_effect=fake_http),
             self.assertRaises(ClientError),
         ):
             self.load_rates()
         # 4xx (e.g. a bad request) is a client error — exactly one attempt.
-        self.assertEqual(bad.calls, 1)
+        self.assertEqual(calls["n"], 1)
 
     def test_debounce_before_conversion(self):
         # /currency hits a network endpoint per query, so it must debounce
@@ -652,6 +630,201 @@ class RunSubprocessTest(unittest.TestCase):
         worker.join(timeout=5)
         self.assertIn("value", result)
         self.assertNotEqual(result["value"].returncode, 0)  # killed, not exited
+
+
+class HttpRequestTest(unittest.TestCase):
+    """Test the cancellable http_request helper (streaming + abort)."""
+
+    @staticmethod
+    def _fake_client(response):
+        """A get_http_client stand-in whose ``stream`` yields *response*."""
+
+        class FakeStream:
+            def __enter__(self):
+                return response
+
+            def __exit__(self, *exc):
+                return False
+
+        class FakeClient:
+            def stream(self, method, url, **kwargs):
+                return FakeStream()
+
+        return FakeClient()
+
+    def test_raises_when_cancelled_before_request(self):
+        from utils.plugin_manager import PluginCancelledError, http_request
+
+        with self.assertRaises(PluginCancelledError):
+            http_request(lambda: True, "GET", "https://example.com")
+
+    def test_raises_when_cancelled_mid_body(self):
+        from utils.plugin_manager import PluginCancelledError, http_request
+
+        state = {"cancelled": False}
+
+        class Response:
+            status_code = 200
+            headers: ClassVar[dict] = {}
+
+            def iter_bytes(self):
+                yield b"first chunk"
+                state["cancelled"] = True
+                yield b"second chunk"
+
+        with (
+            unittest.mock.patch(
+                "utils.plugin_manager.get_http_client",
+                return_value=self._fake_client(Response()),
+            ),
+            self.assertRaises(PluginCancelledError),
+        ):
+            http_request(lambda: state["cancelled"], "GET", "https://example.com")
+
+    def test_returns_fully_read_body_when_not_cancelled(self):
+        from utils.plugin_manager import http_request
+
+        class Response:
+            status_code = 200
+            headers: ClassVar[dict] = {}
+            request = None
+            extensions: ClassVar[dict] = {}
+
+            def iter_bytes(self):
+                yield b"hello"
+                yield b" world"
+
+        with (
+            unittest.mock.patch(
+                "utils.plugin_manager.get_http_client",
+                return_value=self._fake_client(Response()),
+            ),
+            unittest.mock.patch(
+                "utils.plugin_manager._materialize_response",
+                return_value=("materialized", "hello world"),
+            ) as mock_materialize,
+        ):
+            result = http_request(lambda: False, "GET", "https://example.com")
+        self.assertEqual(result, ("materialized", "hello world"))
+        # The helper must read the whole body before materializing, so
+        # superseded queries abort instead of parsing a partial response.
+        args, _ = mock_materialize.call_args
+        self.assertEqual(args[1], b"hello world")
+
+    def test_plugin_run_http_aborts_on_cancel(self):
+        from utils.plugin_manager import LauncherPlugin, PluginCancelledError
+
+        plugin = LauncherPlugin()
+        plugin.cancel()  # superseded before the request goes out
+        with self.assertRaises(PluginCancelledError):
+            plugin.run_http("GET", "https://example.com")
+
+
+class PluginCacheTest(unittest.TestCase):
+    """Test the session result cache on LauncherPlugin."""
+
+    def setUp(self):
+        from utils.plugin_manager import LauncherPlugin
+
+        self.plugin = LauncherPlugin()
+        self.plugin.cache_ttl_seconds = 300
+
+    def test_cache_get_put_roundtrip(self):
+        from utils.plugin_manager import _CACHE_MISS
+
+        self.assertIs(self.plugin.cache_get("k"), _CACHE_MISS)
+        self.plugin.cache_put("k", "v")
+        self.assertEqual(self.plugin.cache_get("k"), "v")
+
+    def test_cache_ttl_zero_disables(self):
+        from utils.plugin_manager import _CACHE_MISS
+
+        self.plugin.cache_ttl_seconds = 0
+        self.plugin.cache_put("k", "v")
+        self.assertIs(self.plugin.cache_get("k"), _CACHE_MISS)
+
+    def test_cache_expiry(self):
+        import time
+
+        from utils.plugin_manager import _CACHE_MISS
+
+        self.plugin.cache_put("k", "v")
+        key = next(iter(self.plugin._cache))
+        self.plugin._cache[key] = (time.monotonic() - 1, "v")  # simulate expiry
+        self.assertIs(self.plugin.cache_get("k"), _CACHE_MISS)
+        self.assertNotIn("k", self.plugin._cache)
+
+    def test_cache_evicts_oldest_over_cap(self):
+        from utils.plugin_manager import _CACHE_MAX_ENTRIES, _CACHE_MISS
+
+        for i in range(_CACHE_MAX_ENTRIES + 10):
+            self.plugin.cache_put(f"k{i}", i)
+        self.assertLessEqual(len(self.plugin._cache), _CACHE_MAX_ENTRIES)
+        # Newest entries survive; the oldest were evicted.
+        self.assertEqual(
+            self.plugin.cache_get(f"k{_CACHE_MAX_ENTRIES + 9}"), _CACHE_MAX_ENTRIES + 9
+        )
+        self.assertIs(self.plugin.cache_get("k0"), _CACHE_MISS)
+
+    def test_cached_produces_once(self):
+        state = {"n": 0}
+
+        def producer():
+            state["n"] += 1
+            return "value"
+
+        self.assertEqual(self.plugin.cached("k", producer), "value")
+        self.assertEqual(self.plugin.cached("k", producer), "value")
+        self.assertEqual(state["n"], 1)
+
+    def test_cached_handle_serves_repeat_args_from_cache(self):
+        from utils.plugin_manager import (
+            LauncherPlugin,
+            PluginResult,
+            cached_handle,
+        )
+
+        class CounterPlugin(LauncherPlugin):
+            cache_ttl_seconds = 300
+            calls = 0
+
+            @cached_handle()
+            def handle(self, args):
+                CounterPlugin.calls += 1
+                return [PluginResult(args)]
+
+        plugin = CounterPlugin()
+        self.assertEqual(plugin.handle("hello"), plugin.handle("hello"))
+        self.assertEqual(CounterPlugin.calls, 1)
+        plugin.handle("world")
+        self.assertEqual(CounterPlugin.calls, 2)  # different args miss the cache
+
+    def test_cached_handle_skips_caching_cancelled_queries(self):
+        from utils.plugin_manager import (
+            LauncherPlugin,
+            PluginResult,
+            cached_handle,
+        )
+
+        class CounterPlugin(LauncherPlugin):
+            cache_ttl_seconds = 300
+            calls = 0
+
+            @cached_handle()
+            def handle(self, args):
+                CounterPlugin.calls += 1
+                if self.is_cancelled():
+                    return []
+                return [PluginResult(args)]
+
+        plugin = CounterPlugin()
+        plugin.cancel()
+        self.assertEqual(plugin.handle("x"), [])
+        plugin._reset_cancel()
+        # PluginResult has no __eq__ — compare titles.
+        self.assertEqual([result.title for result in plugin.handle("x")], ["x"])
+        # The superseded empty result was not cached — the retry ran handle.
+        self.assertEqual(CounterPlugin.calls, 2)
 
 
 class KillPluginTest(unittest.TestCase):
@@ -1343,15 +1516,15 @@ class ShortenPluginTest(unittest.TestCase):
     """Test the bundled /shorten plugin (HTTP mocked)."""
 
     @staticmethod
-    def _fake_client(response, responses=None):
-        """Build a get_http_client stand-in returning *response* per call."""
+    def _fake_http(response, responses=None):
+        """Build a side_effect for plugins.shorten.http_request returning
+        *response* (or each of *responses* in turn)."""
         iterator = iter(responses) if responses is not None else None
 
-        class Client:
-            def get(self, url, params=None):
-                return next(iterator) if iterator is not None else response
+        def fake_http(cancelled, method, url, **kwargs):
+            return next(iterator) if iterator is not None else response
 
-        return Client()
+        return fake_http
 
     def setUp(self):
         from plugins.shorten import ShortenPlugin, normalize_url, shorten_url
@@ -1380,8 +1553,8 @@ class ShortenPluginTest(unittest.TestCase):
             text="https://is.gd/AbCdEf", raise_for_status=lambda: None
         )
         with unittest.mock.patch(
-            "plugins.shorten.get_http_client",
-            return_value=self._fake_client(response),
+            "plugins.shorten.http_request",
+            side_effect=self._fake_http(response),
         ):
             results = self.plugin.handle("https://example.com/very/long")
         self.assertEqual(results[0].data, "https://is.gd/AbCdEf")
@@ -1397,8 +1570,8 @@ class ShortenPluginTest(unittest.TestCase):
             text="https://tinyurl.com/abc123", raise_for_status=lambda: None
         )
         with unittest.mock.patch(
-            "plugins.shorten.get_http_client",
-            return_value=self._fake_client(None, responses=[error, success]),
+            "plugins.shorten.http_request",
+            side_effect=self._fake_http(None, responses=[error, success]),
         ):
             results = self.plugin.handle("https://example.com/x")
         self.assertEqual(results[0].data, "https://tinyurl.com/abc123")
@@ -1413,8 +1586,8 @@ class ShortenPluginTest(unittest.TestCase):
 
         error = SimpleNamespace(text="Error: nope", raise_for_status=lambda: None)
         with unittest.mock.patch(
-            "plugins.shorten.get_http_client",
-            return_value=self._fake_client(error),
+            "plugins.shorten.http_request",
+            side_effect=self._fake_http(error),
         ):
             results = self.plugin.handle("https://example.com/x")
         self.assertIn("failed", results[0].title.casefold())

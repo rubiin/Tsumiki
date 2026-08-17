@@ -11,11 +11,13 @@ from urllib.parse import parse_qs, urlencode, urlparse
 
 from fabric.utils import exec_shell_command_async
 
-from utils.functions import get_http_client
 from utils.plugin_manager import (
     LauncherPlugin,
+    PluginCancelledError,
     PluginResult,
+    cached_handle,
     copy_to_clipboard,
+    http_request,
 )
 
 _DDG_HTML_URL = "https://html.duckduckgo.com/html/"
@@ -91,11 +93,7 @@ def search(
     query: str, limit: int = _MAX_RESULTS, cancelled=None
 ) -> list[tuple[str, str, str]]:
     """Search DuckDuckGo and return (title, url, snippet) triples."""
-    if cancelled is not None and cancelled():
-        return []
-    response = get_http_client().get(_DDG_HTML_URL, params={"q": query})
-    if cancelled is not None and cancelled():
-        return []  # superseded while in flight — skip HTML parsing
+    response = http_request(cancelled, "GET", _DDG_HTML_URL, params={"q": query})
     response.raise_for_status()
     return parse_results(response.text, limit=limit)
 
@@ -122,7 +120,10 @@ class SearchPlugin(LauncherPlugin):
     aliases: ClassVar[list[str]] = ["s", "web"]
     # Each query is a network request — debounce like /translate.
     debounce_ms = 500
+    #: Session cache TTL — repeat searches for the same query are instant.
+    cache_ttl_seconds = 300
 
+    @cached_handle()
     def handle(self, args: str) -> list[PluginResult]:
         query = args.strip()
         if not query:
@@ -137,6 +138,8 @@ class SearchPlugin(LauncherPlugin):
             return []  # superseded before the request went out
         try:
             results = search(query, cancelled=self.is_cancelled)
+        except PluginCancelledError:
+            return []  # superseded — launcher already dropped this query
         except Exception as exc:
             return [
                 PluginResult(

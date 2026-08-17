@@ -2,17 +2,19 @@
 
 from __future__ import annotations
 
+import functools
 import importlib.util
 import inspect
 import os
 import sys
 import threading
+import time
 from contextlib import suppress
 from typing import Any, ClassVar
 
 from fabric.utils import Gio, GLib, logger
 
-from utils.functions import find_executable
+from utils.functions import find_executable, get_http_client
 
 # Module-name prefix used when importing plugin files so that a plugin file
 # can never shadow a stdlib or third-party module.
@@ -137,6 +139,45 @@ def run_subprocess(
     return _communicate_subprocess(proc, args, input=input, timeout=timeout)
 
 
+#: Maximum cached entries per plugin before the oldest are evicted.
+_CACHE_MAX_ENTRIES = 256
+
+#: Sentinel returned by :meth:`LauncherPlugin.cache_get` on a miss.
+_CACHE_MISS = object()
+
+
+def cached_handle(ttl: float | None = None):
+    """Decorator: cache a plugin's ``handle(args)`` results keyed by args.
+
+    On a hit the cached result list is returned without running ``handle``
+    again, so repeated lookups (e.g. the same /translate text, /search query
+    or /define word) are instant instead of re-hitting the network. The
+    effective TTL is *ttl* if given, else the plugin's ``cache_ttl_seconds``
+    class attribute; ``None`` or ``0`` disables caching.
+
+    A superseded query's empty result is never cached, so a cancelled
+    ``handle()`` can't shadow a real result for the same args.
+    """
+
+    def decorate(handle):
+        @functools.wraps(handle)
+        def wrapper(self, args):
+            effective_ttl = ttl if ttl is not None else self.cache_ttl_seconds
+            if effective_ttl is None or effective_ttl <= 0:
+                return handle(self, args)
+            value = self.cache_get(args)
+            if value is not _CACHE_MISS:
+                return value
+            value = handle(self, args)
+            if not self.is_cancelled():
+                self.cache_put(args, value, ttl=effective_ttl)
+            return value
+
+        return wrapper
+
+    return decorate
+
+
 class LauncherPlugin:
     """Base class for slash-command plugins (set ``name`` + ``description``)."""
 
@@ -152,6 +193,12 @@ class LauncherPlugin:
     #: debounce. Set a larger value for expensive plugins (e.g. those that
     #: spawn a subprocess like /calc) to avoid one query per keystroke.
     debounce_ms: int | None = None
+    #: Optional session-cache TTL (seconds) for ``handle()`` results, keyed
+    #: by query args. ``None`` (or ``0``) disables caching; set it on
+    #: network plugins so repeated lookups are served from memory. Combine
+    #: with the :func:`cached_handle` decorator, or use :meth:`cache_get` /
+    #: :meth:`cache_put` / :meth:`cached` directly for finer control.
+    cache_ttl_seconds: float | None = None
     #: When True, the launcher stays open after ``execute()`` (useful for
     #: converters that want to keep showing results). ``execute()`` may also
     #: return True to keep the launcher open.
@@ -160,6 +207,9 @@ class LauncherPlugin:
     def __init__(self) -> None:
         self._cancel_event = threading.Event()
         self._subprocess: Gio.Subprocess | None = None
+        #: Session cache: key -> (expires_at, value). Never cleared between
+        #: queries — repeated lookups stay fast for the whole session.
+        self._cache: dict[Any, tuple[float, Any]] = {}
 
     def handle(self, args: str) -> list[PluginResult]:
         """Return result rows for the argument string (runs on a worker thread)."""
@@ -207,8 +257,134 @@ class LauncherPlugin:
             if self._subprocess is proc:
                 self._subprocess = None
 
+    def run_http(
+        self,
+        method: str,
+        url: str,
+        *,
+        params: dict | None = None,
+        json: Any = None,
+        headers: dict | None = None,
+        timeout: float | None = None,
+    ) -> Any:
+        """Like :func:`http_request` but aborts when this plugin is cancelled."""
+        return http_request(
+            self.is_cancelled,
+            method,
+            url,
+            params=params,
+            json=json,
+            headers=headers,
+            timeout=timeout,
+        )
+
+    # -- session result cache -------------------------------------------
+
+    def cache_get(self, key: Any) -> Any:
+        """Return the cached value for *key*, or ``_CACHE_MISS`` if absent/expired."""
+        entry = self._cache.get(key)
+        if entry is None:
+            return _CACHE_MISS
+        expires_at, value = entry
+        if expires_at <= time.monotonic():
+            del self._cache[key]
+            return _CACHE_MISS
+        return value
+
+    def cache_put(self, key: Any, value: Any, ttl: float | None = None) -> None:
+        """Store *value* for *key* under the given *ttl* (or ``cache_ttl_seconds``).
+
+        Expired and oldest entries are evicted once the cache grows past
+        ``_CACHE_MAX_ENTRIES``. ``None``/``0`` TTL is a no-op.
+        """
+        ttl = ttl if ttl is not None else self.cache_ttl_seconds
+        if ttl is None or ttl <= 0:
+            return
+        self._cache[key] = (time.monotonic() + ttl, value)
+        if len(self._cache) <= _CACHE_MAX_ENTRIES:
+            return
+        now = time.monotonic()
+        for expired in [k for k, (exp, _) in self._cache.items() if exp <= now]:
+            del self._cache[expired]
+        while len(self._cache) > _CACHE_MAX_ENTRIES:
+            # dicts preserve insertion order — pop the oldest entry.
+            self._cache.pop(next(iter(self._cache)))
+
+    def cached(self, key: Any, producer, ttl: float | None = None) -> Any:
+        """Return the cached value for *key*, producing and storing it on a miss."""
+        value = self.cache_get(key)
+        if value is not _CACHE_MISS:
+            return value
+        value = producer()
+        self.cache_put(key, value, ttl=ttl)
+        return value
+
     def __repr__(self) -> str:  # pragma: no cover - debug helper
         return f"<{type(self).__name__} name={self.name!r}>"
+
+
+class PluginCancelledError(RuntimeError):
+    """Raised when a superseded query aborts an in-flight plugin operation.
+
+    ``handle()`` should catch it and return an empty list (no results to
+    show) rather than surfacing it as an error row.
+    """
+
+
+def _materialize_response(response, content: bytes) -> Any:
+    """Rebuild a fully-read ``httpx.Response`` from a streamed one."""
+    import httpx
+
+    return httpx.Response(
+        status_code=response.status_code,
+        headers=response.headers,
+        content=content,
+        request=response.request,
+        extensions=response.extensions,
+    )
+
+
+def http_request(
+    cancelled,
+    method: str,
+    url: str,
+    *,
+    params: dict | None = None,
+    json: Any = None,
+    headers: dict | None = None,
+    timeout: float | None = None,
+) -> Any:
+    """Run an HTTP request that aborts as soon as *cancelled()* is true.
+
+    The response body is streamed in chunks, so a superseded query stops
+    downloading and parsing immediately instead of running to completion
+    and being discarded. Returns a fully-read ``httpx.Response`` — ``.text``,
+    ``.json()`` and ``.raise_for_status()`` behave as usual. Raises the
+    normal httpx exceptions on failure and :class:`PluginCancelledError`
+    when the query was superseded mid-flight.
+
+    *cancelled* is a zero-arg callable returning a truthy value when the
+    query has been superseded; pass ``None`` for fire-and-forget requests.
+    """
+    if cancelled is not None and cancelled():
+        raise PluginCancelledError()
+    client = get_http_client()
+    with client.stream(
+        method,
+        url,
+        params=params,
+        json=json,
+        headers=headers,
+        timeout=timeout,
+    ) as response:
+        if cancelled is not None and cancelled():
+            raise PluginCancelledError()
+        chunks = []
+        for chunk in response.iter_bytes():
+            if cancelled is not None and cancelled():
+                raise PluginCancelledError()
+            chunks.append(chunk)
+    return _materialize_response(response, b"".join(chunks))
 
 
 def copy_to_clipboard(text: str) -> bool:
