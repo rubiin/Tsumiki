@@ -1,0 +1,17 @@
+---
+import Default from "@astrojs/starlight/components/Head.astro";
+import { ClientRouter } from "astro:transitions";
+---
+<ClientRouter />
+<script is:inline>
+	// This site ships no service worker; remove any stale registration left
+	// behind by earlier deployments or unrelated projects on this origin.
+	if ("serviceWorker" in navigator) {
+		navigator.serviceWorker.getRegistrations().then(function (regs) {
+			regs.forEach(function (reg) {
+				reg.unregister();
+			});
+		});
+	}
+</script>
+<Default {...Astro.props} />

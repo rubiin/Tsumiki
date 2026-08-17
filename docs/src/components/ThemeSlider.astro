@@ -1,0 +1,173 @@
+---
+// Replaces Starlight's theme dropdown with a light/dark slider switch.
+// State is shared via the same localStorage key ("starlight-theme") and
+// document dataset that Starlight's ThemeProvider uses.
+---
+
+<starlight-theme-slider>
+	<button
+		type="button"
+		role="switch"
+		aria-checked="true"
+		aria-label={Astro.locals.t("themeSelect.accessibleLabel")}
+		class="theme-slider"
+	>
+		<svg aria-hidden="true" class="slider-icon slider-icon-sun" width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+			<path d="M5 12a1 1 0 0 0-1-1H3a1 1 0 0 0 0 2h1a1 1 0 0 0 1-1Zm.64 5-.71.71a1 1 0 0 0 0 1.41 1 1 0 0 0 1.41 0l.71-.71A1 1 0 0 0 5.64 17ZM12 5a1 1 0 0 0 1-1V3a1 1 0 0 0-2 0v1a1 1 0 0 0 1 1Zm5.66 2.34a1 1 0 0 0 .7-.29l.71-.71a1 1 0 1 0-1.41-1.41l-.66.71a1 1 0 0 0 0 1.41 1 1 0 0 0 .66.29Zm-12-.29a1 1 0 0 0 1.41 0 1 1 0 0 0 0-1.41l-.71-.71a1.004 1.004 0 1 0-1.43 1.41l.73.71ZM21 11h-1a1 1 0 0 0 0 2h1a1 1 0 0 0 0-2Zm-2.64 6A1 1 0 0 0 17 18.36l.71.71a1 1 0 0 0 1.41 0 1 1 0 0 0 0-1.41l-.76-.66ZM12 6.5a5.5 5.5 0 1 0 5.5 5.5A5.51 5.51 0 0 0 12 6.5Zm0 9a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7Zm0 3.5a1 1 0 0 0-1 1v1a1 1 0 0 0 2 0v-1a1 1 0 0 0-1-1Z" />
+		</svg>
+		<svg aria-hidden="true" class="slider-icon slider-icon-moon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+			<path d="M21.64 13a1 1 0 0 0-1.05-.14 8.049 8.049 0 0 1-3.37.73 8.15 8.15 0 0 1-8.14-8.1 8.59 8.59 0 0 1 .25-2A1 1 0 0 0 8 2.36a10.14 10.14 0 1 0 14 11.69 1 1 0 0 0-.36-1.05Zm-9.5 6.69A8.14 8.14 0 0 1 7.08 5.22v.27a10.15 10.15 0 0 0 10.14 10.14 9.784 9.784 0 0 0 2.1-.22 8.11 8.11 0 0 1-7.18 4.32v-.04Z" />
+		</svg>
+		<span class="slider-thumb" aria-hidden="true"></span>
+	</button>
+</starlight-theme-slider>
+
+<style>
+	.theme-slider {
+		position: relative;
+		display: inline-flex;
+		align-items: center;
+		width: 56.16px;
+		height: 25.92px;
+		margin-top: 4px;
+		padding: 0;
+		border-radius: 999px;
+		border: 1px solid rgba(169, 132, 204, 0.35);
+		background: rgba(54, 55, 66, 0.55);
+		cursor: pointer;
+		transition:
+			border-color 0.25s ease,
+			box-shadow 0.25s ease,
+			background-color 0.25s ease;
+	}
+
+	[data-theme="light"] .theme-slider {
+		background: rgba(212, 207, 201, 0.5);
+	}
+
+	.theme-slider:hover {
+		border-color: var(--hyde-purple);
+		box-shadow: 0 0 12px rgba(169, 132, 204, 0.35);
+	}
+
+	.theme-slider:focus-visible {
+		outline: 2px solid var(--hyde-purple);
+		outline-offset: 2px;
+	}
+
+	.slider-thumb {
+		position: absolute;
+		top: 1.62px;
+		left: 1.62px;
+		width: 21.06px;
+		height: 21.06px;
+		border-radius: 50%;
+		background: linear-gradient(135deg, var(--hyde-purple), var(--hyde-blue));
+		box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+		transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+		pointer-events: none;
+	}
+
+	.theme-slider[aria-checked="true"] .slider-thumb {
+		transform: translateX(29.9px);
+	}
+
+	.slider-icon {
+		position: absolute;
+		top: 50%;
+		transform: translateY(-50%);
+		width: 12.87px;
+		height: 12.87px;
+		pointer-events: none;
+		z-index: 1;
+		transition:
+			color 0.25s ease,
+			opacity 0.25s ease;
+	}
+
+	.slider-icon-sun {
+		left: 4.5px;
+		color: #ffd166;
+	}
+
+	.slider-icon-moon {
+		right: 4.5px;
+		color: #c7cdf3;
+	}
+
+	/* Dim the icon for the inactive side */
+	.theme-slider[aria-checked="true"] .slider-icon-sun {
+		opacity: 0.65;
+	}
+
+	.theme-slider[aria-checked="false"] .slider-icon-moon {
+		opacity: 0.65;
+	}
+</style>
+
+<script>
+	(function () {
+		/** Key in `localStorage` to store the color theme preference at. */
+		const storageKey = "starlight-theme";
+
+		/** Coerce any JS value to a valid theme ("auto" for unknown values). */
+		const parseTheme = (theme) =>
+			theme === "auto" || theme === "dark" || theme === "light" ? theme : "auto";
+
+		/** Load the user's preference from localStorage. */
+		const loadTheme = () =>
+			parseTheme(typeof localStorage !== "undefined" && localStorage.getItem(storageKey));
+
+		/** The effective (non-auto) color scheme. */
+		const resolvedTheme = () =>
+			loadTheme() === "auto"
+				? matchMedia("(prefers-color-scheme: light)").matches
+					? "light"
+					: "dark"
+				: loadTheme();
+
+		/** Apply a theme to the document and persist it (empty string = auto). */
+		function applyTheme(theme) {
+			document.documentElement.dataset.theme =
+				theme === "auto" ? resolvedTheme() : theme;
+			if (typeof localStorage !== "undefined") {
+				localStorage.setItem(storageKey, theme === "light" || theme === "dark" ? theme : "");
+			}
+		}
+
+		function setTheme(dark) {
+			applyTheme(dark ? "dark" : "light");
+			document.querySelectorAll("starlight-theme-slider").forEach((el) => el.sync());
+		}
+
+		// Keep sliders in sync when the OS scheme changes while on "auto".
+		matchMedia("(prefers-color-scheme: light)").addEventListener("change", () => {
+			if (loadTheme() === "auto") {
+				document.documentElement.dataset.theme = resolvedTheme();
+				document.querySelectorAll("starlight-theme-slider").forEach((el) => el.sync());
+			}
+		});
+
+		class StarlightThemeSlider extends HTMLElement {
+			connectedCallback() {
+				if (this._initialized) return;
+				this._initialized = true;
+				applyTheme(loadTheme());
+				this.sync();
+				this.querySelector("button")?.addEventListener("click", () =>
+					setTheme(resolvedTheme() !== "dark"),
+				);
+			}
+
+			sync() {
+				const btn = this.querySelector("button");
+				if (btn) btn.setAttribute("aria-checked", String(resolvedTheme() === "dark"));
+			}
+		}
+
+		// Guard against double registration if the script is ever re-evaluated.
+		if (!customElements.get("starlight-theme-slider")) {
+			customElements.define("starlight-theme-slider", StarlightThemeSlider);
+		}
+	})();
+</script>

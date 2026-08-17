@@ -1,0 +1,26 @@
+---
+// Thin reading-progress bar pinned to the top of the page.
+// `data-astro-rerun` re-runs this after view-transition navigations so the
+// swapped-in page's bar gets updated too (listeners are bound only once).
+---
+<div class="scroll-progress" aria-hidden="true"></div>
+<script is:inline data-astro-rerun>
+	(function () {
+		function update() {
+			var bar = document.querySelector(".scroll-progress");
+			if (!bar) return;
+			var doc = document.documentElement;
+			var max = doc.scrollHeight - window.innerHeight;
+			var pct = max > 0 ? Math.min(window.scrollY / max, 1) : 0;
+			bar.style.transform = "scaleX(" + pct + ")";
+		}
+
+		update();
+
+		if (!window.__tsumikiProgressBound) {
+			window.__tsumikiProgressBound = true;
+			window.addEventListener("scroll", update, { passive: true });
+			window.addEventListener("resize", update, { passive: true });
+		}
+	})();
+</script>

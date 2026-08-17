@@ -12,6 +12,15 @@ export default defineConfig({
 	integrations: [
 		starlight({
 			title: "Tsumiki",
+			lastUpdated: true,
+			components: {
+				// Enable smooth view-transition page loads.
+				Head: "./src/components/Head.astro",
+				// Adds the reading-progress bar + splash attribute bridge.
+				PageFrame: "./src/components/PageFrame.astro",
+				// Replace the theme dropdown with a light/dark slider.
+				ThemeSelect: "./src/components/ThemeSlider.astro",
+			},
 			customCss: [
 				// Path to our custom CSS file
 				"./src/styles/custom.css",

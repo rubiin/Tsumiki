@@ -1,7 +1,11 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
+
 /* Custom styles for HyDE site - ONLY for main page eyecandy and consistent colors */
 
 /* HyDE Brand Colors - Global */
 :root {
+	/* Typography: premium Inter stack (Arabic/CJK fall back per-glyph to system fonts) */
+	--sl-font: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 	--hyde-light: #d9d9d9;
 	--hyde-dark: #363742;
 	--hyde-cream: #d4cfc9;
@@ -53,7 +57,8 @@ a:hover {
 
 /* Full page background for splash template */
 body:has([data-template="splash"]),
-html:has([data-template="splash"]) {
+html:has([data-template="splash"]),
+body[data-template="splash"] {
 	min-height: 100vh;
 }
 
@@ -280,24 +285,28 @@ html:has([data-template="splash"]) {
 	height: 2rem !important;
 }
 
-/* Dark theme splash page background */
+/* Dark theme splash page background + subtle grid texture */
 [data-theme="dark"] [data-template="splash"] {
-	background: linear-gradient(
-		135deg,
-		var(--hyde-dark) 0%,
-		#2a2b35 50%,
-		var(--hyde-dark) 100%
-	);
+	background-image:
+		linear-gradient(rgba(212, 207, 201, 0.045) 1px, transparent 1px),
+		linear-gradient(90deg, rgba(212, 207, 201, 0.045) 1px, transparent 1px),
+		linear-gradient(135deg, var(--hyde-dark) 0%, #2a2b35 50%, var(--hyde-dark) 100%);
+	background-size:
+		44px 44px,
+		44px 44px,
+		auto;
 }
 
-/* Light theme splash page background */
+/* Light theme splash page background + subtle grid texture */
 [data-theme="light"] [data-template="splash"] {
-	background: linear-gradient(
-		135deg,
-		var(--hyde-cream) 0%,
-		#f0ebe5 50%,
-		var(--hyde-cream) 100%
-	);
+	background-image:
+		linear-gradient(rgba(54, 55, 66, 0.05) 1px, transparent 1px),
+		linear-gradient(90deg, rgba(54, 55, 66, 0.05) 1px, transparent 1px),
+		linear-gradient(135deg, var(--hyde-cream) 0%, #f0ebe5 50%, var(--hyde-cream) 100%);
+	background-size:
+		44px 44px,
+		44px 44px,
+		auto;
 }
 
 /* Animated background pattern for entire splash page */
@@ -512,7 +521,7 @@ html:has([data-template="splash"]) {
 	background-clip: text;
 	-webkit-background-clip: text;
 	-webkit-text-fill-color: transparent;
-	animation: hydeGradient 4s ease-in-out infinite;
+	animation: heroEntrance 0.9s ease-out both, hydeGradient 4s ease-in-out infinite;
 	letter-spacing: 0.1em;
 	z-index: 3;
 	position: relative;
@@ -551,7 +560,7 @@ html:has([data-template="splash"]) {
 	font-size: 2.5rem;
 	margin: 0;
 	padding: 0;
-	animation: taglineGlow 3s ease-in-out infinite;
+	animation: taglineGlow 3s ease-in-out infinite, heroEntrance 0.9s ease-out 0.15s both;
 	font-weight: 300;
 	letter-spacing: 0.05em;
 	z-index: 3;
@@ -660,18 +669,21 @@ html:has([data-template="splash"]) {
 	background: linear-gradient(135deg, var(--hyde-rose), var(--hyde-purple));
 }
 
-.hero .actions a[data-variant="minimal"] {
+.hero .actions a[data-variant="minimal"],
+.hero .actions a.minimal {
 	background: transparent !important;
 	border: 2px solid var(--hyde-blue);
 	color: var(--hyde-blue);
 }
 
-[data-theme="dark"] .hero .actions a[data-variant="minimal"]:hover {
+[data-theme="dark"] .hero .actions a[data-variant="minimal"]:hover,
+[data-theme="dark"] .hero .actions a.minimal:hover {
 	background: var(--hyde-blue) !important;
 	color: var(--hyde-dark);
 }
 
-[data-theme="light"] .hero .actions a[data-variant="minimal"]:hover {
+[data-theme="light"] .hero .actions a[data-variant="minimal"]:hover,
+[data-theme="light"] .hero .actions a.minimal:hover {
 	background: var(--hyde-blue) !important;
 	color: white;
 }
@@ -848,41 +860,51 @@ html:has([data-template="splash"]) {
 
 /* ========== HOME PAGE ANIMATIONS ========== */
 
-/* --- Card entrance: slide up + fade in with stagger --- */
-[data-template="splash"] .card,
-[data-template="splash"] article.card {
-	animation: cardEntrance 0.6s ease-out both;
+/* --- Scroll-reveal: below-fold content starts hidden only when JS is active --- */
+.js-reveal [data-template="splash"] h2,
+.js-reveal [data-template="splash"] .card,
+.js-reveal [data-template="splash"] article.card,
+.js-reveal [data-template="splash"] .showcase img,
+.js-reveal [data-template="splash"] .highlights li {
+	opacity: 0;
+	transform: translateY(30px);
+	transition:
+		opacity 0.7s ease var(--reveal-delay, 0ms),
+		transform 0.7s ease var(--reveal-delay, 0ms);
 }
 
-[data-template="splash"] .card:nth-child(1),
-[data-template="splash"] article.card:nth-child(1) {
-	animation-delay: 0.1s;
+.js-reveal [data-template="splash"] .is-visible {
+	opacity: 1;
+	transform: none;
 }
 
-[data-template="splash"] .card:nth-child(2),
-[data-template="splash"] article.card:nth-child(2) {
-	animation-delay: 0.2s;
+/* Keep hover lifts working after reveal (hover must beat the reveal transform) */
+.js-reveal [data-template="splash"] .showcase img.is-visible:hover {
+	transform: translateY(-6px) scale(1.02);
 }
 
-[data-template="splash"] .card:nth-child(3),
-[data-template="splash"] article.card:nth-child(3) {
-	animation-delay: 0.3s;
+.js-reveal [data-template="splash"] .highlights li.is-visible:hover {
+	transform: translateY(-4px);
 }
 
-[data-template="splash"] .card:nth-child(4),
-[data-template="splash"] article.card:nth-child(4) {
-	animation-delay: 0.4s;
+/* --- Card sheen sweep on hover --- */
+[data-template="splash"] .card::after,
+[data-template="splash"] article.card::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 45%;
+	height: 100%;
+	background: linear-gradient(105deg, transparent, rgba(255, 255, 255, 0.09), transparent);
+	transform: translateX(-160%) skewX(-20deg);
+	transition: transform 0.7s ease;
+	pointer-events: none;
 }
 
-@keyframes cardEntrance {
-	from {
-		opacity: 0;
-		transform: translateY(40px) scale(0.96);
-	}
-	to {
-		opacity: 1;
-		transform: translateY(0) scale(1);
-	}
+[data-template="splash"] .card:hover::after,
+[data-template="splash"] article.card:hover::after {
+	transform: translateX(320%) skewX(-20deg);
 }
 
 /* --- Card icon gentle float --- */
@@ -915,26 +937,16 @@ html:has([data-template="splash"]) {
 	}
 }
 
-/* --- Showcase image entrance: staggered fade-in --- */
-.showcase img {
-	animation: imageEntrance 0.8s ease-out both;
+/* --- Card icon hover: springy lift + glow (replaces the float while hovering) --- */
+[data-template="splash"] .card:hover .icon,
+[data-template="splash"] article.card:hover .icon {
+	animation: iconHover 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
 
-.showcase img:nth-child(1) { animation-delay: 0.1s; }
-.showcase img:nth-child(2) { animation-delay: 0.2s; }
-.showcase img:nth-child(3) { animation-delay: 0.3s; }
-.showcase img:nth-child(4) { animation-delay: 0.4s; }
-.showcase img:nth-child(5) { animation-delay: 0.5s; }
-.showcase img:nth-child(6) { animation-delay: 0.6s; }
-
-@keyframes imageEntrance {
-	from {
-		opacity: 0;
-		transform: translateY(30px) scale(0.97);
-	}
+@keyframes iconHover {
 	to {
-		opacity: 1;
-		transform: translateY(0) scale(1);
+		transform: scale(1.18) translateY(-4px);
+		filter: drop-shadow(0 4px 10px rgba(169, 132, 204, 0.45));
 	}
 }
 
@@ -947,12 +959,31 @@ html:has([data-template="splash"]) {
 }
 
 /* --- Hero primary button subtle pulse --- */
-.hero .actions a:not([data-variant="minimal"]) {
+.hero .actions a:not([data-variant="minimal"]):not(.minimal) {
 	animation: buttonPulse 3s ease-in-out infinite;
 }
 
-.hero .actions a:not([data-variant="minimal"]):hover {
+.hero .actions a:not([data-variant="minimal"]):not(.minimal):hover {
 	animation: none;
+}
+
+/* Press + keyboard-focus states for hero actions */
+.hero .actions a:active {
+	transform: translateY(-1px) scale(0.97);
+}
+
+.hero .actions a:focus-visible {
+	outline: 2px solid var(--hyde-purple);
+	outline-offset: 3px;
+}
+
+/* Slide the action icon on hover */
+.hero .actions a svg {
+	transition: transform 0.25s ease;
+}
+
+.hero .actions a:hover svg {
+	transform: translateX(3px);
 }
 
 @keyframes buttonPulse {
@@ -964,20 +995,20 @@ html:has([data-template="splash"]) {
 	}
 }
 
-/* --- Section heading slide-in (combined with existing gradient) --- */
-[data-template="splash"] h2 {
-	animation: headingSlideIn 0.8s ease-out both, hydeGradient 4s ease-in-out infinite;
-}
-
-@keyframes headingSlideIn {
+/* --- Hero entrance: staggered fade-up on load --- */
+@keyframes heroEntrance {
 	from {
 		opacity: 0;
-		transform: translateX(-30px);
+		transform: translateY(24px);
 	}
 	to {
 		opacity: 1;
-		transform: translateX(0);
+		transform: translateY(0);
 	}
+}
+
+.hero .actions {
+	animation: heroEntrance 0.9s ease-out 0.3s both;
 }
 
 /* --- Description paragraph fade-in --- */
@@ -1000,6 +1031,148 @@ html:has([data-template="splash"]) {
 
 /* ========== END MAIN PAGE ONLY STYLES ========== */
 
+/* ========== SUBTLE EFFECTS FOR ALL OTHER (NON-SPLASH) PAGES ========== */
+
+/* Sticky header: frosted glass + tinted hairline */
+header.header {
+	background: color-mix(in srgb, var(--sl-color-bg-nav) 82%, transparent);
+	backdrop-filter: blur(14px);
+	-webkit-backdrop-filter: blur(14px);
+	border-bottom: 1px solid rgba(169, 132, 204, 0.15);
+}
+
+/* Page content gently fades in on load */
+html:not([data-has-hero]) .main-frame {
+	animation: pageFadeIn 0.45s ease-out both;
+}
+
+@keyframes pageFadeIn {
+	from {
+		opacity: 0;
+		transform: translateY(8px);
+	}
+	to {
+		opacity: 1;
+		transform: none;
+	}
+}
+
+/* Animated gradient underline on section headings */
+html:not([data-has-hero]) .content-panel h2,
+html:not([data-has-hero]) .content-panel h3 {
+	position: relative;
+	padding-bottom: 0.35rem;
+}
+
+html:not([data-has-hero]) .content-panel h2::after,
+html:not([data-has-hero]) .content-panel h3::after {
+	content: "";
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	width: 3.5rem;
+	height: 3px;
+	border-radius: 2px;
+	background: linear-gradient(90deg, var(--hyde-purple), var(--hyde-blue), var(--hyde-rose));
+	background-size: 200% 100%;
+	animation: underlineShift 4s ease-in-out infinite;
+}
+
+@keyframes underlineShift {
+	0%, 100% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+}
+
+/* Admonitions: subtle lift and accent glow on hover */
+.starlight-aside {
+	transition:
+		transform 0.25s ease,
+		box-shadow 0.25s ease,
+		border-color 0.25s ease;
+}
+
+.starlight-aside:hover {
+	transform: translateY(-2px);
+	border-color: var(--hyde-purple);
+	box-shadow: 0 8px 24px rgba(169, 132, 204, 0.15);
+}
+
+/* Table rows: gentle highlight on hover */
+.content-panel table tbody tr {
+	transition: background-color 0.2s ease;
+}
+
+.content-panel table tbody tr:hover {
+	background: rgba(169, 132, 204, 0.07);
+}
+
+/* Code blocks: soft glow on hover */
+.content-panel pre {
+	transition:
+		border-color 0.25s ease,
+		box-shadow 0.25s ease;
+}
+
+.content-panel pre:hover {
+	border-color: var(--hyde-purple);
+	box-shadow: 0 4px 20px rgba(169, 132, 204, 0.18);
+}
+
+/* ========== END SUBTLE EFFECTS FOR OTHER PAGES ========== */
+
+/* ========== GLOBAL POLISH ========== */
+
+/* Smooth in-page anchor scrolling */
+html {
+	scroll-behavior: smooth;
+}
+
+/* Reading progress bar pinned to the top of the page */
+.scroll-progress {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	height: 3px;
+	transform: scaleX(0);
+	transform-origin: left center;
+	z-index: 60;
+	pointer-events: none;
+	background: linear-gradient(90deg, var(--hyde-purple), var(--hyde-blue), var(--hyde-rose));
+}
+
+[dir="rtl"] .scroll-progress {
+	transform-origin: right center;
+}
+
+/* Hide the progress bar on splash landing pages */
+[data-template="splash"] .scroll-progress {
+	display: none;
+}
+
+/* Subtle ambient glows behind regular page content */
+html:not([data-has-hero]) body {
+	background-image:
+		radial-gradient(600px 420px at 8% -4%, rgba(169, 132, 204, 0.07), transparent 65%),
+		radial-gradient(700px 480px at 102% 12%, rgba(144, 150, 182, 0.08), transparent 65%),
+		radial-gradient(520px 420px at 50% 112%, rgba(200, 160, 158, 0.05), transparent 65%);
+}
+
+/* Table of contents link hover polish */
+starlight-toc a {
+	transition: color 0.2s ease;
+}
+
+starlight-toc a:hover {
+	color: var(--hyde-purple);
+}
+
+/* ========== END GLOBAL POLISH ========== */
+
 /* Performance optimization - disable animations for users who prefer reduced motion */
 @media (prefers-reduced-motion: reduce) {
 	.hero *,
@@ -1021,6 +1194,28 @@ html:has([data-template="splash"]) {
 
 	.showcase img {
 		transform: none !important;
+	}
+
+	/* Also disable the subtle effects on all other pages */
+	html:not([data-has-hero]) .main-frame,
+	html:not([data-has-hero]) h2::after,
+	html:not([data-has-hero]) h3::after,
+	html:not([data-has-hero]) .starlight-aside,
+	html:not([data-has-hero]) .content-panel pre,
+	html:not([data-has-hero]) .content-panel table tbody tr {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+	}
+
+	/* Disable view transitions and smooth scrolling */
+	::view-transition-old(root),
+	::view-transition-new(root) {
+		animation: none;
+	}
+
+	html {
+		scroll-behavior: auto;
 	}
 }
 
@@ -1089,45 +1284,80 @@ nav.sidebar a:hover {
 
 /* ========== END ACTIVE SIDEBAR ITEM STYLING ========== */
 
-/* ========== CUSTOM THEME TOGGLE ========== */
-/* Subtle HyDE color theming for Starlight's built-in theme toggle */
+/* ========== LANGUAGE DROPDOWN REVAMP ========== */
+/* Pill trigger sized to match the theme slider (26px tall, same border/glow) */	starlight-lang-select label {
+		--sl-label-icon-size: 0.75rem;
+		--sl-caret-size: 0.875rem;
+		--sl-inline-padding: 0.4rem;		height: 25.92px;
+		padding: 0;
+		margin-top: 2px;
+		flex-shrink: 0;
+	border-radius: 999px;
+	border: 1px solid rgba(169, 132, 204, 0.35);
+	background: rgba(54, 55, 66, 0.55);
+	transition:
+		border-color 0.25s ease,
+		box-shadow 0.25s ease,
+		background-color 0.25s ease;
+}
 
-/* Icon color — brand tint without changing layout */
-starlight-theme-select .icon {
+[data-theme="light"] starlight-lang-select label {
+	background: rgba(212, 207, 201, 0.5);
+}
+
+starlight-lang-select label:hover,
+starlight-lang-select label:focus-within {
+	border-color: var(--hyde-purple);
+	box-shadow: 0 0 12px rgba(169, 132, 204, 0.35);
+}
+
+starlight-lang-select select {
+	padding-block: 0;
+	width: 8em;
+	font-size: 0.875rem;
+	/* The native <select> is rectangular; suppress its outline so the
+	   pill-shaped :focus-within glow on the label is the only indicator. */
+	outline: none;
+}
+
+starlight-lang-select select:focus {
+	outline: none;
+}
+
+starlight-lang-select .icon {
 	color: var(--hyde-purple);
-	transition: color 0.3s ease;
 }
 
-starlight-theme-select:hover .icon {
-	color: var(--hyde-blue);
+/* ========== END LANGUAGE DROPDOWN REVAMP ========== */
+
+/* ========== HEADER CONTROL ALIGNMENT ========== */
+/* All header interactive controls share one height and pill language */
+
+/* Search button: keep Starlight's native look, but align the height */
+site-search button[data-open-modal] {
+	height: 32px;
 }
 
-[data-theme="dark"] starlight-theme-select .icon {
-	color: var(--hyde-blue);
+/* Social icons: equal 32px circles with soft hover */
+.social-icons a {
+	width: 32px;
+	height: 32px;
+	padding: 0;
+	justify-content: center;
+	align-items: center;
+	border-radius: 999px;
+	transition:
+		color 0.25s ease,
+		background-color 0.25s ease,
+		box-shadow 0.25s ease;
 }
 
-[data-theme="dark"] starlight-theme-select:hover .icon {
-	color: var(--hyde-purple);
+.social-icons a:hover {
+	background-color: rgba(169, 132, 204, 0.12);
+	box-shadow: 0 0 10px rgba(169, 132, 204, 0.25);
 }
 
-[data-theme="light"] starlight-theme-select .icon {
-	color: var(--hyde-blue);
-}
-
-[data-theme="light"] starlight-theme-select:hover .icon {
-	color: var(--hyde-purple);
-}
-
-/* Subtle glow on hover — no layout changes */
-starlight-theme-select {
-	transition: filter 0.3s ease;
-}
-
-starlight-theme-select:hover {
-	filter: drop-shadow(0 0 8px rgba(169, 132, 204, 0.4));
-}
-
-/* ========== END CUSTOM THEME TOGGLE ========== */
+/* ========== END HEADER CONTROL ALIGNMENT ========== */
 
 /* Latest release inline layout in introduction */
 .latest-release {

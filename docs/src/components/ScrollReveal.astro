@@ -1,0 +1,54 @@
+---
+// Scroll-triggered reveal animations for splash landing pages.
+// Content below the fold fades/slides in as it enters the viewport instead
+// of animating on page load. Falls back to fully visible content when JS is
+// disabled or the user prefers reduced motion.
+// `data-astro-rerun` re-runs this after view-transition navigations so the
+// swapped-in landing page gets its reveal observers attached too.
+---
+<script is:inline data-astro-rerun>
+	(function () {
+		function init() {
+			var prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+			var targets = Array.from(
+				document.querySelectorAll(
+					[
+						'[data-template="splash"] h2',
+						'[data-template="splash"] .card',
+						'[data-template="splash"] article.card',
+						'[data-template="splash"] .showcase img',
+						'[data-template="splash"] .highlights li',
+					].join(", "),
+				),
+			);
+
+			// Without this class the CSS keeps everything visible.
+			if (prefersReduced || !targets.length) return;
+			document.documentElement.classList.add("js-reveal");
+
+			var observer = new IntersectionObserver(
+				function (entries) {
+					entries.forEach(function (entry) {
+						if (!entry.isIntersecting) return;
+						entry.target.classList.add("is-visible");
+						observer.unobserve(entry.target);
+					});
+				},
+				{ threshold: 0.15, rootMargin: "0px 0px -40px 0px" },
+			);
+
+			targets.forEach(function (el, i) {
+				// Small stagger so grouped elements reveal in sequence.
+				el.style.setProperty("--reveal-delay", String(Math.min(i % 8, 7) * 70) + "ms");
+				observer.observe(el);
+			});
+		}
+
+		if (document.readyState === "loading") {
+			document.addEventListener("DOMContentLoaded", init);
+		} else {
+			init();
+		}
+	})();
+</script>

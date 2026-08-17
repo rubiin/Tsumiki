@@ -1,0 +1,24 @@
+---
+import Default from "@astrojs/starlight/components/PageFrame.astro";
+import ScrollProgress from "./ScrollProgress.astro";
+---
+<script is:inline data-astro-rerun>
+	// Starlight marks hero/splash pages with `data-has-hero` on <html>, but the
+	// site's splash styling keys off `data-template="splash"` on <body>.
+	// Set/remove it deterministically so the attribute survives view transitions.
+	// `data-astro-rerun` re-runs this after view-transition navigations.
+	(function () {
+		var html = document.documentElement;
+		if (html.hasAttribute("data-has-hero")) {
+			document.body.setAttribute("data-template", "splash");
+		} else {
+			document.body.removeAttribute("data-template");
+		}
+	})();
+</script>
+<ScrollProgress />
+<Default {...Astro.props}>
+	<slot name="header" slot="header" />
+	<slot name="sidebar" slot="sidebar" />
+	<slot />
+</Default>
