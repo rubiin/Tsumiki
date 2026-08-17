@@ -151,9 +151,9 @@ def cached_handle(ttl: float | None = None):
 
     On a hit the cached result list is returned without running ``handle``
     again, so repeated lookups (e.g. the same /translate text, /search query
-    or /define word) are instant instead of re-hitting the network. The
-    effective TTL is *ttl* if given, else the plugin's ``cache_ttl_seconds``
-    class attribute; ``None`` or ``0`` disables caching.
+    or /define word) skip the network call. The effective TTL is *ttl* if
+    given, else the plugin's ``cache_ttl_seconds`` class attribute;
+    ``None`` or ``0`` disables caching.
 
     A superseded query's empty result is never cached, so a cancelled
     ``handle()`` can't shadow a real result for the same args.
@@ -195,8 +195,8 @@ class LauncherPlugin:
     debounce_ms: int | None = None
     #: Optional session-cache TTL (seconds) for ``handle()`` results, keyed
     #: by query args. ``None`` (or ``0``) disables caching; set it on
-    #: network plugins so repeated lookups are served from memory. Combine
-    #: with the :func:`cached_handle` decorator, or use :meth:`cache_get` /
+    #: network plugins to cache repeat lookups. Combine with the
+    #: :func:`cached_handle` decorator, or use :meth:`cache_get` /
     #: :meth:`cache_put` / :meth:`cached` directly for finer control.
     cache_ttl_seconds: float | None = None
     #: When True, the launcher stays open after ``execute()`` (useful for
@@ -207,8 +207,7 @@ class LauncherPlugin:
     def __init__(self) -> None:
         self._cancel_event = threading.Event()
         self._subprocess: Gio.Subprocess | None = None
-        #: Session cache: key -> (expires_at, value). Never cleared between
-        #: queries — repeated lookups stay fast for the whole session.
+        #: Session cache: key -> (expires_at, value).
         self._cache: dict[Any, tuple[float, Any]] = {}
 
     def handle(self, args: str) -> list[PluginResult]:
@@ -307,7 +306,6 @@ class LauncherPlugin:
         for expired in [k for k, (exp, _) in self._cache.items() if exp <= now]:
             del self._cache[expired]
         while len(self._cache) > _CACHE_MAX_ENTRIES:
-            # dicts preserve insertion order — pop the oldest entry.
             self._cache.pop(next(iter(self._cache)))
 
     def cached(self, key: Any, producer, ttl: float | None = None) -> Any:

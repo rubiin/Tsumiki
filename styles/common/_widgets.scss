@@ -57,7 +57,6 @@
 }
 
 /// Generate widget-shell blocks for simple widgets (border + optional nerd-icon only).
-/// Widgets with extra child styles (network_usage, mpris, ocr) defined separately below.
 $widget-shell-widgets: (
   (
     "window_count" // 3-param widgets (no icon/spacing)

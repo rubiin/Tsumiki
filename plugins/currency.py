@@ -276,7 +276,7 @@ class CurrencyPlugin(LauncherPlugin):
         try:
             rate, date = fetch_rate(from_code, to_code, cancelled=self.is_cancelled)
         except _DownloadCancelledError:
-            return []  # superseded — launcher already dropped this query
+            return []
         except Exception as exc:
             return [
                 PluginResult(

@@ -354,7 +354,6 @@
 }
 
 /// Mixin for the overamplified/muted slider state colors.
-/// Used by OSD, quick settings and the settings GUI sliders.
 /// @param {Boolean} $self - When true, use `&.class` (class on the widget itself,
 ///   as in quick settings) instead of `.class` descendant selectors.
 @mixin slider-states($self: false) {
@@ -380,7 +379,6 @@
 }
 
 /// Standard widget hover state: accent-purple background + dark text,
-/// optionally darkening the panel icon to match.
 /// @param {Boolean} $icon - Also set `.panel-font-icon` color to the dark text color
 @mixin widget-hover($icon: false) {
   @extend %widget-hover;

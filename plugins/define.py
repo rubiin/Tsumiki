@@ -163,7 +163,7 @@ class DefinePlugin(LauncherPlugin):
     # Each query opens a TCP connection — debounce like the other network
     # plugins so we don't look the word up on every keystroke.
     debounce_ms = 500
-    #: Definitions barely change — cache them for the session (1 hour).
+    #: Session cache TTL — definitions rarely change.
     cache_ttl_seconds = 3600
 
     @cached_handle()
@@ -185,7 +185,7 @@ class DefinePlugin(LauncherPlugin):
         try:
             blocks = query_dict(word, database, cancelled=self.is_cancelled)
         except PluginCancelledError:
-            return []  # superseded — launcher already dropped this query
+            return []
         except Exception as exc:
             return [
                 PluginResult(

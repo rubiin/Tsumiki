@@ -159,8 +159,7 @@ class TranslatePlugin(LauncherPlugin):
     # Each query is a network request, so wait for the user to pause typing
     # before translating instead of hitting the API on every keystroke.
     debounce_ms = 500
-    #: Session cache TTL — repeating a translation within 5 minutes is served
-    #: from memory instead of hitting Google again.
+    #: Session cache TTL — repeat translations skip the network.
     cache_ttl_seconds = 300
     #: Default target language code (used when the query has no "in <lang>").
     target_lang = "en"
@@ -224,7 +223,7 @@ class TranslatePlugin(LauncherPlugin):
         try:
             translation = self._fetch(text, target_lang)
         except PluginCancelledError:
-            return []  # superseded — launcher already dropped this query
+            return []
         except Exception as exc:
             return [
                 PluginResult(

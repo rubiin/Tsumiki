@@ -34,7 +34,6 @@ from utils.widget_settings import BarConfig
 _PLUGIN_DEBOUNCE_MS = 150
 
 #: Minimum SequenceMatcher ratio for a fuzzy (non-substring) app match.
-#: Below this the query is considered too different to be a match.
 _FUZZY_MATCH_THRESHOLD = 0.6
 
 
@@ -44,7 +43,7 @@ class LauncherConfig:
     # Only essential constants
     DEFAULT_WIDTH = 280
     DEFAULT_HEIGHT = 320
-    DEFAULT_ICON_SIZE = 35
+    DEFAULT_ICON_SIZE = 24
     DEFAULT_GRID_COLUMNS = 3
     DEFAULT_GRID_SPACING = 12
     MIN_GRID_ITEM_SIZE = 84
@@ -528,15 +527,13 @@ class Launcher(PopupWindow):
             + (app.generic_name or "")
         ).casefold()
 
-        # Substring is the strongest signal — keep the old behavior on top.
         if query_lower in text:
             idx = text.find(query_lower)
             if idx == 0 or (idx > 0 and text[idx - 1].isspace()):
                 return 110.0  # starts a word (e.g. "fire" finds "Firefox")
             return 100.0
 
-        # Fuzzy fallback: best similarity against any single field, so long
-        # generic names ("Web Browser") don't dilute the ratio.
+        # Fuzzy fallback: per-field, so long generic names don't dilute it.
         best = 0.0
         for field in (app.display_name, app.name, app.generic_name):
             if not field:

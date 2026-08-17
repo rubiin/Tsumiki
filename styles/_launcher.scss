@@ -3,8 +3,6 @@
 @use "variable";
 @use "common";
 
-// Consistent micro-interaction easing, matching the rest of the bar
-// (buttons-transition and notifications both use ~150ms ease-in-out).
 $launcher-transition:
   background-color 150ms ease-in-out,
   color 150ms ease-in-out;
@@ -12,6 +10,7 @@ $launcher-transition:
 .launcher-button {
   border-radius: 10px;
   transition: $launcher-transition;
+  padding: 5px 20px;
 
   #icon {
     -gtk-icon-effect: highlight;

@@ -120,7 +120,7 @@ class SearchPlugin(LauncherPlugin):
     aliases: ClassVar[list[str]] = ["s", "web"]
     # Each query is a network request — debounce like /translate.
     debounce_ms = 500
-    #: Session cache TTL — repeat searches for the same query are instant.
+    #: Session cache TTL — repeat searches skip the network.
     cache_ttl_seconds = 300
 
     @cached_handle()
@@ -139,7 +139,7 @@ class SearchPlugin(LauncherPlugin):
         try:
             results = search(query, cancelled=self.is_cancelled)
         except PluginCancelledError:
-            return []  # superseded — launcher already dropped this query
+            return []
         except Exception as exc:
             return [
                 PluginResult(

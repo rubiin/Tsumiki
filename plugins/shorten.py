@@ -64,7 +64,7 @@ class ShortenPlugin(LauncherPlugin):
     aliases: ClassVar[list[str]] = ["short", "tiny"]
     # Each query is a network request — debounce like the other plugins.
     debounce_ms = 500
-    #: Short URLs are permanent — cache them for the session (1 hour).
+    #: Session cache TTL — short URLs are permanent.
     cache_ttl_seconds = 3600
 
     @cached_handle()
@@ -91,7 +91,7 @@ class ShortenPlugin(LauncherPlugin):
             try:
                 short = shorten_url(url, provider, cancelled=self.is_cancelled)
             except PluginCancelledError:
-                return []  # superseded — launcher already dropped this query
+                return []
             except Exception as exc:
                 errors.append(f"{provider}: {exc}")
                 continue
