@@ -10,12 +10,7 @@ from ..osd import GenericOSDContainer
 
 
 class LockkeysOSDContainer(GenericOSDContainer):
-    """OSD for capslock and numlock state.
-
-    Driven by Hyprland ``event::activelayout`` — queries lock state
-    asynchronously via ``j/devices`` when the event fires, instead of
-    polling every 200ms.
-    """
+    """OSD for capslock/numlock state, driven by Hyprland activelayout events."""
 
     __gsignals__: ClassVar = {
         "locks-changed": (GObject.SignalFlags.RUN_FIRST, None, ())

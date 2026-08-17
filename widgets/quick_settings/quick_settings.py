@@ -328,10 +328,7 @@ class QuickSettingsMenu(Box):
             else:
                 sliders_box.add(slider_cls())
 
-        # Per-application audio controls revealed by the volume slider chevron.
-        # The submenu sits in the sliders column right below the volume
-        # slider; the chevron finds it via the parent walk in
-        # AudioSlider.on_button_click.
+        # Per-app audio submenu, revealed by the volume slider's chevron.
         if "volume" in controls_config.get("sliders", []):
             self.audio_submenu = AudioSubMenu()
             sliders_box.audio_submenu = self.audio_submenu

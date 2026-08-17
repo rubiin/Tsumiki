@@ -1,39 +1,4 @@
-"""Plugin system for the app launcher slash commands.
-
-Plugins are plain Python files (or packages) placed inside the launcher's
-plugins directory — by default ``<tsumiki-config>/plugins`` (overridable via
-``modules.launcher.plugins_dir``). Each plugin subclasses
-:class:`LauncherPlugin` and is registered under its ``name`` (used as the
-slash command, e.g. ``/calc``) together with any aliases.
-
-Example::
-
-    # ~/.config/tsumiki/plugins/hello.py
-    from utils.plugin_manager import LauncherPlugin, PluginResult, copy_to_clipboard
-
-    class HelloPlugin(LauncherPlugin):
-        name = "hello"
-        description = "Say hello to someone"
-        icon = "face-smile-symbolic"
-
-        def handle(self, args: str) -> list[PluginResult]:
-            who = args.strip() or "world"
-            return [PluginResult(f"Hello, {who}!", subtitle="Press Enter to copy")]
-
-        def execute(self, result: PluginResult | None = None) -> bool:
-            if result:
-                copy_to_clipboard(result.title)
-            return False  # close the launcher after executing
-
-Notes for plugin authors:
-
-* ``handle()`` runs on a worker thread — keep it free of any GTK calls and
-  make it safe for network/CPU work.
-* ``execute()`` runs on the main thread when the user selects a result.
-* For multi-file plugins, use a package (a directory with ``__init__.py``)
-  and re-export your plugin class from ``__init__.py``. Use relative imports
-  (``from .helpers import ...``) inside the package.
-"""
+"""Plugin system for the launcher slash commands; see the Plugin Development docs."""
 
 from __future__ import annotations
 
@@ -76,13 +41,7 @@ class PluginResult:
 
 
 class SubprocessResult:
-    """Captured output of a command run via :func:`run_subprocess`.
-
-    Attribute-compatible with ``subprocess.CompletedProcess`` (``args``,
-    ``returncode``, ``stdout``, ``stderr``) so callers read the same fields
-    — built on :class:`Gio.Subprocess` (the engine behind Fabric's
-    ``exec_shell_command_async``) instead of the stdlib subprocess module.
-    """
+    """Output of :func:`run_subprocess` (like ``subprocess.CompletedProcess``)."""
 
     __slots__ = ("args", "returncode", "stderr", "stdout")
 
@@ -115,15 +74,7 @@ def _spawn_subprocess(
     input: str | None = None,
     env: dict | None = None,
 ) -> Gio.Subprocess:
-    """Spawn *args* and return the :class:`Gio.Subprocess` handle.
-
-    Uses ``Gio.SubprocessLauncher`` when *env* is given (``setenv`` per key),
-    mirroring what Fabric's ``exec_shell_command_async`` does internally.
-    Note the keys are merged over the inherited environment (like
-    ``subprocess.run`` without a full env) — pass a full environment dict if
-    replacement is desired. Spawn failures are surfaced as ``OSError`` for
-    compatibility with the previous ``subprocess.run`` based runner.
-    """
+    """Spawn *args* via :class:`Gio.Subprocess`, surfacing failures as OSError."""
     flags = Gio.SubprocessFlags.STDOUT_PIPE | Gio.SubprocessFlags.STDERR_PIPE
     if input is not None:
         flags |= Gio.SubprocessFlags.STDIN_PIPE
@@ -145,13 +96,7 @@ def _communicate_subprocess(
     input: str | None = None,
     timeout: float | None = None,
 ) -> SubprocessResult:
-    """Wait for *proc* to finish and return its captured output.
-
-    A watchdog thread force-exits the process when *timeout* elapses and
-    :class:`SubprocessTimeoutError` is raised. Killed-by-signal processes
-    (timeout or cancellation) report a negative ``returncode``, matching
-    ``subprocess`` semantics.
-    """
+    """Wait for *proc* to finish; raises SubprocessTimeoutError on timeout."""
     timed_out = threading.Event()
 
     def _on_timeout():
@@ -186,24 +131,14 @@ def run_subprocess(
     env: dict | None = None,
     **kwargs: Any,
 ) -> SubprocessResult:
-    """Run *args* and return a :class:`SubprocessResult`.
-
-    Gio-based replacement for ``subprocess.run`` in plugins — the same
-    engine Fabric's ``exec_shell_command`` helpers use, so no stdlib
-    ``subprocess`` machinery is needed. Accepts ``capture_output=True`` for
-    drop-in compatibility (ignored; output is always captured as text).
-    """
+    """Gio-based ``subprocess.run`` for plugins; returns a :class:`SubprocessResult`."""
     kwargs.pop("capture_output", None)
     proc = _spawn_subprocess(args, input=input, env=env)
     return _communicate_subprocess(proc, args, input=input, timeout=timeout)
 
 
 class LauncherPlugin:
-    """Base class for launcher slash-command plugins.
-
-    Subclasses must set at least ``name`` and ``description`` and should
-    override :meth:`handle` (and usually :meth:`execute`).
-    """
+    """Base class for slash-command plugins (set ``name`` + ``description``)."""
 
     name: str = ""
     description: str = ""
@@ -227,33 +162,17 @@ class LauncherPlugin:
         self._subprocess: Gio.Subprocess | None = None
 
     def handle(self, args: str) -> list[PluginResult]:
-        """Return the result rows for the given argument string.
-
-        Runs on a worker thread — no GTK calls allowed here. Long-running
-        work should be cancellable: check :meth:`is_cancelled` at safe
-        points, and run subprocesses via :meth:`run_subprocess` so the
-        launcher can kill them when the user keeps typing.
-        """
+        """Return result rows for the argument string (runs on a worker thread)."""
         return []
 
     def execute(self, result: PluginResult | None = None) -> bool:
-        """Run when the user activates *result* (or the bare command).
-
-        Return True to keep the launcher open.
-        """
+        """Run when the user activates *result*; True keeps the launcher open."""
         return False
 
     # -- cancellation -------------------------------------------------
 
     def cancel(self) -> None:
-        """Cancel any in-flight ``handle()`` work.
-
-        Sets the cancellation flag and force-exits a tracked process
-        (started via :meth:`run_subprocess`) if one is still referenced.
-        ``force_exit`` is a no-op on an already-finished process. Called by
-        the launcher when the user keeps typing and the current results are
-        about to be superseded.
-        """
+        """Cancel in-flight ``handle()`` work (flag + force-exit subprocess)."""
         self._cancel_event.set()
         if self._subprocess is not None:
             with suppress(Exception):
@@ -278,15 +197,7 @@ class LauncherPlugin:
         env: dict | None = None,
         **kwargs: Any,
     ) -> SubprocessResult:
-        """Run *args* and return a :class:`SubprocessResult`.
-
-        Like the module-level :func:`run_subprocess` but tracks the spawned
-        :class:`Gio.Subprocess` so :meth:`cancel` can force-exit it
-        mid-flight instead of letting a superseded query run to completion
-        and waste CPU/network. The ``capture_output`` kwarg is accepted for
-        drop-in compatibility and ignored since output is always captured
-        as text.
-        """
+        """Like :func:`run_subprocess` but tracked so :meth:`cancel` can kill it."""
         kwargs.pop("capture_output", None)
         proc = _spawn_subprocess(args, input=input, env=env)
         self._subprocess = proc
@@ -345,11 +256,7 @@ class PluginManager:
     # -- discovery ----------------------------------------------------
 
     def load(self) -> int:
-        """Discover and load plugins from the configured directory.
-
-        Returns the number of successfully registered plugin commands.
-        Broken or unrelated files are skipped with a warning.
-        """
+        """Discover and load plugins; returns the number of registered commands."""
         self._plugins.clear()
         self._instances.clear()
 
@@ -445,14 +352,7 @@ class PluginManager:
         return count
 
     def _register(self, plugin_cls: type, source: str) -> bool:
-        """Instantiate a plugin and register it under its name + aliases.
-
-        Disallowed plugins are skipped before instantiation so their
-        ``__init__`` (and any side effects) never run. The class-level
-        ``name`` covers every bundled/documented plugin; the post-
-        instantiation check below is the fallback for plugins that set
-        ``self.name`` inside ``__init__``.
-        """
+        """Instantiate a plugin and register it under its name + aliases."""
         if (
             self._plugin_names is not None
             and plugin_cls.name
@@ -533,12 +433,7 @@ def get_plugin_manager(
     plugins_dir: str,
     plugin_names: list[str] | None = None,
 ) -> PluginManager:
-    """Return a cached :class:`PluginManager`.
-
-    Reloads when either the directory or the ``plugins`` allowlist changes.
-    ``None`` (or omitting *plugin_names*) keeps the legacy behavior of
-    loading every plugin in the directory.
-    """
+    """Return a cached :class:`PluginManager`, reloading when config changes."""
     global _manager, _manager_dir, _manager_names
     plugins_dir = os.path.expanduser(plugins_dir)
     names = (

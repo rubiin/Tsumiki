@@ -8,11 +8,7 @@ from utils.widget_utils import nerd_font_icon
 
 
 class ThemeSwitcherWidget(ButtonWidget):
-    """A widget to cycle through available themes.
-
-    Uses the centralized ``ThemeService`` for theme switching, CSS
-    recompilation, and config persistence.
-    """
+    """A widget to cycle through available themes."""
 
     def __init__(self, **kwargs):
         super().__init__(name="theme_switcher", **kwargs)

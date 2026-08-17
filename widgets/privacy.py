@@ -6,10 +6,7 @@ from utils.widget_utils import nerd_font_icon
 
 
 class PrivacyIndicatorWidget(ButtonWidget):
-    """Privacy indicator widget showing camera, microphone, and screen recording status.
-
-    Inspired by waybar's privacy module, displays active privacy-sensitive services.
-    """
+    """Privacy indicator for camera, microphone, and screen recording status."""
 
     def __init__(self, **kwargs):
         super().__init__(name="privacy_indicator", **kwargs)

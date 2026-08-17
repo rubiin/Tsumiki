@@ -1,13 +1,6 @@
-"""Launcher slash command: /history — search your shell command history.
+"""Launcher slash command: /history — search shell history (bash/zsh/fish).
 
-Reads the common shell history files (bash, zsh, fish — plus ``$HISTFILE``
-when set), de-duplicates entries keeping the most recent occurrence, and
-shows matching commands most-recent-first. Press Enter to copy a command
-back to the clipboard — nothing is ever executed.
-
-Examples:
-    /history git
-    /history docker compose
+Press Enter to copy a command back to the clipboard — nothing is executed.
 """
 
 import os
@@ -49,10 +42,8 @@ def parse_bash_history(content: str) -> list[str]:
 def parse_zsh_history(content: str) -> list[tuple[int, str]]:
     """Return ``[(epoch, command)]`` from a zsh history file.
 
-    Handles both the plain format and the extended ``: ts:0;cmd`` format
-    (EXTENDED_HISTORY). Plain lines carry no timestamp, so they get a
-    position ordinal (later line = larger) that sorts them
-    more-recent-first within the file.
+    Handles plain and extended (``: ts:0;cmd``) formats; plain lines get a
+    position ordinal so later lines sort as more recent.
     """
     entries: list[tuple[int, str]] = []
     for index, line in enumerate(content.splitlines()):
@@ -89,12 +80,7 @@ def parse_fish_history(content: str) -> list[tuple[int, str]]:
 
 
 def load_history(paths: list[str] | None = None) -> list[str]:
-    """Return de-duplicated commands, most recent first, across all files.
-
-    Later lines in a plain file count as more recent; timestamped entries
-    (zsh extended / fish) sort by their real epoch. Duplicate commands are
-    collapsed keeping the most recent occurrence.
-    """
+    """Return de-duplicated commands, most recent first, across all files."""
     merged: list[tuple[int, int, str]] = []
     order = 0
     for path in paths or default_history_files():
@@ -114,8 +100,7 @@ def load_history(paths: list[str] | None = None) -> list[str]:
                 merged.append((recency, order, cmd))
             order += 1
 
-    # Recency = (timestamp-or-position, file order); larger = more recent.
-    # Duplicate commands are collapsed keeping the most recent occurrence.
+    # (recency, file order); larger = more recent. Duplicates keep the newest.
     best: dict[str, tuple[int, int]] = {}
     for recency, order, cmd in merged:
         key = (recency, order)

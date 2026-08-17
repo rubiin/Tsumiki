@@ -5,12 +5,7 @@ from .base import SingletonService
 
 
 class CloudflareWarpService(SingletonService):
-    """Service to manage Cloudflare WARP connection status.
-
-    Polls ``warp-cli status`` at a configurable interval and emits
-    ``changed`` when state changes. Polling can be paused/resumed
-    via ``pause_polling`` / ``resume_polling`` (e.g. on widget unmap/map).
-    """
+    """Manage Cloudflare WARP connection status (polls ``warp-cli status``)."""
 
     @Signal
     def changed(self) -> None:

@@ -1,16 +1,7 @@
 """Launcher slash command: /currency — convert between world currencies.
 
-Rates are downloaded from Frankfurter (https://frankfurter.dev) — free,
-keyless, backed by 84 central banks — into a **per-day cache file** and
-conversions read from that file instead of hitting the API on every query.
-The file is refreshed at most once per calendar day and falls back to the
-last snapshot if the network is unavailable.
-
-Examples:
-    /currency 100 usd to eur
-    /currency 50 gbp jpy
-    /currency usd eur          # amount defaults to 1
-    /currency 10 dollars euros # common names and symbols work too
+Rates are fetched from Frankfurter (keyless) into a per-day local cache,
+so the API is hit at most once per day.
 """
 
 import json
@@ -27,15 +18,11 @@ from utils.plugin_manager import LauncherPlugin, PluginResult, copy_to_clipboard
 #: Returns all EUR-based rates as a list of {date, base, quote, rate} rows.
 _FRANKFURTER_RATES_URL = "https://api.frankfurter.dev/v2/rates"
 
-# Frankfurter occasionally drops the very first connection attempt after a
-# cold start (timeouts), so transient failures are retried a couple of times
-# before giving up. Client errors (4xx) are not retried — they never recover.
+# Retry transient failures; client errors (4xx) are never retried.
 _RETRY_ATTEMPTS = 3
 _RETRY_DELAY_SECONDS = 0.5
 
-# A valid snapshot has many quotes (the API returns ~164). A payload with
-# fewer than this many rates is treated as malformed so it never poisons the
-# daily cache file.
+# A payload below this many rates is treated as malformed (never cached).
 _MIN_RATES_COUNT = 10
 
 # Serializes cache read/refresh so concurrent worker threads don't download
@@ -167,13 +154,10 @@ def _write_cache(payload: dict) -> None:
 
 
 def load_rates(cancelled=None) -> dict:
-    """Return the daily rates payload, downloading it at most once a day.
+    """Return the daily rates payload, downloading at most once a day.
 
-    The cache counts as fresh when it was fetched today; otherwise the file
-    is re-downloaded. A failed download falls back to the last snapshot
-    rather than failing the conversion. *cancelled* is an optional zero-arg
-    callable; when it turns True mid-download, RuntimeError("cancelled")
-    is raised so a superseded query bails out instead of blocking on retries.
+    Falls back to the last snapshot on failure. *cancelled* aborts a
+    superseded download.
     """
     with _RATES_LOCK:
         cached = _read_cache()
@@ -193,12 +177,7 @@ def load_rates(cancelled=None) -> dict:
 
 
 def fetch_rate(from_code: str, to_code: str, cancelled=None) -> tuple[float, str]:
-    """Return the (rate, date) converting *from_code* to *to_code*.
-
-    Reads the locally cached per-day rates file; the network is only touched
-    when the daily snapshot is missing or stale. *cancelled* is forwarded to
-    :func:`load_rates` so superseded downloads abort instead of retrying.
-    """
+    """Return the (rate, date) converting *from_code* to *to_code*."""
     if from_code == to_code:
         return 1.0, _today()
     payload = load_rates(cancelled=cancelled)

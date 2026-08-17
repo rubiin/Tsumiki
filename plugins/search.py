@@ -1,13 +1,6 @@
-"""Launcher slash command: /search — web search results in the launcher.
+"""Launcher slash command: /search — DuckDuckGo results in the launcher.
 
-Searches DuckDuckGo (keyless, no API key) and shows the top results right
-in the launcher; pressing Enter opens the selected result in your default
-browser. ``handle`` runs on a worker thread, so typing stays responsive
-while the request is in flight.
-
-Examples:
-    /search fabric hyprland
-    /search python httpx timeout
+Enter opens the selected result in the default browser.
 """
 
 import re
@@ -37,8 +30,7 @@ def resolve_url(href: str) -> str:
     if _DDG_REDIRECT_RE.match(href):
         query = parse_qs(urlparse(href).query)
         if query.get("uddg"):
-            # parse_qs already decodes percent-encoding — don't unquote again
-            # or URLs containing literal %xx sequences would be corrupted.
+            # parse_qs already decodes percent-encoding — don't unquote again.
             return query["uddg"][0]
     if href.startswith("//"):
         return f"https:{href}"
@@ -98,12 +90,7 @@ def parse_results(page: str, limit: int = _MAX_RESULTS) -> list[tuple[str, str, 
 def search(
     query: str, limit: int = _MAX_RESULTS, cancelled=None
 ) -> list[tuple[str, str, str]]:
-    """Search DuckDuckGo and return (title, url, snippet) triples.
-
-    *cancelled* is an optional zero-arg callable returning True when the
-    query has been superseded; the request result is then discarded instead
-    of parsed.
-    """
+    """Search DuckDuckGo and return (title, url, snippet) triples."""
     if cancelled is not None and cancelled():
         return []
     response = get_http_client().get(_DDG_HTML_URL, params={"q": query})

@@ -1,12 +1,4 @@
-"""Launcher slash command: /shorten — shorten a URL.
-
-Both is.gd and TinyURL are free, keyless services: is.gd is tried first
-and TinyURL is the fallback. Press Enter to copy the short link.
-
-Examples:
-    /shorten https://github.com/rubiin/tsumiki
-    /shorten github.com/rubiin/tsumiki     (https:// is added automatically)
-"""
+"""Launcher slash command: /shorten — shorten a URL (is.gd, TinyURL fallback)."""
 
 from typing import ClassVar
 from urllib.parse import urlparse

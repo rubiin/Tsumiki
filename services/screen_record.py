@@ -70,9 +70,7 @@ class ScreenRecorderService(SingletonService):
             self._start_recording(audio, "", file_path, delayed, timeout)
             return
 
-        # `slurp` blocks until the user finishes dragging the region selector.
-        # Run it off the UI thread and marshal the result back via idle_add so
-        # the shell stays responsive while the user selects the area.
+        # slurp blocks — run it off the UI thread and marshal back via idle_add.
         def _slurp_worker():
             geometry = exec_shell_command("slurp")
             idle_add(self._on_slurp, geometry, audio, file_path, delayed, timeout)

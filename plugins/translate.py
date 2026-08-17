@@ -1,18 +1,7 @@
-"""Launcher slash command: /translate — translate text.
+"""Launcher slash command: /translate — translate text and copy the result.
 
-Uses Google's public (keyless) translate API (``translate_a/single``) through
-the shared httpx client. ``handle`` runs on a worker thread, so typing stays
-responsive while the request is in flight.
-
-The target language can be given with "in <language>" or "to <language>":
-    /translate hello in nepali      -> translate "hello" into Nepali
-    /translate hello to german      -> translate "hello" into German
-    /translate bonjour              -> translate into the default language
-
-Examples:
-    /translate bonjour
-    /translate こんにちは
-    /translate hello in nepali
+The target language can be given with "in <language>" or "to <language>",
+e.g. ``/translate hello in nepali``; otherwise the plugin default is used.
 """
 
 from typing import ClassVar
@@ -137,12 +126,8 @@ _LANGUAGES = {
 
 
 def parse_target_language(text: str) -> tuple[str, str]:
-    """Split *text* into (translate_text, target_lang).
-
-    Recognises a trailing "in <language>" / "to <language>" directive, e.g.
-    ``"hello in nepali"`` -> ``("hello", "ne")``.  Unknown language names and
-    queries without a directive keep the caller's default language (``None``).
-    """
+    """Split *text* into (translate_text, target_lang) from a trailing
+    "in <language>" / "to <language>" directive."""
     lowered = text.casefold().strip()
     for separator in (" in ", " to "):
         if separator in lowered:

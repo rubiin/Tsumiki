@@ -30,15 +30,7 @@ def find_qalc() -> str | None:
 
 
 def evaluate(expr: str, qalc_path: str | None = None, runner=None) -> str:
-    """Evaluate *expr* with qalc and return the result string.
-
-    *runner* is an optional :func:`run_subprocess`-compatible callable so
-    the caller can track/kill the spawned qalc process (see
-    :meth:`LauncherPlugin.run_subprocess`).
-
-    Raises ValueError when qalc is missing, the expression fails, or the
-    calculation times out.
-    """
+    """Evaluate *expr* with qalc; raises ValueError on failure/timeout."""
     qalc = qalc_path or find_qalc()
     if qalc is None:
         raise ValueError("qalc not found — install libqalculate")

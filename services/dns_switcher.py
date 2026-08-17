@@ -16,11 +16,7 @@ DEFAULT_PROVIDERS = [
 
 
 class DnsSwitcherService(SingletonService):
-    """Service to detect and switch DNS servers via NetworkManager.
-
-    Polls ``nmcli`` every 3 seconds to read the current DNS server and
-    emits ``notify::current`` when it changes.
-    """
+    """Detect and switch DNS servers via NetworkManager (polls ``nmcli``)."""
 
     _dns_line_re = None
 

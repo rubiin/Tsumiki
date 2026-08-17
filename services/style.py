@@ -26,30 +26,13 @@ from utils.functions import (
 
 from .base import SingletonService
 
-# Bounded memoization cache for raw TOML theme data keyed by theme name.
-# Theme TOML files are static assets and never change at runtime, so once
-# parsed the result is cached forever (within process lifetime).
+# Memoized raw TOML theme data (static files — safe to cache forever).
 _MAX_CACHED_THEMES = 64
 _theme_file_cache: dict[str, dict] = {}
 
 
 class StyleService(SingletonService):
-    """Centralized service for style/theme management.
-
-    Handles:
-    - Loading and listing available themes
-    - Applying themes (from TOML files or Matugen)
-    - Recompiling and applying CSS
-    - Cycling through themes
-    - Emitting signals on theme changes
-
-    Signals
-    -------
-    theme_changed (theme_name: str)
-        Emitted when a theme is successfully applied.
-    css_recompiled
-        Emitted when CSS is recompiled and applied.
-    """
+    """Centralized service for style/theme management and CSS recompilation."""
 
     @Signal
     def theme_changed(self, theme_name: str) -> None:
@@ -109,23 +92,13 @@ class StyleService(SingletonService):
 
     @property
     def theme_contents(self) -> dict | None:
-        """Parsed contents of the currently active theme (the selected mode's section).
-
-        Returns a dictionary with keys like ``background``, ``text``,
-        ``surface``, ``accent``, ``general`` --- or ``None`` if no
-        theme has been loaded yet.
-        """
+        """Parsed contents of the active theme (the selected mode's section)."""
         return self._theme_contents
 
     # ── Public API ─────────────────────────────────────────────
 
     def apply_theme_from_config(self) -> None:
-        """Load and apply the theme as configured in ``config.toml``.
-
-        This is the main entry point used at startup. If Matugen is
-        enabled it runs that first; otherwise it copies the named theme
-        TOML file to ``_theme.scss`` and recompiles CSS.
-        """
+        """Load and apply the theme as configured in ``config.toml``."""
         matugen_config = self._styling_config.get("matugen", {})
 
         if matugen_config.get("enabled", False):
@@ -134,13 +107,7 @@ class StyleService(SingletonService):
             self._copy_and_apply(self._current_theme, self._mode)
 
     def apply_theme(self, theme_name: str) -> None:
-        """Switch to a different theme by name.
-
-        Parameters
-        ----------
-        theme_name : str
-            Name of the theme (without ``.toml`` suffix).
-        """
+        """Switch to a different theme by name and persist the choice."""
         if theme_name not in self._available_themes:
             logger.warning(
                 f"{Colors.WARNING}[StyleService] Theme '{theme_name}' not found, "
@@ -162,13 +129,7 @@ class StyleService(SingletonService):
         logger.info(f"{Colors.INFO}[StyleService] Applied theme '{theme_name}'")
 
     def next_theme(self) -> str:
-        """Cycle to the next theme in the alphabetical list.
-
-        Returns
-        -------
-        str
-            The new theme name.
-        """
+        """Cycle to the next theme in the alphabetical list."""
         if not self._available_themes:
             return self._current_theme
 
@@ -183,13 +144,7 @@ class StyleService(SingletonService):
         return next_name
 
     def previous_theme(self) -> str:
-        """Cycle to the previous theme in the alphabetical list.
-
-        Returns
-        -------
-        str
-            The new theme name.
-        """
+        """Cycle to the previous theme in the alphabetical list."""
         if not self._available_themes:
             return self._current_theme
 
@@ -204,13 +159,7 @@ class StyleService(SingletonService):
         return prev_name
 
     def set_mode(self, mode: str) -> None:
-        """Set the color mode and re-apply the current theme.
-
-        Parameters
-        ----------
-        mode : str
-            Either ``'dark'`` or ``'light'``.
-        """
+        """Set the color mode and re-apply the current theme."""
         if mode not in ("dark", "light"):
             logger.warning(
                 f"{Colors.WARNING}[StyleService] Invalid mode '{mode}', "
@@ -253,11 +202,7 @@ class StyleService(SingletonService):
             self._available_themes = []
 
     def _copy_and_apply(self, theme_name: str, mode: str) -> None:
-        """Copy a TOML theme file to ``_theme.scss``.
-
-        Loads theme contents into memory and writes SCSS variables
-        synchronously. CSS compilation is a separate step (``refresh()``).
-        """
+        """Copy a TOML theme file to ``_theme.scss`` (CSS compile is separate)."""
         self._load_theme_contents(theme_name, mode)
         self._write_theme_variables(theme_name, mode)
 
@@ -280,11 +225,7 @@ class StyleService(SingletonService):
         return contents
 
     def _load_theme_contents(self, theme_name: str, mode: str) -> None:
-        """Parse the theme TOML and cache the active mode's section.
-
-        Sets ``self._theme_contents`` to the resolved dict (or ``None``
-        if the file can't be read).
-        """
+        """Parse the theme TOML and cache the active mode's section."""
         contents = self._get_raw_theme(theme_name)
         if contents is None:
             # Fall back to default
@@ -293,13 +234,7 @@ class StyleService(SingletonService):
         self._theme_contents = contents.get(mode, contents) if contents else None
 
     def _write_theme_variables(self, theme: str, mode: str = "dark"):
-        """Write flattened theme color values into ``_theme.scss``.
-
-        This writes the SCSS variables file only — it does **not** invoke
-        ``sass``. Actual CSS compilation is handled separately by
-        ``refresh()`` (for explicit refresh) or by the
-        optional file watcher in ``main.py``.
-        """
+        """Write flattened theme colors into ``_theme.scss`` (does not run sass)."""
         destination_file = f"{self._styles_dir}/_theme.scss"
 
         contents = self._get_raw_theme(theme)
@@ -363,12 +298,7 @@ class StyleService(SingletonService):
 
     @run_in_thread
     def _compile_css(self):
-        """Run ``sass`` to compile SCSS into CSS.
-
-        Uses a ``_compiling`` flag + lock to skip concurrent compilations
-        — if sass is already running, subsequent calls return early.
-        Errors are printed to stderr and logged.
-        """
+        """Run ``sass`` to compile SCSS into CSS (skips concurrent runs)."""
         with self._compile_lock:
             if self._compiling:
                 logger.info(f"{Colors.INFO}[Theme] CSS compilation already in progress")

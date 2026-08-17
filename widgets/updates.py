@@ -77,10 +77,7 @@ class UpdatesWidget(ButtonWidget):
         return " ".join(command)
 
     def _should_update(self, *_):
-        """
-        Handles the 'changed' signal from the fabricator.
-        Checks if the update interval has elapsed and triggers an update if necessary.
-        """
+        """Trigger an update when the configured interval has elapsed."""
         if (datetime.now() - self.update_time).total_seconds() >= self.config.get(
             "interval", 3600
         ):

@@ -13,11 +13,7 @@ from utils.widget_settings import BarConfig
 
 
 class LazyWidgetDict(dict):
-    """A dictionary that lazily imports widget classes on first access.
-
-    This speeds up startup by only importing widgets that are actually used
-    in the user's layout configuration.
-    """
+    """A dict that lazily imports widget classes on first access (faster startup)."""
 
     def __init__(self, widget_paths: dict[str, str]):
         super().__init__()

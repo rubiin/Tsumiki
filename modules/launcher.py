@@ -29,9 +29,7 @@ from utils.plugin_manager import (
 )
 from utils.widget_settings import BarConfig
 
-# Default debounce for plugin queries: live-preview plugins (e.g. /translate)
-# would otherwise fire one network request per keystroke. Plugins can override
-# this per-plugin via LauncherPlugin.debounce_ms.
+# Default debounce for plugin queries; plugins can override via debounce_ms.
 _PLUGIN_DEBOUNCE_MS = 150
 
 
@@ -56,10 +54,7 @@ class LauncherConfig:
         """Validate configuration and set defaults."""
         self.width = max(200, self.raw_config.get("width", self.DEFAULT_WIDTH))
         self.height = max(200, self.raw_config.get("height", self.DEFAULT_HEIGHT))
-        # The results area may grow a little beyond the configured height so
-        # taller plugin result sets are visible without scrolling; width stays
-        # fixed so long rows (e.g. /search) ellipsize instead of widening the
-        # window.
+        # Height may grow so tall plugin results are visible; width stays fixed.
         self.max_height = max(self.height, int(self.height * 1.5))
 
         icon_size = self.raw_config.get("icon_size", self.DEFAULT_ICON_SIZE)
@@ -246,14 +241,10 @@ class Launcher(PopupWindow):
         self._plugin_selected = 0
         self._plugin_gen = 0
         self._plugin_query_timer = 0
-        # Plugin whose worker may still be running — cancel it when a newer
-        # query supersedes it so in-flight subprocesses/requests are killed
-        # instead of running to completion and being discarded.
+        # Cancel the running plugin worker when a newer query supersedes it.
         self._active_plugin = None
 
-        # Tab-completion cycle state: the candidate list is snapshotted from
-        # the query that started the cycle, so completing to a full name
-        # doesn't shrink the match set on the next Tab press.
+        # Tab-completion cycle state (candidates snapshotted at cycle start).
         self._completion_candidates: list[str] = []
         self._completion_index = -1
 
@@ -329,9 +320,7 @@ class Launcher(PopupWindow):
             **kwargs,
         )
 
-        # Set up key handling: the entry handler gets first crack at keys so
-        # we can intercept Return/arrows for plugin navigation. The window
-        # handler remains as a fallback when focus is elsewhere.
+        # Entry handler intercepts Return/arrows; window handler is the fallback.
         self.search_entry.connect("key-press-event", self.on_search_key_press)
         self.connect("key-press-event", self.on_key_press)
 
@@ -351,11 +340,7 @@ class Launcher(PopupWindow):
             self.close_launcher()
 
     def on_search_key_press(self, entry, event) -> bool:
-        """Handle launcher keyboard shortcuts on the search entry.
-
-        Returning True stops the entry's default handling (e.g. arrow-key
-        cursor movement) so we can drive plugin selection instead.
-        """
+        """Handle search-entry key shortcuts; True stops default handling."""
         keyval = event.keyval
         if keyval == Gdk.KEY_Escape:
             self.close_launcher()
@@ -386,13 +371,7 @@ class Launcher(PopupWindow):
         return False
 
     def _autocomplete_query(self, direction: int = 1):
-        """Cycle the query through matching results (Tab: +1, Shift+Tab: -1).
-
-        The candidate list is snapshotted when a cycle starts, so repeated
-        Tab presses walk every match — completing to a full name doesn't
-        narrow the pool for the next press. Any edit to the entry restarts
-        the cycle from the new query.
-        """
+        """Cycle the query through matching results (Tab: +1, Shift+Tab: -1)."""
         text = self.search_entry.get_text()
         if not text:
             self._reset_completion_state()
@@ -445,12 +424,7 @@ class Launcher(PopupWindow):
         self._completion_index = -1
 
     def _set_search_text(self, text: str):
-        """Set the search entry text and keep focus for continued typing.
-
-        ``set_text`` resets the cursor to the start, so move it to the end —
-        after a Tab-completed ``/command`` the user can immediately type
-        arguments instead of the caret snapping back to the first character.
-        """
+        """Set the search text, moving the caret to the end for continued typing."""
         self.search_entry.set_text(text)
         self.search_entry.grab_focus_without_selecting()
         self.search_entry.set_position(len(text))
@@ -632,11 +606,7 @@ class Launcher(PopupWindow):
         return 0
 
     def _schedule_plugin_query(self, plugin, args: str, gen: int):
-        """Debounce plugin dispatch so typing doesn't fire a query per keystroke.
-
-        Uses the plugin's ``debounce_ms`` override when set, falling back to
-        the global default — expensive plugins (e.g. /calc) debounce harder.
-        """
+        """Debounce plugin dispatch; use the plugin's ``debounce_ms`` override."""
         self._cancel_plugin_query_timer()
         # A newer query is superseding whatever is still in flight — cancel
         # it now so its subprocess/request is killed rather than wasted.
@@ -785,9 +755,7 @@ class Launcher(PopupWindow):
                 children=children,
             ),
         )
-        # ``on_clicked`` only works as a constructor kwarg in Fabric; assigning
-        # it afterwards never connects the ``clicked`` signal, so connect it
-        # explicitly to make click (and Enter via emit) actually work.
+        # ``on_clicked`` only works as a constructor kwarg — connect explicitly.
         button.connect(
             "clicked",
             lambda *_, p=plugin: self._insert_command(p.name),

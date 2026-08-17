@@ -131,9 +131,7 @@ class Wifi(Service):
         return
 
     def forget_access_point(self, ssid):
-        # List saved connections asynchronously; delete the one matching ssid.
-        # The async API calls back once per stdout line, so each connection ID
-        # arrives as its own call.
+        # List saved connections async; each stdout line arrives as its own call.
         def _on_connection_line(line):
             connection_id = line.strip()
             if not connection_id or connection_id != ssid:

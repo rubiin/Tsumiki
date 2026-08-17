@@ -28,11 +28,7 @@ def _resolve_icon_pixbuf(
     size: int,
     desktop_app=None,
 ) -> GdkPixbuf.Pixbuf | None:
-    """Resolve icon pixbuf with desktop-app -> resolver -> fallback chain.
-
-    Cached by (app_id, size) so icons are decoded once per session;
-    subsequent overview refreshes reuse the cached pixbuf.
-    """
+    """Resolve an icon pixbuf (desktop-app -> resolver -> fallback), cached."""
     pixbuf = None
     if desktop_app:
         pixbuf = desktop_app.get_icon_pixbuf(size=size)

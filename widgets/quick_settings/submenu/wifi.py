@@ -44,11 +44,8 @@ class WifiSubMenu(QuickSubMenu):
         self.child = ScrolledWindow(
             min_content_size=(-1, 120),
             max_content_size=(-1, 260),
-            # Don't propagate the list's natural width: long SSIDs would
-            # otherwise widen the whole quick settings popup when the submenu
-            # is revealed. The list fills the popup width instead and rows
-            # ellipsize. The horizontal policy must stay "automatic": GTK3
-            # ignores propagate_width when it is "never".
+            # propagate_width=False keeps long SSIDs from widening the popup.
+            # Policy must stay "automatic": GTK3 ignores it when "never".
             propagate_width=False,
             propagate_height=True,
             v_expand=True,
@@ -75,9 +72,7 @@ class WifiSubMenu(QuickSubMenu):
         self.connect("destroy", self._on_destroy)
 
     def _on_destroy(self, *_):
-        # Submenus are rebuilt on every reveal; without this, the scrolled
-        # window's adjustment outlives the widget and fires value-changed on
-        # a freed adjustment (gtk_adjustment_get_upper crash).
+        # Rebuilt submenus leave the adjustment dangling — disconnect to avoid a crash.
         if self.child is not None and self._adjustment_handler is not None:
             with contextlib.suppress(Exception):
                 self.child.get_vadjustment().disconnect(self._adjustment_handler)

@@ -11,11 +11,7 @@ from widgets.quick_settings.components import QuickSettingsIconLabelRow
 
 
 def _toggle_row(icon: str, label: str) -> QuickSettingsIconLabelRow:
-    """Build the icon+label row for a simple quick settings toggle card.
-
-    h_align="fill" makes the row span the full card width so it lines up
-    with the chevron toggles when the popup is wider than the toggles.
-    """
+    """Build the icon+label row for a quick settings toggle card."""
     return QuickSettingsIconLabelRow(
         icon=icon,
         label=label,

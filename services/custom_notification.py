@@ -277,11 +277,7 @@ class CustomNotifications(Notifications):
         return Notification.deserialize(notification)
 
     def _persist_and_emit(self):
-        """Persist notifications synchronously, then emit signals.
-
-        Writes the file synchronously before emitting so that any receiver
-        of ``notification_count`` who reads the file sees the latest data.
-        """
+        """Persist notifications synchronously, then emit signals."""
         try:
             with open(NOTIFICATION_CACHE_FILE, "w") as f:
                 json.dump(self.all_notifications, f, indent=4, ensure_ascii=False)

@@ -12,8 +12,7 @@ from utils.plugin_manager import (
 
 _MAX_RESULTS = 100
 _TIMEOUT_SECONDS = 5
-# Null bytes or UTF-8 replacement chars in a listing usually mean binary
-# content (images) — show a marker instead of garbled text.
+# Null/replacement chars usually mean binary content — show a marker.
 _BINARY_MARKERS = ("\x00", "\ufffd")
 
 
@@ -55,9 +54,8 @@ class ClipboardHistoryPlugin(LauncherPlugin):
             ]
 
         try:
-            # ``cliphist list`` can be slow with large histories (and gets
-            # slower as you scroll through it) — run it via the cancellable
-            # helper so a superseding query kills it instead of waiting.
+            # ``cliphist list`` can be slow with large histories — run it
+            # via the cancellable helper so a superseding query kills it.
             result = self.run_subprocess(
                 ["cliphist", "list"],
                 timeout=_TIMEOUT_SECONDS,

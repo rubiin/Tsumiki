@@ -675,13 +675,7 @@ class DateNotificationMenu(Box):
         self.notifications_listbox.remove_all()
 
     def on_notification_count(self, *_):
-        """Re-sync notifications from the service when the count changes.
-
-        The service emits ``notification_count`` on every add/remove (unlike
-        ``notification-closed``, which is only emitted for limit evictions), so
-        this keeps per-group badge counts accurate when a notification inside
-        a group is dismissed.
-        """
+        """Re-sync notifications from the service when the count changes."""
         if getattr(self, "_syncing_notification_count", False):
             return
         if notification_service.count == len(self.all_notifications):

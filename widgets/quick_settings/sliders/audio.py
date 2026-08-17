@@ -9,10 +9,7 @@ from utils.widget_utils import get_audio_icon_name, nerd_font_icon
 
 
 class AudioSlider(SettingSlider):
-    """A widget to display a scale for audio settings.
-
-    Can be used for both device audio and application audio control.
-    """
+    """A scale for audio settings (device or per-application streams)."""
 
     def init_device_audio(self, *_):
         if not self.client.speaker:
@@ -68,9 +65,7 @@ class AudioSlider(SettingSlider):
         self.connect("destroy", self._on_destroy)
 
     def _on_destroy(self, *_):
-        # The stream's `changed` signal outlives this widget (the submenu
-        # rebuilds and destroys sliders while streams keep emitting), so
-        # disconnect here to avoid calling set_value on a destroyed scale.
+        # Disconnect the stream handler — streams outlive the destroyed slider.
         self._destroyed = True
         if self._stream_handler is not None and self.audio_stream is not None:
             self.audio_stream.disconnect(self._stream_handler)

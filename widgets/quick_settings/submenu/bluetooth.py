@@ -140,10 +140,7 @@ class BluetoothSubMenu(QuickSubMenu):
         self.child = ScrolledWindow(
             min_content_size=(-1, 120),
             max_content_size=(-1, 260),
-            # Don't propagate the list's natural width: long device names
-            # would otherwise widen the whole quick settings popup when the
-            # submenu is revealed. The list fills the popup width instead and
-            # rows ellipsize.
+            # propagate_width=False keeps long device names from widening the popup.
             propagate_width=False,
             propagate_height=True,
             child=Box(

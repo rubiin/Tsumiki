@@ -9,11 +9,7 @@ from utils.widget_utils import nerd_font_icon
 
 
 class OCRWidget(ButtonWidget):
-    """A widget that provides Optical Character Recognition functionality.
-
-    Left-click to select an area and copy recognized text to clipboard.
-    Right-click to select the OCR language from available tesseract language packs.
-    """
+    """OCR widget: left-click to grab text, right-click to pick the language."""
 
     def __init__(self, **kwargs):
         super().__init__(name="ocr", **kwargs)

@@ -1,14 +1,7 @@
 """Launcher slash command: /define — word definitions from dict.org.
 
-Queries the DICT protocol (RFC 2229) directly over TCP on dict.org's
-public server (port 2628) — no API key, no extra dependencies. WordNet
-(``wn``) is the default database; pass ``-d <database>`` to pick another
-(e.g. ``gcide``, ``foldoc``). Each numbered sense is its own row; press
-Enter to copy the full definition.
-
-Examples:
-    /define serendipity
-    /define -d foldoc monad
+Queries the DICT protocol (RFC 2229) directly over TCP — no API key.
+WordNet is the default database; ``-d <database>`` picks another.
 """
 
 import re
@@ -26,10 +19,7 @@ _MAX_SENSES = 5
 _PREVIEW_LENGTH = 110
 _DATABASE_FLAGS = {"-d", "--database"}
 
-#: A numbered sense line inside a WordNet definition body. dict.org indents
-#: them and prefixes the part of speech — ``    adj 1: ...``, ``    n 1: ...``,
-#: ``    adv 1: ...`` — while continuation senses of the same POS drop the
-#: marker (``    2: ...``).
+#: Numbered sense line inside a WordNet definition body, e.g. ``    adj 1: ...``.
 _SENSE_RE = re.compile(r"^[ \t]*(?:(?:n|v|adj|adv|sat|prep)\s+)?\d+:", re.MULTILINE)
 #: ``151 "<word>" <database> "<description>" - text follows``
 _151_RE = re.compile(r'^151\s+(?:"([^"]*)"|(\S+))\s+(\S+)\s+"([^"]*)"')

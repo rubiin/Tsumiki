@@ -196,11 +196,7 @@ class ClipHistoryMenu(Box, TeardownMixin):
             self.update_selection(0)
 
     def _fill_viewport(self):
-        """Load more items if the viewport still has room.
-
-        This ensures the initial batch fills the visible area so that
-        scroll-to-load works correctly.
-        """
+        """Load more items if the viewport still has room."""
         if self.loading or self.max_items == 0 or self.items_loaded >= self.max_items:
             return False
 
@@ -486,11 +482,7 @@ class ClipHistoryMenu(Box, TeardownMixin):
         return button
 
     def _rebuild_viewport_from_cache(self):
-        """Rebuild viewport reusing cached item widgets instead of destroying+creating.
-
-        Called by toggle_pin_item to avoid the expensive full rebuild that
-        destroys and recreates every visible button widget.
-        """
+        """Rebuild the viewport reusing cached item widgets (avoids full rebuild)."""
         children = list(self.viewport.get_children())
 
         # Detach all children from viewport without destroying them
@@ -909,10 +901,7 @@ class ClipHistoryMenu(Box, TeardownMixin):
         return False
 
     def _cleanup_resources(self):
-        """Best-effort cleanup for timers, caches, and temporary resources.
-
-        Timer cleanup is handled by TeardownMixin._teardown.
-        """
+        """Best-effort cleanup for timers, caches, and temporary resources."""
         self._search_timer_id = None
 
         if self._arranger_handler:

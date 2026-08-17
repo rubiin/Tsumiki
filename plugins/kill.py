@@ -1,13 +1,7 @@
 """Launcher slash command: /kill — search and kill running processes.
 
-Lists running processes matching the query (by process name or command
-line) and terminates the selected one with SIGTERM — or SIGKILL when the
-``-9`` / ``--force`` flag is used.
-Examples:
-    /kill firefox
-    /kill -9 spotify
-    /kill 3000        # kill whatever is listening on port 3000
-    /kill -9 8080     # SIGKILL the listener on port 8080
+SIGTERM by default, SIGKILL with the ``-9`` flag; a numeric query kills
+the process listening on that port.
 """
 
 import os

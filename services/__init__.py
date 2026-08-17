@@ -1,8 +1,4 @@
-"""Lazy-loaded services for improved startup performance.
-
-Services are initialized on first access, not at import time.
-This avoids establishing D-Bus connections until they're actually needed.
-"""
+"""Lazy-loaded services, initialized on first access (faster startup)."""
 
 import threading
 
