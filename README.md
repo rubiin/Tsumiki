@@ -58,30 +58,6 @@
 - **On-screen displays** — OSD overlays for volume, brightness, microphone, and lock keys.
 - **Lightweight & fast** — Designed for minimal memory and CPU overhead.
 
-## Quick Start
-
-**Prerequisites:** [Hyprland](https://hyprland.org), [JetBrains Nerd Font](https://www.nerdfonts.com), Python 3.12+.
-
-```sh
-# Clone the repository
-git clone https://github.com/rubiin/tsumiki.git ~/.config/tsumiki
-cd ~/.config/tsumiki
-
-# Automated setup (installs dependencies)
-./init.sh -setup
-
-# Start Tsumiki
-./init.sh -start
-```
-
-For one-line bootstrap, detailed installation options, and manual dependency guides, see the **[Installation guide](https://tsumikii.pages.dev/en/getting-started/installation)**.
-
-Add to your Hyprland config to autostart:
-
-```conf
-exec = sleep 5; ~/.config/tsumiki/init.sh -start
-```
-
 ## Documentation
 
 Full documentation is available at **[tsumikii.pages.dev](https://tsumikii.pages.dev)**:
