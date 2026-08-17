@@ -242,7 +242,9 @@ def get_notification_image_pixbuf(
 
     if os.path.isfile(image_file):
         try:
-            return GdkPixbuf.Pixbuf.new_from_file(image_file)
+            return _scale_pixbuf_to_size(
+                GdkPixbuf.Pixbuf.new_from_file(image_file), size
+            )
         except GLib.GError:
             return None
 
