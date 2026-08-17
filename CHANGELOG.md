@@ -1,5 +1,18 @@
 # Changelog
 
+## [4.2.0](https://github.com/rubiin/tsumiki/compare/v4.1.0...v4.2.0) (2026-08-17)
+
+
+### 🚀 New Features
+
+* add widget gap configuration and improve styling for bar widgets ([6282644](https://github.com/rubiin/tsumiki/commit/6282644653b8e228550c3bfadb31bc96a996ad94))
+* enhance audio and wifi submenus with proper destruction handling and UI adjustments ([c723ad5](https://github.com/rubiin/tsumiki/commit/c723ad53c1a97b69eaaca202d1b81880e42d3c44))
+* improve quick settings UI with expanded button functionality and alignment adjustments ([4045de3](https://github.com/rubiin/tsumiki/commit/4045de38a8fe37d0ac3f4cec9bd7bd500c34639e))
+* optimize notification timeout handling with precise elapsed time tracking ([9e9adb1](https://github.com/rubiin/tsumiki/commit/9e9adb1c5e703919f0b99a54feaf5c327344c07a))
+* restore audio submenu with per-application sliders and unify theme accents ([47756c5](https://github.com/rubiin/tsumiki/commit/47756c518c4bb36cb569fc16815ef09b5eb0853f))
+* update quick settings submenus to improve layout and scrolling behavior ([09462c6](https://github.com/rubiin/tsumiki/commit/09462c61a823968b07a4c4bbffdca61fc5ba933b))
+* use uv instead ([#361](https://github.com/rubiin/tsumiki/issues/361)) ([acde133](https://github.com/rubiin/tsumiki/commit/acde13398ddf37bc963b18054b0914b4e072dd4a))
+
 ## [4.1.0](https://github.com/rubiin/tsumiki/compare/v4.0.2...v4.1.0) (2026-08-15)
 
 
