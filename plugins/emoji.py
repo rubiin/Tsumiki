@@ -1,13 +1,4 @@
-"""Launcher slash command: /emoji — search and copy emojis (offline).
-
-Searches the bundled emoji database (``assets/emoji.json``) by name, slug
-or group, and copies the selected emoji to the clipboard.
-
-Examples:
-    /emoji heart
-    /emoji rocket
-    /emoji smileys
-"""
+"""Launcher slash command: /emoji — search the bundled emoji database."""
 
 import json
 from functools import lru_cache
@@ -51,7 +42,6 @@ class EmojiPlugin(LauncherPlugin):
 
     name = "emoji"
     description = "Search and copy an emoji"
-    icon = "face-smile-symbolic"
     aliases: ClassVar[list[str]] = ["emo"]
 
     def handle(self, args: str) -> list[PluginResult]:
