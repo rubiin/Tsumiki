@@ -38,6 +38,7 @@ class AudioSlider(SettingSlider):
             )
 
             self.chevron_btn = HoverButton(
+                style_classes="audio-chevron-button",
                 child=Box(
                     children=(self.chevron_icon,),
                 ),

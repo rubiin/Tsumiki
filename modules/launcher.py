@@ -227,6 +227,9 @@ class Launcher(PopupWindow):
         self._all_apps = self.app_util.all_applications
         self._grid_position = 0  # Track current position in grid
         self._first_app = None  # First app matching the current query (Enter)
+        # Rendered app results: (widget, app) pairs in display order.
+        self._app_rows: list[tuple[Button, DesktopApp]] = []
+        self._app_selected = -1  # Index of the highlighted app result
 
         # Slash-command plugin state
         self.plugin_manager = (
@@ -364,8 +367,16 @@ class Launcher(PopupWindow):
             if keyval in (Gdk.KEY_Return, Gdk.KEY_KP_Enter):
                 self._activate_plugin_selection()
                 return True
+        elif keyval in (Gdk.KEY_Up, Gdk.KEY_KP_Up):
+            # App-search mode: Up moves the highlight up and scrolls.
+            self._move_app_selection(-1)
+            return True
+        elif keyval in (Gdk.KEY_Down, Gdk.KEY_KP_Down):
+            # App-search mode: Down moves the highlight down and scrolls.
+            self._move_app_selection(1)
+            return True
         elif keyval in (Gdk.KEY_Return, Gdk.KEY_KP_Enter):
-            # App-search mode: Enter launches the first match.
+            # App-search mode: Enter launches the highlighted app.
             self._launch_first_app()
             return True
         return False
@@ -430,11 +441,16 @@ class Launcher(PopupWindow):
         self.search_entry.set_position(len(text))
 
     def _launch_first_app(self):
-        """Launch the first app matching the current query (Enter in app mode)."""
-        if self._first_app is None:
+        """Launch the highlighted app, falling back to the first match (Enter)."""
+        app = None
+        if self._app_selected != -1 and self._app_selected < len(self._app_rows):
+            app = self._app_rows[self._app_selected][1]
+        if app is None:
+            app = self._first_app
+        if app is None:
             return
         try:
-            self._first_app.launch()
+            app.launch()
         except Exception as exc:
             logger.warning(f"[Launcher] Failed to launch app: {exc}")
             return
@@ -485,6 +501,8 @@ class Launcher(PopupWindow):
         self._clear_viewport_safely()
         self._grid_position = 0
         self._first_app = None
+        self._app_rows = []
+        self._app_selected = -1
 
     @staticmethod
     def _matches_query(app: DesktopApp, query_lower: str) -> bool:
@@ -854,6 +872,46 @@ class Launcher(PopupWindow):
         self._plugin_selected = new
         self._plugin_rows[old].remove_style_class("selected")
         self._plugin_rows[new].add_style_class("selected")
+        idle_add(self._scroll_to_row, self._plugin_rows[new])
+
+    def _move_app_selection(self, delta: int):
+        """Move the highlighted app row by *delta* steps (Up/Down keys)."""
+        if not self._app_rows:
+            return
+        old = self._app_selected
+        if old == -1:
+            # Start from the top on Down, the bottom on Up.
+            new = 0 if delta > 0 else len(self._app_rows) - 1
+        else:
+            new = old + delta
+        new = max(0, min(new, len(self._app_rows) - 1))
+        if new == old:
+            return
+        self._app_selected = new
+        if old != -1:
+            self._app_rows[old][0].remove_style_class("selected")
+        self._app_rows[new][0].add_style_class("selected")
+        idle_add(self._scroll_to_row, self._app_rows[new][0])
+
+    def _scroll_to_row(self, button: Button):
+        """Scroll the viewport so *button* stays visible while selecting."""
+        adj = self.scrolled_window.get_vadjustment()
+        alloc = button.get_allocation()
+        if alloc.height == 0:
+            return True  # Retry once layout is ready
+
+        y = alloc.y
+        height = alloc.height
+        page_size = adj.get_page_size()
+        current_value = adj.get_value()
+
+        if y < current_value:
+            # Row above the viewport - align to top
+            adj.set_value(y)
+        elif y + height > current_value + page_size:
+            # Row below the viewport - align to bottom
+            adj.set_value(y + height - page_size)
+        return False
 
     def _activate_plugin_selection(self):
         """Activate the currently selected plugin row (Enter)."""
@@ -880,11 +938,16 @@ class Launcher(PopupWindow):
     def add_next_application(self, apps_iter: Iterator[DesktopApp]):
         """Add the next application widget to the viewport."""
         if not (app := next(apps_iter, None)):
+            # Done rendering — highlight the first result by default.
+            if self._app_rows and self._app_selected == -1:
+                self._app_rows[0][0].add_style_class("selected")
+                self._app_selected = 0
             return False
 
         app_widget = AppWidgetFactory.create_widget(
             app, self.config.layout_mode, self.config.icon_size, self.config
         )
+        self._app_rows.append((app_widget, app))
         # Same as above: on_clicked must be a constructor kwarg — connect the
         # signal explicitly so clicking an app tile actually launches it.
         app_widget.connect("clicked", lambda *_: (app.launch(), self.close_launcher()))

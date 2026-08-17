@@ -6,44 +6,41 @@ description: Things you should do after installing Tsumiki
 After installing Tsumiki, add these Hyprland layer rules so blur and popup effects render correctly.
 
 ```lua
+hl.layer_rule({
+	name = "tsumiki-notifications",
+	match = { namespace = "tsumiki-notifications" },
+	blur = true,
+	xray = true,
+	blur_popups = true,
+	ignore_alpha = 0,
+	no_anim = true,
+})
 
-layerrule {
-  name = tsumiki-notifications
-  match:namespace = tsumiki-notifications
-  blur = on
-  xray = on
-  blur_popups = on
-  ignore_alpha = 0
-  no_anim = on
-}
+hl.layer_rule({
+	name = "tsumiki-layer",
+	match = { namespace = "tsumiki" },
+	blur = true,
+	xray = true,
+	blur_popups = true,
+	ignore_alpha = 0,
+})
 
+hl.layer_rule({
+	name = "gtk-layer-shell",
+	match = { namespace = "gtk-layer-shell" },
+	blur = true,
+	ignore_alpha = 0,
+})
 
-layerrule {
-  name = tsumiki-layer
-  match:namespace = tsumiki
-  blur = on
-  xray = on
-  blur_popups = on
-  ignore_alpha = 0
-}
-
-layerrule {
-  name = gtk-layer-shell
-  match:namespace = gtk-layer-shell
-  blur = on
-  ignore_alpha = 0
-}
-
-layerrule {
-  name = launcher-layer
-  match:namespace = launcher
-  blur = on
-  xray = on
-  blur_popups = on
-  ignore_alpha = 0
-  animation = popin
-}
-
+hl.layer_rule({
+	name = "launcher-layer",
+	match = { namespace = "launcher" },
+	blur = true,
+	xray = true,
+	blur_popups = true,
+	ignore_alpha = 0,
+	animation = "popin",
+})
 
 ```
 

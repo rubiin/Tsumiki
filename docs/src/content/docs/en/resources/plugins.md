@@ -107,10 +107,10 @@ calls `handle("bonjour")`. Return a list of `PluginResult` rows:
 
 ```python
 PluginResult(
-    title,          # main line shown in the launcher
-    subtitle="",    # secondary line (hint, source, etc.)
-    icon=None,      # per-row icon override; falls back to the plugin icon
-    data=None,      # arbitrary payload handed to execute() on activation
+    title,  # main line shown in the launcher
+    subtitle="",  # secondary line (hint, source, etc.)
+    icon=None,  # per-row icon override; falls back to the plugin icon
+    data=None,  # arbitrary payload handed to execute() on activation
 )
 ```
 

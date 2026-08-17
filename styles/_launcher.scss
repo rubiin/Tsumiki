@@ -17,7 +17,8 @@ $launcher-transition:
     -gtk-icon-effect: highlight;
   }
   &:hover,
-  &:focus {
+  &:focus,
+  &.selected {
     background-color: theme.$accent-purple;
     color: theme.$background-dark;
 
@@ -45,7 +46,8 @@ $launcher-transition:
   }
 
   &:hover #grid-item label,
-  &:focus #grid-item label {
+  &:focus #grid-item label,
+  &.selected #grid-item label {
     color: theme.$background-dark;
   }
 }
