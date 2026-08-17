@@ -12,6 +12,7 @@ Tsumiki 是基于 Fabric 组件系统构建的 Hyprland 模块化状态栏。
 - **Hyprland** — 一个可正常运行的 Hyprland 安装
 - **JetBrains Nerd Font** — `sudo pacman -S ttf-jetbrains-mono-nerd`
 - **Python 3.12+** — `python --version` 应显示 3.12 或更高版本
+- **uv** — 用于安装依赖项的 Python 包管理器（`uv sync`）
 
 ## 快速安装
 

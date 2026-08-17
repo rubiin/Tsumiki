@@ -12,6 +12,7 @@ Antes de comenzar, asegúrate de tener:
 - **Hyprland** — una instalación funcional de Hyprland
 - **JetBrains Nerd Font** — `sudo pacman -S ttf-jetbrains-mono-nerd`
 - **Python 3.12+** — `python --version` debe mostrar 3.12 o superior
+- **uv** — Administrador de paquetes de Python usado para instalar dependencias (`uv sync`)
 
 ## Instalación Rápida
 

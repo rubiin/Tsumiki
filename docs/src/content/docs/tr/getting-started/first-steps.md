@@ -102,7 +102,7 @@ Bir şey yanlış görünüyorsa:
 
 - **Çubuk görünmüyor** — Hyprland'in çalıştığından ve başka çubukların çalışmadığından emin olun (`pkill waybar`).
 - **Simgeler yok** — [JetBrains Nerd Font](https://www.nerdfonts.com) kurulu ve terminal/UI yazı tipiniz olarak yapılandırılmış mı kontrol edin.
-- **Eksik işlevsellik** — Bazı widget'lar harici araçlar gerektirir (örn. medya için `playerctl`, parlaklık için `brightnessctl`). Tüm bağımlılıkların kurulu olduğundan emin olmak için `./init.sh -setup` komutunu çalıştırın.
+- **Eksik işlevsellik** — Bazı widget'lar harici araçlar gerektirir (örn. medya için `playerctl`, parlaklık için `brightnessctl`). Tüm bağımlılıkların kurulu olduğundan emin olmak için `./init.sh -setup` komutunu çalıştırın (Python bağımlılıkları `uv sync` ile kurulur).
 - **SASS hataları** — `config.toml` dosyanız geçersiz olabilir. `example/config.toml` ile karşılaştırın.
 
 Daha fazla yardım için [SSS](/tr/help/faq) veya [Sorun Giderme](/tr/help/troubleshooting) sayfalarına bakın.

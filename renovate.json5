@@ -8,7 +8,8 @@
         "config:recommended"
     ],
     "enabledManagers": [
-        "pip_requirements",
+        "pep621",
+        "uv",
         "npm",
         "github-actions"
     ],
@@ -19,7 +20,8 @@
     },
         {
             "matchManagers": [
-                "pip_requirements"
+                "pep621",
+                "uv"
             ],
             "matchUpdateTypes": [
                 "minor",
@@ -30,7 +32,8 @@
         },
         {
             "matchManagers": [
-                "pip_requirements"
+                "pep621",
+                "uv"
             ],
             "matchUpdateTypes": [
                 "major"

@@ -1,8 +1,8 @@
 # justfile
 
-# Command to freeze current pip packages to requirements.txt
-freeze:
-    pip freeze > requirements.txt
+# Regenerate the uv lockfile from pyproject.toml
+lock:
+    uv lock
 
 # Run the test suite
 test:

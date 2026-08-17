@@ -102,7 +102,7 @@ Si algo parece incorrecto:
 
 - **La barra no aparece** — Verifica que estés ejecutando Hyprland y que no haya otras barras en ejecución (`pkill waybar`).
 - **Sin iconos** — Verifica que [JetBrains Nerd Font](https://www.nerdfonts.com) esté instalada y configurada como fuente de tu terminal/UI.
-- **Funcionalidad faltante** — Algunos widgets requieren herramientas externas (ej., `playerctl` para medios, `brightnessctl` para brillo). Ejecuta `./init.sh -setup` para asegurarte de que todas las dependencias estén instaladas.
+- **Funcionalidad faltante** — Algunos widgets requieren herramientas externas (ej., `playerctl` para medios, `brightnessctl` para brillo). Ejecuta `./init.sh -setup` para asegurarte de que todas las dependencias estén instaladas (las dependencias de Python se instalan con `uv sync`).
 - **Errores SASS** — Tu `config.toml` puede ser inválido. Compáralo con `example/config.toml`.
 
 Para más ayuda, consulta las páginas de [Preguntas Frecuentes](/es/help/faq) o [Solución de Problemas](/es/help/troubleshooting).

@@ -84,7 +84,7 @@ sudo pacman -S --noconfirm --needed \
   pipewire playerctl dart-sass power-profiles-daemon networkmanager \
   brightnessctl pkgconf wf-recorder kitty python pacman-contrib \
   gtk3 cairo gtk-layer-shell libgirepository noto-fonts-emoji \
-  gobject-introspection gobject-introspection-runtime python-pip \
+  gobject-introspection gobject-introspection-runtime uv \
   python-gobject python-psutil python-cairo python-loguru libnotify \
   cliphist libqalculate python-httpx satty nvtop
 
@@ -95,7 +95,7 @@ yay -S --needed \
   ttf-jetbrains-mono-nerd grimblast-git python-ijson
 
 # Installer les dépendances Python
-pip install -r requirements.txt
+uv sync
 
 # Démarrer
 ./init.sh -start
@@ -127,7 +127,7 @@ alias tsumiki='~/.config/tsumiki/init.sh -start'
 2. La barre Tsumiki devrait apparaître en haut de votre écran.
 3. Si vous voyez des messages d'erreur, vérifiez que :
    - Tous les paquets système sont installés (`./init.sh -setup` réexécute cette vérification)
-   - Les dépendances Python sont installées (`pip install -r requirements.txt`)
+   - Les dépendances Python sont installées (`uv sync`)
    - Vous êtes sous Hyprland (pas un autre compositeur ou X11)
 
 Si la barre n'apparaît pas, consultez [Dépannage](/fr/help/troubleshooting).

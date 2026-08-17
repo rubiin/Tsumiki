@@ -41,7 +41,7 @@ tsu -start
 如果看到 `ModuleNotFoundError`：
 
 ```sh
-pip install -r requirements.txt
+uv sync
 ```
 
 </div>

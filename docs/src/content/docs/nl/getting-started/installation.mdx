@@ -82,7 +82,7 @@ sudo pacman -S --noconfirm --needed \
   pipewire playerctl dart-sass power-profiles-daemon networkmanager \
   brightnessctl pkgconf wf-recorder kitty python pacman-contrib \
   gtk3 cairo gtk-layer-shell libgirepository noto-fonts-emoji \
-  gobject-introspection gobject-introspection-runtime python-pip \
+  gobject-introspection gobject-introspection-runtime uv \
   python-gobject python-psutil python-cairo python-loguru libnotify \
   cliphist libqalculate python-httpx satty nvtop
 
@@ -93,7 +93,7 @@ yay -S --needed \
   ttf-jetbrains-mono-nerd grimblast-git python-ijson
 
 # Python-afhankelijkheden installeren
-pip install -r requirements.txt
+uv sync
 
 # Starten
 ./init.sh -start
@@ -125,7 +125,7 @@ alias tsumiki='~/.config/tsumiki/init.sh -start'
 2. De Tsumiki-balk zou boven aan je scherm moeten verschijnen.
 3. Als je foutmeldingen ziet, controleer dan:
    - Alle systeempakketten zijn geïnstalleerd (`./init.sh -setup` voert deze controle opnieuw uit)
-   - Python-afhankelijkheden zijn geïnstalleerd (`pip install -r requirements.txt`)
+   - Python-afhankelijkheden zijn geïnstalleerd (`uv sync`)
    - Je draait onder Hyprland (niet een andere compositor of X11)
 
 Als de balk niet verschijnt, zie [Probleemoplossing](/nl/help/troubleshooting).

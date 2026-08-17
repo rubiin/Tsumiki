@@ -102,7 +102,7 @@ Als er iets niet klopt:
 
 - **Balk verschijnt niet** — Controleer of Hyprland draait en of er geen andere balken actief zijn (`pkill waybar`).
 - **Geen pictogrammen** — Controleer of [JetBrains Nerd Font](https://www.nerdfonts.com) is geïnstalleerd en geconfigureerd als je terminal/UI-lettertype.
-- **Ontbrekende functionaliteit** — Sommige widgets vereisen externe tools (bijv. `playerctl` voor media, `brightnessctl` voor helderheid). Voer `./init.sh -setup` uit om ervoor te zorgen dat alle afhankelijkheden zijn geïnstalleerd.
+- **Ontbrekende functionaliteit** — Sommige widgets vereisen externe tools (bijv. `playerctl` voor media, `brightnessctl` voor helderheid). Voer `./init.sh -setup` uit om ervoor te zorgen dat alle afhankelijkheden zijn geïnstalleerd (Python-afhankelijkheden worden geïnstalleerd met `uv sync`).
 - **SASS-fouten** — Je `config.toml` is mogelijk ongeldig. Vergelijk het met `example/config.toml`.
 
 Voor meer hulp, raadpleeg de [FAQ](/nl/help/faq) of [Probleemoplossing](/nl/help/troubleshooting) pagina's.

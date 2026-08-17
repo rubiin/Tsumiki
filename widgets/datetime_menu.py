@@ -124,15 +124,14 @@ class DateMenuNotification(Box):
                 style_classes="notification-group-badge-label",
                 name="notification-group-badge-label",
             )
-            header_row.pack_end(
-                self.badge_label,
-                False,
-                False,
-                0,
-            )
         else:
             self.badge_label = None
+
+        # pack_end children are laid out in reverse pack order, so the close
+        # button must be packed first to keep the count badge before it.
         header_row.pack_end(self.close_button, False, False, 0)
+        if self.badge_label is not None:
+            header_row.pack_end(self.badge_label, False, False, 0)
 
         content_box = Box(
             orientation="v",

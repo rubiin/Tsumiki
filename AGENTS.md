@@ -34,10 +34,10 @@ framework). Main code is Python; styles are SCSS; docs are an Astro site.
 ## 4. Setup, Build & Test Commands
 
 ```bash
-./init.sh -setup          # install/setup dependencies
+./init.sh -setup          # install/setup dependencies (uv sync)
 ./init.sh -start           # run the app
 just --list                 # list all available task recipes
-python -m pytest tests/     # run the test suite
+uv run python -m unittest discover tests -q   # run the test suite
 cd docs && pnpm install && pnpm build   # build the docs site
 fabric-cli gs GtkLayerShell-0.1 Playerctl-2.0 NM-1.0  # regenerate gi stubs
 ```
@@ -46,12 +46,12 @@ The following are **one-off/maintainer commands** — run only when explicitly
 requested, never as a side effect of an unrelated change:
 
 - `./install.sh` (system-level bootstrap install)
-- `pip freeze > requirements.txt` (overwrites the pinned dependency list)
+- `uv lock` (regenerates the locked dependency set in `uv.lock`)
 
 ## 5. Guardrails
 
-- Do not run `./install.sh`, `pip freeze > requirements.txt`, or any
-  destructive/system-modifying command unless the user explicitly asks for it.
+- Do not run `./install.sh`, `uv lock`, or any destructive/system-modifying
+  command unless the user explicitly asks for it.
 - Do not revert user changes unless explicitly asked.
 - Do not edit generated files (docs build output, stub files from
   `fabric-cli gs`) directly — regenerate them via their command instead.

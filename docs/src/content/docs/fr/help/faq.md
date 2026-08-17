@@ -47,7 +47,7 @@ tsu -start
 Si vous voyez `ModuleNotFoundError`, installez les dépendances :
 
 ```sh
-pip install -r requirements.txt
+uv sync
 ```
 
 </div>
@@ -79,7 +79,7 @@ tsu -setup
 ou :
 
 ```sh
-pip install -r requirements.txt
+uv sync
 ```
 
 </div>

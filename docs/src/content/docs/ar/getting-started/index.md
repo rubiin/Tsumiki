@@ -12,6 +12,7 @@ description: ابدأ مع تسوميكي في دقائق
 - **هيبرلاند** — تثبيت عامل لهيبرلاند
 - **JetBrains Nerd Font** — `sudo pacman -S ttf-jetbrains-mono-nerd`
 - **Python 3.12+** — يجب أن يظهر `python --version` الإصدار 3.12 أو أعلى
+- **uv** — مدير حزم بايثون المستخدم لتثبيت التبعيات (`uv sync`)
 
 ## التثبيت السريع
 
