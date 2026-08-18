@@ -14,6 +14,7 @@ from shared.mixins import PopoverMixin
 from shared.widget_container import ButtonWidget
 from utils.constants import KANBAN_FILE
 from utils.functions import read_json_file, write_json_file
+from utils.i18n import _
 from utils.icons import get_text_icon
 from utils.widget_utils import create_surface_from_widget, nerd_font_icon
 
@@ -402,9 +403,9 @@ class KanbanWidget(ButtonWidget, PopoverMixin):
         )
 
         if self.config.get("label", True):
-            self.container_box.add(Label(label="Kanban", style_classes="panel-text"))
+            self.container_box.add(Label(label=_('widget.kanban.label'), style_classes="panel-text"))
 
         if self.config.get("tooltip", False) and self.tooltips_enabled:
-            self.set_tooltip_text("Kanban Board")
+            self.set_tooltip_text(_('widget.kanban.tooltip'))
 
         self.setup_popover(Kanban)

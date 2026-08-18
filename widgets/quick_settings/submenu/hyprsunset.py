@@ -12,6 +12,7 @@ from fabric.widgets.scale import Scale
 from shared.buttons import QSChevronButton
 from shared.submenu import QuickSubMenu
 from utils.functions import is_app_running, toggle_command
+from utils.i18n import _
 from utils.icons import get_text_icon
 from utils.widget_utils import (
     create_scale,
@@ -35,7 +36,7 @@ class HyprSunsetSubMenu(QuickSubMenu):
         )
 
         super().__init__(
-            title="HyprSunset",
+            title=_('widget.quick_settings.hyprsunset.title'),
             title_icon=get_text_icon("nightlight.enabled"),
             name="hyprsunset-sub-menu",
             scan_button=self.scan_button,
@@ -104,7 +105,7 @@ class HyprSunsetToggle(QSChevronButton):
         super().__init__(
             action_icon=get_text_icon("nightlight.disabled"),
             pixel_size=20,
-            action_label="Enabled",
+            action_label=_('widget.quick_settings.hyprsunset.enabled'),
             submenu_factory=submenu_factory,
             **kwargs,
         )
@@ -139,10 +140,10 @@ class HyprSunsetToggle(QSChevronButton):
 
         if self.is_running:
             self.action_icon.set_label(get_text_icon("nightlight.enabled"))
-            self.action_label.set_label("Enabled")
+            self.action_label.set_label(_('widget.quick_settings.hyprsunset.enabled'))
             self.set_active_style(True)
         else:
             self.action_icon.set_label(get_text_icon("nightlight.disabled"))
-            self.action_label.set_label("Disabled")
+            self.action_label.set_label(_('common.disabled'))
             self.set_active_style(False)
         return True

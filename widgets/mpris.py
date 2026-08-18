@@ -9,6 +9,7 @@ from shared.widget_container import ButtonWidget
 from utils.colors import Colors
 from utils.constants import ASSETS_DIR, NEWLINE_RE
 from utils.functions import char_limit_to_px, safe_disconnect
+from utils.i18n import _
 
 
 class MprisWidget(ButtonWidget, PopoverMixin):
@@ -231,7 +232,7 @@ class MprisWidget(ButtonWidget, PopoverMixin):
 
         self.show()
         title = NEWLINE_RE.sub(" ", self.player.title or "").strip()
-        bar_label = title or "Nothing playing"
+        bar_label = title or _('widget.mpris.nothing_playing')
 
         label_text = self.label_format.format(
             title=title,

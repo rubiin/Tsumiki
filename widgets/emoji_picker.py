@@ -11,6 +11,7 @@ from shared.widget_container import ButtonWidget
 from utils.constants import ASSETS_DIR
 from utils.decorators import run_in_thread
 from utils.functions import ensure_file
+from utils.i18n import _
 from utils.widget_utils import nerd_font_icon
 
 # Module-level cache for emoji data — parsed once, reused across picker opens
@@ -159,7 +160,7 @@ class EmojiPickerMenu(Box):
             h_align="center",
             v_align="center",
             children=[
-                Label(label="Loading emojis...", style_classes="dim-label"),
+                Label(label=_('widget.emoji_picker.loading'), style_classes="dim-label"),
             ],
         )
         self.stack.add(loading_box)
@@ -423,9 +424,9 @@ class EmojiPickerWidget(ButtonWidget, PopoverMixin):
         )
 
         if self.config.get("label", True):
-            self.container_box.add(Label(label="Emoji", style_classes="panel-text"))
+            self.container_box.add(Label(label=_('widget.emoji_picker.label'), style_classes="panel-text"))
 
         if self.config.get("tooltip", False) and self.tooltips_enabled:
-            self.set_tooltip_text("Emoji Picker")
+            self.set_tooltip_text(_('widget.emoji_picker.tooltip'))
 
         self.setup_popover(lambda: EmojiPickerMenu(parent=self))

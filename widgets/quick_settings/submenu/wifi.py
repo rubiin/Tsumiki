@@ -13,6 +13,7 @@ from shared.buttons import QSChevronButton, ScanButton
 from shared.list import ListBox
 from shared.submenu import QuickSubMenu
 from utils.exceptions import NetworkManagerNotFoundError
+from utils.i18n import _
 from utils.icons import get_text_icon, network_icon_to_text_icons
 from widgets.quick_settings.components import QuickSettingsIconLabelRow
 
@@ -55,7 +56,7 @@ class WifiSubMenu(QuickSubMenu):
         )
 
         super().__init__(
-            title="Network",
+            title=_('widget.quick_settings.network.title'),
             title_icon=get_text_icon("wifi.generic"),
             scan_button=self.scan_button,
             child=self.child,
@@ -268,7 +269,7 @@ class WifiToggle(QSChevronButton):
     ):
         super().__init__(
             action_icon=get_text_icon("wifi.generic"),
-            action_label=" Wifi Disabled",
+            action_label=_('widget.quick_settings.wifi.disabled'),
             submenu_factory=submenu_factory,
             **kwargs,
         )

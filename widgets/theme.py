@@ -4,6 +4,7 @@ from services import style_service
 from shared.widget_container import ButtonWidget
 from utils.colors import Colors
 from utils.functions import send_notification
+from utils.i18n import _
 from utils.widget_utils import nerd_font_icon
 
 
@@ -42,6 +43,6 @@ class ThemeSwitcherWidget(ButtonWidget):
         new_theme = self._style_service.next_theme()
 
         if self.config.get("notify", True):
-            send_notification("Tsumiki", f"Theme switched to {new_theme}")
+            send_notification("Tsumiki", _('widget.theme.switched', theme=new_theme))
 
         self.set_tooltip_text(new_theme)

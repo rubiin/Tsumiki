@@ -264,8 +264,8 @@ class PowerControlButtons(HoverButton):
         self.parent.toggle_popup()
         if self.config.get("confirm", True):
             Dialog().add_content(
-                title=f"{self.name.capitalize()} Confirmation",
-                body=f"Are you sure you want to {self.name}?",
+                title=_('widget.power.confirmation', name=self.name.capitalize()),
+                body=_('widget.power.confirm_action', name=self.name),
                 command=self.command,
             ).toggle_popup()
         else:
