@@ -25,7 +25,7 @@
   <b><a href="#license">License</a></b>
 </p>
 
-> *No, this isn't Waybar. Yes, it's written in Python. Yes, it's still fast.* 🐍
+> _No, this isn't Waybar. Yes, it's written in Python. Yes, it's still fast._ 🐍
 
 **Tsumiki** (積み木 — Japanese for "building blocks") is a modular status bar for the [Hyprland](https://hyprland.org) Wayland compositor. Built on [Fabric](https://github.com/Fabric-Development/fabric), it offers a flexible, widget-based architecture for creating custom desktop panels — lightweight, performant, and deeply configurable.
 
@@ -62,15 +62,15 @@
 
 Full documentation is available at **[tsumikii.pages.dev](https://tsumikii.pages.dev)**:
 
-| Section | Description |
-|---|---|
-| [Getting Started](https://tsumikii.pages.dev/en/getting-started/overview) | Overview, installation, first steps |
-| [Configuration](https://tsumikii.pages.dev/en/configuring/config) | Layout, widget options, modules |
-| [Widgets Reference](https://tsumikii.pages.dev/en/features/widgets) | Complete widget configuration reference |
-| [Modules Reference](https://tsumikii.pages.dev/en/features/modules) | Bar, dock, notifications, launcher, OSD |
-| [Theming](https://tsumikii.pages.dev/en/theming/making-themes) | SCSS customization, Matugen, tips |
-| [FAQ & Troubleshooting](https://tsumikii.pages.dev/en/help/faq) | Common issues and solutions |
-| [Post-Installation](https://tsumikii.pages.dev/en/resources/post-install) | Hyprland layer rules for effects |
+| Section                                                                   | Description                             |
+| ------------------------------------------------------------------------- | --------------------------------------- |
+| [Getting Started](https://tsumikii.pages.dev/en/getting-started/overview) | Overview, installation, first steps     |
+| [Configuration](https://tsumikii.pages.dev/en/configuring/config)         | Layout, widget options, modules         |
+| [Widgets Reference](https://tsumikii.pages.dev/en/features/widgets)       | Complete widget configuration reference |
+| [Modules Reference](https://tsumikii.pages.dev/en/features/modules)       | Bar, dock, notifications, launcher, OSD |
+| [Theming](https://tsumikii.pages.dev/en/theming/making-themes)            | SCSS customization, Matugen, tips       |
+| [FAQ & Troubleshooting](https://tsumikii.pages.dev/en/help/faq)           | Common issues and solutions             |
+| [Post-Installation](https://tsumikii.pages.dev/en/resources/post-install) | Hyprland layer rules for effects        |
 
 ## Support the Project
 

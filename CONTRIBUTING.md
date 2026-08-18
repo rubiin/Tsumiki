@@ -97,12 +97,15 @@ When creating a new widget:
 - Run `python doc_gen.py` to generate the documentation for the widgets
 
 # Installing extra stubs (Optional)
+
 Install fabric-cli with the following command:
+
 ```sh
 yay -S fabric-cli-git
 ```
 
 Then run the following command from the root of the repo to generate the stubs:
+
 ```sh
 fabric-cli gs GtkLayerShell-0.1 Playerctl-2.0 NM-1.0
 ```

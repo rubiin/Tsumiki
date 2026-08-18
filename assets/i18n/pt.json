@@ -16,31 +16,130 @@
     "details": "Detalhes"
   },
   "widget": {
-    "battery": { "tooltip": "Bateria", "low": "Bateria baixa", "charging": "Carregando", "full": "Carga completa", "no_battery": "Nenhuma bateria presente" },
-    "bluetooth": { "tooltip": "Bluetooth", "on": "Ligado", "off": "Desligado", "connected": "Conectado", "connecting": "Conectando...", "connect_failed": "Falha na conexao", "connect": "Conectar", "disconnect": "Desconectar", "unknown_device": "Dispositivo desconhecido" },
-    "breathing": { "label": "Respirar", "choose_exercise": "ESCOLHER UM EXERCICIO", "duration": "DURACAO", "select_exercise": "Selecione um exercicio e pressione Iniciar", "start": "▶  Iniciar", "stop": "■  Parar", "min": "min" },
+    "battery": {
+      "tooltip": "Bateria",
+      "low": "Bateria baixa",
+      "charging": "Carregando",
+      "full": "Carga completa",
+      "no_battery": "Nenhuma bateria presente"
+    },
+    "bluetooth": {
+      "tooltip": "Bluetooth",
+      "on": "Ligado",
+      "off": "Desligado",
+      "connected": "Conectado",
+      "connecting": "Conectando...",
+      "connect_failed": "Falha na conexao",
+      "connect": "Conectar",
+      "disconnect": "Desconectar",
+      "unknown_device": "Dispositivo desconhecido"
+    },
+    "breathing": {
+      "label": "Respirar",
+      "choose_exercise": "ESCOLHER UM EXERCICIO",
+      "duration": "DURACAO",
+      "select_exercise": "Selecione um exercicio e pressione Iniciar",
+      "start": "▶  Iniciar",
+      "stop": "■  Parar",
+      "min": "min"
+    },
     "brightness": { "tooltip": "Brilho: {percent}%" },
     "cheatsheet": { "tooltip": "Atalhos do Hyprland" },
-    "click_counter": { "tooltip": "Clique esquerdo para incrementar, clique direito para redefinir" },
-    "clipboard": { "tooltip": "Historico da area de transferencia", "empty": "O historico da area de transferencia esta vazio", "clear": "Limpar historico", "sync": "Sincronizar area de transferencia", "label": "Transferencia" },
-    "cloudflare_warp": { "tooltip": "Cloudflare WARP", "not_found": "WARP: warp-cli nao encontrado", "connect": "Conectar", "disconnect": "Desconectar", "connected": "Conectado", "disconnected": "Desconectado", "status_connected": "WARP: Conectado", "status_disconnected": "WARP: Desconectado" },
-    "date_time": { "tooltip": "Data e Hora", "all_caught_up": "Tudo atualizado!", "dnd": "Nao perturbe", "clear_group": "Limpar grupo" },
-    "dns_switcher": { "tooltip": "Alternador DNS", "default": "DNS: Padrao", "current": "DNS: {provider}", "add_custom": "Adicionar servidor personalizado", "reset": "Redefinir para padrao (ISP)" },
-    "emoji_picker": { "tooltip": "Seletor de emojis", "label": "Emoji", "loading": "Carregando emojis..." },
+    "click_counter": {
+      "tooltip": "Clique esquerdo para incrementar, clique direito para redefinir"
+    },
+    "clipboard": {
+      "tooltip": "Historico da area de transferencia",
+      "empty": "O historico da area de transferencia esta vazio",
+      "clear": "Limpar historico",
+      "sync": "Sincronizar area de transferencia",
+      "label": "Transferencia"
+    },
+    "cloudflare_warp": {
+      "tooltip": "Cloudflare WARP",
+      "not_found": "WARP: warp-cli nao encontrado",
+      "connect": "Conectar",
+      "disconnect": "Desconectar",
+      "connected": "Conectado",
+      "disconnected": "Desconectado",
+      "status_connected": "WARP: Conectado",
+      "status_disconnected": "WARP: Desconectado"
+    },
+    "date_time": {
+      "tooltip": "Data e Hora",
+      "all_caught_up": "Tudo atualizado!",
+      "dnd": "Nao perturbe",
+      "clear_group": "Limpar grupo"
+    },
+    "dns_switcher": {
+      "tooltip": "Alternador DNS",
+      "default": "DNS: Padrao",
+      "current": "DNS: {provider}",
+      "add_custom": "Adicionar servidor personalizado",
+      "reset": "Redefinir para padrao (ISP)"
+    },
+    "emoji_picker": {
+      "tooltip": "Seletor de emojis",
+      "label": "Emoji",
+      "loading": "Carregando emojis..."
+    },
     "git_companion": { "label": "Companheiro Git", "no_bio": "Sem bio" },
-    "hyprpicker": { "label": "seletor", "tooltip": "Selecionar uma cor", "script_not_found": "Script nao encontrado" },
+    "hyprpicker": {
+      "label": "seletor",
+      "tooltip": "Selecionar uma cor",
+      "script_not_found": "Script nao encontrado"
+    },
     "ip_monitor": { "tooltip": "Informacoes IP", "refresh": "Atualizar" },
     "kanban": { "label": "Kanban", "tooltip": "Quadro Kanban" },
     "keyboard": { "label": "teclado" },
     "language": { "tooltip": "Idioma: {lang}" },
     "launcher_button": { "tooltip": "Abrir lancador de aplicativos" },
-    "mpris": { "nothing_playing": "Nada reproduzindo", "no_title": "Sem titulo", "no_artist": "Sem artista" },
+    "mpris": {
+      "nothing_playing": "Nada reproduzindo",
+      "no_title": "Sem titulo",
+      "no_artist": "Sem artista"
+    },
     "network": { "upload": "Enviar", "download": "Baixar" },
-    "ocr": { "label": "OCR", "tooltip": "Clique esquerdo para OCR, clique direito para selecionar idioma", "lang_selected": "OCR ({lang})" },
+    "ocr": {
+      "label": "OCR",
+      "tooltip": "Clique esquerdo para OCR, clique direito para selecionar idioma",
+      "lang_selected": "OCR ({lang})"
+    },
     "overview_button": { "label": "visao geral", "tooltip": "Visao geral" },
-    "power": { "tooltip": "Energia", "label": "energia", "shutdown": "Desligar", "reboot": "Reiniciar", "hibernate": "Hibernar", "suspend": "Suspender", "lock": "Bloquear", "logout": "Encerrar sessao", "confirm_reboot": "Deseja realmente reiniciar?", "confirm_shutdown": "Deseja realmente desligar?", "confirmation": "Confirmacao de {name}", "confirm_action": "Tem certeza de que deseja {name}?" },
+    "power": {
+      "tooltip": "Energia",
+      "label": "energia",
+      "shutdown": "Desligar",
+      "reboot": "Reiniciar",
+      "hibernate": "Hibernar",
+      "suspend": "Suspender",
+      "lock": "Bloquear",
+      "logout": "Encerrar sessao",
+      "confirm_reboot": "Deseja realmente reiniciar?",
+      "confirm_shutdown": "Deseja realmente desligar?",
+      "confirmation": "Confirmacao de {name}",
+      "confirm_action": "Tem certeza de que deseja {name}?"
+    },
     "pomodoro": { "tooltip": "Temporizador Pomodoro" },
-    "quick_settings": { "uptime": "Tempo de atividade do sistema", "wifi": { "disabled": "Wifi desativado", "password_prompt": "Digite a senha para {ssid}", "connect_to": "Conectar a {ssid}" }, "bluetooth": { "paired": "Dispositivos pareados", "available": "Dispositivos disponiveis", "enabled": "Ativado" }, "power_profiles": { "title": "Perfis de energia", "saver": "Economia de energia" }, "notifications": { "noisy": "Sonoro", "quiet": "Silencioso" }, "dark_mode": { "dark": "Escuro", "light": "Claro" }, "hyprsunset": { "title": "HyprSunset", "enabled": "Ativado" }, "audio": { "title": "Audio do aplicativo" }, "network": { "title": "Rede" } },
+    "quick_settings": {
+      "uptime": "Tempo de atividade do sistema",
+      "wifi": {
+        "disabled": "Wifi desativado",
+        "password_prompt": "Digite a senha para {ssid}",
+        "connect_to": "Conectar a {ssid}"
+      },
+      "bluetooth": {
+        "paired": "Dispositivos pareados",
+        "available": "Dispositivos disponiveis",
+        "enabled": "Ativado"
+      },
+      "power_profiles": { "title": "Perfis de energia", "saver": "Economia de energia" },
+      "notifications": { "noisy": "Sonoro", "quiet": "Silencioso" },
+      "dark_mode": { "dark": "Escuro", "light": "Claro" },
+      "hyprsunset": { "title": "HyprSunset", "enabled": "Ativado" },
+      "audio": { "title": "Audio do aplicativo" },
+      "network": { "title": "Rede" }
+    },
     "recorder": { "started": "Gravacao iniciada", "stopped": "Gravacao parada" },
     "screenshot": { "tooltip": "Captura de tela", "label": "captura" },
     "settings": { "tooltip": "Abrir configuracoes", "label": "Configuracoes" },
@@ -48,14 +147,34 @@
     "submap": { "label": "submapa", "current": "Submapa atual: {submap}" },
     "theme": { "switched": "Tema alterado para {theme}" },
     "updates": { "tooltip": "Atualizacoes" },
-    "usb_manager": { "label": "USB", "tooltip": "Gerenciador USB", "title": "Gerenciador USB", "unmount_all": "Desmontar tudo", "eject_all": "Ejetar tudo", "mounted": "Montado", "ready": "Pronto", "no_devices": "Nenhum dispositivo USB detectado", "plug_in": "Conecte uma unidade USB para comecar", "open": "Abrir", "mount": "Montar", "unmount": "Desmontar", "eject": "Ejetar" },
+    "usb_manager": {
+      "label": "USB",
+      "tooltip": "Gerenciador USB",
+      "title": "Gerenciador USB",
+      "unmount_all": "Desmontar tudo",
+      "eject_all": "Ejetar tudo",
+      "mounted": "Montado",
+      "ready": "Pronto",
+      "no_devices": "Nenhum dispositivo USB detectado",
+      "plug_in": "Conecte uma unidade USB para comecar",
+      "open": "Abrir",
+      "mount": "Montar",
+      "unmount": "Desmontar",
+      "eject": "Ejetar"
+    },
     "wallpaper": { "label": "papel de parede", "tooltip": "Seletor de papel de parede" },
-    "weather": { "fetching": "Obtendo...", "error": "Erro ao obter dados do tempo, tente novamente mais tarde." },
+    "weather": {
+      "fetching": "Obtendo...",
+      "error": "Erro ao obter dados do tempo, tente novamente mais tarde."
+    },
     "window_count": { "tooltip": "Area de trabalho: {id}, Janelas: {count}" },
     "workspaces": { "tooltip": "Area de trabalho: {id}, Janelas: {count}" }
   },
   "module": {
-    "activate_linux": { "title": "Ativar Linux", "subtitle": "Va as Configuracoes para ativar o Linux." },
+    "activate_linux": {
+      "title": "Ativar Linux",
+      "subtitle": "Va as Configuracoes para ativar o Linux."
+    },
     "launcher": { "tooltip": "Abrir lancador de aplicativos" },
     "overview": { "tooltip": "Visao geral" },
     "settings": { "tooltip": "Abrir configuracoes" }

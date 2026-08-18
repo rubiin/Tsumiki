@@ -16,16 +16,66 @@
     "details": "详情"
   },
   "widget": {
-    "battery": { "tooltip": "电池", "low": "电池电量低", "charging": "充电中", "full": "已充满", "no_battery": "未检测到电池" },
-    "bluetooth": { "tooltip": "蓝牙", "on": "开", "off": "关", "connected": "已连接", "connecting": "连接中...", "connect_failed": "连接失败", "connect": "连接", "disconnect": "断开", "unknown_device": "未知设备" },
-    "breathing": { "label": "呼吸", "choose_exercise": "选择练习", "duration": "时长", "select_exercise": "选择练习并按开始", "start": "▶  开始", "stop": "■  停止", "min": "分钟" },
+    "battery": {
+      "tooltip": "电池",
+      "low": "电池电量低",
+      "charging": "充电中",
+      "full": "已充满",
+      "no_battery": "未检测到电池"
+    },
+    "bluetooth": {
+      "tooltip": "蓝牙",
+      "on": "开",
+      "off": "关",
+      "connected": "已连接",
+      "connecting": "连接中...",
+      "connect_failed": "连接失败",
+      "connect": "连接",
+      "disconnect": "断开",
+      "unknown_device": "未知设备"
+    },
+    "breathing": {
+      "label": "呼吸",
+      "choose_exercise": "选择练习",
+      "duration": "时长",
+      "select_exercise": "选择练习并按开始",
+      "start": "▶  开始",
+      "stop": "■  停止",
+      "min": "分钟"
+    },
     "brightness": { "tooltip": "亮度: {percent}%" },
     "cheatsheet": { "tooltip": "Hyprland 快捷键速查" },
     "click_counter": { "tooltip": "左键增加，右键重置" },
-    "clipboard": { "tooltip": "剪贴板历史", "empty": "剪贴板历史为空", "clear": "清除历史", "sync": "同步剪贴板", "label": "剪贴板" },
-    "cloudflare_warp": { "tooltip": "Cloudflare WARP", "not_found": "WARP: warp-cli 未找到", "connect": "连接", "disconnect": "断开", "connected": "已连接", "disconnected": "未连接", "status_connected": "WARP: 已连接", "status_disconnected": "WARP: 未连接" },
-    "date_time": { "tooltip": "日期和时间", "all_caught_up": "一切已更新！", "dnd": "免打扰", "clear_group": "清除分组" },
-    "dns_switcher": { "tooltip": "DNS 切换器", "default": "DNS: 默认", "current": "DNS: {provider}", "add_custom": "添加自定义服务器", "reset": "重置为默认 (ISP)" },
+    "clipboard": {
+      "tooltip": "剪贴板历史",
+      "empty": "剪贴板历史为空",
+      "clear": "清除历史",
+      "sync": "同步剪贴板",
+      "label": "剪贴板"
+    },
+    "cloudflare_warp": {
+      "tooltip": "Cloudflare WARP",
+      "not_found": "WARP: warp-cli 未找到",
+      "connect": "连接",
+      "disconnect": "断开",
+      "connected": "已连接",
+      "disconnected": "未连接",
+      "status_connected": "WARP: 已连接",
+      "status_disconnected": "WARP: 未连接"
+    },
+    "date_time": {
+      "tooltip": "日期和时间",
+      "all_caught_up": "一切已更新！",
+      "dnd": "免打扰",
+      "clear_group": "清除分组"
+    },
+    "dns_switcher": {
+      "tooltip": "DNS 切换器",
+      "default": "DNS: 默认",
+      "current": "DNS: {provider}",
+      "add_custom": "添加自定义服务器",
+      "reset": "重置为默认 (ISP)"
+    },
     "emoji_picker": { "tooltip": "表情选择器", "label": "表情", "loading": "加载表情中..." },
     "git_companion": { "label": "Git 伴侣", "no_bio": "无简介" },
     "hyprpicker": { "label": "取色器", "tooltip": "选取颜色", "script_not_found": "脚本未找到" },
@@ -38,9 +88,36 @@
     "network": { "upload": "上传", "download": "下载" },
     "ocr": { "label": "OCR", "tooltip": "左键 OCR，右键选择语言", "lang_selected": "OCR ({lang})" },
     "overview_button": { "label": "概览", "tooltip": "概览" },
-    "power": { "tooltip": "电源", "label": "电源", "shutdown": "关机", "reboot": "重启", "hibernate": "休眠", "suspend": "挂起", "lock": "锁定", "logout": "注销", "confirm_reboot": "确定要重启吗？", "confirm_shutdown": "确定要关机吗？", "confirmation": "{name} 确认", "confirm_action": "确定要{name}吗？" },
+    "power": {
+      "tooltip": "电源",
+      "label": "电源",
+      "shutdown": "关机",
+      "reboot": "重启",
+      "hibernate": "休眠",
+      "suspend": "挂起",
+      "lock": "锁定",
+      "logout": "注销",
+      "confirm_reboot": "确定要重启吗？",
+      "confirm_shutdown": "确定要关机吗？",
+      "confirmation": "{name} 确认",
+      "confirm_action": "确定要{name}吗？"
+    },
     "pomodoro": { "tooltip": "番茄计时器" },
-    "quick_settings": { "uptime": "系统运行时间", "wifi": { "disabled": "Wifi 已禁用", "password_prompt": "请输入 {ssid} 的密码", "connect_to": "连接到 {ssid}" }, "bluetooth": { "paired": "已配对设备", "available": "可用设备", "enabled": "已启用" }, "power_profiles": { "title": "电源配置", "saver": "节能模式" }, "notifications": { "noisy": "有声", "quiet": "静音" }, "dark_mode": { "dark": "深色", "light": "浅色" }, "hyprsunset": { "title": "HyprSunset", "enabled": "已启用" }, "audio": { "title": "应用音频" }, "network": { "title": "网络" } },
+    "quick_settings": {
+      "uptime": "系统运行时间",
+      "wifi": {
+        "disabled": "Wifi 已禁用",
+        "password_prompt": "请输入 {ssid} 的密码",
+        "connect_to": "连接到 {ssid}"
+      },
+      "bluetooth": { "paired": "已配对设备", "available": "可用设备", "enabled": "已启用" },
+      "power_profiles": { "title": "电源配置", "saver": "节能模式" },
+      "notifications": { "noisy": "有声", "quiet": "静音" },
+      "dark_mode": { "dark": "深色", "light": "浅色" },
+      "hyprsunset": { "title": "HyprSunset", "enabled": "已启用" },
+      "audio": { "title": "应用音频" },
+      "network": { "title": "网络" }
+    },
     "recorder": { "started": "录制已开始", "stopped": "录制已停止" },
     "screenshot": { "tooltip": "截屏", "label": "截屏" },
     "settings": { "tooltip": "打开设置", "label": "设置" },
@@ -48,7 +125,21 @@
     "submap": { "label": "子映射", "current": "当前子映射: {submap}" },
     "theme": { "switched": "主题已切换为 {theme}" },
     "updates": { "tooltip": "更新" },
-    "usb_manager": { "label": "USB", "tooltip": "USB 管理器", "title": "USB 管理器", "unmount_all": "全部卸载", "eject_all": "全部弹出", "mounted": "已挂载", "ready": "就绪", "no_devices": "未检测到 USB 设备", "plug_in": "插入 USB 驱动器以开始", "open": "打开", "mount": "挂载", "unmount": "卸载", "eject": "弹出" },
+    "usb_manager": {
+      "label": "USB",
+      "tooltip": "USB 管理器",
+      "title": "USB 管理器",
+      "unmount_all": "全部卸载",
+      "eject_all": "全部弹出",
+      "mounted": "已挂载",
+      "ready": "就绪",
+      "no_devices": "未检测到 USB 设备",
+      "plug_in": "插入 USB 驱动器以开始",
+      "open": "打开",
+      "mount": "挂载",
+      "unmount": "卸载",
+      "eject": "弹出"
+    },
     "wallpaper": { "label": "壁纸", "tooltip": "壁纸选择器" },
     "weather": { "fetching": "获取中...", "error": "获取天气数据失败，请稍后重试。" },
     "window_count": { "tooltip": "工作区: {id}，窗口: {count}" },

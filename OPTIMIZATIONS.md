@@ -8,6 +8,7 @@
 ## 🔥 High Priority
 
 ### 1. Thread Safety for Stats Fabricator
+
 **Files**: `utils/widget_utils.py`
 **Effort**: Small | **Impact**: Medium
 
@@ -15,8 +16,8 @@
 
 **Fix**: Add `threading.Lock()` guard around creation and mutation of `_util_fabricator`, `_util_subscribers`, and `_util_changed_handler_ids`.
 
-
 ### 4. Expensive gi.repository Imports at Module Level
+
 **Files**: `services/network.py`, `services/mpris.py`, `shared/scrollable_text.py`, `shared/popover.py`, `widgets/quick_settings/submenu/wifi.py`
 **Effort**: Medium | **Impact**: Medium
 
@@ -28,8 +29,8 @@
 
 ## 🥈 Medium Priority
 
-
 ### 6. Signal Connection Leaks (Many Widgets Bypass TeardownMixin)
+
 **Files**: `widgets/battery.py`, `widgets/bluetooth.py`, `widgets/volume.py`, `widgets/datetime_menu.py`, `widgets/kanban.py`, `services/network.py`, `widgets/quick_settings/submenu/bluetooth.py`, `widgets/quick_settings/togglers.py`, `widgets/settings_gui.py`
 **Effort**: Medium | **Impact**: Medium
 
@@ -37,9 +38,8 @@ Many widgets connect to signals directly without using `_register_handler()` fro
 
 **Fix**: Route all signal connections through `_register_handler()`. For singleton services, disconnect handlers on widget destroy.
 
-
-
 ### 8. Synchronous Hyprland send_command Blocks UI Thread
+
 **Files**: `modules/overview.py`, `modules/dock.py`, `utils/monitors.py`
 **Effort**: Medium | **Impact**: Medium
 
@@ -52,6 +52,7 @@ Many widgets connect to signals directly without using `_register_handler()` fro
 ## 🥉 Lower Priority
 
 ### 10. In-Process Sass Compilation
+
 **Files**: `main.py`, `utils/theme_css.py`
 **Effort**: Medium | **Impact**: Low
 
@@ -59,16 +60,14 @@ Uses blocking `exec_shell_command("sass ...")` in a thread (subprocess spawn). C
 
 **Fix**: Replace `exec_shell_command("sass ...")` with Python `import sass` library.
 
-
 ### 13. ScreenRecording Service Uses Gio.Subprocess Directly
+
 **Files**: `services/screen_record.py`
 **Effort**: Small | **Impact**: Low
 
 Uses `Gio.Subprocess.new()` with manual `Gio.Task` callbacks instead of `exec_shell_command_async()`.
 
 **Fix**: Refactor to use `exec_shell_command_async()` or `Gio.SubprocessLauncher`.
-
-
 
 ---
 
@@ -77,6 +76,7 @@ Uses `Gio.Subprocess.new()` with manual `Gio.Task` callbacks instead of `exec_sh
 ## 🔥 High Priority (New)
 
 ### 40. Unnecessary Widget Nesting — EventBoxWidget Wraps Single-Child in Extra Box
+
 **Files**: `shared/widget_container.py`
 **Effort**: Small | **Impact**: Medium
 
@@ -104,11 +104,10 @@ self.add(self.container_box)
 
 **Savings**: Removes 1 Box per button widget (~30+ widgets × 1 Box = 30+ fewer nodes).
 
-
-
 ## 🥈 Medium Priority (New)
 
 ### 44. Unnecessary Widget Nesting — Popup Layout Creates Up to 5 Nested Containers
+
 **Files**: `shared/popup.py`
 **Effort**: Medium | **Impact**: Medium
 
@@ -130,17 +129,17 @@ class Padding(EventBox):
 The `Padding` EventBox can just receive the `style` directly and skip the inner `Box`. Also, for the `top`, `bottom`, and `center` layouts, the padding could be CSS on the parent Box instead of extra EventBox children.
 
 **Fix**:
+
 - Remove `Padding` inner Box, apply style to EventBox directly (or use CSS on parent)
 - For `top`/`bottom` layouts, use CSS `margin` on the popup instead of spacer Padding widgets
 - For `center` layout, use CSS flexbox-style centering instead of 3 Padding widgets
 
 **Savings**: 1-3 container widgets removed per popup.
 
-
 #
 
-
 ### 46. Unnecessary Widget Nesting — Dock Revealer Extra Box Wrapper
+
 **Files**: `modules/dock.py` (lines 928-931)
 **Effort**: Trivial | **Impact**: Low
 
@@ -157,8 +156,8 @@ The `Box` wrapping `self._app_bar` is unnecessary. The `padding_style` can be ap
 
 **Savings**: 1 Box per dock.
 
-
 ### 47. Many Widgets Use `nerd_font_icon()` Result Wrapped in Additional Container
+
 **Files**: `widgets/battery.py`, `widgets/volume.py`, `widgets/brightness.py`, `widgets/power_button.py`, etc.
 **Effort**: Medium | **Impact**: Low
 
@@ -170,14 +169,12 @@ Many widgets only have **one child** (just the icon) or **two** (icon + text lab
 
 **Savings**: 1 Box per single-child widget (~half of all widgets).
 
-
 ---
 
 ## 🥉 Lower Priority (New)
 
-
-
 ### 49. `shared/widget_container.py` — `EventBoxWidget` Always Creates `container_box` Even if Empty
+
 **Files**: `shared/widget_container.py` (line 144)
 **Effort**: Trivial | **Impact**: Low
 
@@ -185,22 +182,23 @@ Many widgets only have **one child** (just the icon) or **two** (icon + text lab
 
 **Fix**: Lazily create `container_box` only when children are actually added, or allow opting out.
 
-
-
 ## 🔥 High Priority (New)
 
 ### 16. LockKeys OSD Polls hyprctl at 200ms — 5x/second Subprocess Spawn
+
 **Files**: `modules/osds/lockkeys.py`, `utils/constants.py`
 **Effort**: Small | **Impact**: Medium
 
 The LockKeys OSD polls `hyprctl devices -j` every **200ms** by default. Each poll spawns a subprocess, parses JSON output, and updates GTK widgets. That's 5 subprocess spawns/second just for capslock/numlock state detection — which changes maybe once per session.
 
 **Fix**:
+
 - Increase default `poll_interval` to 2000ms (2 seconds) — keyboard lock state doesn't change rapidly enough to warrant 200ms
 - Switch to listening for keyboard events via DBus or `hyprctl` event socket instead of polling
 - Or use `exec_shell_command_async` and cache the last result, only updating UI on actual changes
 
 ### 17. DnsSwitcher Service Polls nmcli Every 3s Unconditionally
+
 **Files**: `services/dns_switcher.py`
 **Effort**: Small | **Impact**: Medium
 
@@ -209,6 +207,7 @@ The LockKeys OSD polls `hyprctl devices -j` every **200ms** by default. Each pol
 **Fix**: Add `pause_polling()`/`resume_polling()` methods (like CloudflareWarpService already has) and connect to widget map/unmap events. Increase default interval to 5000ms+.
 
 ### 18. CloudflareWarp Service Polls warp-cli Every 5s Unconditionally at Module Level
+
 **Files**: `services/cloudflare_warp.py`
 **Effort**: Small | **Impact**: Low
 
@@ -216,8 +215,8 @@ Similar to DnsSwitcher — polls `warp-cli status` every 5 seconds. The widget d
 
 **Fix**: Defer starting the poll timer to first widget map event instead of `__init__`. Or default to paused state and only start on first widget map.
 
-
 ### 20. Privacy Service Calls pw-dump Synchronously on Main Thread
+
 **Files**: `services/privacy.py`
 **Effort**: Small | **Impact**: Medium
 
@@ -225,13 +224,12 @@ Similar to DnsSwitcher — polls `warp-cli status` every 5 seconds. The widget d
 
 **Fix**: Move `exec_shell_command("pw-dump")` to a background thread, parse the JSON there, then idle_add the result back to the main thread.
 
-
 ---
 
 ## 🥈 Medium Priority (New)
 
-
 ### 25. LockKeys OSD Does Not Use TeardownMixin for Timer Cleanup
+
 **Files**: `modules/osds/lockkeys.py`
 **Effort**: Small | **Impact**: Low
 
@@ -240,6 +238,7 @@ Similar to DnsSwitcher — polls `warp-cli status` every 5 seconds. The widget d
 **Fix**: Switch to `TeardownMixin` and use `_register_repeater()` for the poll timer.
 
 ### 26. CloudflareWarp Service Uses Raw exec_shell_command Instead of Async
+
 **Files**: `services/cloudflare_warp.py`
 **Effort**: Small | **Impact**: Low
 
@@ -247,17 +246,12 @@ Similar to DnsSwitcher — polls `warp-cli status` every 5 seconds. The widget d
 
 **Fix**: Replace synchronous `exec_shell_command` with `exec_shell_command_async` for all warp-cli invocations.
 
-
-
-
-
 ---
 
 ## 🥉 Lower Priority (New)
 
-
-
 ### 34. Notification Timer Uses invoke_repeater at 250ms for Second-Level Timeouts
+
 **Files**: `modules/notification.py`
 **Effort**: Trivial | **Impact**: Low
 
@@ -266,6 +260,7 @@ Although the old 10ms interval was already fixed to 250ms (per OPTIMIZATIONS.md 
 **Fix**: Change to 500ms interval.
 
 ### 36. ConfigWatcher Uses Raw subprocess.Popen for Restart
+
 **Files**: `utils/config_watcher.py`
 **Effort**: Small | **Impact**: Low
 
@@ -274,10 +269,12 @@ Although the old 10ms interval was already fixed to 250ms (per OPTIMIZATIONS.md 
 **Fix**: Replace with `exec_shell_command_async()` or centralize via `utils/functions.py`'s `toggle_command()` pattern.
 
 ### 37. utils/functions.py Imports Many Modules at Top Level Used Only in Specific Functions
+
 **Files**: `utils/functions.py`
 **Effort**: Medium | **Impact**: Low
 
 Several module-level imports are only used in specific functions:
+
 - `psutil` — only used in `uptime()`
 - `html` — only used in `parse_markup()`
 - `shutil` — only used in `cleanup_temp_resources()`

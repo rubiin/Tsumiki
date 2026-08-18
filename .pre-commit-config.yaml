@@ -36,3 +36,21 @@ repos:
     rev: v1.7.4
     hooks:
       - id: betterleaks
+
+  # oxfmt for docs formatting
+  - repo: https://github.com/oxc-project/mirrors-oxfmt
+    rev: v0.63.0
+    hooks:
+      - id: oxfmt
+        name: Format docs with oxfmt
+        files: '^(?:docs/.*\.(?:astro|ts|tsx|js|jsx|mjs|cjs|json|md|mdx|css)|styles/.*\.scss)$'
+        pass_filenames: false
+
+  # oxlint for docs linting
+  - repo: https://github.com/oxc-project/mirrors-oxlint
+    rev: v1.78.0
+    hooks:
+      - id: oxlint
+        name: Lint docs with oxlint
+        files: '^docs/.*\.(astro|ts|tsx|js|jsx|mjs|cjs)$'
+        pass_filenames: false

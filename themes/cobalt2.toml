@@ -1,78 +1,78 @@
 [dark.background]
-main =  "#2d2a4a"  # Main background (dark purple-gray)
-alt =  "#23234f"  # Secondary background (darker purple)
-dark =  "#1a1a33"  # Darkest background (deep black-purple)
+main = "#2d2a4a" # Main background (dark purple-gray)
+alt = "#23234f" # Secondary background (darker purple)
+dark = "#1a1a33" # Darkest background (deep black-purple)
 
 
 [dark.text]
-main =  "#f5f2f0"  # Primary text color (light beige)
-secondary =  "#d0d0d0"  # Secondary text color (light gray)
-muted =  "#7c7c7c"  # Tertiary text, muted (soft gray)
-disabled =  "#6c6c6c"  # Disabled text (gray)
-muted-light =  "#999999"  # Light-muted text for hints (light gray)
-muted-dark =  "#333333"  # Dark-muted text (very dark gray)
+main = "#f5f2f0" # Primary text color (light beige)
+secondary = "#d0d0d0" # Secondary text color (light gray)
+muted = "#7c7c7c" # Tertiary text, muted (soft gray)
+disabled = "#6c6c6c" # Disabled text (gray)
+muted-light = "#999999" # Light-muted text for hints (light gray)
+muted-dark = "#333333" # Dark-muted text (very dark gray)
 
 
 [dark.surface]
-disabled =  "#58585a"  # Disabled items (grayish)
-neutral =  "#4d4d56"  # Neutral surface for cards, panels (muted gray)
-highlight =  "#ffcc00"  # Selection and highlights (vibrant yellow)
+disabled = "#58585a" # Disabled items (grayish)
+neutral = "#4d4d56" # Neutral surface for cards, panels (muted gray)
+highlight = "#ffcc00" # Selection and highlights (vibrant yellow)
 
 
 [dark.accent]
-light =  "#ffdf00"  # Light accent (bright yellow)
-pink =  "#d6008c"  # Pink accent (bright fuchsia)
-purple =  "#ac61f7"  # Purple accent (vibrant purple)
-red =  "#f75e5e"  # Red for errors and warnings (soft red)
-orange =  "#f39c12"  # Orange for alerts (yellow-orange)
-yellow =  "#f1c40f"  # Yellow for highlights (golden yellow)
-green =  "#2ecc71"  # Green for success (neon green)
-teal =  "#1abc9c"  # Teal for information (cyan)
-blue =  "#3498db"  # Blue for links and actions (bright blue)
-light-blue =  "#5dade2"  # Sky blue accent (soft blue)
-lavender =  "#9b59b6"  # Lavender for subtle highlights (muted purple)
+light = "#ffdf00" # Light accent (bright yellow)
+pink = "#d6008c" # Pink accent (bright fuchsia)
+purple = "#ac61f7" # Purple accent (vibrant purple)
+red = "#f75e5e" # Red for errors and warnings (soft red)
+orange = "#f39c12" # Orange for alerts (yellow-orange)
+yellow = "#f1c40f" # Yellow for highlights (golden yellow)
+green = "#2ecc71" # Green for success (neon green)
+teal = "#1abc9c" # Teal for information (cyan)
+blue = "#3498db" # Blue for links and actions (bright blue)
+light-blue = "#5dade2" # Sky blue accent (soft blue)
+lavender = "#9b59b6" # Lavender for subtle highlights (muted purple)
 
 
 [dark.general]
-bar-background =  "rgba(45, 42, 74, 0.8)"  # Panel background (semi-transparent dark purple)
-shadow-color =  "rgba(0, 0, 0, 0.6)"  # Shadow color (dark, soft shadows)
+bar-background = "rgba(45, 42, 74, 0.8)" # Panel background (semi-transparent dark purple)
+shadow-color = "rgba(0, 0, 0, 0.6)" # Shadow color (dark, soft shadows)
 
 
 [light.background]
-main =  "#d2d5b5"  # Main background (dark purple-gray)
-alt =  "#dcdcb0"  # Secondary background (darker purple)
-dark =  "#e5e5cc"  # Darkest background (deep black-purple)
+main = "#d2d5b5" # Main background (dark purple-gray)
+alt = "#dcdcb0" # Secondary background (darker purple)
+dark = "#e5e5cc" # Darkest background (deep black-purple)
 
 
 [light.text]
-main =  "#0a0d0f"  # Primary text color (light beige)
-secondary =  "#2f2f2f"  # Secondary text color (light gray)
-muted =  "#838383"  # Tertiary text, muted (soft gray)
-disabled =  "#939393"  # Disabled text (gray)
-muted-light =  "#666666"  # Light-muted text for hints (light gray)
-muted-dark =  "#cccccc"  # Dark-muted text (very dark gray)
+main = "#0a0d0f" # Primary text color (light beige)
+secondary = "#2f2f2f" # Secondary text color (light gray)
+muted = "#838383" # Tertiary text, muted (soft gray)
+disabled = "#939393" # Disabled text (gray)
+muted-light = "#666666" # Light-muted text for hints (light gray)
+muted-dark = "#cccccc" # Dark-muted text (very dark gray)
 
 
 [light.surface]
-disabled =  "#a7a7a5"  # Disabled items (grayish)
-neutral =  "#b2b2a9"  # Neutral surface for cards, panels (muted gray)
-highlight =  "#0033ff"  # Selection and highlights (vibrant yellow)
+disabled = "#a7a7a5" # Disabled items (grayish)
+neutral = "#b2b2a9" # Neutral surface for cards, panels (muted gray)
+highlight = "#0033ff" # Selection and highlights (vibrant yellow)
 
 
 [light.accent]
-light =  "#0020ff"  # Light accent (bright yellow)
-pink =  "#29ff73"  # Pink accent (bright fuchsia)
-purple =  "#539e08"  # Purple accent (vibrant purple)
-red =  "#08a1a1"  # Red for errors and warnings (soft red)
-orange =  "#0c63ed"  # Orange for alerts (yellow-orange)
-yellow =  "#0e3bf0"  # Yellow for highlights (golden yellow)
-green =  "#d1338e"  # Green for success (neon green)
-teal =  "#e54363"  # Teal for information (cyan)
-blue =  "#cb6724"  # Blue for links and actions (bright blue)
-light-blue =  "#a2521d"  # Sky blue accent (soft blue)
-lavender =  "#64a649"  # Lavender for subtle highlights (muted purple)
+light = "#0020ff" # Light accent (bright yellow)
+pink = "#29ff73" # Pink accent (bright fuchsia)
+purple = "#539e08" # Purple accent (vibrant purple)
+red = "#08a1a1" # Red for errors and warnings (soft red)
+orange = "#0c63ed" # Orange for alerts (yellow-orange)
+yellow = "#0e3bf0" # Yellow for highlights (golden yellow)
+green = "#d1338e" # Green for success (neon green)
+teal = "#e54363" # Teal for information (cyan)
+blue = "#cb6724" # Blue for links and actions (bright blue)
+light-blue = "#a2521d" # Sky blue accent (soft blue)
+lavender = "#64a649" # Lavender for subtle highlights (muted purple)
 
 
 [light.general]
-bar-background =  "rgba(210, 213, 181, 0.8)"  # Panel background (semi-transparent dark purple)
-shadow-color =  "rgba(255, 255, 255, 0.6)"  # Shadow color (dark, soft shadows)
+bar-background = "rgba(210, 213, 181, 0.8)" # Panel background (semi-transparent dark purple)
+shadow-color = "rgba(255, 255, 255, 0.6)" # Shadow color (dark, soft shadows)

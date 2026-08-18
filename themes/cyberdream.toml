@@ -1,78 +1,78 @@
 [dark.background]
-main =  "#121212"  # Main background (deep black)
-alt =  "#1a1a1a"  # Secondary background (dark gray)
-dark =  "#0d0d0d"  # Darkest background (pitch black)
+main = "#121212" # Main background (deep black)
+alt = "#1a1a1a" # Secondary background (dark gray)
+dark = "#0d0d0d" # Darkest background (pitch black)
 
 
 [dark.text]
-main =  "#d1d1d1"  # Primary text color (light gray)
-secondary =  "#7f8c8d"  # Secondary text color (muted gray with a hint of blue)
-muted =  "#5f6b72"  # Tertiary text, muted (dusty gray)
-disabled =  "#666666"  # Disabled text (dim gray)
-muted-light =  "#999999"  # Light-muted text for hints (light gray)
-muted-dark =  "#4a4a4a"  # Dark-muted text (gray)
+main = "#d1d1d1" # Primary text color (light gray)
+secondary = "#7f8c8d" # Secondary text color (muted gray with a hint of blue)
+muted = "#5f6b72" # Tertiary text, muted (dusty gray)
+disabled = "#666666" # Disabled text (dim gray)
+muted-light = "#999999" # Light-muted text for hints (light gray)
+muted-dark = "#4a4a4a" # Dark-muted text (gray)
 
 
 [dark.surface]
-disabled =  "#4b545d"  # Disabled items (soft blue-gray)
-neutral =  "#4f5b62"  # Neutral surface for cards, panels (cool dark gray)
-highlight =  "#00ffec"  # Selection and highlights (neon cyan)
+disabled = "#4b545d" # Disabled items (soft blue-gray)
+neutral = "#4f5b62" # Neutral surface for cards, panels (cool dark gray)
+highlight = "#00ffec" # Selection and highlights (neon cyan)
 
 
 [dark.accent]
-light =  "#ff4d4d"  # Light accent (neon red)
-pink =  "#ff66b2"  # Pink accent (neon pink)
-purple =  "#9c27b0"  # Purple accent (bright purple)
-red =  "#ff1744"  # Red for errors and warnings (vibrant red)
-orange =  "#ff9100"  # Orange for alerts (neon orange)
-yellow =  "#ffeb3b"  # Yellow for highlights (neon yellow)
-green =  "#00e676"  # Green for success (neon green)
-teal =  "#00bcd4"  # Teal for information (bright cyan)
-blue =  "#2196f3"  # Blue for links and actions (neon blue)
-light-blue =  "#00bcd4"  # Sky blue accent (neon cyan)
-lavender =  "#8e24aa"  # Lavender for subtle highlights (vivid purple)
+light = "#ff4d4d" # Light accent (neon red)
+pink = "#ff66b2" # Pink accent (neon pink)
+purple = "#9c27b0" # Purple accent (bright purple)
+red = "#ff1744" # Red for errors and warnings (vibrant red)
+orange = "#ff9100" # Orange for alerts (neon orange)
+yellow = "#ffeb3b" # Yellow for highlights (neon yellow)
+green = "#00e676" # Green for success (neon green)
+teal = "#00bcd4" # Teal for information (bright cyan)
+blue = "#2196f3" # Blue for links and actions (neon blue)
+light-blue = "#00bcd4" # Sky blue accent (neon cyan)
+lavender = "#8e24aa" # Lavender for subtle highlights (vivid purple)
 
 
 [dark.general]
-bar-background =  "rgba(18, 18, 18, 0.8)"  # Panel background (semi-transparent black)
-shadow-color =  "rgba(0, 0, 0, 0.8)"  # Shadow color (strong dark shadows)
+bar-background = "rgba(18, 18, 18, 0.8)" # Panel background (semi-transparent black)
+shadow-color = "rgba(0, 0, 0, 0.8)" # Shadow color (strong dark shadows)
 
 
 [light.background]
-main =  "#ededed"  # Main background (deep black)
-alt =  "#e5e5e5"  # Secondary background (dark gray)
-dark =  "#f2f2f2"  # Darkest background (pitch black)
+main = "#ededed" # Main background (deep black)
+alt = "#e5e5e5" # Secondary background (dark gray)
+dark = "#f2f2f2" # Darkest background (pitch black)
 
 
 [light.text]
-main =  "#2e2e2e"  # Primary text color (light gray)
-secondary =  "#807372"  # Secondary text color (muted gray with a hint of blue)
-muted =  "#a0948d"  # Tertiary text, muted (dusty gray)
-disabled =  "#999999"  # Disabled text (dim gray)
-muted-light =  "#666666"  # Light-muted text for hints (light gray)
-muted-dark =  "#b5b5b5"  # Dark-muted text (gray)
+main = "#2e2e2e" # Primary text color (light gray)
+secondary = "#807372" # Secondary text color (muted gray with a hint of blue)
+muted = "#a0948d" # Tertiary text, muted (dusty gray)
+disabled = "#999999" # Disabled text (dim gray)
+muted-light = "#666666" # Light-muted text for hints (light gray)
+muted-dark = "#b5b5b5" # Dark-muted text (gray)
 
 
 [light.surface]
-disabled =  "#b4aba2"  # Disabled items (soft blue-gray)
-neutral =  "#b0a49d"  # Neutral surface for cards, panels (cool dark gray)
-highlight =  "#ff0013"  # Selection and highlights (neon cyan)
+disabled = "#b4aba2" # Disabled items (soft blue-gray)
+neutral = "#b0a49d" # Neutral surface for cards, panels (cool dark gray)
+highlight = "#ff0013" # Selection and highlights (neon cyan)
 
 
 [light.accent]
-light =  "#00b2b2"  # Light accent (neon red)
-pink =  "#00994d"  # Pink accent (neon pink)
-purple =  "#63d84f"  # Purple accent (bright purple)
-red =  "#00e8bb"  # Red for errors and warnings (vibrant red)
-orange =  "#006eff"  # Orange for alerts (neon orange)
-yellow =  "#0014c4"  # Yellow for highlights (neon yellow)
-green =  "#ff1989"  # Green for success (neon green)
-teal =  "#ff432b"  # Teal for information (bright cyan)
-blue =  "#de690c"  # Blue for links and actions (neon blue)
-light-blue =  "#ff432b"  # Sky blue accent (neon cyan)
-lavender =  "#71db55"  # Lavender for subtle highlights (vivid purple)
+light = "#00b2b2" # Light accent (neon red)
+pink = "#00994d" # Pink accent (neon pink)
+purple = "#63d84f" # Purple accent (bright purple)
+red = "#00e8bb" # Red for errors and warnings (vibrant red)
+orange = "#006eff" # Orange for alerts (neon orange)
+yellow = "#0014c4" # Yellow for highlights (neon yellow)
+green = "#ff1989" # Green for success (neon green)
+teal = "#ff432b" # Teal for information (bright cyan)
+blue = "#de690c" # Blue for links and actions (neon blue)
+light-blue = "#ff432b" # Sky blue accent (neon cyan)
+lavender = "#71db55" # Lavender for subtle highlights (vivid purple)
 
 
 [light.general]
-bar-background =  "rgba(237, 237, 237, 0.8)"  # Panel background (semi-transparent black)
-shadow-color =  "rgba(255, 255, 255, 0.8)"  # Shadow color (strong dark shadows)
+bar-background = "rgba(237, 237, 237, 0.8)" # Panel background (semi-transparent black)
+shadow-color = "rgba(255, 255, 255, 0.8)" # Shadow color (strong dark shadows)

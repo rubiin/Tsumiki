@@ -1,78 +1,45 @@
 {
-    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-    "labels": [
-        "dependencies"
-    ],
-    "rangeStrategy": "bump",
-    "extends": [
-        "config:recommended"
-    ],
-    "enabledManagers": [
-        "pep621",
-        "npm",
-        "github-actions"
-    ],
-    "lockFileMaintenance": {
-        "enabled": true
-    },
-    "packageRules": [
+  $schema: "https://docs.renovatebot.com/renovate-schema.json",
+  labels: ["dependencies"],
+  rangeStrategy: "bump",
+  extends: ["config:recommended"],
+  enabledManagers: ["pep621", "npm", "github-actions"],
+  lockFileMaintenance: {
+    enabled: true,
+  },
+  packageRules: [
     {
-      "matchPackageNames": ["PyGObject","PyGObject-stubs"],
-      "enabled": false
+      matchPackageNames: ["PyGObject", "PyGObject-stubs"],
+      enabled: false,
     },
-        {
-            "matchManagers": [
-                "pep621"
-            ],
-            "matchUpdateTypes": [
-                "minor",
-                "patch"
-            ],
-            "groupName": "all non-major dependencies",
-            "groupSlug": "all-minor-patch"
-        },
-        {
-            "matchManagers": [
-                "pep621"
-            ],
-            "matchUpdateTypes": [
-                "major"
-            ],
-            "groupName": "all major dependencies",
-            "groupSlug": "all-major-patch"
-        },
-        {
-            "matchManagers": [
-                "npm"
-            ],
-            "matchUpdateTypes": [
-                "minor",
-                "patch"
-            ],
-            "groupName": "all non-major npm dependencies",
-            "groupSlug": "npm-all-minor-patch"
-        },
-        {
-            "matchManagers": [
-                "npm"
-            ],
-            "matchUpdateTypes": [
-                "major"
-            ],
-            "groupName": "all major npm dependencies",
-            "groupSlug": "npm-all-major"
-        },
-        {
-            "matchFileNames": [
-                "docs/package.json"
-            ],
-            "labels": [
-                "dependencies",
-                "docs"
-            ]
-        }
-    ],
-    "schedule": [
-        "before 2am on Saturday"
-    ]
+    {
+      matchManagers: ["pep621"],
+      matchUpdateTypes: ["minor", "patch"],
+      groupName: "all non-major dependencies",
+      groupSlug: "all-minor-patch",
+    },
+    {
+      matchManagers: ["pep621"],
+      matchUpdateTypes: ["major"],
+      groupName: "all major dependencies",
+      groupSlug: "all-major-patch",
+    },
+    {
+      matchManagers: ["npm"],
+      matchUpdateTypes: ["minor", "patch"],
+      groupName: "all non-major npm dependencies",
+      groupSlug: "npm-all-minor-patch",
+    },
+    {
+      matchManagers: ["npm"],
+      matchUpdateTypes: ["major"],
+      groupName: "all major npm dependencies",
+      groupSlug: "npm-all-major",
+    },
+    {
+      matchFileNames: ["docs/package.json"],
+      labels: ["dependencies", "docs"],
+    },
+  ],
+  schedule: ["before 2am on Saturday"],
 }

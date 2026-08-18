@@ -1,78 +1,78 @@
 [dark.background]
-main =  "#2a2a3a"  # Main background
-alt =  "#232436"  # Secondary background
-dark =  "#1c1c2b"  # Darkest background
+main = "#2a2a3a" # Main background
+alt = "#232436" # Secondary background
+dark = "#1c1c2b" # Darkest background
 
 
 [dark.text]
-main =  "#d8dbe6"  # Primary text color
-secondary =  "#bbc2d1"  # Secondary text color
-muted =  "#a1a7b3"  # Tertiary text, muted
-disabled =  "#7b7f8e"  # Text for disabled elements
-muted-light =  "#6f7586"  # Light-muted text for hints
-muted-dark =  "#5a5f6a"  # Dark-muted text
+main = "#d8dbe6" # Primary text color
+secondary = "#bbc2d1" # Secondary text color
+muted = "#a1a7b3" # Tertiary text, muted
+disabled = "#7b7f8e" # Text for disabled elements
+muted-light = "#6f7586" # Light-muted text for hints
+muted-dark = "#5a5f6a" # Dark-muted text
 
 
 [dark.surface]
-disabled =  "#4a4e60"  # Background for disabled items
-neutral =  "#585d71"  # Neutral surface for cards, panels
-highlight =  "#6a6f83"  # Selection and highlights
+disabled = "#4a4e60" # Background for disabled items
+neutral = "#585d71" # Neutral surface for cards, panels
+highlight = "#6a6f83" # Selection and highlights
 
 
 [dark.accent]
-light =  "#f5e0dc"  # Lightest accent (Rosewater)
-pink =  "#f5c2e7"  # Pink accent
-purple =  "#cba6f7"  # Mauve accent
-red =  "#f38ba8"  # Red for errors and warnings
-orange =  "#fab387"  # Orange for warnings and alerts
-yellow =  "#f9e2af"  # Yellow for highlights
-green =  "#a6e3a1"  # Green for success
-teal =  "#94e2d5"  # Teal for information
-blue =  "#89b4fa"  # Blue for links and actions
-light-blue =  "#89dceb"  # Sky blue accent
-lavender =  "#b4befe"  # Lavender for subtle highlights
+light = "#f5e0dc" # Lightest accent (Rosewater)
+pink = "#f5c2e7" # Pink accent
+purple = "#cba6f7" # Mauve accent
+red = "#f38ba8" # Red for errors and warnings
+orange = "#fab387" # Orange for warnings and alerts
+yellow = "#f9e2af" # Yellow for highlights
+green = "#a6e3a1" # Green for success
+teal = "#94e2d5" # Teal for information
+blue = "#89b4fa" # Blue for links and actions
+light-blue = "#89dceb" # Sky blue accent
+lavender = "#b4befe" # Lavender for subtle highlights
 
 
 [dark.general]
-bar-background =  "rgba(46, 46, 46, 0.1)"
-shadow-color =  "rgba(0, 0, 0, 0.4)"
+bar-background = "rgba(46, 46, 46, 0.1)"
+shadow-color = "rgba(0, 0, 0, 0.4)"
 
 
 [light.background]
-main =  "#d5d5c5"  # Main background
-alt =  "#dcdbc9"  # Secondary background
-dark =  "#e3e3d4"  # Darkest background
+main = "#d5d5c5" # Main background
+alt = "#dcdbc9" # Secondary background
+dark = "#e3e3d4" # Darkest background
 
 
 [light.text]
-main =  "#272419"  # Primary text color
-secondary =  "#443d2e"  # Secondary text color
-muted =  "#5e584c"  # Tertiary text, muted
-disabled =  "#848071"  # Text for disabled elements
-muted-light =  "#908a79"  # Light-muted text for hints
-muted-dark =  "#a5a095"  # Dark-muted text
+main = "#272419" # Primary text color
+secondary = "#443d2e" # Secondary text color
+muted = "#5e584c" # Tertiary text, muted
+disabled = "#848071" # Text for disabled elements
+muted-light = "#908a79" # Light-muted text for hints
+muted-dark = "#a5a095" # Dark-muted text
 
 
 [light.surface]
-disabled =  "#b5b19f"  # Background for disabled items
-neutral =  "#a7a28e"  # Neutral surface for cards, panels
-highlight =  "#95907c"  # Selection and highlights
+disabled = "#b5b19f" # Background for disabled items
+neutral = "#a7a28e" # Neutral surface for cards, panels
+highlight = "#95907c" # Selection and highlights
 
 
 [light.accent]
-light =  "#0a1f23"  # Lightest accent (Rosewater)
-pink =  "#0a3d18"  # Pink accent
-purple =  "#345908"  # Mauve accent
-red =  "#0c7457"  # Red for errors and warnings
-orange =  "#054c78"  # Orange for warnings and alerts
-yellow =  "#061d50"  # Yellow for highlights
-green =  "#591c5e"  # Green for success
-teal =  "#6b1d2a"  # Teal for information
-blue =  "#764b05"  # Blue for links and actions
-light-blue =  "#762314"  # Sky blue accent
-lavender =  "#4b4101"  # Lavender for subtle highlights
+light = "#0a1f23" # Lightest accent (Rosewater)
+pink = "#0a3d18" # Pink accent
+purple = "#345908" # Mauve accent
+red = "#0c7457" # Red for errors and warnings
+orange = "#054c78" # Orange for warnings and alerts
+yellow = "#061d50" # Yellow for highlights
+green = "#591c5e" # Green for success
+teal = "#6b1d2a" # Teal for information
+blue = "#764b05" # Blue for links and actions
+light-blue = "#762314" # Sky blue accent
+lavender = "#4b4101" # Lavender for subtle highlights
 
 
 [light.general]
-bar-background =  "rgba(46, 46, 46, 0.1)"
-shadow-color =  "rgba(0, 0, 0, 0.4)"
+bar-background = "rgba(46, 46, 46, 0.1)"
+shadow-color = "rgba(0, 0, 0, 0.4)"

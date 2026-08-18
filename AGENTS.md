@@ -11,17 +11,17 @@ framework). Main code is Python; styles are SCSS; docs are an Astro site.
 
 ## 2. Repository Layout
 
-| Path | Contents |
-|------|----------|
-| `modules/` | Core UI modules (dock, overview, notification, settings, etc.) |
+| Path        | Contents                                                          |
+| ----------- | ----------------------------------------------------------------- |
+| `modules/`  | Core UI modules (dock, overview, notification, settings, etc.)    |
 | `services/` | Background services (battery, weather, network, brightness, etc.) |
-| `widgets/` | Individual widget implementations |
-| `shared/` | Reusable UI components and mixins |
-| `styles/` | SCSS stylesheets and theming |
-| `utils/` | Utility functions, config management, helpers |
-| `docs/` | Astro-based documentation site |
-| `tests/` | Test suite |
-| `assets/` | Static assets (icons, images, i18n, emoji, etc.) |
+| `widgets/`  | Individual widget implementations                                 |
+| `shared/`   | Reusable UI components and mixins                                 |
+| `styles/`   | SCSS stylesheets and theming                                      |
+| `utils/`    | Utility functions, config management, helpers                     |
+| `docs/`     | Astro-based documentation site                                    |
+| `tests/`    | Test suite                                                        |
+| `assets/`   | Static assets (icons, images, i18n, emoji, etc.)                  |
 
 ## 3. Key Files
 
@@ -84,6 +84,7 @@ requested, never as a side effect of an unrelated change:
   style violation.
 
 Architecture notes worth knowing before editing:
+
 - Popup logic is centralized in `shared/popup.py`.
 - Lazy widget loading happens in `modules/bar.py`.
 
@@ -96,14 +97,14 @@ Architecture notes worth knowing before editing:
 
 ## 9. Common Tasks
 
-| Task | Approach |
-|------|----------|
-| Add new widget | See §10 |
-| Add new module | See §11 |
-| Add new service | Create in `services/`, register in `main.py` |
+| Task              | Approach                                             |
+| ----------------- | ---------------------------------------------------- |
+| Add new widget    | See §10                                              |
+| Add new module    | See §11                                              |
+| Add new service   | Create in `services/`, register in `main.py`         |
 | Add config option | Update schema, add to `utils/config.py`, update docs |
-| Style changes | Edit relevant SCSS, test theme variants |
-| Fix UI bug | See §13 |
+| Style changes     | Edit relevant SCSS, test theme variants              |
+| Fix UI bug        | See §13                                              |
 
 ## 10. Adding a New Widget (panel-based, toggleable)
 
@@ -111,6 +112,7 @@ Widgets live in `widgets/` and are typically panel buttons that open popovers
 or show quick info.
 
 **Step 1 — Widget file** (`widgets/my_widget.py`):
+
 ```python
 from fabric.widgets.box import Box
 from fabric.widgets.label import Label
@@ -158,6 +160,7 @@ class MyWidget(ButtonWidget, PopoverMixin):
 ```
 
 **Step 2 — Bar layout** (`config.toml`):
+
 ```toml
 [layout]
 bar = [
@@ -172,6 +175,7 @@ tooltip = true
 ```
 
 **Step 3 — Config schema** (`tsumiki.schema.json`, under `widgets`):
+
 ```json
 "my_widget": {
   "type": "object",
@@ -185,6 +189,7 @@ tooltip = true
 
 **Step 4 — Styling** (`styles/_my_widget.scss`, imported via `@use` in
 `styles/main.scss`):
+
 ```scss
 #my-widget-menu {
   padding: 12px;
@@ -195,6 +200,7 @@ tooltip = true
   font-size: 12px;
 }
 ```
+
 Follow the GTK3 CSS rules in §12 (`text-align`, `margin: auto`, `transition`,
 etc. are not supported — use `h_align="center"` in Python instead).
 
@@ -204,6 +210,7 @@ Modules are top-level windows (overlays, popups, full panels) — e.g.
 notification, overview, dock, desktop_clock.
 
 **Step 1 — Service** (`services/my_module.py`, only if the module manages state):
+
 ```python
 from fabric.core.service import Signal
 from fabric.utils import GLib, logger
@@ -231,6 +238,7 @@ my_module_service = MyModuleService()
 
 **Step 2 — Widget** (`widgets/my_module.py`, or `modules/my_module.py` if it's
 complex enough to warrant it):
+
 ```python
 from fabric.widgets.box import Box
 from fabric.widgets.label import Label
@@ -290,6 +298,7 @@ class MyModuleWidget(ButtonWidget, PopoverMixin):
 ```
 
 **Step 3 — Register in `main.py`:**
+
 ```python
 # After other modules
 if module_options.get("my_module", {}).get("enabled", False):
@@ -300,6 +309,7 @@ if module_options.get("my_module", {}).get("enabled", False):
 ```
 
 **Step 4 — Config schema** (`tsumiki.schema.json`, under `modules`):
+
 ```json
 "my_module": {
   "type": "object",
@@ -320,6 +330,7 @@ if module_options.get("my_module", {}).get("enabled", False):
 ```
 
 **Step 5 — Config entry** (`config.toml`):
+
 ```toml
 [modules.my_module]
 enabled = false
@@ -329,6 +340,7 @@ layer = "overlay"
 
 **Step 6 — Styling** (`styles/_my_module.scss`, always nested to avoid global
 selectors, imported via `@use` in `styles/main.scss`):
+
 ```scss
 #my-module {
   background-color: rgba(40, 40, 50, 0.95);
@@ -346,9 +358,11 @@ selectors, imported via `@use` in `styles/main.scss`):
   font-size: 14px;
 }
 ```
+
 Follow the GTK3 CSS rules in §12.
 
 **Step 7 — Sanity check:**
+
 ```bash
 python3 -c "from services.my_module import my_module_service; print('OK: service')"
 python3 -c "from widgets.my_module import MyModuleWidget; print('OK: widget')"
@@ -357,6 +371,7 @@ python3 -c "from widgets.my_module import MyModuleWidget; print('OK: widget')"
 ## 12. GTK/Fabric Best Practices
 
 **Lifecycle & threading:**
+
 - Keep UI updates on the main thread only; push heavy work to background and
   return via `GLib` idle/timeout callbacks.
 - Prefer signal-driven updates over polling; if polling is required, store
@@ -368,6 +383,7 @@ python3 -c "from widgets.my_module import MyModuleWidget; print('OK: widget')"
 - Never block GTK callbacks with synchronous shell/process operations.
 
 **Rendering & performance:**
+
 - Use fallback labels/icons for missing services or unavailable devices.
 - Avoid rebuilding full widget trees for small state changes; update existing
   widgets in place.
@@ -377,6 +393,7 @@ python3 -c "from widgets.my_module import MyModuleWidget; print('OK: widget')"
 - Debounce noisy event streams to limit redundant relayout/repaint work.
 
 **GTK3 CSS (SCSS) rules:**
+
 - Only use properties [GTK3 CSS supports](https://docs.gtk.org/gtk3/css-properties.html).
 - Not supported — do not use: `text-align`, `align-items`, `justify-content`,
   `margin: auto`.
@@ -403,18 +420,20 @@ python3 -c "from widgets.my_module import MyModuleWidget; print('OK: widget')"
 
 Four special widget types support `@type:id` references in the layout:
 
-| Layout reference | Config key | Collection path |
-|---|---|---|
-| `@collapsible:` | `[[collapsible_groups]]` | `parsed_data.collapsible_groups[]` |
-| `@group:` | `[[widget_groups]]` | `parsed_data.widget_groups[]` |
+| Layout reference  | Config key                                | Collection path                                     |
+| ----------------- | ----------------------------------------- | --------------------------------------------------- |
+| `@collapsible:`   | `[[collapsible_groups]]`                  | `parsed_data.collapsible_groups[]`                  |
+| `@group:`         | `[[widget_groups]]`                       | `parsed_data.widget_groups[]`                       |
 | `@custom_button:` | `[[widgets.custom_button_group.buttons]]` | `parsed_data.widgets.custom_button_group.buttons[]` |
-| `@custom_widget:` | `[[widgets.custom_widget]]` | `parsed_data.widgets.custom_widget[]` |
+| `@custom_widget:` | `[[widgets.custom_widget]]`               | `parsed_data.widgets.custom_widget[]`               |
 
 **Referencing syntax:**
+
 - Numeric index (backward compatible): `@collapsible:0`, `@group:1`, `@custom_button:0`, `@custom_widget:0`
 - String id: `@collapsible:utility-tools`, `@group:workspaces-group`, `@custom_button:firefox`, `@custom_widget:volume`
 
 **Config example:**
+
 ```toml
 [[collapsible_groups]]
 id = "utility-tools"
@@ -434,6 +453,7 @@ command = "firefox"
 ```
 
 **Implementation layers (all must be kept in sync):**
+
 1. **Schema** (`tsumiki.schema.json`): Patterns use `^@type:[\\w-]+$` to accept both numeric and string ids. Each collection item has an optional `"id"` string property.
 2. **Python validation** (`utils/functions.py` and `utils/validation.py`): `_validate_indexed_reference()` checks `identifier.isdigit()` first for backward compat, then falls back to id lookup for supported collection names.
 3. **Runtime resolution** (`utils/widget_factory.py`): `IndexedWidgetHelper.validate_and_get_index()` does generic id lookup for all types without collection-name restriction.
@@ -451,6 +471,7 @@ https://fabric-development.github.io/fabric-wiki/installing-stubs.html
 ## 16. Assistant Behavior
 
 **Communication:**
+
 - Be concise — respect token budgets; prioritize clarity over elaboration.
 - Ground answers in code inspection, not assumptions.
 - Show concrete code snippets rather than descriptions.
@@ -458,6 +479,7 @@ https://fabric-development.github.io/fabric-wiki/installing-stubs.html
 - Challenge assumptions — point out issues in plans or designs plainly.
 
 **Tools:**
+
 - Use `pylance` for Python analysis.
 - Use branch/commit tools for git workflows (but don't commit/push unasked —
   see §5).
