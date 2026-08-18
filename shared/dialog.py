@@ -4,6 +4,7 @@ from fabric.widgets.button import Button
 from fabric.widgets.label import Label
 
 from utils.i18n import _
+
 from .popup import PopupWindow
 
 
