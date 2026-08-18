@@ -511,6 +511,7 @@ DEFAULT_CONFIG = {
         "restart_delay": 1500,
         "multi_monitor": False,
         "tooltips": True,
+        "language": "en",
     },
     "styling": {
         "bar": {

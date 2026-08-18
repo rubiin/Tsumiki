@@ -1,1 +1,114 @@
-{}
+{
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "none": "N/A",
+    "unknown": "Unknown",
+    "refresh": "Refresh",
+    "close": "Close",
+    "save": "Save",
+    "cancel": "Cancel",
+    "enabled": "Enabled",
+    "disabled": "Disabled",
+    "on": "On",
+    "off": "Off"
+  },
+  "widget": {
+    "battery": {
+      "tooltip": "Battery",
+      "low": "Low Battery",
+      "charging": "Charging",
+      "full": "Fully Charged",
+      "no_battery": "No battery present"
+    },
+    "bluetooth": {
+      "tooltip": "Bluetooth",
+      "on": "On",
+      "off": "Off",
+      "connected": "Connected"
+    },
+    "brightness": {
+      "tooltip": "Brightness: {percent}%"
+    },
+    "clipboard": {
+      "tooltip": "Clipboard History",
+      "empty": "Clipboard history is empty",
+      "clear": "Clear History",
+      "sync": "Sync Clipboard"
+    },
+    "date_time": {
+      "tooltip": "Date & Time"
+    },
+    "dns_switcher": {
+      "tooltip": "DNS Switcher",
+      "default": "DNS: Default"
+    },
+    "emoji_picker": {
+      "tooltip": "Emoji Picker",
+      "label": "Emoji",
+      "loading": "Loading emojis..."
+    },
+    "language": {
+      "tooltip": "Language: {lang}"
+    },
+    "network": {
+      "upload": "Upload",
+      "download": "Download"
+    },
+    "power": {
+      "tooltip": "Power",
+      "shutdown": "Shutdown",
+      "reboot": "Reboot",
+      "hibernate": "Hibernate",
+      "suspend": "Suspend",
+      "lock": "Lock",
+      "logout": "Logout"
+    },
+    "quick_settings": {
+      "uptime": "System Uptime",
+      "wifi": {
+        "disabled": "Wifi Disabled",
+        "password_prompt": "Enter password for {ssid}"
+      },
+      "bluetooth": {
+        "paired": "Paired Devices",
+        "available": "Available Devices",
+        "enabled": "Enabled"
+      },
+      "power_profiles": {
+        "saver": "Power Saver"
+      }
+    },
+    "recorder": {
+      "started": "Recording started",
+      "stopped": "Recording stopped"
+    },
+    "screenshot": {
+      "tooltip": "Screen Shot"
+    },
+    "settings": {
+      "tooltip": "Open Settings"
+    },
+    "updates": {
+      "tooltip": "Updates"
+    },
+    "weather": {
+      "fetching": "Fetching...",
+      "error": "Error fetching weather data, try again later."
+    },
+    "workspaces": {
+      "tooltip": "Workspace: {id}, Windows: {count}"
+    }
+  },
+  "module": {
+    "launcher": {
+      "tooltip": "Open Application Launcher"
+    },
+    "overview": {
+      "tooltip": "Overview"
+    },
+    "settings": {
+      "tooltip": "Open Settings"
+    }
+  }
+}

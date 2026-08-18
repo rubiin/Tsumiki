@@ -11,6 +11,7 @@ from shared.dialog import Dialog
 from shared.popup import PopupWindow
 from shared.widget_container import ButtonWidget
 from utils.constants import ASSETS_DIR
+from utils.i18n import _
 from utils.widget_utils import nerd_font_icon
 
 
@@ -299,7 +300,7 @@ class PowerWidget(ButtonWidget):
             self.container_box.add(Label(label="power", style_classes="panel-text"))
 
         if self.config.get("tooltip", False) and self.tooltips_enabled:
-            self.set_tooltip_text("Power")
+            self.set_tooltip_text(_('widget.power.tooltip'))
 
         self.connect(
             "clicked",

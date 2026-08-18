@@ -3748,6 +3748,12 @@
 					"type": "boolean",
 					"description": "Enables multi-monitor support. When true, creates a status bar on all available monitors.",
 					"default": false
+				},
+				"language": {
+					"type": "string",
+					"description": "The language code for the user interface (e.g., 'en', 'es', 'fr', 'de').",
+					"default": "en",
+					"enum": ["en", "es", "fr", "de", "ar", "zh", "ja", "ko", "pt", "ru", "tr", "nl"]
 				}
 			}
 		}

@@ -12,6 +12,7 @@ from modules.bar import Bar
 from utils.colors import Colors
 from utils.config import tsumiki_config
 from utils.constants import APP_DATA_DIRECTORY, APPLICATION_NAME
+from utils.i18n import get_i18n
 
 
 def main():
@@ -26,6 +27,11 @@ def main():
         return bool((module_options.get(name) or {}).get("enabled", False))
 
     helpers.ensure_directory(APP_DATA_DIRECTORY)
+
+    # Initialize i18n with the configured language
+    language = general_options.get("language", "en")
+    i18n = get_i18n()
+    i18n.load(language)
 
     # Initialize theme service and apply the configured theme
     from services import style_service
