@@ -21,10 +21,10 @@ tsumiki/
 
 ## Services
 
-| Service | Source | Description |
-|---|---|---|
-| Batterie | UPower D-Bus | Niveau, charge |
-| Réseau | NetworkManager | WiFi, Ethernet |
-| Météo | Open-Meteo | Conditions |
-| MPRIS | Playerctl | Média |
-| Matugen | binaire | Palette Material You |
+| Service  | Source         | Description          |
+| -------- | -------------- | -------------------- |
+| Batterie | UPower D-Bus   | Niveau, charge       |
+| Réseau   | NetworkManager | WiFi, Ethernet       |
+| Météo    | Open-Meteo     | Conditions           |
+| MPRIS    | Playerctl      | Média                |
+| Matugen  | binaire        | Palette Material You |

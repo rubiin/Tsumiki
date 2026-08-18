@@ -9,9 +9,9 @@
  * intercepts any network request.
  */
 self.addEventListener("install", function () {
-	self.skipWaiting();
+  self.skipWaiting();
 });
 
 self.addEventListener("activate", function (event) {
-	event.waitUntil(self.clients.claim());
+  event.waitUntil(self.clients.claim());
 });

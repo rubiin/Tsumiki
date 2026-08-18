@@ -5,23 +5,26 @@ sidebar:
   order: 2
 ---
 
-import LatestRelease from '../../../../components/LatestRelease.astro'
+import LatestRelease from "../../../../components/LatestRelease.astro";
 
-<div align="center"><img src="https://raw.githubusercontent.com/rubiin/tsumiki/refs/heads/master/assets/images/tsumiki.png" /><br /></div>
+<div align="center">
+  <img src="https://raw.githubusercontent.com/rubiin/tsumiki/refs/heads/master/assets/images/tsumiki.png" />
+  <br />
+</div>
 
 ## Prerequisites
 
 Ensure these are installed before proceeding:
 
-| Requirement | Install Command (Arch Linux) | Notes |
-|---|---|---|
-| [Hyprland](https://hyprland.org) | `sudo pacman -S hyprland` | Running Hyprland instance required |
-| [JetBrains Nerd Font](https://www.nerdfonts.com) | `sudo pacman -S ttf-jetbrains-mono-nerd` | Needed for icon rendering |
-| **Python 3.12+** | `sudo pacman -S python` | Verify: `python --version` |
-| **uv** | `curl -LsSf https://astral.sh/uv/install.sh | sh` | Python package manager used by `./init.sh -setup` |
-| **Git** | `sudo pacman -S git` | Required for cloning |
-| **NetworkManager** | `sudo pacman -S networkmanager` | Required by network widgets |
-| **PipeWire** | `sudo pacman -S pipewire pipewire-pulse` | Required by audio widgets |
+| Requirement                                      | Install Command (Arch Linux)                | Notes                              |
+| ------------------------------------------------ | ------------------------------------------- | ---------------------------------- | ------------------------------------------------- |
+| [Hyprland](https://hyprland.org)                 | `sudo pacman -S hyprland`                   | Running Hyprland instance required |
+| [JetBrains Nerd Font](https://www.nerdfonts.com) | `sudo pacman -S ttf-jetbrains-mono-nerd`    | Needed for icon rendering          |
+| **Python 3.12+**                                 | `sudo pacman -S python`                     | Verify: `python --version`         |
+| **uv**                                           | `curl -LsSf https://astral.sh/uv/install.sh | sh`                                | Python package manager used by `./init.sh -setup` |
+| **Git**                                          | `sudo pacman -S git`                        | Required for cloning               |
+| **NetworkManager**                               | `sudo pacman -S networkmanager`             | Required by network widgets        |
+| **PipeWire**                                     | `sudo pacman -S pipewire pipewire-pulse`    | Required by audio widgets          |
 
 ::::caution
 You need a **working Hyprland setup** before installing Tsumiki. If you're new to Hyprland, follow the [Hyprland Wiki](https://wiki.hyprland.org/Getting-Started/) first.
@@ -37,11 +40,7 @@ cd ~/.config/tsumiki
 ## Latest Release
 
 <div className="latest-release">
-  <LatestRelease
-    repo="rubiin/tsumiki"
-    versionLabel="Version:"
-    dateLabel="Date:"
-  />
+  <LatestRelease repo="rubiin/tsumiki" versionLabel="Version:" dateLabel="Date:" />
 </div>
 
 For full release notes and assets, see the [releases page](https://github.com/rubiin/tsumiki/releases) on GitHub.
@@ -120,6 +119,7 @@ You can create a shell alias for convenience:
 ```sh
 alias tsumiki='~/.config/tsumiki/init.sh -start'
 ```
+
 :::
 
 ## Verifying the Installation

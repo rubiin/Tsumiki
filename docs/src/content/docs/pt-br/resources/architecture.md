@@ -19,10 +19,10 @@ tsumiki/
 
 ## Serviços
 
-| Serviço | Descrição |
-|---|---|
-| Bateria | UPower D-Bus |
-| Rede | NetworkManager |
-| Clima | Open-Meteo |
-| MPRIS | Playerctl |
+| Serviço | Descrição           |
+| ------- | ------------------- |
+| Bateria | UPower D-Bus        |
+| Rede    | NetworkManager      |
+| Clima   | Open-Meteo          |
+| MPRIS   | Playerctl           |
 | Matugen | Paleta Material You |

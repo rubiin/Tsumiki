@@ -13,14 +13,14 @@ This guide covers the main breaking changes between v2 and v3 and how to migrate
 
 ## Overview of breaking changes
 
-| Area | Change |
-|---|---|
-| Config format | JSON5 no longer supported — use TOML |
-| Power profile | `power_profile` option removed from `general` |
-| Dock config | Dock settings live under `[modules.dock]` |
-| Bar auto-hide | Bar auto-hide is configured under `[modules.bar]` |
-| Group sections | Use top-level `[[widget_groups]]` and `[[collapsible_groups]]` |
-| `all_visible` param | Removed from widget constructors |
+| Area                | Change                                                         |
+| ------------------- | -------------------------------------------------------------- |
+| Config format       | JSON5 no longer supported — use TOML                           |
+| Power profile       | `power_profile` option removed from `general`                  |
+| Dock config         | Dock settings live under `[modules.dock]`                      |
+| Bar auto-hide       | Bar auto-hide is configured under `[modules.bar]`              |
+| Group sections      | Use top-level `[[widget_groups]]` and `[[collapsible_groups]]` |
+| `all_visible` param | Removed from widget constructors                               |
 
 ---
 
@@ -151,12 +151,12 @@ layerrule = ignorezero, ^tsumiki$
 
 ## Removed features
 
-| Feature | Status |
-|---|---|
-| Cheatsheet module | Configure in `[modules.cheatsheet]` |
-| `always_occluded` dock option | Removed — use `[modules.dock]` behavior options |
+| Feature                        | Status                                            |
+| ------------------------------ | ------------------------------------------------- |
+| Cheatsheet module              | Configure in `[modules.cheatsheet]`               |
+| `always_occluded` dock option  | Removed — use `[modules.dock]` behavior options   |
 | `all_visible` widget parameter | Removed — visibility is now derived automatically |
-| `CircleImage` class (internal) | Renamed to `CircularImage` |
+| `CircleImage` class (internal) | Renamed to `CircularImage`                        |
 
 ---
 

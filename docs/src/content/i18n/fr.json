@@ -1,8 +1,8 @@
 {
-	"sidebar.getting-started": "🚀 Pour commencer",
-	"sidebar.configuring": "🛠️ Configuration",
-	"sidebar.features": "🧩 Fonctionnalités",
-	"sidebar.theming": "🎨 Thèmes",
-	"sidebar.resources": "📚 Ressources",
-	"sidebar.help": "👥 Aide"
+  "sidebar.getting-started": "🚀 Pour commencer",
+  "sidebar.configuring": "🛠️ Configuration",
+  "sidebar.features": "🧩 Fonctionnalités",
+  "sidebar.theming": "🎨 Thèmes",
+  "sidebar.resources": "📚 Ressources",
+  "sidebar.help": "👥 Aide"
 }

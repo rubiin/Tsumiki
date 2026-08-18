@@ -224,7 +224,7 @@ class CheatSheetMenu(Box):
                 for group in row_groups:
                     row.add(self._build_group(group))
 
-                for _ in range(self.columns - len(row_groups)):
+                for x in range(self.columns - len(row_groups)):
                     placeholder = Box(
                         name="cheatsheet-group-placeholder",
                         style_classes="cheatsheet-group-placeholder",

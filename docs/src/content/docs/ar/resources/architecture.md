@@ -19,10 +19,10 @@ tsumiki/
 
 ## الخدمات
 
-| الخدمة | الوصف |
-|---|---|
-| البطارية | UPower D-Bus |
-| الشبكة | NetworkManager |
-| الطقس | Open-Meteo |
-| MPRIS | Playerctl |
-| Matugen | لوحة Material You |
+| الخدمة   | الوصف             |
+| -------- | ----------------- |
+| البطارية | UPower D-Bus      |
+| الشبكة   | NetworkManager    |
+| الطقس    | Open-Meteo        |
+| MPRIS    | Playerctl         |
+| Matugen  | لوحة Material You |

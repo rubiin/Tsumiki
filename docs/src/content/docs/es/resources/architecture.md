@@ -23,14 +23,14 @@ tsumiki/
 
 ## Servicios Clave
 
-| Servicio | Fuente | Descripción |
-|---|---|---|
-| Batería | UPower D-Bus | Nivel, estado de carga |
-| Red | NetworkManager D-Bus | WiFi, Ethernet |
-| Brillo | brightnessctl | Brillo pantalla/teclado |
-| Clima | Open-Meteo | Condiciones climáticas |
-| MPRIS | Playerctl | Control de medios |
-| Matugen | binario matugen | Paleta Material You |
+| Servicio | Fuente               | Descripción             |
+| -------- | -------------------- | ----------------------- |
+| Batería  | UPower D-Bus         | Nivel, estado de carga  |
+| Red      | NetworkManager D-Bus | WiFi, Ethernet          |
+| Brillo   | brightnessctl        | Brillo pantalla/teclado |
+| Clima    | Open-Meteo           | Condiciones climáticas  |
+| MPRIS    | Playerctl            | Control de medios       |
+| Matugen  | binario matugen      | Paleta Material You     |
 
 ## Añadir un Nuevo Widget
 

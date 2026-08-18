@@ -15,15 +15,15 @@ Tsumiki (eski adıyla Hydepanel), [Hyprland](https://hyprland.org) Wayland birle
 
 Tsumiki'yi kurmadan önce sisteminizin bu gereksinimleri karşıladığından emin olun:
 
-| Gereksinim | Notlar |
-|---|---|
-| [Hyprland](https://hyprland.org) | Çalışan bir Hyprland kurulumu gereklidir |
-| [JetBrains Nerd Font](https://www.nerdfonts.com) | Simge ve glif oluşturma için gereklidir |
-| **Python 3.12+** | Tsumiki, Python 3.12 hedefler |
-| **uv** | Bağımlılıkları yüklemek için kullanılan Python paket yöneticisi (`uv sync`) |
-| **Arch Linux** (önerilir) | Arch için optimize edilmiş paketler; diğer dağıtımlar manuel kurulum gerektirebilir |
-| **NetworkManager** | Ağ ile ilgili widget'lar ve servisler için gereklidir |
-| **PipeWire** | Ses ile ilgili widget'lar ve OSD için gereklidir |
+| Gereksinim                                       | Notlar                                                                              |
+| ------------------------------------------------ | ----------------------------------------------------------------------------------- |
+| [Hyprland](https://hyprland.org)                 | Çalışan bir Hyprland kurulumu gereklidir                                            |
+| [JetBrains Nerd Font](https://www.nerdfonts.com) | Simge ve glif oluşturma için gereklidir                                             |
+| **Python 3.12+**                                 | Tsumiki, Python 3.12 hedefler                                                       |
+| **uv**                                           | Bağımlılıkları yüklemek için kullanılan Python paket yöneticisi (`uv sync`)         |
+| **Arch Linux** (önerilir)                        | Arch için optimize edilmiş paketler; diğer dağıtımlar manuel kurulum gerektirebilir |
+| **NetworkManager**                               | Ağ ile ilgili widget'lar ve servisler için gereklidir                               |
+| **PipeWire**                                     | Ses ile ilgili widget'lar ve OSD için gereklidir                                    |
 
 ## Temel Kavramlar
 

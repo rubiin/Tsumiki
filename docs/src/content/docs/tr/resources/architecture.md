@@ -19,10 +19,10 @@ tsumiki/
 
 ## Servisler
 
-| Servis | Açıklama |
-|---|---|
-| Pil | UPower D-Bus |
-| Ağ | NetworkManager |
-| Hava Durumu | Open-Meteo |
-| MPRIS | Playerctl |
-| Matugen | Material You paleti |
+| Servis      | Açıklama            |
+| ----------- | ------------------- |
+| Pil         | UPower D-Bus        |
+| Ağ          | NetworkManager      |
+| Hava Durumu | Open-Meteo          |
+| MPRIS       | Playerctl           |
+| Matugen     | Material You paleti |

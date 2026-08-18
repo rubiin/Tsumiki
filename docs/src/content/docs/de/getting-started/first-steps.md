@@ -23,6 +23,7 @@ Sie können Tsumiki jederzeit beenden mit:
 ```sh
 pkill tsumiki
 ```
+
 :::
 
 ## 2. Autostart einrichten
@@ -62,10 +63,10 @@ right_section = ["volume", "battery", "system_tray", "power"]
 
 Dies erzeugt eine Leiste mit:
 
-| Bereich | Widgets |
-|---|---|
-| **Links** | Arbeitsbereich-Umschalter, aktiver Fenstertitel |
-| **Mitte** | Aktuelles Datum und Uhrzeit |
+| Bereich    | Widgets                                                |
+| ---------- | ------------------------------------------------------ |
+| **Links**  | Arbeitsbereich-Umschalter, aktiver Fenstertitel        |
+| **Mitte**  | Aktuelles Datum und Uhrzeit                            |
 | **Rechts** | Lautstärkeregler, Akkustatus, System Tray, Energiemenü |
 
 ## 5. Neu laden, um Änderungen zu übernehmen

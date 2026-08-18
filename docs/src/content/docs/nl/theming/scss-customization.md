@@ -5,17 +5,17 @@ sidebar:
   order: 3
 ---
 
-| Variabele | Standaard | Beschrijving |
-|---|---|---|
-| `$bar-background` | themakleur | Achtergrond van de balk |
-| `$bar-border-radius` | `16px` | Hoekradius |
-| `$bar-padding` | `4px 12px` | Interne vulling |
+| Variabele            | Standaard  | Beschrijving            |
+| -------------------- | ---------- | ----------------------- |
+| `$bar-background`    | themakleur | Achtergrond van de balk |
+| `$bar-border-radius` | `16px`     | Hoekradius              |
+| `$bar-padding`       | `4px 12px` | Interne vulling         |
 
-| Klasse | Effect |
-|---|---|
-| `compact` | Verminderde afstand |
-| `bordered` | Rand toevoegen |
-| `pill` | Pilvormige container |
+| Klasse     | Effect               |
+| ---------- | -------------------- |
+| `compact`  | Verminderde afstand  |
+| `bordered` | Rand toevoegen       |
+| `pill`     | Pilvormige container |
 
 ```toml
 [styling.bar]

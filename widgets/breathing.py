@@ -281,7 +281,8 @@ class BreathingMenu(BoxWidget):
         self._grid_frame = Box(orientation="vertical", spacing=8)
 
         grid_lbl = Label(
-            label=_('widget.breathing.choose_exercise'), style_classes="section-label", h_align="start"
+            label=_('widget.breathing.choose_exercise'), style_classes="section-label",
+            h_align="start"
         )
         self._grid_frame.pack_start(grid_lbl, False, False, 0)
 
@@ -308,7 +309,8 @@ class BreathingMenu(BoxWidget):
         self._duration_frame = Box(orientation="vertical", spacing=6)
 
         dur_lbl = Label(
-            label=_('widget.breathing.duration'), style_classes="section-label", h_align="start"
+            label=_('widget.breathing.duration'), style_classes="section-label",
+              h_align="start"
         )
         self._duration_frame.pack_start(dur_lbl, False, False, 0)
 
@@ -556,7 +558,8 @@ class BreatheWidget(ButtonWidget):
 
         self.connect("clicked", self.on_click)
 
-        self.label = Label(label=_('widget.breathing.label'), style_classes="breathe-label")
+        self.label = Label(label=_('widget.breathing.label'),
+                            style_classes="breathe-label")
         self.icon = nerd_font_icon(
             icon=get_text_icon("notifications.noisy"),
             props={

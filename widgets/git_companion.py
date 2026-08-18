@@ -578,7 +578,8 @@ class GitCompanionWidget(ButtonWidget, PopoverMixin):
             )
 
         if self.config.get("tooltip", True) and self.tooltips_enabled:
-            self.set_tooltip_text(self.config.get("tooltip_text", _('widget.git_companion.label')))
+            self.set_tooltip_text(self.config.get("tooltip_text",
+                                                   _('widget.git_companion.label')))
 
         self.setup_popover(
             lambda: GitCompanionPopoverContent(config=self.config, parent=self),

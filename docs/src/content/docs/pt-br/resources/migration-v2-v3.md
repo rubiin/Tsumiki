@@ -5,12 +5,12 @@ sidebar:
   order: 2
 ---
 
-| Mudança | Detalhe |
-|---|---|
-| Formato | JSON5 → TOML |
-| Dock | Em `[modules.dock]` |
-| Auto-ocultar | Em `[modules.bar]` |
-| Grupos | `[[widget_groups]]` e `[[collapsible_groups]]` |
+| Mudança      | Detalhe                                        |
+| ------------ | ---------------------------------------------- |
+| Formato      | JSON5 → TOML                                   |
+| Dock         | Em `[modules.dock]`                            |
+| Auto-ocultar | Em `[modules.bar]`                             |
+| Grupos       | `[[widget_groups]]` e `[[collapsible_groups]]` |
 
 ```sh
 cp ~/.config/tsumiki/example/config.toml ~/.config/tsumiki/config.toml

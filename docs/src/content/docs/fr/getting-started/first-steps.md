@@ -23,6 +23,7 @@ Vous pouvez arrêter Tsumiki à tout moment avec :
 ```sh
 pkill tsumiki
 ```
+
 :::
 
 ## 2. Configurer le Démarrage Automatique
@@ -62,10 +63,10 @@ right_section = ["volume", "battery", "system_tray", "power"]
 
 Cela crée une barre avec :
 
-| Section | Widgets |
-|---|---|
-| **Gauche** | Sélecteur d'espaces de travail, titre de la fenêtre active |
-| **Centre** | Date et heure actuelles |
+| Section    | Widgets                                                                     |
+| ---------- | --------------------------------------------------------------------------- |
+| **Gauche** | Sélecteur d'espaces de travail, titre de la fenêtre active                  |
+| **Centre** | Date et heure actuelles                                                     |
 | **Droite** | Contrôle du volume, état de la batterie, barre système, menu d'alimentation |
 
 ## 5. Recharger pour Appliquer les Modifications

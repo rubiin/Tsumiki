@@ -3,7 +3,6 @@ title: Quick Start
 description: Get Tsumiki running in minutes
 ---
 
-
 Tsumiki is a modular status bar for Hyprland built on the Fabric widget system.
 
 ## Prerequisites

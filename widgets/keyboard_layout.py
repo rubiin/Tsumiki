@@ -14,7 +14,8 @@ class KeyboardLayoutWidget(ButtonWidget):
     def __init__(self, **kwargs):
         super().__init__(name="keyboard", **kwargs)
 
-        self.kb_label = Label(label=_('widget.keyboard.label'), style_classes="panel-text")
+        self.kb_label = Label(label=_('widget.keyboard.label'),
+                               style_classes="panel-text")
 
         if self.config.get("show_icon", True):
             # Create a TextIcon with the specified icon and size

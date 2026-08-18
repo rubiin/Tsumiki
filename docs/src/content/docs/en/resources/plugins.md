@@ -82,23 +82,23 @@ restart the bar. `/hello` (or `/hi`) now greets you.
 
 ### Class attributes
 
-| Attribute | Type | Purpose |
-|---|---|---|
-| `name` | `str` | The slash command (`/name`). Required — a plugin without a name is skipped. |
-| `description` | `str` | Short description shown when browsing commands with `/`. |
-| `icon` | `str \| None` | GTK icon name (e.g. `"face-smile-symbolic"`) or a Nerd Font glyph. Falls back to the launcher default when unset. |
-| `aliases` | `list[str]` | Extra slash commands that trigger this plugin. |
+| Attribute     | Type          | Purpose                                                                                                                                                                                                     |
+| ------------- | ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `name`        | `str`         | The slash command (`/name`). Required — a plugin without a name is skipped.                                                                                                                                 |
+| `description` | `str`         | Short description shown when browsing commands with `/`.                                                                                                                                                    |
+| `icon`        | `str \| None` | GTK icon name (e.g. `"face-smile-symbolic"`) or a Nerd Font glyph. Falls back to the launcher default when unset.                                                                                           |
+| `aliases`     | `list[str]`   | Extra slash commands that trigger this plugin.                                                                                                                                                              |
 | `debounce_ms` | `int \| None` | Per-plugin debounce before `handle()` fires while typing. `None`/`0` uses the launcher default (150 ms). Set a larger value for expensive plugins (network or subprocess) to avoid one query per keystroke. |
-| `keep_open` | `bool` | When `True`, the launcher stays open after `execute()`. |
+| `keep_open`   | `bool`        | When `True`, the launcher stays open after `execute()`.                                                                                                                                                     |
 
 ### Methods
 
-| Method | Thread | Purpose |
-|---|---|---|
-| `handle(args)` | worker | Return the result rows for the argument string. |
-| `execute(result)` | main | Run when the user activates a row (or the bare command). Return `True` to keep the launcher open. |
-| `is_cancelled()` | any | `True` when the query was superseded since the last dispatch. |
-| `run_subprocess(...)` | any | Like `run_subprocess` but tracks the spawned process so `cancel()` can kill it. |
+| Method                | Thread | Purpose                                                                                           |
+| --------------------- | ------ | ------------------------------------------------------------------------------------------------- |
+| `handle(args)`        | worker | Return the result rows for the argument string.                                                   |
+| `execute(result)`     | main   | Run when the user activates a row (or the bare command). Return `True` to keep the launcher open. |
+| `is_cancelled()`      | any    | `True` when the query was superseded since the last dispatch.                                     |
+| `run_subprocess(...)` | any    | Like `run_subprocess` but tracks the spawned process so `cancel()` can kill it.                   |
 
 ## `handle()`: producing results
 
@@ -133,13 +133,13 @@ If `execute()` raises, the error is logged and the launcher stays open.
 
 ## Helpers
 
-| Helper | Purpose |
-|---|---|
-| `copy_to_clipboard(text)` | Copy text to the system clipboard (`wl-copy`, falling back to `xclip`). |
+| Helper                                                  | Purpose                                                                                                                                                           |
+| ------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `copy_to_clipboard(text)`                               | Copy text to the system clipboard (`wl-copy`, falling back to `xclip`).                                                                                           |
 | `run_subprocess(args, timeout=..., input=..., env=...)` | Gio-based replacement for `subprocess.run` — returns a `SubprocessResult` (`args`, `returncode`, `stdout`, `stderr`). Raises `SubprocessTimeoutError` on timeout. |
-| `self.run_subprocess(...)` | Same, but registers the process with the plugin so `cancel()` force-exits it mid-flight. |
-| `get_http_client()` | Shared `httpx` client from `utils.functions` — use it for network requests (connection pooling, timeouts). |
-| `find_executable(name)` | Locate a binary on `PATH`, returning `None` if missing. |
+| `self.run_subprocess(...)`                              | Same, but registers the process with the plugin so `cancel()` force-exits it mid-flight.                                                                          |
+| `get_http_client()`                                     | Shared `httpx` client from `utils.functions` — use it for network requests (connection pooling, timeouts).                                                        |
+| `find_executable(name)`                                 | Locate a binary on `PATH`, returning `None` if missing.                                                                                                           |
 
 ## Cancellation and debouncing
 
@@ -212,18 +212,18 @@ implementations of the full API (local work, network requests, subprocesses,
 cancellation). Enable the ones you want by listing their `name` in the
 `plugins` allowlist.
 
-| Command | Aliases | What it does | Requires |
-|---|---|---|---|
-| `/calc` | `calculator`, `math` | Evaluate math, units and currency | `qalc` (libqalculate) |
-| `/translate` | `tr`, `t` | Translate text (auto-detected source) | network |
-| `/emoji` | `emo` | Search and copy an emoji | — (offline) |
-| `/clipboard-history` | `clip`, `cb` | Search and re-copy clipboard history | `cliphist` |
-| `/currency` | `fx`, `money`, `exchange` | Convert currencies (daily cached rates) | network |
-| `/kill` | `k`, `pkill` | Search and kill a process (or a port's listener) | — |
-| `/search` | `s`, `web` | Web search; Enter opens a result | network |
-| `/history` | `h`, `hist` | Search shell command history | — |
-| `/define` | `def`, `dict` | Word definitions (dict.org WordNet) | network |
-| `/shorten` | `short`, `tiny` | Shorten a URL (is.gd / TinyURL) | network |
+| Command              | Aliases                   | What it does                                     | Requires              |
+| -------------------- | ------------------------- | ------------------------------------------------ | --------------------- |
+| `/calc`              | `calculator`, `math`      | Evaluate math, units and currency                | `qalc` (libqalculate) |
+| `/translate`         | `tr`, `t`                 | Translate text (auto-detected source)            | network               |
+| `/emoji`             | `emo`                     | Search and copy an emoji                         | — (offline)           |
+| `/clipboard-history` | `clip`, `cb`              | Search and re-copy clipboard history             | `cliphist`            |
+| `/currency`          | `fx`, `money`, `exchange` | Convert currencies (daily cached rates)          | network               |
+| `/kill`              | `k`, `pkill`              | Search and kill a process (or a port's listener) | —                     |
+| `/search`            | `s`, `web`                | Web search; Enter opens a result                 | network               |
+| `/history`           | `h`, `hist`               | Search shell command history                     | —                     |
+| `/define`            | `def`, `dict`             | Word definitions (dict.org WordNet)              | network               |
+| `/shorten`           | `short`, `tiny`           | Shorten a URL (is.gd / TinyURL)                  | network               |
 
 ### `/calc` — math, units & currency
 

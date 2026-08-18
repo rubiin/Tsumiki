@@ -11,12 +11,12 @@ Tsumiki kompiliert SCSS aus `styles/main.scss` mit `dart-sass` in CSS.
 
 ### Leistenvariablen
 
-| Variable | Standard | Beschreibung |
-|---|---|---|
-| `$bar-background` | Themenfarbe | Hintergrund der Leiste |
-| `$bar-border-radius` | `16px` | Eckenradius |
-| `$bar-padding` | `4px 12px` | Innenabstand |
-| `$bar-margin` | `0 8px` | Außenabstand |
+| Variable             | Standard    | Beschreibung           |
+| -------------------- | ----------- | ---------------------- |
+| `$bar-background`    | Themenfarbe | Hintergrund der Leiste |
+| `$bar-border-radius` | `16px`      | Eckenradius            |
+| `$bar-padding`       | `4px 12px`  | Innenabstand           |
+| `$bar-margin`        | `0 8px`     | Außenabstand           |
 
 ### Anpassung über config.toml
 
@@ -29,11 +29,11 @@ padding = "4px 12px"
 
 ### Integrierte Style-Klassen
 
-| Klasse | Effekt |
-|---|---|
-| `compact` | Reduzierter Abstand |
-| `bordered` | Rahmen hinzufügen |
-| `pill` | Pillenförmiger Container |
+| Klasse     | Effekt                   |
+| ---------- | ------------------------ |
+| `compact`  | Reduzierter Abstand      |
+| `bordered` | Rahmen hinzufügen        |
+| `pill`     | Pillenförmiger Container |
 
 ### Benutzerdefiniertes CSS
 

@@ -15,15 +15,15 @@ Tsumiki（原名 Hydepanel）是 [Hyprland](https://hyprland.org) Wayland 合成
 
 在安装 Tsumiki 之前，请确保您的系统满足以下要求：
 
-| 要求 | 说明 |
-|---|---|
-| [Hyprland](https://hyprland.org) | 需要可正常运行的 Hyprland 安装 |
-| [JetBrains Nerd Font](https://www.nerdfonts.com) | 图标和字形渲染所需 |
-| **Python 3.12+** | Tsumiki 需要 Python 3.12 |
-| **uv** | 用于安装依赖项的 Python 包管理器（`uv sync`） |
-| **Arch Linux**（推荐） | 为 Arch 优化的软件包；其他发行版可能需要手动设置 |
-| **NetworkManager** | 网络相关组件和服务所需 |
-| **PipeWire** | 音频相关组件和 OSD 所需 |
+| 要求                                             | 说明                                             |
+| ------------------------------------------------ | ------------------------------------------------ |
+| [Hyprland](https://hyprland.org)                 | 需要可正常运行的 Hyprland 安装                   |
+| [JetBrains Nerd Font](https://www.nerdfonts.com) | 图标和字形渲染所需                               |
+| **Python 3.12+**                                 | Tsumiki 需要 Python 3.12                         |
+| **uv**                                           | 用于安装依赖项的 Python 包管理器（`uv sync`）    |
+| **Arch Linux**（推荐）                           | 为 Arch 优化的软件包；其他发行版可能需要手动设置 |
+| **NetworkManager**                               | 网络相关组件和服务所需                           |
+| **PipeWire**                                     | 音频相关组件和 OSD 所需                          |
 
 ## 核心概念
 

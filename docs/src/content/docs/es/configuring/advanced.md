@@ -25,26 +25,26 @@ left_section = ["@custom_widget:volume", "workspaces"]
 
 Opciones de configuración completas:
 
-| Clave | Tipo | Predeterminado | Descripción |
-|---|---|---|---|
-| `id` | string | — | Identificador único para referenciar en el diseño (`@custom_widget:mi-id`) |
-| `exec` | string | requerido | Comando shell a ejecutar |
-| `interval` | int | `0` | Intervalo de actualización en segundos (0 = ejecutar una vez) |
-| `return_type` | string | `"plain"` | Formato de salida: `"plain"` o `"json"` |
-| `label_format` | string | `"{}"` | Cadena de formato donde `{}` se reemplaza con la salida |
-| `exec_on_event` | bool | `false` | Re-ejecutar comando después de clic/desplazamiento |
-| `max_length` | int | `0` | Longitud máxima de texto (0 = sin límite) |
-| `min_length` | int | `0` | Longitud mínima de texto (rellena con espacios) |
-| `rotate` | int | `0` | Rotar texto en grados |
-| `tooltip` | bool | `true` | Mostrar tooltip con la salida |
-| `tooltip_format` | string | — | Cadena de formato del tooltip |
-| `on_click` | string | — | Comando de clic izquierdo |
-| `on_click_right` | string | — | Comando de clic derecho |
-| `on_click_middle` | string | — | Comando de clic medio |
-| `on_scroll_up` | string | — | Comando de desplazamiento hacia arriba |
-| `on_scroll_down` | string | — | Comando de desplazamiento hacia abajo |
-| `signal` | int | — | Número de señal para activadores de eventos sig* |
-| `restart_interval` | int | — | Intervalo de reinicio para scripts persistentes |
+| Clave              | Tipo   | Predeterminado | Descripción                                                                |
+| ------------------ | ------ | -------------- | -------------------------------------------------------------------------- |
+| `id`               | string | —              | Identificador único para referenciar en el diseño (`@custom_widget:mi-id`) |
+| `exec`             | string | requerido      | Comando shell a ejecutar                                                   |
+| `interval`         | int    | `0`            | Intervalo de actualización en segundos (0 = ejecutar una vez)              |
+| `return_type`      | string | `"plain"`      | Formato de salida: `"plain"` o `"json"`                                    |
+| `label_format`     | string | `"{}"`         | Cadena de formato donde `{}` se reemplaza con la salida                    |
+| `exec_on_event`    | bool   | `false`        | Re-ejecutar comando después de clic/desplazamiento                         |
+| `max_length`       | int    | `0`            | Longitud máxima de texto (0 = sin límite)                                  |
+| `min_length`       | int    | `0`            | Longitud mínima de texto (rellena con espacios)                            |
+| `rotate`           | int    | `0`            | Rotar texto en grados                                                      |
+| `tooltip`          | bool   | `true`         | Mostrar tooltip con la salida                                              |
+| `tooltip_format`   | string | —              | Cadena de formato del tooltip                                              |
+| `on_click`         | string | —              | Comando de clic izquierdo                                                  |
+| `on_click_right`   | string | —              | Comando de clic derecho                                                    |
+| `on_click_middle`  | string | —              | Comando de clic medio                                                      |
+| `on_scroll_up`     | string | —              | Comando de desplazamiento hacia arriba                                     |
+| `on_scroll_down`   | string | —              | Comando de desplazamiento hacia abajo                                      |
+| `signal`           | int    | —              | Número de señal para activadores de eventos sig*                           |
+| `restart_interval` | int    | —              | Intervalo de reinicio para scripts persistentes                            |
 
 ## Grupos de Widgets
 

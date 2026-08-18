@@ -59,31 +59,31 @@ Las variables se definen en `styles/_variable.scss` y `styles/_settings.scss`.
 
 ### Variables de la Barra
 
-| Variable | Predeterminado | Descripción |
-|---|---|---|
-| `$bar-background` | color del tema | Color de fondo de la barra |
-| `$bar-border-color` | color del tema | Color del borde de la barra |
-| `$bar-border-radius` | `16px` | Radio de esquina de la barra |
-| `$bar-border-enabled` | `false` | Activar borde de la barra |
-| `$bar-border-width` | `1px` | Grosor del borde de la barra |
-| `$bar-padding` | `4px 12px` | Relleno interno de la barra |
-| `$bar-margin` | `0 8px` | Margen externo de la barra |
+| Variable              | Predeterminado | Descripción                  |
+| --------------------- | -------------- | ---------------------------- |
+| `$bar-background`     | color del tema | Color de fondo de la barra   |
+| `$bar-border-color`   | color del tema | Color del borde de la barra  |
+| `$bar-border-radius`  | `16px`         | Radio de esquina de la barra |
+| `$bar-border-enabled` | `false`        | Activar borde de la barra    |
+| `$bar-border-width`   | `1px`          | Grosor del borde de la barra |
+| `$bar-padding`        | `4px 12px`     | Relleno interno de la barra  |
+| `$bar-margin`         | `0 8px`        | Margen externo de la barra   |
 
 ### Variables de Espacios de Trabajo
 
-| Variable | Predeterminado | Descripción |
-|---|---|---|
-| `$bar-widgets-workspaces-spacing` | `0.125em` | Espaciado entre botones de espacios de trabajo |
-| `$bar-widgets-workspaces-icon_size` | `12px` | Tamaño de icono en botones de espacios de trabajo |
-| `$bar-widgets-workspaces-border-radius` | `16px` | Radio de borde del widget de espacios de trabajo |
-| `$bar-widgets-workspaces-border-enabled` | `false` | Activar borde del widget de espacios de trabajo |
-| `$bar-widgets-workspaces-border-width` | `1px` | Grosor del borde del widget de espacios de trabajo |
-| `$bar-widgets-workspaces-pill-height` | `1px` | Altura del indicador de píldora |
-| `$bar-widgets-workspaces-pill-width` | `0.5em` | Anchura del indicador de píldora |
-| `$bar-widgets-workspaces-pill-active_width` | `1em` | Anchura expandida de píldora activa |
-| `$bar-widgets-workspaces-pill-border-enabled` | `false` | Activar borde de píldora |
-| `$bar-widgets-workspaces-pill-border-radius` | `16px` | Radio de borde de píldora |
-| `$bar-widgets-workspaces-pill-border-width` | `2px` | Grosor del borde de píldora |
+| Variable                                      | Predeterminado | Descripción                                        |
+| --------------------------------------------- | -------------- | -------------------------------------------------- |
+| `$bar-widgets-workspaces-spacing`             | `0.125em`      | Espaciado entre botones de espacios de trabajo     |
+| `$bar-widgets-workspaces-icon_size`           | `12px`         | Tamaño de icono en botones de espacios de trabajo  |
+| `$bar-widgets-workspaces-border-radius`       | `16px`         | Radio de borde del widget de espacios de trabajo   |
+| `$bar-widgets-workspaces-border-enabled`      | `false`        | Activar borde del widget de espacios de trabajo    |
+| `$bar-widgets-workspaces-border-width`        | `1px`          | Grosor del borde del widget de espacios de trabajo |
+| `$bar-widgets-workspaces-pill-height`         | `1px`          | Altura del indicador de píldora                    |
+| `$bar-widgets-workspaces-pill-width`          | `0.5em`        | Anchura del indicador de píldora                   |
+| `$bar-widgets-workspaces-pill-active_width`   | `1em`          | Anchura expandida de píldora activa                |
+| `$bar-widgets-workspaces-pill-border-enabled` | `false`        | Activar borde de píldora                           |
+| `$bar-widgets-workspaces-pill-border-radius`  | `16px`         | Radio de borde de píldora                          |
+| `$bar-widgets-workspaces-pill-border-width`   | `2px`          | Grosor del borde de píldora                        |
 
 ### Variables Comunes de Widgets
 
@@ -96,23 +96,23 @@ $bar-widgets-<nombre>-spacing
 
 Ejemplos comunes:
 
-| Variable | Predeterminado | Widgets |
-|---|---|---|
-| `$bar-widgets-cpu-icon_size` | `12px` | CPU, Memoria, Almacenamiento |
-| `$bar-widgets-battery-icon_size` | `14px` | Batería |
-| `$bar-widgets-volume-icon_size` | `14px` | Volumen |
-| `$bar-widgets-bluetooth-icon_size` | `14px` | Bluetooth |
-| `$bar-widgets-weather-icon_size` | `14px` | Clima |
+| Variable                           | Predeterminado | Widgets                      |
+| ---------------------------------- | -------------- | ---------------------------- |
+| `$bar-widgets-cpu-icon_size`       | `12px`         | CPU, Memoria, Almacenamiento |
+| `$bar-widgets-battery-icon_size`   | `14px`         | Batería                      |
+| `$bar-widgets-volume-icon_size`    | `14px`         | Volumen                      |
+| `$bar-widgets-bluetooth-icon_size` | `14px`         | Bluetooth                    |
+| `$bar-widgets-weather-icon_size`   | `14px`         | Clima                        |
 
 ### Variables de Diseño
 
-| Variable | Predeterminado | Descripción |
-|---|---|---|
-| `$quicksettings-width` | `370px` | Anchura del panel de ajustes rápidos |
-| `$radius-large` | `9999px` | Radio de borde grande (completamente redondeado) |
-| `$radius` | de configuración | Radio de borde predeterminado |
-| `$border-color` | color del tema | Color de borde predeterminado |
-| `$border` | de configuración | Abreviatura de borde |
+| Variable               | Predeterminado   | Descripción                                      |
+| ---------------------- | ---------------- | ------------------------------------------------ |
+| `$quicksettings-width` | `370px`          | Anchura del panel de ajustes rápidos             |
+| `$radius-large`        | `9999px`         | Radio de borde grande (completamente redondeado) |
+| `$radius`              | de configuración | Radio de borde predeterminado                    |
+| `$border-color`        | color del tema   | Color de borde predeterminado                    |
+| `$border`              | de configuración | Abreviatura de borde                             |
 
 ## Sobreescribir SCSS
 
@@ -135,11 +135,11 @@ style_classes = ["compact"]     # Variante de espaciado más ajustado
 
 Clases de estilo integradas disponibles:
 
-| Clase | Efecto |
-|---|---|
-| `compact` | Relleno y espaciado reducidos |
+| Clase      | Efecto                             |
+| ---------- | ---------------------------------- |
+| `compact`  | Relleno y espaciado reducidos      |
 | `bordered` | Añade un borde alrededor del grupo |
-| `pill` | Contenedor en forma de píldora |
+| `pill`     | Contenedor en forma de píldora     |
 
 ## Añadir CSS Personalizado
 

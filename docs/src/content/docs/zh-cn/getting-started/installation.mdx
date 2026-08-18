@@ -5,22 +5,25 @@ sidebar:
   order: 2
 ---
 
-import LatestRelease from '../../../../components/LatestRelease.astro'
+import LatestRelease from "../../../../components/LatestRelease.astro";
 
-<div align="center"><img src="https://raw.githubusercontent.com/rubiin/tsumiki/refs/heads/master/assets/images/tsumiki.png" /><br /></div>
+<div align="center">
+  <img src="https://raw.githubusercontent.com/rubiin/tsumiki/refs/heads/master/assets/images/tsumiki.png" />
+  <br />
+</div>
 
 ## 前提条件
 
 在继续之前，请确保已安装以下内容：
 
-| 要求 | 安装命令（Arch Linux） | 说明 |
-|---|---|---|
-| [Hyprland](https://hyprland.org) | `sudo pacman -S hyprland` | 需要正在运行的 Hyprland 实例 |
-| [JetBrains Nerd Font](https://www.nerdfonts.com) | `sudo pacman -S ttf-jetbrains-mono-nerd` | 图标渲染所需 |
-| **Python 3.12+** | `sudo pacman -S python` | 验证：`python --version` |
-| **Git** | `sudo pacman -S git` | 克隆所需 |
-| **NetworkManager** | `sudo pacman -S networkmanager` | 网络组件所需 |
-| **PipeWire** | `sudo pacman -S pipewire pipewire-pulse` | 音频组件所需 |
+| 要求                                             | 安装命令（Arch Linux）                   | 说明                         |
+| ------------------------------------------------ | ---------------------------------------- | ---------------------------- |
+| [Hyprland](https://hyprland.org)                 | `sudo pacman -S hyprland`                | 需要正在运行的 Hyprland 实例 |
+| [JetBrains Nerd Font](https://www.nerdfonts.com) | `sudo pacman -S ttf-jetbrains-mono-nerd` | 图标渲染所需                 |
+| **Python 3.12+**                                 | `sudo pacman -S python`                  | 验证：`python --version`     |
+| **Git**                                          | `sudo pacman -S git`                     | 克隆所需                     |
+| **NetworkManager**                               | `sudo pacman -S networkmanager`          | 网络组件所需                 |
+| **PipeWire**                                     | `sudo pacman -S pipewire pipewire-pulse` | 音频组件所需                 |
 
 ::::caution
 在安装 Tsumiki 之前，您需要**一个可正常运行的 Hyprland 环境**。如果您是 Hyprland 新手，请先阅读 [Hyprland Wiki](https://wiki.hyprland.org/Getting-Started/)。
@@ -36,11 +39,7 @@ cd ~/.config/tsumiki
 ## 最新版本
 
 <div className="latest-release">
-  <LatestRelease
-    repo="rubiin/tsumiki"
-    versionLabel="版本："
-    dateLabel="日期："
-  />
+  <LatestRelease repo="rubiin/tsumiki" versionLabel="版本：" dateLabel="日期：" />
 </div>
 
 如需完整的发布说明和资源，请参阅 GitHub 上的[发布页面](https://github.com/rubiin/tsumiki/releases)。
@@ -119,6 +118,7 @@ exec-once = sleep 5; ~/.config/tsumiki/init.sh -start
 ```sh
 alias tsumiki='~/.config/tsumiki/init.sh -start'
 ```
+
 :::
 
 ## 验证安装

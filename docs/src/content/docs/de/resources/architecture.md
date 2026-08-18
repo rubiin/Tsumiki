@@ -23,14 +23,14 @@ tsumiki/
 
 ## Schlüsseldienste
 
-| Dienst | Quelle | Beschreibung |
-|---|---|---|
-| Akku | UPower D-Bus | Ladestand, Ladezustand |
-| Netzwerk | NetworkManager D-Bus | WiFi, Ethernet |
-| Helligkeit | brightnessctl | Bildschirm-/Tastaturhelligkeit |
-| Wetter | Open-Meteo | Wetterbedingungen |
-| MPRIS | Playerctl | Medienwiedergabe |
-| Matugen | matugen-Binary | Material-You-Palette |
+| Dienst     | Quelle               | Beschreibung                   |
+| ---------- | -------------------- | ------------------------------ |
+| Akku       | UPower D-Bus         | Ladestand, Ladezustand         |
+| Netzwerk   | NetworkManager D-Bus | WiFi, Ethernet                 |
+| Helligkeit | brightnessctl        | Bildschirm-/Tastaturhelligkeit |
+| Wetter     | Open-Meteo           | Wetterbedingungen              |
+| MPRIS      | Playerctl            | Medienwiedergabe               |
+| Matugen    | matugen-Binary       | Material-You-Palette           |
 
 ## Neues Widget hinzufügen
 

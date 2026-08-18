@@ -14,7 +14,8 @@ class SubMapWidget(ButtonWidget):
     def __init__(self, **kwargs):
         super().__init__(name="submap", **kwargs)
 
-        self.submap_label = Label(label=_('widget.submap.label'), style_classes="panel-text")
+        self.submap_label = Label(label=_('widget.submap.label'),
+                                  style_classes="panel-text")
 
         self.container_box.add(self.submap_label)
 

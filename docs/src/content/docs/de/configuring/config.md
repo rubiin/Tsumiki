@@ -70,15 +70,15 @@ tooltip = true
 
 Globales Verhalten wie Debug-Modus, automatischer Neustart und Multi-Monitor-Steuerung.
 
-| Schlüssel | Typ | Standard | Beschreibung |
-|---|---|---|---|
-| `debug` | bool | `false` | Ausführliche Protokollierung aktivieren |
-| `auto_restart` | bool | `true` | Automatischer Neustart bei Absturz |
-| `restart_delay` | int | `1500` | Verzögerung vor Neustart (ms) |
-| `multi_monitor` | bool | `false` | Pro-Monitor-Leisteninstanzen |
-| `tooltips` | bool | `true` | Widget-Tooltips aktivieren |
-| `check_updates` | bool | `false` | Auf Tsumiki-Updates prüfen |
-| `monitor_styles` | bool | `true` | SCSS-Änderungen überwachen und neu laden |
+| Schlüssel        | Typ  | Standard | Beschreibung                             |
+| ---------------- | ---- | -------- | ---------------------------------------- |
+| `debug`          | bool | `false`  | Ausführliche Protokollierung aktivieren  |
+| `auto_restart`   | bool | `true`   | Automatischer Neustart bei Absturz       |
+| `restart_delay`  | int  | `1500`   | Verzögerung vor Neustart (ms)            |
+| `multi_monitor`  | bool | `false`  | Pro-Monitor-Leisteninstanzen             |
+| `tooltips`       | bool | `true`   | Widget-Tooltips aktivieren               |
+| `check_updates`  | bool | `false`  | Auf Tsumiki-Updates prüfen               |
+| `monitor_styles` | bool | `true`   | SCSS-Änderungen überwachen und neu laden |
 
 ### `layout`
 
@@ -99,30 +99,30 @@ right_section = ["@group:1", "system_tray", "power"]
 
 Verfügbare Referenztypen:
 
-| Referenz | Beispiel | Beschreibung |
-|---|---|---|
-| Widget-Name | `"workspaces"` | Direkte Widget-Referenz |
-| `@group:N` | `"@group:0"` | Widget-Gruppe nach Index |
-| `@collapsible:N` | `"@collapsible:0"` | Einklappbare Gruppe nach Index |
+| Referenz           | Beispiel             | Beschreibung                          |
+| ------------------ | -------------------- | ------------------------------------- |
+| Widget-Name        | `"workspaces"`       | Direkte Widget-Referenz               |
+| `@group:N`         | `"@group:0"`         | Widget-Gruppe nach Index              |
+| `@collapsible:N`   | `"@collapsible:0"`   | Einklappbare Gruppe nach Index        |
 | `@custom_button:N` | `"@custom_button:0"` | Benutzerdefinierter Button nach Index |
 
 ### `modules`
 
 Aktiviert und konfiguriert größere UI-Module wie:
 
-| Modul | Schlüssel | Beschreibung |
-|---|---|---|
-| Leiste | `modules.bar` | Panel-Position und -Ebene |
-| Benachrichtigungen | `modules.notification` | Desktop-Benachrichtigungssystem |
-| Dock | `modules.dock` | App-Dock mit Intellihide |
-| Übersicht | `modules.overview` | Arbeitsbereichs-Exposé-Ansicht |
-| OSD | `modules.osd` | Bildschirmanzeige für Lautstärke usw. |
-| Launcher | `modules.launcher` | Anwendungssuche und -start |
-| Desktop-Uhr | `modules.desktop_clock` | Dekorative Desktop-Uhr |
-| Desktop-Zitate | `modules.desktop_quotes` | Inspirierende Zitate-Überlagerung |
-| Bildschirmecken | `modules.screen_corners` | Aktive Ecken |
-| Spickzettel | `modules.cheatsheet` | Tastenkürzel-Referenz |
-| Activate Linux | `modules.activate_linux` | Fensteraktivierungs-Hinweis |
+| Modul              | Schlüssel                | Beschreibung                          |
+| ------------------ | ------------------------ | ------------------------------------- |
+| Leiste             | `modules.bar`            | Panel-Position und -Ebene             |
+| Benachrichtigungen | `modules.notification`   | Desktop-Benachrichtigungssystem       |
+| Dock               | `modules.dock`           | App-Dock mit Intellihide              |
+| Übersicht          | `modules.overview`       | Arbeitsbereichs-Exposé-Ansicht        |
+| OSD                | `modules.osd`            | Bildschirmanzeige für Lautstärke usw. |
+| Launcher           | `modules.launcher`       | Anwendungssuche und -start            |
+| Desktop-Uhr        | `modules.desktop_clock`  | Dekorative Desktop-Uhr                |
+| Desktop-Zitate     | `modules.desktop_quotes` | Inspirierende Zitate-Überlagerung     |
+| Bildschirmecken    | `modules.screen_corners` | Aktive Ecken                          |
+| Spickzettel        | `modules.cheatsheet`     | Tastenkürzel-Referenz                 |
+| Activate Linux     | `modules.activate_linux` | Fensteraktivierungs-Hinweis           |
 
 Beispiel für eine Dock-Konfiguration:
 
@@ -144,20 +144,20 @@ Es stehen über 45 Widgets zur Verfügung. Siehe die vollständige [Widgets-Refe
 
 Häufige Widgets sind:
 
-| Widget | Beschreibung |
-|---|---|
-| `workspaces` | Virtueller Desktop-Umschalter |
-| `window_title` | Aktiver Fenstertitel |
-| `date_time` | Datums-/Zeitanzeige |
-| `system_tray` | System Tray-Symbole |
-| `volume` | Audio-Lautstärkeregelung |
-| `battery` | Akkustatus |
-| `cpu` | CPU-Auslastungsmonitor |
-| `memory` | Speicherauslastungsmonitor |
-| `network_usage` | Netzwerkgeschwindigkeitsmonitor |
-| `weather` | Wetterbedingungen |
-| `power` | Energiemenü (Herunterfahren usw.) |
-| `quick_settings` | Schnelleinstellungen-Panel |
+| Widget           | Beschreibung                      |
+| ---------------- | --------------------------------- |
+| `workspaces`     | Virtueller Desktop-Umschalter     |
+| `window_title`   | Aktiver Fenstertitel              |
+| `date_time`      | Datums-/Zeitanzeige               |
+| `system_tray`    | System Tray-Symbole               |
+| `volume`         | Audio-Lautstärkeregelung          |
+| `battery`        | Akkustatus                        |
+| `cpu`            | CPU-Auslastungsmonitor            |
+| `memory`         | Speicherauslastungsmonitor        |
+| `network_usage`  | Netzwerkgeschwindigkeitsmonitor   |
+| `weather`        | Wetterbedingungen                 |
+| `power`          | Energiemenü (Herunterfahren usw.) |
+| `quick_settings` | Schnelleinstellungen-Panel        |
 
 ## Arbeitsbereichs-Stile
 

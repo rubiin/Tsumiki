@@ -88,9 +88,14 @@ class BluetoothDeviceBox(CenterBox):
             self.connect_button.set_label(_('widget.bluetooth.connect_failed'))
 
     def on_device_connect(self, *_):
-        self.connect_button.set_label(
-            _('widget.bluetooth.disconnect'),
-        ) if self.device.connected else self.connect_button.set_label(_('widget.bluetooth.connect'))
+        if self.device.connected:
+            self.connect_button.set_label(
+                _('widget.bluetooth.disconnect'),
+            )
+        else:
+            self.connect_button.set_label(
+                _('widget.bluetooth.connect'),
+            )
 
 
 class BluetoothSubMenu(QuickSubMenu):

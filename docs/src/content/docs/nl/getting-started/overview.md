@@ -15,15 +15,15 @@ De naam **Tsumiki** (積み木) is Japans voor "bouwstenen" — wat het modulair
 
 Zorg ervoor dat je systeem aan deze vereisten voldoet voordat je Tsumiki installeert:
 
-| Vereiste | Opmerkingen |
-|---|---|
-| [Hyprland](https://hyprland.org) | Een werkende Hyprland-installatie is vereist |
-| [JetBrains Nerd Font](https://www.nerdfonts.com) | Vereist voor weergave van pictogrammen en glyphs |
-| **Python 3.12+** | Tsumiki vereist Python 3.12 |
-| **uv** | Python-pakketbeheerder die wordt gebruikt om afhankelijkheden te installeren (`uv sync`) |
-| **Arch Linux** (aanbevolen) | Pakketten geoptimaliseerd voor Arch; andere distro's hebben mogelijk handmatige installatie nodig |
-| **NetworkManager** | Vereist voor netwerkgerelateerde widgets en services |
-| **PipeWire** | Vereist voor audiogerelateerde widgets en OSD |
+| Vereiste                                         | Opmerkingen                                                                                       |
+| ------------------------------------------------ | ------------------------------------------------------------------------------------------------- |
+| [Hyprland](https://hyprland.org)                 | Een werkende Hyprland-installatie is vereist                                                      |
+| [JetBrains Nerd Font](https://www.nerdfonts.com) | Vereist voor weergave van pictogrammen en glyphs                                                  |
+| **Python 3.12+**                                 | Tsumiki vereist Python 3.12                                                                       |
+| **uv**                                           | Python-pakketbeheerder die wordt gebruikt om afhankelijkheden te installeren (`uv sync`)          |
+| **Arch Linux** (aanbevolen)                      | Pakketten geoptimaliseerd voor Arch; andere distro's hebben mogelijk handmatige installatie nodig |
+| **NetworkManager**                               | Vereist voor netwerkgerelateerde widgets en services                                              |
+| **PipeWire**                                     | Vereist voor audiogerelateerde widgets en OSD                                                     |
 
 ## Kernconcepten
 

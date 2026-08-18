@@ -73,7 +73,8 @@ class NotificationQuickSetting(HoverButton):
 
         self.popup = popup
 
-        self.row = _toggle_row(get_text_icon("notifications.noisy"), _('widget.quick_settings.notifications.noisy'))
+        self.row = _toggle_row(get_text_icon("notifications.noisy"),
+                                _('widget.quick_settings.notifications.noisy'))
 
         self.notification_icon = self.row.icon
         self.notification_label = self.row.label
@@ -181,7 +182,10 @@ class FlightModeToggle(HoverButton):
         self.flight_icon.set_label(
             get_text_icon("flight.enabled" if enabled else "flight.disabled")
         )
-        self.flight_label.set_label(_('common.enabled') if enabled else _('common.disabled'))
+        if enabled:
+            self.flight_label.set_label(_('common.enabled'))
+        else:
+            self.flight_label.set_label(_('common.disabled'))
         return True
 
 
@@ -197,7 +201,8 @@ class DarkModeToggle(HoverButton):
 
         self.popup = popup
 
-        self.row = _toggle_row(get_text_icon("color.dark"), _('widget.quick_settings.dark_mode.dark'))
+        self.row = _toggle_row(get_text_icon("color.dark"),
+                                _('widget.quick_settings.dark_mode.dark'))
 
         self.mode_icon = self.row.icon
         self.mode_label = self.row.label
@@ -224,4 +229,11 @@ class DarkModeToggle(HoverButton):
         dark = style_service.mode == "dark"
         self.toggle_css_class("active", dark)
         self.mode_icon.set_label(get_text_icon("color.dark" if dark else "color.light"))
-        self.mode_label.set_label(_('widget.quick_settings.dark_mode.dark') if dark else _('widget.quick_settings.dark_mode.light'))
+        if dark:
+            self.mode_label.set_label(
+                _('widget.quick_settings.dark_mode.dark')
+            )
+        else:
+            self.mode_label.set_label(
+                _('widget.quick_settings.dark_mode.light')
+            )
