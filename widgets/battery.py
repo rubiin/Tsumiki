@@ -76,7 +76,7 @@ class BatteryWidget(ButtonWidget):
 
         self._update_ui()
 
-    def _update_ui(self, *_):
+    def _update_ui(self, *_args):
         """Update the battery status by fetching the current battery information
         and updating the widget accordingly.
         """

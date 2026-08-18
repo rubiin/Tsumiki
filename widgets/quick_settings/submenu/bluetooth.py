@@ -249,7 +249,7 @@ class BluetoothToggle(QSChevronButton):
         # Button Signals
         self.connect("action-clicked", lambda *_: self.client.toggle_power())
 
-    def toggle_bluetooth(self, client: BluetoothClient, *_):
+    def toggle_bluetooth(self, client: BluetoothClient, *_args):
         if client.enabled:
             self.set_active_style(True)
             self.action_icon.set_label(get_text_icon("bluetooth.enabled"))

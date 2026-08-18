@@ -132,7 +132,7 @@ class HyprSunsetToggle(QSChevronButton):
             self.popup.hide_popover()
         return True
 
-    def update_action_button(self, *_):
+    def update_action_button(self, *_args):
         if not self.get_mapped():
             return True
 

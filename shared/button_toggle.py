@@ -69,7 +69,7 @@ class CommandSwitcher(ButtonWidget):
         self._update_ui()  # Initial update
 
     # toggle the command on click
-    def on_click(self, *_):
+    def on_click(self, *_args):
         helpers.toggle_command(
             self.command,
             full_command=self.full_command,
@@ -77,7 +77,7 @@ class CommandSwitcher(ButtonWidget):
         self._update_ui()
         return True
 
-    def _update_ui(self, *_):
+    def _update_ui(self, *_args):
         if not self.get_mapped():
             return True
 

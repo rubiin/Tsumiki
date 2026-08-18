@@ -67,7 +67,7 @@ class RecorderWidget(ButtonWidget):
         else:
             self.recorder_service.screenrecord_start(config=self.config)
 
-    def _update_ui(self, _, is_recording: bool):
+    def _update_ui(self, _sender, is_recording: bool):
         current_children = self.container_box.get_children()
 
         if is_recording:

@@ -97,7 +97,7 @@ class NotificationQuickSetting(HoverButton):
         notification_service.dont_disturb = not notification_service.dont_disturb
         self.popup.hide_popover()
 
-    def toggle_notification(self, _, value: bool, *args):
+    def toggle_notification(self, _sender, value: bool, *_args):
         """Toggle the notification."""
 
         self.toggle_css_class(
@@ -179,7 +179,7 @@ class FlightModeToggle(HoverButton):
 
         self.update_state()
 
-    def update_state(self, *_):
+    def update_state(self, *_args):
         if not self.get_mapped():
             return True
 
