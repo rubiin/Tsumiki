@@ -62,7 +62,7 @@ class CloudflareWarpPopover(Box):
 
         self._on_status_changed()
 
-    def _on_status_changed(self, *_):
+    def _on_status_changed(self, *_args):
         connected = self._service.connected
 
         if connected:
@@ -149,7 +149,7 @@ class CloudflareWarpWidget(ButtonWidget, PopoverMixin):
         if self._available:
             self.setup_popover(lambda: CloudflareWarpPopover(parent=self))
 
-    def _on_status_changed(self, *_):
+    def _on_status_changed(self, *_args):
         if not self._available:
             return
         if self._service.connected:

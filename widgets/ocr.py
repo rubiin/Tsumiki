@@ -122,6 +122,6 @@ class OCRWidget(ButtonWidget):
         self._langs_cache = langs
         self._langs_cache_time = time.time()
 
-    def on_language_selected(self, _, lang):
+    def on_language_selected(self, _sender, lang):
         self.current_lang = lang
         self.set_tooltip_text(_("widget.ocr.lang_selected", lang=lang))

@@ -232,7 +232,7 @@ class DarkModeToggle(HoverButton):
         if self.popup is not None:
             self.popup.hide_popover()
 
-    def update_state(self, *_):
+    def update_state(self, *_args):
         dark = style_service.mode == "dark"
         self.toggle_css_class("active", dark)
         self.mode_icon.set_label(get_text_icon("color.dark" if dark else "color.light"))

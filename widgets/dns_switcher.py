@@ -209,7 +209,7 @@ class DnsSwitcherPopover(Box):
                 row.set_style_classes(["dns-provider-btn"])
                 row._radio.set_label("○")
 
-    def _on_current_changed(self, *_):
+    def _on_current_changed(self, *_args):
         current = self._service.current
         self._update_active_state()
         if current and current != "Default":
@@ -290,7 +290,7 @@ class DnsSwitcherWidget(ButtonWidget, PopoverMixin):
 
         self.setup_popover(lambda: DnsSwitcherPopover(parent=self))
 
-    def _on_current_changed(self, *_):
+    def _on_current_changed(self, *_args):
         current = self._service.current
         if current and current != "Default":
             self._label.set_label(current)

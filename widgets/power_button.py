@@ -260,7 +260,7 @@ class PowerControlButtons(HoverButton):
         self.shortcut_label.set_label(shortcut[:1].upper())
         self.shortcut_label.set_visible(True)
 
-    def on_button_press(self, *_):
+    def on_button_press(self, *_args):
         self.parent.toggle_popup()
         if self.config.get("confirm", True):
             Dialog().add_content(

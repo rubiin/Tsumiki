@@ -36,7 +36,7 @@ class BlueToothWidget(ButtonWidget):
 
         self.update_bluetooth_status()
 
-    def update_bluetooth_status(self, *_):
+    def update_bluetooth_status(self, *_args):
         bt_status = "on" if self.bluetooth_client.enabled else "off"
 
         icon = self.icons["enabled"] if bt_status == "on" else self.icons["disabled"]
