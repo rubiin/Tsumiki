@@ -20,7 +20,7 @@ This page covers issues beyond the [FAQ](/en/help/faq).
 ## Theme Not Applying
 
 - Confirm `theme_name` in `config.toml` matches a file in `themes/`.
-- Recompile styles: `./init.sh -recompile`.
+- Recompile styles: `./tsumiki.sh -recompile`.
 - For Matugen, see [Theming with Matugen](/en/theming/matugen).
 
 ## High CPU or Memory

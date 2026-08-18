@@ -34,8 +34,8 @@ framework). Main code is Python; styles are SCSS; docs are an Astro site.
 ## 4. Setup, Build & Test Commands
 
 ```bash
-./init.sh -setup          # install/setup dependencies (uv sync)
-./init.sh -start           # run the app
+./tsumiki.sh -setup          # install/setup dependencies (uv sync)
+./tsumiki.sh -start           # run the app
 just --list                 # list all available task recipes
 uv run python -m unittest discover tests -q   # run the test suite
 cd docs && pnpm install && pnpm build   # build the docs site

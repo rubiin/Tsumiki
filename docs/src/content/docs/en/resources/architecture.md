@@ -14,7 +14,7 @@ tsumiki/
 ├── main.py                  # Application entry point
 ├── config.toml              # User configuration
 ├── tsumiki.schema.json      # JSON Schema for validation
-├── init.sh                  # Setup/start utilities
+├── tsumiki.sh                  # Setup/start utilities
 ├── install.sh               # Bootstrap installer
 ├── themes/                  # Theme .toml files
 │   ├── catpuccin-mocha.toml

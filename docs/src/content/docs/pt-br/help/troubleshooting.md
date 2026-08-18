@@ -17,7 +17,7 @@ description: Diagnosticar problemas comuns do Tsumiki
 ## Tema Não Aplica
 
 - Verifique `theme_name` no `config.toml`.
-- Recompile: `./init.sh -recompile`.
+- Recompile: `./tsumiki.sh -recompile`.
 
 ## Alto Uso de CPU
 

@@ -19,8 +19,8 @@ description: ابدأ مع تسوميكي في دقائق
 ```sh
 git clone https://github.com/rubiin/tsumiki.git ~/.config/tsumiki
 cd ~/.config/tsumiki
-./init.sh -setup
-./init.sh -start
+./tsumiki.sh -setup
+./tsumiki.sh -start
 ```
 
 العلامة `-setup` تثبت جميع حزم النظام المطلوبة وتبعيات Python. قد يُطلب منك كلمة المرور أثناء الإعداد.
@@ -32,7 +32,7 @@ cd ~/.config/tsumiki
 أضف هذا السطر إلى `~/.config/hypr/hyprland.conf`:
 
 ```sh
-exec-once = sleep 5; ~/.config/tsumiki/init.sh -start
+exec-once = sleep 5; ~/.config/tsumiki/tsumiki.sh -start
 ```
 
 ## إعدادات الحد الأدنى
@@ -70,7 +70,7 @@ tooltip = true
 
 ```sh
 pkill tsumiki
-./init.sh -start
+./tsumiki.sh -start
 ```
 
 ## الخطوات التالية

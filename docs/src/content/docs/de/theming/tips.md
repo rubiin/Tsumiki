@@ -20,4 +20,4 @@ Sparen Sie starke `accent*`-Farben für wichtige Zustände (Fehler, Erfolg, akti
 1. `matugen.enabled = true` in `config.toml` setzen.
 2. `wallpaper` auf Ihr Bild verweisen.
 3. Tsumiki neu starten, um die Palette zu generieren.
-4. Bei Bedarf neu kompilieren: `./init.sh -recompile`.
+4. Bei Bedarf neu kompilieren: `./tsumiki.sh -recompile`.

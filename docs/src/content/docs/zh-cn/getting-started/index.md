@@ -19,8 +19,8 @@ Tsumiki 是基于 Fabric 组件系统构建的 Hyprland 模块化状态栏。
 ```sh
 git clone https://github.com/rubiin/tsumiki.git ~/.config/tsumiki
 cd ~/.config/tsumiki
-./init.sh -setup
-./init.sh -start
+./tsumiki.sh -setup
+./tsumiki.sh -start
 ```
 
 `-setup` 标志会安装所有必需的系统包和 Python 依赖。安装过程中可能会提示您输入密码。
@@ -32,7 +32,7 @@ cd ~/.config/tsumiki
 将这一行添加到 `~/.config/hypr/hyprland.conf`：
 
 ```sh
-exec-once = sleep 5; ~/.config/tsumiki/init.sh -start
+exec-once = sleep 5; ~/.config/tsumiki/tsumiki.sh -start
 ```
 
 ## 最小配置
@@ -70,7 +70,7 @@ tooltip = true
 
 ```sh
 pkill tsumiki
-./init.sh -start
+./tsumiki.sh -start
 ```
 
 ## 下一步

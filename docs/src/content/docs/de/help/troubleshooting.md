@@ -20,7 +20,7 @@ Diese Seite behandelt Probleme, die über die [FAQ](/de/help/faq) hinausgehen.
 ## Theme wird nicht angewendet
 
 - Prüfen Sie, ob `theme_name` in `config.toml` mit einer Datei in `themes/` übereinstimmt.
-- Stile neu kompilieren: `./init.sh -recompile`.
+- Stile neu kompilieren: `./tsumiki.sh -recompile`.
 - Für Matugen, siehe [Theming mit Matugen](/de/theming/matugen).
 
 ## Hohe CPU- oder Speicherauslastung

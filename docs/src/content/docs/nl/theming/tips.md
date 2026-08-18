@@ -20,4 +20,4 @@ Bewaar sterke kleuren voor belangrijke toestanden.
 1. Stel `matugen.enabled = true` in in `config.toml`
 2. Verwijs `wallpaper` naar uw afbeelding
 3. Herstart Tsumiki
-4. Hercompileer indien nodig: `./init.sh -recompile`
+4. Hercompileer indien nodig: `./tsumiki.sh -recompile`

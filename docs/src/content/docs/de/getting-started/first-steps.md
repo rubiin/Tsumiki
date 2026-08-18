@@ -12,7 +12,7 @@ Sie haben Tsumiki installiert und die [Post-Installations](/de/resources/post-in
 Führen Sie vom Tsumiki-Projektverzeichnis aus:
 
 ```sh
-./init.sh -start
+./tsumiki.sh -start
 ```
 
 Wenn Hyprland läuft, sollte die Leiste oben auf Ihrem Bildschirm erscheinen. Wenn die Leiste nicht erscheint, überprüfen Sie die Fehlerausgabe im Terminal und siehe [Fehlerbehebung](/de/help/troubleshooting).
@@ -33,7 +33,7 @@ Fügen Sie Tsumiki zu Ihrer Hyprland-Konfiguration hinzu, damit es beim Einlogge
 Öffnen Sie `~/.config/hypr/hyprland.conf` und fügen Sie hinzu:
 
 ```sh
-exec-once = sleep 5; ~/.config/tsumiki/init.sh -start
+exec-once = sleep 5; ~/.config/tsumiki/tsumiki.sh -start
 ```
 
 Die Verzögerung `sleep 5` gibt Hyprland Zeit, vollständig zu initialisieren. Passen Sie den Pfad an, wenn Sie Tsumiki in ein anderes Verzeichnis geklont haben.
@@ -75,7 +75,7 @@ Nach dem Speichern Ihrer Änderungen starten Sie Tsumiki neu:
 
 ```sh
 pkill tsumiki
-./init.sh -start
+./tsumiki.sh -start
 ```
 
 Wenn die Konfiguration gültig ist, sollte die Leiste mit Ihrem neuen Layout wieder erscheinen.
@@ -103,7 +103,7 @@ Wenn etwas nicht stimmt:
 
 - **Leiste erscheint nicht** — Überprüfen Sie, ob Hyprland läuft und keine anderen Leisten aktiv sind (`pkill waybar`).
 - **Keine Symbole** — Stellen Sie sicher, dass [JetBrains Nerd Font](https://www.nerdfonts.com) installiert und als Terminal-/UI-Schriftart konfiguriert ist.
-- **Fehlende Funktionalität** — Einige Widgets erfordern externe Tools (z.B. `playerctl` für Medien, `brightnessctl` für Helligkeit). Führen Sie `./init.sh -setup` aus, um sicherzustellen, dass alle Abhängigkeiten installiert sind (Python-Abhängigkeiten werden mit `uv sync` installiert).
+- **Fehlende Funktionalität** — Einige Widgets erfordern externe Tools (z.B. `playerctl` für Medien, `brightnessctl` für Helligkeit). Führen Sie `./tsumiki.sh -setup` aus, um sicherzustellen, dass alle Abhängigkeiten installiert sind (Python-Abhängigkeiten werden mit `uv sync` installiert).
 - **SASS-Fehler** — Ihre `config.toml` könnte ungültig sein. Vergleichen Sie sie mit `example/config.toml`.
 
 Weitere Hilfe finden Sie auf den Seiten [FAQ](/de/help/faq) oder [Fehlerbehebung](/de/help/troubleshooting).

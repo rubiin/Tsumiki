@@ -12,7 +12,7 @@ Has instalado Tsumiki y aplicado los pasos de [Post Instalación](/es/resources/
 Desde el directorio del proyecto Tsumiki, ejecuta:
 
 ```sh
-./init.sh -start
+./tsumiki.sh -start
 ```
 
 Si Hyprland está en ejecución, la barra debería aparecer en la parte superior de tu pantalla. Si la barra no aparece, verifica la salida de errores en la terminal y consulta [Solución de Problemas](/es/help/troubleshooting).
@@ -33,7 +33,7 @@ Añade Tsumiki a tu configuración de Hyprland para que se lance automáticament
 Abre `~/.config/hypr/hyprland.conf` y añade:
 
 ```sh
-exec-once = sleep 5; ~/.config/tsumiki/init.sh -start
+exec-once = sleep 5; ~/.config/tsumiki/tsumiki.sh -start
 ```
 
 El retardo `sleep 5` le da tiempo a Hyprland para inicializarse completamente. Ajusta la ruta si clonaste Tsumiki en un directorio diferente.
@@ -75,7 +75,7 @@ Después de guardar tus ediciones, reinicia Tsumiki:
 
 ```sh
 pkill tsumiki
-./init.sh -start
+./tsumiki.sh -start
 ```
 
 Si la configuración es válida, la barra debería reaparecer con tu nuevo diseño.
@@ -103,7 +103,7 @@ Si algo parece incorrecto:
 
 - **La barra no aparece** — Verifica que estés ejecutando Hyprland y que no haya otras barras en ejecución (`pkill waybar`).
 - **Sin iconos** — Verifica que [JetBrains Nerd Font](https://www.nerdfonts.com) esté instalada y configurada como fuente de tu terminal/UI.
-- **Funcionalidad faltante** — Algunos widgets requieren herramientas externas (ej., `playerctl` para medios, `brightnessctl` para brillo). Ejecuta `./init.sh -setup` para asegurarte de que todas las dependencias estén instaladas (las dependencias de Python se instalan con `uv sync`).
+- **Funcionalidad faltante** — Algunos widgets requieren herramientas externas (ej., `playerctl` para medios, `brightnessctl` para brillo). Ejecuta `./tsumiki.sh -setup` para asegurarte de que todas las dependencias estén instaladas (las dependencias de Python se instalan con `uv sync`).
 - **Errores SASS** — Tu `config.toml` puede ser inválido. Compáralo con `example/config.toml`.
 
 Para más ayuda, consulta las páginas de [Preguntas Frecuentes](/es/help/faq) o [Solución de Problemas](/es/help/troubleshooting).

@@ -12,7 +12,7 @@ You installed Tsumiki and applied the [Post Installation](/en/resources/post-ins
 From the Tsumiki project directory, run:
 
 ```sh
-./init.sh -start
+./tsumiki.sh -start
 ```
 
 If Hyprland is running, the bar should appear at the top of your screen. If the bar does not appear, check for error output in the terminal and see [Troubleshooting](/en/help/troubleshooting).
@@ -33,7 +33,7 @@ Add Tsumiki to your Hyprland configuration so it launches automatically on login
 Open `~/.config/hypr/hyprland.conf` and add:
 
 ```sh
-exec-once = sleep 5; ~/.config/tsumiki/init.sh -start
+exec-once = sleep 5; ~/.config/tsumiki/tsumiki.sh -start
 ```
 
 The `sleep 5` delay gives Hyprland time to fully initialize. Adjust the path if you cloned Tsumiki to a different directory.
@@ -75,7 +75,7 @@ After saving your edits, restart Tsumiki:
 
 ```sh
 pkill tsumiki
-./init.sh -start
+./tsumiki.sh -start
 ```
 
 If the configuration is valid, the bar should reappear with your new layout.
@@ -103,7 +103,7 @@ If something looks wrong:
 
 - **Bar doesn't appear** — Check that you're running Hyprland and that no other bars are running (`pkill waybar`).
 - **No icons** — Verify [JetBrains Nerd Font](https://www.nerdfonts.com) is installed and configured as your terminal/UI font.
-- **Missing functionality** — Some widgets require external tools (e.g., `playerctl` for media, `brightnessctl` for brightness). Run `./init.sh -setup` to ensure all dependencies are installed (Python dependencies are installed with `uv sync`).
+- **Missing functionality** — Some widgets require external tools (e.g., `playerctl` for media, `brightnessctl` for brightness). Run `./tsumiki.sh -setup` to ensure all dependencies are installed (Python dependencies are installed with `uv sync`).
 - **SASS errors** — Your `config.toml` may be invalid. Compare with `example/config.toml`.
 
 For more help, see the [FAQ](/en/help/faq) or [Troubleshooting](/en/help/troubleshooting) pages.

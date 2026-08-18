@@ -12,7 +12,7 @@ sidebar:
 من مجلد مشروع تسوميكي، شغّل:
 
 ```sh
-./init.sh -start
+./tsumiki.sh -start
 ```
 
 إذا كان هيبرلاند يعمل، يجب أن يظهر الشريط في أعلى شاشتك. إذا لم يظهر الشريط، تحقق من مخرجات الأخطاء في الطرفية وراجع [استكشاف الأخطاء وإصلاحها](/ar/help/troubleshooting).
@@ -33,7 +33,7 @@ pkill tsumiki
 افتح `~/.config/hypr/hyprland.conf` وأضف:
 
 ```sh
-exec-once = sleep 5; ~/.config/tsumiki/init.sh -start
+exec-once = sleep 5; ~/.config/tsumiki/tsumiki.sh -start
 ```
 
 التأخير `sleep 5` يعطي هيبرلاند وقتاً للتهيئة الكاملة. اضبط المسار إذا قمت باستنساخ تسوميكي في مجلد مختلف.
@@ -75,7 +75,7 @@ right_section = ["volume", "battery", "system_tray", "power"]
 
 ```sh
 pkill tsumiki
-./init.sh -start
+./tsumiki.sh -start
 ```
 
 إذا كانت الإعدادات صالحة، يجب أن يظهر الشريط مرة أخرى مع تخطيطك الجديد.
@@ -103,7 +103,7 @@ pkill tsumiki
 
 - **الشريط لا يظهر** — تحقق من أن هيبرلاند يعمل وأنه لا توجد أشرطة أخرى قيد التشغيل (`pkill waybar`).
 - **لا توجد أيقونات** — تحقق من تثبيت [JetBrains Nerd Font](https://www.nerdfonts.com) وتكوينه كخط للطرفية/الواجهة.
-- **وظائف مفقودة** — بعض الأدوات تتطلب أدوات خارجية (مثل `playerctl` للوسائط، `brightnessctl` للسطوع). شغّل `./init.sh -setup` للتأكد من تثبيت جميع التبعيات (يتم تثبيت تبعيات Python عبر `uv sync`).
+- **وظائف مفقودة** — بعض الأدوات تتطلب أدوات خارجية (مثل `playerctl` للوسائط، `brightnessctl` للسطوع). شغّل `./tsumiki.sh -setup` للتأكد من تثبيت جميع التبعيات (يتم تثبيت تبعيات Python عبر `uv sync`).
 - **أخطاء SASS** — قد يكون ملف `config.toml` غير صالح. قارنه مع `example/config.toml`.
 
 لمزيد من المساعدة، راجع صفحات [الأسئلة الشائعة](/ar/help/faq) أو [استكشاف الأخطاء وإصلاحها](/ar/help/troubleshooting).

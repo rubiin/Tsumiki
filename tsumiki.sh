@@ -175,6 +175,7 @@ install_packages() {
 	# Install packages from AUR using yay
 	aur_deps=(
 		gnome-bluetooth-3.0
+		fabric-cli-git
 		slurp
 		imagemagick
 		tesseract
@@ -219,6 +220,7 @@ usage() {
 	log_success "  📦  -install       Install system packages"
 	log_success "  🐍  -setup         Setup virtual environment and Python dependencies"
 	log_success "  🔁  -restart       Kill existing instances and start the bar"
+	log_success "  📡  -ipc <cmd>     IPC commands (list-windows, toggle, reload-config, etc.)"
 	log_success "  ❓  -h, --help     Show this help message"
 
 	echo ""
@@ -249,11 +251,20 @@ fi
 
 NEEDS_ENV_CHECK=false
 
+IPC_ARGS=()
+IPC_MODE=false
+
 for arg in "$@"; do
 	case "$arg" in
 	-h|--help)
 		usage
 		exit 0
+		;;
+	-ipc)
+		IPC_MODE=true
+		shift
+		IPC_ARGS=("$@")
+		break
 		;;
 	-start)
 		SHOULD_START=true
@@ -294,6 +305,119 @@ for arg in "$@"; do
 		;;
 	esac
 done
+
+# Handle IPC mode
+if [ "$IPC_MODE" = true ]; then
+	if [ ${#IPC_ARGS[@]} -eq 0 ]; then
+		log_error "IPC requires a command."
+		echo ""
+		echo "Available IPC commands:"
+		echo "  list-windows, lw           List all windows and their visibility"
+		echo "  toggle, toggle-window <w>  Toggle window visibility"
+		echo "  list-actions, actions      List all available actions"
+		echo "  reload-config              Reload Tsumiki configuration"
+		echo "  execute, exec <cmd>        Execute a shell command"
+		echo "  inspector                  Open the GTK inspector"
+		echo "  invoke, action <a> [args]  Invoke an action with arguments"
+		echo "  help                       Show this help message"
+		exit 1
+	fi
+
+	IPC_COMMAND="${IPC_ARGS[0]}"
+	IPC_REST_ARGS=(${IPC_ARGS[@]:1})
+
+	# Check if fabric-cli is available
+	if ! command -v fabric-cli &>/dev/null; then
+		log_error "fabric-cli not found in PATH."
+		log_warning "Install it from: https://github.com/Fabric-Development/fabric-cli"
+		exit 1
+	fi
+
+	# Auto-detect instance name from running instances
+	IPC_INSTANCE=$(fabric-cli list-all --json 2>/dev/null | python3 -c "
+import sys, json
+try:
+    data = json.load(sys.stdin)
+    names = data.get('instances-dbus-names', [])
+    # Get the first instance name (strip 'org.Fabric.fabric.' prefix)
+    for name in names:
+        if name.startswith('org.Fabric.fabric.'):
+            print(name.replace('org.Fabric.fabric.', ''))
+            break
+    else:
+        print('')
+except:
+    print('')
+" 2>/dev/null)
+
+	if [ -z "$IPC_INSTANCE" ]; then
+		log_error "No running Tsumiki instance found."
+		log_warning "Please start Tsumiki first: $SCRIPT_NAME -start"
+		exit 1
+	fi
+
+	case "$IPC_COMMAND" in
+	list-windows|lw)
+		fabric-cli list-windows "$IPC_INSTANCE" --json
+		;;
+	toggle|toggle-window)
+		if [ ${#IPC_REST_ARGS[@]} -eq 0 ]; then
+			log_error "toggle requires a window name."
+			echo "Usage: $SCRIPT_NAME -ipc toggle <window-name>"
+			exit 1
+		fi
+		fabric-cli invoke-action "$IPC_INSTANCE" toggle-window "${IPC_REST_ARGS[0]}"
+		;;
+	list-actions|actions)
+		fabric-cli list-actions "$IPC_INSTANCE" --json
+		;;
+	reload-config)
+		log_info "Reloading configuration..."
+		fabric-cli invoke-action "$IPC_INSTANCE" reload-config
+		log_success "Configuration reloaded."
+		;;
+	execute|exec)
+		if [ ${#IPC_REST_ARGS[@]} -eq 0 ]; then
+			log_error "execute requires a command."
+			echo "Usage: $SCRIPT_NAME -ipc execute <command>"
+			exit 1
+		fi
+		fabric-cli invoke-action "$IPC_INSTANCE" execute-command "${IPC_REST_ARGS[*]}"
+		;;
+	invoke|action)
+		if [ ${#IPC_REST_ARGS[@]} -eq 0 ]; then
+			log_error "invoke requires an action name."
+			echo "Usage: $SCRIPT_NAME -ipc invoke <action> [args...]"
+			exit 1
+		fi
+		fabric-cli invoke-action "$IPC_INSTANCE" "${IPC_REST_ARGS[@]}"
+		;;
+	inspector)
+		fabric-cli invoke-action "$IPC_INSTANCE" open-inspector
+		;;
+	help)
+		echo "Tsumiki IPC - Inter-Process Communication"
+		echo ""
+		echo "Usage: $SCRIPT_NAME -ipc <command> [args...]"
+		echo ""
+		echo "Commands:"
+		echo "  list-windows, lw           List all windows and their visibility"
+		echo "  toggle, toggle-window <w>  Toggle window visibility"
+		echo "  list-actions, actions      List all available actions"
+		echo "  reload-config              Reload Tsumiki configuration"
+		echo "  execute, exec <cmd>        Execute a shell command"
+		echo "  inspector                  Open the GTK inspector"
+		echo "  invoke, action <a> [args]  Invoke an action with arguments"
+		echo "  help                       Show this help message"
+		;;
+	*)
+		log_error "Unknown IPC command: $IPC_COMMAND"
+		echo "Run '$SCRIPT_NAME -ipc help' for usage information"
+		exit 1
+		;;
+	esac
+	exit 0
+fi
 
 if [ "$SHOULD_START" = false ] && [ "$SHOULD_STOP" = false ] && [ "$SHOULD_UPDATE" = false ] && [ "$SHOULD_INSTALL" = false ] && [ "$SHOULD_SETUP" = false ]; then
 	log_warning "No operation selected."

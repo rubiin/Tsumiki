@@ -20,4 +20,4 @@ Güçlü renkleri önemli durumlar için saklayın.
 1. `config.toml` içinde `matugen.enabled = true` ayarlayın
 2. `wallpaper`'ı görselinize yöneltin
 3. Tsumiki'yi yeniden başlatın
-4. Gerekirse yeniden derleyin: `./init.sh -recompile`
+4. Gerekirse yeniden derleyin: `./tsumiki.sh -recompile`

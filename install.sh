@@ -85,7 +85,7 @@ run_init() {
     log "🛠️  Running setup script"
     log "🚀 This will install dependencies and configure Tsumiki"
 
-    bash "$INSTALL_DIR/init.sh" -install -setup
+    bash "$INSTALL_DIR/tsumiki.sh" -install -setup
 
     success "✅ Setup completed successfully"
 }
@@ -107,12 +107,12 @@ setup_tsu_command() {
     log "⚙️  Configuring 'tsu' command"
 
     mkdir -p "$BIN_DIR"
-    chmod +x "$INSTALL_DIR/init.sh"
+    chmod +x "$INSTALL_DIR/tsumiki.sh"
 
-    ln -sfn "$INSTALL_DIR/init.sh" "$TSU_PATH"
+    ln -sfn "$INSTALL_DIR/tsumiki.sh" "$TSU_PATH"
 
     log "🔗 Symlink created:"
-    log "→ $TSU_PATH → $INSTALL_DIR/init.sh"
+    log "→ $TSU_PATH → $INSTALL_DIR/tsumiki.sh"
 
     ensure_path_entry "$HOME/.bashrc"
     ensure_path_entry "$HOME/.zshrc"

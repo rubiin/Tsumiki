@@ -20,7 +20,7 @@ Esta página cubre problemas más allá de las [Preguntas Frecuentes](/es/help/f
 ## El Tema No se Aplica
 
 - Confirma que `theme_name` en `config.toml` coincida con un archivo en `themes/`.
-- Recompila los estilos: `./init.sh -recompile`.
+- Recompila los estilos: `./tsumiki.sh -recompile`.
 - Para Matugen, consulta [Tematización con Matugen](/es/theming/matugen).
 
 ## Alto Uso de CPU o Memoria

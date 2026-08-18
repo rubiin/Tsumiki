@@ -12,7 +12,7 @@ Vous avez installé Tsumiki et appliqué les étapes de [Post Installation](/fr/
 Depuis le répertoire du projet Tsumiki, exécutez :
 
 ```sh
-./init.sh -start
+./tsumiki.sh -start
 ```
 
 Si Hyprland est en cours d'exécution, la barre devrait apparaître en haut de votre écran. Si la barre n'apparaît pas, vérifiez la sortie d'erreur dans le terminal et consultez [Dépannage](/fr/help/troubleshooting).
@@ -33,7 +33,7 @@ Ajoutez Tsumiki à votre configuration Hyprland pour qu'il se lance automatiquem
 Ouvrez `~/.config/hypr/hyprland.conf` et ajoutez :
 
 ```sh
-exec-once = sleep 5; ~/.config/tsumiki/init.sh -start
+exec-once = sleep 5; ~/.config/tsumiki/tsumiki.sh -start
 ```
 
 Le délai `sleep 5` donne le temps à Hyprland de s'initialiser complètement. Ajustez le chemin si vous avez cloné Tsumiki dans un répertoire différent.
@@ -75,7 +75,7 @@ Après avoir enregistré vos modifications, redémarrez Tsumiki :
 
 ```sh
 pkill tsumiki
-./init.sh -start
+./tsumiki.sh -start
 ```
 
 Si la configuration est valide, la barre devrait réapparaître avec votre nouvelle disposition.
@@ -103,7 +103,7 @@ Si quelque chose semble incorrect :
 
 - **La barre n'apparaît pas** — Vérifiez que vous exécutez Hyprland et qu'aucune autre barre n'est en cours d'exécution (`pkill waybar`).
 - **Pas d'icônes** — Vérifiez que [JetBrains Nerd Font](https://www.nerdfonts.com) est installée et configurée comme police de votre terminal/UI.
-- **Fonctionnalité manquante** — Certains widgets nécessitent des outils externes (ex., `playerctl` pour les médias, `brightnessctl` pour la luminosité). Exécutez `./init.sh -setup` pour vous assurer que toutes les dépendances sont installées (les dépendances Python sont installées avec `uv sync`).
+- **Fonctionnalité manquante** — Certains widgets nécessitent des outils externes (ex., `playerctl` pour les médias, `brightnessctl` pour la luminosité). Exécutez `./tsumiki.sh -setup` pour vous assurer que toutes les dépendances sont installées (les dépendances Python sont installées avec `uv sync`).
 - **Erreurs SASS** — Votre `config.toml` peut être invalide. Comparez-le avec `example/config.toml`.
 
 Pour plus d'aide, consultez les pages [FAQ](/fr/help/faq) ou [Dépannage](/fr/help/troubleshooting).

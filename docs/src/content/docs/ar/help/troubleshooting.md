@@ -16,7 +16,7 @@ description: حل المشاكل الشائعة في تسوميكي
 ## الثيم لا يطبق
 
 - تحقق من `theme_name` في `config.toml`.
-- أعد التجميع: `./init.sh -recompile`.
+- أعد التجميع: `./tsumiki.sh -recompile`.
 
 ## استخدام عالي للمعالج
 

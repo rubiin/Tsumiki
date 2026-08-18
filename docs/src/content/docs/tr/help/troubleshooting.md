@@ -17,7 +17,7 @@ description: Yaygın Tsumiki sorunlarını teşhis etme
 ## Tema Uygulanmıyor
 
 - `config.toml` içinde `theme_name`'i kontrol edin.
-- Yeniden derleyin: `./init.sh -recompile`.
+- Yeniden derleyin: `./tsumiki.sh -recompile`.
 
 ## Yüksek CPU Kullanımı
 

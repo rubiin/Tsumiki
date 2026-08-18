@@ -67,8 +67,8 @@ curl -fsSL https://raw.githubusercontent.com/rubiin/tsumiki/master/install.sh | 
 Se você já clonou o repositório manualmente, execute o script de configuração:
 
 ```sh
-./init.sh -setup
-./init.sh -start
+./tsumiki.sh -setup
+./tsumiki.sh -start
 ```
 
 A flag `-setup` instala pacotes de sistema necessários e configura o ambiente virtual Python.
@@ -97,7 +97,7 @@ yay -S --needed \
 uv sync
 
 # Iniciar
-./init.sh -start
+./tsumiki.sh -start
 ```
 
 Se você não usa `yay`, instale os pacotes AUR com seu ajudante AUR preferido.
@@ -107,7 +107,7 @@ Se você não usa `yay`, instale os pacotes AUR com seu ajudante AUR preferido.
 Adicione esta linha ao seu `~/.config/hypr/hyprland.conf` para iniciar o Tsumiki automaticamente quando o Hyprland iniciar:
 
 ```sh
-exec-once = sleep 5; ~/.config/tsumiki/init.sh -start
+exec-once = sleep 5; ~/.config/tsumiki/tsumiki.sh -start
 ```
 
 O `sleep 5` garante que o Hyprland esteja completamente inicializado antes do Tsumiki iniciar. Ajuste o caminho se você clonou em um local diferente.
@@ -116,17 +116,17 @@ O `sleep 5` garante que o Hyprland esteja completamente inicializado antes do Ts
 Você pode criar um alias de shell por conveniência:
 
 ```sh
-alias tsumiki='~/.config/tsumiki/init.sh -start'
+alias tsumiki='~/.config/tsumiki/tsumiki.sh -start'
 ```
 
 :::
 
 ## Verificando a Instalação
 
-1. Execute `./init.sh -start` a partir do diretório do projeto.
+1. Execute `./tsumiki.sh -start` a partir do diretório do projeto.
 2. A barra do Tsumiki deve aparecer no topo da sua tela.
 3. Se você vir mensagens de erro, verifique se:
-   - Todos os pacotes do sistema estão instalados (`./init.sh -setup` reexecuta esta verificação)
+   - Todos os pacotes do sistema estão instalados (`./tsumiki.sh -setup` reexecuta esta verificação)
    - As dependências Python estão instaladas (`uv sync`)
    - Você está executando sob Hyprland (não outro compositor ou X11)
 

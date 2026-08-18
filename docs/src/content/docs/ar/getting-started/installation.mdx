@@ -67,8 +67,8 @@ curl -fsSL https://raw.githubusercontent.com/rubiin/tsumiki/master/install.sh | 
 إذا سبق أن استنسخت المستودع يدوياً، شغّل سكريبت الإعداد:
 
 ```sh
-./init.sh -setup
-./init.sh -start
+./tsumiki.sh -setup
+./tsumiki.sh -start
 ```
 
 العلامة `-setup` تثبت حزم النظام المطلوبة وتضبط البيئة الافتراضية لـ Python.
@@ -97,7 +97,7 @@ yay -S --needed \
 uv sync
 
 # بدء
-./init.sh -start
+./tsumiki.sh -start
 ```
 
 إذا كنت لا تستخدم `yay`، ثبّت حزم AUR بمساعد AUR المفضل لديك.
@@ -107,7 +107,7 @@ uv sync
 أضف هذا السطر إلى `~/.config/hypr/hyprland.conf` لتشغيل تسوميكي تلقائياً عند بدء Hyprland:
 
 ```sh
-exec-once = sleep 5; ~/.config/tsumiki/init.sh -start
+exec-once = sleep 5; ~/.config/tsumiki/tsumiki.sh -start
 ```
 
 `sleep 5` يضمن تهيئة Hyprland بالكامل قبل تشغيل تسوميكي. اضبط المسار إذا استنسخت في موقع مختلف.
@@ -116,17 +116,17 @@ exec-once = sleep 5; ~/.config/tsumiki/init.sh -start
 يمكنك إنشاء alias في الشيل للراحة:
 
 ```sh
-alias tsumiki='~/.config/tsumiki/init.sh -start'
+alias tsumiki='~/.config/tsumiki/tsumiki.sh -start'
 ```
 
 :::
 
 ## التحقق من التثبيت
 
-1. شغّل `./init.sh -start` من مجلد المشروع.
+1. شغّل `./tsumiki.sh -start` من مجلد المشروع.
 2. يجب أن يظهر شريط تسوميكي في أعلى شاشتك.
 3. إذا رأيت رسائل خطأ، تحقق من:
-   - تثبيت جميع حزم النظام (`./init.sh -setup` يعيد تشغيل هذا الفحص)
+   - تثبيت جميع حزم النظام (`./tsumiki.sh -setup` يعيد تشغيل هذا الفحص)
    - تثبيت تبعيات Python (`uv sync`)
    - أنك تعمل تحت Hyprland (وليس مشغّل آخر أو X11)
 

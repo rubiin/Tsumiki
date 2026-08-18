@@ -79,7 +79,7 @@ Cuando cambies el fondo de pantalla o la configuración de Matugen, regenera y r
 Genera paleta y recompila en un solo comando:
 
 ```bash
-matugen image ~/Pictures/wallpaper.jpg -t scheme-tonal-spot --mode dark --contrast 0.0 --config ~/.config/tsumiki/assets/matugen/config.toml && ./init.sh -recompile
+matugen image ~/Pictures/wallpaper.jpg -t scheme-tonal-spot --mode dark --contrast 0.0 --config ~/.config/tsumiki/assets/matugen/config.toml && ./tsumiki.sh -recompile
 ```
 
 Interactivo (REPL de Python dentro del entorno de Tsumiki):

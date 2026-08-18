@@ -17,7 +17,7 @@ description: 诊断常见 Tsumiki 问题
 ## 主题未应用
 
 - 检查 `config.toml` 中的 `theme_name`。
-- 重新编译：`./init.sh -recompile`。
+- 重新编译：`./tsumiki.sh -recompile`。
 
 ## CPU 使用率高
 

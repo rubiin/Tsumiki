@@ -19,8 +19,8 @@ Başlamadan önce aşağıdakilere sahip olduğunuzdan emin olun:
 ```sh
 git clone https://github.com/rubiin/tsumiki.git ~/.config/tsumiki
 cd ~/.config/tsumiki
-./init.sh -setup
-./init.sh -start
+./tsumiki.sh -setup
+./tsumiki.sh -start
 ```
 
 `-setup` bayrağı gerekli tüm sistem paketlerini ve Python bağımlılıklarını yükler. Kurulum sırasında şifreniz istenebilir.
@@ -32,7 +32,7 @@ Alternatif kurulum yöntemleri için (bootstrap betiği, manuel kurulum), [tam k
 `~/.config/hypr/hyprland.conf` dosyasına şu satırı ekleyin:
 
 ```sh
-exec-once = sleep 5; ~/.config/tsumiki/init.sh -start
+exec-once = sleep 5; ~/.config/tsumiki/tsumiki.sh -start
 ```
 
 ## Minimum Yapılandırma
@@ -70,7 +70,7 @@ Kaydettikten sonra çubuğu yeniden başlatın:
 
 ```sh
 pkill tsumiki
-./init.sh -start
+./tsumiki.sh -start
 ```
 
 ## Sonraki Adımlar

@@ -12,7 +12,7 @@ Você instalou o Tsumiki e aplicou as etapas de [Pós-Instalação](/pt-br/resou
 A partir do diretório do projeto Tsumiki, execute:
 
 ```sh
-./init.sh -start
+./tsumiki.sh -start
 ```
 
 Se o Hyprland estiver em execução, a barra deve aparecer no topo da sua tela. Se a barra não aparecer, verifique a saída de erros no terminal e consulte [Solução de Problemas](/pt-br/help/troubleshooting).
@@ -33,7 +33,7 @@ Adicione o Tsumiki à sua configuração do Hyprland para que ele inicie automat
 Abra `~/.config/hypr/hyprland.conf` e adicione:
 
 ```sh
-exec-once = sleep 5; ~/.config/tsumiki/init.sh -start
+exec-once = sleep 5; ~/.config/tsumiki/tsumiki.sh -start
 ```
 
 O atraso `sleep 5` dá tempo ao Hyprland para inicializar completamente. Ajuste o caminho se você clonou o Tsumiki em um diretório diferente.
@@ -75,7 +75,7 @@ Após salvar suas edições, reinicie o Tsumiki:
 
 ```sh
 pkill tsumiki
-./init.sh -start
+./tsumiki.sh -start
 ```
 
 Se a configuração for válida, a barra deve reaparecer com seu novo layout.
@@ -103,7 +103,7 @@ Se algo parecer errado:
 
 - **A barra não aparece** — Verifique se você está executando o Hyprland e se não há outras barras em execução (`pkill waybar`).
 - **Sem ícones** — Verifique se o [JetBrains Nerd Font](https://www.nerdfonts.com) está instalado e configurado como fonte do seu terminal/UI.
-- **Funcionalidade ausente** — Alguns widgets requerem ferramentas externas (ex., `playerctl` para mídia, `brightnessctl` para brilho). Execute `./init.sh -setup` para garantir que todas as dependências estejam instaladas (as dependências Python são instaladas com `uv sync`).
+- **Funcionalidade ausente** — Alguns widgets requerem ferramentas externas (ex., `playerctl` para mídia, `brightnessctl` para brilho). Execute `./tsumiki.sh -setup` para garantir que todas as dependências estejam instaladas (as dependências Python são instaladas com `uv sync`).
 - **Erros SASS** — Seu `config.toml` pode ser inválido. Compare com `example/config.toml`.
 
 Para mais ajuda, consulte as páginas [FAQ](/pt-br/help/faq) ou [Solução de Problemas](/pt-br/help/troubleshooting).

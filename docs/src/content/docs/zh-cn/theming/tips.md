@@ -20,4 +20,4 @@ description: Tsumiki 的实用主题化建议
 1. 在 `config.toml` 中设置 `matugen.enabled = true`
 2. 将 `wallpaper` 指向您的图片
 3. 重启 Tsumiki
-4. 如有需要重新编译：`./init.sh -recompile`
+4. 如有需要重新编译：`./tsumiki.sh -recompile`

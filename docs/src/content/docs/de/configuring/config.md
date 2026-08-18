@@ -223,7 +223,7 @@ Wenn Sie von älteren Versionen aktualisieren, lesen Sie [Migration v2 zu v3](/d
 1. Beginnen Sie mit `example/config.toml`.
 2. Halten Sie Ihre benutzerdefinierte Datei klein und fokussiert.
 3. Ändern Sie jeweils einen Abschnitt.
-4. Starten Sie mit `./init.sh -start` neu, um das Verhalten zu validieren.
+4. Starten Sie mit `./tsumiki.sh -start` neu, um das Verhalten zu validieren.
 
 ## Referenzquelle
 

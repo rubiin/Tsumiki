@@ -27,7 +27,7 @@ Reserva los colores fuertes de `accent*` para estados importantes (errores, éxi
 1. Establece `matugen.enabled = true` en `config.toml`.
 2. Apunta `wallpaper` a tu imagen.
 3. Reinicia Tsumiki para generar la paleta.
-4. Recompila los estilos si los colores se ven desactualizados: `./init.sh -recompile`.
+4. Recompila los estilos si los colores se ven desactualizados: `./tsumiki.sh -recompile`.
 
 ## Aprende de Temas Existentes
 

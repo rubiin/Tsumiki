@@ -12,7 +12,7 @@ sidebar:
 从 Tsumiki 项目目录运行：
 
 ```sh
-./init.sh -start
+./tsumiki.sh -start
 ```
 
 如果 Hyprland 正在运行，状态栏应出现在屏幕顶部。如果状态栏未出现，请检查终端中的错误输出并参阅[故障排除](/zh-cn/help/troubleshooting)。
@@ -33,7 +33,7 @@ pkill tsumiki
 打开 `~/.config/hypr/hyprland.conf` 并添加：
 
 ```sh
-exec-once = sleep 5; ~/.config/tsumiki/init.sh -start
+exec-once = sleep 5; ~/.config/tsumiki/tsumiki.sh -start
 ```
 
 `sleep 5` 的延迟让 Hyprland 有足够的时间完全初始化。如果您将 Tsumiki 克隆到其他目录，请调整路径。
@@ -75,7 +75,7 @@ right_section = ["volume", "battery", "system_tray", "power"]
 
 ```sh
 pkill tsumiki
-./init.sh -start
+./tsumiki.sh -start
 ```
 
 如果配置有效，状态栏将以新布局重新出现。
@@ -103,7 +103,7 @@ pkill tsumiki
 
 - **状态栏不显示** — 检查您是否正在运行 Hyprland，以及是否有其他状态栏在运行（`pkill waybar`）。
 - **没有图标** — 验证 [JetBrains Nerd Font](https://www.nerdfonts.com) 已安装并配置为终端/UI 字体。
-- **缺少功能** — 某些组件需要外部工具（例如，媒体需要 `playerctl`，亮度需要 `brightnessctl`）。运行 `./init.sh -setup` 以确保所有依赖项都已安装（Python 依赖项通过 `uv sync` 安装）。
+- **缺少功能** — 某些组件需要外部工具（例如，媒体需要 `playerctl`，亮度需要 `brightnessctl`）。运行 `./tsumiki.sh -setup` 以确保所有依赖项都已安装（Python 依赖项通过 `uv sync` 安装）。
 - **SASS 错误** — 您的 `config.toml` 可能无效。与 `example/config.toml` 进行比较。
 
 如需更多帮助，请参阅[常见问题](/zh-cn/help/faq)或[故障排除](/zh-cn/help/troubleshooting)页面。

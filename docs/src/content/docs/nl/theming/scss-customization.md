@@ -23,4 +23,4 @@ background = "#1e1e2e"
 border-radius = 16
 ```
 
-Hercompileer: `./init.sh -recompile`.
+Hercompileer: `./tsumiki.sh -recompile`.

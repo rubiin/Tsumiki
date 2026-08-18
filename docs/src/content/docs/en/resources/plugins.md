@@ -199,7 +199,7 @@ class UptimePlugin(LauncherPlugin):
 
 1. Place the `.py` file (or package directory) in your plugins directory.
 2. Add its `name` to `plugins` in `[modules.launcher]`.
-3. Restart the bar (`./init.sh -start` or your own restart binding).
+3. Restart the bar (`./tsumiki.sh -start` or your own restart binding).
 
 Plugins load at launcher startup — there is no hot reload. If a plugin doesn't
 appear, check the log output: load failures and allowlist mismatches are

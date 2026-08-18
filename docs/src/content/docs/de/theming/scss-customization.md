@@ -43,4 +43,4 @@ Erstellen Sie `styles/custom.scss` und importieren Sie es in `styles/main.scss`:
 @use "custom.scss";
 ```
 
-Kompilieren: `./init.sh -recompile`.
+Kompilieren: `./tsumiki.sh -recompile`.

@@ -120,7 +120,7 @@ Para sobreescribir permanentemente una variable:
 
 1. Copia la variable relevante de `_settings.scss` en tu tema personalizado.
 2. O establece el valor bajo `[styling]` en `config.toml` (para variables soportadas).
-3. Recompila con `./init.sh -recompile`.
+3. Recompila con `./tsumiki.sh -recompile`.
 
 ## Clases de Estilo por Widget
 
@@ -150,7 +150,7 @@ Puedes añadir reglas CSS personalizadas directamente:
    ```scss
    @use "custom.scss";
    ```
-3. Recompila: `./init.sh -recompile`
+3. Recompila: `./tsumiki.sh -recompile`
 
 ## Animaciones de Transición
 
