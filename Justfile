@@ -17,6 +17,18 @@ docs-dev:
 docs-build:
     cd docs && pnpm build
 
+docs-lint:
+    cd docs && pnpm lint
+
+docs-lint-fix:
+    cd docs && pnpm lint:fix
+
+docs-fmt:
+    cd docs && pnpm fmt
+
+docs-fmt-check:
+    cd docs && pnpm fmt:check
+
 restore_config:
     cp config.toml.bak config.toml
 
