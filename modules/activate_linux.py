@@ -2,6 +2,7 @@ from fabric.widgets.box import Box
 from fabric.widgets.label import Label
 
 from shared.widget_container import BaseWindow
+from utils.i18n import _
 from utils.widget_settings import BarConfig
 
 
@@ -15,7 +16,7 @@ class ActivateLinux(BaseWindow):
 
         self.main_label = Label(
             name="activate_linux-main-label",
-            label="Activate Linux",
+            label=_('module.activate_linux.title'),
             h_expand=True,
             justification="left",
             h_align="start",
@@ -23,7 +24,7 @@ class ActivateLinux(BaseWindow):
 
         self.sub_label = Label(
             name="activate_linux-sub-label",
-            label="Go to Settings to activate Linux.",
+            label=_('module.activate_linux.subtitle'),
             h_expand=True,
             justification="left",
         )

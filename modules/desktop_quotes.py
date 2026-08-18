@@ -5,6 +5,7 @@ from fabric.widgets.label import Label
 from services.quotes import QuotesService
 from shared.widget_container import BaseWindow
 from utils.functions import convert_seconds_to_milliseconds
+from utils.i18n import _
 from utils.widget_settings import BarConfig
 
 
@@ -18,7 +19,7 @@ class DesktopQuote(BaseWindow):
 
         self.quote_label = Label(
             name="desktop_quotes-quote-label",
-            label="Loading quote...",
+            label=_('common.loading'),
             line_wrap="word-char",
             chars_width=50,
             h_expand=True,
@@ -26,7 +27,7 @@ class DesktopQuote(BaseWindow):
 
         self.author_label = Label(
             name="desktop_quotes-author-label",
-            label="Loading author...",
+            label=_('common.loading'),
             line_wrap="word-char",
             chars_width=40,
             h_align="end",
@@ -69,4 +70,4 @@ class DesktopQuote(BaseWindow):
             self.quote_label.set_label(quote["q"])
             self.author_label.set_label("- " + quote["a"])
         else:
-            self.quote_label.set_text("Failed to load quote.")
+            self.quote_label.set_text(_('common.error'))

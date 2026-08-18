@@ -4,6 +4,7 @@
     "error": "Error",
     "none": "N/A",
     "unknown": "Unknown",
+    "ok": "OK",
     "refresh": "Refresh",
     "close": "Close",
     "save": "Save",
@@ -232,6 +233,10 @@
     }
   },
   "module": {
+    "activate_linux": {
+      "title": "Activate Linux",
+      "subtitle": "Go to Settings to activate Linux."
+    },
     "launcher": {
       "tooltip": "Open Application Launcher"
     },
