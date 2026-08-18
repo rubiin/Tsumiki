@@ -38,7 +38,7 @@ class USBManagerMenu(Box, TeardownMixin):
         self._refresh_timer_id: int | None = None
 
         self.title = Label(
-            label=_('widget.usb_manager.title'),
+            label=_("widget.usb_manager.title"),
             h_align="start",
             name="usb-manager-title",
             style_classes="panel-text",
@@ -52,7 +52,7 @@ class USBManagerMenu(Box, TeardownMixin):
         self.refresh_button = ScanButton(
             on_clicked=self._on_refresh_clicked,
             sensitive=False,
-            tooltip_text=_('common.refresh'),
+            tooltip_text=_("common.refresh"),
             size=17,
         )
 
@@ -84,7 +84,7 @@ class USBManagerMenu(Box, TeardownMixin):
             style_classes="usb-manager-btn",
             child=self._build_button_content(
                 icon="󱘖",
-                label=_('widget.usb_manager.unmount_all'),
+                label=_("widget.usb_manager.unmount_all"),
             ),
             on_clicked=self.unmount_all,
         )
@@ -93,7 +93,7 @@ class USBManagerMenu(Box, TeardownMixin):
             style_classes="usb-manager-btn",
             child=self._build_button_content(
                 icon="⏏",
-                label=_('widget.usb_manager.eject_all'),
+                label=_("widget.usb_manager.eject_all"),
             ),
             on_clicked=self.eject_all,
         )
@@ -250,8 +250,8 @@ class USBManagerMenu(Box, TeardownMixin):
         if not self.devices:
             self._set_content(
                 self._build_status_view(
-                    title=_('widget.usb_manager.no_devices'),
-                    subtitle=_('widget.usb_manager.plug_in'),
+                    title=_("widget.usb_manager.no_devices"),
+                    subtitle=_("widget.usb_manager.plug_in"),
                     icon="󰕓",
                 )
             )
@@ -302,9 +302,7 @@ class USBManagerMenu(Box, TeardownMixin):
     def _build_device_row(self, device: dict) -> Box:
         mounted = bool(device.get("mountpoint"))
         primary_label = (
-            _('widget.usb_manager.open')
-            if mounted
-            else _('widget.usb_manager.mount')
+            _("widget.usb_manager.open") if mounted else _("widget.usb_manager.mount")
         )
         usage_text = self._build_usage_text(device)
         usage_fraction = self._usage_fraction(device)
@@ -352,9 +350,9 @@ class USBManagerMenu(Box, TeardownMixin):
 
         status_badge = Label(
             label=(
-                _('widget.usb_manager.mounted')
+                _("widget.usb_manager.mounted")
                 if mounted
-                else _('widget.usb_manager.ready')
+                else _("widget.usb_manager.ready")
             ),
             style_classes=["panel-text", "usb-manager-status-badge"],
             visible=mounted,
@@ -399,7 +397,7 @@ class USBManagerMenu(Box, TeardownMixin):
                 icon="󱘖",
                 props={"style_classes": ["panel-font-icon"]},
             ),
-            tooltip_text=_('widget.usb_manager.unmount'),
+            tooltip_text=_("widget.usb_manager.unmount"),
             on_clicked=partial(self.unmount_device, device),
         )
 
@@ -410,7 +408,7 @@ class USBManagerMenu(Box, TeardownMixin):
                 icon="⏏",
                 props={"style_classes": ["panel-font-icon"]},
             ),
-            tooltip_text=_('widget.usb_manager.eject'),
+            tooltip_text=_("widget.usb_manager.eject"),
             on_clicked=partial(self.eject_device, device),
         )
 
@@ -564,11 +562,12 @@ class USBManagerWidget(ButtonWidget, PopoverMixin):
         )
 
         if self.config.get("label", False):
-            self.container_box.add(Label(label=_('widget.usb_manager.label'),
-                                          style_classes="panel-text"))
+            self.container_box.add(
+                Label(label=_("widget.usb_manager.label"), style_classes="panel-text")
+            )
 
         if self.config.get("tooltip", True) and self.tooltips_enabled:
-            self.set_tooltip_text(_('widget.usb_manager.tooltip'))
+            self.set_tooltip_text(_("widget.usb_manager.tooltip"))
 
         self.setup_popover(self._build_popover)
 
@@ -582,4 +581,4 @@ class USBManagerWidget(ButtonWidget, PopoverMixin):
 
     def update_device_count(self, count: int):
         if self.config.get("tooltip", True) and self.tooltips_enabled:
-            self.set_tooltip_text(_('widget.usb_manager.tooltip'))
+            self.set_tooltip_text(_("widget.usb_manager.tooltip"))

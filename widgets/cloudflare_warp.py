@@ -34,7 +34,7 @@ class CloudflareWarpPopover(Box):
 
         self._status_label = Label(
             name="warp-status-label",
-            label=_('common.loading'),
+            label=_("common.loading"),
             h_align="center",
         )
 
@@ -49,7 +49,7 @@ class CloudflareWarpPopover(Box):
         # ── Toggle button ──
         self._toggle_btn = Button(
             name="warp-toggle-btn",
-            label=_('widget.cloudflare_warp.connect'),
+            label=_("widget.cloudflare_warp.connect"),
             h_align="center",
             on_clicked=lambda *_: self._on_toggle(),
         )
@@ -68,15 +68,15 @@ class CloudflareWarpPopover(Box):
         if connected:
             self._status_icon.set_label("")
             self._status_icon.set_style_classes(["warp-status-icon", "warp-connected"])
-            self._status_label.set_label(_('widget.cloudflare_warp.connected'))
-            self._toggle_btn.set_label(_('widget.cloudflare_warp.disconnect'))
+            self._status_label.set_label(_("widget.cloudflare_warp.connected"))
+            self._toggle_btn.set_label(_("widget.cloudflare_warp.disconnect"))
         else:
             self._status_icon.set_label("")
             self._status_icon.set_style_classes(
                 ["warp-status-icon", "warp-disconnected"]
             )
-            self._status_label.set_label(_('widget.cloudflare_warp.disconnected'))
-            self._toggle_btn.set_label(_('widget.cloudflare_warp.connect'))
+            self._status_label.set_label(_("widget.cloudflare_warp.disconnected"))
+            self._toggle_btn.set_label(_("widget.cloudflare_warp.connect"))
 
         self._toggle_btn.set_sensitive(True)
 
@@ -121,7 +121,7 @@ class CloudflareWarpWidget(ButtonWidget, PopoverMixin):
                 icon=self._connected_icon,
                 props={"style_classes": ["panel-font-icon"]},
             )
-            self.set_tooltip_text(_('widget.cloudflare_warp.tooltip'))
+            self.set_tooltip_text(_("widget.cloudflare_warp.tooltip"))
             self._register_handler(
                 self._service,
                 self._service.connect("changed", self._on_status_changed),
@@ -134,7 +134,7 @@ class CloudflareWarpWidget(ButtonWidget, PopoverMixin):
                 icon="",
                 props={"style_classes": ["panel-font-icon"]},
             )
-            self.set_tooltip_text(_('widget.cloudflare_warp.not_found'))
+            self.set_tooltip_text(_("widget.cloudflare_warp.not_found"))
 
         self.container_box.add(self._icon)
 
@@ -154,7 +154,7 @@ class CloudflareWarpWidget(ButtonWidget, PopoverMixin):
             return
         if self._service.connected:
             self._icon.set_label(self._connected_icon)
-            self.set_tooltip_text(_('widget.cloudflare_warp.status_connected'))
+            self.set_tooltip_text(_("widget.cloudflare_warp.status_connected"))
         else:
             self._icon.set_label(self._disconnected_icon)
-            self.set_tooltip_text(_('widget.cloudflare_warp.status_disconnected'))
+            self.set_tooltip_text(_("widget.cloudflare_warp.status_disconnected"))

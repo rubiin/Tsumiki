@@ -14,7 +14,7 @@ class ClickCounterWidget(ButtonWidget):
         self.connect("button-press-event", self.on_button_press)
 
         if self.config.get("tooltip", True) and self.tooltips_enabled:
-            self.set_tooltip_text(_('widget.click_counter.tooltip'))
+            self.set_tooltip_text(_("widget.click_counter.tooltip"))
 
     def _increment(self, *_):
         self.count = self.count + 1

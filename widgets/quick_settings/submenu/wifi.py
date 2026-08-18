@@ -56,7 +56,7 @@ class WifiSubMenu(QuickSubMenu):
         )
 
         super().__init__(
-            title=_('widget.quick_settings.network.title'),
+            title=_("widget.quick_settings.network.title"),
             title_icon=get_text_icon("wifi.generic"),
             scan_button=self.scan_button,
             child=self.child,
@@ -269,7 +269,7 @@ class WifiToggle(QSChevronButton):
     ):
         super().__init__(
             action_icon=get_text_icon("wifi.generic"),
-            action_label=_('widget.quick_settings.wifi.disabled'),
+            action_label=_("widget.quick_settings.wifi.disabled"),
             submenu_factory=submenu_factory,
             **kwargs,
         )

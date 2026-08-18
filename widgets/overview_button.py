@@ -12,7 +12,7 @@ class OverviewButtonWidget(ButtonWidget):
         super().__init__(name="overview_button", **kwargs)
 
         if self.config.get("tooltip", False) and self.tooltips_enabled:
-            self.set_tooltip_text(_('widget.overview_button.tooltip'))
+            self.set_tooltip_text(_("widget.overview_button.tooltip"))
 
         self.container_box.children = nerd_font_icon(
             icon=self.config.get("icon"),
@@ -20,8 +20,11 @@ class OverviewButtonWidget(ButtonWidget):
         )
 
         if self.config.get("label", True):
-            self.container_box.add(Label(label=_('widget.overview_button.label'),
-                                          style_classes="panel-text"))
+            self.container_box.add(
+                Label(
+                    label=_("widget.overview_button.label"), style_classes="panel-text"
+                )
+            )
 
         # Lazy-init overview popup
         self._overview_popup = None

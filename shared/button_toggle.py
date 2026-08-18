@@ -54,7 +54,7 @@ class CommandSwitcher(ButtonWidget):
 
         if self.label:
             self.label_text = Label(
-                label=_('common.enabled'),
+                label=_("common.enabled"),
                 style_classes="panel-text",
             )
             self.container_box.add(self.label_text)
@@ -85,7 +85,7 @@ class CommandSwitcher(ButtonWidget):
 
         self.toggle_css_class("active", is_running)
 
-        label = _('common.enabled') if is_running else _('common.disabled')
+        label = _("common.enabled") if is_running else _("common.disabled")
 
         if self.label:
             self.label_text.set_label(label)

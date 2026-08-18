@@ -25,7 +25,7 @@ class BlueToothWidget(ButtonWidget):
         )
 
         if self.config.get("label", True):
-            self.bt_label = Label(label=_('common.on'), style_classes="panel-text")
+            self.bt_label = Label(label=_("common.on"), style_classes="panel-text")
             self.container_box.add(self.bt_label)
 
         self.bluetooth_client = BluetoothClient()
@@ -47,4 +47,4 @@ class BlueToothWidget(ButtonWidget):
             self.bt_label.set_text(bt_status.capitalize())
 
         if self.config.get("tooltip", False) and self.tooltips_enabled:
-            self.set_tooltip_text(_('widget.bluetooth.tooltip'))
+            self.set_tooltip_text(_("widget.bluetooth.tooltip"))

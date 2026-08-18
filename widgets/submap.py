@@ -14,8 +14,9 @@ class SubMapWidget(ButtonWidget):
     def __init__(self, **kwargs):
         super().__init__(name="submap", **kwargs)
 
-        self.submap_label = Label(label=_('widget.submap.label'),
-                                  style_classes="panel-text")
+        self.submap_label = Label(
+            label=_("widget.submap.label"), style_classes="panel-text"
+        )
 
         self.container_box.add(self.submap_label)
 
@@ -50,7 +51,7 @@ class SubMapWidget(ButtonWidget):
             self.hide()
 
         if self.config.get("tooltip", False) and self.tooltips_enabled:
-            self.set_tooltip_text(_('widget.submap.current', submap=submap))
+            self.set_tooltip_text(_("widget.submap.current", submap=submap))
 
     def on_submap_event(self, _, event: HyprlandEvent):
         """Handle event::submap — use the event data directly, no extra hyprctl call."""

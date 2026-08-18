@@ -45,7 +45,7 @@ class DnsSwitcherPopover(Box):
                 ),
                 Label(
                     name="dns-header-title",
-                    label=_('widget.dns_switcher.tooltip'),
+                    label=_("widget.dns_switcher.tooltip"),
                     h_align="start",
                     v_align="center",
                     h_expand=True,
@@ -78,7 +78,7 @@ class DnsSwitcherPopover(Box):
                     icon="",
                     props={"style_classes": ["dns-btn-icon"]},
                 ),
-                Label(label=_('widget.dns_switcher.add_custom')),
+                Label(label=_("widget.dns_switcher.add_custom")),
             ],
         )
         # Keep a reference to the label so we can change text later
@@ -102,7 +102,7 @@ class DnsSwitcherPopover(Box):
         )
         self._save_btn = Button(
             name="dns-save-btn",
-            label=_('common.save'),
+            label=_("common.save"),
             on_clicked=lambda *_: self._on_save_custom(),
         )
 
@@ -130,7 +130,7 @@ class DnsSwitcherPopover(Box):
                         icon="",
                         props={"style_classes": ["dns-btn-icon"]},
                     ),
-                    Label(label=_('widget.dns_switcher.reset')),
+                    Label(label=_("widget.dns_switcher.reset")),
                 ],
             ),
             on_clicked=lambda *_: self._on_reset(),
@@ -216,17 +216,17 @@ class DnsSwitcherPopover(Box):
             self._header_status.set_label(current)
             self._header_status.set_style_classes(["dns-status-active"])
         else:
-            self._header_status.set_label(_('widget.dns_switcher.default'))
+            self._header_status.set_label(_("widget.dns_switcher.default"))
             self._header_status.set_style_classes(["dns-status-default"])
 
     def _toggle_add_section(self):
         self._is_adding = not self._is_adding
         self._add_form.set_visible(self._is_adding)
         if self._is_adding:
-            self._add_btn_label.set_label(_('common.cancel'))
+            self._add_btn_label.set_label(_("common.cancel"))
             self._add_btn.set_style_classes(["dns-cancel-btn"])
         else:
-            self._add_btn_label.set_label(_('widget.dns_switcher.add_custom'))
+            self._add_btn_label.set_label(_("widget.dns_switcher.add_custom"))
             self._add_btn.set_style_classes([])
             self._name_entry.set_text("")
             self._ip_entry.set_text("")
@@ -240,7 +240,7 @@ class DnsSwitcherPopover(Box):
             self._service.set_dns(primary, " ".join(ip.split()[1:]))
             self._is_adding = False
             self._add_form.set_visible(False)
-            self._add_btn_label.set_label(_('widget.dns_switcher.add_custom'))
+            self._add_btn_label.set_label(_("widget.dns_switcher.add_custom"))
             self._add_btn.set_style_classes([])
             self._name_entry.set_text("")
             self._ip_entry.set_text("")
@@ -281,7 +281,7 @@ class DnsSwitcherWidget(ButtonWidget, PopoverMixin):
         self.container_box.add(self._label)
 
         if self.config.get("tooltip", True) and self.tooltips_enabled:
-            self.set_tooltip_text(_('widget.dns_switcher.tooltip'))
+            self.set_tooltip_text(_("widget.dns_switcher.tooltip"))
 
         self._register_handler(
             self._service,
@@ -294,7 +294,7 @@ class DnsSwitcherWidget(ButtonWidget, PopoverMixin):
         current = self._service.current
         if current and current != "Default":
             self._label.set_label(current)
-            self.set_tooltip_text(_('widget.dns_switcher.current', provider=current))
+            self.set_tooltip_text(_("widget.dns_switcher.current", provider=current))
         else:
             self._label.set_label(self.config.get("label_text", "DNS"))
-            self.set_tooltip_text(_('widget.dns_switcher.default'))
+            self.set_tooltip_text(_("widget.dns_switcher.default"))

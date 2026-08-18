@@ -31,21 +31,22 @@ class OCRWidget(ButtonWidget):
             self.container_box.add(self.icon)
 
         if self.config.get("label", True):
-            self.container_box.add(Label(label=_('widget.ocr.label'),
-                                         style_classes="panel-text"))
+            self.container_box.add(
+                Label(label=_("widget.ocr.label"), style_classes="panel-text")
+            )
 
         # Left click for OCR
         self.connect("button-press-event", self.on_button_press)
 
         if self.config.get("tooltip", False) and self.tooltips_enabled:
-            self.set_tooltip_text(_('widget.ocr.tooltip'))
+            self.set_tooltip_text(_("widget.ocr.tooltip"))
 
     def lazy_init(self):
         if not self.initialized:
             self.script_file = f"{ASSETS_DIR}/scripts/ocr.sh"
             if not os.path.isfile(self.script_file):
                 self.set_sensitive(False)
-                self.set_tooltip_text(_('common.error'))
+                self.set_tooltip_text(_("common.error"))
                 return
             self.initialized = True
 
@@ -123,4 +124,4 @@ class OCRWidget(ButtonWidget):
 
     def on_language_selected(self, _, lang):
         self.current_lang = lang
-        self.set_tooltip_text(_('widget.ocr.lang_selected', lang=lang))
+        self.set_tooltip_text(_("widget.ocr.lang_selected", lang=lang))

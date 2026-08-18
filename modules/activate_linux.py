@@ -16,7 +16,7 @@ class ActivateLinux(BaseWindow):
 
         self.main_label = Label(
             name="activate_linux-main-label",
-            label=_('module.activate_linux.title'),
+            label=_("module.activate_linux.title"),
             h_expand=True,
             justification="left",
             h_align="start",
@@ -24,7 +24,7 @@ class ActivateLinux(BaseWindow):
 
         self.sub_label = Label(
             name="activate_linux-sub-label",
-            label=_('module.activate_linux.subtitle'),
+            label=_("module.activate_linux.subtitle"),
             h_expand=True,
             justification="left",
         )
