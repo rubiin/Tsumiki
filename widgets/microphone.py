@@ -1,10 +1,8 @@
 from fabric.widgets.label import Label
 
 from shared.widget_container import ButtonWidget
+from utils.icons import get_text_icon
 from utils.widget_utils import nerd_font_icon
-
-MIC_ON_ICON = "󰍬"
-MIC_OFF_ICON = "󰍭"
 
 
 class MicrophoneIndicatorWidget(ButtonWidget):
@@ -13,8 +11,11 @@ class MicrophoneIndicatorWidget(ButtonWidget):
     def __init__(self, **kwargs):
         super().__init__(name="microphone", **kwargs)
 
+        self.mic_on_icon = get_text_icon("microphone.high")
+        self.mic_off_icon = get_text_icon("microphone.muted")
+
         self.icon = nerd_font_icon(
-            icon=MIC_OFF_ICON,
+            icon=self.mic_off_icon,
             props={"style_classes": ["panel-font-icon"]},
         )
 
@@ -38,7 +39,7 @@ class MicrophoneIndicatorWidget(ButtonWidget):
 
         if current_microphone:
             is_muted = current_microphone.muted
-            self.icon.set_label(MIC_OFF_ICON if is_muted else MIC_ON_ICON)
+            self.icon.set_label(self.mic_off_icon if is_muted else self.mic_on_icon)
 
             # Update the label  if enabled
             if self.config.get("label", True):
