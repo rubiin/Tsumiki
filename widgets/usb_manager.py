@@ -250,8 +250,8 @@ class USBManagerMenu(Box, TeardownMixin):
         if not self.devices:
             self._set_content(
                 self._build_status_view(
-                    title="No USB devices detected",
-                    subtitle="Plug in a USB drive to get started",
+                    title=_('widget.usb_manager.no_devices'),
+                    subtitle=_('widget.usb_manager.plug_in'),
                     icon="󰕓",
                 )
             )
@@ -301,7 +301,7 @@ class USBManagerMenu(Box, TeardownMixin):
 
     def _build_device_row(self, device: dict) -> Box:
         mounted = bool(device.get("mountpoint"))
-        primary_label = "Open" if mounted else "Mount"
+        primary_label = _('widget.usb_manager.open') if mounted else _('widget.usb_manager.mount')
         usage_text = self._build_usage_text(device)
         usage_fraction = self._usage_fraction(device)
 
@@ -347,7 +347,7 @@ class USBManagerMenu(Box, TeardownMixin):
         )
 
         status_badge = Label(
-            label="Mounted" if mounted else "Ready",
+            label=_('widget.usb_manager.mounted') if mounted else _('widget.usb_manager.ready'),
             style_classes=["panel-text", "usb-manager-status-badge"],
             visible=mounted,
         )
@@ -391,7 +391,7 @@ class USBManagerMenu(Box, TeardownMixin):
                 icon="󱘖",
                 props={"style_classes": ["panel-font-icon"]},
             ),
-            tooltip_text="Unmount",
+            tooltip_text=_('widget.usb_manager.unmount'),
             on_clicked=partial(self.unmount_device, device),
         )
 
@@ -402,7 +402,7 @@ class USBManagerMenu(Box, TeardownMixin):
                 icon="⏏",
                 props={"style_classes": ["panel-font-icon"]},
             ),
-            tooltip_text="Eject",
+            tooltip_text=_('widget.usb_manager.eject'),
             on_clicked=partial(self.eject_device, device),
         )
 

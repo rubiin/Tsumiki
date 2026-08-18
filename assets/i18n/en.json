@@ -114,7 +114,9 @@
       "tooltip": "Open Application Launcher"
     },
     "mpris": {
-      "nothing_playing": "Nothing playing"
+      "nothing_playing": "Nothing playing",
+      "no_title": "No Title",
+      "no_artist": "No Artist"
     },
     "network": {
       "upload": "Upload",
@@ -215,7 +217,11 @@
       "mounted": "Mounted",
       "ready": "Ready",
       "no_devices": "No USB devices detected",
-      "plug_in": "Plug in a USB drive to get started"
+      "plug_in": "Plug in a USB drive to get started",
+      "open": "Open",
+      "mount": "Mount",
+      "unmount": "Unmount",
+      "eject": "Eject"
     },
     "wallpaper": {
       "label": "wallpaper",
