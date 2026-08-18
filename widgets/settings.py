@@ -4,6 +4,7 @@ from fabric.widgets.label import Label
 
 from modules.settings_gui import open_settings
 from shared.widget_container import ButtonWidget
+from utils.i18n import _
 from utils.widget_utils import nerd_font_icon
 
 
@@ -19,9 +20,9 @@ class SettingsWidget(ButtonWidget):
         )
 
         if self.config.get("label", False):
-            self.container_box.add(Label(label="Settings", style_classes="panel-text"))
+            self.container_box.add(Label(label=_('widget.settings.label'), style_classes="panel-text"))
 
         if self.config.get("tooltip", True) and self.tooltips_enabled:
-            self.set_tooltip_text("Open Settings")
+            self.set_tooltip_text(_('widget.settings.tooltip'))
 
         self.connect("clicked", lambda *_: open_settings())

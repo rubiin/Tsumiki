@@ -114,15 +114,6 @@ class I18n:
 # Module-level convenience function
 def _(key: str, **kwargs) -> str:
     """Translate a key to the current language.
-
-    Usage:
-        from utils.i18n import _
-
-        # Simple translation
-        label = _("widget.battery.tooltip")
-
-        # With formatting
-        label = _("widget.battery.low", percent=15)
     """
     return get_i18n().translate(key, **kwargs)
 

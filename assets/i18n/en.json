@@ -30,18 +30,34 @@
     "brightness": {
       "tooltip": "Brightness: {percent}%"
     },
+    "cheatsheet": {
+      "tooltip": "Hyprland keybind cheatsheet"
+    },
     "clipboard": {
       "tooltip": "Clipboard History",
       "empty": "Clipboard history is empty",
       "clear": "Clear History",
       "sync": "Sync Clipboard"
     },
+    "cloudflare_warp": {
+      "tooltip": "Cloudflare WARP",
+      "not_found": "WARP: warp-cli not found",
+      "connect": "Connect",
+      "disconnect": "Disconnect",
+      "connected": "Connected",
+      "disconnected": "Disconnected",
+      "status_connected": "WARP: Connected",
+      "status_disconnected": "WARP: Disconnected"
+    },
     "date_time": {
       "tooltip": "Date & Time"
     },
     "dns_switcher": {
       "tooltip": "DNS Switcher",
-      "default": "DNS: Default"
+      "default": "DNS: Default",
+      "current": "DNS: {provider}",
+      "add_custom": "Add Custom Server",
+      "reset": "Reset to Default (ISP)"
     },
     "emoji_picker": {
       "tooltip": "Emoji Picker",
@@ -55,6 +71,11 @@
       "upload": "Upload",
       "download": "Download"
     },
+    "ocr": {
+      "label": "Ocr",
+      "tooltip": "Left click to OCR, right click to select language",
+      "lang_selected": "OCR ({lang})"
+    },
     "power": {
       "tooltip": "Power",
       "shutdown": "Shutdown",
@@ -62,7 +83,9 @@
       "hibernate": "Hibernate",
       "suspend": "Suspend",
       "lock": "Lock",
-      "logout": "Logout"
+      "logout": "Logout",
+      "confirm_reboot": "Do you really want to reboot?",
+      "confirm_shutdown": "Do you really want to shutdown?"
     },
     "quick_settings": {
       "uptime": "System Uptime",
@@ -77,6 +100,14 @@
       },
       "power_profiles": {
         "saver": "Power Saver"
+      },
+      "notifications": {
+        "noisy": "Noisy",
+        "quiet": "Quiet"
+      },
+      "dark_mode": {
+        "dark": "Dark",
+        "light": "Light"
       }
     },
     "recorder": {
@@ -84,10 +115,12 @@
       "stopped": "Recording stopped"
     },
     "screenshot": {
-      "tooltip": "Screen Shot"
+      "tooltip": "Screen Shot",
+      "label": "screenshot"
     },
     "settings": {
-      "tooltip": "Open Settings"
+      "tooltip": "Open Settings",
+      "label": "Settings"
     },
     "updates": {
       "tooltip": "Updates"
