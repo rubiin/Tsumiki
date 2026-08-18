@@ -2,44 +2,38 @@
 
 ## [4.3.0](https://github.com/rubiin/tsumiki/compare/v4.2.0...v4.3.0) (2026-08-18)
 
-
 ### 🚀 New Features
 
-* add linting and formatting scripts, update package versions ([7f5757f](https://github.com/rubiin/tsumiki/commit/7f5757f1a1e2d2b686324c38148998eaee597fe5))
-* enhance plugin system with new components and service worker; add scroll reveal and theme slider ([d97fd2a](https://github.com/rubiin/tsumiki/commit/d97fd2a1b8417890c53ec1759ff1ef9688e6ade2))
-* i18n support ([#365](https://github.com/rubiin/tsumiki/issues/365)) ([24ae776](https://github.com/rubiin/tsumiki/commit/24ae7760507f7266f554ef906930f64827bf5f1b))
-* remove symbolic icon from emoji plugin results ([6da19fd](https://github.com/rubiin/tsumiki/commit/6da19fdc7352b355804f29cb256ea2b5f5e0e79e))
-* update version to 4.2.0 and remove 'uv' manager from enabledManagers ([ad57aee](https://github.com/rubiin/tsumiki/commit/ad57aee270456f437b111e674fe7d5187c37d013))
-
+- add linting and formatting scripts, update package versions ([7f5757f](https://github.com/rubiin/tsumiki/commit/7f5757f1a1e2d2b686324c38148998eaee597fe5))
+- enhance plugin system with new components and service worker; add scroll reveal and theme slider ([d97fd2a](https://github.com/rubiin/tsumiki/commit/d97fd2a1b8417890c53ec1759ff1ef9688e6ade2))
+- i18n support ([#365](https://github.com/rubiin/tsumiki/issues/365)) ([24ae776](https://github.com/rubiin/tsumiki/commit/24ae7760507f7266f554ef906930f64827bf5f1b))
+- remove symbolic icon from emoji plugin results ([6da19fd](https://github.com/rubiin/tsumiki/commit/6da19fdc7352b355804f29cb256ea2b5f5e0e79e))
+- update version to 4.2.0 and remove 'uv' manager from enabledManagers ([ad57aee](https://github.com/rubiin/tsumiki/commit/ad57aee270456f437b111e674fe7d5187c37d013))
 
 ### 🐛 Bug Fixes
 
-* add oxfmt config ([9775793](https://github.com/rubiin/tsumiki/commit/97757932664493850df1730ec5cf598f0b82e1a1))
-* chevron styling and post installs ([a4414a6](https://github.com/rubiin/tsumiki/commit/a4414a6eca46a525ede7e41eff53806939f0adb1))
-* correct variable name typo in volume update logic ([21317a9](https://github.com/rubiin/tsumiki/commit/21317a9e6065b6105296ca323eeff90de98c6825))
-* launcher stuffs ([dff2d27](https://github.com/rubiin/tsumiki/commit/dff2d272ff158a51167284ea0a1b4d69b28e04f8))
-* precommit ([51dbd29](https://github.com/rubiin/tsumiki/commit/51dbd2987c2631ad6d952678d722597cc31d61dd))
-* update entry commands for docs linting and formatting ([4c469fb](https://github.com/rubiin/tsumiki/commit/4c469fb76d26240904b775e6647bc90d7a7ff703))
-
+- add oxfmt config ([9775793](https://github.com/rubiin/tsumiki/commit/97757932664493850df1730ec5cf598f0b82e1a1))
+- chevron styling and post installs ([a4414a6](https://github.com/rubiin/tsumiki/commit/a4414a6eca46a525ede7e41eff53806939f0adb1))
+- correct variable name typo in volume update logic ([21317a9](https://github.com/rubiin/tsumiki/commit/21317a9e6065b6105296ca323eeff90de98c6825))
+- launcher stuffs ([dff2d27](https://github.com/rubiin/tsumiki/commit/dff2d272ff158a51167284ea0a1b4d69b28e04f8))
+- precommit ([51dbd29](https://github.com/rubiin/tsumiki/commit/51dbd2987c2631ad6d952678d722597cc31d61dd))
+- update entry commands for docs linting and formatting ([4c469fb](https://github.com/rubiin/tsumiki/commit/4c469fb76d26240904b775e6647bc90d7a7ff703))
 
 ### ⚡️ Performance Improvements
 
-* launcher ([e649345](https://github.com/rubiin/tsumiki/commit/e649345c57f42e3a70dca9f5e091d15956a5ad3e))
-
+- launcher ([e649345](https://github.com/rubiin/tsumiki/commit/e649345c57f42e3a70dca9f5e091d15956a5ad3e))
 
 ### 📚 Documentation
 
-* add plugin development guide and bundled plugin reference ([dd59642](https://github.com/rubiin/tsumiki/commit/dd59642baa0f8438ea477510742cc8bc860b8227))
-
+- add plugin development guide and bundled plugin reference ([dd59642](https://github.com/rubiin/tsumiki/commit/dd59642baa0f8438ea477510742cc8bc860b8227))
 
 ### ⚙️ Chores
 
-* remove outdated lazy.md file containing static code audit notes ([7f57cf0](https://github.com/rubiin/tsumiki/commit/7f57cf03a8f41f4986bb3ee3b0931925c97623bd))
-
+- remove outdated lazy.md file containing static code audit notes ([7f57cf0](https://github.com/rubiin/tsumiki/commit/7f57cf03a8f41f4986bb3ee3b0931925c97623bd))
 
 ### ♻️ Code Refactoring
 
-* trim long comments across plugin system and modules ([4d3e2b0](https://github.com/rubiin/tsumiki/commit/4d3e2b00f6f9acdba40678b8092c2b62c8dee899))
+- trim long comments across plugin system and modules ([4d3e2b0](https://github.com/rubiin/tsumiki/commit/4d3e2b00f6f9acdba40678b8092c2b62c8dee899))
 
 ## [4.2.0](https://github.com/rubiin/tsumiki/compare/v4.1.0...v4.2.0) (2026-08-17)
 
