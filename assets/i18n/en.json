@@ -1,1 +1,256 @@
-{}
+{
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "none": "N/A",
+    "unknown": "Unknown",
+    "ok": "OK",
+    "refresh": "Refresh",
+    "close": "Close",
+    "save": "Save",
+    "cancel": "Cancel",
+    "enabled": "Enabled",
+    "disabled": "Disabled",
+    "on": "On",
+    "off": "Off",
+    "details": "Details"
+  },
+  "widget": {
+    "battery": {
+      "tooltip": "Battery",
+      "low": "Low Battery",
+      "charging": "Charging",
+      "full": "Fully Charged",
+      "no_battery": "No battery present"
+    },
+    "bluetooth": {
+      "tooltip": "Bluetooth",
+      "on": "On",
+      "off": "Off",
+      "connected": "Connected",
+      "connecting": "Connecting...",
+      "connect_failed": "Failed to connect",
+      "connect": "Connect",
+      "disconnect": "Disconnect",
+      "unknown_device": "Unknown Device"
+    },
+    "breathing": {
+      "label": "Breathe",
+      "choose_exercise": "CHOOSE AN EXERCISE",
+      "duration": "DURATION",
+      "select_exercise": "Select an exercise and press Start",
+      "start": "▶  Start",
+      "stop": "■  Stop",
+      "min": "min"
+    },
+    "brightness": {
+      "tooltip": "Brightness: {percent}%"
+    },
+    "cheatsheet": {
+      "tooltip": "Hyprland keybind cheatsheet"
+    },
+    "click_counter": {
+      "tooltip": "Left-click to increment, right-click to reset"
+    },
+    "clipboard": {
+      "tooltip": "Clipboard History",
+      "empty": "Clipboard history is empty",
+      "clear": "Clear History",
+      "sync": "Sync Clipboard",
+      "label": "Clip"
+    },
+    "cloudflare_warp": {
+      "tooltip": "Cloudflare WARP",
+      "not_found": "WARP: warp-cli not found",
+      "connect": "Connect",
+      "disconnect": "Disconnect",
+      "connected": "Connected",
+      "disconnected": "Disconnected",
+      "status_connected": "WARP: Connected",
+      "status_disconnected": "WARP: Disconnected"
+    },
+    "date_time": {
+      "tooltip": "Date & Time",
+      "all_caught_up": "Your all caught up!",
+      "dnd": "Do Not Disturb",
+      "clear_group": "Clear group"
+    },
+    "dns_switcher": {
+      "tooltip": "DNS Switcher",
+      "default": "DNS: Default",
+      "current": "DNS: {provider}",
+      "add_custom": "Add Custom Server",
+      "reset": "Reset to Default (ISP)"
+    },
+    "emoji_picker": {
+      "tooltip": "Emoji Picker",
+      "label": "Emoji",
+      "loading": "Loading emojis..."
+    },
+    "git_companion": {
+      "label": "Git Companion",
+      "no_bio": "No bio"
+    },
+    "hyprpicker": {
+      "label": "picker",
+      "tooltip": "Pick a color",
+      "script_not_found": "Script not found"
+    },
+    "ip_monitor": {
+      "tooltip": "IP Information",
+      "refresh": "Refresh"
+    },
+    "kanban": {
+      "label": "Kanban",
+      "tooltip": "Kanban Board"
+    },
+    "keyboard": {
+      "label": "keyboard"
+    },
+    "language": {
+      "tooltip": "Language: {lang}"
+    },
+    "launcher_button": {
+      "tooltip": "Open Application Launcher"
+    },
+    "mpris": {
+      "nothing_playing": "Nothing playing",
+      "no_title": "No Title",
+      "no_artist": "No Artist"
+    },
+    "network": {
+      "upload": "Upload",
+      "download": "Download"
+    },
+    "ocr": {
+      "label": "Ocr",
+      "tooltip": "Left click to OCR, right click to select language",
+      "lang_selected": "OCR ({lang})"
+    },
+    "overview_button": {
+      "label": "overview",
+      "tooltip": "Overview"
+    },
+    "power": {
+      "tooltip": "Power",
+      "label": "power",
+      "shutdown": "Shutdown",
+      "reboot": "Reboot",
+      "hibernate": "Hibernate",
+      "suspend": "Suspend",
+      "lock": "Lock",
+      "logout": "Logout",
+      "confirm_reboot": "Do you really want to reboot?",
+      "confirm_shutdown": "Do you really want to shutdown?",
+      "confirmation": "{name} Confirmation",
+      "confirm_action": "Are you sure you want to {name}?"
+    },
+    "pomodoro": {
+      "tooltip": "Pomodoro Timer"
+    },
+    "quick_settings": {
+      "uptime": "System Uptime",
+      "wifi": {
+        "disabled": "Wifi Disabled",
+        "password_prompt": "Enter password for {ssid}",
+        "connect_to": "Connect to {ssid}"
+      },
+      "bluetooth": {
+        "paired": "Paired Devices",
+        "available": "Available Devices",
+        "enabled": "Enabled"
+      },
+      "power_profiles": {
+        "title": "Power profiles",
+        "saver": "Power Saver"
+      },
+      "notifications": {
+        "noisy": "Noisy",
+        "quiet": "Quiet"
+      },
+      "dark_mode": {
+        "dark": "Dark",
+        "light": "Light"
+      },
+      "hyprsunset": {
+        "title": "HyprSunset",
+        "enabled": "Enabled"
+      },
+      "audio": {
+        "title": "Application Audio"
+      },
+      "network": {
+        "title": "Network"
+      }
+    },
+    "recorder": {
+      "started": "Recording started",
+      "stopped": "Recording stopped"
+    },
+    "screenshot": {
+      "tooltip": "Screen Shot",
+      "label": "screenshot"
+    },
+    "settings": {
+      "tooltip": "Open Settings",
+      "label": "Settings"
+    },
+    "stopwatch": {
+      "label": "Stopwatch"
+    },
+    "submap": {
+      "label": "submap",
+      "current": "Current submap: {submap}"
+    },
+    "theme": {
+      "switched": "Theme switched to {theme}"
+    },
+    "updates": {
+      "tooltip": "Updates"
+    },
+    "usb_manager": {
+      "label": "USB",
+      "tooltip": "USB Manager",
+      "title": "USB Manager",
+      "unmount_all": "Unmount All",
+      "eject_all": "Eject All",
+      "mounted": "Mounted",
+      "ready": "Ready",
+      "no_devices": "No USB devices detected",
+      "plug_in": "Plug in a USB drive to get started",
+      "open": "Open",
+      "mount": "Mount",
+      "unmount": "Unmount",
+      "eject": "Eject"
+    },
+    "wallpaper": {
+      "label": "wallpaper",
+      "tooltip": "Wallpaper Picker"
+    },
+    "weather": {
+      "fetching": "Fetching...",
+      "error": "Error fetching weather data, try again later."
+    },
+    "window_count": {
+      "tooltip": "Workspace: {id}, Windows: {count}"
+    },
+    "workspaces": {
+      "tooltip": "Workspace: {id}, Windows: {count}"
+    }
+  },
+  "module": {
+    "activate_linux": {
+      "title": "Activate Linux",
+      "subtitle": "Go to Settings to activate Linux."
+    },
+    "launcher": {
+      "tooltip": "Open Application Launcher"
+    },
+    "overview": {
+      "tooltip": "Overview"
+    },
+    "settings": {
+      "tooltip": "Open Settings"
+    }
+  }
+}

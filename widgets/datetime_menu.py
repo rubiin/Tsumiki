@@ -20,6 +20,7 @@ from shared.circle_image import CircularImage
 from shared.list import ListBox
 from shared.mixins import PopoverMixin
 from shared.widget_container import ButtonWidget
+from utils.i18n import _
 from utils.icons import get_text_icon
 from utils.widget_utils import (
     get_icon,
@@ -95,7 +96,7 @@ class DateMenuNotification(Box):
             on_clicked=on_close or self.remove_notification,
         )
         if on_close is not None:
-            self.close_button.set_tooltip_text("Clear group")
+            self.close_button.set_tooltip_text(_('widget.date_time.clear_group'))
             self.close_button.add_style_class("group-clear-button")
 
         header_row = Box(
@@ -243,7 +244,7 @@ class DateNotificationMenu(Box):
                         },
                     ),
                     Label(
-                        label="Your all caught up!",
+                        label=_('widget.date_time.all_caught_up'),
                         style_classes="placeholder-text",
                     ),
                 ),
@@ -260,7 +261,7 @@ class DateNotificationMenu(Box):
                 style_classes="header",
                 orientation="h",
                 children=(
-                    Label(label="Do Not Disturb", name="dnd-text"),
+                    Label(label=_('widget.date_time.dnd'), name="dnd-text"),
                     self.dnd_switch,
                 ),
             )

@@ -6,6 +6,7 @@ from services import bluetooth_service, notification_service, style_service
 from services.network import NetworkService
 from shared.button_toggle import CommandSwitcher
 from shared.buttons import HoverButton
+from utils.i18n import _
 from utils.icons import get_text_icon
 from widgets.quick_settings.components import QuickSettingsIconLabelRow
 
@@ -72,7 +73,8 @@ class NotificationQuickSetting(HoverButton):
 
         self.popup = popup
 
-        self.row = _toggle_row(get_text_icon("notifications.noisy"), "Noisy")
+        self.row = _toggle_row(get_text_icon("notifications.noisy"),
+                                _('widget.quick_settings.notifications.noisy'))
 
         self.notification_icon = self.row.icon
         self.notification_label = self.row.label
@@ -102,11 +104,11 @@ class NotificationQuickSetting(HoverButton):
         )
 
         if value:
-            self.notification_label.set_label("Quiet")
+            self.notification_label.set_label(_('widget.quick_settings.notifications.quiet'))
             self.notification_icon.set_label(get_text_icon("notifications.silent"))
 
         else:
-            self.notification_label.set_label("Noisy")
+            self.notification_label.set_label(_('widget.quick_settings.notifications.noisy'))
             self.notification_icon.set_label(get_text_icon("notifications.noisy"))
 
 
@@ -141,7 +143,7 @@ class FlightModeToggle(HoverButton):
 
         self.popup = popup
 
-        self.row = _toggle_row(get_text_icon("flight.disabled"), "Disabled")
+        self.row = _toggle_row(get_text_icon("flight.disabled"), _('common.disabled'))
 
         self.flight_icon = self.row.icon
         self.flight_label = self.row.label
@@ -180,7 +182,10 @@ class FlightModeToggle(HoverButton):
         self.flight_icon.set_label(
             get_text_icon("flight.enabled" if enabled else "flight.disabled")
         )
-        self.flight_label.set_label("Enabled" if enabled else "Disabled")
+        if enabled:
+            self.flight_label.set_label(_('common.enabled'))
+        else:
+            self.flight_label.set_label(_('common.disabled'))
         return True
 
 
@@ -196,7 +201,8 @@ class DarkModeToggle(HoverButton):
 
         self.popup = popup
 
-        self.row = _toggle_row(get_text_icon("color.dark"), "Dark")
+        self.row = _toggle_row(get_text_icon("color.dark"),
+                                _('widget.quick_settings.dark_mode.dark'))
 
         self.mode_icon = self.row.icon
         self.mode_label = self.row.label
@@ -223,4 +229,11 @@ class DarkModeToggle(HoverButton):
         dark = style_service.mode == "dark"
         self.toggle_css_class("active", dark)
         self.mode_icon.set_label(get_text_icon("color.dark" if dark else "color.light"))
-        self.mode_label.set_label("Dark" if dark else "Light")
+        if dark:
+            self.mode_label.set_label(
+                _('widget.quick_settings.dark_mode.dark')
+            )
+        else:
+            self.mode_label.set_label(
+                _('widget.quick_settings.dark_mode.light')
+            )

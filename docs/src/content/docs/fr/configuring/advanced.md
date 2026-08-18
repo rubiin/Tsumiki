@@ -25,26 +25,26 @@ left_section = ["@custom_widget:volume", "workspaces"]
 
 Options de configuration complètes :
 
-| Clé | Type | Défaut | Description |
-|---|---|---|---|
-| `id` | string | — | Identifiant unique pour référencer dans la disposition (`@custom_widget:mon-id`) |
-| `exec` | string | requis | Commande shell à exécuter |
-| `interval` | int | `0` | Intervalle d'actualisation en secondes (0 = exécuter une fois) |
-| `return_type` | string | `"plain"` | Format de sortie : `"plain"` ou `"json"` |
-| `label_format` | string | `"{}"` | Chaîne de format où `{}` est remplacé par la sortie |
-| `exec_on_event` | bool | `false` | Ré-exécuter la commande après clic/défilement |
-| `max_length` | int | `0` | Longueur maximale du texte (0 = pas de limite) |
-| `min_length` | int | `0` | Longueur minimale du texte (remplit avec des espaces) |
-| `rotate` | int | `0` | Rotation du texte en degrés |
-| `tooltip` | bool | `true` | Afficher l'infobulle avec la sortie |
-| `tooltip_format` | string | — | Chaîne de format de l'infobulle |
-| `on_click` | string | — | Commande clic gauche |
-| `on_click_right` | string | — | Commande clic droit |
-| `on_click_middle` | string | — | Commande clic milieu |
-| `on_scroll_up` | string | — | Commande défilement vers le haut |
-| `on_scroll_down` | string | — | Commande défilement vers le bas |
-| `signal` | int | — | Numéro de signal pour les déclencheurs d'événements sig* |
-| `restart_interval` | int | — | Intervalle de redémarrage pour les scripts persistants |
+| Clé                | Type   | Défaut    | Description                                                                      |
+| ------------------ | ------ | --------- | -------------------------------------------------------------------------------- |
+| `id`               | string | —         | Identifiant unique pour référencer dans la disposition (`@custom_widget:mon-id`) |
+| `exec`             | string | requis    | Commande shell à exécuter                                                        |
+| `interval`         | int    | `0`       | Intervalle d'actualisation en secondes (0 = exécuter une fois)                   |
+| `return_type`      | string | `"plain"` | Format de sortie : `"plain"` ou `"json"`                                         |
+| `label_format`     | string | `"{}"`    | Chaîne de format où `{}` est remplacé par la sortie                              |
+| `exec_on_event`    | bool   | `false`   | Ré-exécuter la commande après clic/défilement                                    |
+| `max_length`       | int    | `0`       | Longueur maximale du texte (0 = pas de limite)                                   |
+| `min_length`       | int    | `0`       | Longueur minimale du texte (remplit avec des espaces)                            |
+| `rotate`           | int    | `0`       | Rotation du texte en degrés                                                      |
+| `tooltip`          | bool   | `true`    | Afficher l'infobulle avec la sortie                                              |
+| `tooltip_format`   | string | —         | Chaîne de format de l'infobulle                                                  |
+| `on_click`         | string | —         | Commande clic gauche                                                             |
+| `on_click_right`   | string | —         | Commande clic droit                                                              |
+| `on_click_middle`  | string | —         | Commande clic milieu                                                             |
+| `on_scroll_up`     | string | —         | Commande défilement vers le haut                                                 |
+| `on_scroll_down`   | string | —         | Commande défilement vers le bas                                                  |
+| `signal`           | int    | —         | Numéro de signal pour les déclencheurs d'événements sig*                         |
+| `restart_interval` | int    | —         | Intervalle de redémarrage pour les scripts persistants                           |
 
 ## Groupes de Widgets
 

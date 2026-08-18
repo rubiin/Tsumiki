@@ -59,32 +59,32 @@ Variables are defined in `styles/_variable.scss` and `styles/_settings.scss`.
 
 ### Bar Variables
 
-| Variable | Default | Description |
-|---|---|---|
-| `$bar-background` | theme color | Bar background color |
-| `$bar-border-color` | theme color | Bar border color |
-| `$bar-border-radius` | `16px` | Bar corner radius |
-| `$bar-border-enabled` | `false` | Enable bar border |
-| `$bar-border-width` | `1px` | Bar border thickness |
-| `$bar-padding` | `4px 12px` | Bar internal padding |
-| `$bar-margin` | `0 8px` | Bar external margin |
-| `$bar-widgets-gap` | `2px` | Gap between bar widgets (applied on each side) |
+| Variable              | Default     | Description                                    |
+| --------------------- | ----------- | ---------------------------------------------- |
+| `$bar-background`     | theme color | Bar background color                           |
+| `$bar-border-color`   | theme color | Bar border color                               |
+| `$bar-border-radius`  | `16px`      | Bar corner radius                              |
+| `$bar-border-enabled` | `false`     | Enable bar border                              |
+| `$bar-border-width`   | `1px`       | Bar border thickness                           |
+| `$bar-padding`        | `4px 12px`  | Bar internal padding                           |
+| `$bar-margin`         | `0 8px`     | Bar external margin                            |
+| `$bar-widgets-gap`    | `2px`       | Gap between bar widgets (applied on each side) |
 
 ### Workspace Variables
 
-| Variable | Default | Description |
-|---|---|---|
-| `$bar-widgets-workspaces-spacing` | `0.125em` | Spacing between workspace buttons |
-| `$bar-widgets-workspaces-icon_size` | `12px` | Icon size within workspace buttons |
-| `$bar-widgets-workspaces-border-radius` | `16px` | Workspace widget border radius |
-| `$bar-widgets-workspaces-border-enabled` | `false` | Enable workspace widget border |
-| `$bar-widgets-workspaces-border-width` | `1px` | Workspace widget border thickness |
-| `$bar-widgets-workspaces-pill-height` | `1px` | Pill indicator height |
-| `$bar-widgets-workspaces-pill-width` | `0.5em` | Pill indicator width |
-| `$bar-widgets-workspaces-pill-active_width` | `1em` | Active pill expanded width |
-| `$bar-widgets-workspaces-pill-border-enabled` | `false` | Enable pill border |
-| `$bar-widgets-workspaces-pill-border-radius` | `16px` | Pill border radius |
-| `$bar-widgets-workspaces-pill-border-width` | `2px` | Pill border thickness |
+| Variable                                      | Default   | Description                        |
+| --------------------------------------------- | --------- | ---------------------------------- |
+| `$bar-widgets-workspaces-spacing`             | `0.125em` | Spacing between workspace buttons  |
+| `$bar-widgets-workspaces-icon_size`           | `12px`    | Icon size within workspace buttons |
+| `$bar-widgets-workspaces-border-radius`       | `16px`    | Workspace widget border radius     |
+| `$bar-widgets-workspaces-border-enabled`      | `false`   | Enable workspace widget border     |
+| `$bar-widgets-workspaces-border-width`        | `1px`     | Workspace widget border thickness  |
+| `$bar-widgets-workspaces-pill-height`         | `1px`     | Pill indicator height              |
+| `$bar-widgets-workspaces-pill-width`          | `0.5em`   | Pill indicator width               |
+| `$bar-widgets-workspaces-pill-active_width`   | `1em`     | Active pill expanded width         |
+| `$bar-widgets-workspaces-pill-border-enabled` | `false`   | Enable pill border                 |
+| `$bar-widgets-workspaces-pill-border-radius`  | `16px`    | Pill border radius                 |
+| `$bar-widgets-workspaces-pill-border-width`   | `2px`     | Pill border thickness              |
 
 ### Common Widget Variables
 
@@ -97,23 +97,23 @@ $bar-widgets-<name>-spacing
 
 Common examples:
 
-| Variable | Default | Widgets |
-|---|---|---|
-| `$bar-widgets-cpu-icon_size` | `12px` | CPU, Memory, Storage |
-| `$bar-widgets-battery-icon_size` | `14px` | Battery |
-| `$bar-widgets-volume-icon_size` | `14px` | Volume |
-| `$bar-widgets-bluetooth-icon_size` | `14px` | Bluetooth |
-| `$bar-widgets-weather-icon_size` | `14px` | Weather |
+| Variable                           | Default | Widgets              |
+| ---------------------------------- | ------- | -------------------- |
+| `$bar-widgets-cpu-icon_size`       | `12px`  | CPU, Memory, Storage |
+| `$bar-widgets-battery-icon_size`   | `14px`  | Battery              |
+| `$bar-widgets-volume-icon_size`    | `14px`  | Volume               |
+| `$bar-widgets-bluetooth-icon_size` | `14px`  | Bluetooth            |
+| `$bar-widgets-weather-icon_size`   | `14px`  | Weather              |
 
 ### Layout Variables
 
-| Variable | Default | Description |
-|---|---|---|
-| `$quicksettings-width` | `370px` | Quick settings panel width |
-| `$radius-large` | `9999px` | Large border radius (fully rounded) |
-| `$radius` | from config | Default border radius |
-| `$border-color` | theme color | Default border color |
-| `$border` | from settings | Border shorthand |
+| Variable               | Default       | Description                         |
+| ---------------------- | ------------- | ----------------------------------- |
+| `$quicksettings-width` | `370px`       | Quick settings panel width          |
+| `$radius-large`        | `9999px`      | Large border radius (fully rounded) |
+| `$radius`              | from config   | Default border radius               |
+| `$border-color`        | theme color   | Default border color                |
+| `$border`              | from settings | Border shorthand                    |
 
 ## Overriding SCSS
 
@@ -136,11 +136,11 @@ style_classes = ["compact"]     # Tighter spacing variant
 
 Available built-in style classes:
 
-| Class | Effect |
-|---|---|
-| `compact` | Reduced padding and spacing |
+| Class      | Effect                         |
+| ---------- | ------------------------------ |
+| `compact`  | Reduced padding and spacing    |
 | `bordered` | Adds a border around the group |
-| `pill` | Pill-shaped container |
+| `pill`     | Pill-shaped container          |
 
 ## Adding Custom CSS
 

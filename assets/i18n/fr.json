@@ -1,0 +1,256 @@
+{
+  "common": {
+    "loading": "Chargement...",
+    "error": "Erreur",
+    "none": "N/D",
+    "unknown": "Inconnu",
+    "ok": "OK",
+    "refresh": "Actualiser",
+    "close": "Fermer",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "enabled": "Active",
+    "disabled": "Desactive",
+    "on": "Active",
+    "off": "Desactive",
+    "details": "Details"
+  },
+  "widget": {
+    "battery": {
+      "tooltip": "Batterie",
+      "low": "Batterie faible",
+      "charging": "En charge",
+      "full": "Chargee",
+      "no_battery": "Aucune batterie"
+    },
+    "bluetooth": {
+      "tooltip": "Bluetooth",
+      "on": "Active",
+      "off": "Desactive",
+      "connected": "Connecte",
+      "connecting": "Connexion...",
+      "connect_failed": "Echec de la connexion",
+      "connect": "Connecter",
+      "disconnect": "Deconnecter",
+      "unknown_device": "Appareil inconnu"
+    },
+    "breathing": {
+      "label": "Respirer",
+      "choose_exercise": "CHOISIR UN EXERCICE",
+      "duration": "DUREE",
+      "select_exercise": "Selectionnez un exercice et appuyez sur Demarrer",
+      "start": "▶  Demarrer",
+      "stop": "■  Arreter",
+      "min": "min"
+    },
+    "brightness": {
+      "tooltip": "Luminosite : {percent}%"
+    },
+    "cheatsheet": {
+      "tooltip": "Aide-memoire des raccourcis Hyprland"
+    },
+    "click_counter": {
+      "tooltip": "Clic gauche pour incrementer, clic droit pour reinitialiser"
+    },
+    "clipboard": {
+      "tooltip": "Historique du presse-papiers",
+      "empty": "L'historique du presse-papiers est vide",
+      "clear": "Effacer l'historique",
+      "sync": "Synchroniser le presse-papiers",
+      "label": "Presse-papiers"
+    },
+    "cloudflare_warp": {
+      "tooltip": "Cloudflare WARP",
+      "not_found": "WARP : warp-cli introuvable",
+      "connect": "Connecter",
+      "disconnect": "Deconnecter",
+      "connected": "Connecte",
+      "disconnected": "Deconnecte",
+      "status_connected": "WARP : Connecte",
+      "status_disconnected": "WARP : Deconnecte"
+    },
+    "date_time": {
+      "tooltip": "Date et Heure",
+      "all_caught_up": "Tout est a jour !",
+      "dnd": "Ne pas deranger",
+      "clear_group": "Effacer le groupe"
+    },
+    "dns_switcher": {
+      "tooltip": "Changeur DNS",
+      "default": "DNS : Par defaut",
+      "current": "DNS : {provider}",
+      "add_custom": "Ajouter un serveur personnalise",
+      "reset": "Reinitialiser par defaut (FAI)"
+    },
+    "emoji_picker": {
+      "tooltip": "Selecteur d'emojis",
+      "label": "Emoji",
+      "loading": "Chargement des emojis..."
+    },
+    "git_companion": {
+      "label": "Compagnon Git",
+      "no_bio": "Pas de bio"
+    },
+    "hyprpicker": {
+      "label": "selecteur",
+      "tooltip": "Selectionner une couleur",
+      "script_not_found": "Script introuvable"
+    },
+    "ip_monitor": {
+      "tooltip": "Information IP",
+      "refresh": "Actualiser"
+    },
+    "kanban": {
+      "label": "Kanban",
+      "tooltip": "Tableau Kanban"
+    },
+    "keyboard": {
+      "label": "clavier"
+    },
+    "language": {
+      "tooltip": "Langue : {lang}"
+    },
+    "launcher_button": {
+      "tooltip": "Ouvrir le lanceur d'applications"
+    },
+    "mpris": {
+      "nothing_playing": "Rien en lecture",
+      "no_title": "Sans titre",
+      "no_artist": "Sans artiste"
+    },
+    "network": {
+      "upload": "Envoyer",
+      "download": "Telecharger"
+    },
+    "ocr": {
+      "label": "OCR",
+      "tooltip": "Clic gauche pour OCR, clic droit pour selectionner la langue",
+      "lang_selected": "OCR ({lang})"
+    },
+    "overview_button": {
+      "label": "vue d'ensemble",
+      "tooltip": "Vue d'ensemble"
+    },
+    "power": {
+      "tooltip": "Alimentation",
+      "label": "alimentation",
+      "shutdown": "Eteindre",
+      "reboot": "Redemarrer",
+      "hibernate": "Hiberner",
+      "suspend": "Suspendre",
+      "lock": "Verrouiller",
+      "logout": "Deconnexion",
+      "confirm_reboot": "Voulez-vous vraiment redemarrer ?",
+      "confirm_shutdown": "Voulez-vous vraiment eteindre ?",
+      "confirmation": "Confirmation de {name}",
+      "confirm_action": "Etes-vous sur de vouloir {name} ?"
+    },
+    "pomodoro": {
+      "tooltip": "Minuteur Pomodoro"
+    },
+    "quick_settings": {
+      "uptime": "Duree de fonctionnement du systeme",
+      "wifi": {
+        "disabled": "Wifi desactive",
+        "password_prompt": "Entrez le mot de passe pour {ssid}",
+        "connect_to": "Connecter a {ssid}"
+      },
+      "bluetooth": {
+        "paired": "Appareils apparies",
+        "available": "Appareils disponibles",
+        "enabled": "Active"
+      },
+      "power_profiles": {
+        "title": "Profils d'alimentation",
+        "saver": "Mode economie"
+      },
+      "notifications": {
+        "noisy": "Sonore",
+        "quiet": "Silencieux"
+      },
+      "dark_mode": {
+        "dark": "Sombre",
+        "light": "Clair"
+      },
+      "hyprsunset": {
+        "title": "HyprSunset",
+        "enabled": "Active"
+      },
+      "audio": {
+        "title": "Audio de l'application"
+      },
+      "network": {
+        "title": "Reseau"
+      }
+    },
+    "recorder": {
+      "started": "Enregistrement demarre",
+      "stopped": "Enregistrement arrete"
+    },
+    "screenshot": {
+      "tooltip": "Capture d'ecran",
+      "label": "capture"
+    },
+    "settings": {
+      "tooltip": "Ouvrir les parametres",
+      "label": "Parametres"
+    },
+    "stopwatch": {
+      "label": "Chronometre"
+    },
+    "submap": {
+      "label": "sous-carte",
+      "current": "Sous-carte actuelle : {submap}"
+    },
+    "theme": {
+      "switched": "Theme change en {theme}"
+    },
+    "updates": {
+      "tooltip": "Mises a jour"
+    },
+    "usb_manager": {
+      "label": "USB",
+      "tooltip": "Gestionnaire USB",
+      "title": "Gestionnaire USB",
+      "unmount_all": "Tout demonter",
+      "eject_all": "Tout ejecter",
+      "mounted": "Monte",
+      "ready": "Pret",
+      "no_devices": "Aucun peripherique USB detecte",
+      "plug_in": "Branchez une cle USB pour commencer",
+      "open": "Ouvrir",
+      "mount": "Monter",
+      "unmount": "Demonter",
+      "eject": "Ejecter"
+    },
+    "wallpaper": {
+      "label": "fond d'ecran",
+      "tooltip": "Selecteur de fond d'ecran"
+    },
+    "weather": {
+      "fetching": "Recuperation...",
+      "error": "Erreur lors de la recuperation des donnees meteo, reessayez plus tard."
+    },
+    "window_count": {
+      "tooltip": "Bureau : {id}, Fenetres : {count}"
+    },
+    "workspaces": {
+      "tooltip": "Bureau : {id}, Fenetres : {count}"
+    }
+  },
+  "module": {
+    "activate_linux": {
+      "title": "Activer Linux",
+      "subtitle": "Allez dans Parametres pour activer Linux."
+    },
+    "launcher": {
+      "tooltip": "Ouvrir le lanceur d'applications"
+    },
+    "overview": {
+      "tooltip": "Vue d'ensemble"
+    },
+    "settings": {
+      "tooltip": "Ouvrir les parametres"
+    }
+  }
+}

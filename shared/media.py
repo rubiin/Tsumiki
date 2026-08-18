@@ -10,6 +10,7 @@ from services.mpris import MprisPlayer, MprisPlayerManager
 from shared.sinewave_slider import SineWaveSlider
 from utils.constants import APP_DATA_DIRECTORY, ASSETS_DIR, NEWLINE_RE
 from utils.functions import ensure_directory, get_http_client
+from utils.i18n import _
 from utils.icons import get_text_icon
 from utils.widget_utils import nerd_font_icon
 
@@ -129,14 +130,14 @@ class PlayerBox(Box):
         # ─── Track Info ───
         self.title_label = Label(
             name="player-title",
-            label="No Title",
+            label=_('widget.mpris.no_title'),
             max_chars_width=28,
             ellipsization="end",
             h_align="start",
         )
         self.artist_label = Label(
             name="player-artist",
-            label="No Artist",
+            label=_('widget.mpris.no_artist'),
             max_chars_width=28,
             ellipsization="end",
             h_align="start",

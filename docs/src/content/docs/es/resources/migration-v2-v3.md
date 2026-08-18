@@ -7,12 +7,12 @@ sidebar:
 
 ## Resumen de cambios importantes
 
-| Área | Cambio |
-|---|---|
-| Formato de configuración | JSON5 ya no es compatible — use TOML |
-| Dock | Los ajustes del dock están bajo `[modules.dock]` |
-| Auto-ocultar barra | Configurado bajo `[modules.bar]` |
-| Grupos | Use `[[widget_groups]]` y `[[collapsible_groups]]` |
+| Área                     | Cambio                                             |
+| ------------------------ | -------------------------------------------------- |
+| Formato de configuración | JSON5 ya no es compatible — use TOML               |
+| Dock                     | Los ajustes del dock están bajo `[modules.dock]`   |
+| Auto-ocultar barra       | Configurado bajo `[modules.bar]`                   |
+| Grupos                   | Use `[[widget_groups]]` y `[[collapsible_groups]]` |
 
 ## Migración paso a paso
 

@@ -23,6 +23,7 @@ You can stop Tsumiki at any time with:
 ```sh
 pkill tsumiki
 ```
+
 :::
 
 ## 2. Set Up Autostart
@@ -62,11 +63,11 @@ right_section = ["volume", "battery", "system_tray", "power"]
 
 This creates a bar with:
 
-| Section | Widgets |
-|---|---|
-| **Left** | Workspace switcher, active window title |
-| **Middle** | Current date and time |
-| **Right** | Volume control, battery status, system tray, power menu |
+| Section    | Widgets                                                 |
+| ---------- | ------------------------------------------------------- |
+| **Left**   | Workspace switcher, active window title                 |
+| **Middle** | Current date and time                                   |
+| **Right**  | Volume control, battery status, system tray, power menu |
 
 ## 5. Reload to Apply Changes
 

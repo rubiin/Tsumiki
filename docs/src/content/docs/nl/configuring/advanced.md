@@ -25,26 +25,26 @@ left_section = ["@custom_widget:volume", "workspaces"]
 
 Volledige configuratie-opties:
 
-| Sleutel | Type | Standaard | Beschrijving |
-|---|---|---|---|
-| `id` | string | — | Unieke identificatie voor verwijzing in lay-out (`@custom_widget:mijn-id`) |
-| `exec` | string | vereist | Uit te voeren shell-commando |
-| `interval` | int | `0` | Vernieuwingsinterval in seconden (0 = eenmalig uitvoeren) |
-| `return_type` | string | `"plain"` | Uitvoerformaat: `"plain"` of `"json"` |
-| `label_format` | string | `"{}"` | Formaatstring waarbij `{}` wordt vervangen door uitvoer |
-| `exec_on_event` | bool | `false` | Commando opnieuw uitvoeren na klik/scroll |
-| `max_length` | int | `0` | Maximale tekstlengte (0 = geen limiet) |
-| `min_length` | int | `0` | Minimale tekstlengte (vult met spaties) |
-| `rotate` | int | `0` | Tekst roteren in graden |
-| `tooltip` | bool | `true` | Tooltip tonen met uitvoer |
-| `tooltip_format` | string | — | Tooltip-formaatstring |
-| `on_click` | string | — | Linksklik-commando |
-| `on_click_right` | string | — | Rechtsklik-commando |
-| `on_click_middle` | string | — | Middelste klik-commando |
-| `on_scroll_up` | string | — | Scroll-omhoog-commando |
-| `on_scroll_down` | string | — | Scroll-omlaag-commando |
-| `signal` | int | — | Signaalnummer voor sig* gebeurtenistriggers |
-| `restart_interval` | int | — | Herstartinterval voor persistente scripts |
+| Sleutel            | Type   | Standaard | Beschrijving                                                               |
+| ------------------ | ------ | --------- | -------------------------------------------------------------------------- |
+| `id`               | string | —         | Unieke identificatie voor verwijzing in lay-out (`@custom_widget:mijn-id`) |
+| `exec`             | string | vereist   | Uit te voeren shell-commando                                               |
+| `interval`         | int    | `0`       | Vernieuwingsinterval in seconden (0 = eenmalig uitvoeren)                  |
+| `return_type`      | string | `"plain"` | Uitvoerformaat: `"plain"` of `"json"`                                      |
+| `label_format`     | string | `"{}"`    | Formaatstring waarbij `{}` wordt vervangen door uitvoer                    |
+| `exec_on_event`    | bool   | `false`   | Commando opnieuw uitvoeren na klik/scroll                                  |
+| `max_length`       | int    | `0`       | Maximale tekstlengte (0 = geen limiet)                                     |
+| `min_length`       | int    | `0`       | Minimale tekstlengte (vult met spaties)                                    |
+| `rotate`           | int    | `0`       | Tekst roteren in graden                                                    |
+| `tooltip`          | bool   | `true`    | Tooltip tonen met uitvoer                                                  |
+| `tooltip_format`   | string | —         | Tooltip-formaatstring                                                      |
+| `on_click`         | string | —         | Linksklik-commando                                                         |
+| `on_click_right`   | string | —         | Rechtsklik-commando                                                        |
+| `on_click_middle`  | string | —         | Middelste klik-commando                                                    |
+| `on_scroll_up`     | string | —         | Scroll-omhoog-commando                                                     |
+| `on_scroll_down`   | string | —         | Scroll-omlaag-commando                                                     |
+| `signal`           | int    | —         | Signaalnummer voor sig* gebeurtenistriggers                                |
+| `restart_interval` | int    | —         | Herstartinterval voor persistente scripts                                  |
 
 ## Widget Groepen
 

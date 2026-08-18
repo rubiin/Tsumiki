@@ -1,13 +1,13 @@
 {
-	// CLI type-check config for TypeScript 7 (native compiler).
-	// `astro check` requires TypeScript's programmatic API, which TS 7 does not
-	// ship yet (https://github.com/withastro/roadmap/discussions/1321), so the
-	// build type-checks the project's .ts/.d.ts files with `tsc --noEmit` instead.
-	// The astro language server still uses the wide `tsconfig.json` for editors.
-	"extends": "./tsconfig.json",
-	"compilerOptions": {
-		"noEmit": true
-	},
-	"include": [".astro/types.d.ts", "src/**/*.ts", "src/**/*.d.ts"],
-	"exclude": ["dist", "node_modules"]
+  // CLI type-check config for TypeScript 7 (native compiler).
+  // `astro check` requires TypeScript's programmatic API, which TS 7 does not
+  // ship yet (https://github.com/withastro/roadmap/discussions/1321), so the
+  // build type-checks the project's .ts/.d.ts files with `tsc --noEmit` instead.
+  // The astro language server still uses the wide `tsconfig.json` for editors.
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true
+  },
+  "include": [".astro/types.d.ts", "src/**/*.ts", "src/**/*.d.ts"],
+  "exclude": ["dist", "node_modules"]
 }

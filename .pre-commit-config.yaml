@@ -48,4 +48,24 @@ repos:
         additional_dependencies: ['oxfmt']
         files: '^styles/.*\.scss$'
 
+  # oxlint for docs linting
+  - repo: local
+    hooks:
+      - id: docs-oxlint
+        name: Lint docs with oxlint
+        entry: bash -c 'cd docs && pnpm oxlint'
+        language: system
+        files: '^docs/.*\.(astro|ts|tsx|js|jsx|mjs|cjs)$'
+        pass_filenames: false
+
+  # oxfmt for docs formatting
+  - repo: local
+    hooks:
+      - id: docs-oxfmt
+        name: Format docs with oxfmt
+        entry: bash -c 'cd docs && pnpm oxfmt'
+        language: system
+        files: '^docs/.*\.(astro|ts|tsx|js|jsx|mjs|cjs|json|md|mdx|css)$'
+        pass_filenames: false
+
 default_stages: [pre-commit]

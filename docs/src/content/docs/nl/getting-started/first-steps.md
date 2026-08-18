@@ -23,6 +23,7 @@ Je kunt Tsumiki op elk moment stoppen met:
 ```sh
 pkill tsumiki
 ```
+
 :::
 
 ## 2. Stel Automatisch Starten In
@@ -62,10 +63,10 @@ right_section = ["volume", "battery", "system_tray", "power"]
 
 Dit maakt een balk met:
 
-| Sectie | Widgets |
-|---|---|
-| **Links** | Werkruimteschakelaar, actieve venstertitel |
-| **Midden** | Huidige datum en tijd |
+| Sectie     | Widgets                                                 |
+| ---------- | ------------------------------------------------------- |
+| **Links**  | Werkruimteschakelaar, actieve venstertitel              |
+| **Midden** | Huidige datum en tijd                                   |
 | **Rechts** | Volumeregeling, batterijstatus, systeemvak, energiemenu |
 
 ## 5. Herlaad om Wijzigingen Toe te Passen

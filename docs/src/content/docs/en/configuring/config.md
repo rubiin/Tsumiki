@@ -70,15 +70,15 @@ tooltip = true
 
 Global behavior such as debug mode, auto reload, and multi-monitor controls.
 
-| Key | Type | Default | Description |
-|---|---|---|---|
-| `debug` | bool | `false` | Enable verbose logging |
-| `auto_restart` | bool | `true` | Automatically restart on crash |
-| `restart_delay` | int | `1500` | Delay before restart (ms) |
-| `multi_monitor` | bool | `false` | Per-monitor bar instances |
-| `tooltips` | bool | `true` | Enable widget tooltips |
-| `check_updates` | bool | `false` | Check for Tsumiki updates |
-| `monitor_styles` | bool | `true` | Watch and reload SCSS changes |
+| Key              | Type | Default | Description                    |
+| ---------------- | ---- | ------- | ------------------------------ |
+| `debug`          | bool | `false` | Enable verbose logging         |
+| `auto_restart`   | bool | `true`  | Automatically restart on crash |
+| `restart_delay`  | int  | `1500`  | Delay before restart (ms)      |
+| `multi_monitor`  | bool | `false` | Per-monitor bar instances      |
+| `tooltips`       | bool | `true`  | Enable widget tooltips         |
+| `check_updates`  | bool | `false` | Check for Tsumiki updates      |
+| `monitor_styles` | bool | `true`  | Watch and reload SCSS changes  |
 
 ### `layout`
 
@@ -99,31 +99,31 @@ right_section = ["@group:1", "system_tray", "power"]
 
 Available reference types:
 
-| Reference | Example | Description |
-|---|---|---|
-| Widget name | `"workspaces"` | Direct widget reference |
-| `@group:N` / `@group:id` | `"@group:0"` / `"@group:workspaces-group"` | Widget group by index or string id |
-| `@collapsible:N` / `@collapsible:id` | `"@collapsible:0"` / `"@collapsible:utility-tools"` | Collapsible group by index or string id |
-| `@custom_button:N` / `@custom_button:id` | `"@custom_button:0"` / `"@custom_button:firefox"` | Custom button by index or string id |
-| `@custom_widget:N` / `@custom_widget:id` | `"@custom_widget:0"` / `"@custom_widget:volume"` | Custom widget by index or string id |
+| Reference                                | Example                                             | Description                             |
+| ---------------------------------------- | --------------------------------------------------- | --------------------------------------- |
+| Widget name                              | `"workspaces"`                                      | Direct widget reference                 |
+| `@group:N` / `@group:id`                 | `"@group:0"` / `"@group:workspaces-group"`          | Widget group by index or string id      |
+| `@collapsible:N` / `@collapsible:id`     | `"@collapsible:0"` / `"@collapsible:utility-tools"` | Collapsible group by index or string id |
+| `@custom_button:N` / `@custom_button:id` | `"@custom_button:0"` / `"@custom_button:firefox"`   | Custom button by index or string id     |
+| `@custom_widget:N` / `@custom_widget:id` | `"@custom_widget:0"` / `"@custom_widget:volume"`    | Custom widget by index or string id     |
 
 ### `modules`
 
 Enables and configures larger UI modules such as:
 
-| Module | Key | Description |
-|---|---|---|
-| Bar | `modules.bar` | Panel bar position and layer |
-| Notification | `modules.notification` | Desktop notification system |
-| Dock | `modules.dock` | Application dock with intellihide |
-| Overview | `modules.overview` | Workspace exposé view |
-| OSD | `modules.osd` | On-screen display for volume, etc. |
-| Launcher | `modules.launcher` | Application search & launch, slash commands (`/calc`, `/translate`) |
-| Desktop Clock | `modules.desktop_clock` | Decorative desktop clock |
-| Desktop Quotes | `modules.desktop_quotes` | Inspirational quote overlay |
-| Screen Corners | `modules.screen_corners` | Hot corners |
-| Cheatsheet | `modules.cheatsheet` | Keybinding reference |
-| Activate Linux | `modules.activate_linux` | Window activation hint |
+| Module         | Key                      | Description                                                         |
+| -------------- | ------------------------ | ------------------------------------------------------------------- |
+| Bar            | `modules.bar`            | Panel bar position and layer                                        |
+| Notification   | `modules.notification`   | Desktop notification system                                         |
+| Dock           | `modules.dock`           | Application dock with intellihide                                   |
+| Overview       | `modules.overview`       | Workspace exposé view                                               |
+| OSD            | `modules.osd`            | On-screen display for volume, etc.                                  |
+| Launcher       | `modules.launcher`       | Application search & launch, slash commands (`/calc`, `/translate`) |
+| Desktop Clock  | `modules.desktop_clock`  | Decorative desktop clock                                            |
+| Desktop Quotes | `modules.desktop_quotes` | Inspirational quote overlay                                         |
+| Screen Corners | `modules.screen_corners` | Hot corners                                                         |
+| Cheatsheet     | `modules.cheatsheet`     | Keybinding reference                                                |
+| Activate Linux | `modules.activate_linux` | Window activation hint                                              |
 
 Example dock configuration:
 
@@ -145,20 +145,20 @@ Over 45 widgets are available. See the complete [Widgets Reference](/en/features
 
 Common widgets include:
 
-| Widget | Description |
-|---|---|
-| `workspaces` | Virtual desktop switcher |
-| `window_title` | Active window title |
-| `date_time` | Date/time display |
-| `system_tray` | System tray icons |
-| `volume` | Audio volume control |
-| `battery` | Battery status |
-| `cpu` | CPU usage monitor |
-| `memory` | Memory usage monitor |
-| `network_usage` | Network speed monitor |
-| `weather` | Weather conditions |
-| `power` | Power menu (shutdown, etc.) |
-| `quick_settings` | Quick settings panel |
+| Widget           | Description                 |
+| ---------------- | --------------------------- |
+| `workspaces`     | Virtual desktop switcher    |
+| `window_title`   | Active window title         |
+| `date_time`      | Date/time display           |
+| `system_tray`    | System tray icons           |
+| `volume`         | Audio volume control        |
+| `battery`        | Battery status              |
+| `cpu`            | CPU usage monitor           |
+| `memory`         | Memory usage monitor        |
+| `network_usage`  | Network speed monitor       |
+| `weather`        | Weather conditions          |
+| `power`          | Power menu (shutdown, etc.) |
+| `quick_settings` | Quick settings panel        |
 
 ## Workspace Styles
 

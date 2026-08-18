@@ -27,6 +27,7 @@ from fabric.widgets.scrolledwindow import ScrolledWindow
 from shared.list import ListBox
 from shared.mixins import PopoverMixin
 from shared.widget_container import ButtonWidget, TeardownMixin
+from utils.i18n import _
 from utils.widget_utils import get_text_icon, nerd_font_icon
 
 
@@ -147,13 +148,13 @@ class ClipHistoryMenu(Box, TeardownMixin):
                 Button(
                     name="sync-button",
                     label=get_text_icon("ui.refresh"),
-                    tooltip_text="Sync Clipboard",
+                    tooltip_text=_('widget.clipboard.sync'),
                     on_clicked=self._load_clipboard_items_async,
                 ),
                 Button(
                     name="clear-button",
                     label=get_text_icon("trash.empty"),
-                    tooltip_text="Clear History",
+                    tooltip_text=_('widget.clipboard.clear'),
                     on_clicked=self.clear_history,
                 ),
             ],
@@ -344,7 +345,7 @@ class ClipHistoryMenu(Box, TeardownMixin):
             # Show a message if no clipboard items
             label = Label(
                 name="no-clip",
-                label="Clipboard history is empty",
+                label=_('widget.clipboard.empty'),
                 h_align="center",
                 v_align="center",
             )
@@ -944,7 +945,7 @@ class ClipBoardWidget(ButtonWidget, PopoverMixin):
             self.container_box.add(Label(label="Clip", style_classes="panel-text"))
 
         if self.config.get("tooltip", False) and self.tooltips_enabled:
-            self.set_tooltip_text("Clipboard History")
+            self.set_tooltip_text(_('widget.clipboard.tooltip'))
 
         self.setup_popover(self._build_popover)
 

@@ -1,0 +1,256 @@
+{
+  "common": {
+    "loading": "Laden...",
+    "error": "Fehler",
+    "none": "k.A.",
+    "unknown": "Unbekannt",
+    "ok": "OK",
+    "refresh": "Aktualisieren",
+    "close": "Schliessen",
+    "save": "Speichern",
+    "cancel": "Abbrechen",
+    "enabled": "Aktiviert",
+    "disabled": "Deaktiviert",
+    "on": "Ein",
+    "off": "Aus",
+    "details": "Details"
+  },
+  "widget": {
+    "battery": {
+      "tooltip": "Akku",
+      "low": "Akku niedrig",
+      "charging": "Wird geladen",
+      "full": "Voll geladen",
+      "no_battery": "Kein Akku vorhanden"
+    },
+    "bluetooth": {
+      "tooltip": "Bluetooth",
+      "on": "Ein",
+      "off": "Aus",
+      "connected": "Verbunden",
+      "connecting": "Verbinden...",
+      "connect_failed": "Verbindung fehlgeschlagen",
+      "connect": "Verbinden",
+      "disconnect": "Trennen",
+      "unknown_device": "Unbekanntes Gerat"
+    },
+    "breathing": {
+      "label": "Atmen",
+      "choose_exercise": "UEBUNG AUSWAEHLEN",
+      "duration": "DAUER",
+      "select_exercise": "Waehlen Sie eine Uebung und druecken Sie Start",
+      "start": "▶  Starten",
+      "stop": "■  Stoppen",
+      "min": "Min"
+    },
+    "brightness": {
+      "tooltip": "Helligkeit: {percent}%"
+    },
+    "cheatsheet": {
+      "tooltip": "Hyprland Tastenkombinationen"
+    },
+    "click_counter": {
+      "tooltip": "Linksklick zum Erhoehen, Rechtsklick zum Zuruecksetzen"
+    },
+    "clipboard": {
+      "tooltip": "Zwischenablage",
+      "empty": "Zwischenablage ist leer",
+      "clear": "Verlauf loeschen",
+      "sync": "Zwischenablage synchronisieren",
+      "label": "Ablage"
+    },
+    "cloudflare_warp": {
+      "tooltip": "Cloudflare WARP",
+      "not_found": "WARP: warp-cli nicht gefunden",
+      "connect": "Verbinden",
+      "disconnect": "Trennen",
+      "connected": "Verbunden",
+      "disconnected": "Getrennt",
+      "status_connected": "WARP: Verbunden",
+      "status_disconnected": "WARP: Getrennt"
+    },
+    "date_time": {
+      "tooltip": "Datum & Uhrzeit",
+      "all_caught_up": "Alles aktuell!",
+      "dnd": "Nicht stoeren",
+      "clear_group": "Gruppe loeschen"
+    },
+    "dns_switcher": {
+      "tooltip": "DNS Wechsler",
+      "default": "DNS: Standard",
+      "current": "DNS: {provider}",
+      "add_custom": "Benutzerdefinierten Server hinzufuegen",
+      "reset": "Auf Standard zuruecksetzen (ISP)"
+    },
+    "emoji_picker": {
+      "tooltip": "Emoji-Auswahl",
+      "label": "Emoji",
+      "loading": "Emojis laden..."
+    },
+    "git_companion": {
+      "label": "Git Begleiter",
+      "no_bio": "Keine Bio"
+    },
+    "hyprpicker": {
+      "label": "Auswahl",
+      "tooltip": "Farbe auswaehlen",
+      "script_not_found": "Skript nicht gefunden"
+    },
+    "ip_monitor": {
+      "tooltip": "IP-Informationen",
+      "refresh": "Aktualisieren"
+    },
+    "kanban": {
+      "label": "Kanban",
+      "tooltip": "Kanban Board"
+    },
+    "keyboard": {
+      "label": "Tastatur"
+    },
+    "language": {
+      "tooltip": "Sprache: {lang}"
+    },
+    "launcher_button": {
+      "tooltip": "Anwendungsstarter oeffnen"
+    },
+    "mpris": {
+      "nothing_playing": "Nichts wird abgespielt",
+      "no_title": "Kein Titel",
+      "no_artist": "Kein Kuenstler"
+    },
+    "network": {
+      "upload": "Hochladen",
+      "download": "Herunterladen"
+    },
+    "ocr": {
+      "label": "OCR",
+      "tooltip": "Linksklick fuer OCR, Rechtsklick zum Sprachauswahl",
+      "lang_selected": "OCR ({lang})"
+    },
+    "overview_button": {
+      "label": "Uebersicht",
+      "tooltip": "Uebersicht"
+    },
+    "power": {
+      "tooltip": "Energie",
+      "label": "Energie",
+      "shutdown": "Herunterfahren",
+      "reboot": "Neustarten",
+      "hibernate": "Ruhezustand",
+      "suspend": "Bereitschaft",
+      "lock": "Sperren",
+      "logout": "Abmelden",
+      "confirm_reboot": "Moechten Sie wirklich neu starten?",
+      "confirm_shutdown": "Moechten Sie wirklich herunterfahren?",
+      "confirmation": "{name} Bestaetigung",
+      "confirm_action": "Sind Sie sicher, dass Sie {name} moechten?"
+    },
+    "pomodoro": {
+      "tooltip": "Pomodoro Timer"
+    },
+    "quick_settings": {
+      "uptime": "Systembetriebszeit",
+      "wifi": {
+        "disabled": "Wifi deaktiviert",
+        "password_prompt": "Passwort fuer {ssid} eingeben",
+        "connect_to": "Verbinden mit {ssid}"
+      },
+      "bluetooth": {
+        "paired": "Gepaarte Geraete",
+        "available": "Verfuegbare Geraete",
+        "enabled": "Aktiviert"
+      },
+      "power_profiles": {
+        "title": "Energieprofile",
+        "saver": "Sparmodus"
+      },
+      "notifications": {
+        "noisy": "Laust",
+        "quiet": "Leise"
+      },
+      "dark_mode": {
+        "dark": "Dunkel",
+        "light": "Hell"
+      },
+      "hyprsunset": {
+        "title": "HyprSunset",
+        "enabled": "Aktiviert"
+      },
+      "audio": {
+        "title": "Anwendungs-Audio"
+      },
+      "network": {
+        "title": "Netzwerk"
+      }
+    },
+    "recorder": {
+      "started": "Aufnahme gestartet",
+      "stopped": "Aufnahme gestoppt"
+    },
+    "screenshot": {
+      "tooltip": "Bildschirmfoto",
+      "label": "Foto"
+    },
+    "settings": {
+      "tooltip": "Einstellungen oeffnen",
+      "label": "Einstellungen"
+    },
+    "stopwatch": {
+      "label": "Stoppuhr"
+    },
+    "submap": {
+      "label": "Unterkarte",
+      "current": "Aktuelle Unterkarte: {submap}"
+    },
+    "theme": {
+      "switched": "Thema gewechselt zu {theme}"
+    },
+    "updates": {
+      "tooltip": "Updates"
+    },
+    "usb_manager": {
+      "label": "USB",
+      "tooltip": "USB-Manager",
+      "title": "USB-Manager",
+      "unmount_all": "Alle aushaengen",
+      "eject_all": "Alle auswerfen",
+      "mounted": "Eingehaengt",
+      "ready": "Bereit",
+      "no_devices": "Keine USB-Geraete erkannt",
+      "plug_in": "Schliessen Sie ein USB-Laufwerk an",
+      "open": "Oeffnen",
+      "mount": "Einhaengen",
+      "unmount": "Aushaengen",
+      "eject": "Auswerfen"
+    },
+    "wallpaper": {
+      "label": "Hintergrund",
+      "tooltip": "Hintergrundbild auswaehlen"
+    },
+    "weather": {
+      "fetching": "Abrufen...",
+      "error": "Fehler beim Abrufen der Wetterdaten, versuchen Sie es spaeter erneut."
+    },
+    "window_count": {
+      "tooltip": "Arbeitsflaeche: {id}, Fenster: {count}"
+    },
+    "workspaces": {
+      "tooltip": "Arbeitsflaeche: {id}, Fenster: {count}"
+    }
+  },
+  "module": {
+    "activate_linux": {
+      "title": "Linux aktivieren",
+      "subtitle": "Gehen Sie zu Einstellungen, um Linux zu aktivieren."
+    },
+    "launcher": {
+      "tooltip": "Anwendungsstarter oeffnen"
+    },
+    "overview": {
+      "tooltip": "Uebersicht"
+    },
+    "settings": {
+      "tooltip": "Einstellungen oeffnen"
+    }
+  }
+}

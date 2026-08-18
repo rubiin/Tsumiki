@@ -5,22 +5,25 @@ sidebar:
   order: 2
 ---
 
-import LatestRelease from '../../../../components/LatestRelease.astro'
+import LatestRelease from "../../../../components/LatestRelease.astro";
 
-<div align="center"><img src="https://raw.githubusercontent.com/rubiin/tsumiki/refs/heads/master/assets/images/tsumiki.png" /><br /></div>
+<div align="center">
+  <img src="https://raw.githubusercontent.com/rubiin/tsumiki/refs/heads/master/assets/images/tsumiki.png" />
+  <br />
+</div>
 
 ## المتطلبات الأساسية
 
 تأكد من تثبيت هذه المتطلبات قبل المتابعة:
 
-| المتطلب | أمر التثبيت (Arch Linux) | ملاحظات |
-|---|---|---|
-| [Hyprland](https://hyprland.org) | `sudo pacman -S hyprland` | يجب تشغيل Hyprland |
-| [JetBrains Nerd Font](https://www.nerdfonts.com) | `sudo pacman -S ttf-jetbrains-mono-nerd` | مطلوب لعرض الأيقونات |
-| **Python 3.12+** | `sudo pacman -S python` | تحقق: `python --version` |
-| **Git** | `sudo pacman -S git` | مطلوب للاستنساخ |
-| **NetworkManager** | `sudo pacman -S networkmanager` | مطلوب بواسطة أدوات الشبكة |
-| **PipeWire** | `sudo pacman -S pipewire pipewire-pulse` | مطلوب بواسطة أدوات الصوت |
+| المتطلب                                          | أمر التثبيت (Arch Linux)                 | ملاحظات                   |
+| ------------------------------------------------ | ---------------------------------------- | ------------------------- |
+| [Hyprland](https://hyprland.org)                 | `sudo pacman -S hyprland`                | يجب تشغيل Hyprland        |
+| [JetBrains Nerd Font](https://www.nerdfonts.com) | `sudo pacman -S ttf-jetbrains-mono-nerd` | مطلوب لعرض الأيقونات      |
+| **Python 3.12+**                                 | `sudo pacman -S python`                  | تحقق: `python --version`  |
+| **Git**                                          | `sudo pacman -S git`                     | مطلوب للاستنساخ           |
+| **NetworkManager**                               | `sudo pacman -S networkmanager`          | مطلوب بواسطة أدوات الشبكة |
+| **PipeWire**                                     | `sudo pacman -S pipewire pipewire-pulse` | مطلوب بواسطة أدوات الصوت  |
 
 ::::caution
 تحتاج إلى **إعداد Hyprland عامل** قبل تثبيت تسوميكي. إذا كنت جديداً على Hyprland، اتبع [Wiki Hyprland](https://wiki.hyprland.org/Getting-Started/) أولاً.
@@ -36,11 +39,7 @@ cd ~/.config/tsumiki
 ## أحدث إصدار
 
 <div className="latest-release">
-  <LatestRelease
-    repo="rubiin/tsumiki"
-    versionLabel="الإصدار:"
-    dateLabel="التاريخ:"
-  />
+  <LatestRelease repo="rubiin/tsumiki" versionLabel="الإصدار:" dateLabel="التاريخ:" />
 </div>
 
 لملاحظات الإصدار الكاملة والملفات، راجع [صفحة الإصدارات](https://github.com/rubiin/tsumiki/releases) على GitHub.
@@ -119,6 +118,7 @@ exec-once = sleep 5; ~/.config/tsumiki/init.sh -start
 ```sh
 alias tsumiki='~/.config/tsumiki/init.sh -start'
 ```
+
 :::
 
 ## التحقق من التثبيت

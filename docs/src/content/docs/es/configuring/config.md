@@ -70,15 +70,15 @@ tooltip = true
 
 Comportamiento global como modo de depuración, reinicio automático y controles de múltiples monitores.
 
-| Clave | Tipo | Predeterminado | Descripción |
-|---|---|---|---|
-| `debug` | bool | `false` | Activar registro verbose |
-| `auto_restart` | bool | `true` | Reiniciar automáticamente en caso de fallo |
-| `restart_delay` | int | `1500` | Retardo antes de reiniciar (ms) |
-| `multi_monitor` | bool | `false` | Instancias de barra por monitor |
-| `tooltips` | bool | `true` | Activar tooltips de widgets |
-| `check_updates` | bool | `false` | Verificar actualizaciones de Tsumiki |
-| `monitor_styles` | bool | `true` | Vigilar y recargar cambios SCSS |
+| Clave            | Tipo | Predeterminado | Descripción                                |
+| ---------------- | ---- | -------------- | ------------------------------------------ |
+| `debug`          | bool | `false`        | Activar registro verbose                   |
+| `auto_restart`   | bool | `true`         | Reiniciar automáticamente en caso de fallo |
+| `restart_delay`  | int  | `1500`         | Retardo antes de reiniciar (ms)            |
+| `multi_monitor`  | bool | `false`        | Instancias de barra por monitor            |
+| `tooltips`       | bool | `true`         | Activar tooltips de widgets                |
+| `check_updates`  | bool | `false`        | Verificar actualizaciones de Tsumiki       |
+| `monitor_styles` | bool | `true`         | Vigilar y recargar cambios SCSS            |
 
 ### `layout`
 
@@ -99,30 +99,30 @@ right_section = ["@group:1", "system_tray", "power"]
 
 Tipos de referencia disponibles:
 
-| Referencia | Ejemplo | Descripción |
-|---|---|---|
-| Nombre de widget | `"workspaces"` | Referencia directa al widget |
-| `@group:N` | `"@group:0"` | Grupo de widgets por índice |
-| `@collapsible:N` | `"@collapsible:0"` | Grupo plegable por índice |
+| Referencia         | Ejemplo              | Descripción                    |
+| ------------------ | -------------------- | ------------------------------ |
+| Nombre de widget   | `"workspaces"`       | Referencia directa al widget   |
+| `@group:N`         | `"@group:0"`         | Grupo de widgets por índice    |
+| `@collapsible:N`   | `"@collapsible:0"`   | Grupo plegable por índice      |
 | `@custom_button:N` | `"@custom_button:0"` | Botón personalizado por índice |
 
 ### `modules`
 
 Activa y configura módulos de UI más grandes como:
 
-| Módulo | Clave | Descripción |
-|---|---|---|
-| Barra | `modules.bar` | Posición y capa del panel |
-| Notificaciones | `modules.notification` | Sistema de notificaciones del escritorio |
-| Dock | `modules.dock` | Dock de aplicaciones con intellihide |
-| Overview | `modules.overview` | Vista exposé de espacios de trabajo |
-| OSD | `modules.osd` | Visualización en pantalla para volumen, etc. |
-| Lanzador de Apps | `modules.launcher` | Búsqueda y lanzamiento de aplicaciones |
-| Reloj de Escritorio | `modules.desktop_clock` | Reloj decorativo del escritorio |
-| Citas de Escritorio | `modules.desktop_quotes` | Superposición de citas inspiradoras |
-| Esquinas de Pantalla | `modules.screen_corners` | Esquinas activas |
-| Cheatsheet | `modules.cheatsheet` | Referencia de atajos de teclado |
-| Activate Linux | `modules.activate_linux` | Indicador de activación de ventana |
+| Módulo               | Clave                    | Descripción                                  |
+| -------------------- | ------------------------ | -------------------------------------------- |
+| Barra                | `modules.bar`            | Posición y capa del panel                    |
+| Notificaciones       | `modules.notification`   | Sistema de notificaciones del escritorio     |
+| Dock                 | `modules.dock`           | Dock de aplicaciones con intellihide         |
+| Overview             | `modules.overview`       | Vista exposé de espacios de trabajo          |
+| OSD                  | `modules.osd`            | Visualización en pantalla para volumen, etc. |
+| Lanzador de Apps     | `modules.launcher`       | Búsqueda y lanzamiento de aplicaciones       |
+| Reloj de Escritorio  | `modules.desktop_clock`  | Reloj decorativo del escritorio              |
+| Citas de Escritorio  | `modules.desktop_quotes` | Superposición de citas inspiradoras          |
+| Esquinas de Pantalla | `modules.screen_corners` | Esquinas activas                             |
+| Cheatsheet           | `modules.cheatsheet`     | Referencia de atajos de teclado              |
+| Activate Linux       | `modules.activate_linux` | Indicador de activación de ventana           |
 
 Ejemplo de configuración del dock:
 
@@ -144,20 +144,20 @@ Hay más de 45 widgets disponibles. Consulta la [Referencia de Widgets](/es/feat
 
 Los widgets comunes incluyen:
 
-| Widget | Descripción |
-|---|---|
-| `workspaces` | Selector de escritorios virtuales |
-| `window_title` | Título de la ventana activa |
-| `date_time` | Visualización de fecha/hora |
-| `system_tray` | Iconos de la bandeja del sistema |
-| `volume` | Control de volumen de audio |
-| `battery` | Estado de la batería |
-| `cpu` | Monitor de uso de CPU |
-| `memory` | Monitor de uso de memoria |
-| `network_usage` | Monitor de velocidad de red |
-| `weather` | Condiciones climáticas |
-| `power` | Menú de energía (apagado, etc.) |
-| `quick_settings` | Panel de ajustes rápidos |
+| Widget           | Descripción                       |
+| ---------------- | --------------------------------- |
+| `workspaces`     | Selector de escritorios virtuales |
+| `window_title`   | Título de la ventana activa       |
+| `date_time`      | Visualización de fecha/hora       |
+| `system_tray`    | Iconos de la bandeja del sistema  |
+| `volume`         | Control de volumen de audio       |
+| `battery`        | Estado de la batería              |
+| `cpu`            | Monitor de uso de CPU             |
+| `memory`         | Monitor de uso de memoria         |
+| `network_usage`  | Monitor de velocidad de red       |
+| `weather`        | Condiciones climáticas            |
+| `power`          | Menú de energía (apagado, etc.)   |
+| `quick_settings` | Panel de ajustes rápidos          |
 
 ## Estilos de Espacios de Trabajo
 

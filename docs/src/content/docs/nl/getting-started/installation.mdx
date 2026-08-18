@@ -5,22 +5,25 @@ sidebar:
   order: 2
 ---
 
-import LatestRelease from '../../../../components/LatestRelease.astro'
+import LatestRelease from "../../../../components/LatestRelease.astro";
 
-<div align="center"><img src="https://raw.githubusercontent.com/rubiin/tsumiki/refs/heads/master/assets/images/tsumiki.png" /><br /></div>
+<div align="center">
+  <img src="https://raw.githubusercontent.com/rubiin/tsumiki/refs/heads/master/assets/images/tsumiki.png" />
+  <br />
+</div>
 
 ## Vereisten
 
 Zorg ervoor dat deze zijn geïnstalleerd voordat je verder gaat:
 
-| Vereiste | Installatiecommando (Arch Linux) | Opmerkingen |
-|---|---|---|
-| [Hyprland](https://hyprland.org) | `sudo pacman -S hyprland` | Draaiende Hyprland-instantie vereist |
-| [JetBrains Nerd Font](https://www.nerdfonts.com) | `sudo pacman -S ttf-jetbrains-mono-nerd` | Nodig voor pictogramweergave |
-| **Python 3.12+** | `sudo pacman -S python` | Controleren: `python --version` |
-| **Git** | `sudo pacman -S git` | Vereist voor klonen |
-| **NetworkManager** | `sudo pacman -S networkmanager` | Vereist door netwerkwidgets |
-| **PipeWire** | `sudo pacman -S pipewire pipewire-pulse` | Vereist door audiowidgets |
+| Vereiste                                         | Installatiecommando (Arch Linux)         | Opmerkingen                          |
+| ------------------------------------------------ | ---------------------------------------- | ------------------------------------ |
+| [Hyprland](https://hyprland.org)                 | `sudo pacman -S hyprland`                | Draaiende Hyprland-instantie vereist |
+| [JetBrains Nerd Font](https://www.nerdfonts.com) | `sudo pacman -S ttf-jetbrains-mono-nerd` | Nodig voor pictogramweergave         |
+| **Python 3.12+**                                 | `sudo pacman -S python`                  | Controleren: `python --version`      |
+| **Git**                                          | `sudo pacman -S git`                     | Vereist voor klonen                  |
+| **NetworkManager**                               | `sudo pacman -S networkmanager`          | Vereist door netwerkwidgets          |
+| **PipeWire**                                     | `sudo pacman -S pipewire pipewire-pulse` | Vereist door audiowidgets            |
 
 ::::caution
 Je hebt een **werkende Hyprland-installatie** nodig voordat je Tsumiki installeert. Als je nieuw bent met Hyprland, volg dan eerst de [Hyprland Wiki](https://wiki.hyprland.org/Getting-Started/).
@@ -28,7 +31,7 @@ Je hebt een **werkende Hyprland-installatie** nodig voordat je Tsumiki installee
 
 ## Klonen
 
-```sh
+````sh
 git clone https://github.com/rubiin/tsumiki.git ~/.config/tsumiki
 cd ~/.config/tsumiki
 ## Nieuwste Versie
@@ -51,7 +54,7 @@ Kies een van de volgende drie methoden.
 
 ```sh
 curl -fsSL https://raw.githubusercontent.com/rubiin/tsumiki/master/install.sh | bash
-```
+````
 
 Dit script kloont of werkt `~/.config/tsumiki` bij en voert vervolgens de volledige installatie uit.
 
@@ -117,6 +120,7 @@ Je kunt voor het gemak een shell-alias maken:
 ```sh
 alias tsumiki='~/.config/tsumiki/init.sh -start'
 ```
+
 :::
 
 ## Installatie Verifiëren

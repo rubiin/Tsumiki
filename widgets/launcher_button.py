@@ -1,6 +1,7 @@
 from fabric.widgets.image import Image
 
 from shared.widget_container import ButtonWidget
+from utils.i18n import _
 
 
 class LauncherButton(ButtonWidget):
@@ -17,7 +18,7 @@ class LauncherButton(ButtonWidget):
 
         # Set tooltip
         if self.config.get("tooltip", True) and self.tooltips_enabled:
-            self.set_tooltip_text("Open Application Launcher")
+            self.set_tooltip_text(_('widget.launcher_button.tooltip'))
 
         # Create the button content
         self.container_box.children = [

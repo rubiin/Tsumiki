@@ -19,10 +19,10 @@ tsumiki/
 
 ## Services
 
-| Service | Beschrijving |
-|---|---|
-| Batterij | UPower D-Bus |
-| Netwerk | NetworkManager |
-| Weer | Open-Meteo |
-| MPRIS | Playerctl |
-| Matugen | Material You-palet |
+| Service  | Beschrijving       |
+| -------- | ------------------ |
+| Batterij | UPower D-Bus       |
+| Netwerk  | NetworkManager     |
+| Weer     | Open-Meteo         |
+| MPRIS    | Playerctl          |
+| Matugen  | Material You-palet |

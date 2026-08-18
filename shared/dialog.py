@@ -3,6 +3,8 @@ from fabric.widgets.box import Box
 from fabric.widgets.button import Button
 from fabric.widgets.label import Label
 
+from utils.i18n import _
+
 from .popup import PopupWindow
 
 
@@ -35,9 +37,10 @@ class Dialog(PopupWindow):
             h_align="center",
         )
 
-        self.ok_btn = Button(label="OK", name="dialog-button")
+        self.ok_btn = Button(label=_('common.ok'), name="dialog-button")
         self.cancel_btn = Button(
-            label="Cancel", name="dialog-button", on_clicked=lambda *_: self.destroy()
+            label=_('common.cancel'), name="dialog-button",
+              on_clicked=lambda *_: self.destroy()
         )
 
         self.buttons.children = (self.ok_btn, self.cancel_btn)

@@ -11,6 +11,7 @@ from fabric.widgets.stack import Stack
 from shared.mixins import PopoverMixin
 from shared.widget_container import ButtonWidget
 from utils.hyprland import hyprland_service
+from utils.i18n import _
 from utils.widget_utils import nerd_font_icon
 
 _MODMASK_MAP = {
@@ -223,7 +224,7 @@ class CheatSheetMenu(Box):
                 for group in row_groups:
                     row.add(self._build_group(group))
 
-                for _ in range(self.columns - len(row_groups)):
+                for x in range(self.columns - len(row_groups)):
                     placeholder = Box(
                         name="cheatsheet-group-placeholder",
                         style_classes="cheatsheet-group-placeholder",
@@ -353,6 +354,6 @@ class CheatSheetWidget(ButtonWidget, PopoverMixin):
             )
 
         if self.config.get("tooltip", True) and self.tooltips_enabled:
-            self.set_tooltip_text("Hyprland keybind cheatsheet")
+            self.set_tooltip_text(_('widget.cheatsheet.tooltip'))
 
         self.setup_popover(lambda: CheatSheetMenu(parent=self, config=self.config))

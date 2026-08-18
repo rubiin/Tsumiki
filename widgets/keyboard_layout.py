@@ -4,6 +4,7 @@ from fabric.widgets.label import Label
 from shared.widget_container import ButtonWidget
 from utils.constants import get_kblayout_map
 from utils.hyprland import hyprland_service
+from utils.i18n import _
 from utils.widget_utils import nerd_font_icon
 
 
@@ -13,7 +14,8 @@ class KeyboardLayoutWidget(ButtonWidget):
     def __init__(self, **kwargs):
         super().__init__(name="keyboard", **kwargs)
 
-        self.kb_label = Label(label="keyboard", style_classes="panel-text")
+        self.kb_label = Label(label=_('widget.keyboard.label'),
+                               style_classes="panel-text")
 
         if self.config.get("show_icon", True):
             # Create a TextIcon with the specified icon and size

@@ -2,6 +2,7 @@ from fabric.utils import invoke_repeater
 from fabric.widgets.label import Label
 
 import utils.functions as helpers
+from utils.i18n import _
 from utils.widget_utils import (
     nerd_font_icon,
 )
@@ -53,7 +54,7 @@ class CommandSwitcher(ButtonWidget):
 
         if self.label:
             self.label_text = Label(
-                label="Enabled",
+                label=_('common.enabled'),
                 style_classes="panel-text",
             )
             self.container_box.add(self.label_text)
@@ -84,7 +85,7 @@ class CommandSwitcher(ButtonWidget):
 
         self.toggle_css_class("active", is_running)
 
-        label = "Enabled" if is_running else "Disabled"
+        label = _('common.enabled') if is_running else _('common.disabled')
 
         if self.label:
             self.label_text.set_label(label)

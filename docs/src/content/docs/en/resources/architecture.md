@@ -138,34 +138,34 @@ class MyWidget(ButtonWidget, PopoverMixin):
 
 ## Services Reference
 
-| Service | File | Source | Description |
-|---|---|---|---|
-| Battery | `services/battery.py` | UPower D-Bus | Battery level, charging state |
-| Network | `services/network.py` | NetworkManager D-Bus | WiFi, Ethernet, signal strength |
-| Brightness | `services/brightness.py` | brightnessctl | Screen/keyboard brightness |
-| Weather | `services/weather.py` | Open-Meteo / wttr.in | Weather conditions, forecast |
-| MPRIS | `services/mpris.py` | Playerctl D-Bus | Media playback, track info |
-| Screen Record | `services/screen_record.py` | wf-recorder, grimblast | Recording, screenshots |
-| Matugen | `services/matugen.py` | matugen binary | Material You palette generation |
-| Privacy | `services/privacy.py` | PipeWire, procfs | Mic/camera/screen usage detection |
-| Network Speed | `services/networkspeed.py` | /proc/net | Real-time bandwidth monitoring |
-| Quotes | `services/quotes.py` | External API | Inspirational quotes |
-| Custom Notification | `services/custom_notification.py` | — | Programmatic notification API |
+| Service             | File                              | Source                 | Description                       |
+| ------------------- | --------------------------------- | ---------------------- | --------------------------------- |
+| Battery             | `services/battery.py`             | UPower D-Bus           | Battery level, charging state     |
+| Network             | `services/network.py`             | NetworkManager D-Bus   | WiFi, Ethernet, signal strength   |
+| Brightness          | `services/brightness.py`          | brightnessctl          | Screen/keyboard brightness        |
+| Weather             | `services/weather.py`             | Open-Meteo / wttr.in   | Weather conditions, forecast      |
+| MPRIS               | `services/mpris.py`               | Playerctl D-Bus        | Media playback, track info        |
+| Screen Record       | `services/screen_record.py`       | wf-recorder, grimblast | Recording, screenshots            |
+| Matugen             | `services/matugen.py`             | matugen binary         | Material You palette generation   |
+| Privacy             | `services/privacy.py`             | PipeWire, procfs       | Mic/camera/screen usage detection |
+| Network Speed       | `services/networkspeed.py`        | /proc/net              | Real-time bandwidth monitoring    |
+| Quotes              | `services/quotes.py`              | External API           | Inspirational quotes              |
+| Custom Notification | `services/custom_notification.py` | —                      | Programmatic notification API     |
 
 ## Shared Components
 
-| Component | File | Purpose |
-|---|---|---|
-| `ButtonWidget` | `shared/widget_container.py` | Base class for all panel button widgets |
-| `PopoverMixin` | `shared/mixins.py` | Mixin for popover/show-hide behavior |
-| `AnimatedScale` | `shared/animated/scale.py` | Animated slider scale |
-| `CircularProgress` | `shared/animated/circularprogress.py` | Circular progress ring widget |
-| `ButtonToggle` | `shared/button_toggle.py` | Toggle button with on/off icons |
-| `CollapsibleGroup` | `shared/collapsible_group.py` | Collapsible widget group container |
-| `MediaPlayer` | `shared/media.py` | Reusable MPRIS media player UI |
-| `Submenu` | `shared/submenu.py` | Slide-in submenu panel |
-| `TagEntry` | `shared/tagentry.py` | Tag/chip input field |
-| `LottieAnimation` | `shared/lottie.py` | Lottie/rlottie animation player |
+| Component          | File                                  | Purpose                                 |
+| ------------------ | ------------------------------------- | --------------------------------------- |
+| `ButtonWidget`     | `shared/widget_container.py`          | Base class for all panel button widgets |
+| `PopoverMixin`     | `shared/mixins.py`                    | Mixin for popover/show-hide behavior    |
+| `AnimatedScale`    | `shared/animated/scale.py`            | Animated slider scale                   |
+| `CircularProgress` | `shared/animated/circularprogress.py` | Circular progress ring widget           |
+| `ButtonToggle`     | `shared/button_toggle.py`             | Toggle button with on/off icons         |
+| `CollapsibleGroup` | `shared/collapsible_group.py`         | Collapsible widget group container      |
+| `MediaPlayer`      | `shared/media.py`                     | Reusable MPRIS media player UI          |
+| `Submenu`          | `shared/submenu.py`                   | Slide-in submenu panel                  |
+| `TagEntry`         | `shared/tagentry.py`                  | Tag/chip input field                    |
+| `LottieAnimation`  | `shared/lottie.py`                    | Lottie/rlottie animation player         |
 
 ## Adding a New Widget
 
@@ -196,6 +196,7 @@ validate_config_enums(config_data, "tsumiki.schema.json")
 ```
 
 The schema validates:
+
 - Enum values (e.g., workspace style, widget mode)
 - Type correctness
 - Required fields

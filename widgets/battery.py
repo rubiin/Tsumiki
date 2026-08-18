@@ -1,6 +1,7 @@
 from services.battery import BatteryService
 from shared.widget_container import ButtonWidget
 from utils.functions import format_seconds_to_hours_minutes, send_notification
+from utils.i18n import _
 from utils.icons import get_text_icon
 from utils.widget_utils import nerd_font_icon
 
@@ -84,7 +85,10 @@ class BatteryWidget(ButtonWidget):
         if not is_present:
             if self.config.get("hide_when_missing", True):
                 self.set_visible(False)
-            self.set_tooltip_text(f"{get_text_icon('battery.low')} No battery present")
+            icon = get_text_icon('battery.low')
+            self.set_tooltip_text(
+                f"{icon} {_('widget.battery.no_battery')}"
+            )
             if self.config.get("label", True):
                 self.battery_icon.set_text("N/A")
             return True
@@ -143,7 +147,7 @@ class BatteryWidget(ButtonWidget):
             )
 
             if battery_percent == self.full_battery_level:
-                self.set_tooltip_text(f"󱠴 Status: Fully Charged\n{tool_tip_text}")
+                self.set_tooltip_text(f"󱠴 {_('widget.battery.full')}\n{tool_tip_text}")
 
             elif is_charging and battery_percent < self.full_battery_level:
                 self.set_tooltip_text(
@@ -183,11 +187,11 @@ class BatteryWidget(ButtonWidget):
                     and not self.full_battery_notified
                 ):
                     send_notification(
-                        title="Battery Full",
-                        body=f"Battery charged to {percentage}%",
+                        title=_('widget.battery.full'),
+                        body=f"{_('widget.battery.tooltip')} {percentage}%",
                         urgency="normal",
                         icon="battery-full",
-                        app_name="Battery",
+                        app_name=_('widget.battery.tooltip'),
                     )
                     self.full_battery_notified = True
                     self.charging_notified = False
@@ -199,11 +203,11 @@ class BatteryWidget(ButtonWidget):
                     and not self.discharging_notified
                 ):
                     send_notification(
-                        title="Charger Disconnected",
-                        body=f"Battery at {percentage}% - On battery power",
+                        title=_('common.disabled'),
+                        body=f"{_('widget.battery.tooltip')} {percentage}%",
                         urgency="normal",
                         icon="battery",
-                        app_name="Battery",
+                        app_name=_('widget.battery.tooltip'),
                     )
                     self.discharging_notified = True
                     self.charging_notified = False
@@ -216,11 +220,11 @@ class BatteryWidget(ButtonWidget):
                 and not self.charging_notified
             ):
                 send_notification(
-                    title="Charger Connected",
-                    body=f"Battery at {percentage}% - Charging",
+                    title=_('widget.battery.charging'),
+                    body=f"{_('widget.battery.tooltip')} {percentage}%",
                     urgency="normal",
                     icon="battery-charging",
-                    app_name="Battery",
+                    app_name=_('widget.battery.tooltip'),
                 )
                 self.charging_notified = True
                 self.discharging_notified = False
@@ -239,11 +243,11 @@ class BatteryWidget(ButtonWidget):
                 and (self.last_percentage is None or self.last_percentage > threshold)
             ):
                 send_notification(
-                    title="Low Battery",
-                    body=f"Battery at {percentage}%",
+                    title=_('widget.battery.low'),
+                    body=f"{_('widget.battery.tooltip')} {percentage}%",
                     urgency="critical",
                     icon="battery-caution",
-                    app_name="Battery",
+                    app_name=_('widget.battery.tooltip'),
                 )
                 self.low_battery_notified = True
             elif percentage > threshold or is_charging:

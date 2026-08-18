@@ -12,6 +12,7 @@ from shared.mixins import PopoverMixin
 from shared.widget_container import BoxWidget, ButtonWidget
 from utils.constants import ASSETS_DIR
 from utils.functions import check_if_day
+from utils.i18n import _
 from utils.weather_icons import WEATHER_ICONS
 from utils.widget_utils import nerd_font_icon
 
@@ -375,7 +376,7 @@ class WeatherWidget(ButtonWidget, BaseWeatherWidget, PopoverMixin):
         self.update_time = datetime.now()
 
         self.weather_label = Label(
-            label="Fetching..",
+            label=_('common.loading'),
             style_classes="panel-text",
         )
 
@@ -398,7 +399,7 @@ class WeatherWidget(ButtonWidget, BaseWeatherWidget, PopoverMixin):
             self.weather_label.set_label("")
             self.weather_icon.set_markup("")
             if self.config.get("tooltip", False) and self.tooltips_enabled:
-                self.set_tooltip_text("Error fetching weather data, try again later.")
+                self.set_tooltip_text(_('widget.weather.error'))
             return
 
         # Get the current weather

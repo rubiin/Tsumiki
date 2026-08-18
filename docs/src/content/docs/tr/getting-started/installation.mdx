@@ -5,22 +5,25 @@ sidebar:
   order: 2
 ---
 
-import LatestRelease from '../../../../components/LatestRelease.astro'
+import LatestRelease from "../../../../components/LatestRelease.astro";
 
-<div align="center"><img src="https://raw.githubusercontent.com/rubiin/tsumiki/refs/heads/master/assets/images/tsumiki.png" /><br /></div>
+<div align="center">
+  <img src="https://raw.githubusercontent.com/rubiin/tsumiki/refs/heads/master/assets/images/tsumiki.png" />
+  <br />
+</div>
 
 ## Ön Koşullar
 
 Devam etmeden önce bunların kurulu olduğundan emin olun:
 
-| Gereksinim | Kurulum Komutu (Arch Linux) | Notlar |
-|---|---|---|
-| [Hyprland](https://hyprland.org) | `sudo pacman -S hyprland` | Çalışan Hyprland örneği gerekli |
-| [JetBrains Nerd Font](https://www.nerdfonts.com) | `sudo pacman -S ttf-jetbrains-mono-nerd` | Simge oluşturma için gerekli |
-| **Python 3.12+** | `sudo pacman -S python` | Doğrulayın: `python --version` |
-| **Git** | `sudo pacman -S git` | Kopyalama için gerekli |
-| **NetworkManager** | `sudo pacman -S networkmanager` | Ağ widget'ları için gerekli |
-| **PipeWire** | `sudo pacman -S pipewire pipewire-pulse` | Ses widget'ları için gerekli |
+| Gereksinim                                       | Kurulum Komutu (Arch Linux)              | Notlar                          |
+| ------------------------------------------------ | ---------------------------------------- | ------------------------------- |
+| [Hyprland](https://hyprland.org)                 | `sudo pacman -S hyprland`                | Çalışan Hyprland örneği gerekli |
+| [JetBrains Nerd Font](https://www.nerdfonts.com) | `sudo pacman -S ttf-jetbrains-mono-nerd` | Simge oluşturma için gerekli    |
+| **Python 3.12+**                                 | `sudo pacman -S python`                  | Doğrulayın: `python --version`  |
+| **Git**                                          | `sudo pacman -S git`                     | Kopyalama için gerekli          |
+| **NetworkManager**                               | `sudo pacman -S networkmanager`          | Ağ widget'ları için gerekli     |
+| **PipeWire**                                     | `sudo pacman -S pipewire pipewire-pulse` | Ses widget'ları için gerekli    |
 
 ::::caution
 Tsumiki'yi kurmadan önce **çalışan bir Hyprland kurulumuna** ihtiyacınız var. Hyprland'de yeniyseniz, önce [Hyprland Wiki](https://wiki.hyprland.org/Getting-Started/)'yi takip edin.
@@ -36,11 +39,7 @@ cd ~/.config/tsumiki
 ## Son Sürüm
 
 <div className="latest-release">
-  <LatestRelease
-    repo="rubiin/tsumiki"
-    versionLabel="Sürüm:"
-    dateLabel="Tarih:"
-  />
+  <LatestRelease repo="rubiin/tsumiki" versionLabel="Sürüm:" dateLabel="Tarih:" />
 </div>
 
 Tam sürüm notları ve varlıklar için GitHub'daki [sürümler sayfasına](https://github.com/rubiin/tsumiki/releases) bakın.
@@ -119,6 +118,7 @@ Kolaylık için bir shell takma adı oluşturabilirsiniz:
 ```sh
 alias tsumiki='~/.config/tsumiki/init.sh -start'
 ```
+
 :::
 
 ## Kurulumu Doğrulama

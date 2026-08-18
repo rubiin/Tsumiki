@@ -5,22 +5,25 @@ sidebar:
   order: 2
 ---
 
-import LatestRelease from '../../../../components/LatestRelease.astro'
+import LatestRelease from "../../../../components/LatestRelease.astro";
 
-<div align="center"><img src="https://raw.githubusercontent.com/rubiin/tsumiki/refs/heads/master/assets/images/tsumiki.png" /><br /></div>
+<div align="center">
+  <img src="https://raw.githubusercontent.com/rubiin/tsumiki/refs/heads/master/assets/images/tsumiki.png" />
+  <br />
+</div>
 
 ## Pré-requisitos
 
 Certifique-se de que estes estão instalados antes de prosseguir:
 
-| Requisito | Comando de Instalação (Arch Linux) | Notas |
-|---|---|---|
-| [Hyprland](https://hyprland.org) | `sudo pacman -S hyprland` | Instância do Hyprland em execução necessária |
-| [JetBrains Nerd Font](https://www.nerdfonts.com) | `sudo pacman -S ttf-jetbrains-mono-nerd` | Necessário para renderização de ícones |
-| **Python 3.12+** | `sudo pacman -S python` | Verificar: `python --version` |
-| **Git** | `sudo pacman -S git` | Necessário para clonar |
-| **NetworkManager** | `sudo pacman -S networkmanager` | Necessário para widgets de rede |
-| **PipeWire** | `sudo pacman -S pipewire pipewire-pulse` | Necessário para widgets de áudio |
+| Requisito                                        | Comando de Instalação (Arch Linux)       | Notas                                        |
+| ------------------------------------------------ | ---------------------------------------- | -------------------------------------------- |
+| [Hyprland](https://hyprland.org)                 | `sudo pacman -S hyprland`                | Instância do Hyprland em execução necessária |
+| [JetBrains Nerd Font](https://www.nerdfonts.com) | `sudo pacman -S ttf-jetbrains-mono-nerd` | Necessário para renderização de ícones       |
+| **Python 3.12+**                                 | `sudo pacman -S python`                  | Verificar: `python --version`                |
+| **Git**                                          | `sudo pacman -S git`                     | Necessário para clonar                       |
+| **NetworkManager**                               | `sudo pacman -S networkmanager`          | Necessário para widgets de rede              |
+| **PipeWire**                                     | `sudo pacman -S pipewire pipewire-pulse` | Necessário para widgets de áudio             |
 
 ::::caution
 Você precisa de uma **instalação funcional do Hyprland** antes de instalar o Tsumiki. Se você é novo no Hyprland, siga a [Wiki do Hyprland](https://wiki.hyprland.org/Getting-Started/) primeiro.
@@ -36,11 +39,7 @@ cd ~/.config/tsumiki
 ## Último Lançamento
 
 <div className="latest-release">
-  <LatestRelease
-    repo="rubiin/tsumiki"
-    versionLabel="Versão:"
-    dateLabel="Data:"
-  />
+  <LatestRelease repo="rubiin/tsumiki" versionLabel="Versão:" dateLabel="Data:" />
 </div>
 
 Para notas de versão completas e ativos, veja a [página de lançamentos](https://github.com/rubiin/tsumiki/releases) no GitHub.
@@ -119,6 +118,7 @@ Você pode criar um alias de shell por conveniência:
 ```sh
 alias tsumiki='~/.config/tsumiki/init.sh -start'
 ```
+
 :::
 
 ## Verificando a Instalação

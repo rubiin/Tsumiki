@@ -23,6 +23,7 @@ Você pode parar o Tsumiki a qualquer momento com:
 ```sh
 pkill tsumiki
 ```
+
 :::
 
 ## 2. Configurar Inicialização Automática
@@ -62,11 +63,11 @@ right_section = ["volume", "battery", "system_tray", "power"]
 
 Isso cria uma barra com:
 
-| Seção | Widgets |
-|---|---|
-| **Esquerda** | Alternador de espaços de trabalho, título da janela ativa |
-| **Centro** | Data e hora atuais |
-| **Direita** | Controle de volume, status da bateria, bandeja do sistema, menu de energia |
+| Seção        | Widgets                                                                    |
+| ------------ | -------------------------------------------------------------------------- |
+| **Esquerda** | Alternador de espaços de trabalho, título da janela ativa                  |
+| **Centro**   | Data e hora atuais                                                         |
+| **Direita**  | Controle de volume, status da bateria, bandeja do sistema, menu de energia |
 
 ## 5. Recarregar para Aplicar Alterações
 

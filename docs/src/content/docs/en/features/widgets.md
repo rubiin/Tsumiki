@@ -751,13 +751,13 @@ tooltip = true
 
 Click to open a popover with pre-configured providers:
 
-| Provider | Primary DNS | Secondary DNS |
-|---|---|---|
-| Cloudflare | `1.1.1.1` | `1.0.0.1` |
-| Google | `8.8.8.8` | `8.8.4.4` |
-| OpenDNS | `208.67.222.222` | `208.67.220.220` |
-| AdGuard | `94.140.14.14` | `94.140.15.15` |
-| Quad9 | `9.9.9.9` | `149.112.112.112` |
+| Provider   | Primary DNS      | Secondary DNS     |
+| ---------- | ---------------- | ----------------- |
+| Cloudflare | `1.1.1.1`        | `1.0.0.1`         |
+| Google     | `8.8.8.8`        | `8.8.4.4`         |
+| OpenDNS    | `208.67.222.222` | `208.67.220.220`  |
+| AdGuard    | `94.140.14.14`   | `94.140.15.15`    |
+| Quad9      | `9.9.9.9`        | `149.112.112.112` |
 
 Includes a "Reset to Default (ISP)" button to restore automatic DNS.
 
@@ -839,6 +839,5 @@ A visual separator between bar sections.
 [widgets.divider]
 size = 2
 ```
-
 
 For advanced configuration, see [Advanced Configuration](/en/configuring/advanced) for configuration and usage.

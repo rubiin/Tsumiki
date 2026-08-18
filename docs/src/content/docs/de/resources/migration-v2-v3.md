@@ -7,12 +7,12 @@ sidebar:
 
 ## Wichtige Änderungen
 
-| Bereich | Änderung |
-|---|---|
-| Konfigurationsformat | JSON5 nicht mehr unterstützt — TOML verwenden |
-| Dock | Einstellungen unter `[modules.dock]` |
-| Automatisches Ausblenden | Konfiguriert unter `[modules.bar]` |
-| Gruppen | `[[widget_groups]]` und `[[collapsible_groups]]` verwenden |
+| Bereich                  | Änderung                                                   |
+| ------------------------ | ---------------------------------------------------------- |
+| Konfigurationsformat     | JSON5 nicht mehr unterstützt — TOML verwenden              |
+| Dock                     | Einstellungen unter `[modules.dock]`                       |
+| Automatisches Ausblenden | Konfiguriert unter `[modules.bar]`                         |
+| Gruppen                  | `[[widget_groups]]` und `[[collapsible_groups]]` verwenden |
 
 ## Schritt-für-Schritt-Migration
 

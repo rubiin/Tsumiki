@@ -2,6 +2,7 @@ from fabric.bluetooth import BluetoothClient
 from fabric.widgets.label import Label
 
 from shared.widget_container import ButtonWidget
+from utils.i18n import _
 from utils.icons import get_text_icon
 from utils.widget_utils import nerd_font_icon
 
@@ -24,7 +25,7 @@ class BlueToothWidget(ButtonWidget):
         )
 
         if self.config.get("label", True):
-            self.bt_label = Label(label="On", style_classes="panel-text")
+            self.bt_label = Label(label=_('common.on'), style_classes="panel-text")
             self.container_box.add(self.bt_label)
 
         self.bluetooth_client = BluetoothClient()
@@ -46,4 +47,4 @@ class BlueToothWidget(ButtonWidget):
             self.bt_label.set_text(bt_status.capitalize())
 
         if self.config.get("tooltip", False) and self.tooltips_enabled:
-            self.set_tooltip_text(f"Bluetooth is {bt_status}")
+            self.set_tooltip_text(_('widget.bluetooth.tooltip'))

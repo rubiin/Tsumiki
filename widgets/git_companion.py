@@ -23,6 +23,7 @@ from shared.circle_image import CircularImage
 from shared.mixins import PopoverMixin
 from shared.widget_container import ButtonWidget
 from utils.functions import get_http_client
+from utils.i18n import _
 from utils.icons import get_text_icon
 from utils.widget_utils import nerd_font_icon
 
@@ -237,7 +238,7 @@ class GitCompanionPopoverContent(Box):
                     props={"style_classes": ["git-companion-brand"]},
                 ),
                 Label(
-                    label="Git Companion",
+                    label=_('widget.git_companion.label'),
                     style_classes="git-companion-title",
                     h_align="start",
                 ),
@@ -288,7 +289,7 @@ class GitCompanionPopoverContent(Box):
                     h_align="start",
                 ),
                 Label(
-                    label="No bio",
+                    label=_('widget.git_companion.no_bio'),
                     style_classes="git-companion-bio",
                     h_align="start",
                 ),
@@ -577,7 +578,8 @@ class GitCompanionWidget(ButtonWidget, PopoverMixin):
             )
 
         if self.config.get("tooltip", True) and self.tooltips_enabled:
-            self.set_tooltip_text(self.config.get("tooltip_text", "Open Git Companion"))
+            self.set_tooltip_text(self.config.get("tooltip_text",
+                                                   _('widget.git_companion.label')))
 
         self.setup_popover(
             lambda: GitCompanionPopoverContent(config=self.config, parent=self),

@@ -19,10 +19,10 @@ tsumiki/
 
 ## 服务
 
-| 服务 | 描述 |
-|---|---|
-| 电池 | UPower D-Bus |
-| 网络 | NetworkManager |
-| 天气 | Open-Meteo |
-| MPRIS | Playerctl |
+| 服务    | 描述                |
+| ------- | ------------------- |
+| 电池    | UPower D-Bus        |
+| 网络    | NetworkManager      |
+| 天气    | Open-Meteo          |
+| MPRIS   | Playerctl           |
 | Matugen | Material You 调色板 |

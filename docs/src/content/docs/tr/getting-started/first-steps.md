@@ -23,6 +23,7 @@ Tsumiki'yi istediğiniz zaman şu şekilde durdurabilirsiniz:
 ```sh
 pkill tsumiki
 ```
+
 :::
 
 ## 2. Otomatik Başlatmayı Ayarlama
@@ -62,11 +63,11 @@ right_section = ["volume", "battery", "system_tray", "power"]
 
 Bu, aşağıdaki gibi bir çubuk oluşturur:
 
-| Bölüm | Widget'lar |
-|---|---|
-| **Sol** | Çalışma alanı değiştirici, aktif pencere başlığı |
-| **Orta** | Geçerli tarih ve saat |
-| **Sağ** | Ses kontrolü, pil durumu, sistem tepsisi, güç menüsü |
+| Bölüm    | Widget'lar                                           |
+| -------- | ---------------------------------------------------- |
+| **Sol**  | Çalışma alanı değiştirici, aktif pencere başlığı     |
+| **Orta** | Geçerli tarih ve saat                                |
+| **Sağ**  | Ses kontrolü, pil durumu, sistem tepsisi, güç menüsü |
 
 ## 5. Değişiklikleri Uygulamak için Yeniden Yükleme
 

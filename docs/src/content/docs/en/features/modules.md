@@ -108,11 +108,11 @@ ignored = []
 
 Navigate the dock with:
 
-| Action | Keybinding |
-|---|---|
-| Focus next client | `Super+Tab` |
-| Focus previous client | `Super+Shift+Tab` |
-| Open launcher | `Super+Space` |
+| Action                   | Keybinding                        |
+| ------------------------ | --------------------------------- |
+| Focus next client        | `Super+Tab`                       |
+| Focus previous client    | `Super+Shift+Tab`                 |
+| Open launcher            | `Super+Space`                     |
 | Move client to workspace | Right-click → "Move to Workspace" |
 
 ---
@@ -166,12 +166,12 @@ plugins = ["calc", "emoji"]          # allowlist of plugins to load (empty = non
 
 ### Keybindings
 
-| Action | Keybinding |
-|---|---|
+| Action        | Keybinding    |
+| ------------- | ------------- |
 | Open launcher | `Super+Space` |
-| Navigate | Arrow keys |
-| Launch app | `Enter` |
-| Close | `Escape` |
+| Navigate      | Arrow keys    |
+| Launch app    | `Enter`       |
+| Close         | `Escape`      |
 
 ### Slash Commands & Plugins
 

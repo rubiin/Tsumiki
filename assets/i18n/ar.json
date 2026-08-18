@@ -1,0 +1,256 @@
+{
+  "common": {
+    "loading": "جاري التحميل...",
+    "error": "خطأ",
+    "none": "غير متاح",
+    "unknown": "غير معروف",
+    "ok": "موافق",
+    "refresh": "تحديث",
+    "close": "إغلاق",
+    "save": "حفظ",
+    "cancel": "إلغاء",
+    "enabled": "مفعل",
+    "disabled": "معطل",
+    "on": "تشغيل",
+    "off": "إيقاف",
+    "details": "تفاصيل"
+  },
+  "widget": {
+    "battery": {
+      "tooltip": "البطارية",
+      "low": " البطارية منخفضة",
+      "charging": "جاري الشحن",
+      "full": "شحن كامل",
+      "no_battery": "لا توجد بطارية"
+    },
+    "bluetooth": {
+      "tooltip": "بلوتوث",
+      "on": "تشغيل",
+      "off": "إيقاف",
+      "connected": "متصل",
+      "connecting": "جاري الاتصال...",
+      "connect_failed": "فشل الاتصال",
+      "connect": "اتصال",
+      "disconnect": "قطع الاتصال",
+      "unknown_device": "جهاز غير معروف"
+    },
+    "breathing": {
+      "label": "تنفس",
+      "choose_exercise": "اختر تمريناً",
+      "duration": "المدة",
+      "select_exercise": "اختر تمريناً واضغط بدء",
+      "start": "▶  بدء",
+      "stop": "■  إيقاف",
+      "min": "دقيقة"
+    },
+    "brightness": {
+      "tooltip": "السطوع: {percent}%"
+    },
+    "cheatsheet": {
+      "tooltip": "دليل اختصارات Hyprland"
+    },
+    "click_counter": {
+      "tooltip": "نق يسار للزيادة، نق يمين لإعادة الضبط"
+    },
+    "clipboard": {
+      "tooltip": "سجل الحافظة",
+      "empty": "سجل الحافظة فارغ",
+      "clear": "مسح السجل",
+      "sync": "مزامنة الحافظة",
+      "label": "حافظة"
+    },
+    "cloudflare_warp": {
+      "tooltip": "Cloudflare WARP",
+      "not_found": "WARP: warp-cli غير موجود",
+      "connect": "اتصال",
+      "disconnect": "قطع الاتصال",
+      "connected": "متصل",
+      "disconnected": "غير متصل",
+      "status_connected": "WARP: متصل",
+      "status_disconnected": "WARP: غير متصل"
+    },
+    "date_time": {
+      "tooltip": "التاريخ والوقت",
+      "all_caught_up": "كل شيء محدّث!",
+      "dnd": "عدم الإزعاج",
+      "clear_group": "مسح المجموعة"
+    },
+    "dns_switcher": {
+      "tooltip": "محوّل DNS",
+      "default": "DNS: افتراضي",
+      "current": "DNS: {provider}",
+      "add_custom": "إضافة خادم مخصص",
+      "reset": "إعادة تعيين إلى الافتراضي (مزوّد الخدمة)"
+    },
+    "emoji_picker": {
+      "tooltip": "محدد الرموز التعبيرية",
+      "label": "رمز تعبيري",
+      "loading": "جاري تحميل الرموز التعبيرية..."
+    },
+    "git_companion": {
+      "label": "رفيق Git",
+      "no_bio": "لا نبذة"
+    },
+    "hyprpicker": {
+      "label": "محدد",
+      "tooltip": "اختر لوناً",
+      "script_not_found": "السكريبت غير موجود"
+    },
+    "ip_monitor": {
+      "tooltip": "معلومات IP",
+      "refresh": "تحديث"
+    },
+    "kanban": {
+      "label": "كانبان",
+      "tooltip": "لوحة كانبان"
+    },
+    "keyboard": {
+      "label": "لوحة المفاتيح"
+    },
+    "language": {
+      "tooltip": "اللغة: {lang}"
+    },
+    "launcher_button": {
+      "tooltip": "فتح مشغّل التطبيقات"
+    },
+    "mpris": {
+      "nothing_playing": "لا شيء يُشغّل",
+      "no_title": "بدون عنوان",
+      "no_artist": "بدون فنان"
+    },
+    "network": {
+      "upload": "رفع",
+      "download": "تحميل"
+    },
+    "ocr": {
+      "label": "OCR",
+      "tooltip": "نق يسار لـ OCR، نق يمين لاختيار اللغة",
+      "lang_selected": "OCR ({lang})"
+    },
+    "overview_button": {
+      "label": "نظرة عامة",
+      "tooltip": "نظرة عامة"
+    },
+    "power": {
+      "tooltip": "الطاقة",
+      "label": "طاقة",
+      "shutdown": "إيقاف التشغيل",
+      "reboot": "إعادة التشغيل",
+      "hibernate": "سبات",
+      "suspend": "تعليق",
+      "lock": "قفل",
+      "logout": "تسجيل الخروج",
+      "confirm_reboot": "هل تريد إعادة التشغيل حقاً؟",
+      "confirm_shutdown": "هل تريد إيقاف التشغيل حقاً؟",
+      "confirmation": "تأكيد {name}",
+      "confirm_action": "هل أنت متأكد أنك تريد {name}؟"
+    },
+    "pomodoro": {
+      "tooltip": "مؤقت بومودورو"
+    },
+    "quick_settings": {
+      "uptime": "وقت تشغيل النظام",
+      "wifi": {
+        "disabled": "Wifi معطّل",
+        "password_prompt": "أدخل كلمة مرور {ssid}",
+        "connect_to": "الاتصال بـ {ssid}"
+      },
+      "bluetooth": {
+        "paired": "أجهزة مقترنة",
+        "available": "أجهزة متاحة",
+        "enabled": "مفعّل"
+      },
+      "power_profiles": {
+        "title": "ملفات الطاقة",
+        "saver": " توفير الطاقة"
+      },
+      "notifications": {
+        "noisy": "مزعج",
+        "quiet": "هادئ"
+      },
+      "dark_mode": {
+        "dark": "داكن",
+        "light": "فاتح"
+      },
+      "hyprsunset": {
+        "title": "HyprSunset",
+        "enabled": "مفعّل"
+      },
+      "audio": {
+        "title": "صوت التطبيق"
+      },
+      "network": {
+        "title": "الشبكة"
+      }
+    },
+    "recorder": {
+      "started": "بدأ التسجيل",
+      "stopped": "توقف التسجيل"
+    },
+    "screenshot": {
+      "tooltip": "لقطة شاشة",
+      "label": "لقطة"
+    },
+    "settings": {
+      "tooltip": "فتح الإعدادات",
+      "label": "الإعدادات"
+    },
+    "stopwatch": {
+      "label": "ساعة إيقاف"
+    },
+    "submap": {
+      "label": "خريطة فرعية",
+      "current": "الخريطة الفرعية الحالية: {submap}"
+    },
+    "theme": {
+      "switched": "تم تغيير السمة إلى {theme}"
+    },
+    "updates": {
+      "tooltip": "التحديثات"
+    },
+    "usb_manager": {
+      "label": "USB",
+      "tooltip": "مدير USB",
+      "title": "مدير USB",
+      "unmount_all": "إلغاء تثبيت الكل",
+      "eject_all": "إخراج الكل",
+      "mounted": "مثبت",
+      "ready": "جاهز",
+      "no_devices": "لم يتم اكتشاف أجهزة USB",
+      "plug_in": "قم بتوصيل محرك أقراص USB للبدء",
+      "open": "فتح",
+      "mount": "تثبيت",
+      "unmount": "إلغاء التثبيت",
+      "eject": "إخراج"
+    },
+    "wallpaper": {
+      "label": "خلفية",
+      "tooltip": "محدد خلفية الشاشة"
+    },
+    "weather": {
+      "fetching": "جاري الجلب...",
+      "error": "خطأ في جلب بيانات الطقس، حاول مرة أخرى لاحقاً."
+    },
+    "window_count": {
+      "tooltip": "مساحة العمل: {id}، النوافذ: {count}"
+    },
+    "workspaces": {
+      "tooltip": "مساحة العمل: {id}، النوافذ: {count}"
+    }
+  },
+  "module": {
+    "activate_linux": {
+      "title": "تفعيل Linux",
+      "subtitle": "انتقل إلى الإعدادات لتفعيل Linux."
+    },
+    "launcher": {
+      "tooltip": "فتح مشغّل التطبيقات"
+    },
+    "overview": {
+      "tooltip": "نظرة عامة"
+    },
+    "settings": {
+      "tooltip": "فتح الإعدادات"
+    }
+  }
+}

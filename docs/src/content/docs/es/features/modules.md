@@ -108,12 +108,12 @@ ignored = []
 
 Navega por el dock con:
 
-| Acción | Atajo |
-|---|---|
-| Enfocar siguiente cliente | `Super+Tab` |
-| Enfocar cliente anterior | `Super+Shift+Tab` |
-| Abrir lanzador | `Super+Space` |
-| Mover cliente a espacio | Clic derecho → "Mover al Espacio" |
+| Acción                    | Atajo                             |
+| ------------------------- | --------------------------------- |
+| Enfocar siguiente cliente | `Super+Tab`                       |
+| Enfocar cliente anterior  | `Super+Shift+Tab`                 |
+| Abrir lanzador            | `Super+Space`                     |
+| Mover cliente a espacio   | Clic derecho → "Mover al Espacio" |
 
 ---
 
@@ -175,12 +175,12 @@ Plugins incluidos:
 
 ### Atajos de Teclado
 
-| Acción | Atajo |
-|---|---|
-| Abrir lanzador | `Super+Space` |
-| Navegar | Teclas de dirección |
-| Iniciar aplicación | `Enter` |
-| Cerrar | `Escape` |
+| Acción             | Atajo               |
+| ------------------ | ------------------- |
+| Abrir lanzador     | `Super+Space`       |
+| Navegar            | Teclas de dirección |
+| Iniciar aplicación | `Enter`             |
+| Cerrar             | `Escape`            |
 
 ---
 

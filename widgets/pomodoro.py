@@ -8,6 +8,7 @@ from fabric.widgets.overlay import Overlay
 
 from shared.mixins import PopoverMixin
 from shared.widget_container import ButtonWidget, TeardownMixin
+from utils.i18n import _
 from utils.widget_utils import nerd_font_icon
 
 
@@ -345,6 +346,6 @@ class PomodoroWidget(ButtonWidget, PopoverMixin):
             )
 
         if self.config.get("tooltip", True) and self.tooltips_enabled:
-            self.set_tooltip_text("Pomodoro Timer")
+            self.set_tooltip_text(_('widget.pomodoro.tooltip'))
 
         self.setup_popover(lambda: PomodoroMenu(parent=self))
