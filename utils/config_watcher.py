@@ -53,7 +53,7 @@ class ConfigWatcher:
         self._restart_timer_id = None
         self._cooldown_timer_id = None
         self.root_dir = get_relative_path("..")
-        self.init_script = f"{self.root_dir}/init.sh"
+        self.init_script = f"{self.root_dir}/tsumiki.sh"
         self.watched_names = {os.path.basename(p) for p in _CONFIG_FILES}
 
         self._monitor_directory()

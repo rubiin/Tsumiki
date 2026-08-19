@@ -113,8 +113,7 @@ class I18n:
 
 # Module-level convenience function
 def _(key: str, **kwargs) -> str:
-    """Translate a key to the current language.
-    """
+    """Translate a key to the current language."""
     return get_i18n().translate(key, **kwargs)
 
 

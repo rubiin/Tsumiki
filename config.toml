@@ -1062,7 +1062,7 @@ radius = "16px"
 width = "1px"
 
 [styling.bar.widgets.quick_settings]
-icon_size = "17px"
+icon_size = "15px"
 spacing = "0.125em"
 
 [styling.bar.widgets.quick_settings.border]

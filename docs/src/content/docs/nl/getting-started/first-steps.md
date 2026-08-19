@@ -12,7 +12,7 @@ Je hebt Tsumiki geïnstalleerd en de [Post-Installatie](/nl/resources/post-insta
 Vanuit de Tsumiki-projectmap voer je uit:
 
 ```sh
-./init.sh -start
+./tsumiki.sh -start
 ```
 
 Als Hyprland actief is, zou de balk boven aan je scherm moeten verschijnen. Als de balk niet verschijnt, controleer dan de foutuitvoer in de terminal en raadpleeg [Probleemoplossing](/nl/help/troubleshooting).
@@ -33,7 +33,7 @@ Voeg Tsumiki toe aan je Hyprland-configuratie zodat het automatisch start bij in
 Open `~/.config/hypr/hyprland.conf` en voeg toe:
 
 ```sh
-exec-once = sleep 5; ~/.config/tsumiki/init.sh -start
+exec-once = sleep 5; ~/.config/tsumiki/tsumiki.sh -start
 ```
 
 De `sleep 5` vertraging geeft Hyprland de tijd om volledig te initialiseren. Pas het pad aan als je Tsumiki in een andere map hebt gekloond.
@@ -75,7 +75,7 @@ Na het opslaan van je bewerkingen herstart je Tsumiki:
 
 ```sh
 pkill tsumiki
-./init.sh -start
+./tsumiki.sh -start
 ```
 
 Als de configuratie geldig is, zou de balk opnieuw moeten verschijnen met je nieuwe lay-out.
@@ -103,7 +103,7 @@ Als er iets niet klopt:
 
 - **Balk verschijnt niet** — Controleer of Hyprland draait en of er geen andere balken actief zijn (`pkill waybar`).
 - **Geen pictogrammen** — Controleer of [JetBrains Nerd Font](https://www.nerdfonts.com) is geïnstalleerd en geconfigureerd als je terminal/UI-lettertype.
-- **Ontbrekende functionaliteit** — Sommige widgets vereisen externe tools (bijv. `playerctl` voor media, `brightnessctl` voor helderheid). Voer `./init.sh -setup` uit om ervoor te zorgen dat alle afhankelijkheden zijn geïnstalleerd (Python-afhankelijkheden worden geïnstalleerd met `uv sync`).
+- **Ontbrekende functionaliteit** — Sommige widgets vereisen externe tools (bijv. `playerctl` voor media, `brightnessctl` voor helderheid). Voer `./tsumiki.sh -setup` uit om ervoor te zorgen dat alle afhankelijkheden zijn geïnstalleerd (Python-afhankelijkheden worden geïnstalleerd met `uv sync`).
 - **SASS-fouten** — Je `config.toml` is mogelijk ongeldig. Vergelijk het met `example/config.toml`.
 
 Voor meer hulp, raadpleeg de [FAQ](/nl/help/faq) of [Probleemoplossing](/nl/help/troubleshooting) pagina's.

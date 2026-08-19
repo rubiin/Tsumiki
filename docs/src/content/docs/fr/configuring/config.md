@@ -223,7 +223,7 @@ Si vous effectuez une mise à niveau depuis des versions plus anciennes, consult
 1. Commencez à partir de `example/config.toml`.
 2. Gardez votre fichier personnalisé petit et ciblé.
 3. Modifiez une section à la fois.
-4. Redémarrez avec `./init.sh -start` pour valider le comportement.
+4. Redémarrez avec `./tsumiki.sh -start` pour valider le comportement.
 
 ## Source de Référence
 

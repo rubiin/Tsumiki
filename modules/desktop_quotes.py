@@ -19,7 +19,7 @@ class DesktopQuote(BaseWindow):
 
         self.quote_label = Label(
             name="desktop_quotes-quote-label",
-            label=_('common.loading'),
+            label=_("common.loading"),
             line_wrap="word-char",
             chars_width=50,
             h_expand=True,
@@ -27,7 +27,7 @@ class DesktopQuote(BaseWindow):
 
         self.author_label = Label(
             name="desktop_quotes-author-label",
-            label=_('common.loading'),
+            label=_("common.loading"),
             line_wrap="word-char",
             chars_width=40,
             h_align="end",
@@ -70,4 +70,4 @@ class DesktopQuote(BaseWindow):
             self.quote_label.set_label(quote["q"])
             self.author_label.set_label("- " + quote["a"])
         else:
-            self.quote_label.set_text(_('common.error'))
+            self.quote_label.set_text(_("common.error"))

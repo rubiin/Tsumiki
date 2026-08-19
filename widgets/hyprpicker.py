@@ -23,22 +23,23 @@ class HyprPickerWidget(ButtonWidget):
             )
 
         if self.config.get("label", True):
-            self.container_box.add(Label(label=_('widget.hyprpicker.label'),
-                                         style_classes="panel-text"))
+            self.container_box.add(
+                Label(label=_("widget.hyprpicker.label"), style_classes="panel-text")
+            )
 
         self.connect("button-press-event", self.on_button_press)
 
         self.initialized = False
 
         if self.config.get("tooltip", False) and self.tooltips_enabled:
-            self.set_tooltip_text(_('widget.hyprpicker.tooltip'))
+            self.set_tooltip_text(_("widget.hyprpicker.tooltip"))
 
     def lazy_init(self):
         if not self.initialized:
             self.script_file = f"{ASSETS_DIR}/scripts/hyprpicker.sh"
             if not os.path.isfile(self.script_file):
                 self.set_sensitive(False)
-                self.set_tooltip_text(_('widget.hyprpicker.script_not_found'))
+                self.set_tooltip_text(_("widget.hyprpicker.script_not_found"))
                 return
             self.initialized = True
 

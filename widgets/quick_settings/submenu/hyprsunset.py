@@ -36,7 +36,7 @@ class HyprSunsetSubMenu(QuickSubMenu):
         )
 
         super().__init__(
-            title=_('widget.quick_settings.hyprsunset.title'),
+            title=_("widget.quick_settings.hyprsunset.title"),
             title_icon=get_text_icon("nightlight.enabled"),
             name="hyprsunset-sub-menu",
             scan_button=self.scan_button,
@@ -105,7 +105,7 @@ class HyprSunsetToggle(QSChevronButton):
         super().__init__(
             action_icon=get_text_icon("nightlight.disabled"),
             pixel_size=20,
-            action_label=_('widget.quick_settings.hyprsunset.enabled'),
+            action_label=_("widget.quick_settings.hyprsunset.enabled"),
             submenu_factory=submenu_factory,
             **kwargs,
         )
@@ -132,7 +132,7 @@ class HyprSunsetToggle(QSChevronButton):
             self.popup.hide_popover()
         return True
 
-    def update_action_button(self, *_):
+    def update_action_button(self, *_args):
         if not self.get_mapped():
             return True
 
@@ -140,10 +140,10 @@ class HyprSunsetToggle(QSChevronButton):
 
         if self.is_running:
             self.action_icon.set_label(get_text_icon("nightlight.enabled"))
-            self.action_label.set_label(_('widget.quick_settings.hyprsunset.enabled'))
+            self.action_label.set_label(_("widget.quick_settings.hyprsunset.enabled"))
             self.set_active_style(True)
         else:
             self.action_icon.set_label(get_text_icon("nightlight.disabled"))
-            self.action_label.set_label(_('common.disabled'))
+            self.action_label.set_label(_("common.disabled"))
             self.set_active_style(False)
         return True

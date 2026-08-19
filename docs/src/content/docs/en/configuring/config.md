@@ -248,7 +248,7 @@ If you are upgrading from older versions, review [Migration v2 to v3](/en/resour
 1. Start from `example/config.toml`.
 2. Keep your custom file small and focused.
 3. Change one section at a time.
-4. Restart with `./init.sh -start` to validate behavior.
+4. Restart with `./tsumiki.sh -start` to validate behavior.
 
 ## Reference Source
 

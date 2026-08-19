@@ -224,7 +224,7 @@ class QuickSettingsMenu(Box):
             style_classes="uptime",
             v_align="center",
             h_align="start",
-            tooltip_text=_('widget.quick_settings.uptime'),
+            tooltip_text=_("widget.quick_settings.uptime"),
         )
         self._last_uptime_text = uptime_label.get_label()
 
@@ -261,8 +261,8 @@ class QuickSettingsMenu(Box):
         button_box.pack_end(
             self._create_power_button(
                 "power_menu.reboot",
-                _('widget.power.reboot'),
-                _('widget.power.confirm_reboot'),
+                _("widget.power.reboot"),
+                _("widget.power.confirm_reboot"),
                 "reboot",
             ),
             False,
@@ -272,8 +272,8 @@ class QuickSettingsMenu(Box):
         button_box.pack_end(
             self._create_power_button(
                 "power_menu.shutdown",
-                _('widget.power.shutdown'),
-                _('widget.power.confirm_shutdown'),
+                _("widget.power.shutdown"),
+                _("widget.power.confirm_shutdown"),
                 "shutdown",
             ),
             False,

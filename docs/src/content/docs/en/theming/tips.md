@@ -27,7 +27,7 @@ Reserve strong `accent*` colors for important states (errors, success, active wo
 1. Set `matugen.enabled = true` in `config.toml`.
 2. Point `wallpaper` at your image.
 3. Restart Tsumiki to generate the palette.
-4. Recompile styles if colors look stale: `./init.sh -recompile`.
+4. Recompile styles if colors look stale: `./tsumiki.sh -recompile`.
 
 ## Learn from Existing Themes
 

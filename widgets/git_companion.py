@@ -238,7 +238,7 @@ class GitCompanionPopoverContent(Box):
                     props={"style_classes": ["git-companion-brand"]},
                 ),
                 Label(
-                    label=_('widget.git_companion.label'),
+                    label=_("widget.git_companion.label"),
                     style_classes="git-companion-title",
                     h_align="start",
                 ),
@@ -289,7 +289,7 @@ class GitCompanionPopoverContent(Box):
                     h_align="start",
                 ),
                 Label(
-                    label=_('widget.git_companion.no_bio'),
+                    label=_("widget.git_companion.no_bio"),
                     style_classes="git-companion-bio",
                     h_align="start",
                 ),
@@ -578,8 +578,9 @@ class GitCompanionWidget(ButtonWidget, PopoverMixin):
             )
 
         if self.config.get("tooltip", True) and self.tooltips_enabled:
-            self.set_tooltip_text(self.config.get("tooltip_text",
-                                                   _('widget.git_companion.label')))
+            self.set_tooltip_text(
+                self.config.get("tooltip_text", _("widget.git_companion.label"))
+            )
 
         self.setup_popover(
             lambda: GitCompanionPopoverContent(config=self.config, parent=self),

@@ -16,7 +16,7 @@ class WallpaperWidget(ButtonWidget):
 
         # Optional tooltip
         if cfg.get("tooltip"):
-            self.set_tooltip_text(_('widget.wallpaper.tooltip'))
+            self.set_tooltip_text(_("widget.wallpaper.tooltip"))
 
         # Add icon
         self.container_box.children = nerd_font_icon(
@@ -28,7 +28,7 @@ class WallpaperWidget(ButtonWidget):
         if cfg.get("label", True):
             self.container_box.add(
                 Label(
-                    label=_('widget.wallpaper.label'),
+                    label=_("widget.wallpaper.label"),
                     style_classes="panel-text",
                 )
             )

@@ -52,7 +52,7 @@ class IPMonitorPopoverContent(Box):
 
     def _build_ui(self):
         self.title = Label(
-            label=_('widget.ip_monitor.tooltip'),
+            label=_("widget.ip_monitor.tooltip"),
             style_classes="ip-monitor-title",
             h_align="start",
             h_expand=True,
@@ -69,7 +69,7 @@ class IPMonitorPopoverContent(Box):
                         props={"style_classes": ["ip-monitor-refresh-icon"]},
                     ),
                     Label(
-                        label=_('common.refresh'),
+                        label=_("common.refresh"),
                         style_classes="ip-monitor-refresh-label",
                     ),
                 ],
@@ -108,7 +108,7 @@ class IPMonitorPopoverContent(Box):
         )
 
         self.details_title = Label(
-            label=_('common.details'),
+            label=_("common.details"),
             style_classes="ip-monitor-section-title",
             h_align="start",
         )
@@ -315,7 +315,7 @@ class IPMonitorWidget(ButtonWidget, PopoverMixin):
             )
 
         if self.config.get("tooltip", True) and self.tooltips_enabled:
-            self.set_tooltip_text(_('widget.ip_monitor.tooltip'))
+            self.set_tooltip_text(_("widget.ip_monitor.tooltip"))
 
         self.setup_popover(
             lambda: IPMonitorPopoverContent(

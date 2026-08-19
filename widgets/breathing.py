@@ -261,7 +261,7 @@ class BreathingMenu(BoxWidget):
         )
 
         self._total_label = Label(
-            label=_('widget.breathing.select_exercise'),
+            label=_("widget.breathing.select_exercise"),
             style_classes="info-label",
             h_align="start",
         )
@@ -281,8 +281,9 @@ class BreathingMenu(BoxWidget):
         self._grid_frame = Box(orientation="vertical", spacing=8)
 
         grid_lbl = Label(
-            label=_('widget.breathing.choose_exercise'), style_classes="section-label",
-            h_align="start"
+            label=_("widget.breathing.choose_exercise"),
+            style_classes="section-label",
+            h_align="start",
         )
         self._grid_frame.pack_start(grid_lbl, False, False, 0)
 
@@ -309,8 +310,9 @@ class BreathingMenu(BoxWidget):
         self._duration_frame = Box(orientation="vertical", spacing=6)
 
         dur_lbl = Label(
-            label=_('widget.breathing.duration'), style_classes="section-label",
-              h_align="start"
+            label=_("widget.breathing.duration"),
+            style_classes="section-label",
+            h_align="start",
         )
         self._duration_frame.pack_start(dur_lbl, False, False, 0)
 
@@ -329,7 +331,7 @@ class BreathingMenu(BoxWidget):
         self._dur_spin.get_style_context().add_class("dur-spin")
         self._dur_spin.connect("value-changed", self._on_spin_value_changed)
 
-        dur_unit = Label(label=_('widget.breathing.min'), style_classes="section-label")
+        dur_unit = Label(label=_("widget.breathing.min"), style_classes="section-label")
 
         dur_row.pack_start(self._dur_spin, True, True, 0)
         dur_row.pack_start(dur_unit, False, False, 0)
@@ -341,7 +343,7 @@ class BreathingMenu(BoxWidget):
         btn_row = Box(orientation="horizontal", spacing=8)
 
         self._start_btn = Button(
-            label=_('widget.breathing.start'),
+            label=_("widget.breathing.start"),
             style_classes="start-btn",
             h_expand=True,
             on_clicked=self._on_start_clicked,
@@ -349,7 +351,7 @@ class BreathingMenu(BoxWidget):
         btn_row.pack_start(self._start_btn, True, True, 0)
 
         self._stop_btn = Button(
-            label=_('widget.breathing.stop'),
+            label=_("widget.breathing.stop"),
             style_classes="stop-btn",
             h_expand=True,
             sensitive=False,
@@ -507,14 +509,14 @@ class BreathingMenu(BoxWidget):
         else:
             self._phase_label.set_text("—")
             self._countdown_label.set_text("")
-            self._total_label.set_text(_('widget.breathing.select_exercise'))
+            self._total_label.set_text(_("widget.breathing.select_exercise"))
             self._cycle_label.set_text("")
             self._circle.update("", 0)
             self._subtitle_lbl.set_text("")
 
             self._grid_frame.set_visible(True)
             self._duration_frame.set_visible(True)
-            self._start_btn.set_label(_('widget.breathing.start'))
+            self._start_btn.set_label(_("widget.breathing.start"))
             self._stop_btn.set_sensitive(False)
 
         self.show_all()
@@ -558,8 +560,9 @@ class BreatheWidget(ButtonWidget):
 
         self.connect("clicked", self.on_click)
 
-        self.label = Label(label=_('widget.breathing.label'),
-                            style_classes="breathe-label")
+        self.label = Label(
+            label=_("widget.breathing.label"), style_classes="breathe-label"
+        )
         self.icon = nerd_font_icon(
             icon=get_text_icon("notifications.noisy"),
             props={

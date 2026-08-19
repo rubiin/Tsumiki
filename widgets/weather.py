@@ -376,7 +376,7 @@ class WeatherWidget(ButtonWidget, BaseWeatherWidget, PopoverMixin):
         self.update_time = datetime.now()
 
         self.weather_label = Label(
-            label=_('common.loading'),
+            label=_("common.loading"),
             style_classes="panel-text",
         )
 
@@ -399,7 +399,7 @@ class WeatherWidget(ButtonWidget, BaseWeatherWidget, PopoverMixin):
             self.weather_label.set_label("")
             self.weather_icon.set_markup("")
             if self.config.get("tooltip", False) and self.tooltips_enabled:
-                self.set_tooltip_text(_('widget.weather.error'))
+                self.set_tooltip_text(_("widget.weather.error"))
             return
 
         # Get the current weather

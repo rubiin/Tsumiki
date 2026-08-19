@@ -67,8 +67,8 @@ curl -fsSL https://raw.githubusercontent.com/rubiin/tsumiki/master/install.sh | 
 Depoyu zaten manuel olarak kopyaladıysanız, kurulum betiğini çalıştırın:
 
 ```sh
-./init.sh -setup
-./init.sh -start
+./tsumiki.sh -setup
+./tsumiki.sh -start
 ```
 
 `-setup` bayrağı gerekli sistem paketlerini kurar ve Python sanal ortamını yapılandırır.
@@ -97,7 +97,7 @@ yay -S --needed \
 uv sync
 
 # Başlatın
-./init.sh -start
+./tsumiki.sh -start
 ```
 
 `yay` kullanmıyorsanız, AUR paketlerini tercih ettiğiniz AUR yardımcısıyla kurun.
@@ -107,7 +107,7 @@ uv sync
 Hyprland başladığında Tsumiki'yi otomatik olarak başlatmak için `~/.config/hypr/hyprland.conf` dosyanıza şu satırı ekleyin:
 
 ```sh
-exec-once = sleep 5; ~/.config/tsumiki/init.sh -start
+exec-once = sleep 5; ~/.config/tsumiki/tsumiki.sh -start
 ```
 
 `sleep 5`, Tsumiki başlamadan önce Hyprland'in tamamen başlatılmasını sağlar. Farklı bir konuma kopyaladıysanız yolu ayarlayın.
@@ -116,17 +116,17 @@ exec-once = sleep 5; ~/.config/tsumiki/init.sh -start
 Kolaylık için bir shell takma adı oluşturabilirsiniz:
 
 ```sh
-alias tsumiki='~/.config/tsumiki/init.sh -start'
+alias tsumiki='~/.config/tsumiki/tsumiki.sh -start'
 ```
 
 :::
 
 ## Kurulumu Doğrulama
 
-1. Proje dizininden `./init.sh -start` komutunu çalıştırın.
+1. Proje dizininden `./tsumiki.sh -start` komutunu çalıştırın.
 2. Tsumiki çubuğu ekranınızın üst kısmında görünmelidir.
 3. Hata mesajları görürseniz şunları kontrol edin:
-   - Tüm sistem paketleri kurulu (`./init.sh -setup` bu kontrolü yeniden çalıştırır)
+   - Tüm sistem paketleri kurulu (`./tsumiki.sh -setup` bu kontrolü yeniden çalıştırır)
    - Python bağımlılıkları kurulu (`uv sync`)
    - Hyprland altında çalışıyorsunuz (başka bir birleştirici veya X11 değil)
 

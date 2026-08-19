@@ -121,7 +121,7 @@ To permanently override a variable:
 
 1. Copy the relevant `_settings.scss` variable into your custom theme.
 2. Or set the value under `[styling]` in `config.toml` (for supported variables).
-3. Recompile with `./init.sh -recompile`.
+3. Recompile with `./tsumiki.sh -recompile`.
 
 ## Per-Widget Style Classes
 
@@ -151,7 +151,7 @@ You can add custom CSS rules directly:
    ```scss
    @use "custom.scss";
    ```
-3. Recompile: `./init.sh -recompile`
+3. Recompile: `./tsumiki.sh -recompile`
 
 ## Transition Animations
 

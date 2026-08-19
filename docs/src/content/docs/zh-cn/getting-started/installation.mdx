@@ -67,8 +67,8 @@ curl -fsSL https://raw.githubusercontent.com/rubiin/tsumiki/master/install.sh | 
 如果您已手动克隆了仓库，请运行设置脚本：
 
 ```sh
-./init.sh -setup
-./init.sh -start
+./tsumiki.sh -setup
+./tsumiki.sh -start
 ```
 
 `-setup` 标志会安装所需的系统包并配置 Python 虚拟环境。
@@ -97,7 +97,7 @@ yay -S --needed \
 uv sync
 
 # 启动
-./init.sh -start
+./tsumiki.sh -start
 ```
 
 如果您不使用 `yay`，请使用您首选的 AUR 助手安装 AUR 包。
@@ -107,7 +107,7 @@ uv sync
 将此行添加到您的 `~/.config/hypr/hyprland.conf`，以便在 Hyprland 启动时自动启动 Tsumiki：
 
 ```sh
-exec-once = sleep 5; ~/.config/tsumiki/init.sh -start
+exec-once = sleep 5; ~/.config/tsumiki/tsumiki.sh -start
 ```
 
 `sleep 5` 确保 Hyprland 在 Tsumiki 启动前完全初始化。如果您克隆到其他位置，请调整路径。
@@ -116,17 +116,17 @@ exec-once = sleep 5; ~/.config/tsumiki/init.sh -start
 您可以创建一个 shell 别名以方便使用：
 
 ```sh
-alias tsumiki='~/.config/tsumiki/init.sh -start'
+alias tsumiki='~/.config/tsumiki/tsumiki.sh -start'
 ```
 
 :::
 
 ## 验证安装
 
-1. 从项目目录运行 `./init.sh -start`。
+1. 从项目目录运行 `./tsumiki.sh -start`。
 2. Tsumiki 状态栏应出现在屏幕顶部。
 3. 如果您看到错误消息，请检查：
-   - 所有系统包都已安装（`./init.sh -setup` 重新运行此检查）
+   - 所有系统包都已安装（`./tsumiki.sh -setup` 重新运行此检查）
    - Python 依赖项已安装（`uv sync`）
    - 您在 Hyprland 下运行（而不是其他合成器或 X11）
 

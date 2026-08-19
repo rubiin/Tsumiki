@@ -19,8 +19,8 @@ Before starting, ensure you have:
 ```sh
 git clone https://github.com/rubiin/tsumiki.git ~/.config/tsumiki
 cd ~/.config/tsumiki
-./init.sh -setup
-./init.sh -start
+./tsumiki.sh -setup
+./tsumiki.sh -start
 ```
 
 The `-setup` flag installs all required system packages and Python dependencies. You may be prompted for your password during setup.
@@ -32,7 +32,7 @@ For alternative install methods (bootstrap script, manual setup), see the [full 
 Add this line to `~/.config/hypr/hyprland.conf`:
 
 ```sh
-exec-once = sleep 5; ~/.config/tsumiki/init.sh -start
+exec-once = sleep 5; ~/.config/tsumiki/tsumiki.sh -start
 ```
 
 ## Minimal Config
@@ -70,7 +70,7 @@ After saving, restart the bar:
 
 ```sh
 pkill tsumiki
-./init.sh -start
+./tsumiki.sh -start
 ```
 
 ## Next Steps

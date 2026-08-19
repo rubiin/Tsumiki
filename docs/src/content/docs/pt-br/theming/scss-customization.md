@@ -23,4 +23,4 @@ border-radius = 16
 | `bordered` | Adiciona borda       |
 | `pill`     | Forma de pílula      |
 
-Recompile: `./init.sh -recompile`.
+Recompile: `./tsumiki.sh -recompile`.

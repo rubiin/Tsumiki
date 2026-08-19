@@ -130,14 +130,14 @@ class PlayerBox(Box):
         # ─── Track Info ───
         self.title_label = Label(
             name="player-title",
-            label=_('widget.mpris.no_title'),
+            label=_("widget.mpris.no_title"),
             max_chars_width=28,
             ellipsization="end",
             h_align="start",
         )
         self.artist_label = Label(
             name="player-artist",
-            label=_('widget.mpris.no_artist'),
+            label=_("widget.mpris.no_artist"),
             max_chars_width=28,
             ellipsization="end",
             h_align="start",

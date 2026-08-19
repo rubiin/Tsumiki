@@ -37,10 +37,11 @@ class Dialog(PopupWindow):
             h_align="center",
         )
 
-        self.ok_btn = Button(label=_('common.ok'), name="dialog-button")
+        self.ok_btn = Button(label=_("common.ok"), name="dialog-button")
         self.cancel_btn = Button(
-            label=_('common.cancel'), name="dialog-button",
-              on_clicked=lambda *_: self.destroy()
+            label=_("common.cancel"),
+            name="dialog-button",
+            on_clicked=lambda *_: self.destroy(),
         )
 
         self.buttons.children = (self.ok_btn, self.cancel_btn)

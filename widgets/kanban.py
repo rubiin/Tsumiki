@@ -405,12 +405,12 @@ class KanbanWidget(ButtonWidget, PopoverMixin):
         if self.config.get("label", True):
             self.container_box.add(
                 Label(
-                    label=_('widget.kanban.label'),
+                    label=_("widget.kanban.label"),
                     style_classes="panel-text",
                 )
             )
 
         if self.config.get("tooltip", False) and self.tooltips_enabled:
-            self.set_tooltip_text(_('widget.kanban.tooltip'))
+            self.set_tooltip_text(_("widget.kanban.tooltip"))
 
         self.setup_popover(Kanban)

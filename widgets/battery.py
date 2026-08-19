@@ -76,7 +76,7 @@ class BatteryWidget(ButtonWidget):
 
         self._update_ui()
 
-    def _update_ui(self, *_):
+    def _update_ui(self, *_args):
         """Update the battery status by fetching the current battery information
         and updating the widget accordingly.
         """
@@ -85,10 +85,8 @@ class BatteryWidget(ButtonWidget):
         if not is_present:
             if self.config.get("hide_when_missing", True):
                 self.set_visible(False)
-            icon = get_text_icon('battery.low')
-            self.set_tooltip_text(
-                f"{icon} {_('widget.battery.no_battery')}"
-            )
+            icon = get_text_icon("battery.low")
+            self.set_tooltip_text(f"{icon} {_('widget.battery.no_battery')}")
             if self.config.get("label", True):
                 self.battery_icon.set_text("N/A")
             return True
@@ -187,11 +185,11 @@ class BatteryWidget(ButtonWidget):
                     and not self.full_battery_notified
                 ):
                     send_notification(
-                        title=_('widget.battery.full'),
+                        title=_("widget.battery.full"),
                         body=f"{_('widget.battery.tooltip')} {percentage}%",
                         urgency="normal",
                         icon="battery-full",
-                        app_name=_('widget.battery.tooltip'),
+                        app_name=_("widget.battery.tooltip"),
                     )
                     self.full_battery_notified = True
                     self.charging_notified = False
@@ -203,11 +201,11 @@ class BatteryWidget(ButtonWidget):
                     and not self.discharging_notified
                 ):
                     send_notification(
-                        title=_('common.disabled'),
+                        title=_("common.disabled"),
                         body=f"{_('widget.battery.tooltip')} {percentage}%",
                         urgency="normal",
                         icon="battery",
-                        app_name=_('widget.battery.tooltip'),
+                        app_name=_("widget.battery.tooltip"),
                     )
                     self.discharging_notified = True
                     self.charging_notified = False
@@ -220,11 +218,11 @@ class BatteryWidget(ButtonWidget):
                 and not self.charging_notified
             ):
                 send_notification(
-                    title=_('widget.battery.charging'),
+                    title=_("widget.battery.charging"),
                     body=f"{_('widget.battery.tooltip')} {percentage}%",
                     urgency="normal",
                     icon="battery-charging",
-                    app_name=_('widget.battery.tooltip'),
+                    app_name=_("widget.battery.tooltip"),
                 )
                 self.charging_notified = True
                 self.discharging_notified = False
@@ -243,11 +241,11 @@ class BatteryWidget(ButtonWidget):
                 and (self.last_percentage is None or self.last_percentage > threshold)
             ):
                 send_notification(
-                    title=_('widget.battery.low'),
+                    title=_("widget.battery.low"),
                     body=f"{_('widget.battery.tooltip')} {percentage}%",
                     urgency="critical",
                     icon="battery-caution",
-                    app_name=_('widget.battery.tooltip'),
+                    app_name=_("widget.battery.tooltip"),
                 )
                 self.low_battery_notified = True
             elif percentage > threshold or is_charging:

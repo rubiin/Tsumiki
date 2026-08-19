@@ -346,6 +346,6 @@ class PomodoroWidget(ButtonWidget, PopoverMixin):
             )
 
         if self.config.get("tooltip", True) and self.tooltips_enabled:
-            self.set_tooltip_text(_('widget.pomodoro.tooltip'))
+            self.set_tooltip_text(_("widget.pomodoro.tooltip"))
 
         self.setup_popover(lambda: PomodoroMenu(parent=self))

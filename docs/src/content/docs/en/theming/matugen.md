@@ -79,7 +79,7 @@ When you change wallpaper or Matugen config, regenerate and recompile styles.
 Generate palette and recompile in one command:
 
 ```bash
-matugen image ~/Pictures/wallpaper.jpg -t scheme-tonal-spot --mode dark --contrast 0.0 --config ~/.config/tsumiki/assets/matugen/config.toml && ./init.sh -recompile
+matugen image ~/Pictures/wallpaper.jpg -t scheme-tonal-spot --mode dark --contrast 0.0 --config ~/.config/tsumiki/assets/matugen/config.toml && ./tsumiki.sh -recompile
 ```
 
 Interactive (Python REPL within Tsumiki environment):

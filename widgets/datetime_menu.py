@@ -96,7 +96,7 @@ class DateMenuNotification(Box):
             on_clicked=on_close or self.remove_notification,
         )
         if on_close is not None:
-            self.close_button.set_tooltip_text(_('widget.date_time.clear_group'))
+            self.close_button.set_tooltip_text(_("widget.date_time.clear_group"))
             self.close_button.add_style_class("group-clear-button")
 
         header_row = Box(
@@ -244,7 +244,7 @@ class DateNotificationMenu(Box):
                         },
                     ),
                     Label(
-                        label=_('widget.date_time.all_caught_up'),
+                        label=_("widget.date_time.all_caught_up"),
                         style_classes="placeholder-text",
                     ),
                 ),
@@ -261,7 +261,7 @@ class DateNotificationMenu(Box):
                 style_classes="header",
                 orientation="h",
                 children=(
-                    Label(label=_('widget.date_time.dnd'), name="dnd-text"),
+                    Label(label=_("widget.date_time.dnd"), name="dnd-text"),
                     self.dnd_switch,
                 ),
             )

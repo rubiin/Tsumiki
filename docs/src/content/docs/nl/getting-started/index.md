@@ -19,8 +19,8 @@ Zorg ervoor dat je het volgende hebt voordat je begint:
 ```sh
 git clone https://github.com/rubiin/tsumiki.git ~/.config/tsumiki
 cd ~/.config/tsumiki
-./init.sh -setup
-./init.sh -start
+./tsumiki.sh -setup
+./tsumiki.sh -start
 ```
 
 De vlag `-setup` installeert alle benodigde systeempakketten en Python-afhankelijkheden. Tijdens de installatie kan naar je wachtwoord worden gevraagd.
@@ -32,7 +32,7 @@ Voor alternatieve installatiemethoden (bootstrap-script, handmatige installatie)
 Voeg deze regel toe aan `~/.config/hypr/hyprland.conf`:
 
 ```sh
-exec-once = sleep 5; ~/.config/tsumiki/init.sh -start
+exec-once = sleep 5; ~/.config/tsumiki/tsumiki.sh -start
 ```
 
 ## Minimale Configuratie
@@ -70,7 +70,7 @@ Na het opslaan, herstart de balk:
 
 ```sh
 pkill tsumiki
-./init.sh -start
+./tsumiki.sh -start
 ```
 
 ## Volgende Stappen

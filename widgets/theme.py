@@ -42,6 +42,6 @@ class ThemeSwitcherWidget(ButtonWidget):
         new_theme = self._style_service.next_theme()
 
         if self.config.get("notify", True):
-            send_notification("Tsumiki", _('widget.theme.switched', theme=new_theme))
+            send_notification("Tsumiki", _("widget.theme.switched", theme=new_theme))
 
         self.set_tooltip_text(new_theme)

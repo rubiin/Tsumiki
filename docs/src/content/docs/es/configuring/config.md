@@ -223,7 +223,7 @@ Si estás actualizando desde versiones anteriores, revisa [Migración v2 a v3](/
 1. Comienza desde `example/config.toml`.
 2. Mantén tu archivo personalizado pequeño y enfocado.
 3. Cambia una sección a la vez.
-4. Reinicia con `./init.sh -start` para validar el comportamiento.
+4. Reinicia con `./tsumiki.sh -start` para validar el comportamiento.
 
 ## Fuente de Referencia
 

@@ -162,6 +162,50 @@ def main():
 
         return False
 
+    @Application.action()
+    def list_windows():
+        """List all available windows."""
+        windows = {}
+        for window in app.get_windows():
+            windows[window.get_name()] = window.get_visible()
+        return str(windows)
+
+    @Application.action()
+    def reload_config():
+        """Reload Tsumiki configuration."""
+        try:
+            from utils.config import TsumikiConfig
+
+            config = TsumikiConfig()
+            config._load_config()
+            logger.info("[Main] Configuration reloaded")
+            return ""
+        except Exception as e:
+            logger.error(f"[Main] Failed to reload config: {e}")
+            return str(e)
+
+    @Application.action()
+    def execute_command(command: str):
+        """Execute a shell command and return the output."""
+        import subprocess
+
+        try:
+            result = subprocess.run(
+                command,
+                shell=True,
+                capture_output=True,
+                text=True,
+                timeout=10,
+            )
+            output = result.stdout
+            if result.returncode != 0:
+                output += f"\nError: {result.stderr}"
+            return output
+        except subprocess.TimeoutExpired:
+            return "Command timed out after 10 seconds"
+        except Exception as e:
+            return f"Error: {e}"
+
     # Run the application
     app.run()
 

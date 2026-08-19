@@ -20,4 +20,4 @@ description: نصائح عملية لتثيم تسوميكي
 1. اضبط `matugen.enabled = true` في `config.toml`
 2. وجّه `wallpaper` إلى صورتك
 3. أعد تشغيل تسوميكي
-4. أعد التجميع إذا لزم الأمر: `./init.sh -recompile`
+4. أعد التجميع إذا لزم الأمر: `./tsumiki.sh -recompile`

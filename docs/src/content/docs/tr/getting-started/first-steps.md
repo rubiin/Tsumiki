@@ -12,7 +12,7 @@ Tsumiki'yi kurdunuz ve [Kurulum Sonrası](/tr/resources/post-install) adımları
 Tsumiki proje dizininden şunu çalıştırın:
 
 ```sh
-./init.sh -start
+./tsumiki.sh -start
 ```
 
 Hyprland çalışıyorsa, çubuk ekranınızın üst kısmında görünmelidir. Çubuk görünmezse, terminaldeki hata çıktısını kontrol edin ve [Sorun Giderme](/tr/help/troubleshooting) bölümüne bakın.
@@ -33,7 +33,7 @@ Tsumiki'yi Hyprland yapılandırmanıza ekleyin, böylece oturum açtığınızd
 `~/.config/hypr/hyprland.conf` dosyasını açın ve ekleyin:
 
 ```sh
-exec-once = sleep 5; ~/.config/tsumiki/init.sh -start
+exec-once = sleep 5; ~/.config/tsumiki/tsumiki.sh -start
 ```
 
 `sleep 5` gecikmesi, Hyprland'in tamamen başlatılması için zaman tanır. Tsumiki'yi farklı bir dizine kopyaladıysanız yolu ayarlayın.
@@ -75,7 +75,7 @@ Düzenlemelerinizi kaydettikten sonra Tsumiki'yi yeniden başlatın:
 
 ```sh
 pkill tsumiki
-./init.sh -start
+./tsumiki.sh -start
 ```
 
 Yapılandırma geçerliyse, çubuk yeni düzeninizle yeniden görünmelidir.
@@ -103,7 +103,7 @@ Bir şey yanlış görünüyorsa:
 
 - **Çubuk görünmüyor** — Hyprland'in çalıştığından ve başka çubukların çalışmadığından emin olun (`pkill waybar`).
 - **Simgeler yok** — [JetBrains Nerd Font](https://www.nerdfonts.com) kurulu ve terminal/UI yazı tipiniz olarak yapılandırılmış mı kontrol edin.
-- **Eksik işlevsellik** — Bazı widget'lar harici araçlar gerektirir (örn. medya için `playerctl`, parlaklık için `brightnessctl`). Tüm bağımlılıkların kurulu olduğundan emin olmak için `./init.sh -setup` komutunu çalıştırın (Python bağımlılıkları `uv sync` ile kurulur).
+- **Eksik işlevsellik** — Bazı widget'lar harici araçlar gerektirir (örn. medya için `playerctl`, parlaklık için `brightnessctl`). Tüm bağımlılıkların kurulu olduğundan emin olmak için `./tsumiki.sh -setup` komutunu çalıştırın (Python bağımlılıkları `uv sync` ile kurulur).
 - **SASS hataları** — `config.toml` dosyanız geçersiz olabilir. `example/config.toml` ile karşılaştırın.
 
 Daha fazla yardım için [SSS](/tr/help/faq) veya [Sorun Giderme](/tr/help/troubleshooting) sayfalarına bakın.
