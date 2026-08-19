@@ -388,6 +388,11 @@ class WeatherWidget(ButtonWidget, BaseWeatherWidget, PopoverMixin):
         )
         self.container_box.add(self.revealer)
 
+        self._weather_color = None
+        self._hover_color = "#ffffff"
+        self.connect("enter-notify-event", self._on_hover_enter)
+        self.connect("leave-notify-event", self._on_hover_leave)
+
         self._update_ui(forced=True)
 
         self._register_repeater(invoke_repeater(60000, self._update_ui))
@@ -418,11 +423,9 @@ class WeatherWidget(ButtonWidget, BaseWeatherWidget, PopoverMixin):
             else weather_icon["icon-night"]
         )
 
-        self.weather_icon.set_markup(
-            f'<span foreground="{weather_icon["color"]}">{text_icon}</span>'
-        )
-
-        label_text = self.config.get("label_format", "{location}").format(
+        self._weather_color = weather_icon["color"]
+        self._text_icon = text_icon
+        self._label_text = self.config.get("label_format", "{location}").format(
             location=self.data["location"],
             temperature=self.get_temperature(),
             condition=self.get_description(),
@@ -430,8 +433,12 @@ class WeatherWidget(ButtonWidget, BaseWeatherWidget, PopoverMixin):
             wind_speed=self.get_wind_speed(),
         )
 
+        self.weather_icon.set_markup(
+            f'<span foreground="{self._weather_color}">{self._text_icon}</span>'
+        )
+
         self.weather_label.set_markup(
-            f'<span foreground="{weather_icon["color"]}">{label_text}</span>'
+            f'<span foreground="{self._weather_color}">{self._label_text}</span>'
         )
 
         # Update the tooltip with the city and weather condition if enabled
@@ -442,6 +449,28 @@ class WeatherWidget(ButtonWidget, BaseWeatherWidget, PopoverMixin):
             self.set_tooltip_text(tool_tip)
 
         return False
+
+    def _on_hover_enter(self, *_args):
+        """Switch markup colors to hover-friendly color."""
+        if self._weather_color is None:
+            return
+        self.weather_icon.set_markup(
+            f'<span foreground="{self._hover_color}">{self._text_icon}</span>'
+        )
+        self.weather_label.set_markup(
+            f'<span foreground="{self._hover_color}">{self._label_text}</span>'
+        )
+
+    def _on_hover_leave(self, *_args):
+        """Restore weather-specific markup colors."""
+        if self._weather_color is None:
+            return
+        self.weather_icon.set_markup(
+            f'<span foreground="{self._weather_color}">{self._text_icon}</span>'
+        )
+        self.weather_label.set_markup(
+            f'<span foreground="{self._weather_color}">{self._label_text}</span>'
+        )
 
     @cooldown(1)
     def on_button_press(self, _, event):
@@ -459,7 +488,8 @@ class WeatherWidget(ButtonWidget, BaseWeatherWidget, PopoverMixin):
             and (datetime.now() - self.update_time).total_seconds() > 300
         ):
             weather_icon = WEATHER_ICONS[self.current_weather["weatherCode"]]
-            text_icon = (
+            self._weather_color = weather_icon["color"]
+            self._text_icon = (
                 weather_icon["icon"]
                 if check_if_day(
                     sunrise_time=self.sunrise_time,
@@ -469,7 +499,7 @@ class WeatherWidget(ButtonWidget, BaseWeatherWidget, PopoverMixin):
             )
 
             self.weather_icon.set_markup(
-                f'<span foreground="{weather_icon["color"]}">{text_icon}</span>'
+                f'<span foreground="{self._weather_color}">{self._text_icon}</span>'
             )
 
         if (datetime.now() - self.update_time).total_seconds() < self.config.get(
