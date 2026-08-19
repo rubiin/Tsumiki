@@ -27,7 +27,7 @@ from utils.widget_utils import (
     get_notification_image_pixbuf,
     nerd_font_icon,
 )
-from widgets.nepali_datetime import NepaliDateTimeLabel
+from widgets.extended_datetime import ExtendedDateTime
 
 
 class DateMenuNotification(Box):
@@ -770,15 +770,12 @@ class DateTimeWidget(ButtonWidget, PopoverMixin):
 
             date_format = f"{self.config.get('date_format', '%b %d')} {clock_format}"
 
-        if self.config.get("nepali_date", False):
-            date_label = NepaliDateTimeLabel(
-                formatters=date_format,
-                interval=1000,
-                name="date_time-nepali",
-                style_classes="panel-text",
-            )
-        else:
-            date_label = DateTime(date_format)
+        is_nepali_time = self.config.get("nepali_date", False)
+
+        date_label = ExtendedDateTime(
+            formatters=date_format,
+            nepali_time=is_nepali_time,
+        )
 
         if self.config.get("hover_reveal", True):
             self.revealer = Revealer(

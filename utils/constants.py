@@ -155,7 +155,7 @@ DEFAULT_CONFIG = {
             "clock_format": "12h",
             "hover_reveal": False,
             "reveal_duration": 500,
-            "nepali_date": False,
+            "extended_date": False,
             "notification": {
                 "enabled": True,
                 "count": True,
@@ -491,7 +491,7 @@ DEFAULT_CONFIG = {
             "anchor": "center",
             "date_format": "%A, %d %B %Y",
             "time_format": "%H:%M",
-            "nepali_date": False,
+            "extended_date": False,
         },
         "desktop_quotes": {
             "enabled": False,
