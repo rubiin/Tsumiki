@@ -22,6 +22,7 @@ Fabric registers D-Bus actions using the `@Application.action()` decorator. Thes
 Toggle the visibility of a Tsumiki window.
 
 **Arguments:**
+
 - `name` (string): Window name to toggle
 
 ### list_windows
@@ -37,6 +38,7 @@ Reload Tsumiki configuration.
 Execute a shell command and return the output.
 
 **Arguments:**
+
 - `command` (string): Shell command to execute
 
 ### open_inspector
@@ -218,6 +220,7 @@ fabric-cli invoke-action my_custom_action "hello" "42"
 ### "couldn't find a running Fabric instance"
 
 Ensure Tsumiki is running:
+
 ```bash
 pgrep -f tsumiki
 ```
@@ -233,6 +236,7 @@ Ensure you're running as the same user who started Tsumiki.
 ### No Output
 
 Check if Tsumiki has any windows open:
+
 ```bash
 ./tsumiki.sh -ipc list-windows
 ```
