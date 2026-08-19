@@ -772,7 +772,7 @@ class DateTimeWidget(ButtonWidget, PopoverMixin):
 
         if self.config.get("nepali_date", False):
             date_label = NepaliDateTimeLabel(
-                fmt=date_format,
+                formatters=date_format,
                 interval=1000,
                 name="date_time-nepali",
                 style_classes="panel-text",

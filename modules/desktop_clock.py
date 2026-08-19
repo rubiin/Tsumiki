@@ -443,7 +443,7 @@ class DesktopClock(BaseWindow):
 
             if self.config.get("nepali_date", False):
                 date_widget = NepaliDateTimeLabel(
-                    fmt=date_format,
+                    formatters=date_format,
                     interval=3600000,
                     name="date",
                 )
