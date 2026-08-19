@@ -27,6 +27,7 @@ from utils.widget_utils import (
     get_notification_image_pixbuf,
     nerd_font_icon,
 )
+from widgets.nepali_datetime import NepaliDateTimeLabel
 
 
 class DateMenuNotification(Box):
@@ -769,15 +770,25 @@ class DateTimeWidget(ButtonWidget, PopoverMixin):
 
             date_format = f"{self.config.get('date_format', '%b %d')} {clock_format}"
 
+        if self.config.get("nepali_date", False):
+            date_label = NepaliDateTimeLabel(
+                fmt=date_format,
+                interval=1000,
+                name="date_time-nepali",
+                style_classes="panel-text",
+            )
+        else:
+            date_label = DateTime(date_format)
+
         if self.config.get("hover_reveal", True):
             self.revealer = Revealer(
-                child=DateTime(date_format),
+                child=date_label,
                 transition_duration=self.config.get("reveal_duration", 500),
                 transition_type="slide_right",
             )
             self.container_box.add(self.revealer)
         else:
-            self.container_box.add(DateTime(date_format))
+            self.container_box.add(date_label)
 
         self.setup_popover(lambda: DateNotificationMenu(config=self.config))
 

@@ -7,6 +7,7 @@ from fabric.widgets.datetime import DateTime
 
 from shared.widget_container import BaseWindow, TeardownMixin
 from utils.widget_settings import BarConfig
+from widgets.nepali_datetime import NepaliDateTimeLabel
 
 
 class CookieClockFace(Gtk.DrawingArea, TeardownMixin):
@@ -438,6 +439,21 @@ class DesktopClock(BaseWindow):
                 children=[CookieClockFace(self.config)],
             )
         else:
+            date_format = self.config.get("date_format", "%Y-%m-%d")
+
+            if self.config.get("nepali_date", False):
+                date_widget = NepaliDateTimeLabel(
+                    fmt=date_format,
+                    interval=3600000,
+                    name="date",
+                )
+            else:
+                date_widget = DateTime(
+                    formatters=[date_format],
+                    interval=3600000,
+                    name="date",
+                )
+
             child = Box(
                 name="desktop-clock-box",
                 orientation="v",
@@ -446,11 +462,7 @@ class DesktopClock(BaseWindow):
                         formatters=[self.config.get("time_format", "%H:%M:%S")],
                         name="clock",
                     ),
-                    DateTime(
-                        formatters=[self.config.get("date_format", "%Y-%m-%d")],
-                        interval=3600000,
-                        name="date",
-                    ),
+                    date_widget,
                 ],
             )
 

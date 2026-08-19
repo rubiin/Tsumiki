@@ -241,6 +241,15 @@ wheels = [
 ]
 
 [[package]]
+name = "nepali"
+version = "1.2.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/42/6e/26c0f7b544c978ec7b9d12ee1219023213e2dd14f3ea18e4f1665b1b945f/nepali-1.2.0.tar.gz", hash = "sha256:75a9d0bd4b3e95d72c7045539b63e84077686ffa12dff5db3fffe6579cbb511d", size = 63658, upload-time = "2026-02-02T15:06:34.084Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/f1/e5/4aea4554803da821bce158b14ca66f7622f11daa281e9e720e4b97861b3f/nepali-1.2.0-py3-none-any.whl", hash = "sha256:1f9244b2fcb51e6b9e710cc1c483024f8600954d545a9a12a2accf53213911b1", size = 69502, upload-time = "2026-02-02T15:06:32.689Z" },
+]
+
+[[package]]
 name = "pillow"
 version = "12.3.0"
 source = { registry = "https://pypi.org/simple" }
@@ -439,6 +448,7 @@ dependencies = [
     { name = "httpx" },
     { name = "ijson" },
     { name = "loguru" },
+    { name = "nepali" },
     { name = "pillow" },
     { name = "psutil" },
     { name = "pycairo" },
@@ -462,6 +472,7 @@ requires-dist = [
     { name = "httpx", specifier = "==0.28.1" },
     { name = "ijson", specifier = ">=3.4.0" },
     { name = "loguru", specifier = ">=0.7.3" },
+    { name = "nepali", specifier = ">=1.2.0" },
     { name = "pillow", specifier = ">=11.3.0" },
     { name = "psutil", specifier = ">=6.1.1" },
     { name = "pycairo", specifier = ">=1.28.0" },
