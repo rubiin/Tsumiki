@@ -16,8 +16,8 @@ class ExtendedDateTime(DateTime):
     """
 
     def __init__(self, nepali_time: bool = False, **kwargs):
-        super().__init__(**kwargs)
         self._nepali_time = nepali_time
+        super().__init__(**kwargs)
 
     def do_format(self) -> str:
         if self._nepali_time:
