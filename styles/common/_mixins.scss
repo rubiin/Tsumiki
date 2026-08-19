@@ -335,9 +335,7 @@
 // mixin for text shadow with configurable opacity
 /// @param {Number} $opacity - Opacity value for the text shadow (0-1)
 @mixin text-shadow($opacity: 0.5) {
-
   text-shadow: 0 1px 2px rgba(0, 0, 0, $opacity);
-
 }
 
 /// Mixin to set image and label background/color consistently
