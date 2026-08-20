@@ -357,6 +357,7 @@ Muestra las aplicaciones en ejecución como iconos en los que se puede hacer cli
 icon_size = 22
 ignored = []
 tooltip = true
+show_current_workspace_only = false
 ```
 
 ---
@@ -374,6 +375,7 @@ calendar = true
 clock_format = "12h"   # "12h" | "24h"
 hover_reveal = false
 reveal_duration = 500
+nepali_date = false
 
 [widgets.date_time.notification]
 enabled = true

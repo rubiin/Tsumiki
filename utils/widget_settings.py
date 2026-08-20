@@ -72,7 +72,13 @@ HyprSunset = TypedDict(
 
 # TaskBar configuration
 TaskBar = TypedDict(
-    "TaskBar", {"icon_size": int, "ignored": list[str], "tooltip": bool}
+    "TaskBar",
+    {
+        "icon_size": int,
+        "ignored": list[str],
+        "tooltip": bool,
+        "show_current_workspace_only": bool,
+    },
 )
 
 # SystemTray configuration

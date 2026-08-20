@@ -55,6 +55,7 @@ truncation = true
 
 [widgets.taskbar]
 icon_size = 22
+show_current_workspace_only = false
 ```
 
 ## Medya

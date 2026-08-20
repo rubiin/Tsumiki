@@ -249,6 +249,7 @@ tooltip = true
 icon_size = 22
 ignored = []
 tooltip = true
+show_current_workspace_only = false
 ```
 
 ---
@@ -264,6 +265,7 @@ tooltip = true
 date_format = " %a %b %d,"
 calendar = true
 clock_format = "12h"   # "12h" | "24h"
+nepali_date = false
 ```
 
 ### ساعة عالمية

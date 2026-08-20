@@ -330,7 +330,12 @@ DEFAULT_CONFIG = {
             "hide_when_empty": False,
             "tooltip": True,
         },
-        "taskbar": {"icon_size": 22, "ignored": [], "tooltip": True},
+        "taskbar": {
+            "icon_size": 22,
+            "ignored": [],
+            "tooltip": True,
+            "show_current_workspace_only": False,
+        },
         "theme_switcher": {
             "icon": "",
             "notify": False,  # Whether to show a notification when the theme is changed

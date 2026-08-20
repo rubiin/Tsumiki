@@ -877,6 +877,11 @@
               "type": "boolean",
               "default": true,
               "description": "Determines whether to show the tooltip for the taskbar."
+            },
+            "show_current_workspace_only": {
+              "type": "boolean",
+              "default": false,
+              "description": "When true, only show applications that are on the current workspace."
             }
           },
           "required": ["icon_size", "ignored", "tooltip"]

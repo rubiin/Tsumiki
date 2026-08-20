@@ -87,6 +87,7 @@ hide_when_zero = true
 
 [widgets.taskbar]
 icon_size = 22
+show_current_workspace_only = false
 ```
 
 ## Widgets de Date, Heure et Calendrier
@@ -95,6 +96,7 @@ icon_size = 22
 [widgets.date_time]
 clock_format = "12h"
 calendar = true
+nepali_date = false
 
 [widgets.world_clock]
 timezones = ["America/New_York", "Asia/Tokyo"]

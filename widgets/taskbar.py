@@ -22,22 +22,27 @@ class TaskBarWidget(BoxWidget):
         )
         self._service = hyprland_service
         self._hyprland_connection = self._service.connection
+        self._show_current_workspace_only = self.config.get(
+            "show_current_workspace_only", False
+        )
 
         self._clients_by_address: dict[str, HyprlandClient] = {}
         self._client_buttons: dict[str, dict] = {}  # address -> {button, image, client}
         self._active_address: str | None = None
+        self._current_workspace_id: int | None = None
         self._sync_scheduled_id: int | None = None
         self._sync_in_progress = False
 
-        for hid in bulk_connect(
-            self._hyprland_connection,
-            {
-                "event::openwindow": self._on_window_event,
-                "event::closewindow": self._on_window_event,
-                "event::activewindowv2": self._on_active_window_event,
-                "event::windowtitle": self._on_window_event,
-            },
-        ):
+        events = {
+            "event::openwindow": self._on_window_event,
+            "event::closewindow": self._on_window_event,
+            "event::activewindowv2": self._on_active_window_event,
+            "event::windowtitle": self._on_window_event,
+        }
+        if self._show_current_workspace_only:
+            events["event::workspace"] = self._on_workspace_event
+
+        for hid in bulk_connect(self._hyprland_connection, events):
             self._register_handler(self._hyprland_connection, hid)
 
         self.connect("destroy", self._on_destroy)
@@ -61,6 +66,29 @@ class TaskBarWidget(BoxWidget):
 
     def _on_window_event(self, *_):
         self._schedule_sync()
+
+    def _on_workspace_event(self, *_):
+        self._fetch_current_workspace(lambda _: self._schedule_sync())
+
+    def _fetch_current_workspace(self, callback):
+        try:
+            self._hyprland_connection.send_command_async(
+                "j/activeworkspace",
+                lambda reply: self._handle_workspace_reply(reply, callback),
+            )
+        except Exception as e:
+            logger.warning(f"[Taskbar] Failed to request active workspace: {e}")
+            callback(None)
+
+    def _handle_workspace_reply(self, reply, callback):
+        try:
+            parsed = parse_hyprland_reply(reply)
+            ws_id = parsed.get("id")
+            if isinstance(ws_id, int) and ws_id > 0:
+                self._current_workspace_id = ws_id
+        except Exception as e:
+            logger.warning(f"[Taskbar] Failed to parse workspace reply: {e}")
+        callback(self._current_workspace_id)
 
     def _on_active_window_event(self, *_):
         if not self._clients_by_address:
@@ -151,9 +179,21 @@ class TaskBarWidget(BoxWidget):
     def _process_clients(self, raw_clients, active_address):
         self._active_address = active_address
         try:
+            if self._show_current_workspace_only and self._current_workspace_id is None:
+                self._fetch_current_workspace(
+                    lambda _: self._process_clients(raw_clients, active_address)
+                )
+                return
+
             clients = []
             for item in raw_clients:
-                if item.get("workspace", {}).get("id", -1) <= 0:
+                ws_id = item.get("workspace", {}).get("id", -1)
+                if ws_id <= 0:
+                    continue
+                if (
+                    self._show_current_workspace_only
+                    and ws_id != self._current_workspace_id
+                ):
                     continue
                 client = HyprlandClient(item, active_address)
                 app_id = client.get_app_id()

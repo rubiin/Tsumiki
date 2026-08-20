@@ -62,6 +62,7 @@ truncation = true
 
 [widgets.taskbar]
 icon_size = 22
+show_current_workspace_only = false
 ```
 
 ## Datums-, Zeit- und Kalenderwidgets
@@ -69,6 +70,7 @@ icon_size = 22
 ```toml
 [widgets.date_time]
 clock_format = "12h"
+nepali_date = false
 
 [widgets.world_clock]
 timezones = ["America/New_York", "Asia/Tokyo"]

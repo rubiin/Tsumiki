@@ -120,6 +120,7 @@ enabled = false
 type = "cookie"
 layer = "bottom"
 anchor = "bottom-right"
+nepali_date = false
 ```
 
 ## Citations de Bureau

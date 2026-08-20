@@ -54,6 +54,7 @@ hide_unoccupied = true
 
 [widgets.date_time]
 date_format = "%b %d %H:%M"
+nepali_date = false
 
 [widgets.volume]
 tooltip = true
