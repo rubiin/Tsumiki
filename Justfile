@@ -6,10 +6,10 @@ lock:
 
 # Run the test suite
 test:
-    python3 -m unittest discover tests -q
+    uv run python -m unittest discover tests -q
 
 doc_gen:
-    python doc_gen.py
+    uv run python doc_gen.py
 
 docs-dev:
     cd docs && pnpm dev
