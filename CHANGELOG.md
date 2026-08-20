@@ -1,5 +1,25 @@
 # Changelog
 
+## [4.4.0](https://github.com/rubiin/tsumiki/compare/v4.3.0...v4.4.0) (2026-08-20)
+
+### 🚀 New Features
+
+- add hover effect for weather widget icons and labels ([d6c16a5](https://github.com/rubiin/tsumiki/commit/d6c16a565df3185ce076081f99edfc6a59f2f78c))
+- add ipc support ([#366](https://github.com/rubiin/tsumiki/issues/366)) ([c808f3d](https://github.com/rubiin/tsumiki/commit/c808f3d1a531ca63bda4c6a016dbe2f5c842c68b))
+- add nepali_date option for Bikram Sambat calendar display ([ccc76d1](https://github.com/rubiin/tsumiki/commit/ccc76d1c8d18580d018d18072f9f4511feb46aa1))
+- enable nepali_date option in configuration ([2ee1308](https://github.com/rubiin/tsumiki/commit/2ee1308d780544cb65407a80fbb93515c76266c9))
+
+### 🐛 Bug Fixes
+
+- remove unnecessary line breaks in text-shadow mixin ([e1b4b32](https://github.com/rubiin/tsumiki/commit/e1b4b3241544f2be788d4c8d256f15a4522fadef))
+- reorder super() call in ExtendedDateTime constructor for clarity ([db6af1e](https://github.com/rubiin/tsumiki/commit/db6af1e12a612b983705c7fe753b92716d9af297))
+- update fabric and idna package versions ([a135cb2](https://github.com/rubiin/tsumiki/commit/a135cb28ddc262ac679f82063a427fe38e623626))
+
+### ♻️ Code Refactoring
+
+- replace IconResolver with resolve_icon_pixbuf for icon handling in dock and overview modules ([5d867c2](https://github.com/rubiin/tsumiki/commit/5d867c2edc5a842663454a160f639108b31772e2))
+- replace NepaliDateTimeLabel with ExtendedDateTime for improved date handling ([24d8f56](https://github.com/rubiin/tsumiki/commit/24d8f56004a73c8bd982e372a04206b1a7f077d0))
+
 ## [4.3.0](https://github.com/rubiin/tsumiki/compare/v4.2.0...v4.3.0) (2026-08-18)
 
 ### 🚀 New Features
