@@ -1,6 +1,6 @@
 from contextlib import suppress
 
-from fabric.utils import Gdk, GdkPixbuf, GLib, Gtk, logger
+from fabric.utils import Gdk, GLib, Gtk, logger
 from fabric.widgets.box import Box
 from fabric.widgets.button import Button
 from fabric.widgets.eventbox import EventBox
@@ -11,38 +11,13 @@ from fabric.widgets.overlay import Overlay
 
 from shared.popup import PopupWindow
 from utils.app import AppUtils
-from utils.functions import safe_disconnect, ttl_lru_cache
+from utils.functions import safe_disconnect
 from utils.hyprland import HyprlandClient, hyprland_service
-from utils.icon_resolver import IconResolver
 from utils.widget_settings import BarConfig
-from utils.widget_utils import create_surface_from_widget
+from utils.widget_utils import create_surface_from_widget, resolve_icon_pixbuf
 
 SCALE = 0.14
 TARGET = [Gtk.TargetEntry.new("text/plain", Gtk.TargetFlags.SAME_APP, 0)]
-
-
-@ttl_lru_cache(seconds_to_live=3600, maxsize=256)
-def _resolve_icon_pixbuf(
-    icon_resolver: IconResolver,
-    app_id: str,
-    size: int,
-    desktop_app=None,
-) -> GdkPixbuf.Pixbuf | None:
-    """Resolve an icon pixbuf (desktop-app -> resolver -> fallback), cached."""
-    pixbuf = None
-    if desktop_app:
-        pixbuf = desktop_app.get_icon_pixbuf(size=size)
-    if not pixbuf:
-        pixbuf = icon_resolver.get_icon_pixbuf(app_id, size)
-    if not pixbuf:
-        pixbuf = icon_resolver.get_icon_pixbuf(
-            "application-x-executable-symbolic", size
-        )
-    if not pixbuf:
-        pixbuf = icon_resolver.get_icon_pixbuf("image-missing", size)
-    if pixbuf and (pixbuf.get_width() != size or pixbuf.get_height() != size):
-        pixbuf = pixbuf.scale_simple(size, size, GdkPixbuf.InterpType.BILINEAR)
-    return pixbuf
 
 
 class HyprlandWindowButton(Button):
@@ -60,7 +35,6 @@ class HyprlandWindowButton(Button):
         self.size = size if transform in [0, 2] else (size[1], size[0])
         self.client = client
         self.window: Box = window
-        self.icon_resolver = IconResolver()
 
         # Compute dynamic icon sizes based on the button size.
         # Using the minimum dimension of the button for scaling.
@@ -70,8 +44,8 @@ class HyprlandWindowButton(Button):
         if app_util is None:
             app_util = AppUtils()
         desktop_app = app_util.find_app(client.get_app_id())
-        icon_pixbuf = _resolve_icon_pixbuf(
-            self.icon_resolver, client.get_app_id(), icon_size_main, desktop_app
+        icon_pixbuf = resolve_icon_pixbuf(
+            client.get_app_id(), icon_size_main, desktop_app
         )
 
         super().__init__(
@@ -115,8 +89,7 @@ class HyprlandWindowButton(Button):
     def update_image(self, image):
         # Compute overlay icon size dynamically.
         icon_size_overlay = int(min(self.size) * 0.5)
-        icon_pixbuf = _resolve_icon_pixbuf(
-            self.icon_resolver,
+        icon_pixbuf = resolve_icon_pixbuf(
             self.client.get_app_id(),
             icon_size_overlay,
             self.desktop_app,

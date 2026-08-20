@@ -5,7 +5,7 @@ from fabric.widgets.image import Image
 from shared.widget_container import BoxWidget
 from utils.functions import normalize_address, parse_hyprland_reply
 from utils.hyprland import HyprlandClient, hyprland_service
-from utils.icon_resolver import IconResolver
+from utils.widget_utils import resolve_icon_pixbuf
 
 SYNC_DEBOUNCE_MS = 60
 
@@ -20,7 +20,6 @@ class TaskBarWidget(BoxWidget):
             name="taskbar",
             **kwargs,
         )
-        self.icon_resolver = IconResolver()
         self._service = hyprland_service
         self._hyprland_connection = self._service.connection
 
@@ -195,9 +194,7 @@ class TaskBarWidget(BoxWidget):
 
     def _update_button_visuals(self, entry: dict, client: HyprlandClient):
         entry["image"].set_from_pixbuf(
-            self.icon_resolver.get_icon_pixbuf(
-                client.get_app_id(), self.config.get("icon_size", 22)
-            )
+            resolve_icon_pixbuf(client.get_app_id(), self.config.get("icon_size", 22))
         )
         entry["button"].set_tooltip_text(
             client.get_title() if self.config.get("tooltip", True) else None
@@ -207,9 +204,7 @@ class TaskBarWidget(BoxWidget):
     def _add_client_button(self, address: str, client: HyprlandClient):
         client_image = Image()
         client_image.set_from_pixbuf(
-            self.icon_resolver.get_icon_pixbuf(
-                client.get_app_id(), self.config.get("icon_size", 22)
-            )
+            resolve_icon_pixbuf(client.get_app_id(), self.config.get("icon_size", 22))
         )
 
         client_button = Button(
