@@ -24,7 +24,9 @@ done
 # --- Check Dependencies ---
 for cmd in grimblast tesseract wl-copy notify-send; do
     if ! command -v "$cmd" &>/dev/null; then
-        $NOTIFY && notify-send "OCR Tool" "Missing dependency: $cmd"
+        if [ "$NOTIFY" = true ]; then
+            notify-send "OCR Tool" "Missing dependency: $cmd"
+        fi
         echo "Missing dependency: $cmd"
         exit 1
     fi
@@ -36,7 +38,11 @@ ocr_text=$(grimblast --freeze save area - | tesseract -l "$OCR_LANG" - - 2>/dev/
 # --- Output / Notification ---
 if [[ -n "$ocr_text" ]]; then
     echo -n "$ocr_text" | wl-copy
-    $NOTIFY && notify-send -a "Tsumiki" "OCR Success" "Text Copied to Clipboard"
+    if [ "$NOTIFY" = true ]; then
+        notify-send -a "Tsumiki" "OCR Success" "Text Copied to Clipboard"
+    fi
 else
-    $NOTIFY && notify-send -a "Tsumiki" "OCR Failed" "No text recognized or operation failed"
+    if [ "$NOTIFY" = true ]; then
+        notify-send -a "Tsumiki" "OCR Failed" "No text recognized or operation failed"
+    fi
 fi

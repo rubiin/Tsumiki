@@ -1,6 +1,6 @@
 #!/bin/bash
 
-INSTALL_DIR=$(dirname -- "$0")
+INSTALL_DIR=$(dirname -- "$(readlink -f "$0")")
 
 # Navigate to the $HOME/bar directory
 cd "$INSTALL_DIR" || {

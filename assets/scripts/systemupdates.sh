@@ -112,7 +112,8 @@ check_fedora_updates() {
     local official_updates=0
     local flatpak_updates=0
     if command -v dnf &>/dev/null; then
-        official_updates=$(dnf check-update -q | grep -v '^Loaded plugins' | grep -v '^No match for' | wc -l)
+        # dnf check-update exits 100 when updates are available — suppress that
+        official_updates=$(dnf check-update -q 2>/dev/null | grep -v '^Loaded plugins' | grep -v '^No match for' | wc -l || true)
     fi
     flatpak_updates=$(check_flatpak_updates)
 
@@ -184,7 +185,9 @@ command="
     echo ''\
 
     $aur_helper -Syu
-    flatpak update -y || true
+    if [[ "$CHECK_FLATPAK" -eq 1 ]]; then
+        flatpak update -y || true
+    fi
     read -n 1 -p 'Press any key to continue...'
 "
 

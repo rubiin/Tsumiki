@@ -27,7 +27,7 @@ send_notification_with_color() {
     local color_display="$2"
     local color_format="$3"
 
-    $NOTIFY || return
+    [ "$NOTIFY" = true ] || return
 
     # Sanitize input (remove all whitespace)
     clean_format=$(echo "$color_format" | tr -d '[:space:]')
