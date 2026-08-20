@@ -329,6 +329,7 @@ hide_when_empty = false
 icon_size = 22
 ignored = []
 tooltip = true
+show_current_workspace_only = false
 
 [widgets.theme_switcher]
 icon = ""
