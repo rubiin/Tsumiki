@@ -16,7 +16,9 @@ check_dependencies() {
 
     if [ "${#missing[@]}" -ne 0 ]; then
         echo "Missing dependencies: ${missing[*]}"
-        $NOTIFY && notify-send "HyprPicker Error" "Missing: ${missing[*]}"
+        if [ "$NOTIFY" = true ]; then
+            notify-send "HyprPicker Error" "Missing: ${missing[*]}"
+        fi
         exit 1
     fi
 }
