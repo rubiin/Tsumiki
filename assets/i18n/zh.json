@@ -20,6 +20,7 @@
       "tooltip": "电池",
       "low": "电池电量低",
       "charging": "充电中",
+      "unplugged": "已拔出充电器",
       "full": "已充满",
       "no_battery": "未检测到电池"
     },

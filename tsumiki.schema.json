@@ -199,28 +199,72 @@
             "notifications": {
               "type": "object",
               "properties": {
-                "low_threshold": {
-                  "type": "number",
-                  "default": 10,
-                  "description": "The battery level percentage at which to trigger low battery notifications."
+                "low_battery": {
+                  "type": "object",
+                  "properties": {
+                    "enabled": {
+                      "type": "boolean",
+                      "default": false,
+                      "description": "Show a notification when the battery is low."
+                    },
+                    "threshold": {
+                      "type": "number",
+                      "default": 10,
+                      "description": "Battery percentage at which to trigger the low battery notification."
+                    },
+                    "message": {
+                      "type": "string",
+                      "default": "",
+                      "description": "Notification body text. Supports {percent} placeholder. Falls back to default i18n string if empty."
+                    }
+                  }
                 },
                 "full_battery": {
-                  "type": "boolean",
-                  "default": false,
-                  "description": "Determines whether to show notifications when the battery is full."
-                },
-                "low_battery": {
-                  "type": "boolean",
-                  "default": false,
-                  "description": "Determines whether to show notifications when the battery is low."
+                  "type": "object",
+                  "properties": {
+                    "enabled": {
+                      "type": "boolean",
+                      "default": false,
+                      "description": "Show a notification when the battery is fully charged."
+                    },
+                    "message": {
+                      "type": "string",
+                      "default": "",
+                      "description": "Notification body text. Supports {percent} placeholder. Falls back to default i18n string if empty."
+                    }
+                  }
                 },
                 "charging": {
-                  "type": "boolean",
-                  "default": false,
-                  "description": "Determines whether to show notifications when the battery is charging."
+                  "type": "object",
+                  "properties": {
+                    "enabled": {
+                      "type": "boolean",
+                      "default": false,
+                      "description": "Show a notification when the charger is plugged in."
+                    },
+                    "message": {
+                      "type": "string",
+                      "default": "",
+                      "description": "Notification body text. Supports {percent} placeholder. Falls back to default i18n string if empty."
+                    }
+                  }
+                },
+                "unplugged": {
+                  "type": "object",
+                  "properties": {
+                    "enabled": {
+                      "type": "boolean",
+                      "default": false,
+                      "description": "Show a notification when the charger is unplugged."
+                    },
+                    "message": {
+                      "type": "string",
+                      "default": "",
+                      "description": "Notification body text. Supports {percent} placeholder. Falls back to default i18n string if empty."
+                    }
+                  }
                 }
-              },
-              "required": ["low_threshold", "full_battery", "low_battery", "charging"]
+              }
             }
           },
           "required": [

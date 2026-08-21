@@ -82,10 +82,23 @@ DEFAULT_CONFIG = {
             "tooltip": True,
             "label_format": "{icon} {percent}",
             "notifications": {
-                "low_threshold": 10,
-                "full_battery": False,
-                "low_battery": False,
-                "charging": False,
+                "low_battery": {
+                    "enabled": False,
+                    "threshold": 10,
+                    "message": "",
+                },
+                "full_battery": {
+                    "enabled": False,
+                    "message": "",
+                },
+                "charging": {
+                    "enabled": False,
+                    "message": "",
+                },
+                "unplugged": {
+                    "enabled": False,
+                    "message": "",
+                },
             },
         },
         "quick_settings": {

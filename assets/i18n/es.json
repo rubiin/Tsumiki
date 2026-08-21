@@ -20,6 +20,7 @@
       "tooltip": "Bateria",
       "low": "Bateria baja",
       "charging": "Cargando",
+      "unplugged": "Desconectado",
       "full": "Carga completa",
       "no_battery": "No hay bateria presente"
     },

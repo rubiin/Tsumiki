@@ -20,6 +20,7 @@
       "tooltip": "Batterij",
       "low": "Batterij laag",
       "charging": "Opladen",
+      "unplugged": "Ontkoppeld",
       "full": "Volledig opgeladen",
       "no_battery": "Geen batterij gedetecteerd"
     },

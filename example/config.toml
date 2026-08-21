@@ -171,11 +171,26 @@ tooltip = true
 label_format = "{icon} {percent}"
 
 [widgets.battery.notifications]
-low_threshold = 10
-full_battery = false
-low_battery = false
-charging = false
+# low battery: fires when percentage drops below threshold while discharging
+[widgets.battery.notifications.low_battery]
+enabled = false
+threshold = 10
+message = ""                              # {percent} placeholder supported
 
+# full battery: fires when charger is unplugged at 100%
+[widgets.battery.notifications.full_battery]
+enabled = false
+message = ""
+
+# charging: fires when charger is plugged in
+[widgets.battery.notifications.charging]
+enabled = false
+message = ""
+
+# unplugged: fires when charger is disconnected (not full)
+[widgets.battery.notifications.unplugged]
+enabled = false
+message = ""
 # --- System Tray ---
 [widgets.system_tray]
 icon_size = 16

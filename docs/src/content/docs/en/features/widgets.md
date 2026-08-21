@@ -138,15 +138,43 @@ tooltip = true
 label_format = "{icon} {percent}"
 
 [widgets.battery.notifications]
-low_threshold = 10
-full_battery = false
-low_battery = false
-charging = false
+
+[widgets.battery.notifications.low_battery]
+enabled = false
+threshold = 10
+message = ""                              # {percent} placeholder supported
+
+[widgets.battery.notifications.full_battery]
+enabled = false
+message = ""
+
+[widgets.battery.notifications.charging]
+enabled = false
+message = ""
+
+[widgets.battery.notifications.unplugged]
+enabled = false
+message = ""
 ```
 
 Variables available in `label_format`: `{icon}`, `{percent}`, `{time_remaining}`.
 
-The notifications section controls which battery events trigger desktop notifications.
+#### Notification options
+
+Each notification type is a separate table with the following fields:
+
+| Field       | Types              | Description                                                                                           |
+| ----------- | ------------------ | ----------------------------------------------------------------------------------------------------- |
+| `enabled`   | all                | Whether to show this notification.                                                                    |
+| `threshold` | `low_battery` only | Battery percentage that triggers the low-battery alert (default: `10`).                               |
+| `message`   | all                | Custom body text. Supports `{percent}` placeholder. Falls back to the default i18n string when empty. |
+
+**Notification types:**
+
+- **`low_battery`** -- Fires when the battery drops to or below `threshold` while discharging.
+- **`full_battery`** -- Fires when the charger is unplugged and the battery is at 100%.
+- **`charging`** -- Fires when the charger is plugged in.
+- **`unplugged`** -- Fires when the charger is disconnected (and the battery is not full).
 
 ### Volume
 

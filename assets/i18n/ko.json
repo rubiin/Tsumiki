@@ -20,6 +20,7 @@
       "tooltip": "배터리",
       "low": "배터리 부족",
       "charging": "충전 중",
+      "unplugged": "충전기 분리됨",
       "full": "충전 완료",
       "no_battery": "배터리가 감지되지 않음"
     },

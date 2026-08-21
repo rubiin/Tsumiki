@@ -20,6 +20,7 @@
       "tooltip": "Akku",
       "low": "Akku niedrig",
       "charging": "Wird geladen",
+      "unplugged": "Netzstecker gezogen",
       "full": "Voll geladen",
       "no_battery": "Kein Akku vorhanden"
     },

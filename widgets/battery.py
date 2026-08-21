@@ -167,61 +167,87 @@ class BatteryWidget(ButtonWidget):
 
         return True
 
+    def _get_notification_message(self, event_type, percentage):
+        """Return the body text for a battery notification.
+        Uses custom message from config if provided, otherwise falls back to i18n."""
+        notifications = self.config.get("notifications", {})
+        event_config = notifications.get(event_type, {})
+        if isinstance(event_config, dict):
+            custom = event_config.get("message", "")
+        else:
+            custom = ""
+        app_name = _("widget.battery.tooltip")
+
+        fallbacks = {
+            "low_battery": f"{app_name} {percentage}%",
+            "full_battery": f"{app_name} {percentage}%",
+            "charging": f"{app_name} {percentage}%",
+            "unplugged": f"{app_name} {percentage}%",
+        }
+
+        body = custom or fallbacks.get(event_type, f"{percentage}%")
+        body = body.replace("{percent}", str(percentage))
+
+        return body
+
     def _check_notifications(self, percentage, is_charging):
-        """Simple notification checking."""
+        """Check battery state transitions and fire notifications."""
         notifications = self.config.get("notifications", {})
         last_state_available = self.last_charging_state is not None
 
         # Handle state transitions for charging, discharging, and full battery
         if last_state_available:
             is_full = percentage >= self.full_battery_level
+            full_cfg = notifications.get("full_battery", {})
+            unplugged_cfg = notifications.get("unplugged", {})
+            charging_cfg = notifications.get("charging", {})
 
-            # Transition from charging to not charging (could be disconnected or full)
+            # Transition from charging to not charging (disconnected or full)
             if not is_charging and self.last_charging_state:
                 # Full battery event takes precedence
                 if (
                     is_full
-                    and notifications.get("full_battery", False)
+                    and full_cfg.get("enabled", False)
                     and not self.full_battery_notified
                 ):
                     send_notification(
                         title=_("widget.battery.full"),
-                        body=f"{_('widget.battery.tooltip')} {percentage}%",
+                        body=self._get_notification_message("full_battery", percentage),
                         urgency="normal",
-                        icon="battery-full",
+                        icon="battery-full-charged-symbolic",
                         app_name=_("widget.battery.tooltip"),
                     )
                     self.full_battery_notified = True
                     self.charging_notified = False
                     self.discharging_notified = False
-                # Disconnected event
+                # Charger unplugged event
                 elif (
                     not is_full
-                    and notifications.get("charging", False)
+                    and unplugged_cfg.get("enabled", False)
                     and not self.discharging_notified
                 ):
                     send_notification(
-                        title=_("common.disabled"),
-                        body=f"{_('widget.battery.tooltip')} {percentage}%",
+                        title=_("widget.battery.unplugged"),
+                        body=self._get_notification_message("unplugged", percentage),
                         urgency="normal",
-                        icon="battery",
+                        icon="battery-full-discharging-symbolic",
                         app_name=_("widget.battery.tooltip"),
                     )
                     self.discharging_notified = True
                     self.charging_notified = False
 
-            # Transition to charging
+            # Transition to charging (plugged in)
             elif (
                 is_charging
                 and not self.last_charging_state
-                and notifications.get("charging", False)
+                and charging_cfg.get("enabled", False)
                 and not self.charging_notified
             ):
                 send_notification(
                     title=_("widget.battery.charging"),
-                    body=f"{_('widget.battery.tooltip')} {percentage}%",
+                    body=self._get_notification_message("charging", percentage),
                     urgency="normal",
-                    icon="battery-charging",
+                    icon="battery-charging-symbolic",
                     app_name=_("widget.battery.tooltip"),
                 )
                 self.charging_notified = True
@@ -232,8 +258,9 @@ class BatteryWidget(ButtonWidget):
             self.full_battery_notified = False
 
         # Low battery notification
-        if notifications.get("low_battery", False):
-            threshold = notifications.get("low_threshold", 10)
+        low_cfg = notifications.get("low_battery", {})
+        if low_cfg.get("enabled", False):
+            threshold = low_cfg.get("threshold", 10)
             if (
                 percentage <= threshold
                 and not is_charging
@@ -242,9 +269,9 @@ class BatteryWidget(ButtonWidget):
             ):
                 send_notification(
                     title=_("widget.battery.low"),
-                    body=f"{_('widget.battery.tooltip')} {percentage}%",
+                    body=self._get_notification_message("low_battery", percentage),
                     urgency="critical",
-                    icon="battery-caution",
+                    icon="battery-caution-symbolic",
                     app_name=_("widget.battery.tooltip"),
                 )
                 self.low_battery_notified = True
