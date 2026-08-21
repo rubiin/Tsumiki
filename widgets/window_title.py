@@ -31,6 +31,11 @@ class WindowTitleWidget(ButtonWidget):
         self.container_box.children = self.active_window
 
     def _get_title(self, win_title: str, win_class: str):
+        # When no window is active, win_class is empty or "unknown"
+        # (Fabric defaults to "unknown" when j/activewindow has no class key)
+        if not win_class or win_class == "unknown":
+            return ""
+
         mappings_enabled = self.config.get("mappings", True)
         trunc = self.config.get("truncation", True)
         trunc_size = self.config.get("truncation_size", 50)
