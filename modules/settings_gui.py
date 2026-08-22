@@ -609,7 +609,7 @@ class SettingsGUI(Window):
         browse_btn = HoverButton(
             label="Browse...",
             name="settings-browse-btn",
-            on_clicked=self._on_browse_wallpaper(entry, path, key),
+            on_clicked=lambda _btn, e=entry, p=path, k=key: self._on_browse_wallpaper(_btn, e, p, k),
         )
 
         hbox.pack_start(browse_btn, False, False, 0)
