@@ -223,6 +223,7 @@ class ClipHistoryMenu(Box, TeardownMixin):
     def on_search_text_changed(self, entry, pspec):
         # Remove any existing pending filter operation
         if self._search_timer_id is not None:
+            self._unregister_repeater(self._search_timer_id)
             GLib.source_remove(self._search_timer_id)
             self._search_timer_id = None
 

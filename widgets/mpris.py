@@ -124,6 +124,7 @@ class MprisWidget(ButtonWidget, PopoverMixin):
     def _stop_progress_timer(self):
         if self._progress_timer_id is None:
             return
+        self._unregister_repeater(self._progress_timer_id)
         GLib.source_remove(self._progress_timer_id)
         self._progress_timer_id = None
 

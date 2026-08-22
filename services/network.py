@@ -1,9 +1,10 @@
+import contextlib
 import shlex
 from typing import Any, Literal
 
 import gi
 from fabric.core.service import Property, Service, Signal
-from fabric.utils import Gio, bulk_connect, exec_shell_command_async, logger, time
+from fabric.utils import Gio, GLib, bulk_connect, exec_shell_command_async, logger, time
 
 from utils.constants import NETWORK_RECENCY_THRESHOLD_SECONDS
 from utils.exceptions import NetworkManagerNotFoundError
@@ -112,15 +113,13 @@ class Wifi(Service):
         """Start scanning for WiFi networks and emit scanning signal"""
         if self._device:
             self.emit("scanning", True)  # Emit signal that scanning has started
-            self._device.request_scan_async(
-                None,
-                lambda device, result: [
-                    device.request_scan_finish(result),
-                    self.emit(
-                        "scanning", False
-                    ),  # Emit signal that scanning has stopped
-                ],
-            )
+
+            def _on_scan_done(device, result):
+                with contextlib.suppress(GLib.Error):
+                    device.request_scan_finish(result)
+                self.emit("scanning", False)
+
+            self._device.request_scan_async(None, _on_scan_done)
 
     def is_active_ap(self, name) -> bool:
         return self._ap.get_bssid() == name if self._ap else False

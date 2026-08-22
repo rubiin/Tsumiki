@@ -490,6 +490,7 @@ class USBManagerMenu(Box, TeardownMixin):
 
     def _on_action_done(self, *_):
         if self._refresh_timer_id is not None:
+            self._unregister_repeater(self._refresh_timer_id)
             GLib.source_remove(self._refresh_timer_id)
         self._refresh_timer_id = self._register_repeater(
             GLib.timeout_add(250, self._refresh_after_action)

@@ -50,13 +50,14 @@ class BluetoothDeviceBox(CenterBox):
             lambda _: self.device.set_property("connecting", not self.device.connected),
         )
 
-        bulk_connect(
+        self._device_handler_ids = bulk_connect(
             self.device,
             {
                 "notify::connecting": self.on_device_connecting,
                 "notify::connected": self.on_device_connect,
             },
         )
+        self.connect("destroy", self._on_destroy)
 
         device_name = device.name or _("widget.bluetooth.unknown_device")
 
@@ -80,6 +81,10 @@ class BluetoothDeviceBox(CenterBox):
         self.add_end(self.connect_button)
 
         self.on_device_connect()
+
+    def _on_destroy(self, *_):
+        for handler_id in self._device_handler_ids:
+            self.device.disconnect(handler_id)
 
     def on_device_connecting(self, *_args):
         if self.device.connecting:

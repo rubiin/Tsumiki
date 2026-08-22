@@ -1,4 +1,6 @@
-from fabric.utils import GLib, time
+from time import monotonic
+
+from fabric.utils import GLib
 from fabric.widgets.label import Label
 
 from shared.widget_container import ButtonWidget
@@ -41,15 +43,14 @@ class StopWatchWidget(ButtonWidget):
             )
         else:
             self.running = True
-            self.start_time = time.time() - self.elapsed_time
+            self.start_time = monotonic() - self.elapsed_time
             self.icon.set_label(
                 self.config.get("running_icon"),
             )
 
     def update_time(self):
         if self.running:
-            # Calculate the elapsed time
-            self.elapsed_time = time.time() - self.start_time
+            self.elapsed_time = monotonic() - self.start_time
             minutes, seconds = divmod(self.elapsed_time, 60)
             self.time_label.set_text(f"{int(minutes):02}:{int(seconds):02}")
         return True

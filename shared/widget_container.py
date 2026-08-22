@@ -27,6 +27,13 @@ class TeardownMixin:
         self._repeaters.append(repeater_id)
         return repeater_id
 
+    def _unregister_repeater(self, repeater_id: int) -> None:
+        """Remove a repeater id from the tracked list after manual removal."""
+        import contextlib
+
+        with contextlib.suppress(ValueError):
+            getattr(self, "_repeaters", []).remove(repeater_id)
+
     def _register_handler(self, source, handler_id) -> None:
         if not hasattr(self, "_repeaters"):
             self._repeaters = []

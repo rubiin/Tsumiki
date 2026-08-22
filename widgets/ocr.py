@@ -80,6 +80,7 @@ class OCRWidget(ButtonWidget):
         # The async API fires once per stdout line; re-arm a short timer so the
         # menu is built ~200ms after the final line arrives.
         if self._lang_finalize_id:
+            self._unregister_repeater(self._lang_finalize_id)
             GLib.source_remove(self._lang_finalize_id)
         self._lang_finalize_id = self._register_repeater(
             GLib.timeout_add(200, self._finalize_languages)
