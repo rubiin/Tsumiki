@@ -37,11 +37,16 @@ class Dialog(PopupWindow):
             h_align="center",
         )
 
-        self.ok_btn = Button(label=_("common.ok"), name="dialog-button")
+        self._command = None
+        self.ok_btn = Button(
+            label=_("common.ok"),
+            name="dialog-button",
+            on_clicked=self._on_ok_clicked,
+        )
         self.cancel_btn = Button(
             label=_("common.cancel"),
             name="dialog-button",
-            on_clicked=lambda *_: self.destroy(),
+            on_clicked=lambda *_: self.toggle_popup(),
         )
 
         self.buttons.children = (self.ok_btn, self.cancel_btn)
@@ -59,6 +64,10 @@ class Dialog(PopupWindow):
             **kwargs,
         )
 
+    def _on_ok_clicked(self, *_):
+        if self._command:
+            exec_shell_command_async(self._command, lambda *_: self.toggle_popup())
+
     def add_content(
         self,
         title: str,
@@ -67,11 +76,6 @@ class Dialog(PopupWindow):
     ):
         self.title.set_label(title.upper())
         self.body.set_label(body)
-        self.ok_btn.connect(
-            "clicked",
-            lambda *_: exec_shell_command_async(
-                command, lambda *_: self.toggle_popup()
-            ),
-        )
+        self._command = command
 
         return self
