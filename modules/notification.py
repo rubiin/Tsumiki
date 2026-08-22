@@ -357,9 +357,9 @@ class NotificationWidget(EventBox):
 
     def _build_actions(self, notification: Notification) -> Grid:
         """Build the actions grid from notification actions."""
-        actions_count = min(
-            len(self._notification.actions), self.config.get("max_actions", 3)
-        )
+        max_actions = self.config.get("max_actions", 3)
+        actions = notification.actions[:max_actions]
+        actions_count = len(actions)
         grid = Grid(
             orientation="h",
             name="notification-action-box",
@@ -370,9 +370,9 @@ class NotificationWidget(EventBox):
         grid.attach_flow(
             [
                 ActionButton(action, i, actions_count)
-                for i, action in enumerate(notification.actions)
+                for i, action in enumerate(actions)
             ],
-            3,
+            max_actions,
         )
         return grid
 
