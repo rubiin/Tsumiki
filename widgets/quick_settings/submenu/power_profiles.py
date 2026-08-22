@@ -125,6 +125,8 @@ class PowerProfileSubMenu(QuickSubMenu):
             self.on_profile_changed()
 
     def on_profile_changed(self, *_):
+        if self.profile_items is None:
+            return
         active = power_pfl_service.active_profile
         for item in self.profile_items:
             item.set_active(active)
