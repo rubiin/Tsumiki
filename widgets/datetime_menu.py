@@ -725,13 +725,18 @@ class DateTimeWidget(ButtonWidget, PopoverMixin):
 
         notification_config = self.config.get("notification", {})
 
+        clock_format = "%I:%M"
+        if self.config.get("clock_format", "24h") == "24h":
+            clock_format = "%H:%M"
+        date_format = f"{self.config.get('date_format', '%b %d')} {clock_format}"
+
         if notification_config.get("enabled", True):
             self.notification_indicator = nerd_font_icon(
                 icon=get_text_icon("notifications.noisy"),
                 name="notification-indicator",
                 props={
                     "style_classes": ["panel-font-icon"],
-                    "visible": notification_config.get("enabled", True),
+                    "visible": True,
                 },
             )
 
@@ -739,8 +744,7 @@ class DateTimeWidget(ButtonWidget, PopoverMixin):
                 name="notification-count",
                 label=str(notification_service.count),
                 v_align="start",
-                visible=notification_config.get("enabled", True)
-                and notification_config.get("count", True),
+                visible=notification_config.get("count", True),
             )
 
             if (
@@ -762,13 +766,6 @@ class DateTimeWidget(ButtonWidget, PopoverMixin):
 
             self.container_box.add(self.notification_indicator)
             self.container_box.add(self.count_label)
-
-            clock_format = "%I:%M"
-
-            if self.config.get("clock_format", "24h") == "24h":
-                clock_format = "%H:%M"
-
-            date_format = f"{self.config.get('date_format', '%b %d')} {clock_format}"
 
         is_nepali_time = self.config.get("nepali_date", False)
 
