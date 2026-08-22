@@ -489,7 +489,7 @@ DEFAULT_CONFIG = {
         },
         "dock": {
             "enabled": False,
-            "ignored_apps": [],
+            "ignored": [],
             "icon_size": 40,
             "behavior": "intellihide",  # can be "always_show" or "intellihide"
             "tooltip": False,

@@ -2837,7 +2837,7 @@
               },
               "description": "Specifies the size of the dock preview icons."
             },
-            "ignored_apps": {
+            "ignored": {
               "type": "array",
               "items": {
                 "type": "string",

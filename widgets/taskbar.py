@@ -197,7 +197,7 @@ class TaskBarWidget(BoxWidget):
                     continue
                 client = HyprlandClient(item, active_address)
                 app_id = client.get_app_id()
-                if not app_id or app_id in self.config.get("ignored_apps", []):
+                if not app_id or app_id in self.config.get("ignored", []):
                     continue
                 clients.append(client)
 

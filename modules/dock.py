@@ -365,7 +365,7 @@ class AppBar(BoxWidget):
 
                 client = HyprlandClient(item, active_address)
                 app_id = client.get_app_id()
-                if not app_id or app_id in self.config.get("ignored_apps", []):
+                if not app_id or app_id in self.config.get("ignored", []):
                     continue
                 clients.append(client)
 
@@ -585,7 +585,7 @@ class AppBar(BoxWidget):
             self._save_pinned_apps()
 
     def on_app_id(self, client, client_button: Button, client_image: Image, *_):
-        if client.get_app_id() in self.config.get("ignored_apps", []):
+        if client.get_app_id() in self.config.get("ignored", []):
             client_button.destroy()
             client_image.destroy()
             return

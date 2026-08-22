@@ -80,7 +80,7 @@ max_count = 200
 ```toml
 [modules.dock]
 enabled = false
-ignored_apps = []
+ignored = []
 icon_size = 40
 behavior = "intellihide"            # "intellihide" | "always_show"
 tooltip = false

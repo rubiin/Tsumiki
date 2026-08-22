@@ -80,7 +80,7 @@ Un lanzador de aplicaciones ancladas con intellihide, vistas previas de ventanas
 ```toml
 [modules.dock]
 enabled = false
-ignored_apps = []
+ignored = []
 icon_size = 40
 behavior = "intellihide"            # "intellihide" | "always_show"
 tooltip = false

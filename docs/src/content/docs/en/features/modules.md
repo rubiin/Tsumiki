@@ -80,7 +80,7 @@ A pinned-application launcher with intellihide, window previews, and app groupin
 ```toml
 [modules.dock]
 enabled = false
-ignored_apps = []
+ignored = []
 icon_size = 40
 behavior = "intellihide"            # "intellihide" | "always_show"
 tooltip = false
