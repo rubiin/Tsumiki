@@ -5,6 +5,15 @@ from fabric.utils import GLib, exec_shell_command, exec_shell_command_async, log
 
 from .base import SingletonService
 
+# Matches valid IPv4, IPv6, or hostname — blocks shell metacharacters.
+_DNS_VALUE_RE = re.compile(r"^[a-zA-Z0-9.:\[\]-]+$")
+
+
+def _is_valid_dns_value(value: str) -> bool:
+    """Return True if *value* looks like an IP address or hostname."""
+    return bool(_DNS_VALUE_RE.match(value))
+
+
 # Pre-configured DNS providers with label, primary, secondary
 DEFAULT_PROVIDERS = [
     {"label": "Cloudflare", "primary": "1.1.1.1", "secondary": "1.0.0.1"},
@@ -136,6 +145,14 @@ class DnsSwitcherService(SingletonService):
         uuid = self._get_active_connection()
         if not uuid:
             logger.warning("[DNS] No active NetworkManager connection found")
+            return
+
+        if not _is_valid_dns_value(primary) or (
+            secondary and not _is_valid_dns_value(secondary)
+        ):
+            logger.warning(
+                f"[DNS] Rejected invalid DNS value: primary={primary!r} secondary={secondary!r}"
+            )
             return
 
         servers = primary
