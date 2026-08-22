@@ -188,3 +188,12 @@ config.toml
 # End of https://www.toptal.com/developers/gitignore/api/python
 
 graphify-out
+
+# Ignore documentation files
+opts.md
+bugs.md
+
+# testing files
+*ignore_me*
+*ignore-me*
+*IGNORE_ME*
