@@ -187,7 +187,7 @@ class SystemTrayWidget(ButtonWidget, PopoverMixin, BaseSystemTray):
         self.container_box.add(self.tray_box)
 
         if self.not_empty(self.hidden_list):
-            self.connect_after.add(self.chevron_icon)
+            self.container_box.add(self.chevron_icon)
             self.create_menu()
             # Connect click handler
             self.connect("clicked", self.on_click)
@@ -247,7 +247,10 @@ class SystemTrayWidget(ButtonWidget, PopoverMixin, BaseSystemTray):
         # Check if there are any visible items in the tray
         has_visible_items = self.not_empty(self.tray_box.get_children())
         # Check if there are items in the popup menu
-        has_hidden_items = self.not_empty(self.popup_menu.grid.get_children())
+        has_hidden_items = (
+            hasattr(self, "popup_menu")
+            and self.not_empty(self.popup_menu.grid.get_children())
+        )
 
         # Widget is visible if there are any items (visible or hidden)
         self.set_visible(has_visible_items or has_hidden_items)
