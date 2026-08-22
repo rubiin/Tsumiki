@@ -328,7 +328,7 @@ class KanbanColumn(Gtk.Frame):
                 self.listbox.add(new_row)
 
             self.listbox.show_all()
-            drag_context.finish(True, False, time)
+            drag_context.finish(True, True, time)
             self.emit("changed")  # Emit on move
 
     def on_drag_motion(self, widget: Gtk.Widget, drag_context, x, y, time):
@@ -375,18 +375,26 @@ class Kanban(Box):
 
     def load_state(self):
         state = read_json_file(KANBAN_FILE)
-        if state:
-            for col_data in state["columns"]:
-                for column in self.columns:
-                    if column.title == col_data["title"]:
-                        column.clear_notes(suppress_signal=True)
-                        for note_text in col_data["notes"]:
-                            column.add_note(note_text, suppress_signal=True)
-                        break
-        else:
+        if not state or not isinstance(state.get("columns"), list):
             logger.info(
                 f"[Kanban] No saved state found at {KANBAN_FILE}, starting fresh."
             )
+            return
+
+        for col_data in state["columns"]:
+            if not isinstance(col_data, dict):
+                continue
+            title = col_data.get("title")
+            notes = col_data.get("notes")
+            if not title or not isinstance(notes, list):
+                continue
+            for column in self.columns:
+                if column.title == title:
+                    column.clear_notes(suppress_signal=True)
+                    for note_text in notes:
+                        if isinstance(note_text, str):
+                            column.add_note(note_text, suppress_signal=True)
+                    break
 
 
 class KanbanWidget(ButtonWidget, PopoverMixin):
