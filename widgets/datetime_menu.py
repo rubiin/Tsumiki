@@ -203,7 +203,7 @@ class DateNotificationMenu(Box):
 
         self.config = config
         self.pixel_size = 13
-        self.notification_enabled = config.get("notification", True)
+        self.notification_enabled = config.get("notification", {}).get("enabled", True)
         self._vadj_handler = None
 
         if self.notification_enabled:
