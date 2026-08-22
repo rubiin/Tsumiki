@@ -408,6 +408,8 @@ python3 -c "from widgets.my_module import MyModuleWidget; print('OK: widget')"
 - If a change affects shared state, check all call sites before editing.
 - If a refactor touches UI lifecycle code, watch for stale handlers,
   duplicate timers, and destroy/cleanup paths (see §12).
+- If a change touches config schema, update `tsumiki.schema.json`, `utils/config.py`,
+  and `config.toml` examples in sync.
 
 ## 14. Architecture Notes
 
@@ -486,3 +488,4 @@ https://fabric-development.github.io/fabric-wiki/installing-stubs.html
 - Use the `review` skill for PR reviews.
 - Use the `diagnose` skill for bug investigations.
 - Use the `tdd` skill for feature development.
+- Use the `brainstorm` skill for design discussions.
