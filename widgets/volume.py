@@ -50,6 +50,9 @@ class VolumeWidget(EventBoxWidget):
     @cooldown(0.1)
     def on_scroll(self, _, event):
         # Adjust the volume based on the scroll direction
+        if not self.audio.speaker:
+            return
+
         val_y = event.delta_y
         step_size = self.config.get("step_size", 5)
 
