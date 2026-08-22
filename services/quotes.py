@@ -38,12 +38,15 @@ class QuotesService(SingletonService):
                 time.sleep(delay * (attempt + 1))
         return None
 
-    def get_quotes(self) -> Optional[dict]:
+    def get_quotes(self, ttl: int = 3600) -> Optional[dict]:
         quotes = None
 
         if os.path.exists(QUOTES_CACHE_FILE):
-            quotes = read_json_file(QUOTES_CACHE_FILE)
-            return random.choice(quotes) if quotes else None
+            cache_age = time.time() - os.path.getmtime(QUOTES_CACHE_FILE)
+            if cache_age < ttl:
+                quotes = read_json_file(QUOTES_CACHE_FILE)
+                return random.choice(quotes) if quotes else None
+            # Cache expired — refresh from the API.
 
         quotes = self.simple_quotes_info()
         if quotes:

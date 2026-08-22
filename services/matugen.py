@@ -35,11 +35,13 @@ class MatugenService(SingletonService):
 
     def _build_cmd(self, image_path: str) -> str:
         """Build matugen command from config."""
+        import shlex
+
         scheme = self._style_config.get("scheme", "scheme-tonal-spot")
         contrast = self._style_config.get("contrast", 0.0)
 
         return (
-            f"matugen image -q {image_path} -t {scheme} "
+            f"matugen image -q {shlex.quote(image_path)} -t {scheme} "
             f"--mode {self._mode} --contrast {contrast} --config {_CONFIG_PATH} "
             f"--source-color-index 0"
         )

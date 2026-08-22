@@ -5,16 +5,19 @@ class HyprSunsetWidget(CommandSwitcher):
     """A widget to control the hyprsunset command."""
 
     def __init__(self, **kwargs):
-        # Set the command to adjust the screen temperature
-        self.command = "hyprsunset"
-        self.args = f"-t {self.config.get('temperature', 6500)}"
-
         super().__init__(
-            command=self.command,
-            enabled_icon=self.config.get("enabled_icon"),
-            disabled_icon=self.config.get("disabled_icon"),
-            label=self.config.get("label", "HyprSunset"),
-            tooltip=self.config.get("tooltip", "Adjust screen temperature"),
+            command="hyprsunset",
+            enabled_icon="",
+            disabled_icon="",
             name="hyprsunset",
             **kwargs,
         )
+        # Config is available now that super().__init__() has run.
+        self.enabled_icon = self.config.get("enabled_icon", self.enabled_icon)
+        self.disabled_icon = self.config.get("disabled_icon", self.disabled_icon)
+        self.icon.set_label(self.enabled_icon)
+        if self.config.get("tooltip", True):
+            self.set_tooltip_text("Adjust screen temperature")
+        # Pass the configured temperature to hyprsunset via full_command.
+        temperature = self.config.get("temperature", "6500")
+        self.full_command = f"hyprsunset -t {temperature}"

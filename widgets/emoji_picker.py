@@ -32,7 +32,8 @@ class EmojiPickerMenu(Box):
         self._parent = parent
 
         self.selected_index = -1
-        self.emojis_per_page = config.get("per_row", 5) * config.get("per_column", 5)
+        self._per_row = config.get("per_row", 5)
+        self.emojis_per_page = self._per_row * config.get("per_column", 5)
         self.current_page_index = 0
         self.filtered_emojis = []
         self.total_pages = 0
@@ -216,7 +217,7 @@ class EmojiPickerMenu(Box):
 
         row_box = None
         for i, (emoji_char, emoji_info) in enumerate(page_emojis):
-            if i % 9 == 0:
+            if i % self._per_row == 0:
                 row_box = Box(name="emoji-row-box", orientation="h", spacing=2)
                 grid_box.add(row_box)
             if row_box is not None:

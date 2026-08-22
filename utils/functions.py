@@ -960,7 +960,10 @@ def validate_widgets(parsed_data, default_config):
         if isinstance(groups, list):
             for idx, group in enumerate(groups):
                 if isinstance(group, dict) and "widgets" in group:
-                    for widget in group["widgets"]:
+                    widgets = group["widgets"]
+                    if not isinstance(widgets, (list, tuple)):
+                        continue
+                    for widget in widgets:
                         validate_widget_reference(
                             widget, parsed_data, default_config, f"{group_type}[{idx}]"
                         )
@@ -1042,7 +1045,7 @@ def send_notification(
 
     # Set the urgency level if provided
     if urgency in URGENCY_LEVELS:
-        notification.set_urgent(urgency)
+        notification.set_urgent(urgency == "critical")
 
     # Set the icon if provided
     if icon:

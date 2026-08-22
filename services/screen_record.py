@@ -123,11 +123,9 @@ class ScreenRecorderService(SingletonService):
 
         def _callback(process: Gio.Subprocess, task: Gio.Task):
             try:
-                _, stdout, stderr = process.communicate_utf8_finish(task)
-            except GLib.Error:
-                logger.exception(
-                    f"[SCREENSHOT] Failed read notification action with error {stderr}"
-                )
+                _, stdout, _stderr = process.communicate_utf8_finish(task)
+            except GLib.Error as err:
+                logger.exception(f"[SCREENSHOT] Failed read notification action: {err}")
                 return
 
             match stdout.strip("\n"):
@@ -156,7 +154,7 @@ class ScreenRecorderService(SingletonService):
         timestamp = datetime.today().strftime("%Y-%m-%d_%H-%M-%S")
         file_path = os.path.join(self.screenshot_path, f"{timestamp}.png")
 
-        annotate = config.get("annotate", False)
+        annotate = config.get("annotation", False)
 
         temp_path = file_path  # Default to final path if no annotation
 
@@ -172,7 +170,7 @@ class ScreenRecorderService(SingletonService):
             else ["grimblast", "copyscreen"]
         )
 
-        if not fullscreen:
+        if not fullscreen and len(command) > 2:
             command[2] = "area"
 
         def after_screenshot(*_):
@@ -238,11 +236,10 @@ class ScreenRecorderService(SingletonService):
 
         def _callback(process: Gio.Subprocess, task: Gio.Task):
             try:
-                _, stdout, stderr = process.communicate_utf8_finish(task)
-            except GLib.Error:
+                _, stdout, _stderr = process.communicate_utf8_finish(task)
+            except GLib.Error as err:
                 logger.exception(
-                    f"[SCREENRECORD] Failed read notification action with error."
-                    f"{stderr}"
+                    f"[SCREENRECORD] Failed read notification action: {err}"
                 )
                 return
 

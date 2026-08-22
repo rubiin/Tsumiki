@@ -81,9 +81,9 @@ class HyprSunsetSubMenu(QuickSubMenu):
 
     def _update_ui(self, moved_pos: str | int):
         # Update the scale value based on the current temperature
-        sanitized_value = int(
-            moved_pos.strip("\n").strip("") if isinstance(moved_pos, str) else moved_pos
-        )
+        if isinstance(moved_pos, str):
+            moved_pos = moved_pos.strip().rstrip("kK")
+        sanitized_value = int(moved_pos)
 
         # Avoid unnecessary updates if the value hasn't changed
         if sanitized_value == round(self.scale.get_value()):

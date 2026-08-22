@@ -23,11 +23,22 @@ class BrightnessSlider(SettingSlider):
             self.destroy()
             return
 
+        self._destroyed = False
+        self._brightness_handler_id = None
         if self.scale:
             self.scale.connect("change-value", self.on_scale_move)
-            self.client.connect("brightness_changed", self.on_brightness_change)
+            self._brightness_handler_id = self.client.connect(
+                "brightness_changed", self.on_brightness_change
+            )
 
         self.icon_button.connect("clicked", self.reset)
+        self.connect("destroy", self._on_destroy)
+
+    def _on_destroy(self, *_):
+        self._destroyed = True
+        if self._brightness_handler_id is not None:
+            self.client.disconnect(self._brightness_handler_id)
+            self._brightness_handler_id = None
 
     def reset(self, *_):
         """Reset the brightness to the default value."""
@@ -40,6 +51,8 @@ class BrightnessSlider(SettingSlider):
         self.client.screen_brightness = raw_value
 
     def on_brightness_change(self, service: BrightnessService, _):
+        if self._destroyed:
+            return
         brightness_percent = service.screen_brightness_percentage
 
         # Avoid unnecessary updates if the value hasn't changed

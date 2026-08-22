@@ -143,14 +143,14 @@ class GpuWidget(FabricatorBoundWidget, StatDisplayMixin):
 
         self._gpu_request_in_flight = True
         self._last_gpu_poll = now
-        out = exec_shell_command("nvtop -s")
-
         try:
+            out = exec_shell_command("nvtop -s")
             data = json.loads(out)
             self._on_gpu_stats_received(json.dumps(data[0]))
-
         except Exception as e:
             logger.error(f"Error parsing JSON: {e}")
+        finally:
+            self._gpu_request_in_flight = False
 
         return True
 

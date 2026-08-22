@@ -117,8 +117,9 @@ class IconResolver:
     def _get_icon_from_desktop_file(self, desktop_file_path: str):
         with open(desktop_file_path, "r") as f:
             for line in f.readlines():
-                if "Icon=" in line:
-                    return "".join(line[5:].split())
+                stripped = line.strip()
+                if stripped.startswith("Icon="):
+                    return "".join(stripped[5:].split())
             return symbolic_icons["fallback"]["executable"]
 
     _app_id_split_re = None

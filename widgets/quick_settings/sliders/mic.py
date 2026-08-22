@@ -55,6 +55,11 @@ class MicrophoneSlider(SettingSlider):
 
         self.scale.connect("change-value", self.on_scale_move)
         self.icon_button.connect("clicked", self.on_mute_click)
+        self._destroyed = False
+        self.connect("destroy", self._on_destroy)
+
+    def _on_destroy(self, *_):
+        self._destroyed = True
 
     @cooldown(1)
     def on_scale_move(self, _, __, moved_pos: float):
@@ -62,7 +67,7 @@ class MicrophoneSlider(SettingSlider):
 
     def update_state(self, *_):
         """Update the slider state from the audio stream."""
-        if not self.audio_stream:
+        if not self.audio_stream or self._destroyed:
             return
 
         volume = round(self.audio_stream.volume)

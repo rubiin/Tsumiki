@@ -267,4 +267,5 @@ class Animator(Service):
             self._timeline_pos = 0
             self.playing = False
             return
+        self.playing = False
         return self.do_remove_tick_handlers()

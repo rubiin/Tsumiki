@@ -254,6 +254,8 @@ class WeatherMenu(BoxWidget, BaseWeatherWidget):
         self._register_repeater(invoke_repeater(60000, self.update_widget))
 
     def update_data(self, data):
+        if data is None:
+            return
         self.update_app_data(data)
 
         self.update_widget(forced=True)

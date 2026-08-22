@@ -124,6 +124,9 @@ class CustomWidgetPresenter:
     def _handle_json_output(self, output: str):
         try:
             data = json.loads(output)
+            if not isinstance(data, dict):
+                self._handle_text_output(str(data))
+                return
             text = data.get("text", "")
             alt = data.get("alt", "")
             percentage = data.get("percentage")
@@ -236,6 +239,8 @@ class CustomWidgetExecutor:
                 def _on_exit(proc, task):
                     with contextlib.suppress(Exception):
                         proc.wait_finish(task)
+                    if getattr(self, "_destroyed", False):
+                        return
                     self._restart_timer_id = GLib.timeout_add(
                         restart * 1000, self._start_continuous
                     )
@@ -248,6 +253,8 @@ class CustomWidgetExecutor:
             )
 
     def cleanup(self):
+        self._destroyed = True
+
         if self._repeater_handler_id:
             remove_handler(self._repeater_handler_id)
             self._repeater_handler_id = None

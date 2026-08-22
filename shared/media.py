@@ -96,11 +96,18 @@ class PlayerBoxStack(Box):
     def on_lost_player(self, mpris_manager, player_name):
         logger.info(f"[PLAYER_MANAGER] Player Removed {player_name}")
         players: list = self.player_stack.get_children()
+        if not players:
+            self.hide()
+            self.current_stack_pos = 0
+            return
         if len(players) == 1 and player_name == players[0].player.player_name:
             self.hide()
             self.current_stack_pos = 0
             return
-        if players[self.current_stack_pos].player.player_name == player_name:
+        if (
+            self.current_stack_pos < len(players)
+            and players[self.current_stack_pos].player.player_name == player_name
+        ):
             self.current_stack_pos = max(0, self.current_stack_pos - 1)
             self.player_stack.set_visible_child(
                 self.player_stack.get_children()[self.current_stack_pos],

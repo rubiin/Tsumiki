@@ -243,7 +243,8 @@ class MprisWidget(ButtonWidget, PopoverMixin):
         self.label.set_text(label_text)
 
         art_url = getattr(self.player, "arturl", None) or self.default_cover
-        self.cover.set_style(f"background-image: url('{art_url}');")
+        safe_url = art_url.replace("\\", "\\\\").replace("'", "\\'")
+        self.cover.set_style(f"background-image: url('{safe_url}');")
 
         self._update_progress()
 

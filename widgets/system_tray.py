@@ -247,9 +247,8 @@ class SystemTrayWidget(ButtonWidget, PopoverMixin, BaseSystemTray):
         # Check if there are any visible items in the tray
         has_visible_items = self.not_empty(self.tray_box.get_children())
         # Check if there are items in the popup menu
-        has_hidden_items = (
-            hasattr(self, "popup_menu")
-            and self.not_empty(self.popup_menu.grid.get_children())
+        has_hidden_items = hasattr(self, "popup_menu") and self.not_empty(
+            self.popup_menu.grid.get_children()
         )
 
         # Widget is visible if there are any items (visible or hidden)

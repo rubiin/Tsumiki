@@ -178,13 +178,13 @@ class TaskBarWidget(BoxWidget):
 
     def _process_clients(self, raw_clients, active_address):
         self._active_address = active_address
-        try:
-            if self._show_current_workspace_only and self._current_workspace_id is None:
-                self._fetch_current_workspace(
-                    lambda _: self._process_clients(raw_clients, active_address)
-                )
-                return
+        if self._show_current_workspace_only and self._current_workspace_id is None:
+            self._fetch_current_workspace(
+                lambda _: self._process_clients(raw_clients, active_address)
+            )
+            return
 
+        try:
             clients = []
             for item in raw_clients:
                 ws_id = item.get("workspace", {}).get("id", -1)

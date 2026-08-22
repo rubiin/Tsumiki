@@ -932,7 +932,7 @@ class Launcher(PopupWindow):
         adj = self.scrolled_window.get_vadjustment()
         alloc = button.get_allocation()
         if alloc.height == 0:
-            return True  # Retry once layout is ready
+            return False  # Button removed or not yet laid out; stop retrying
 
         y = alloc.y
         height = alloc.height

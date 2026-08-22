@@ -573,7 +573,8 @@ class GitCompanionWidget(ButtonWidget, PopoverMixin):
         if self.config.get("label", False):
             self.container_box.add(
                 Label(
-                    label=self.config("label_text", "Git"), style_classes="panel-text"
+                    label=self.config.get("label_text", "Git"),
+                    style_classes="panel-text",
                 )
             )
 

@@ -94,6 +94,15 @@ class NotificationPopup(BaseWindow):
             old_box = self._active_notifications.pop(replaces_id, None)
             if old_box is not None:
                 old_box.replace_notification(notification)
+                # Disconnect the old destroy handler (wired to replaces_id)
+                # and re-register with the new id so cleanup targets the
+                # correct key when the box eventually self-destroys.
+                if hasattr(old_box, "_destroy_handler_id"):
+                    old_box.disconnect(old_box._destroy_handler_id)
+                old_box._destroy_handler_id = old_box.connect(
+                    "destroy",
+                    lambda *_: self._unregister_notification(id, old_box),
+                )
                 self._active_notifications[id] = old_box
                 return
 
@@ -101,7 +110,7 @@ class NotificationPopup(BaseWindow):
         self.notifications.add(new_box)
         new_box.set_reveal_child(True)
         self._active_notifications[id] = new_box
-        new_box.connect(
+        new_box._destroy_handler_id = new_box.connect(
             "destroy", lambda *_: self._unregister_notification(id, new_box)
         )
 

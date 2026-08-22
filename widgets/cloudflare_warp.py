@@ -57,6 +57,8 @@ class CloudflareWarpPopover(Box):
         # ── Layout ──
         self.children = [status_box, self._toggle_btn]
 
+        self._destroyed = False
+        self._re_enable_timer_id = None
         self._handler_id = self._service.connect("changed", self._on_status_changed)
         self.connect("destroy", self._on_destroy)
 
@@ -84,9 +86,19 @@ class CloudflareWarpPopover(Box):
         self._toggle_btn.set_sensitive(False)
         self._service.toggle_warp()
         # Re-enable after a short delay
-        GLib.timeout_add(2000, lambda: self._toggle_btn.set_sensitive(True) or False)
+        self._re_enable_timer_id = GLib.timeout_add(
+            2000, lambda: self._re_enable_btn() or False
+        )
+
+    def _re_enable_btn(self):
+        if not self._destroyed:
+            self._toggle_btn.set_sensitive(True)
 
     def _on_destroy(self, *_):
+        self._destroyed = True
+        if self._re_enable_timer_id is not None:
+            GLib.source_remove(self._re_enable_timer_id)
+            self._re_enable_timer_id = None
         if self._handler_id:
             self._service.disconnect(self._handler_id)
             self._handler_id = None

@@ -5,15 +5,16 @@ class HyprIdleWidget(CommandSwitcher):
     """A widget to control the hypridle command."""
 
     def __init__(self, **kwargs):
-        # Set the command to hypridle
-        self.command = "hypridle"
-
         super().__init__(
-            command=self.command,
-            enabled_icon=self.config.get("enabled_icon"),
-            disabled_icon=self.config.get("disabled_icon"),
-            label=self.config.get("label", "HyprIdle"),
-            tooltip=self.config.get("tooltip", "Control the hypridle command"),
+            command="hypridle",
+            enabled_icon="",
+            disabled_icon="",
             name="hypridle",
             **kwargs,
         )
+        # Config is available now that super().__init__() has run.
+        self.enabled_icon = self.config.get("enabled_icon", self.enabled_icon)
+        self.disabled_icon = self.config.get("disabled_icon", self.disabled_icon)
+        self.icon.set_label(self.enabled_icon)
+        if self.config.get("tooltip", True):
+            self.set_tooltip_text("Control the hypridle command")

@@ -151,7 +151,8 @@ class DnsSwitcherService(SingletonService):
             secondary and not _is_valid_dns_value(secondary)
         ):
             logger.warning(
-                f"[DNS] Rejected invalid DNS value: primary={primary!r} secondary={secondary!r}"
+                f"[DNS] Rejected invalid DNS value: "
+                f"primary={primary!r} secondary={secondary!r}"
             )
             return
 

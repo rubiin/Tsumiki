@@ -60,8 +60,10 @@ class SettingsGUI(Window):
         )
 
         self.set_resizable(False)
-        self.config = dict(tsumiki_config)
-        self.theme = tsumiki_config.get("styling", {})
+        import copy
+
+        self.config = copy.deepcopy(tsumiki_config)
+        self.theme = self.config.get("styling", {})
         self.modified = False
 
         # Main layout
@@ -609,7 +611,9 @@ class SettingsGUI(Window):
         browse_btn = HoverButton(
             label="Browse...",
             name="settings-browse-btn",
-            on_clicked=lambda _btn, e=entry, p=path, k=key: self._on_browse_wallpaper(_btn, e, p, k),
+            on_clicked=lambda _btn, e=entry, p=path, k=key: self._on_browse_wallpaper(
+                _btn, e, p, k
+            ),
         )
 
         hbox.pack_start(browse_btn, False, False, 0)

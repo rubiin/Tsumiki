@@ -158,10 +158,13 @@ class OSDContainer(BaseWindow):
         # First make the window visible
         self.set_visible(True)
 
-        # Reset hide timer
+        # Reset hide timer and pending finalize
         if self.hide_timer_id is not None:
             remove_handler(self.hide_timer_id)
             self.hide_timer_id = None
+        if getattr(self, "_finalize_hide_id", None) is not None:
+            remove_handler(self._finalize_hide_id)
+            self._finalize_hide_id = None
 
         # Delay reveal to ensure animation plays
         idle_add(lambda: self.revealer.set_reveal_child(True))
@@ -173,10 +176,13 @@ class OSDContainer(BaseWindow):
 
         # Wait for the animation to finish before hiding the window completely
         duration = self.revealer.get_transition_duration()
-        self._register_repeater(GLib.timeout_add(duration, self._finalize_hide))
+        self._finalize_hide_id = self._register_repeater(
+            GLib.timeout_add(duration, self._finalize_hide)
+        )
         return False
 
     def _finalize_hide(self):
         self.set_visible(False)
         self.hide_timer_id = None
+        self._finalize_hide_id = None
         return False
