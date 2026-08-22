@@ -204,7 +204,6 @@ class OverviewMenu(Box):
             overlay = WorkspaceEventBox(
                 w_id,
                 fixed,
-                hyprland_connection=self._hyprland_connection,
             )
             self.workspace_overlays[w_id] = overlay
             overlays.append(overlay)
