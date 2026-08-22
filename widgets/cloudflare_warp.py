@@ -96,6 +96,7 @@ class CloudflareWarpPopover(Box):
 
     def _on_destroy(self, *_):
         self._destroyed = True
+        self._service.pause_polling()
         if self._re_enable_timer_id is not None:
             GLib.source_remove(self._re_enable_timer_id)
             self._re_enable_timer_id = None

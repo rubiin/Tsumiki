@@ -13,13 +13,24 @@ class AnimatedCircularProgressBar(CircularProgressBar):
         self.duration = duration
         self.curve = curve
         self.animator = None
+        self._destroyed = False
+
+        self.connect("destroy", self._on_destroy)
+
+    def _on_destroy(self, *_):
+        self._destroyed = True
+        if self.animator is not None:
+            self.animator.pause()
 
     def set_notify_value(self, p, *_):
-        if p.value == self.value:
+        if self._destroyed or p.value == self.value:
             return
         self.set_value(p.value)
 
     def animate_value(self, value: float):
+        if self._destroyed:
+            return
+
         from ..animator import Animator
 
         if self.animator is None:

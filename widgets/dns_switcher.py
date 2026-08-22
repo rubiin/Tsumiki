@@ -149,6 +149,7 @@ class DnsSwitcherPopover(Box):
             "notify::current", self._on_current_changed
         )
         self.connect("destroy", self._on_destroy)
+        self._service.resume_polling()
 
         self._on_current_changed()
 
@@ -249,6 +250,7 @@ class DnsSwitcherPopover(Box):
         self._service.reset_to_default()
 
     def _on_destroy(self, *_):
+        self._service.pause_polling()
         if self._handler_id:
             self._service.disconnect(self._handler_id)
             self._handler_id = None

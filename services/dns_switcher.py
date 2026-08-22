@@ -71,6 +71,14 @@ class DnsSwitcherService(SingletonService):
             GLib.source_remove(self._poll_timer_id)
             self._poll_timer_id = None
 
+    def pause_polling(self):
+        """Stop polling — call when the widget is destroyed."""
+        self._stop_polling()
+
+    def resume_polling(self):
+        """Restart polling — call when the widget is created."""
+        self._start_polling()
+
     def _poll(self):
         if not self._poller_running:
             return False

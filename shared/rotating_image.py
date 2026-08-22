@@ -1,9 +1,10 @@
 import math
+from functools import partial
 
 import cairo
 from fabric.widgets.svg import Svg
 
-from .animator import Animator
+from .animator import Animator, cubic_bezier
 
 
 class RotatingIcon(Svg):
@@ -17,7 +18,7 @@ class RotatingIcon(Svg):
 
         self.animator = (
             Animator(
-                bezier_curve=(0.0, 0.0, 1.0, 1.0),
+                timing_function=partial(cubic_bezier, 0.0, 0.0, 1.0, 1.0),
                 duration=duration,
                 min_value=0.0,
                 max_value=1.0,
