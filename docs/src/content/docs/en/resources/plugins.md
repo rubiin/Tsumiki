@@ -224,6 +224,7 @@ cancellation). Enable the ones you want by listing their `name` in the
 | `/history`           | `h`, `hist`               | Search shell command history                     | —                     |
 | `/define`            | `def`, `dict`             | Word definitions (dict.org WordNet)              | network               |
 | `/shorten`           | `short`, `tiny`           | Shorten a URL (is.gd / TinyURL)                  | network               |
+| `/unicode`           | `uni`, `char`             | Search and copy a Unicode character              | — (offline)           |
 
 ### `/calc` — math, units & currency
 
@@ -335,4 +336,15 @@ Shortens a URL via is.gd (TinyURL as fallback) — both free and keyless.
 ```
 /shorten https://github.com/rubiin/tsumiki
 /shorten example.com
+```
+
+### `/unicode` -- Unicode character search
+
+Searches a bundled database of ~2000 common Unicode characters by name,
+alias, codepoint, or category. Enter copies the character to the clipboard.
+
+```
+/unicode arrow
+/unicode copyright
+/unicode EUR
 ```

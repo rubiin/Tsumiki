@@ -1051,6 +1051,49 @@ class EmojiPluginTest(unittest.TestCase):
         self.assertLessEqual(len(results), 24)
 
 
+class UnicodePluginTest(unittest.TestCase):
+    """Test the bundled /unicode plugin (offline)."""
+
+    def setUp(self):
+        from plugins.unicode import UnicodePlugin, search_unicode
+
+        self.plugin = UnicodePlugin()
+        self.search_unicode = search_unicode
+
+    def test_search_finds_by_name(self):
+        matches = self.search_unicode("copyright")
+        self.assertTrue(matches)
+        self.assertEqual(matches[0][1]["name"], "COPYRIGHT SIGN")
+
+    def test_search_finds_by_codepoint(self):
+        matches = self.search_unicode("U+00A9")
+        self.assertTrue(matches)
+        self.assertEqual(matches[0][0], "\u00a9")
+
+    def test_handle_returns_rows_with_codepoint(self):
+        results = self.plugin.handle("copyright")
+        self.assertTrue(results)
+        row = results[0]
+        self.assertIn("U+00A9", row.title)
+        self.assertEqual(row.data, "\u00a9")
+
+    def test_handle_without_args_returns_usage(self):
+        results = self.plugin.handle("")
+        self.assertIn("Usage:", results[0].title)
+
+    def test_handle_no_match(self):
+        results = self.plugin.handle("zzzznotaunicode")
+        self.assertIn("No Unicode", results[0].title)
+
+    def test_handle_limits_results(self):
+        results = self.plugin.handle("letter")
+        self.assertLessEqual(len(results), 24)
+
+    def test_aliases(self):
+        self.assertIn("uni", self.plugin.aliases)
+        self.assertIn("char", self.plugin.aliases)
+
+
 class ClipboardHistoryPluginTest(unittest.TestCase):
     """Test the bundled /clipboard-history plugin (cliphist mocked)."""
 

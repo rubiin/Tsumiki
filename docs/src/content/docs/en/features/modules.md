@@ -207,6 +207,8 @@ Bundled plugins:
   `/define -d foldoc monad`.
 - **`/shorten`** — shorten a URL via is.gd (TinyURL fallback), e.g.
   `/shorten github.com/rubiin/tsumiki` — Enter copies the short link.
+- **`/unicode`** — search and copy Unicode characters by name, e.g.
+  `/unicode arrow` or `/unicode copyright`.
 
 Keyboard: `Up`/`Down` move the selection, `Enter` activates the highlighted
 row, `Escape` closes.
