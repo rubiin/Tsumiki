@@ -30,11 +30,15 @@ def default_history_files() -> list[str]:
     return [path for path in files if path]
 
 
-def parse_bash_history(content: str) -> list[str]:
-    """Return non-empty commands from a bash-style history file."""
+def parse_bash_history(content: str) -> list[tuple[int, str]]:
+    """Return ``[(line_ordinal, command)]`` from a bash-style history file.
+
+    Each entry gets a line-position ordinal so later lines rank as more
+    recent, matching the convention used by zsh plain entries.
+    """
     return [
-        line.strip()
-        for line in content.splitlines()
+        (index + 1, line.strip())
+        for index, line in enumerate(content.splitlines())
         if line.strip() and not line.startswith("#")
     ]
 
@@ -94,7 +98,7 @@ def load_history(paths: list[str] | None = None) -> list[str]:
         elif path.endswith(".zsh_history"):
             entries = parse_zsh_history(content)
         else:
-            entries = [(0, cmd) for cmd in parse_bash_history(content)]
+            entries = parse_bash_history(content)
         for recency, cmd in entries:
             if cmd:
                 merged.append((recency, order, cmd))
