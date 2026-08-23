@@ -109,9 +109,16 @@ class MprisPlayer(Service):
     def on_player_exit(self, player):
         for id in list(self._signal_connectors.values()):
             safe_disconnect(self._player, id)
-        del self._signal_connectors
-        GLib.idle_add(lambda: (self.emit("exit", True), False))
-        del self._player
+        # Defer attribute deletion to the idle callback so that any pending
+        # update_status idle lambdas that reference self._player don't
+        # raise AttributeError between the exit signal and teardown.
+        def _emit_exit_and_cleanup():
+            self.emit("exit", True)
+            del self._player
+            del self._signal_connectors
+            return False
+
+        GLib.idle_add(_emit_exit_and_cleanup)
 
     def toggle_shuffle(self, *_):
         if self.can_shuffle:
