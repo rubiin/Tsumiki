@@ -173,18 +173,35 @@ class ScreenRecorderService(SingletonService):
         if not fullscreen and len(command) > 2:
             command[2] = "area"
 
+        def _annotate_and_notify():
+            """Run satty off the main thread, then marshal back."""
+            try:
+                result = exec_shell_command(
+                    f"satty --filename {temp_path} --output-filename {file_path}"
+                )
+                if result is False:
+                    logger.warning("[SCREENSHOT] satty annotation failed")
+                    return
+                os.unlink(temp_path)
+            except OSError as e:
+                logger.exception(f"[SCREENSHOT] Error in annotation: {e}")
+                return
+
+            def _notify():
+                if config.get("capture_sound", False):
+                    helpers.play_sound(self.shutter_sound)
+                self.send_screenshot_notification(file_path=file_path)
+                return False
+
+            idle_add(_notify)
+
         def after_screenshot(*_):
             try:
                 if annotate:
-                    # Must block until satty finishes so unlink doesn't
-                    # delete the temp file while satty is still reading it.
-                    result = exec_shell_command(
-                        f"satty --filename {temp_path} --output-filename {file_path}"
-                    )
-                    if result is False:
-                        logger.warning("[SCREENSHOT] satty annotation failed")
-                        return  # satty failed, skip notification
-                    os.unlink(temp_path)  # Clean up temp file after use
+                    # Run satty off the main thread to avoid blocking the
+                    # GTK event loop while the annotation window is open.
+                    thread(_annotate_and_notify)
+                    return
 
                 if config.get("capture_sound", False):
                     helpers.play_sound(self.shutter_sound)

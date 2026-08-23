@@ -340,6 +340,7 @@ class Popover(Widget):
         bulk_connect(
             self._content_window,
             {
+                "focus-in-event": self.on_popover_focus_in,
                 "focus-out-event": self.on_popover_focus_out,
                 "key-press-event": self.on_key_press,
             },
@@ -360,6 +361,13 @@ class Popover(Widget):
         self._wire_popover_handlers()
         self._activate_popover()
         return True
+
+    def on_popover_focus_in(self, widget, event):
+        """Cancel any pending hide timeout when focus returns to the popover."""
+        if self._focus_out_timeout_id is not None:
+            GLib.source_remove(self._focus_out_timeout_id)
+            self._focus_out_timeout_id = None
+        return False
 
     def on_popover_focus_out(self, widget, event):
         # This helps with keyboard focus issues
