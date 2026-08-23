@@ -2,55 +2,51 @@
 
 ## [4.5.0](https://github.com/rubiin/tsumiki/compare/v4.4.0...v4.5.0) (2026-08-23)
 
-
 ### 🚀 New Features
 
-* add /unicode command for searching and copying Unicode characters ([b250123](https://github.com/rubiin/tsumiki/commit/b250123ca6b992916d448c5de66ce6c75f293ad6))
-* add nepali_date and show_current_workspace_only options to widget configurations ([c07be89](https://github.com/rubiin/tsumiki/commit/c07be89065e96f23cb720053cb97b5d22a7679bc))
-* add show_current_workspace_only option to theme switcher widget ([26be2f1](https://github.com/rubiin/tsumiki/commit/26be2f120ffdabb5651dbb89239ad7de2a03585f))
-
+- add /unicode command for searching and copying Unicode characters ([b250123](https://github.com/rubiin/tsumiki/commit/b250123ca6b992916d448c5de66ce6c75f293ad6))
+- add nepali_date and show_current_workspace_only options to widget configurations ([c07be89](https://github.com/rubiin/tsumiki/commit/c07be89065e96f23cb720053cb97b5d22a7679bc))
+- add show_current_workspace_only option to theme switcher widget ([26be2f1](https://github.com/rubiin/tsumiki/commit/26be2f120ffdabb5651dbb89239ad7de2a03585f))
 
 ### 🐛 Bug Fixes
 
-* add check for None in on_profile_changed to prevent errors ([0bc0d52](https://github.com/rubiin/tsumiki/commit/0bc0d52391fa43f41d924a866a474911467cfded))
-* add check for None in on_scroll to prevent errors when adjusting volume ([edab9bd](https://github.com/rubiin/tsumiki/commit/edab9bd0e9a1b3937b3528028e9e5ada0123c956))
-* add DNS value validation to prevent invalid entries ([ec64107](https://github.com/rubiin/tsumiki/commit/ec641072a374510d01ed5c6711313bd42e4d9557))
-* add pause and resume polling methods to DnsSwitcherService and integrate with widget lifecycle ([a7d5ef2](https://github.com/rubiin/tsumiki/commit/a7d5ef2821dac10e58efb29043eb6d06cbb5e177))
-* cancel popover hide timeout on focus-in to prevent premature close ([26feca6](https://github.com/rubiin/tsumiki/commit/26feca6a500205ef64984e5937f70d1a7afff484))
-* defer MprisPlayer attribute deletion to idle callback after exit signal ([097a0f0](https://github.com/rubiin/tsumiki/commit/097a0f023cf23e0763f8edb37b128eb57145f6d9))
-* handle case when no active window is present in WindowTitleWidget ([0246f7e](https://github.com/rubiin/tsumiki/commit/0246f7e6e64e2cff2b618f92083df61648a3083c))
-* improve drag context handling and enhance state loading validation in Kanban ([8977a07](https://github.com/rubiin/tsumiki/commit/8977a07f3aa7e32561889d4e5e6c259311e9b678))
-* improve error handling and state management across various widgets and services ([39a3b2d](https://github.com/rubiin/tsumiki/commit/39a3b2dd4f9b284f80db93c21613d15745d7c608))
-* improve notification checks and error handling in scripts ([5e59303](https://github.com/rubiin/tsumiki/commit/5e59303c34e6338beb40ac31a6ffe63a89987ad9))
-* improve notification handling for missing dependencies in hyprpicker script ([09866f4](https://github.com/rubiin/tsumiki/commit/09866f41a3ed9ea0216771739f6561f16c0bf1b3))
-* improve WiFi scanning signal handling and add repeater unregistration method ([0e8da5c](https://github.com/rubiin/tsumiki/commit/0e8da5c2771ec4750aed260771b2f6cc653e7e33))
-* marshal wallpaper thumbnail UI update to main GTK thread ([a8c7b4a](https://github.com/rubiin/tsumiki/commit/a8c7b4aa681aebf4ab9f259c0d4f3271d70c1805))
-* optimize action handling in NotificationWidget to respect max_actions configuration ([74c1beb](https://github.com/rubiin/tsumiki/commit/74c1beb180025908b187064d84b21b85ee9d36f9))
-* prioritize string id lookup over numeric index for [@type](https://github.com/type):id refs ([1ddeca6](https://github.com/rubiin/tsumiki/commit/1ddeca6739c2d022a47ecc4c9e1635b100d4ab80))
-* remove unused hyprland_connection parameter from WorkspaceEventBox instantiation ([fe31033](https://github.com/rubiin/tsumiki/commit/fe31033073045eb78f34983f667d9981cb42f1aa))
-* rename ignored_apps to ignored in dock configuration and related code ([591002a](https://github.com/rubiin/tsumiki/commit/591002a009a09eb4c479f00e4c2420ba42913ed9))
-* return popover layer-shell windows to pool on hide ([8cd493e](https://github.com/rubiin/tsumiki/commit/8cd493ed8501928b3f203cc37dc1aab5164fbd28))
-* run satty annotation off the main thread to avoid blocking GTK ([26feca6](https://github.com/rubiin/tsumiki/commit/26feca6a500205ef64984e5937f70d1a7afff484))
-* serialize config.toml writes with a lock to prevent race conditions ([b83069d](https://github.com/rubiin/tsumiki/commit/b83069d3c35dc95a2eec0fa9b7609c60852779e0))
-* update bash history test to expect (ordinal, command) tuples ([ebd3a73](https://github.com/rubiin/tsumiki/commit/ebd3a73057c927e52841468e89b97b9e215cb29e))
-* update browse button click handler to use a lambda for argument passing ([10fe236](https://github.com/rubiin/tsumiki/commit/10fe236017891cf9951114a150f060b3df400ab3))
-* update DateTimeWidget to support configurable clock and date formats ([ec06724](https://github.com/rubiin/tsumiki/commit/ec067246eab9b9e0c3b553b3a7e5f66551774c8f))
-* update Justfile to use uv for running tests and documentation generation ([d8d1fd6](https://github.com/rubiin/tsumiki/commit/d8d1fd6d71fea6ebf5ccbb953a04f87fff8a3e91))
-* update notification_enabled retrieval to support nested configuration ([11260f7](https://github.com/rubiin/tsumiki/commit/11260f7b2d5cc5f598ec2b33b34fcd2e8c653cb2))
-* update ok button click handler to execute command asynchronously ([be315db](https://github.com/rubiin/tsumiki/commit/be315dbd02920fef5195dea7b6cf76c74bad4121))
-* update SystemTrayWidget to correctly manage chevron icon and popup menu visibility ([7e6bc60](https://github.com/rubiin/tsumiki/commit/7e6bc60b0b467e9d11c6b132154995dd1b284259))
-* use comparable line-position ordinals for bash history recency ([4eee87f](https://github.com/rubiin/tsumiki/commit/4eee87f7348311825526e0d2e0c2603e541daee8))
-* use generation counter to stop stale util polling threads ([9b47887](https://github.com/rubiin/tsumiki/commit/9b47887073b8bc3440d59bc9cfc06274d339dd29))
-
+- add check for None in on_profile_changed to prevent errors ([0bc0d52](https://github.com/rubiin/tsumiki/commit/0bc0d52391fa43f41d924a866a474911467cfded))
+- add check for None in on_scroll to prevent errors when adjusting volume ([edab9bd](https://github.com/rubiin/tsumiki/commit/edab9bd0e9a1b3937b3528028e9e5ada0123c956))
+- add DNS value validation to prevent invalid entries ([ec64107](https://github.com/rubiin/tsumiki/commit/ec641072a374510d01ed5c6711313bd42e4d9557))
+- add pause and resume polling methods to DnsSwitcherService and integrate with widget lifecycle ([a7d5ef2](https://github.com/rubiin/tsumiki/commit/a7d5ef2821dac10e58efb29043eb6d06cbb5e177))
+- cancel popover hide timeout on focus-in to prevent premature close ([26feca6](https://github.com/rubiin/tsumiki/commit/26feca6a500205ef64984e5937f70d1a7afff484))
+- defer MprisPlayer attribute deletion to idle callback after exit signal ([097a0f0](https://github.com/rubiin/tsumiki/commit/097a0f023cf23e0763f8edb37b128eb57145f6d9))
+- handle case when no active window is present in WindowTitleWidget ([0246f7e](https://github.com/rubiin/tsumiki/commit/0246f7e6e64e2cff2b618f92083df61648a3083c))
+- improve drag context handling and enhance state loading validation in Kanban ([8977a07](https://github.com/rubiin/tsumiki/commit/8977a07f3aa7e32561889d4e5e6c259311e9b678))
+- improve error handling and state management across various widgets and services ([39a3b2d](https://github.com/rubiin/tsumiki/commit/39a3b2dd4f9b284f80db93c21613d15745d7c608))
+- improve notification checks and error handling in scripts ([5e59303](https://github.com/rubiin/tsumiki/commit/5e59303c34e6338beb40ac31a6ffe63a89987ad9))
+- improve notification handling for missing dependencies in hyprpicker script ([09866f4](https://github.com/rubiin/tsumiki/commit/09866f41a3ed9ea0216771739f6561f16c0bf1b3))
+- improve WiFi scanning signal handling and add repeater unregistration method ([0e8da5c](https://github.com/rubiin/tsumiki/commit/0e8da5c2771ec4750aed260771b2f6cc653e7e33))
+- marshal wallpaper thumbnail UI update to main GTK thread ([a8c7b4a](https://github.com/rubiin/tsumiki/commit/a8c7b4aa681aebf4ab9f259c0d4f3271d70c1805))
+- optimize action handling in NotificationWidget to respect max_actions configuration ([74c1beb](https://github.com/rubiin/tsumiki/commit/74c1beb180025908b187064d84b21b85ee9d36f9))
+- prioritize string id lookup over numeric index for [@type](https://github.com/type):id refs ([1ddeca6](https://github.com/rubiin/tsumiki/commit/1ddeca6739c2d022a47ecc4c9e1635b100d4ab80))
+- remove unused hyprland_connection parameter from WorkspaceEventBox instantiation ([fe31033](https://github.com/rubiin/tsumiki/commit/fe31033073045eb78f34983f667d9981cb42f1aa))
+- rename ignored_apps to ignored in dock configuration and related code ([591002a](https://github.com/rubiin/tsumiki/commit/591002a009a09eb4c479f00e4c2420ba42913ed9))
+- return popover layer-shell windows to pool on hide ([8cd493e](https://github.com/rubiin/tsumiki/commit/8cd493ed8501928b3f203cc37dc1aab5164fbd28))
+- run satty annotation off the main thread to avoid blocking GTK ([26feca6](https://github.com/rubiin/tsumiki/commit/26feca6a500205ef64984e5937f70d1a7afff484))
+- serialize config.toml writes with a lock to prevent race conditions ([b83069d](https://github.com/rubiin/tsumiki/commit/b83069d3c35dc95a2eec0fa9b7609c60852779e0))
+- update bash history test to expect (ordinal, command) tuples ([ebd3a73](https://github.com/rubiin/tsumiki/commit/ebd3a73057c927e52841468e89b97b9e215cb29e))
+- update browse button click handler to use a lambda for argument passing ([10fe236](https://github.com/rubiin/tsumiki/commit/10fe236017891cf9951114a150f060b3df400ab3))
+- update DateTimeWidget to support configurable clock and date formats ([ec06724](https://github.com/rubiin/tsumiki/commit/ec067246eab9b9e0c3b553b3a7e5f66551774c8f))
+- update Justfile to use uv for running tests and documentation generation ([d8d1fd6](https://github.com/rubiin/tsumiki/commit/d8d1fd6d71fea6ebf5ccbb953a04f87fff8a3e91))
+- update notification_enabled retrieval to support nested configuration ([11260f7](https://github.com/rubiin/tsumiki/commit/11260f7b2d5cc5f598ec2b33b34fcd2e8c653cb2))
+- update ok button click handler to execute command asynchronously ([be315db](https://github.com/rubiin/tsumiki/commit/be315dbd02920fef5195dea7b6cf76c74bad4121))
+- update SystemTrayWidget to correctly manage chevron icon and popup menu visibility ([7e6bc60](https://github.com/rubiin/tsumiki/commit/7e6bc60b0b467e9d11c6b132154995dd1b284259))
+- use comparable line-position ordinals for bash history recency ([4eee87f](https://github.com/rubiin/tsumiki/commit/4eee87f7348311825526e0d2e0c2603e541daee8))
+- use generation counter to stop stale util polling threads ([9b47887](https://github.com/rubiin/tsumiki/commit/9b47887073b8bc3440d59bc9cfc06274d339dd29))
 
 ### 📚 Documentation
 
-* update AGENTS.md with guidelines for config schema changes ([a2b3ed8](https://github.com/rubiin/tsumiki/commit/a2b3ed8692c5902c662d8f02a089b08f920ed315))
-
+- update AGENTS.md with guidelines for config schema changes ([a2b3ed8](https://github.com/rubiin/tsumiki/commit/a2b3ed8692c5902c662d8f02a089b08f920ed315))
 
 ### ♻️ Code Refactoring
 
-* refactor:  ([ec10342](https://github.com/rubiin/tsumiki/commit/ec10342e3cd43485797fbb5c6f5003cfebe68bcc))
+- refactor: ([ec10342](https://github.com/rubiin/tsumiki/commit/ec10342e3cd43485797fbb5c6f5003cfebe68bcc))
 
 ## [4.4.0](https://github.com/rubiin/tsumiki/compare/v4.3.0...v4.4.0) (2026-08-20)
 
