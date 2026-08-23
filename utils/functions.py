@@ -458,51 +458,50 @@ def parse_hyprland_reply(reply: HyprlandReply) -> dict:
         return {}
 
 
+# Lock to serialize read-modify-write cycles on config.toml.
+# Without this, concurrent calls (e.g. set_mode triggering both
+# theme and mode updates) race on the same file: the second read
+# can observe stale pre-first-write content, silently reverting
+# the first update on next restart.
+_config_write_lock = threading.Lock()
+
+
+def _update_config_key(key_path: list[str], value: Any) -> None:
+    """Atomically update a single key in config.toml under a lock."""
+    import pytomlpp as toml
+
+    config_file = get_relative_path("../config.toml")
+    with _config_write_lock:
+        try:
+            config = read_toml_file(config_file)
+            if config is None:
+                return
+
+            node = config
+            for k in key_path[:-1]:
+                node = node.setdefault(k, {})
+            node[key_path[-1]] = value
+
+            with open(config_file, "w") as f:
+                toml.dump(config, f)
+        except (IOError, OSError, ValueError, KeyError, TypeError) as e:
+            logger.exception(
+                f"{Colors.ERROR}[Config] Error updating {'.'.join(key_path)}: {e}"
+            )
+
+
 # Function to update the theme configuration
 def update_theme_config(theme_name: str):
     """Update the config.toml file with the new theme name."""
-    try:
-        config_file = get_relative_path("../config.toml")
-
-        # Read current theme config
-        config = read_toml_file(config_file)
-
-        if config is None:
-            return
-
-        # Update the theme name
-        config["styling"]["theme_name"] = theme_name
-
-        # Write back to file
-
-        write_toml_file(config_file, config)
-
-        logger.info(f"{Colors.INFO}[Theme] Updated theme config to {theme_name}")
-    except (IOError, OSError, KeyError, TypeError) as e:
-        logger.exception(f"{Colors.ERROR}[Theme] Error updating theme config: {e}")
+    _update_config_key(["styling", "theme_name"], theme_name)
+    logger.info(f"{Colors.INFO}[Theme] Updated theme config to {theme_name}")
 
 
 # Function to update the styling mode (dark/light)
 def update_styling_mode(mode: str):
     """Update the config.toml file with the new styling mode."""
-    try:
-        config_file = get_relative_path("../config.toml")
-
-        # Read current theme config
-        config = read_toml_file(config_file)
-
-        if config is None:
-            return
-
-        # Update the styling mode
-        config["styling"]["mode"] = mode
-
-        # Write back to file
-        write_toml_file(config_file, config)
-
-        logger.info(f"{Colors.INFO}[Theme] Updated styling mode to {mode}")
-    except (IOError, OSError, KeyError, TypeError) as e:
-        logger.exception(f"{Colors.ERROR}[Theme] Error updating styling mode: {e}")
+    _update_config_key(["styling", "mode"], mode)
+    logger.info(f"{Colors.INFO}[Theme] Updated styling mode to {mode}")
 
 
 # Function to convert celsius to fahrenheit
