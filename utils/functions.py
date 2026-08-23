@@ -745,28 +745,17 @@ def _validate_indexed_reference(
 ) -> int:
     """Helper function to validate indexed references (groups, buttons, etc.).
 
-    Supports both numeric indices and string-based ``id`` lookup for
-    collapsible groups.  When *collection_name* is ``"collapsible group"``
-    and the identifier is not a digit, it searches for an item whose
-    ``id`` property matches.
+    Supports both numeric indices and string-based ``id`` lookup.  For
+    supported collection types, string ``id`` matching takes priority over
+    numeric index interpretation so that all-digit ids like ``"2024"``
+    resolve correctly when a matching ``id`` field exists.
     """
-    if identifier.isdigit():
-        idx = int(identifier)
+    if not isinstance(collection, list):
+        raise ValueError(f"{collection_name} must be an array")
 
-        if not isinstance(collection, list):
-            raise ValueError(f"{collection_name} must be an array")
-
-        if not (0 <= idx < len(collection)):
-            raise ValueError(
-                f"{collection_name.title()} index {idx} is out of range "
-                f"in section {section}. "
-                f"Available indices: 0-{len(collection) - 1}"
-            )
-
-        return idx
-
-    # String-based id lookup (supported for collapsible groups, custom widgets,
-    # custom buttons, and widget groups)
+    # For supported collection types, try string id lookup first —
+    # this takes priority over numeric index interpretation so that
+    # all-digit ids (e.g. id = "2024") work correctly.
     if collection_name in (
         "collapsible group",
         "custom widget",
@@ -776,9 +765,19 @@ def _validate_indexed_reference(
         for idx, item in enumerate(collection):
             if isinstance(item, dict) and item.get("id") == identifier:
                 return idx
-        raise ValueError(
-            f"No {collection_name} with id '{identifier}' found in section {section}."
-        )
+
+    # Fall back to numeric index lookup
+    if identifier.isdigit():
+        idx = int(identifier)
+
+        if not (0 <= idx < len(collection)):
+            raise ValueError(
+                f"{collection_name.title()} index {idx} is out of range "
+                f"in section {section}. "
+                f"Available indices: 0-{len(collection) - 1}"
+            )
+
+        return idx
 
     raise ValueError(
         f"Invalid {collection_name} reference '{identifier}' in section {section}. "
