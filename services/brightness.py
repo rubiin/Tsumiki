@@ -42,13 +42,16 @@ class BrightnessService(SingletonService):
             self.max_screen = self._read_max_brightness(self.screen_backlight_path)
 
             self.screen_monitor = monitor_file(
-                f"{self.screen_backlight_path}/brightness", initial_call=True
+                f"{self.screen_backlight_path}/brightness"
             )
 
             self.screen_monitor.connect(
                 "changed",
                 self._on_screen_brightness_file_changed,
             )
+            # Prime the cache so an unchanged first event (e.g. a driver
+            # restoring the same value after resume) stays silent.
+            _ = self.screen_brightness
 
             logger.info(
                 f"{Colors.INFO}Brightness service initialized for device: "
@@ -70,10 +73,15 @@ class BrightnessService(SingletonService):
     def _on_screen_brightness_file_changed(self, _, file, *args):
         try:
             brightness = int(file.load_bytes()[0].get_data())
-            self._screen_brightness_cache = brightness
-            self.emit("brightness_changed", brightness)
         except (ValueError, OSError, TypeError) as e:
             logger.warning(f"{Colors.WARNING}Failed to read brightness update: {e}")
+            return
+
+        if brightness == self._screen_brightness_cache:
+            return
+
+        self._screen_brightness_cache = brightness
+        self.emit("brightness_changed", brightness)
 
     def _read_max_brightness(self, path: str) -> int:
         max_brightness_path = os.path.join(path, "max_brightness")

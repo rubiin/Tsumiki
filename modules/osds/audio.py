@@ -55,13 +55,15 @@ class AudioOSDContainer(GenericOSDContainer):
             self.emit("volume-changed")
 
     def on_speaker_changed(self, *_):
+        # Re-wire the volume handler but keep previous_volume/previous_muted:
+        # PipeWire re-announces the default sink on profile/port changes and
+        # sink suspend/resume with an identical volume, and resetting the
+        # state here made update_volume() treat that as a change and pop
+        # the OSD with no actual value change.
         if self._speaker and self._speaker_handler_id is not None:
             self._speaker.disconnect(self._speaker_handler_id)
 
         self._speaker_handler_id = None
-        self.previous_volume = None
-        self.previous_muted = None
-        self._effective_muted = None
         self._speaker = self.audio_service.speaker
 
         if self._speaker:
