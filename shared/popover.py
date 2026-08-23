@@ -340,7 +340,6 @@ class Popover(Widget):
         bulk_connect(
             self._content_window,
             {
-                "focus-in-event": self.on_popover_focus_in,
                 "focus-out-event": self.on_popover_focus_out,
                 "key-press-event": self.on_key_press,
             },
@@ -362,13 +361,6 @@ class Popover(Widget):
         self._activate_popover()
         return True
 
-    def on_popover_focus_in(self, widget, event):
-        """Cancel any pending hide timeout when focus returns to the popover."""
-        if self._focus_out_timeout_id is not None:
-            GLib.source_remove(self._focus_out_timeout_id)
-            self._focus_out_timeout_id = None
-        return False
-
     def on_popover_focus_out(self, widget, event):
         # This helps with keyboard focus issues
         if self._focus_out_timeout_id is not None:
@@ -388,18 +380,9 @@ class Popover(Widget):
             GLib.source_remove(self._focus_out_timeout_id)
             self._focus_out_timeout_id = None
 
-        # Disconnect draw handler before returning window to pool
-        if self._draw_handler_id is not None:
-            safe_disconnect(self._content, self._draw_handler_id)
-            self._draw_handler_id = None
-
         self._content_window.hide()
         self._manager.clear_active_popover(self)
         self._visible = False
-
-        # Return the layer-shell window to the pool for reuse
-        self._manager.return_popover_window(self._content_window)
-        self._content_window = None
 
         self.emit("popover-closed")
 
