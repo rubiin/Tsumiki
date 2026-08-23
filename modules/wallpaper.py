@@ -1,7 +1,7 @@
 import mimetypes
 
 from fabric.core.service import Signal
-from fabric.utils import Gtk, logger, os
+from fabric.utils import GLib, Gtk, logger, os
 from fabric.widgets.box import Box
 from fabric.widgets.grid import Grid
 from fabric.widgets.image import Image
@@ -64,8 +64,10 @@ class ImageButton(HoverButton):
                     (self.thumb_size, self.thumb_size), PILImage.Resampling.LANCZOS
                 )
                 img_cropped.save(self.wp_thumb_path)
-            self.set_image(
-                Image(image_file=self.wp_thumb_path, tooltip_text=self.wallpaper_name)
+            # Marshal UI update back to the main GTK thread
+            GLib.idle_add(
+                self.set_image,
+                Image(image_file=self.wp_thumb_path, tooltip_text=self.wallpaper_name),
             )
         except Exception as e:
             logger.exception(f"Error creating thumbnail: {e}")
