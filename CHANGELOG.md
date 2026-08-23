@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.5.1](https://github.com/rubiin/tsumiki/compare/v4.5.0...v4.5.1) (2026-08-23)
+
+
+### ⚙️ Chores
+
+* **deps:** update dependency pnpm to v11.22.0 ([#370](https://github.com/rubiin/tsumiki/issues/370)) ([8d46d11](https://github.com/rubiin/tsumiki/commit/8d46d111b00d6854be4f1884a31377d953c511bc))
+
 ## [4.5.0](https://github.com/rubiin/tsumiki/compare/v4.4.0...v4.5.0) (2026-08-23)
 
 ### 🚀 New Features
