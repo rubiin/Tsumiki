@@ -31,6 +31,7 @@ _util_polling_enabled = False
 _util_subscribers = 0
 _util_changed_handler_ids: set[int] = set()
 _fabricator_lock = threading.Lock()
+_poll_generation = 0
 
 
 # Function to get the system uptime
@@ -53,8 +54,9 @@ def stats_poll(*_):
     temperature = {}
     disk = psutil.disk_usage(storage_config.get("path", "/"))
     ticks = 0
+    gen = _poll_generation
 
-    while _util_polling_enabled:
+    while _util_polling_enabled and gen == _poll_generation:
         if ticks % UTIL_SLOW_POLL_TICKS == 0:
             cpu_freq = psutil.cpu_freq()
             temperature = psutil.sensors_temperatures()
@@ -74,10 +76,11 @@ def stats_poll(*_):
 
 
 def _stop_util_fabricator() -> None:
-    global _util_fabricator, _util_polling_enabled, _util_subscribers
+    global _util_fabricator, _util_polling_enabled, _util_subscribers, _poll_generation
 
     with _fabricator_lock:
         _util_polling_enabled = False
+        _poll_generation += 1
 
         if _util_fabricator is not None:
             destroy = getattr(_util_fabricator, "destroy", None)
