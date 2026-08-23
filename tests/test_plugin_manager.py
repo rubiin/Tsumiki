@@ -1356,7 +1356,9 @@ class HistoryPluginTest(unittest.TestCase):
 
     def test_parse_bash_history(self):
         content = "ls\ncd /tmp\n\n# a comment\n"
-        self.assertEqual(self.parse_bash_history(content), ["ls", "cd /tmp"])
+        self.assertEqual(
+            self.parse_bash_history(content), [(1, "ls"), (2, "cd /tmp")]
+        )
 
     def test_parse_zsh_extended_history(self):
         content = ": 1700000001:0;cd /tmp\n: 1700000002:3;git status\n"
