@@ -380,9 +380,18 @@ class Popover(Widget):
             GLib.source_remove(self._focus_out_timeout_id)
             self._focus_out_timeout_id = None
 
+        # Disconnect draw handler before returning window to pool
+        if self._draw_handler_id is not None:
+            safe_disconnect(self._content, self._draw_handler_id)
+            self._draw_handler_id = None
+
         self._content_window.hide()
         self._manager.clear_active_popover(self)
         self._visible = False
+
+        # Return the layer-shell window to the pool for reuse
+        self._manager.return_popover_window(self._content_window)
+        self._content_window = None
 
         self.emit("popover-closed")
 
