@@ -109,6 +109,7 @@ class MprisPlayer(Service):
     def on_player_exit(self, player):
         for id in list(self._signal_connectors.values()):
             safe_disconnect(self._player, id)
+
         # Defer attribute deletion to the idle callback so that any pending
         # update_status idle lambdas that reference self._player don't
         # raise AttributeError between the exit signal and teardown.
