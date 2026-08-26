@@ -24,7 +24,7 @@ from fabric.widgets.image import Image
 from fabric.widgets.label import Label
 from fabric.widgets.scrolledwindow import ScrolledWindow
 
-from shared.list import ListBox
+from shared.fabricate import fabricate
 from shared.mixins import PopoverMixin
 from shared.widget_container import ButtonWidget, TeardownMixin
 from utils.i18n import _
@@ -92,7 +92,9 @@ class ClipHistoryMenu(Box, TeardownMixin):
         self._search_timer_id = None  # Timer ID for search text change
         self._item_widgets: dict[str, Button] = {}  # Cache of item_id -> button widget
 
-        self.viewport = ListBox(
+        fabric_listbox = fabricate(Gtk.ListBox)
+
+        self.viewport = fabric_listbox(
             name="viewport",
             spacing=4,
             orientation="v",

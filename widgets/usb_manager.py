@@ -13,7 +13,7 @@ from fabric.widgets.centerbox import CenterBox
 from fabric.widgets.label import Label
 
 from shared.buttons import HoverButton, ScanButton
-from shared.list import ListBox
+from shared.fabricate import fabricate
 from shared.mixins import PopoverMixin
 from shared.widget_container import ButtonWidget, TeardownMixin
 from utils.i18n import _
@@ -64,7 +64,8 @@ class USBManagerMenu(Box, TeardownMixin):
             end_children=[self.refresh_button],
         )
 
-        self.device_list = ListBox(
+        fabric_listbox = fabricate(Gtk.ListBox)
+        self.device_list = fabric_listbox(
             name="usb-manager-list",
             orientation="v",
             spacing=6,
@@ -265,7 +266,7 @@ class USBManagerMenu(Box, TeardownMixin):
         self._set_content(self.device_list)
         self._update_footer_buttons()
 
-    def _set_content(self, child: Box | ListBox):
+    def _set_content(self, child: Box | Gtk.ListBox):
         for existing in self.content.get_children():
             self.content.remove(existing)
         self.content.add(child)

@@ -9,7 +9,7 @@ from fabric.widgets.grid import Grid
 from fabric.widgets.label import Label
 from fabric.widgets.scrolledwindow import ScrolledWindow
 
-from shared.list import ListBox
+from shared.fabricate import fabricate
 from shared.mixins import PopoverMixin
 from shared.widget_container import ButtonWidget
 from utils.constants import KANBAN_FILE
@@ -215,7 +215,8 @@ class KanbanColumn(Gtk.Frame):
 
     def setup_ui(self):
         self.box = Box(orientation="vertical", spacing=4)
-        self.listbox = ListBox()
+        fabric_listbox = fabricate(Gtk.ListBox)
+        self.listbox = fabric_listbox()
         self.listbox.set_selection_mode(Gtk.SelectionMode.NONE)
 
         self.add_btn = Button(

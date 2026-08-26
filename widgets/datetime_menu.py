@@ -17,7 +17,7 @@ import utils.functions as helpers
 from services import notification_service
 from shared.buttons import HoverButton
 from shared.circle_image import CircularImage
-from shared.list import ListBox
+from shared.fabricate import fabricate
 from shared.mixins import PopoverMixin
 from shared.widget_container import ButtonWidget
 from utils.i18n import _
@@ -211,7 +211,8 @@ class DateNotificationMenu(Box):
                 notification_service.get_deserialized()
             )
 
-            self.notifications_listbox = ListBox(
+            fabric_listbox = fabricate(Gtk.ListBox)
+            self.notifications_listbox = fabric_listbox(
                 name="notification-list",
                 orientation="v",
                 h_align="center",
