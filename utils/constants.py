@@ -238,11 +238,15 @@ DEFAULT_CONFIG = {
                 "widgets": ["updates", "battery"],
                 "spacing": 4,
                 "style_classes": ["bordered"],
+                "hover_reveal": False,
+                "reveal_duration": 500,
             },
             {
                 "widgets": ["quick_settings", "cpu"],
                 "spacing": 0,
                 "style_classes": ["compact"],
+                "hover_reveal": False,
+                "reveal_duration": 500,
             },
         ],
         "memory": {

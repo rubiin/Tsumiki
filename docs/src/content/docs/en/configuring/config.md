@@ -190,6 +190,24 @@ spacing = 4
 style_classes = ["bordered"]
 ```
 
+Groups can optionally use a hover-revealer that hides children until hovered:
+
+```toml
+[[widget_groups]]
+widgets = ["updates", "battery"]
+spacing = 4
+style_classes = ["bordered"]
+hover_reveal = true
+reveal_duration = 300
+revealer_icon = "󰍽"
+```
+
+| Key               | Type   | Default | Description                                           |
+| ----------------- | ------ | ------- | ----------------------------------------------------- |
+| `hover_reveal`    | bool   | `false` | Hide children behind a revealer that expands on hover |
+| `reveal_duration` | int    | `500`   | Transition duration in milliseconds                   |
+| `revealer_icon`   | string | `󰍽`     | Nerd Font icon shown when the group is collapsed      |
+
 Collapsible groups hide widgets behind a toggle:
 
 ```toml

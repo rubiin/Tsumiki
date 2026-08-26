@@ -684,6 +684,9 @@ Widget_Groups = list[
             "id": str,
             "spacing": int,
             "style_classes": list[str],
+            "hover_reveal": bool,
+            "reveal_duration": int,
+            "revealer_icon": str,
         },
     )
 ]

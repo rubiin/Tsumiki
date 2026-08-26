@@ -4,6 +4,8 @@ from fabric.utils import GLib, bulk_connect
 from fabric.widgets.box import Box
 from fabric.widgets.button import Button
 from fabric.widgets.eventbox import EventBox
+from fabric.widgets.label import Label
+from fabric.widgets.revealer import Revealer
 from fabric.widgets.wayland import WaylandWindow as Window
 from fabric.widgets.widget import Widget
 
@@ -187,20 +189,77 @@ class ButtonWidget(Button, BaseWidget):
 class WidgetGroup(BoxWidget):
     """A group of widgets that can be managed and styled together."""
 
-    def __init__(self, children=None, spacing=4, style_classes=None, **kwargs):
+    def __init__(
+        self,
+        children=None,
+        spacing=4,
+        style_classes=None,
+        hover_reveal=False,
+        reveal_duration=500,
+        revealer_icon=None,
+        **kwargs,
+    ):
         css_classes = self._merge_style_classes(["panel-module-group"], style_classes)
+
+        self._hover_reveal = hover_reveal
 
         super().__init__(
             name="widget-group",
             spacing=spacing,
             style_classes=css_classes,
-            orientation="h",  # Default to horizontal for panel layout
+            orientation="h",
             **kwargs,
         )
 
-        if children:
+        if hover_reveal:
+            self._setup_hover_reveal(children, reveal_duration, revealer_icon or "󰍽")
+        elif children:
             for child in children:
                 self.add(child)
+
+    def _setup_hover_reveal(self, children, reveal_duration, icon_char):
+        """Wrap children in a revealer and add a reveal icon."""
+        self.revealer_icon = Label(
+            name="widget-group-revealer-icon",
+            label=icon_char,
+            style_classes="panel-font-icon",
+        )
+        self.add(self.revealer_icon)
+
+        children_box = Box(
+            orientation="h",
+            spacing=self._spacing,
+            style_classes="panel-module-group-inner",
+        )
+        if children:
+            for child in children:
+                children_box.add(child)
+
+        self.revealer = Revealer(
+            child=children_box,
+            transition_duration=reveal_duration,
+            transition_type="slide_right",
+            reveal_child=False,
+        )
+        self.add(self.revealer)
+
+        bulk_connect(
+            self,
+            {
+                "enter-notify-event": self._on_hover_enter_reveal,
+                "leave-notify-event": self._on_hover_leave_reveal,
+            },
+        )
+
+    def _on_hover_enter_reveal(self, *_):
+        if not self._hover_reveal:
+            return
+        self.revealer.set_reveal_child(True)
+
+    def _on_hover_leave_reveal(self, *_):
+        if not self._hover_reveal:
+            return
+        self.revealer.set_reveal_child(False)
 
     @classmethod
     def from_config(cls, config, widgets_list, main_config=None):
@@ -215,4 +274,7 @@ class WidgetGroup(BoxWidget):
             children=widgets,
             spacing=config.get("spacing", 4),
             style_classes=config.get("style_classes", []),
+            hover_reveal=config.get("hover_reveal", False),
+            reveal_duration=config.get("reveal_duration", 500),
+            revealer_icon=config.get("revealer_icon", None),
         )

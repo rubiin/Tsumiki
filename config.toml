@@ -484,18 +484,24 @@ id = "workspaces-group"
 widgets = ["workspaces", "window_title"]
 spacing = 2
 style_classes = ["compact"]
+hover_reveal = false
+reveal_duration = 500
 
 [[widget_groups]]
 id = "sys-group"
 widgets = ["quick_settings", "updates", "battery"]
 spacing = 2
 style_classes = ["compact"]
+hover_reveal = false
+reveal_duration = 500
 
 [[widget_groups]]
 id = "utils-group"
 widgets = ["clipboard", "usb_manager"]
 spacing = 2
 style_classes = ["compact"]
+hover_reveal = false
+reveal_duration = 500
 
 [[collapsible_groups]]
 id = "utility-tools"

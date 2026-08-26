@@ -2537,6 +2537,20 @@
               "type": "string"
             },
             "minItems": 1
+          },
+          "hover_reveal": {
+            "type": "boolean",
+            "default": false,
+            "description": "When true, the group children are hidden behind a revealer that expands on hover."
+          },
+          "reveal_duration": {
+            "type": "integer",
+            "default": 500,
+            "description": "Duration in milliseconds for the hover-reveal transition."
+          },
+          "revealer_icon": {
+            "type": "string",
+            "description": "Nerd Font icon shown when hover_reveal is enabled and the group is collapsed."
           }
         },
         "required": ["widgets", "spacing", "style_classes"],

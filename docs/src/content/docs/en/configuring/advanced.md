@@ -66,6 +66,21 @@ Reference in layout with `@group:sys-group`.
 right_section = ["@group:sys-group", "system_tray"]
 ```
 
+### Hover Reveal
+
+Add `hover_reveal = true` to hide the group children behind a revealer that slides open on hover. An optional `revealer_icon` is displayed while collapsed.
+
+```toml
+[[widget_groups]]
+id = "sys-group"
+widgets = ["updates", "battery"]
+spacing = 4
+style_classes = ["bordered"]
+hover_reveal = true
+reveal_duration = 300
+revealer_icon = "󰍽"
+```
+
 ## Collapsible Groups
 
 Hide less-used widgets behind a toggle:

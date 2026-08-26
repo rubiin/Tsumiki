@@ -33,6 +33,8 @@ id = "sys-stats"
 widgets = ["updates", "network_usage"]
 spacing = 4
 style_classes = ["bordered"]
+hover_reveal = false
+reveal_duration = 500
 
 # ── Collapsible Groups ───────────────────────────────
 # Hide utility widgets behind a toggle icon.
