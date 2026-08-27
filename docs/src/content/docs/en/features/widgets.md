@@ -328,11 +328,13 @@ style = "numbered"       # "numbered" | "pill" | "icon" | "default" | "underline
 empty_scroll = false
 label_format = "{id}"
 icon_map = {}
+show_special = false
 ```
 
 - **`style`**: Choose from `numbered`, `pill`, `icon`, `default`, `underline`, or `bubble`.
 - **`icon_map`**: Map workspace IDs to custom icons: `{ "1": "", "2": "" }`.
 - **`label_format`**: Format string with `{id}` variable.
+- **`show_special`**: Show special workspaces (negative IDs). Set to `false` to hide them.
 
 ### Window Title
 

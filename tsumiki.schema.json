@@ -1259,6 +1259,11 @@
               "required": [],
               "default": {},
               "description": "Mapping of workspace IDs to icons."
+            },
+            "show_special": {
+              "type": "boolean",
+              "default": false,
+              "description": "Show special workspaces (negative IDs) in the workspace indicator."
             }
           },
           "required": [

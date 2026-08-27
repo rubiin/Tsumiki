@@ -214,6 +214,7 @@ style = "numbered"       # "numbered" | "pill" | "icon" | "default" | "underline
 empty_scroll = false
 label_format = "{id}"
 icon_map = {}
+show_special = false
 ```
 
 ### عنوان النافذة

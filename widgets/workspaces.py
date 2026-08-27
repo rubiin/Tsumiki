@@ -17,41 +17,45 @@ class WorkSpacesWidget(BoxWidget):
         self.label_format = self.config.get("label_format", "{id}")
         self.workspace_count = self.config.get("count", 8)
         self.hide_unoccupied = self.config.get("hide_unoccupied", False)
+        self.show_special = self.config.get("show_special", False)
         self.style = self.config.get("style", "numbered")
 
         # Create a HyperlandWorkspace widget to manage workspace buttons
-        self.workspace = HyprlandWorkspaces(
+        self.children = HyprlandWorkspaces(
             name="workspaces_widget",
             style_classes=self.style,
             spacing=4,
             # Create buttons for each workspace if occupied
-            buttons=None
-            if self.hide_unoccupied
-            else [
-                self._setup_button(ws_id)
-                for ws_id in range(1, self.workspace_count + 1)
-                if ws_id not in self.ignored_ws
-            ],
+            buttons=self._filter_workspaces(),
             # Factory function to create buttons for each workspace
             buttons_factory=self._setup_button,
             invert_scroll=self.config.get("reverse_scroll", False),
             empty_scroll=self.config.get("empty_scroll", False),
         )
 
-        # Add the HyperlandWorkspace widget as a child
-        self.children = self.workspace
-
     def _create_workspace_label(self, ws_id: int) -> str:
         return self.icon_map.get(str(ws_id), self.label_format.format(id=ws_id))
 
     def _setup_button(self, ws_id: int) -> WorkspaceButton:
+        visible = ws_id not in self.ignored_ws and (self.show_special or ws_id >= 0)
         button = WorkspaceButton(
             id=ws_id,
             v_align="center",
             label=self._create_workspace_label(ws_id) if self.style != "pill" else None,
-            visible=ws_id not in self.ignored_ws,
+            visible=visible,
         )
 
         setup_cursor_hover(button)
 
         return button
+
+    def _filter_workspaces(self):
+        """Filter workspaces based on occupancy."""
+        if self.hide_unoccupied:
+            return None
+        else:
+            return [
+                self._setup_button(ws_id)
+                for ws_id in range(1, self.workspace_count + 1)
+                if ws_id not in self.ignored_ws
+            ]

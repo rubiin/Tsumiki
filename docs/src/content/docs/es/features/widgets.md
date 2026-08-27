@@ -300,11 +300,15 @@ style = "numbered"       # "numbered" | "pill" | "icon" | "default" | "underline
 empty_scroll = false
 label_format = "{id}"
 icon_map = {}
+show_special = false
 ```
 
 - **`style`**: Elige entre `numbered`, `pill`, `icon`, `default`, `underline` o `bubble`.
-- **`icon_map`**: Mapea IDs de espacios de trabajo a iconos personalizados: `{ "1": "", "2": "" }`.
-- **`label_format`**: Cadena de formato con variable `{id}`.
+- **`icon_map`**: Mapea IDs de espacios de trabajo a iconos personalizados: `{ "1": "", "2": "" }`.- **`label_format`**: Cadena de formato con variable `{id}`.
+- **`show_special`**: Mostrar espacios de trabajo especiales (IDs negativos). Establecer en `false` para ocultarlos.
+
+
+
 
 ### Título de Ventana
 

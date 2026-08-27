@@ -392,12 +392,13 @@ fallback = "class"
 [widgets.workspaces]
 count = 10
 hide_unoccupied = true
-ignored = [-99]
+ignored = []
 reverse_scroll = false
 style = "numbered"
 empty_scroll = false
 label_format = "{id}"
 icon_map = {}
+show_special = false
 
 [widgets.world_clock]
 icon = "󰃰"

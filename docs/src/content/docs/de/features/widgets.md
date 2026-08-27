@@ -56,6 +56,7 @@ confirm = true
 [widgets.workspaces]
 count = 10
 style = "numbered"
+show_special = false
 
 [widgets.window_title]
 truncation = true

@@ -413,6 +413,7 @@ DEFAULT_CONFIG = {
             "empty_scroll": False,
             "label_format": "{id}",
             "icon_map": {},
+            "show_special": False,
         },
         "world_clock": {
             "icon": "󱉊'",

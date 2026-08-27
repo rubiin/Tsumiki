@@ -449,6 +449,7 @@ Workspaces = TypedDict(
         "reverse_scroll": bool,
         "style": str,
         "empty_scroll": bool,
+        "show_special": bool,
     },
 )
 
