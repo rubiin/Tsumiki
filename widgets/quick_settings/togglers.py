@@ -58,7 +58,9 @@ class HyprIdleQuickSetting(QuickSettingToggler):
             name="quicksettings-togglebutton",
             **kwargs,
         )
-        self.connect("clicked", lambda *_: popup.hide_popover())
+        self.connect(
+            "clicked", lambda *_: popup.hide_popover() if popup is not None else None
+        )
 
 
 class NotificationQuickSetting(HoverButton):
@@ -95,7 +97,8 @@ class NotificationQuickSetting(HoverButton):
     def on_click(self, *_):
         """Toggle the notification."""
         notification_service.dont_disturb = not notification_service.dont_disturb
-        self.popup.hide_popover()
+        if self.popup is not None:
+            self.popup.hide_popover()
 
     def toggle_notification(self, _sender, value: bool, *_args):
         """Toggle the notification."""

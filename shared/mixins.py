@@ -45,10 +45,11 @@ class PopoverMixin:
         if self._popup is None and self._popover_content_factory is not None:
             from .popover import Popover
 
-            self._popup = Popover(
-                content=self._popover_content_factory(),
-                point_to=self,
-            )
+            # Create the popover first so self._popup is set before the content
+            # factory runs — child widgets often reference self._popup (e.g.
+            # popup=self._popup) and need a non-None value.
+            self._popup = Popover(point_to=self)
+            self._popup.set_content(self._popover_content_factory())
 
             if self._popover_on_close:
                 self._popup.connect("popover-closed", self._popover_on_close)
