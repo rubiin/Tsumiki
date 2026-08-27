@@ -2,39 +2,35 @@
 
 ## [4.6.0](https://github.com/rubiin/tsumiki/compare/v4.5.1...v4.6.0) (2026-08-27)
 
-
 ### 🚀 New Features
 
-* **brightness:** enhance brightness change handler to suppress unchanged values ([9bf4cb0](https://github.com/rubiin/tsumiki/commit/9bf4cb0db061c7738f84434a9b9bd021711d4cf8))
-* **fabricate:** introduce Fabricate utility to wrap GTK3 widgets with enhanced features and remove ListBox implementation ([489d71d](https://github.com/rubiin/tsumiki/commit/489d71dd4c4b5a43f8ff0f29453881016edf2a75))
-* **list:** introduce ListBox widget for enhanced list management across various components ([62bba94](https://github.com/rubiin/tsumiki/commit/62bba94cb236f80c17a0b5c87e4b2d5695ac870f))
-* **widget-groups:** add hover reveal functionality with customizable options ([1b01d3e](https://github.com/rubiin/tsumiki/commit/1b01d3ecd6d5621ab2291a57828aebb743b2db07))
-* **workspaces:** add show_special option to manage visibility of special workspaces ([eddeb67](https://github.com/rubiin/tsumiki/commit/eddeb6745c1853175c89eab024f03878a172d490))
-
+- **brightness:** enhance brightness change handler to suppress unchanged values ([9bf4cb0](https://github.com/rubiin/tsumiki/commit/9bf4cb0db061c7738f84434a9b9bd021711d4cf8))
+- **fabricate:** introduce Fabricate utility to wrap GTK3 widgets with enhanced features and remove ListBox implementation ([489d71d](https://github.com/rubiin/tsumiki/commit/489d71dd4c4b5a43f8ff0f29453881016edf2a75))
+- **list:** introduce ListBox widget for enhanced list management across various components ([62bba94](https://github.com/rubiin/tsumiki/commit/62bba94cb236f80c17a0b5c87e4b2d5695ac870f))
+- **widget-groups:** add hover reveal functionality with customizable options ([1b01d3e](https://github.com/rubiin/tsumiki/commit/1b01d3ecd6d5621ab2291a57828aebb743b2db07))
+- **workspaces:** add show_special option to manage visibility of special workspaces ([eddeb67](https://github.com/rubiin/tsumiki/commit/eddeb6745c1853175c89eab024f03878a172d490))
 
 ### 🐛 Bug Fixes
 
-* **deps:** update all non-major dependencies ([#369](https://github.com/rubiin/tsumiki/issues/369)) ([d588b8d](https://github.com/rubiin/tsumiki/commit/d588b8d7767c9c052de756bd5c7edb58a4c8af80))
-* **deps:** update dependencies to latest compatible versions ([12141d9](https://github.com/rubiin/tsumiki/commit/12141d9e79c641816ecfac4647614bf44ded0162))
-* **functions:** enable shell execution for toggle_command subprocess ([202c0b0](https://github.com/rubiin/tsumiki/commit/202c0b0d7e771f0a2709609804ea19a8f2247865))
-* **mpris:** handle player exit gracefully and prevent errors when accessing properties ([cd683ac](https://github.com/rubiin/tsumiki/commit/cd683ac24725e1ab2f1d5992dc36de00b6da9005))
-* **popover:** ensure popover is initialized before setting content and handle None case in notification toggle ([52a49dc](https://github.com/rubiin/tsumiki/commit/52a49dcbe2bcb3f83005bb7e4141fa99ac9b28fe))
-* **quicksettings:** remove focus box-shadow from submenu items ([6ae04d5](https://github.com/rubiin/tsumiki/commit/6ae04d5c5ea4c3fc89a25d95eecd153d9e385c0f))
-* **release:** correct email format and update remote URL in release workflow ([554d2ca](https://github.com/rubiin/tsumiki/commit/554d2cab8c124b147290bd3806d2d8874465b71d))
-* **wifi:** clear available networks list before loading new access points ([3302550](https://github.com/rubiin/tsumiki/commit/330255044ef21b92db8452115eb75af67a1d94ae))
-
+- **deps:** update all non-major dependencies ([#369](https://github.com/rubiin/tsumiki/issues/369)) ([d588b8d](https://github.com/rubiin/tsumiki/commit/d588b8d7767c9c052de756bd5c7edb58a4c8af80))
+- **deps:** update dependencies to latest compatible versions ([12141d9](https://github.com/rubiin/tsumiki/commit/12141d9e79c641816ecfac4647614bf44ded0162))
+- **functions:** enable shell execution for toggle_command subprocess ([202c0b0](https://github.com/rubiin/tsumiki/commit/202c0b0d7e771f0a2709609804ea19a8f2247865))
+- **mpris:** handle player exit gracefully and prevent errors when accessing properties ([cd683ac](https://github.com/rubiin/tsumiki/commit/cd683ac24725e1ab2f1d5992dc36de00b6da9005))
+- **popover:** ensure popover is initialized before setting content and handle None case in notification toggle ([52a49dc](https://github.com/rubiin/tsumiki/commit/52a49dcbe2bcb3f83005bb7e4141fa99ac9b28fe))
+- **quicksettings:** remove focus box-shadow from submenu items ([6ae04d5](https://github.com/rubiin/tsumiki/commit/6ae04d5c5ea4c3fc89a25d95eecd153d9e385c0f))
+- **release:** correct email format and update remote URL in release workflow ([554d2ca](https://github.com/rubiin/tsumiki/commit/554d2cab8c124b147290bd3806d2d8874465b71d))
+- **wifi:** clear available networks list before loading new access points ([3302550](https://github.com/rubiin/tsumiki/commit/330255044ef21b92db8452115eb75af67a1d94ae))
 
 ### ⚙️ Chores
 
-* **deps:** lock file maintenance ([#374](https://github.com/rubiin/tsumiki/issues/374)) ([cb4c185](https://github.com/rubiin/tsumiki/commit/cb4c185686bf9d3f262cf63ca342a5ad0cf34407))
-* **deps:** update actions/checkout action to v7 ([#371](https://github.com/rubiin/tsumiki/issues/371)) ([f635087](https://github.com/rubiin/tsumiki/commit/f635087ce2beb4c91e3e37ca9174afbcc0f6b038))
-* **deps:** update actions/setup-node action to v7 ([#372](https://github.com/rubiin/tsumiki/issues/372)) ([8430aa3](https://github.com/rubiin/tsumiki/commit/8430aa3ac1de5f95158c6c75b2678a9859dd9340))
-* **deps:** update pnpm/action-setup action to v6 ([#373](https://github.com/rubiin/tsumiki/issues/373)) ([28f6992](https://github.com/rubiin/tsumiki/commit/28f699208d07b259e5c26d492f61e23a00641a25))
-
+- **deps:** lock file maintenance ([#374](https://github.com/rubiin/tsumiki/issues/374)) ([cb4c185](https://github.com/rubiin/tsumiki/commit/cb4c185686bf9d3f262cf63ca342a5ad0cf34407))
+- **deps:** update actions/checkout action to v7 ([#371](https://github.com/rubiin/tsumiki/issues/371)) ([f635087](https://github.com/rubiin/tsumiki/commit/f635087ce2beb4c91e3e37ca9174afbcc0f6b038))
+- **deps:** update actions/setup-node action to v7 ([#372](https://github.com/rubiin/tsumiki/issues/372)) ([8430aa3](https://github.com/rubiin/tsumiki/commit/8430aa3ac1de5f95158c6c75b2678a9859dd9340))
+- **deps:** update pnpm/action-setup action to v6 ([#373](https://github.com/rubiin/tsumiki/issues/373)) ([28f6992](https://github.com/rubiin/tsumiki/commit/28f699208d07b259e5c26d492f61e23a00641a25))
 
 ### ♻️ Code Refactoring
 
-* **popover:** remove unused focus-in event handler and clean up popover closing logic ([b5ad61c](https://github.com/rubiin/tsumiki/commit/b5ad61c3209c5553b1e41c8a2fd33788eda84046))
+- **popover:** remove unused focus-in event handler and clean up popover closing logic ([b5ad61c](https://github.com/rubiin/tsumiki/commit/b5ad61c3209c5553b1e41c8a2fd33788eda84046))
 
 ## [4.5.1](https://github.com/rubiin/tsumiki/compare/v4.5.0...v4.5.1) (2026-08-23)
 
