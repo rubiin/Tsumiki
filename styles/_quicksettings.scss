@@ -354,22 +354,7 @@ $qs-active-fg: theme.$accent-purple;
         }
       }
 
-      .audio-chevron-button {
-        border-radius: 50%;
-        padding: common.toEm(4);
-        min-width: 24px;
-        min-height: 24px;
-        background-color: transparent;
-        transition: background-color 200ms ease;
 
-        &:hover {
-          background-color: color.adjust(theme.$surface-neutral, $alpha: -0.7);
-        }
-
-        &:active {
-          background-color: color.adjust(theme.$surface-neutral, $alpha: -0.85);
-        }
-      }
 
       button {
         background-color: transparent;
@@ -405,6 +390,22 @@ $qs-active-fg: theme.$accent-purple;
 
           @include common.image-label-colors($qs-active-fg);
         }
+      }
+    }
+
+    .audio-chevron-button {
+      border-radius: variable.$radius-large;
+
+
+      background-color: transparent;
+      transition: background-color 200ms ease;
+
+      &:hover {
+        background-color: color.adjust(theme.$surface-neutral, $alpha: -0.7);
+      }
+
+      &:active {
+        background-color: color.adjust(theme.$surface-neutral, $alpha: -0.85);
       }
     }
   }

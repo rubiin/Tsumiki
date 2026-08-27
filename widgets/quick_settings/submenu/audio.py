@@ -5,6 +5,7 @@ from fabric.widgets.label import Label
 from fabric.widgets.scrolledwindow import ScrolledWindow
 
 from services import audio_service
+from shared.list import ListBox
 from shared.submenu import QuickSubMenu
 from utils.i18n import _
 from utils.icons import get_text_icon, symbolic_icons
@@ -21,10 +22,11 @@ class AudioSubMenu(QuickSubMenu):
         self.scan_button = None
 
         # Create app list container
-        self.app_list = Gtk.ListBox(
-            selection_mode=Gtk.SelectionMode.NONE, name="app-list"
+        self.app_list = ListBox(
+            selection_mode="none",
+            name="app-list",
+            style_classes="menu",
         )
-        self.app_list.get_style_context().add_class("menu")
 
         # Wrap in scrolled window sized to its content, so the sliders fit
         # without a scrollbar until there are many apps.

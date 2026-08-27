@@ -1,5 +1,4 @@
 from fabric.utils import cooldown
-from fabric.widgets.box import Box
 
 from services import audio_service
 from shared.buttons import HoverButton
@@ -39,9 +38,7 @@ class AudioSlider(SettingSlider):
 
             self.chevron_btn = HoverButton(
                 style_classes="audio-chevron-button",
-                child=Box(
-                    children=(self.chevron_icon,),
-                ),
+                child=self.chevron_icon,
                 on_clicked=self.on_button_click,
             )
             self.children = (*self.children, self.chevron_btn)
