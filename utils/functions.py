@@ -691,6 +691,7 @@ def toggle_command(command: str, full_command: str):
 
         subprocess.Popen(
             full_command,
+            shell=True,
             stdin=subprocess.DEVNULL,
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL,

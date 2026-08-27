@@ -307,9 +307,6 @@ show_special = false
 - **`icon_map`**: Mapea IDs de espacios de trabajo a iconos personalizados: `{ "1": "", "2": "" }`.- **`label_format`**: Cadena de formato con variable `{id}`.
 - **`show_special`**: Mostrar espacios de trabajo especiales (IDs negativos). Establecer en `false` para ocultarlos.
 
-
-
-
 ### Título de Ventana
 
 Muestra el título de la ventana actualmente enfocada.
