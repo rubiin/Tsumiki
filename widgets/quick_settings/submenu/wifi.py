@@ -121,7 +121,7 @@ class WifiSubMenu(QuickSubMenu):
         self.batch_size = 7
         self.loading = False
         self.max_items = len(self.wifi_device.access_points) if self.wifi_device else 0
-        self.available_networks_listbox.remove_all()
+        self.available_networks_listbox.children = []
         if self.wifi_device:
             self._load_next_batch(self.wifi_device.access_points)
 
