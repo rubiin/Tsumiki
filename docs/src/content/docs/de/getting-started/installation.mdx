@@ -84,14 +84,13 @@ sudo pacman -S --noconfirm --needed \
   brightnessctl pkgconf wf-recorder kitty python pacman-contrib \
   gtk3 cairo gtk-layer-shell libgirepository noto-fonts-emoji \
   gobject-introspection gobject-introspection-runtime uv \
-  python-gobject python-psutil python-cairo python-loguru libnotify \
-  cliphist libqalculate python-httpx satty nvtop
+  libnotify cliphist libqalculate satty nvtop
 
 # AUR-Pakete installieren (mit yay als Beispiel)
 yay -S --needed \
-  python-fabric-git gnome-bluetooth-3.0 python-rlottie-python \
-  python-pytomlpp slurp imagemagick tesseract tesseract-data-eng \
-  ttf-jetbrains-mono-nerd grimblast-git python-ijson
+  fabric-cli-git gnome-bluetooth-3.0 \
+  slurp imagemagick tesseract tesseract-data-eng \
+  ttf-jetbrains-mono-nerd grimblast-git matugen-bin cinnamon-desktop
 
 # Python-Abhängigkeiten installieren
 uv sync

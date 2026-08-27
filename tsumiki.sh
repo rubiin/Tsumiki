@@ -183,6 +183,7 @@ install_packages() {
 		ttf-jetbrains-mono-nerd
 		grimblast-git
 		matugen-bin
+		cinnamon-desktop
 	)
 
 	sudo pacman -S --noconfirm --needed "${pacman_deps[@]}" || {
