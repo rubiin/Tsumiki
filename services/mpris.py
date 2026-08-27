@@ -121,7 +121,6 @@ class MprisPlayer(Service):
 
         def _emit_exit_and_cleanup():
             self.emit("exit", True)
-            del dead_player
             del self._signal_connectors
             return False
 

@@ -10,7 +10,7 @@ from fabric.widgets.scrolledwindow import ScrolledWindow
 
 from services.network import NetworkService, Wifi
 from shared.buttons import QSChevronButton, ScanButton
-from shared.fabricate import fabricate
+from shared.list import ListBox
 from shared.submenu import QuickSubMenu
 from utils.exceptions import NetworkManagerNotFoundError
 from utils.i18n import _
@@ -32,8 +32,7 @@ class WifiSubMenu(QuickSubMenu):
         self.wifi_device = None
         self._wifi_connected = None
 
-        fabric_listbox = fabricate(Gtk.ListBox)
-        self.available_networks_listbox = fabric_listbox(
+        self.available_networks_listbox = ListBox(
             visible=True, name="available-networks-listbox"
         )
         self.client.connect("device-ready", self.on_device_ready)
@@ -121,7 +120,7 @@ class WifiSubMenu(QuickSubMenu):
         self.batch_size = 7
         self.loading = False
         self.max_items = len(self.wifi_device.access_points) if self.wifi_device else 0
-        self.available_networks_listbox.children = []
+        self.available_networks_listbox.remove_all()
         if self.wifi_device:
             self._load_next_batch(self.wifi_device.access_points)
 

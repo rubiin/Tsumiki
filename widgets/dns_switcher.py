@@ -55,6 +55,7 @@ class DnsSwitcherPopover(Box):
         )
 
         # ── Provider list ──
+        # TODO: use listbox instead of buttons for better accessibility
         self._provider_list = Box(
             name="dns-provider-list",
             orientation="v",

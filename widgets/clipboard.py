@@ -24,7 +24,7 @@ from fabric.widgets.image import Image
 from fabric.widgets.label import Label
 from fabric.widgets.scrolledwindow import ScrolledWindow
 
-from shared.fabricate import fabricate
+from shared.list import ListBox
 from shared.mixins import PopoverMixin
 from shared.widget_container import ButtonWidget, TeardownMixin
 from utils.i18n import _
@@ -92,12 +92,8 @@ class ClipHistoryMenu(Box, TeardownMixin):
         self._search_timer_id = None  # Timer ID for search text change
         self._item_widgets: dict[str, Button] = {}  # Cache of item_id -> button widget
 
-        fabric_listbox = fabricate(Gtk.ListBox)
-
-        self.viewport = fabric_listbox(
+        self.viewport = ListBox(
             name="viewport",
-            spacing=4,
-            orientation="v",
             v_align="fill",
             h_align="fill",
             h_expand=True,
@@ -244,7 +240,7 @@ class ClipHistoryMenu(Box, TeardownMixin):
 
     def close(self, *_):
         """Close the clipboard history panel"""
-        self.viewport.children = []
+        self.viewport.remove_all()
         self.selected_index = -1  # Reset selection
         self.filtered_items = []
         if self._parent is not None:
