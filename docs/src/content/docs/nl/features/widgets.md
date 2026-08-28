@@ -55,6 +55,7 @@ confirm = true
 count = 10
 style = "numbered"
 show_special = false
+urgent_show = true
 
 [widgets.window_title]
 truncation = true

@@ -8,12 +8,50 @@ $workspace-transition:
   background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
   border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
+@keyframes urgent-pulse {
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+/// Apply the urgent pulse animation.
+@mixin urgent {
+  &.urgent {
+    background-color: theme.$accent-red;
+    color: theme.$background-dark;
+    animation: urgent-pulse 1.5s ease-in-out infinite;
+  }
+}
+
 /// Shared skeleton for workspace style variants.
 @mixin workspace-variant {
   & > button {
+    @include urgent;
     @content;
   }
 }
+
+/// Dark label used on light backgrounds (hover, active states).
+@mixin dark-label {
+  label {
+    color: theme.$background-dark;
+  }
+}
+
+/// Common gradient used by slanted-right variants.
+$slanted-gradient: linear-gradient(
+  190deg,
+  color.adjust(theme.$accent-purple, $alpha: -0.1) 0%,
+  transparent 100%
+);
 
 /** workspace switcher widget */
 
@@ -32,12 +70,13 @@ $workspace-transition:
       variable.$bar-widgets-workspaces-border-width
     );
 
-    // Base button styles shared by all variants — transition emitted once
+    // Base button styles shared by all variants
     & > button {
       transition: $workspace-transition;
       min-height: variable.$bar-widgets-workspaces-pill-height;
       min-width: variable.$bar-widgets-workspaces-pill-width;
       border-radius: variable.$radius-large;
+      @include urgent;
 
       label {
         color: theme.$text-main;
@@ -46,10 +85,7 @@ $workspace-transition:
 
       &:hover {
         background-color: theme.$accent-purple;
-
-        label {
-          color: theme.$background-dark;
-        }
+        @include dark-label;
       }
 
       &.active {
@@ -64,10 +100,7 @@ $workspace-transition:
         border-radius: variable.$bar-widgets-workspaces-pill-border-radius;
         border-width: variable.$bar-widgets-workspaces-pill-border-width;
         background-color: theme.$accent-purple;
-
-        label {
-          color: theme.$background-dark;
-        }
+        @include dark-label;
       }
     }
   }
@@ -86,10 +119,7 @@ $workspace-transition:
         padding-left: 20px;
         padding-right: 20px;
         border-radius: 40px;
-
-        label {
-          color: theme.$background-dark;
-        }
+        @include dark-label;
       }
     }
   }
@@ -113,19 +143,13 @@ $workspace-transition:
 
     &:hover {
       background-color: color.adjust(theme.$accent-purple, $alpha: -0.5);
-
-      label {
-        color: theme.$background-dark;
-      }
+      @include dark-label;
     }
 
     &.active {
       background-color: theme.$accent-purple;
       font-weight: 700;
-
-      label {
-        color: theme.$background-dark;
-      }
+      @include dark-label;
     }
   }
 }
@@ -144,10 +168,7 @@ $workspace-transition:
     &:hover {
       background-color: color.adjust(theme.$accent-purple, $alpha: -0.6);
       border-bottom-color: color.adjust(theme.$accent-purple, $alpha: -0.3);
-
-      label {
-        color: theme.$background-dark;
-      }
+      @include dark-label;
     }
 
     &.active {
@@ -186,19 +207,13 @@ $workspace-transition:
 
     &:hover {
       background-color: color.adjust(theme.$accent-purple, $alpha: -0.3);
-
-      label {
-        color: theme.$background-dark;
-      }
+      @include dark-label;
     }
 
     &.active {
       background-color: theme.$accent-purple;
       font-weight: 700;
-
-      label {
-        color: theme.$background-dark;
-      }
+      @include dark-label;
     }
   }
 }
@@ -220,10 +235,7 @@ $workspace-transition:
       background-color: theme.$accent-purple;
       border-left-color: theme.$accent-purple;
       border-right-color: theme.$accent-purple;
-
-      label {
-        color: theme.$background-dark;
-      }
+      @include dark-label;
     }
 
     &.active {
@@ -232,10 +244,7 @@ $workspace-transition:
       min-width: 1.6em;
       border-left-color: color.adjust(theme.$accent-purple, $alpha: -0.2);
       border-right-color: color.adjust(theme.$accent-purple, $alpha: -0.2);
-
-      label {
-        color: theme.$background-dark;
-      }
+      @include dark-label;
     }
   }
 }
@@ -244,11 +253,7 @@ $workspace-transition:
   @include workspace-variant {
     padding: 0.25em 1em;
     background-color: color.adjust(theme.$accent-purple, $alpha: -0.2);
-    background-image: linear-gradient(
-      190deg,
-      color.adjust(theme.$accent-purple, $alpha: -0.1) 0%,
-      transparent 100%
-    );
+    background-image: $slanted-gradient;
     border-radius: 0;
     border-right: 3px solid color.adjust(theme.$accent-purple, $alpha: -0.3);
 
@@ -259,32 +264,18 @@ $workspace-transition:
 
     &:hover {
       background-color: theme.$accent-purple;
-      background-image: linear-gradient(
-        190deg,
-        color.adjust(theme.$accent-purple, $alpha: -0.1) 0%,
-        transparent 100%
-      );
+      background-image: $slanted-gradient;
       border-right-color: theme.$accent-purple;
-
-      label {
-        color: theme.$background-dark;
-      }
+      @include dark-label;
     }
 
     &.active {
       background-color: theme.$accent-purple;
-      background-image: linear-gradient(
-        190deg,
-        color.adjust(theme.$accent-purple, $alpha: -0.1) 0%,
-        transparent 100%
-      );
+      background-image: $slanted-gradient;
       font-weight: 700;
       min-width: 1.6em;
       border-right-color: color.adjust(theme.$accent-purple, $alpha: -0.2);
-
-      label {
-        color: theme.$background-dark;
-      }
+      @include dark-label;
     }
   }
 }
@@ -302,9 +293,7 @@ $workspace-transition:
     }
 
     &:hover {
-      label {
-        color: theme.$background-dark;
-      }
+      @include dark-label;
     }
 
     &.active {
@@ -325,4 +314,11 @@ $workspace-transition:
       }
     }
   }
+}
+
+// When urgent_show is false, suppress the pulse animation and color.
+#workspaces.urgent-disabled button.urgent {
+  background-color: transparent;
+  color: inherit;
+  animation: none;
 }

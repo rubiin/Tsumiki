@@ -420,7 +420,7 @@ After completing a feature, bugfix, or refactor, run the following checks:
 uv run ruff check .
 
 # 2. Compile SCSS (only if styles were modified)
-sass styles/main.scss css/style.css --no-source-map
+sass styles/main.scss ~/tmp/style.css --no-source-map
 
 # 3. Run pre-commit hooks
 prek run --all-files

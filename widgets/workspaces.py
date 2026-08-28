@@ -18,7 +18,11 @@ class WorkSpacesWidget(BoxWidget):
         self.workspace_count = self.config.get("count", 8)
         self.hide_unoccupied = self.config.get("hide_unoccupied", False)
         self.show_special = self.config.get("show_special", False)
+        self.urgent_show = self.config.get("urgent_show", True)
         self.style = self.config.get("style", "numbered")
+
+        if not self.urgent_show:
+            self.add_style_class("urgent-disabled")
 
         # Create a HyperlandWorkspace widget to manage workspace buttons
         self.children = HyprlandWorkspaces(

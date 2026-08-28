@@ -25,6 +25,58 @@
 
 **Fix**: Move `gi.repository` imports into lazy initializers or inside `__init__` methods so they only load when the service/widget is actually instantiated. NetworkManager and Playerctl introspection are particularly expensive.
 
+### 50. Stats Widget GPU Polling Blocks Main Thread
+
+**Files**: `widgets/stats.py` (line 147)
+**Effort**: Small | **Impact**: Medium
+
+`_poll_gpu_stats()` calls `exec_shell_command("nvtop -s")` synchronously, blocking the GTK main loop. This runs every `_gpu_poll_interval` seconds (default 2s). The `nvtop -s` command spawns a subprocess and parses JSON output — both blocking operations.
+
+```python
+# Current — blocks main thread
+out = exec_shell_command("nvtop -s")
+data = json.loads(out)
+
+# Fix — run in background
+exec_shell_command_async("nvtop -s", callback=self._on_gpu_stats_received)
+```
+
+**Fix**: Use `exec_shell_command_async()` with a callback. Cache the last result and only update UI on actual changes.
+
+### 51. USB Manager lsblk Polling Blocks Main Thread
+
+**Files**: `widgets/usb_manager.py` (line 187)
+**Effort**: Small | **Impact**: Medium
+
+`refresh_devices()` calls `exec_shell_command("lsblk -J ...")` synchronously. This blocks the GTK main loop during device enumeration. The `lsblk` command can take 100-500ms depending on the number of devices.
+
+```python
+# Current — blocks main thread
+output = exec_shell_command("lsblk -J -o NAME,PATH,TYPE,SIZE,...")
+
+# Fix — run in background
+exec_shell_command_async("lsblk -J ...", callback=self._on_lsblk_ready)
+```
+
+**Fix**: Use `exec_shell_command_async()` with a callback. The animation (refresh button spin) can continue while the command runs.
+
+### 52. Git Companion GitHub API Calls Block Main Thread
+
+**Files**: `widgets/git_companion.py` (line 82)
+**Effort**: Small | **Impact**: Medium
+
+`_run_gh_command()` calls `exec_shell_command(cmd_str)` synchronously. GitHub CLI commands (`gh`) can take 1-5 seconds depending on network latency. This blocks the entire GTK main loop during API calls.
+
+```python
+# Current — blocks main thread
+result = exec_shell_command(cmd_str)
+
+# Fix — run in background
+exec_shell_command_async(cmd_str, callback=self._on_gh_result)
+```
+
+**Fix**: Use `exec_shell_command_async()` with a callback. Show a loading state while the command runs.
+
 ---
 
 ## 🥈 Medium Priority
@@ -47,6 +99,119 @@ Many widgets connect to signals directly without using `_register_handler()` fro
 
 **Fix**: Use `send_command_async()` with callbacks. Combine related queries into fewer round-trips.
 
+### 53. Sass Compilation Blocks Main Thread During Theme Switch
+
+**Files**: `services/style.py` (line 310)
+**Effort**: Medium | **Impact**: Medium
+
+`_compile_sass()` calls `exec_shell_command("sass styles/main.scss ...")` synchronously. Sass compilation can take 100-500ms. This blocks the GTK main loop during theme switching, causing visible UI freeze.
+
+```python
+# Current — blocks main thread
+output = exec_shell_command(f"sass styles/main.scss {CSS_PATH} --no-source-map")
+
+# Fix — run in background thread
+exec_shell_command_async(
+    f"sass styles/main.scss {CSS_PATH} --no-source-map", callback=self._on_sass_compiled
+)
+```
+
+**Fix**: Move Sass compilation to a background thread. Use `exec_shell_command_async()` or `threading.Thread()`. Apply CSS via `idle_add()` after compilation completes.
+
+### 54. Matugen Color Generation Blocks Main Thread
+
+**Files**: `services/matugen.py` (line 85)
+**Effort**: Small | **Impact**: Medium
+
+`generate_colors()` calls `exec_shell_command(cmd)` synchronously. Matugen can take 1-3 seconds to generate color palettes. This blocks the GTK main loop during theme generation.
+
+```python
+# Current — blocks main thread
+exec_shell_command(cmd)
+
+# Fix — run in background
+exec_shell_command_async(cmd, callback=self._on_colors_generated)
+```
+
+**Fix**: Use `exec_shell_command_async()` with a callback. Emit `colors_generated` signal from the callback.
+
+### 55. Sinewave Slider 60fps Animation Loop Wastes CPU
+
+**Files**: `shared/sinewave_slider.py` (line 144)
+**Effort**: Small | **Impact**: Low
+
+`SinewaveSlider.__init__()` starts a 60fps animation loop (`GLib.timeout_add(16, self._tick)`) immediately on creation. The animation runs continuously even when the slider is not visible or not being interacted with.
+
+```python
+# Current — always running
+self._anim_id: int | None = GLib.timeout_add(16, self._tick)
+
+# Fix — only run when visible/interacting
+self.connect("map", self._start_animation)
+self.connect("unmap", self._stop_animation)
+```
+
+**Fix**: Start the animation loop only when the widget is mapped (visible). Stop it when unmapped. Use `_register_repeater()` for proper cleanup.
+
+### 56. Icon Resolver File I/O on Main Thread
+
+**Files**: `utils/icon_resolver.py` (line 118)
+**Effort**: Small | **Impact**: Low
+
+`_resolve_icon_name()` reads `.desktop` files synchronously with `open(desktop_file_path, "r")`. This blocks the GTK main loop during icon resolution. Desktop files are typically small (1-10KB), but the I/O can still cause micro-stutters.
+
+```python
+# Current — blocks main thread
+with open(desktop_file_path, "r") as f:
+    content = f.read()
+
+
+# Fix — cache resolved icons
+@lru_cache(maxsize=256)
+def _resolve_icon_name(self, desktop_file_path: str) -> str | None: ...
+```
+
+**Fix**: Cache resolved icon names with `@lru_cache`. Desktop files rarely change during a session.
+
+### 57. Weather Cache File I/O on Main Thread
+
+**Files**: `services/weather.py` (line 306)
+**Effort**: Small | **Impact**: Low
+
+`_load_cached_weather()` reads JSON from disk synchronously with `open(WEATHER_CACHE_FILE, "r")`. Weather cache files are typically 5-50KB.
+
+```python
+# Current — blocks main thread
+with open(WEATHER_CACHE_FILE, "r") as f:
+    cached_data = json.load(f)
+
+# Fix — cache in memory after first load
+self._cached_weather = None  # populated on first read
+```
+
+**Fix**: Cache the parsed weather data in memory. Only re-read from disk if the file modification time changes.
+
+### 58. Emoji Picker Loads JSON on Every Open
+
+**Files**: `widgets/emoji_picker.py` (line 107)
+**Effort**: Small | **Impact**: Low
+
+`_load_emoji_data()` reads `emoji.json` from disk every time the picker is opened. The file is typically 200-500KB.
+
+```python
+# Current — reads from disk every time
+with open(self._emoji_file_path, "r") as f:
+    data = json.load(f)
+
+# Fix — cache after first load
+if self._emoji_data is None:
+    with open(self._emoji_file_path, "r") as f:
+        self._emoji_data = json.load(f)
+return self._emoji_data
+```
+
+**Fix**: Cache the parsed emoji data in a class variable or module-level cache. The emoji list is static and doesn't change during a session.
+
 ---
 
 ## 🥉 Lower Priority
@@ -68,187 +233,6 @@ Uses blocking `exec_shell_command("sass ...")` in a thread (subprocess spawn). C
 Uses `Gio.Subprocess.new()` with manual `Gio.Task` callbacks instead of `exec_shell_command_async()`.
 
 **Fix**: Refactor to use `exec_shell_command_async()` or `Gio.SubprocessLauncher`.
-
----
-
-# New Findings (July 2026)
-
-## 🔥 High Priority (New)
-
-### 40. Unnecessary Widget Nesting — EventBoxWidget Wraps Single-Child in Extra Box
-
-**Files**: `shared/widget_container.py`
-**Effort**: Small | **Impact**: Medium
-
-`EventBoxWidget.__init__()` creates an `EventBox` → adds a `Box(container_box)` → adds children to that Box. Every widget using `EventBoxWidget` gets an extra Box node in the widget tree for no reason — the EventBox can hold children directly.
-
-```python
-# Current — 2 levels
-self.container_box = Box(name="widget-container", style_classes=["panel-box"])
-self.add(self.container_box)  # EventBox → unnecessary Box
-
-# Fix — 1 level; apply style_classes + name directly to EventBox
-self.add(self.container_box)  # → remove, add children to self directly
-```
-
-Similarly `ButtonWidget` does `Button` → `Box` (`container_box`) → children. Buttons can hold child widgets directly. The `widget-container` CSS class can be applied to the Button itself.
-
-```python
-# Current
-self.container_box = Box(style_classes=["widget-container"])
-self.add(self.container_box)
-
-# Fix — remove container_box, add children directly to Button
-# Button inherits from Bin — supports single child natively
-```
-
-**Savings**: Removes 1 Box per button widget (~30+ widgets × 1 Box = 30+ fewer nodes).
-
-## 🥈 Medium Priority (New)
-
-### 44. Unnecessary Widget Nesting — Popup Layout Creates Up to 5 Nested Containers
-
-**Files**: `shared/popup.py`
-**Effort**: Medium | **Impact**: Medium
-
-`PopupWindow` uses `make_layout()` which creates:
-`BaseWindow` → `Box` (horizontal) → `Box` (_make_v_column) → `Padding(EventBox → Box)` → `PopupRevealer(EventBox → Revealer → child)`
-
-That's **6 container widgets** before the actual content. The `Padding` class is itself `EventBox(child=Box(...))` — an EventBox wrapping a Box.
-
-```python
-# Current — Padding class
-class Padding(EventBox):
-    def __init__(self, ..., style=""):
-        super().__init__(
-            child=Box(style=style, h_expand=True, v_expand=True),  # ← redundant Box
-            ...
-        )
-```
-
-The `Padding` EventBox can just receive the `style` directly and skip the inner `Box`. Also, for the `top`, `bottom`, and `center` layouts, the padding could be CSS on the parent Box instead of extra EventBox children.
-
-**Fix**:
-
-- Remove `Padding` inner Box, apply style to EventBox directly (or use CSS on parent)
-- For `top`/`bottom` layouts, use CSS `margin` on the popup instead of spacer Padding widgets
-- For `center` layout, use CSS flexbox-style centering instead of 3 Padding widgets
-
-**Savings**: 1-3 container widgets removed per popup.
-
-#
-
-### 46. Unnecessary Widget Nesting — Dock Revealer Extra Box Wrapper
-
-**Files**: `modules/dock.py` (lines 928-931)
-**Effort**: Trivial | **Impact**: Low
-
-```python
-self.revealer = Revealer(
-    child=Box(children=[self._app_bar], style=padding_style),
-    ...
-)
-```
-
-The `Box` wrapping `self._app_bar` is unnecessary. The `padding_style` can be applied directly to the AppBar (`BoxWidget`) or to the Revealer itself (GTK3 Revealer supports CSS padding).
-
-**Fix**: Apply `padding_style` to `self._app_bar` styling instead of wrapping in a Box.
-
-**Savings**: 1 Box per dock.
-
-### 47. Many Widgets Use `nerd_font_icon()` Result Wrapped in Additional Container
-
-**Files**: `widgets/battery.py`, `widgets/volume.py`, `widgets/brightness.py`, `widgets/power_button.py`, etc.
-**Effort**: Medium | **Impact**: Low
-
-`nerd_font_icon()` returns a `Label`. Many widgets then add this Label to a `ButtonWidget.container_box` (which is a `Box`). That means `ButtonWidget(Button)` → `Box(container_box)` → `Label(nerd_font_icon)`. Since `Button` is a `Gtk.Bin` (single-child container), the middle Box is often serving as a pass-through just for multiple children.
-
-Many widgets only have **one child** (just the icon) or **two** (icon + text label). For the single-child case, the icon Label can be set directly as the Button's child, skipping container_box entirely. For two-child cases, a Box is still needed but could be the direct container without the widget-container name/style overhead.
-
-**Fix**: Add a `set_child()` method to `ButtonWidget` that sets the button's direct child for single-child widgets, bypassing `container_box`.
-
-**Savings**: 1 Box per single-child widget (~half of all widgets).
-
----
-
-## 🥉 Lower Priority (New)
-
-### 49. `shared/widget_container.py` — `EventBoxWidget` Always Creates `container_box` Even if Empty
-
-**Files**: `shared/widget_container.py` (line 144)
-**Effort**: Trivial | **Impact**: Low
-
-`EventBoxWidget.__init__()` always creates `self.container_box = Box(name=..., style_classes=...)` and adds it, even if the subclass never adds children. At minimum this is an invisible empty Box in the widget tree.
-
-**Fix**: Lazily create `container_box` only when children are actually added, or allow opting out.
-
-## 🔥 High Priority (New)
-
-### 16. LockKeys OSD Polls hyprctl at 200ms — 5x/second Subprocess Spawn
-
-**Files**: `modules/osds/lockkeys.py`, `utils/constants.py`
-**Effort**: Small | **Impact**: Medium
-
-The LockKeys OSD polls `hyprctl devices -j` every **200ms** by default. Each poll spawns a subprocess, parses JSON output, and updates GTK widgets. That's 5 subprocess spawns/second just for capslock/numlock state detection — which changes maybe once per session.
-
-**Fix**:
-
-- Increase default `poll_interval` to 2000ms (2 seconds) — keyboard lock state doesn't change rapidly enough to warrant 200ms
-- Switch to listening for keyboard events via DBus or `hyprctl` event socket instead of polling
-- Or use `exec_shell_command_async` and cache the last result, only updating UI on actual changes
-
-### 17. DnsSwitcher Service Polls nmcli Every 3s Unconditionally
-
-**Files**: `services/dns_switcher.py`
-**Effort**: Small | **Impact**: Medium
-
-`DnsSwitcherService` polls `nmcli -t -f UUID con show --active` every 3 seconds via `GLib.timeout_add`. Each poll involves a blocking `exec_shell_command()` call. The poll never pauses — it runs even when no DNS switcher widget is visible.
-
-**Fix**: Add `pause_polling()`/`resume_polling()` methods (like CloudflareWarpService already has) and connect to widget map/unmap events. Increase default interval to 5000ms+.
-
-### 18. CloudflareWarp Service Polls warp-cli Every 5s Unconditionally at Module Level
-
-**Files**: `services/cloudflare_warp.py`
-**Effort**: Small | **Impact**: Low
-
-Similar to DnsSwitcher — polls `warp-cli status` every 5 seconds. The widget does connect map/unmap to pause/resume polling, but the **service singleton starts polling in `__init__`** — whenever `services/cloudflare_warp.py` is imported (typically at widget module load time), polling begins immediately, even before any widget is created or mapped.
-
-**Fix**: Defer starting the poll timer to first widget map event instead of `__init__`. Or default to paused state and only start on first widget map.
-
-### 20. Privacy Service Calls pw-dump Synchronously on Main Thread
-
-**Files**: `services/privacy.py`
-**Effort**: Small | **Impact**: Medium
-
-`_load_pipewire_objects()` calls `exec_shell_command("pw-dump")` synchronously. `pw-dump` can produce several megabytes of JSON output. This is called from the privacy indicator's repeater (every 3500ms). Blocks the GTK main loop during execution.
-
-**Fix**: Move `exec_shell_command("pw-dump")` to a background thread, parse the JSON there, then idle_add the result back to the main thread.
-
----
-
-## 🥈 Medium Priority (New)
-
-### 25. LockKeys OSD Does Not Use TeardownMixin for Timer Cleanup
-
-**Files**: `modules/osds/lockkeys.py`
-**Effort**: Small | **Impact**: Low
-
-`LockkeysOSDContainer` manages `_poll_timer` manually with `do_destroy()` calling `cleanup()`. It does **not** use `TeardownMixin` from `shared/widget_container.py`. This is inconsistent with the pattern used by other widgets and could miss cleanup in edge cases.
-
-**Fix**: Switch to `TeardownMixin` and use `_register_repeater()` for the poll timer.
-
-### 26. CloudflareWarp Service Uses Raw exec_shell_command Instead of Async
-
-**Files**: `services/cloudflare_warp.py`
-**Effort**: Small | **Impact**: Low
-
-`_run_warp_cli()` calls `exec_shell_command(f"warp-cli {action}")` synchronously. The poll function uses `exec_shell_command_async` but action calls are synchronous.
-
-**Fix**: Replace synchronous `exec_shell_command` with `exec_shell_command_async` for all warp-cli invocations.
-
----
-
-## 🥉 Lower Priority (New)
 
 ### 34. Notification Timer Uses invoke_repeater at 250ms for Second-Level Timeouts
 
@@ -286,3 +270,61 @@ Several module-level imports are only used in specific functions:
 These add import overhead at module load time even when the features are never used.
 
 **Fix**: Move these imports inside their respective functions (lazy imports). For `psutil`, it's already imported by `stats_poll()` in `widget_utils.py`, so it's already in memory — the import is fast but unnecessary.
+
+### 59. Kanban GLib.timeout_add Without Cleanup Tracking
+
+**Files**: `widgets/kanban.py` (line 200)
+**Effort**: Trivial | **Impact**: Low
+
+`InlineEditor` uses `GLib.timeout_add(200, lambda: ...)` without tracking the timer ID. If the widget is destroyed before the timeout fires, the callback may run on a destroyed widget.
+
+```python
+# Current — no cleanup
+GLib.timeout_add(200, lambda: (editor.text_view.grab_focus(), False))
+
+# Fix — use _register_repeater for cleanup
+self._register_repeater(
+    GLib.timeout_add(200, lambda: (editor.text_view.grab_focus(), False))
+)
+```
+
+**Fix**: Use `_register_repeater()` to track the timer ID and ensure cleanup on destroy.
+
+### 60. USB Manager _run_command Blocks Main Thread
+
+**Files**: `widgets/usb_manager.py` (line 483)
+**Effort**: Small | **Impact**: Low
+
+`_run_command()` calls `exec_shell_command(command)` synchronously. USB operations (mount, unmount, eject) can take 100ms-2s. This blocks the GTK main loop during device operations.
+
+```python
+# Current — blocks main thread
+exec_shell_command(command)
+
+# Fix — run in background
+exec_shell_command_async(command, callback=self._on_action_done)
+```
+
+**Fix**: Use `exec_shell_command_async()` with a callback. The refresh animation can continue while the command runs.
+
+---
+
+## 📊 Summary
+
+| Priority  | Count | Total Effort | Total Impact |
+| --------- | ----- | ------------ | ------------ |
+| 🔥 High   | 5     | Medium       | High         |
+| 🥈 Medium | 8     | Medium       | Medium       |
+| 🥉 Lower  | 7     | Small        | Low          |
+
+**Top 3 Quick Wins (High Impact, Low Effort):**
+
+1. **Stats GPU polling** (#50) — Move `nvtop -s` to async, 10 min fix
+2. **USB Manager lsblk** (#51) — Move `lsblk` to async, 10 min fix
+3. **Git Companion GitHub API** (#52) — Move `gh` to async, 15 min fix
+
+**Top 3 Architectural Improvements (High Impact, Medium Effort):**
+
+1. **Thread safety for Stats Fabricator** (#1) — Prevents race conditions
+2. **Lazy gi.repository imports** (#4) — Faster startup
+3. **Sass compilation to background** (#53) — Eliminates UI freeze on theme switch

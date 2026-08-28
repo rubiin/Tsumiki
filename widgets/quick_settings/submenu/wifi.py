@@ -79,7 +79,15 @@ class WifiSubMenu(QuickSubMenu):
                 self.child.get_vadjustment().disconnect(self._adjustment_handler)
             self._adjustment_handler = None
 
-    def on_child_revealed(self, *_):
+    def on_child_revealed(self, revealer, *_):
+        # Always delegate visibility to the base class so the submenu is
+        # hidden when the revealer finishes its hide animation.
+        super().on_child_revealed(revealer)
+
+        # Only start a scan when the submenu is being revealed, not hidden.
+        if not revealer.get_reveal_child():
+            return
+
         self.scan_button.set_sensitive(False)
         self.start_new_scan()
         self.scan_button.set_sensitive(True)
@@ -100,6 +108,9 @@ class WifiSubMenu(QuickSubMenu):
         self.loading = False
 
     def on_scroll(self, adjustment: Gtk.Adjustment):
+        if self.wifi_device is None:
+            return
+
         value = adjustment.get_value()
         upper = adjustment.get_upper()
         page_size = adjustment.get_page_size()
@@ -125,6 +136,8 @@ class WifiSubMenu(QuickSubMenu):
             self._load_next_batch(self.wifi_device.access_points)
 
     def start_new_scan(self, *_):
+        if self.wifi_device is None:
+            return
         self.wifi_device.scan()
         self.scan_button.play_animation()
 
