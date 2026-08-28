@@ -119,6 +119,7 @@ class SettingsGUI(Window):
             label="Apply & Save",
             name="settings-save-btn",
             on_clicked=self._on_save,
+            sensitive=False,
         )
         self.save_btn.set_sensitive(False)
         button_box.add(self.save_btn)

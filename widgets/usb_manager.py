@@ -333,13 +333,14 @@ class USBManagerMenu(Box, TeardownMixin):
             style_classes=["panel-text", "usb-manager-device-usage"],
         )
 
-        usage_progress = Gtk.ProgressBar()
-        usage_progress.set_name("usb-manager-usage-progress")
-        usage_progress.set_fraction(usage_fraction or 0.0)
-        usage_progress.set_visible(usage_fraction is not None)
-        usage_progress.set_hexpand(True)
-        usage_progress.set_vexpand(False)
-        usage_progress.set_show_text(False)
+        usage_progress = Gtk.ProgressBar(
+            name="usb-manager-usage-progress",
+            fraction=usage_fraction or 0.0,
+            visible=usage_fraction is not None,
+            hexpand=True,
+            vexpand=False,
+            show_text=False,
+        )
 
         icon = nerd_font_icon(
             icon="󰕓",
