@@ -104,19 +104,12 @@ class ClipHistoryMenu(Box, TeardownMixin):
             name="search-entry",
             placeholder="search history",
             h_expand=True,
+            primary_icon_name="system-search",
+            secondary_icon_name="edit-clear",
             on_activate=self.use_selected_item,
             on_key_press_event=self.on_search_entry_key_press,
         )
 
-        # Add magnifying glass icon to the left (primary position)
-        self.search_entry.set_icon_from_icon_name(
-            Gtk.EntryIconPosition.PRIMARY, "system-search"
-        )
-
-        # Right icon (cross/clear)
-        self.search_entry.set_icon_from_icon_name(
-            Gtk.EntryIconPosition.SECONDARY, "edit-clear"
-        )
         bulk_connect(
             self.search_entry,
             {

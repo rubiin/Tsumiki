@@ -269,17 +269,9 @@ class Launcher(PopupWindow):
             name="launcher-prompt",
             placeholder="Search Applications...",
             h_expand=True,
+            primary_icon_name="system-search",
+            secondary_icon_name="edit-clear",
             notify_text=lambda entry, *_: self.arrange_viewport(entry.get_text()),
-        )
-
-        # Add magnifying glass icon to the left (primary position)
-        self.search_entry.set_icon_from_icon_name(
-            Gtk.EntryIconPosition.PRIMARY, "system-search"
-        )
-
-        # Right icon (cross/clear)
-        self.search_entry.set_icon_from_icon_name(
-            Gtk.EntryIconPosition.SECONDARY, "edit-clear"
         )
 
         self.search_entry.props.xalign = 0.1
