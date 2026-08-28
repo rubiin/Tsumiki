@@ -38,8 +38,7 @@ class OCRWidget(ButtonWidget):
         # Left click for OCR
         self.connect("button-press-event", self.on_button_press)
 
-        if self.config.get("tooltip", False) and self.tooltips_enabled:
-            self.set_tooltip_text(_("widget.ocr.tooltip"))
+        self.set_tooltip_if_enabled(_("widget.ocr.tooltip"))
 
     def lazy_init(self):
         if not self.initialized:

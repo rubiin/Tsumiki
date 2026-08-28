@@ -353,7 +353,6 @@ class CheatSheetWidget(ButtonWidget, PopoverMixin):
                 )
             )
 
-        if self.config.get("tooltip", True) and self.tooltips_enabled:
-            self.set_tooltip_text(_("widget.cheatsheet.tooltip"))
+        self.set_tooltip_if_enabled(_("widget.cheatsheet.tooltip"), default=True)
 
         self.setup_popover(lambda: CheatSheetMenu(parent=self, config=self.config))

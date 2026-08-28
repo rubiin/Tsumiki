@@ -15,7 +15,7 @@
   border: variable.$border;
 
   .panel-font-icon {
-    font-size: 11px;
+    font-size: variable.$font-size-sm;
     color: theme.$text-main;
   }
 
@@ -40,7 +40,7 @@
 
   #notification-indicator {
     font-weight: bold;
-    font-size: 15px;
+    font-size: variable.$font-size-xl;
   }
 
   .no-notifications {
@@ -49,7 +49,7 @@
 
   #notification-count {
     font-weight: 700;
-    font-size: 10px;
+    font-size: variable.$font-size-xs;
     margin-right: 6px;
   }
 
@@ -106,7 +106,7 @@
 
         #clear-icon {
           padding: 0;
-          font-size: 13px;
+          font-size: variable.$font-size-md;
         }
 
         &:hover {
@@ -115,7 +115,7 @@
 
           #clear-icon {
             @extend %clear-icon;
-            font-size: 13px;
+            font-size: variable.$font-size-md;
             color: theme.$background-dark;
           }
         }
@@ -144,7 +144,7 @@
 
         calendar {
           all: unset;
-          font-size: 14px;
+          font-size: variable.$font-size-lg;
           padding: 0.28em;
 
           &.button {
@@ -243,7 +243,7 @@
         border-radius: variable.$radius-large;
         background-color: theme.$accent-purple;
         color: theme.$background-main;
-        font-size: 10px;
+        font-size: variable.$font-size-xs;
         font-weight: 700;
       }
 
@@ -263,7 +263,7 @@
           border-radius: variable.$radius-large;
           background-color: theme.$surface-disabled;
           color: theme.$text-main;
-          font-size: 11px;
+          font-size: variable.$font-size-sm;
           font-weight: 700;
         }
 

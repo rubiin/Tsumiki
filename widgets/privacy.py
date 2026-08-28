@@ -53,15 +53,15 @@ class PrivacyIndicatorWidget(ButtonWidget):
         if len(screen) > 0:
             self._add_privacy_icon("")  # Screen recording icon
 
-        if self.config.get("tooltip", True) and self.tooltips_enabled:
-            tooltip_text = []
-            if len(mic) > 0:
-                tooltip_text.append("Microphone active")
-            if len(camera) > 0:
-                tooltip_text.append("Camera active")
-            if len(screen) > 0:
-                tooltip_text.append("Screen recording active")
-            self.set_tooltip_text("\n".join(tooltip_text))
+        tooltip_parts = []
+        if len(mic) > 0:
+            tooltip_parts.append("Microphone active")
+        if len(camera) > 0:
+            tooltip_parts.append("Camera active")
+        if len(screen) > 0:
+            tooltip_parts.append("Screen recording active")
+        if tooltip_parts:
+            self.set_tooltip_if_enabled("\n".join(tooltip_parts), default=True)
         else:
             self.set_tooltip_text("")
 

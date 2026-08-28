@@ -13,7 +13,7 @@
 #cloudflare-warp-popover {
   min-width: 220px;
   padding: 16px;
-  border-radius: 14px;
+  border-radius: variable.$radius-2xl;
 
   #warp-status-box {
     .warp-status-icon {
@@ -29,13 +29,13 @@
     }
 
     #warp-status-label {
-      font-size: 16px;
+      font-size: variable.$font-size-2xl;
       font-weight: 700;
       color: theme.$text-main;
     }
 
     .warp-mode-text {
-      font-size: 12px;
+      font-size: variable.$font-size-base;
       color: theme.$text-muted;
     }
   }
@@ -43,11 +43,11 @@
   #warp-toggle-btn {
     min-height: 36px;
     padding: 0 24px;
-    border-radius: 18px;
+    border-radius: variable.$radius-4xl;
     background-color: theme.$accent-blue;
     color: theme.$background-dark;
     font-weight: 700;
-    font-size: 14px;
+    font-size: variable.$font-size-lg;
 
     &:hover {
       background-color: theme.$accent-lavender;

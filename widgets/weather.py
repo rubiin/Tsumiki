@@ -11,7 +11,7 @@ from services.weather import WeatherService
 from shared.mixins import PopoverMixin
 from shared.widget_container import BoxWidget, ButtonWidget
 from utils.constants import ASSETS_DIR
-from utils.functions import check_if_day
+from utils.functions import check_if_day, convert_to_12hr_format
 from utils.i18n import _
 from utils.weather_icons import WEATHER_ICONS
 from utils.widget_utils import nerd_font_icon
@@ -77,26 +77,6 @@ class BaseWeatherWidget:
             return self.hourly_forecast[index]["tempC"] + "°C"
 
         return self.hourly_forecast[index]["tempF"] + "°F"
-
-        # wttr.in time are in 300,400...2100 format ,
-        #  we need to convert it to 4:00...21:00
-
-    def convert_to_12hr_format(self, time: str) -> str:
-        time = int(time)
-        hour = time // 100  # Get the hour (e.g., 1200 -> 12)
-        minute = time % 100  # Get the minutes (e.g., 1200 -> 00)
-
-        # Convert to 12-hour format
-        period = "AM" if hour < 12 else "PM"
-
-        # Adjust hour for 12-hour format
-        if hour == 0:
-            hour = 12
-        elif hour > 12:
-            hour -= 12
-
-        # Format the time as a string
-        return f"{hour}:{minute:02d} {period}"
 
 
 class WeatherMenu(BoxWidget, BaseWeatherWidget):
@@ -307,13 +287,13 @@ class WeatherMenu(BoxWidget, BaseWeatherWidget):
             for col, value in enumerate(self.next_values):
                 hour = Label(
                     style_classes="weather-forecast-time",
-                    label=f"{self.convert_to_12hr_format(value['time'])}",
+                    label=f"{convert_to_12hr_format(value['time'])}",
                     h_align="center",
                 )
                 icon = Svg(
                     svg_file=self.get_weather_asset(
                         value["weatherCode"],
-                        self.convert_to_12hr_format(value["time"]),
+                        convert_to_12hr_format(value["time"]),
                     ),
                     size=65,
                     h_align="center",
@@ -405,8 +385,7 @@ class WeatherWidget(ButtonWidget, BaseWeatherWidget, PopoverMixin):
         if data is None:
             self.weather_label.set_label("")
             self.weather_icon.set_markup("")
-            if self.config.get("tooltip", False) and self.tooltips_enabled:
-                self.set_tooltip_text(_("widget.weather.error"))
+            self.set_tooltip_if_enabled(_("widget.weather.error"))
             return
 
         # Get the current weather
@@ -444,11 +423,10 @@ class WeatherWidget(ButtonWidget, BaseWeatherWidget, PopoverMixin):
         )
 
         # Update the tooltip with the city and weather condition if enabled
-        if self.config.get("tooltip", False) and self.tooltips_enabled:
-            tool_tip = f"{self.get_temperature()} {self.get_description()}"
-            tool_tip += f"\n\n{weather_icon['quote']}"
+        tool_tip = f"{self.get_temperature()} {self.get_description()}"
+        tool_tip += f"\n\n{weather_icon['quote']}"
 
-            self.set_tooltip_text(tool_tip)
+        self.set_tooltip_if_enabled(tool_tip)
 
         return False
 

@@ -31,10 +31,10 @@
   }
 
   .panel-font-icon {
-    font-size: 22px;
+    font-size: variable.$font-size-5xl;
   }
 
   &.compact .panel-font-icon {
-    font-size: 20px;
+    font-size: variable.$font-size-4xl;
   }
 }

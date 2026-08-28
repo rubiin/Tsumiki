@@ -565,8 +565,7 @@ class USBManagerWidget(ButtonWidget, PopoverMixin):
                 Label(label=_("widget.usb_manager.label"), style_classes="panel-text")
             )
 
-        if self.config.get("tooltip", True) and self.tooltips_enabled:
-            self.set_tooltip_text(_("widget.usb_manager.tooltip"))
+        self.set_tooltip_if_enabled(_("widget.usb_manager.tooltip"), default=True)
 
         self.setup_popover(self._build_popover)
 
@@ -579,5 +578,4 @@ class USBManagerWidget(ButtonWidget, PopoverMixin):
             self.popup.content.refresh_devices()
 
     def update_device_count(self, count: int):
-        if self.config.get("tooltip", True) and self.tooltips_enabled:
-            self.set_tooltip_text(_("widget.usb_manager.tooltip"))
+        self.set_tooltip_if_enabled(_("widget.usb_manager.tooltip"), default=True)

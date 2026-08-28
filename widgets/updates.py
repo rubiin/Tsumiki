@@ -115,8 +115,7 @@ class UpdatesWidget(ButtonWidget):
                 self.icon.set_label(icon)
 
             # Tooltip
-            if self.config.get("tooltip", True) and self.tooltips_enabled:
-                self.set_tooltip_text(data.get("tooltip", ""))
+            self.set_tooltip_if_enabled(data.get("tooltip", ""), default=True)
 
             # Auto-hide logic
             if self.config.get("auto_hide", False):

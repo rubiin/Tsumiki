@@ -31,8 +31,7 @@ class HyprPickerWidget(ButtonWidget):
 
         self.initialized = False
 
-        if self.config.get("tooltip", False) and self.tooltips_enabled:
-            self.set_tooltip_text(_("widget.hyprpicker.tooltip"))
+        self.set_tooltip_if_enabled(_("widget.hyprpicker.tooltip"))
 
     def lazy_init(self):
         if not self.initialized:

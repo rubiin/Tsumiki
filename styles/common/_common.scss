@@ -6,7 +6,7 @@
 @use "../_variable.scss";
 
 .flat {
-  border-radius: 4px;
+  border-radius: variable.$radius-xs;
 }
 
 .shadow {
@@ -160,7 +160,7 @@ menu {
   padding: functions.toEm(6);
   background-color: theme.$background-alt;
   background-clip: border-box;
-  border-radius: 12px;
+  border-radius: variable.$radius-xl;
   border: variable.$border;
 
   > menuitem {
@@ -177,14 +177,14 @@ menu {
 
     &.top {
       margin-top: 0;
-      border-radius: 6px;
+      border-radius: variable.$radius-sm;
       -gtk-icon-source: -gtk-icontheme("pan-up-symbolic");
     }
 
     &.bottom {
       margin-top: 8px;
       margin-bottom: -12px;
-      border-radius: 6px;
+      border-radius: variable.$radius-sm;
       -gtk-icon-source: -gtk-icontheme("pan-down-symbolic");
     }
   }
@@ -226,7 +226,7 @@ radio {
 }
 
 check {
-  border-radius: 4px;
+  border-radius: variable.$radius-xs;
 }
 
 check:hover,
@@ -360,13 +360,13 @@ separator {
 scrolledwindow {
   scrollbar {
     background-color: theme.$surface-disabled;
-    border-radius: 10px;
+    border-radius: variable.$radius-lg;
     padding: 2px;
     margin-left: 6px;
   }
 
   slider {
-    border-radius: 8px;
+    border-radius: variable.$radius-md;
     min-width: 6px;
     min-height: 30px;
     background-color: theme.$background-main;
@@ -374,7 +374,7 @@ scrolledwindow {
 }
 
 #wallpaper_button {
-  border-radius: 10px;
+  border-radius: variable.$radius-lg;
 
   &:hover {
     background-color: theme.$background-alt;
@@ -383,12 +383,12 @@ scrolledwindow {
 
 .window-basic {
   background-color: theme.$background-alt;
-  border-radius: 20px;
+  border-radius: variable.$radius-5xl;
   padding: 10px;
 }
 
 .sleek-border {
-  border-radius: 20px;
+  border-radius: variable.$radius-5xl;
   border-style: solid;
   border-width: 0.3px;
   border-color: theme.$surface-disabled;
@@ -439,7 +439,7 @@ scrolledwindow {
 
 .buttons {
   &-basic {
-    border-radius: 20px;
+    border-radius: variable.$radius-5xl;
     color: theme.$text-main;
     font-weight: 700;
     border: none;
@@ -459,7 +459,7 @@ scrolledwindow {
 }
 
 .chevron-icon {
-  font-size: 12px;
+  font-size: variable.$font-size-base;
   color: theme.$text-main;
 }
 

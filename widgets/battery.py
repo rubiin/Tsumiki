@@ -145,14 +145,15 @@ class BatteryWidget(ButtonWidget):
             )
 
             if battery_percent == self.full_battery_level:
-                self.set_tooltip_text(f"󱠴 {_('widget.battery.full')}\n{tool_tip_text}")
+                full_msg = f"󱠴 {_('widget.battery.full')}\n{tool_tip_text}"
+                self.set_tooltip_if_enabled(full_msg)
 
             elif is_charging and battery_percent < self.full_battery_level:
-                self.set_tooltip_text(
+                self.set_tooltip_if_enabled(
                     f"{status_text}\n󰄉 Full in : {formatted_time}\n{tool_tip_text}"
                 )
             else:
-                self.set_tooltip_text(
+                self.set_tooltip_if_enabled(
                     f"{status_text}\n󰄉 Empty in : {formatted_time}\n{tool_tip_text}"
                 )
 

@@ -314,8 +314,7 @@ class IPMonitorWidget(ButtonWidget, PopoverMixin):
                 )
             )
 
-        if self.config.get("tooltip", True) and self.tooltips_enabled:
-            self.set_tooltip_text(_("widget.ip_monitor.tooltip"))
+        self.set_tooltip_if_enabled(_("widget.ip_monitor.tooltip"), default=True)
 
         self.setup_popover(
             lambda: IPMonitorPopoverContent(

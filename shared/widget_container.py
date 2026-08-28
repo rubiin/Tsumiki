@@ -52,6 +52,13 @@ class TeardownMixin:
         self._repeaters = []
         self._handlers = []
 
+    def toggle(self):
+        """Toggle the visibility of this widget/window."""
+        if self.is_visible():
+            self.hide()
+        else:
+            self.show()
+
 
 class BaseWidget(Widget, TeardownMixin):
     """A base widget class that can be extended for custom widgets."""
@@ -88,13 +95,6 @@ class BaseWidget(Widget, TeardownMixin):
             },
         )
 
-    def toggle(self):
-        """Toggle the visibility of the bar."""
-        if self.is_visible():
-            self.hide()
-        else:
-            self.show()
-
     def toggle_css_class(self, class_name: str | Iterable[str], condition: bool):
         if condition:
             self.add_style_class(class_name)
@@ -108,19 +108,26 @@ class BaseWidget(Widget, TeardownMixin):
     def set_active_style(self, action: bool, *_) -> None:
         self.set_style_classes("") if not action else self.set_style_classes("active")
 
+    def set_tooltip_if_enabled(self, text: str, default: bool = False) -> None:
+        """Set tooltip text only when tooltips are enabled.
+
+        Replaces the two-line guard in almost every widget:
+            ``if self.config.get("tooltip", ...) and self.tooltips_enabled:``
+
+        Args:
+            text: The tooltip string to display.
+            default: Fallback when ``widgets.<name>.tooltip`` is absent.
+                Use ``True`` for widgets whose tooltip is on by convention.
+        """
+        if self.config.get("tooltip", default) and self.tooltips_enabled:
+            self.set_tooltip_text(text)
+
 
 class BaseWindow(Window, TeardownMixin):
     """A base window class that can be extended for custom windows."""
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-
-    def toggle(self):
-        """Toggle the visibility of the bar."""
-        if self.is_visible():
-            self.hide()
-        else:
-            self.show()
 
 
 class BoxWidget(Box, BaseWidget):

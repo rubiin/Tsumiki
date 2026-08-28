@@ -431,7 +431,6 @@ class EmojiPickerWidget(ButtonWidget, PopoverMixin):
                 Label(label=_("widget.emoji_picker.label"), style_classes="panel-text")
             )
 
-        if self.config.get("tooltip", False) and self.tooltips_enabled:
-            self.set_tooltip_text(_("widget.emoji_picker.tooltip"))
+        self.set_tooltip_if_enabled(_("widget.emoji_picker.tooltip"))
 
         self.setup_popover(lambda: EmojiPickerMenu(parent=self))

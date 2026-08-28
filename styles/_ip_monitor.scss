@@ -15,11 +15,11 @@
 #ip-monitor-window {
   min-width: 340px;
   padding: 8px;
-  border-radius: 14px;
+  border-radius: variable.$radius-2xl;
 
   #ip-monitor-header {
     .ip-monitor-title {
-      font-size: 18px;
+      font-size: variable.$font-size-3xl;
       font-weight: 700;
       color: theme.$text-main;
     }
@@ -27,7 +27,7 @@
     #ip-monitor-refresh-btn {
       min-height: 28px;
       padding: 0 10px;
-      border-radius: 14px;
+      border-radius: variable.$radius-2xl;
       background-color: theme.$accent-blue;
       color: theme.$background-dark;
 
@@ -37,19 +37,19 @@
     }
 
     .ip-monitor-refresh-icon {
-      font-size: 12px;
+      font-size: variable.$font-size-base;
     }
 
     .ip-monitor-refresh-label {
       font-weight: 700;
-      font-size: 13px;
+      font-size: variable.$font-size-md;
     }
   }
 
   #ip-monitor-hero-card,
   #ip-monitor-details-card {
     background-color: theme.$background-alt;
-    border-radius: 14px;
+    border-radius: variable.$radius-2xl;
     padding: 10px;
   }
 
@@ -63,13 +63,13 @@
 
     .ip-monitor-hero-ip {
       color: theme.$text-main;
-      font-size: 22px;
+      font-size: variable.$font-size-5xl;
       font-weight: 700;
     }
 
     .ip-monitor-hero-location {
       color: theme.$text-muted;
-      font-size: 16px;
+      font-size: variable.$font-size-2xl;
     }
   }
 
@@ -84,18 +84,18 @@
     .ip-monitor-detail-key {
       min-width: 96px;
       color: theme.$text-disabled;
-      font-size: 14px;
+      font-size: variable.$font-size-lg;
       font-weight: 600;
     }
 
     .ip-monitor-detail-value {
       color: theme.$text-secondary;
-      font-size: 14px;
+      font-size: variable.$font-size-lg;
     }
   }
 
   .ip-monitor-last-updated {
     color: theme.$text-muted;
-    font-size: 11px;
+    font-size: variable.$font-size-sm;
   }
 }

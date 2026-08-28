@@ -45,7 +45,7 @@ $hover-transition: background 0.15s ease-in-out;
     }
 
     .timestamp {
-      font-size: 12px;
+      font-size: variable.$font-size-base;
       font-weight: 700;
       text-shadow: none;
       margin-right: 10px;
@@ -72,7 +72,7 @@ $hover-transition: background 0.15s ease-in-out;
       margin-top: common.toEm(2);
 
       .expand-icon {
-        font-size: 10px;
+        font-size: variable.$font-size-xs;
         color: theme.$text-disabled;
       }
 
@@ -91,7 +91,7 @@ $hover-transition: background 0.15s ease-in-out;
 
     .close-icon {
       font-weight: 900;
-      font-size: 12px;
+      font-size: variable.$font-size-base;
       padding: 2px 4px;
     }
 
@@ -182,7 +182,7 @@ $hover-transition: background 0.15s ease-in-out;
       }
 
       .timestamp {
-        font-size: 11px;
+        font-size: variable.$font-size-sm;
         font-weight: 600;
         color: theme.$text-disabled;
         margin-right: 4px;
@@ -190,7 +190,7 @@ $hover-transition: background 0.15s ease-in-out;
     }
 
     #date-menu-notification-body {
-      font-size: 13px;
+      font-size: variable.$font-size-md;
       color: theme.$text-main;
     }
   }

@@ -104,7 +104,7 @@ $workspace-transition:
 #workspaces_widget.minimal {
   @include workspace-variant {
     padding: 0.2em 0.7em;
-    border-radius: 6px;
+    border-radius: variable.$radius-sm;
     background-color: transparent;
 
     label {

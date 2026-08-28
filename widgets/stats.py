@@ -103,7 +103,7 @@ class CpuWidget(FabricatorBoundWidget, StatDisplayMixin):
                 f"{get_text_icon('cpu')} Clock Speed: {freq_text}"
             )
 
-            self.set_tooltip_text(tooltip_text)
+            self.set_tooltip_if_enabled(tooltip_text)
 
         return True
 
@@ -184,7 +184,7 @@ class GpuWidget(FabricatorBoundWidget, StatDisplayMixin):
                 f" Clock Speed: {frequency}"
             )
 
-            self.set_tooltip_text(tooltip_text)
+            self.set_tooltip_if_enabled(tooltip_text)
 
         return True
 
@@ -219,10 +219,9 @@ class MemoryWidget(FabricatorBoundWidget, StatDisplayMixin):
         self.update_stat_display(self.percent_used, f"{self.get_used()}")
 
         # Update the tooltip with the memory usage details if enabled
-        if self.config.get("tooltip", False) and self.tooltips_enabled:
-            self.set_tooltip_text(
-                f"󰾆 {self.percent_used}%\n{get_text_icon('memory')} {self.ratio()}",
-            )
+        self.set_tooltip_if_enabled(
+            f"󰾆 {self.percent_used}%\n{get_text_icon('memory')} {self.ratio()}",
+        )
 
         return True
 
@@ -264,10 +263,9 @@ class StorageWidget(FabricatorBoundWidget, StatDisplayMixin):
         self.update_stat_display(percent, f"{self.get_used()}")
 
         # Update the tooltip with the storage usage details if enabled
-        if self.config.get("tooltip", False) and self.tooltips_enabled:
-            self.set_tooltip_text(
-                f"󰾆 {percent}%\n{get_text_icon('storage')} {self.ratio()}"
-            )
+        self.set_tooltip_if_enabled(
+            f"󰾆 {percent}%\n{get_text_icon('storage')} {self.ratio()}"
+        )
 
         return True
 
@@ -354,11 +352,9 @@ class NetworkUsageWidget(FabricatorBoundWidget):
 
         idle_add(self.network_label.set_label, label_text)
 
-        if self.config.get("tooltip", False) and self.tooltips_enabled:
-            tooltip_text = (
-                f"Download: {self.format_speed(download_speed)}\n"
-                f"Upload: {self.format_speed(upload_speed)}"
-            )
-            self.set_tooltip_text(tooltip_text)
+        self.set_tooltip_if_enabled(
+            f"Download: {self.format_speed(download_speed)}\n"
+            f"Upload: {self.format_speed(upload_speed)}"
+        )
 
         return True

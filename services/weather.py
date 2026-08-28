@@ -7,7 +7,7 @@ from fabric.utils import idle_add, logger, os, time
 
 from utils.constants import WEATHER_CACHE_FILE
 from utils.decorators import thread
-from utils.functions import write_json_file
+from utils.functions import convert_to_12hr_format, write_json_file
 
 from .base import SingletonService
 
@@ -118,24 +118,6 @@ class WeatherService(SingletonService):
     def _map_weather_code(self, code: int) -> int:
         """Map Open-Meteo weather codes to wttr.in compatible codes."""
         return _WEATHER_CODE_MAP.get(code, 113)
-
-    def _convert_to_12hr_format(self, time_24hr: str) -> str:
-        """Convert 24-hour time format (HH:MM) to 12-hour format (HH:MM AM/PM)."""
-        if not time_24hr or ":" not in time_24hr:
-            return time_24hr
-
-        try:
-            hour, minute = map(int, time_24hr.split(":"))
-            period = "AM" if hour < 12 else "PM"
-
-            if hour == 0:
-                hour = 12
-            elif hour > 12:
-                hour -= 12
-
-            return f"{hour}:{minute:02d} {period}"
-        except (ValueError, IndexError):
-            return time_24hr
 
     def _get_weather_description(self, code: int) -> str:
         """Get weather description from Open-Meteo weather code."""
@@ -270,12 +252,12 @@ class WeatherService(SingletonService):
                     },
                     "hourly": [],
                     "astronomy": {
-                        "sunrise": self._convert_to_12hr_format(
+                        "sunrise": convert_to_12hr_format(
                             daily.get("sunrise", [""])[0].split("T")[1]
                             if daily.get("sunrise")
                             else ""
                         ),
-                        "sunset": self._convert_to_12hr_format(
+                        "sunset": convert_to_12hr_format(
                             daily.get("sunset", [""])[0].split("T")[1]
                             if daily.get("sunset")
                             else ""

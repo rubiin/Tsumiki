@@ -8,7 +8,7 @@ $launcher-transition:
   color 150ms ease-in-out;
 
 .launcher-button {
-  border-radius: 10px;
+  border-radius: variable.$radius-lg;
   transition: $launcher-transition;
   padding: 5px 20px;
 
@@ -69,7 +69,7 @@ $launcher-transition:
   &-prompt {
     @extend %entry-default;
     border-bottom: 1px solid theme.$surface-disabled;
-    font-size: 15px;
+    font-size: variable.$font-size-xl;
     margin-bottom: 10px;
     padding: 10px 0;
     transition:
@@ -110,22 +110,22 @@ $launcher-transition:
   }
 
   .launcher-plugin-button {
-    border-radius: 10px;
+    border-radius: variable.$radius-lg;
     padding: 6px 8px;
     transition: $launcher-transition;
 
     #launcher-plugin-icon {
       -gtk-icon-effect: highlight;
-      font-size: 18px;
+      font-size: variable.$font-size-3xl;
     }
 
     #launcher-plugin-title {
-      font-size: 14px;
+      font-size: variable.$font-size-lg;
       color: theme.$text-main;
     }
 
     #launcher-plugin-subtitle {
-      font-size: 11px;
+      font-size: variable.$font-size-sm;
       color: theme.$text-muted;
     }
 
@@ -153,7 +153,7 @@ $launcher-transition:
 
   #launcher-plugin-hint {
     padding: 8px 10px;
-    border-radius: 10px;
+    border-radius: variable.$radius-lg;
     background-color: color.mix(theme.$surface-neutral, transparent, 50%);
     opacity: 0.85;
   }

@@ -41,8 +41,8 @@ class WindowCountWidget(ButtonWidget):
             label_format = self.config.get("label_format", "[{count}]")
             self.count_label.set_label(label_format.format(count=count))
 
-            if self.config.get("tooltip", False) and self.tooltips_enabled:
-                self.set_tooltip_text(f"Workspace: {data.get('id')}, Windows: {count}")
+            ws_id = data.get("id")
+            self.set_tooltip_if_enabled(f"Workspace: {ws_id}, Windows: {count}")
 
             if self.config.get("hide_when_zero", False):
                 self.set_visible(count != 0)

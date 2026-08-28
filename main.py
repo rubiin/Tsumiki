@@ -1,3 +1,5 @@
+import importlib
+
 from fabric import Application
 from fabric.utils import (
     GLib,
@@ -47,52 +49,25 @@ def main():
     # Create status bars
     Bar.create_bars(app, tsumiki_config)
 
-    if module_enabled("notification"):
-        from modules.notification import NotificationPopup
+    # ── Module registry: config key → (module path, class name) ──────────
+    module_registry = {
+        "notification": ("modules.notification", "NotificationPopup"),
+        "overview": ("modules.overview", "OverViewOverlay"),
+        "screen_corners": ("modules.corners", "ScreenCorners"),
+        "desktop_quotes": ("modules.desktop_quotes", "DesktopQuote"),
+        "activate_linux": ("modules.activate_linux", "ActivateLinux"),
+        "launcher": ("modules.launcher", "Launcher"),
+        "dock": ("modules.dock", "Dock"),
+        "desktop_clock": ("modules.desktop_clock", "DesktopClock"),
+        "osd": ("modules.osd", "OSDContainer"),
+    }
 
-        app.add_window(NotificationPopup(tsumiki_config))
-
-    if module_enabled("overview"):
-        from modules.overview import OverViewOverlay
-
-        logger.info("[Main] Adding overview module")
-
-        app.add_window(OverViewOverlay(tsumiki_config))
-
-    if module_enabled("screen_corners"):
-        from modules.corners import ScreenCorners
-
-        app.add_window(ScreenCorners(tsumiki_config))
-
-    if module_enabled("desktop_quotes"):
-        from modules.desktop_quotes import DesktopQuote
-
-        app.add_window(DesktopQuote(tsumiki_config))
-
-    if module_enabled("activate_linux"):
-        from modules.activate_linux import ActivateLinux
-
-        app.add_window(ActivateLinux(tsumiki_config))
-
-    if module_enabled("launcher"):
-        from modules.launcher import Launcher
-
-        app.add_window(Launcher(tsumiki_config))
-
-    if module_enabled("dock"):
-        from modules.dock import Dock
-
-        app.add_window(Dock(tsumiki_config))
-
-    if module_enabled("desktop_clock"):
-        from modules.desktop_clock import DesktopClock
-
-        app.add_window(DesktopClock(tsumiki_config))
-
-    if module_enabled("osd"):
-        from modules.osd import OSDContainer
-
-        app.add_window(OSDContainer(tsumiki_config))
+    for name, (module_path, class_name) in module_registry.items():
+        if module_enabled(name):
+            module = importlib.import_module(module_path)
+            cls = getattr(module, class_name)
+            logger.info(f"[Main] Adding {name} module")
+            app.add_window(cls(tsumiki_config))
 
     # Disable verbose logging for non-debug mode
 

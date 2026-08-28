@@ -53,8 +53,7 @@ class SubMapWidget(ButtonWidget):
             else:
                 self.show()
 
-        if self.config.get("tooltip", False) and self.tooltips_enabled:
-            self.set_tooltip_text(_("widget.submap.current", submap=submap))
+        self.set_tooltip_if_enabled(_("widget.submap.current", submap=submap))
 
     def on_submap_event(self, _, event: HyprlandEvent):
         """Handle event::submap — use the event data directly, no extra hyprctl call."""

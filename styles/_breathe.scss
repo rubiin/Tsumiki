@@ -1,6 +1,7 @@
 @use "sass:color";
 @use "theme";
 
+@use "variable.scss";
 #breathe-box {
   .header-bar {
     background-color: theme.$background-alt;
@@ -9,24 +10,24 @@
   }
 
   .title-label {
-    font-size: 15px;
+    font-size: variable.$font-size-xl;
     font-weight: bold;
     color: theme.$text-main;
   }
 
   .subtitle-label {
-    font-size: 11px;
+    font-size: variable.$font-size-sm;
     color: theme.$text-muted;
   }
 
   .status-card {
     background-color: theme.$background-alt;
-    border-radius: 12px;
+    border-radius: variable.$radius-xl;
     border: 1px solid theme.$surface-disabled;
   }
 
   .phase-label {
-    font-size: 22px;
+    font-size: variable.$font-size-5xl;
     font-weight: bold;
     color: theme.$text-main;
   }
@@ -38,12 +39,12 @@
   }
 
   .info-label {
-    font-size: 12px;
+    font-size: variable.$font-size-base;
     color: theme.$text-muted;
   }
 
   .section-label {
-    font-size: 12px;
+    font-size: variable.$font-size-base;
     font-weight: bold;
     color: theme.$text-muted;
     letter-spacing: 1px;
@@ -51,7 +52,7 @@
 
   .exercise-btn {
     background-color: theme.$background-alt;
-    border-radius: 10px;
+    border-radius: variable.$radius-lg;
     border: 1px solid theme.$surface-disabled;
     color: theme.$text-main;
     padding: 0;
@@ -68,28 +69,28 @@
   }
 
   .exercise-name {
-    font-size: 13px;
+    font-size: variable.$font-size-md;
     font-weight: bold;
     color: theme.$text-main;
   }
 
   .exercise-timing {
-    font-size: 11px;
+    font-size: variable.$font-size-sm;
     color: theme.$accent-blue;
     font-family: monospace;
   }
 
   .exercise-desc {
-    font-size: 11px;
+    font-size: variable.$font-size-sm;
     color: theme.$text-disabled;
   }
 
   .dur-spin {
     background-color: theme.$background-alt;
-    border-radius: 6px;
+    border-radius: variable.$radius-sm;
     border: 1px solid theme.$surface-disabled;
     color: theme.$text-muted;
-    font-size: 14px;
+    font-size: variable.$font-size-lg;
     padding: 6px;
 
     entry {
@@ -103,7 +104,7 @@
     button {
       background: theme.$background-main;
       border: 1px solid theme.$surface-disabled;
-      border-radius: 4px;
+      border-radius: variable.$radius-xs;
       padding: 0 4px;
       margin: 2px;
       color: theme.$text-muted;
@@ -117,10 +118,10 @@
 
   .start-btn {
     background-color: theme.$accent-blue;
-    border-radius: 8px;
+    border-radius: variable.$radius-md;
     border: none;
     color: theme.$background-main;
-    font-size: 14px;
+    font-size: variable.$font-size-lg;
     font-weight: bold;
     padding: 10px;
   }
@@ -131,10 +132,10 @@
 
   .stop-btn {
     background-color: theme.$surface-disabled;
-    border-radius: 8px;
+    border-radius: variable.$radius-md;
     border: none;
     color: theme.$accent-red;
-    font-size: 14px;
+    font-size: variable.$font-size-lg;
     font-weight: bold;
     padding: 10px;
   }
@@ -149,7 +150,7 @@
   }
 
   .hint-label {
-    font-size: 11px;
+    font-size: variable.$font-size-sm;
     color: theme.$text-disabled;
   }
 }

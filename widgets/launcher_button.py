@@ -17,8 +17,7 @@ class LauncherButton(ButtonWidget):
         icon_size = self.config.get("icon_size", 16)
 
         # Set tooltip
-        if self.config.get("tooltip", True) and self.tooltips_enabled:
-            self.set_tooltip_text(_("widget.launcher_button.tooltip"))
+        self.set_tooltip_if_enabled(_("widget.launcher_button.tooltip"), default=True)
 
         # Create the button content
         self.container_box.children = [

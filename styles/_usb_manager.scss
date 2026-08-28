@@ -37,7 +37,7 @@
 
   #usb-manager-title,
   .title-icon {
-    font-size: 15px;
+    font-size: variable.$font-size-xl;
     font-weight: 600;
   }
 
@@ -66,12 +66,12 @@
     padding: 8px 4px;
 
     .usb-manager-status-icon {
-      font-size: 22px;
+      font-size: variable.$font-size-5xl;
       opacity: 0.8;
     }
 
     .usb-manager-status-title {
-      font-size: 16px;
+      font-size: variable.$font-size-2xl;
       font-weight: 600;
     }
 
@@ -82,7 +82,7 @@
 
   #usb-manager-item {
     padding: 8px;
-    border-radius: 12px;
+    border-radius: variable.$radius-xl;
     background-color: color.adjust(theme.$text-main, $alpha: -0.955);
     margin-top: 8px;
     border: 1px solid color.adjust(theme.$text-main, $alpha: -0.92);
@@ -92,17 +92,17 @@
     }
 
     .usb-manager-device-name {
-      font-size: 14px;
+      font-size: variable.$font-size-lg;
       font-weight: 600;
     }
 
     .usb-manager-device-meta {
-      font-size: 12px;
+      font-size: variable.$font-size-base;
       opacity: 0.85;
     }
 
     .usb-manager-device-path {
-      font-size: 12px;
+      font-size: variable.$font-size-base;
       color: color.adjust(theme.$accent-purple, $lightness: 18%);
       margin: 1px 0;
     }
@@ -127,7 +127,7 @@
     }
 
     .usb-manager-device-usage {
-      font-size: 11px;
+      font-size: variable.$font-size-sm;
       opacity: 0.75;
       margin-bottom: 4px;
     }
@@ -137,7 +137,7 @@
       color: theme.$background-dark;
       border-radius: variable.$radius-large;
       padding: 1px 7px;
-      font-size: 10px;
+      font-size: variable.$font-size-xs;
       font-weight: 700;
     }
 
@@ -177,6 +177,6 @@
   }
 
   .btn-icon {
-    font-size: 15px;
+    font-size: variable.$font-size-xl;
   }
 }

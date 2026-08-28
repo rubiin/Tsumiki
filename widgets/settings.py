@@ -24,7 +24,6 @@ class SettingsWidget(ButtonWidget):
                 Label(label=_("widget.settings.label"), style_classes="panel-text")
             )
 
-        if self.config.get("tooltip", True) and self.tooltips_enabled:
-            self.set_tooltip_text(_("widget.settings.tooltip"))
+        self.set_tooltip_if_enabled(_("widget.settings.tooltip"), default=True)
 
         self.connect("clicked", lambda *_: open_settings())

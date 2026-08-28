@@ -72,7 +72,7 @@
       padding: 0;
 
       .player-icon-sm {
-        font-size: 15px;
+        font-size: variable.$font-size-xl;
         color: theme.$text-main;
       }
 
@@ -104,20 +104,20 @@
 
       #player-title {
         font-weight: 600;
-        font-size: 14px;
+        font-size: variable.$font-size-lg;
         color: theme.$text-main;
       }
 
       #player-artist {
         font-weight: 400;
-        font-size: 11px;
+        font-size: variable.$font-size-sm;
         color: theme.$text-secondary;
         margin-top: 2px;
       }
 
       #player-time {
         font-weight: 400;
-        font-size: 12px;
+        font-size: variable.$font-size-base;
         color: theme.$text-muted;
         margin-top: 3px;
       }
@@ -130,11 +130,11 @@
       box-shadow: 0 4px 12px color.mix(theme.$general-shadow-color, transparent, 70%);
       margin-top: 0;
       padding: 0;
-      border-radius: 16px;
+      border-radius: variable.$radius-3xl;
       transition: border-radius 0.25s cubic-bezier(0.5, 0.25, 0, 1);
 
       .player-icon-lg {
-        font-size: 16px;
+        font-size: variable.$font-size-2xl;
         color: theme.$background-dark;
       }
 

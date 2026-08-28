@@ -56,16 +56,16 @@
     #close-label,
     #clear-label {
       color: theme.$accent-red;
-      font-size: 12px;
+      font-size: variable.$font-size-base;
     }
 
     #scrolled-window {
-      border-radius: 12px;
+      border-radius: variable.$radius-xl;
       min-height: 300px;
     }
 
     #slot-button {
-      border-radius: 10px;
+      border-radius: variable.$radius-lg;
       padding: 8px;
       transition: padding 0.1s ease;
       animation: loadSlot 0.5s ease;
@@ -85,7 +85,7 @@
 
     #clip-label {
       font-weight: bold;
-      font-size: 12px;
+      font-size: variable.$font-size-base;
     }
   }
 }

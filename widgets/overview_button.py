@@ -11,8 +11,7 @@ class OverviewButtonWidget(ButtonWidget):
     def __init__(self, **kwargs):
         super().__init__(name="overview_button", **kwargs)
 
-        if self.config.get("tooltip", False) and self.tooltips_enabled:
-            self.set_tooltip_text(_("widget.overview_button.tooltip"))
+        self.set_tooltip_if_enabled(_("widget.overview_button.tooltip"))
 
         self.container_box.children = nerd_font_icon(
             icon=self.config.get("icon"),

@@ -30,7 +30,7 @@ $qs-active-fg: theme.$accent-purple;
 
   .power-profile {
     .panel-font-icon {
-      font-size: 18px;
+      font-size: variable.$font-size-3xl;
       font-weight: bold;
     }
 
@@ -139,7 +139,7 @@ $qs-active-fg: theme.$accent-purple;
 
     #power-menu-box {
       .panel-font-icon {
-        font-size: 16px;
+        font-size: variable.$font-size-2xl;
         background-color: transparent;
       }
 
@@ -197,7 +197,7 @@ $qs-active-fg: theme.$accent-purple;
         padding: common.toEm(5);
 
         .panel-font-icon {
-          font-size: 18px;
+          font-size: variable.$font-size-3xl;
           font-weight: bold;
         }
 
@@ -207,7 +207,7 @@ $qs-active-fg: theme.$accent-purple;
         }
 
         .submenu-item-label {
-          font-size: 13px;
+          font-size: variable.$font-size-md;
           margin-left: 5px;
         }
       }
@@ -258,7 +258,7 @@ $qs-active-fg: theme.$accent-purple;
           background-color: theme.$surface-neutral;
 
           label {
-            font-size: 11px;
+            font-size: variable.$font-size-sm;
             font-weight: 600;
           }
 
@@ -316,7 +316,7 @@ $qs-active-fg: theme.$accent-purple;
         padding-left: common.toEm(10);
 
         .panel-font-icon {
-          font-size: 16px;
+          font-size: variable.$font-size-2xl;
           background-color: transparent;
         }
 
@@ -353,8 +353,6 @@ $qs-active-fg: theme.$accent-purple;
           background-color: color.adjust(theme.$surface-neutral, $alpha: -0.7);
         }
       }
-
-
 
       button {
         background-color: transparent;
@@ -396,7 +394,6 @@ $qs-active-fg: theme.$accent-purple;
     .audio-chevron-button {
       border-radius: variable.$radius-large;
 
-
       background-color: transparent;
       transition: background-color 200ms ease;
 
@@ -427,7 +424,7 @@ $qs-active-fg: theme.$accent-purple;
     padding: 2px 0;
 
     .submenu-item-label {
-      font-size: 11px;
+      font-size: variable.$font-size-sm;
       font-weight: 600;
     }
 

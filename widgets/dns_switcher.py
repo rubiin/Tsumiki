@@ -283,8 +283,7 @@ class DnsSwitcherWidget(ButtonWidget, PopoverMixin):
         )
         self.container_box.add(self._label)
 
-        if self.config.get("tooltip", True) and self.tooltips_enabled:
-            self.set_tooltip_text(_("widget.dns_switcher.tooltip"))
+        self.set_tooltip_if_enabled(_("widget.dns_switcher.tooltip"), default=True)
 
         self._register_handler(
             self._service,

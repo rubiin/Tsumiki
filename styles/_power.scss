@@ -19,11 +19,11 @@
   &-button-menu {
     background-color: theme.$background-main;
     box-shadow: -2px 2px 10px 4px color.adjust(theme.$general-shadow-color, $alpha: 0.15);
-    border-radius: 8px;
+    border-radius: variable.$radius-md;
   }
 
   &-control-button {
-    border-radius: 8px;
+    border-radius: variable.$radius-md;
     text-decoration-color: theme.$text-main;
     color: theme.$text-main;
     background-color: theme.$background-main;
@@ -38,9 +38,9 @@
       margin-top: 8px;
       margin-left: 8px;
       min-width: 1.2em;
-      border-radius: 6px;
+      border-radius: variable.$radius-sm;
       padding: 3px 6px;
-      font-size: 12px;
+      font-size: variable.$font-size-base;
       font-weight: 700;
       background-color: color.adjust(theme.$text-main, $alpha: -0.84);
       color: theme.$text-secondary;
@@ -48,7 +48,7 @@
 
     label {
       margin-top: 10px;
-      font-size: 14px;
+      font-size: variable.$font-size-lg;
     }
 
     &:focus,

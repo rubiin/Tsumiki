@@ -14,24 +14,24 @@
 #dns-switcher-popover {
   min-width: 300px;
   padding: 12px;
-  border-radius: 14px;
+  border-radius: variable.$radius-2xl;
 
   #dns-header {
     margin-bottom: 4px;
 
     .dns-header-icon {
-      font-size: 20px;
+      font-size: variable.$font-size-4xl;
       color: theme.$accent-blue;
     }
 
     #dns-header-title {
-      font-size: 16px;
+      font-size: variable.$font-size-2xl;
       font-weight: 700;
       color: theme.$text-main;
     }
 
     #dns-header-status {
-      font-size: 12px;
+      font-size: variable.$font-size-base;
       font-weight: 600;
     }
 
@@ -48,13 +48,13 @@
     padding: 4px 0;
     min-height: 100px;
     background-color: rgba(theme.$background-alt, 0.5);
-    border-radius: 10px;
+    border-radius: variable.$radius-lg;
   }
 
   #dns-provider-list {
     #dns-provider-btn {
       padding: 10px 14px;
-      border-radius: 10px;
+      border-radius: variable.$radius-lg;
       background-color: transparent;
 
       &:hover {
@@ -69,37 +69,37 @@
         }
 
         .dns-radio-icon {
-          font-size: 14px;
+          font-size: variable.$font-size-lg;
           color: theme.$background-dark;
           margin-right: 2px;
         }
 
         .dns-provider-label {
-          font-size: 14px;
+          font-size: variable.$font-size-lg;
           font-weight: 600;
           color: theme.$background-dark;
         }
 
         .dns-provider-ip {
-          font-size: 11px;
+          font-size: variable.$font-size-sm;
           color: rgba(theme.$background-dark, 0.7);
         }
       }
 
       .dns-radio-icon {
-        font-size: 14px;
+        font-size: variable.$font-size-lg;
         color: theme.$text-disabled;
         margin-right: 2px;
       }
 
       .dns-provider-label {
-        font-size: 14px;
+        font-size: variable.$font-size-lg;
         font-weight: 600;
         color: theme.$text-main;
       }
 
       .dns-provider-ip {
-        font-size: 11px;
+        font-size: variable.$font-size-sm;
         color: theme.$text-disabled;
       }
     }
@@ -107,7 +107,7 @@
 
   #dns-add-btn {
     padding: 8px 14px;
-    border-radius: 10px;
+    border-radius: variable.$radius-lg;
     background-color: rgba(theme.$accent-blue, 0.15);
     color: theme.$accent-blue;
 
@@ -125,7 +125,7 @@
     }
 
     .dns-btn-icon {
-      font-size: 14px;
+      font-size: variable.$font-size-lg;
     }
   }
 
@@ -133,20 +133,20 @@
     #dns-custom-name,
     #dns-custom-ip {
       padding: 6px 10px;
-      border-radius: 8px;
+      border-radius: variable.$radius-md;
       background-color: theme.$background-alt;
       color: theme.$text-main;
-      font-size: 13px;
+      font-size: variable.$font-size-md;
       min-height: 28px;
     }
 
     #dns-save-btn {
       padding: 6px 14px;
-      border-radius: 8px;
+      border-radius: variable.$radius-md;
       background-color: theme.$accent-green;
       color: theme.$background-dark;
       font-weight: 600;
-      font-size: 13px;
+      font-size: variable.$font-size-md;
 
       &:hover {
         background-color: color.mix(theme.$accent-green, white, 10%);
@@ -157,7 +157,7 @@
   #dns-reset-btn {
     margin-top: 4px;
     padding: 8px 14px;
-    border-radius: 10px;
+    border-radius: variable.$radius-lg;
     background-color: rgba(theme.$accent-red, 0.15);
     color: theme.$accent-red;
 
@@ -166,7 +166,7 @@
     }
 
     .dns-btn-icon {
-      font-size: 12px;
+      font-size: variable.$font-size-base;
     }
   }
 }

@@ -51,7 +51,7 @@
   font-weight: bold;
   background-color: theme.$background-main;
   color: theme.$text-main;
-  border-radius: 12px;
+  border-radius: variable.$radius-xl;
   min-height: 8px;
 
   selection {
@@ -92,25 +92,25 @@
 /// Secondary title typography
 %title_2 {
   font-weight: 800;
-  font-size: 20px;
+  font-size: variable.$font-size-4xl;
 }
 
 /// Tertiary title typography
 %title_3 {
   font-weight: 700;
-  font-size: 20px;
+  font-size: variable.$font-size-4xl;
 }
 
 /// Quaternary title typography
 %title_4 {
   font-weight: 700;
-  font-size: 18px;
+  font-size: variable.$font-size-3xl;
 }
 
 /// Quinary title typography
 %title_5 {
   font-weight: 700;
-  font-size: 16px;
+  font-size: variable.$font-size-2xl;
 }
 
 /// General heading typography
@@ -122,19 +122,19 @@
 /// Caption heading typography for smaller section headers
 %caption_heading {
   font-weight: 700;
-  font-size: 13px;
+  font-size: variable.$font-size-md;
 }
 
 /// Standard caption typography
 %caption {
   font-weight: 400;
-  font-size: 12px;
+  font-size: variable.$font-size-base;
 }
 
 /// Smaller text typography for fine details
 %smaller {
   font-weight: 400;
-  font-size: 12px;
+  font-size: variable.$font-size-base;
 }
 
 /// Mixin for styling slider/progress bar widgets with customizable appearance

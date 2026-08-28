@@ -22,7 +22,7 @@
 
     #kanban-header {
       border: 2px solid theme.$surface-disabled;
-      border-radius: 12px;
+      border-radius: variable.$radius-xl;
       padding: 4px;
     }
 
@@ -34,7 +34,7 @@
 
     #kanban-note {
       background-color: theme.$surface-disabled;
-      border-radius: 4px;
+      border-radius: variable.$radius-xs;
       padding: 8px;
       margin-bottom: 4px;
     }
@@ -51,14 +51,14 @@
 
     #inline-editor {
       border: 2px solid theme.$surface-highlight;
-      border-radius: 12px;
+      border-radius: variable.$radius-xl;
       padding: 8px;
     }
 
     #kanban-btn,
     #kanban-btn-add {
       background-color: theme.$surface-disabled;
-      border-radius: 8px;
+      border-radius: variable.$radius-md;
       padding: 4px;
 
       &:hover {
@@ -80,7 +80,7 @@
 
     #kanban-btn-label,
     #kanban-btn-neg {
-      font-size: 12px;
+      font-size: variable.$font-size-base;
       color: theme.$text-main;
     }
 

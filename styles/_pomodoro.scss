@@ -16,7 +16,7 @@
 
     #pomodoro-session {
       color: theme.$text-muted;
-      font-size: 12px;
+      font-size: variable.$font-size-base;
       margin-bottom: 8px;
     }
 
@@ -33,7 +33,7 @@
 
       #pomodoro-phase {
         color: theme.$text-main;
-        font-size: 14px;
+        font-size: variable.$font-size-lg;
         font-weight: 500;
         margin-bottom: 4px;
       }
@@ -58,9 +58,9 @@
     #pomodoro-btn-reset-all {
       background-color: color.adjust(theme.$accent-pink, $alpha: -0.15);
       color: color.adjust(theme.$background-dark, $alpha: -0.1);
-      border-radius: 12px;
+      border-radius: variable.$radius-xl;
       padding: 10px 16px;
-      font-size: 13px;
+      font-size: variable.$font-size-md;
       font-weight: 500;
       border: none;
       min-width: 100px;

@@ -1,19 +1,24 @@
 from fabric.utils import cooldown
 
 from services import audio_service
-from shared.widget_container import EventBoxWidget
+from shared.scrollable_progress import ScrollableProgressWidget
 from utils.functions import safe_disconnect
 from utils.icons import get_text_icon
-from utils.widget_utils import create_progress, get_audio_icon_name, nerd_font_icon
+from utils.widget_utils import get_audio_icon_name
 
 
-class VolumeWidget(EventBoxWidget):
-    """a widget that displays and controls the volume."""
+class VolumeWidget(ScrollableProgressWidget):
+    """A widget that displays and controls the volume."""
 
     def __init__(self, **kwargs):
         super().__init__(
             name="volume",
+            icon_name="volume.medium",
+            icon_style_classes=["panel-font-icon", "overlay-icon"],
             events=["scroll", "smooth-scroll", "enter-notify-event"],
+            initial_progress=(
+                audio_service.speaker.volume / 100 if audio_service.speaker else 0.0
+            ),
             **kwargs,
         )
         self._speaker = None
@@ -21,22 +26,6 @@ class VolumeWidget(EventBoxWidget):
 
         # Initialize the audio service
         self.audio = audio_service
-
-        self.icon = nerd_font_icon(
-            icon=get_text_icon("volume.medium"),
-            props={
-                "style_classes": ["panel-font-icon", "overlay-icon"],
-            },
-        )
-
-        # Create a circular progress bar to display the brightness level
-        self.progress_bar = create_progress(
-            child=self.icon,
-            value=self.audio.speaker.volume / 100 if self.audio.speaker else 0,
-        )
-
-        # Create an event box to handle scroll events for volume control
-        self.container_box.add(self.progress_bar)
 
         # Connect the audio service to update the progress bar on volume change
         self._register_handler(
@@ -71,8 +60,7 @@ class VolumeWidget(EventBoxWidget):
             safe_disconnect(self._speaker, self._speaker_volume_handler_id)
             self._speaker_volume_handler_id = None
 
-        if self.config.get("tooltip", False) and self.tooltips_enabled:
-            self.set_tooltip_text(speaker.description)
+        self.set_tooltip_if_enabled(speaker.description)
 
         self._speaker = speaker
         self._speaker_volume_handler_id = speaker.connect(
@@ -95,11 +83,8 @@ class VolumeWidget(EventBoxWidget):
             return
 
         volume = round(speaker.volume)
-        normalized_value = volume / 100
-        self.progress_bar.set_value(normalized_value)
-        self.progress_bar.animate_value(normalized_value)
-
-        self.icon.set_text(get_audio_icon_name(volume, speaker.muted)["icon_text"])
+        icon_text = get_audio_icon_name(volume, speaker.muted)["icon_text"]
+        self.update_progress(volume / 100, icon_text)
 
     def destroy(self):
         if self._speaker and self._speaker_volume_handler_id is not None:

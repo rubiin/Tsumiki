@@ -26,12 +26,12 @@
 
   .git-companion-brand {
     color: theme.$accent-blue;
-    font-size: 18px;
+    font-size: variable.$font-size-3xl;
   }
 
   .git-companion-title {
     color: theme.$text-main;
-    font-size: 16px;
+    font-size: variable.$font-size-2xl;
     font-weight: 700;
   }
 
@@ -49,12 +49,12 @@
   }
 
   .git-companion-action-icon {
-    font-size: 14px;
+    font-size: variable.$font-size-lg;
   }
 
   #git-companion-profile {
     padding: 8px 4px 2px;
-    border-radius: 18px;
+    border-radius: variable.$radius-4xl;
   }
 
   #git-companion-avatar-box {
@@ -77,23 +77,23 @@
 
   .git-companion-avatar-fallback-icon {
     color: theme.$accent-blue;
-    font-size: 18px;
+    font-size: variable.$font-size-3xl;
   }
 
   .git-companion-name {
     color: theme.$text-main;
-    font-size: 18px;
+    font-size: variable.$font-size-3xl;
     font-weight: 700;
   }
 
   .git-companion-bio {
     color: theme.$text-disabled;
-    font-size: 12px;
+    font-size: variable.$font-size-base;
   }
 
   #git-companion-tabs {
     padding: 2px;
-    border-radius: 18px;
+    border-radius: variable.$radius-4xl;
     background-color: theme.$accent-purple;
     border: 1px solid theme.$surface-disabled;
   }
@@ -101,7 +101,7 @@
   .git-companion-tab-btn {
     min-height: 32px;
     padding: 0 14px;
-    border-radius: 14px;
+    border-radius: variable.$radius-2xl;
     background-color: transparent;
     color: theme.$text-muted;
     font-weight: 600;
@@ -112,7 +112,7 @@
   }
 
   .git-companion-tab-label {
-    font-size: 12px;
+    font-size: variable.$font-size-base;
   }
 
   #git-companion-scroller {
@@ -125,7 +125,7 @@
 
   .git-companion-item {
     padding: 10px 12px;
-    border-radius: 14px;
+    border-radius: variable.$radius-2xl;
     background-color: theme.$background-alt;
     border: 1px solid theme.$surface-disabled;
     color: theme.$text-main;
@@ -139,12 +139,12 @@
 
   .git-companion-item-title {
     color: theme.$text-main;
-    font-size: 12px;
+    font-size: variable.$font-size-base;
     font-weight: 700;
   }
 
   .git-companion-item-subtitle {
     color: theme.$text-disabled;
-    font-size: 11px;
+    font-size: variable.$font-size-sm;
   }
 }

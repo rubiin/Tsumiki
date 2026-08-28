@@ -418,7 +418,6 @@ class KanbanWidget(ButtonWidget, PopoverMixin):
                 )
             )
 
-        if self.config.get("tooltip", False) and self.tooltips_enabled:
-            self.set_tooltip_text(_("widget.kanban.tooltip"))
+        self.set_tooltip_if_enabled(_("widget.kanban.tooltip"))
 
         self.setup_popover(Kanban)

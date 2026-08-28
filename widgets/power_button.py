@@ -299,8 +299,7 @@ class PowerWidget(ButtonWidget):
         if self.config.get("label", True):
             self.container_box.add(Label(label="power", style_classes="panel-text"))
 
-        if self.config.get("tooltip", False) and self.tooltips_enabled:
-            self.set_tooltip_text(_("widget.power.tooltip"))
+        self.set_tooltip_if_enabled(_("widget.power.tooltip"))
 
         self.connect(
             "clicked",

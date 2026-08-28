@@ -249,8 +249,7 @@ class MprisWidget(ButtonWidget, PopoverMixin):
 
         self._update_progress()
 
-        if self.config.get("tooltip", False) and self.tooltips_enabled:
-            self.set_tooltip_text(bar_label)
+        self.set_tooltip_if_enabled(bar_label)
 
     def _set_default_values(self):
         self._last_progress_pct = None

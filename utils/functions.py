@@ -581,11 +581,23 @@ def check_if_day(
     return current_time_obj >= sunrise_time_obj or current_time_obj < sunset_time_obj
 
 
-# wttr.in time are in 300,400...2100 format , we need to convert it to 4:00...21:00
+# wttr.in time are in 300,400...2100 format, we need to convert it to 4:00...21:00
+# Accepts both "HHMM" (e.g. "1200") and "HH:MM" (e.g. "14:30") input.
 def convert_to_12hr_format(time: str) -> str:
-    time = int(time)
-    hour = time // 100  # Get the hour (e.g., 1200 -> 12)
-    minute = time % 100  # Get the minutes (e.g., 1200 -> 00)
+    if not time:
+        return time or ""
+
+    # Handle "HH:MM" format (e.g. from Open-Meteo sunrise/sunset)
+    if ":" in str(time):
+        try:
+            hour, minute = map(int, str(time).split(":"))
+        except (ValueError, IndexError):
+            return str(time)
+    else:
+        # Handle "HHMM" format (e.g. from wttr.in hourly forecast)
+        time_int = int(time)
+        hour = time_int // 100
+        minute = time_int % 100
 
     # Convert to 12-hour format
     period = "AM" if hour < 12 else "PM"
