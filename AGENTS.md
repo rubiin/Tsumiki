@@ -422,13 +422,18 @@ uv run ruff check .
 # 2. Compile SCSS (only if styles were modified)
 sass styles/main.scss css/style.css --no-source-map
 
-# 3. Run test suite
+# 3. Run pre-commit hooks
+prek run --all-files
+
+# 4. Run test suite
 uv run python -m unittest discover tests -q
 ```
 
 - **Ruff**: Fix any lint errors before finishing.
 - **SCSS compilation**: Verify styles compile without errors; this catches
   syntax issues, undefined variables, and import problems.
+- **Pre-commit**: All hooks must pass; fix any issues flagged by hooks
+  before finishing.
 - **Tests**: All tests must pass; add new tests if the change introduces new
   functionality or fixes a bug with a clear reproduction case.
 
