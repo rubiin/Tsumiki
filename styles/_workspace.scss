@@ -39,13 +39,6 @@ $workspace-transition:
   }
 }
 
-/// Dark label used on light backgrounds (hover, active states).
-@mixin dark-label {
-  label {
-    color: theme.$background-dark;
-  }
-}
-
 /// Common gradient used by slanted-right variants.
 $slanted-gradient: linear-gradient(
   190deg,
@@ -85,7 +78,6 @@ $slanted-gradient: linear-gradient(
 
       &:hover {
         background-color: theme.$accent-purple;
-        @include dark-label;
       }
 
       &.active {
@@ -100,7 +92,6 @@ $slanted-gradient: linear-gradient(
         border-radius: variable.$bar-widgets-workspaces-pill-border-radius;
         border-width: variable.$bar-widgets-workspaces-pill-border-width;
         background-color: theme.$accent-purple;
-        @include dark-label;
       }
     }
   }
@@ -119,7 +110,6 @@ $slanted-gradient: linear-gradient(
         padding-left: 20px;
         padding-right: 20px;
         border-radius: 40px;
-        @include dark-label;
       }
     }
   }
@@ -143,13 +133,11 @@ $slanted-gradient: linear-gradient(
 
     &:hover {
       background-color: color.adjust(theme.$accent-purple, $alpha: -0.5);
-      @include dark-label;
     }
 
     &.active {
       background-color: theme.$accent-purple;
       font-weight: 700;
-      @include dark-label;
     }
   }
 }
@@ -168,7 +156,6 @@ $slanted-gradient: linear-gradient(
     &:hover {
       background-color: color.adjust(theme.$accent-purple, $alpha: -0.6);
       border-bottom-color: color.adjust(theme.$accent-purple, $alpha: -0.3);
-      @include dark-label;
     }
 
     &.active {
@@ -207,13 +194,11 @@ $slanted-gradient: linear-gradient(
 
     &:hover {
       background-color: color.adjust(theme.$accent-purple, $alpha: -0.3);
-      @include dark-label;
     }
 
     &.active {
       background-color: theme.$accent-purple;
       font-weight: 700;
-      @include dark-label;
     }
   }
 }
@@ -235,7 +220,10 @@ $slanted-gradient: linear-gradient(
       background-color: theme.$accent-purple;
       border-left-color: theme.$accent-purple;
       border-right-color: theme.$accent-purple;
-      @include dark-label;
+
+      label {
+        color: theme.$text-main;
+      }
     }
 
     &.active {
@@ -244,7 +232,10 @@ $slanted-gradient: linear-gradient(
       min-width: 1.6em;
       border-left-color: color.adjust(theme.$accent-purple, $alpha: -0.2);
       border-right-color: color.adjust(theme.$accent-purple, $alpha: -0.2);
-      @include dark-label;
+
+      label {
+        color: theme.$text-main;
+      }
     }
   }
 }
@@ -266,7 +257,10 @@ $slanted-gradient: linear-gradient(
       background-color: theme.$accent-purple;
       background-image: $slanted-gradient;
       border-right-color: theme.$accent-purple;
-      @include dark-label;
+
+      label {
+        color: theme.$text-main;
+      }
     }
 
     &.active {
@@ -275,7 +269,10 @@ $slanted-gradient: linear-gradient(
       font-weight: 700;
       min-width: 1.6em;
       border-right-color: color.adjust(theme.$accent-purple, $alpha: -0.2);
-      @include dark-label;
+
+      label {
+        color: theme.$text-main;
+      }
     }
   }
 }
@@ -293,7 +290,11 @@ $slanted-gradient: linear-gradient(
     }
 
     &:hover {
-      @include dark-label;
+      background-color: color.adjust(theme.$accent-purple, $alpha: -0.5);
+
+      label {
+        color: theme.$text-main;
+      }
     }
 
     &.active {
