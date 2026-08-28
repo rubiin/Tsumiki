@@ -88,10 +88,13 @@ class AudioSubMenu(QuickSubMenu):
             name_box.pack_start(icon, False, True, 0)
 
             # App name label
-            name_label = Label(label=app.name, style_classes="submenu-item-label")
+            name_label = Label(
+                label=app.name,
+                style_classes="submenu-item-label",
+                h_align="start",
+                tooltip_text=app.description or app.name,
+            )
             name_label.set_ellipsize(3)  # PANGO_ELLIPSIZE_END
-            name_label.set_halign(Gtk.Align.START)
-            name_label.set_tooltip_text(app.description or app.name)
             name_box.pack_start(name_label, True, True, 0)
 
             box.add(name_box)

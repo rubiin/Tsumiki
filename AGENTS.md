@@ -411,14 +411,37 @@ python3 -c "from widgets.my_module import MyModuleWidget; print('OK: widget')"
 - If a change touches config schema, update `tsumiki.schema.json`, `utils/config.py`,
   and `config.toml` examples in sync.
 
-## 14. Architecture Notes
+## 14. Post-Implementation Verification
+
+After completing a feature, bugfix, or refactor, run the following checks:
+
+```bash
+# 1. Lint Python code
+uv run ruff check .
+
+# 2. Compile SCSS (only if styles were modified)
+sass styles/main.scss css/style.css --no-source-map
+
+# 3. Run test suite
+uv run python -m unittest discover tests -q
+```
+
+- **Ruff**: Fix any lint errors before finishing.
+- **SCSS compilation**: Verify styles compile without errors; this catches
+  syntax issues, undefined variables, and import problems.
+- **Tests**: All tests must pass; add new tests if the change introduces new
+  functionality or fixes a bug with a clear reproduction case.
+
+If any check fails, fix the issue and re-run until all pass.
+
+## 15. Architecture Notes
 
 - Configuration is hot-reloadable via `utils/config_watcher.py`.
 - Themes are generated dynamically (see `services/matugen.py`).
 - DBus is used for system integration (`utils/dbus_helper.py`).
 - Internationalization is via JSON files in `assets/i18n/`.
 
-### 14.1. Indexed Widget References with `id` Support
+### 15.1. Indexed Widget References with `id` Support
 
 Four special widget types support `@type:id` references in the layout:
 
@@ -464,13 +487,13 @@ command = "firefox"
 
 **When adding `id` support to a new type, you must update all 5 layers.**
 
-## 15. gi.repository Type Stubs
+## 16. gi.repository Type Stubs
 
 `gi.repository` imports lack type checking by default. Stubs are generated
 via `gengir` (see the `fabric-cli gs ...` command in §4). More detail:
 https://fabric-development.github.io/fabric-wiki/installing-stubs.html
 
-## 16. Assistant Behavior
+## 17. Assistant Behavior
 
 **Communication:**
 

@@ -156,7 +156,7 @@ class WifiSubMenu(QuickSubMenu):
         dialog.set_default_response(Gtk.ResponseType.OK)
 
         content = dialog.get_content_area()
-        prompt_label = Gtk.Label(label=f"Enter password for {ssid}")
+        prompt_label = Label(label=f"Enter password for {ssid}")
         password_entry = Gtk.Entry()
         password_entry.set_visibility(False)
         password_entry.set_activates_default(True)
