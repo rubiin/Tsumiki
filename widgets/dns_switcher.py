@@ -1,3 +1,4 @@
+from fabric.utils import Gtk
 from fabric.widgets.box import Box
 from fabric.widgets.button import Button
 from fabric.widgets.entry import Entry
@@ -5,6 +6,7 @@ from fabric.widgets.label import Label
 from fabric.widgets.scrolledwindow import ScrolledWindow
 
 from services.dns_switcher import DEFAULT_PROVIDERS, dns_switcher_service
+from shared.list import ListBox
 from shared.mixins import PopoverMixin
 from shared.widget_container import ButtonWidget
 from utils.i18n import _
@@ -55,13 +57,11 @@ class DnsSwitcherPopover(Box):
         )
 
         # ── Provider list ──
-        # TODO: use listbox instead of buttons for better accessibility
-        self._provider_list = Box(
+        self._provider_list = ListBox(
             name="dns-provider-list",
-            orientation="v",
-            spacing=2,
+            visible=True,
         )
-        self._provider_rows: list[Button] = []
+        self._provider_rows: list[Gtk.ListBoxRow] = []
         self._rebuild_provider_list()
 
         scroll = ScrolledWindow(
@@ -155,7 +155,7 @@ class DnsSwitcherPopover(Box):
         self._on_current_changed()
 
     def _rebuild_provider_list(self):
-        self._provider_list.children = []
+        self._provider_list.remove_all()
         self._provider_rows.clear()
 
         for idx, prov in enumerate(DEFAULT_PROVIDERS):
@@ -168,7 +168,7 @@ class DnsSwitcherPopover(Box):
                 props={"style_classes": ["dns-radio-icon"]},
             )
 
-            row = Button(
+            row_content = Button(
                 name="dns-provider-btn",
                 child=Box(
                     spacing=10,
@@ -191,6 +191,13 @@ class DnsSwitcherPopover(Box):
                 ),
                 on_clicked=make_cb(idx),
             )
+
+            row = Gtk.ListBoxRow(
+                name="dns-provider-row",
+                visible=True,
+                activatable=True,
+            )
+            row.add(row_content)
             row._radio = radio
             row._provider_id = prov["label"]
             self._provider_list.add(row)
@@ -203,12 +210,13 @@ class DnsSwitcherPopover(Box):
     def _update_active_state(self):
         current = self._service.current
         for row in self._provider_rows:
+            btn = row.get_child()
             is_active = row._provider_id == current
             if is_active:
-                row.set_style_classes(["dns-provider-btn-active"])
-                row._radio.set_label("")
+                btn.set_style_classes(["dns-provider-btn-active"])
+                row._radio.set_label("")
             else:
-                row.set_style_classes(["dns-provider-btn"])
+                btn.set_style_classes(["dns-provider-btn"])
                 row._radio.set_label("○")
 
     def _on_current_changed(self, *_args):
