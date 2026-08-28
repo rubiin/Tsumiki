@@ -3,73 +3,36 @@
 @use "variable";
 @use "sass:color";
 
-$workspace-transition:
-  padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+$workspace-transition: padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
   background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
   border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
-@keyframes urgent-pulse {
-  0% {
-    opacity: 1;
-  }
-
-  50% {
-    opacity: 0.5;
-  }
-
-  100% {
-    opacity: 1;
-  }
-}
-
-/// Apply the urgent pulse animation.
-@mixin urgent {
-  &.urgent {
-    background-color: theme.$accent-red;
-    color: theme.$background-dark;
-    animation: urgent-pulse 1.5s ease-in-out infinite;
-  }
-}
-
 /// Shared skeleton for workspace style variants.
 @mixin workspace-variant {
-  & > button {
-    @include urgent;
+  &>button {
     @content;
   }
 }
 
-/// Common gradient used by slanted-right variants.
-$slanted-gradient: linear-gradient(
-  190deg,
-  color.adjust(theme.$accent-purple, $alpha: -0.1) 0%,
-  transparent 100%
-);
-
 /** workspace switcher widget */
 
 #workspaces {
-  @include common.nerd-icon(
-    variable.$bar-widgets-workspaces-icon_size,
-    variable.$bar-widgets-workspaces-spacing
-  );
+  @include common.nerd-icon(variable.$bar-widgets-workspaces-icon_size,
+    variable.$bar-widgets-workspaces-spacing );
 
   &_widget {
     font-weight: 700;
 
-    @include common.widget-border(
-      variable.$bar-widgets-workspaces-border-radius,
+    @include common.widget-border(variable.$bar-widgets-workspaces-border-radius,
       variable.$bar-widgets-workspaces-border-enabled,
-      variable.$bar-widgets-workspaces-border-width
-    );
+      variable.$bar-widgets-workspaces-border-width );
 
-    // Base button styles shared by all variants
-    & > button {
+    // Base button styles shared by all variants — transition emitted once
+    &>button {
       transition: $workspace-transition;
       min-height: variable.$bar-widgets-workspaces-pill-height;
       min-width: variable.$bar-widgets-workspaces-pill-width;
       border-radius: variable.$radius-large;
-      @include urgent;
 
       label {
         color: theme.$text-main;
@@ -78,6 +41,10 @@ $slanted-gradient: linear-gradient(
 
       &:hover {
         background-color: theme.$accent-purple;
+
+        label {
+          color: theme.$background-dark;
+        }
       }
 
       &.active {
@@ -86,12 +53,14 @@ $slanted-gradient: linear-gradient(
         transition: $workspace-transition;
         padding-left: variable.$bar-widgets-workspaces-pill-active_width;
         padding-right: variable.$bar-widgets-workspaces-pill-active_width;
-        border: if(
-          sass(variable.$bar-widgets-workspaces-pill-border-enabled): variable.$border; else: none
-        );
+        border: if(sass(variable.$bar-widgets-workspaces-pill-border-enabled): variable.$border; else: none);
         border-radius: variable.$bar-widgets-workspaces-pill-border-radius;
         border-width: variable.$bar-widgets-workspaces-pill-border-width;
         background-color: theme.$accent-purple;
+
+        label {
+          color: theme.$background-dark;
+        }
       }
     }
   }
@@ -110,6 +79,10 @@ $slanted-gradient: linear-gradient(
         padding-left: 20px;
         padding-right: 20px;
         border-radius: 40px;
+
+        label {
+          color: theme.$background-dark;
+        }
       }
     }
   }
@@ -133,11 +106,19 @@ $slanted-gradient: linear-gradient(
 
     &:hover {
       background-color: color.adjust(theme.$accent-purple, $alpha: -0.5);
+
+      label {
+        color: theme.$background-dark;
+      }
     }
 
     &.active {
       background-color: theme.$accent-purple;
       font-weight: 700;
+
+      label {
+        color: theme.$background-dark;
+      }
     }
   }
 }
@@ -156,6 +137,10 @@ $slanted-gradient: linear-gradient(
     &:hover {
       background-color: color.adjust(theme.$accent-purple, $alpha: -0.6);
       border-bottom-color: color.adjust(theme.$accent-purple, $alpha: -0.3);
+
+      label {
+        color: theme.$background-dark;
+      }
     }
 
     &.active {
@@ -194,11 +179,19 @@ $slanted-gradient: linear-gradient(
 
     &:hover {
       background-color: color.adjust(theme.$accent-purple, $alpha: -0.3);
+
+      label {
+        color: theme.$background-dark;
+      }
     }
 
     &.active {
       background-color: theme.$accent-purple;
       font-weight: 700;
+
+      label {
+        color: theme.$background-dark;
+      }
     }
   }
 }
@@ -222,7 +215,7 @@ $slanted-gradient: linear-gradient(
       border-right-color: theme.$accent-purple;
 
       label {
-        color: theme.$text-main;
+        color: theme.$background-dark;
       }
     }
 
@@ -234,7 +227,7 @@ $slanted-gradient: linear-gradient(
       border-right-color: color.adjust(theme.$accent-purple, $alpha: -0.2);
 
       label {
-        color: theme.$text-main;
+        color: theme.$background-dark;
       }
     }
   }
@@ -244,7 +237,9 @@ $slanted-gradient: linear-gradient(
   @include workspace-variant {
     padding: 0.25em 1em;
     background-color: color.adjust(theme.$accent-purple, $alpha: -0.2);
-    background-image: $slanted-gradient;
+    background-image: linear-gradient(190deg,
+        color.adjust(theme.$accent-purple, $alpha: -0.1) 0%,
+        transparent 100%);
     border-radius: 0;
     border-right: 3px solid color.adjust(theme.$accent-purple, $alpha: -0.3);
 
@@ -255,23 +250,27 @@ $slanted-gradient: linear-gradient(
 
     &:hover {
       background-color: theme.$accent-purple;
-      background-image: $slanted-gradient;
+      background-image: linear-gradient(190deg,
+          color.adjust(theme.$accent-purple, $alpha: -0.1) 0%,
+          transparent 100%);
       border-right-color: theme.$accent-purple;
 
       label {
-        color: theme.$text-main;
+        color: theme.$background-dark;
       }
     }
 
     &.active {
       background-color: theme.$accent-purple;
-      background-image: $slanted-gradient;
+      background-image: linear-gradient(190deg,
+          color.adjust(theme.$accent-purple, $alpha: -0.1) 0%,
+          transparent 100%);
       font-weight: 700;
       min-width: 1.6em;
       border-right-color: color.adjust(theme.$accent-purple, $alpha: -0.2);
 
       label {
-        color: theme.$text-main;
+        color: theme.$background-dark;
       }
     }
   }
@@ -290,10 +289,8 @@ $slanted-gradient: linear-gradient(
     }
 
     &:hover {
-      background-color: color.adjust(theme.$accent-purple, $alpha: -0.5);
-
       label {
-        color: theme.$text-main;
+        color: theme.$background-dark;
       }
     }
 
@@ -315,11 +312,4 @@ $slanted-gradient: linear-gradient(
       }
     }
   }
-}
-
-// When urgent_show is false, suppress the pulse animation and color.
-#workspaces.urgent-disabled button.urgent {
-  background-color: transparent;
-  color: inherit;
-  animation: none;
 }
