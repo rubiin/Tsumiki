@@ -43,23 +43,6 @@ exec_shell_command_async("nvtop -s", callback=self._on_gpu_stats_received)
 
 **Fix**: Use `exec_shell_command_async()` with a callback. Cache the last result and only update UI on actual changes.
 
-### 51. USB Manager lsblk Polling Blocks Main Thread
-
-**Files**: `widgets/usb_manager.py` (line 187)
-**Effort**: Small | **Impact**: Medium
-
-`refresh_devices()` calls `exec_shell_command("lsblk -J ...")` synchronously. This blocks the GTK main loop during device enumeration. The `lsblk` command can take 100-500ms depending on the number of devices.
-
-```python
-# Current — blocks main thread
-output = exec_shell_command("lsblk -J -o NAME,PATH,TYPE,SIZE,...")
-
-# Fix — run in background
-exec_shell_command_async("lsblk -J ...", callback=self._on_lsblk_ready)
-```
-
-**Fix**: Use `exec_shell_command_async()` with a callback. The animation (refresh button spin) can continue while the command runs.
-
 ### 52. Git Companion GitHub API Calls Block Main Thread
 
 **Files**: `widgets/git_companion.py` (line 82)
@@ -89,15 +72,6 @@ exec_shell_command_async(cmd_str, callback=self._on_gh_result)
 Many widgets connect to signals directly without using `_register_handler()` from `TeardownMixin`. When the widget is destroyed, these signal handlers remain connected to the source object. For singleton services that outlive widgets, stale callbacks can cause memory leaks and potential crashes.
 
 **Fix**: Route all signal connections through `_register_handler()`. For singleton services, disconnect handlers on widget destroy.
-
-### 8. Synchronous Hyprland send_command Blocks UI Thread
-
-**Files**: `modules/overview.py`, `modules/dock.py`, `utils/monitors.py`
-**Effort**: Medium | **Impact**: Medium
-
-`send_command("j/clients")`, `send_command("j/monitors")`, `send_command("j/activewindow")` block the GTK main loop. The overview's `update()` queries both `j/monitors` and `j/clients` sequentially — two synchronous round-trips.
-
-**Fix**: Use `send_command_async()` with callbacks. Combine related queries into fewer round-trips.
 
 ### 53. Sass Compilation Blocks Main Thread During Theme Switch
 
@@ -134,24 +108,6 @@ exec_shell_command_async(cmd, callback=self._on_colors_generated)
 ```
 
 **Fix**: Use `exec_shell_command_async()` with a callback. Emit `colors_generated` signal from the callback.
-
-### 55. Sinewave Slider 60fps Animation Loop Wastes CPU
-
-**Files**: `shared/sinewave_slider.py` (line 144)
-**Effort**: Small | **Impact**: Low
-
-`SinewaveSlider.__init__()` starts a 60fps animation loop (`GLib.timeout_add(16, self._tick)`) immediately on creation. The animation runs continuously even when the slider is not visible or not being interacted with.
-
-```python
-# Current — always running
-self._anim_id: int | None = GLib.timeout_add(16, self._tick)
-
-# Fix — only run when visible/interacting
-self.connect("map", self._start_animation)
-self.connect("unmap", self._stop_animation)
-```
-
-**Fix**: Start the animation loop only when the widget is mapped (visible). Stop it when unmapped. Use `_register_repeater()` for proper cleanup.
 
 ### 56. Icon Resolver File I/O on Main Thread
 
@@ -271,51 +227,15 @@ These add import overhead at module load time even when the features are never u
 
 **Fix**: Move these imports inside their respective functions (lazy imports). For `psutil`, it's already imported by `stats_poll()` in `widget_utils.py`, so it's already in memory — the import is fast but unnecessary.
 
-### 59. Kanban GLib.timeout_add Without Cleanup Tracking
-
-**Files**: `widgets/kanban.py` (line 200)
-**Effort**: Trivial | **Impact**: Low
-
-`InlineEditor` uses `GLib.timeout_add(200, lambda: ...)` without tracking the timer ID. If the widget is destroyed before the timeout fires, the callback may run on a destroyed widget.
-
-```python
-# Current — no cleanup
-GLib.timeout_add(200, lambda: (editor.text_view.grab_focus(), False))
-
-# Fix — use _register_repeater for cleanup
-self._register_repeater(
-    GLib.timeout_add(200, lambda: (editor.text_view.grab_focus(), False))
-)
-```
-
-**Fix**: Use `_register_repeater()` to track the timer ID and ensure cleanup on destroy.
-
-### 60. USB Manager _run_command Blocks Main Thread
-
-**Files**: `widgets/usb_manager.py` (line 483)
-**Effort**: Small | **Impact**: Low
-
-`_run_command()` calls `exec_shell_command(command)` synchronously. USB operations (mount, unmount, eject) can take 100ms-2s. This blocks the GTK main loop during device operations.
-
-```python
-# Current — blocks main thread
-exec_shell_command(command)
-
-# Fix — run in background
-exec_shell_command_async(command, callback=self._on_action_done)
-```
-
-**Fix**: Use `exec_shell_command_async()` with a callback. The refresh animation can continue while the command runs.
-
 ---
 
 ## 📊 Summary
 
 | Priority  | Count | Total Effort | Total Impact |
 | --------- | ----- | ------------ | ------------ |
-| 🔥 High   | 5     | Medium       | High         |
-| 🥈 Medium | 8     | Medium       | Medium       |
-| 🥉 Lower  | 7     | Small        | Low          |
+| 🔥 High   | 4     | Medium       | High         |
+| 🥈 Medium | 7     | Medium       | Medium       |
+| 🥉 Lower  | 4     | Small        | Low          |
 
 **Top 3 Quick Wins (High Impact, Low Effort):**
 

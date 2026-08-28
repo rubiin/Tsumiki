@@ -111,6 +111,7 @@ class KanbanNote(EventBox):
     def __init__(self, text: str):
         super().__init__()
         self.text = text
+        self._focus_timer_id: int | None = None
         # Variables to store the click offset for drag preview.
         self.setup_ui()
         self.setup_dnd()
@@ -170,11 +171,17 @@ class KanbanNote(EventBox):
     def on_delete_clicked(self, button):
         self.get_parent().destroy()
 
+    def _cancel_focus_timer(self):
+        if self._focus_timer_id is not None:
+            GLib.source_remove(self._focus_timer_id)
+            self._focus_timer_id = None
+
     def start_edit(self):
         row = self.get_parent()
         editor = InlineEditor(self.label.get_text())
 
         def on_confirmed(editor, text: str):
+            self._cancel_focus_timer()
             self.label.set_text(text)
             row.remove(editor)
             row.add(self)
@@ -182,6 +189,7 @@ class KanbanNote(EventBox):
             self.emit("changed")
 
         def on_canceled(editor):
+            self._cancel_focus_timer()
             row.remove(editor)
             row.add(self)
             row.show_all()
@@ -197,7 +205,9 @@ class KanbanNote(EventBox):
         row.remove(self)
         row.add(editor)
         row.show_all()
-        GLib.timeout_add(200, lambda: (editor.text_view.grab_focus(), False))
+        self._focus_timer_id = GLib.timeout_add(
+            200, lambda: (editor.text_view.grab_focus(), False)
+        )
 
 
 class KanbanColumn(Gtk.Frame):

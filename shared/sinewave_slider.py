@@ -2,7 +2,7 @@ import math
 from collections.abc import Callable
 from typing import Iterable, Literal, TypedDict
 
-from fabric.utils import Gdk, GLib, GObject, Gtk, cairo
+from fabric.utils import Gdk, GLib, GObject, Gtk, bulk_connect, cairo
 from fabric.widgets.widget import Widget
 
 
@@ -126,12 +126,19 @@ class SineWaveSlider(Gtk.DrawingArea, Widget):
         self._requested_height = -1
         self.set_size_request(width, 24)
 
-        self.connect("draw", self._on_draw)
-        self.connect("button-press-event", self._on_press)
-        self.connect("button-release-event", self._on_release)
-        self.connect("motion-notify-event", self._on_motion)
-        self.connect("enter-notify-event", self._on_enter)
-        self.connect("leave-notify-event", self._on_leave)
+        bulk_connect(
+            self,
+            {
+                "draw": self._on_draw,
+                "button-press-event": self._on_press,
+                "button-release-event": self._on_release,
+                "motion-notify-event": self._on_motion,
+                "enter-notify-event": self._on_enter,
+                "leave-notify-event": self._on_leave,
+                "map": self._start_animation,
+                "unmap": self._stop_animation,
+            },
+        )
 
         self.add_events(
             Gdk.EventMask.BUTTON_PRESS_MASK
@@ -141,7 +148,7 @@ class SineWaveSlider(Gtk.DrawingArea, Widget):
             | Gdk.EventMask.LEAVE_NOTIFY_MASK
         )
 
-        self._anim_id: int | None = GLib.timeout_add(16, self._tick)
+        self._anim_id: int | None = None
 
     # ───────────────────────────────────────── CSS gadget contexts
 
@@ -207,6 +214,19 @@ class SineWaveSlider(Gtk.DrawingArea, Widget):
 
         return self._cached_style
 
+    # ───────────────────────────────────────── animation lifecycle
+
+    def _start_animation(self, *_args) -> None:
+        if self._anim_id is None and (
+            self._morph != self._morph_target or self._morph > 0.0
+        ):
+            self._anim_id = GLib.timeout_add(16, self._tick)
+
+    def _stop_animation(self, *_args) -> None:
+        if self._anim_id is not None:
+            GLib.source_remove(self._anim_id)
+            self._anim_id = None
+
     # ───────────────────────────────────────── active state
 
     def get_active(self) -> bool:
@@ -217,8 +237,8 @@ class SineWaveSlider(Gtk.DrawingArea, Widget):
         if self._morph_target == target:
             return
         self._morph_target = target
-        if self._anim_id is None:
-            self._anim_id = GLib.timeout_add(16, self._tick)
+        if self.get_mapped():
+            self._start_animation()
 
     # ───────────────────────────────────────── value
 
@@ -416,7 +436,5 @@ class SineWaveSlider(Gtk.DrawingArea, Widget):
             self._on_change(self._value)
 
     def destroy(self) -> None:
-        if self._anim_id:
-            GLib.source_remove(self._anim_id)
-            self._anim_id = None
+        self._stop_animation()
         super().destroy()

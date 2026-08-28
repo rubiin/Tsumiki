@@ -25,7 +25,8 @@ class ScrollingLabel(Gtk.DrawingArea):
         scroll_on_hover=False,
         **kwargs,
     ):
-        super().__init__(name, **kwargs)
+        super().__init__(**kwargs)
+        self.set_name(name)
         self.text = text
         self.speed = speed
         self.max_width_limit = max_width

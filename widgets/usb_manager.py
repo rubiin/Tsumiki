@@ -5,7 +5,7 @@ from functools import partial
 from fabric.utils import (
     GLib,
     Gtk,
-    exec_shell_command,
+    exec_shell_command_async,
     logger,
 )
 from fabric.widgets.box import Box
@@ -36,6 +36,8 @@ class USBManagerMenu(Box, TeardownMixin):
         self.config = config or {}
         self.devices = []
         self._refresh_timer_id: int | None = None
+        self._lsblk_lines: list[str] = []
+        self._lsblk_finalize_id: int | None = None
 
         self.title = Label(
             label=_("widget.usb_manager.title"),
@@ -130,6 +132,10 @@ class USBManagerMenu(Box, TeardownMixin):
 
     def _on_destroy(self, *_):
         self._refresh_timer_id = None
+        if self._lsblk_finalize_id is not None:
+            self._unregister_repeater(self._lsblk_finalize_id)
+            GLib.source_remove(self._lsblk_finalize_id)
+            self._lsblk_finalize_id = None
         return None
 
     def close(self, *_):
@@ -183,21 +189,35 @@ class USBManagerMenu(Box, TeardownMixin):
     def refresh_devices(self, *_, animate: bool = False):
         if animate:
             self.refresh_button.play_animation()
-        try:
-            output = exec_shell_command(
-                (
-                    "lsblk -J -o NAME,PATH,TYPE,SIZE,FSTYPE,"
-                    "LABEL,MOUNTPOINT,FSUSE%,FSUSED,FSAVAIL,RM,HOTPLUG,TRAN"
-                )
-            )
 
-        except Exception as err:
-            logger.warning(f"[USBManager] lsblk command failed: {err}")
-            output = ""
+        self._lsblk_lines = []
+        if self._lsblk_finalize_id is not None:
+            self._unregister_repeater(self._lsblk_finalize_id)
+            GLib.source_remove(self._lsblk_finalize_id)
+            self._lsblk_finalize_id = None
 
-        self._on_lsblk_ready(output)
+        exec_shell_command_async(
+            "lsblk  --output NAME,PATH,TYPE,SIZE,FSTYPE,"
+            "LABEL,MOUNTPOINT,FSUSE%,FSUSED,FSAVAIL,RM,HOTPLUG,TRAN --json",
+            self._on_lsblk_line,
+        )
 
-    def _on_lsblk_ready(self, output: str):
+    def _on_lsblk_line(self, line: str):
+        """Accumulate lsblk output lines; finalize ~200ms after last line."""
+        self._lsblk_lines.append(line)
+        if self._lsblk_finalize_id is not None:
+            self._unregister_repeater(self._lsblk_finalize_id)
+            GLib.source_remove(self._lsblk_finalize_id)
+        self._lsblk_finalize_id = self._register_repeater(
+            GLib.timeout_add(200, self._finalize_lsblk)
+        )
+
+    def _finalize_lsblk(self):
+        """Parse the accumulated lsblk output and update the device list."""
+        self._lsblk_finalize_id = None
+        output = "\n".join(self._lsblk_lines)
+        self._lsblk_lines = []
+
         parsed = self._parse_lsblk_output(output)
 
         if parsed is None:
@@ -215,10 +235,12 @@ class USBManagerMenu(Box, TeardownMixin):
         self._update_footer_buttons()
         if self._parent:
             self._parent.update_device_count(len(self.devices))
+        return False
 
     @staticmethod
     def _parse_lsblk_output(output: str) -> dict | None:
         text = (output or "").strip()
+
         if not text:
             return None
 
@@ -480,12 +502,10 @@ class USBManagerMenu(Box, TeardownMixin):
         )
 
     def _run_command(self, command: str):
-        try:
-            exec_shell_command(command)
-        except Exception as err:
-            logger.warning(f"[USBManager] command failed: {err}")
+        def on_command_done(*_):
+            self._on_action_done()
 
-        self._on_action_done()
+        exec_shell_command_async(command, on_command_done)
 
     def _on_action_done(self, *_):
         if self._refresh_timer_id is not None:
