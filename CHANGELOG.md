@@ -1,5 +1,37 @@
 # Changelog
 
+## [4.7.0](https://github.com/rubiin/tsumiki/compare/v4.6.0...v4.7.0) (2026-08-30)
+
+
+### 🚀 New Features
+
+* **workspace:** add urgent pulse animation and improve transition handling ([fcf5db5](https://github.com/rubiin/tsumiki/commit/fcf5db5a2df52aec3e1d343e981531a5d5e4b86e))
+* **workspace:** implement urgent workspace animation and configuration options ([fd68673](https://github.com/rubiin/tsumiki/commit/fd68673852389f49926d7e3c244bed830e801cf0))
+
+
+### 🐛 Bug Fixes
+
+* **mpris:** correct style_classes format and update default text to localized string ([be4e696](https://github.com/rubiin/tsumiki/commit/be4e696ad10341699e7292c356697903c979df72))
+* remove group count ([d9625ce](https://github.com/rubiin/tsumiki/commit/d9625ce571676df35f5c2a83a07a6025f4001a19))
+* rename urgent_show to show_urgent and update related configurations ([2b3ce63](https://github.com/rubiin/tsumiki/commit/2b3ce637202cdaf0802f254780e39434b34b1195))
+* update setters ([c0f57d8](https://github.com/rubiin/tsumiki/commit/c0f57d8918f8b636cccad63cb35cc1da0f2b77a8))
+* update sync to async ([d889773](https://github.com/rubiin/tsumiki/commit/d889773ffc1c06dbb2be69cd8de66567ac6898d3))
+* update tests ([ffcfe7c](https://github.com/rubiin/tsumiki/commit/ffcfe7cdac73590190f561f911e0d75d0bd65438))
+* **workspace:** comment out urgent animation definition ([f9c07f7](https://github.com/rubiin/tsumiki/commit/f9c07f7599e8a572992758627eebce0666703196))
+* **workspace:** remove commented-out urgent animation definition ([c0927d9](https://github.com/rubiin/tsumiki/commit/c0927d911776f73bd444e7964e21e55d69ebfe75))
+* **workspace:** remove duplicate urgent animation definition ([3515186](https://github.com/rubiin/tsumiki/commit/35151865280551ba992d781620900f8a14ee3483))
+
+
+### ♻️ Code Refactoring
+
+* **audio:** update audio-chevron-button styles and simplify button initialization ([213037a](https://github.com/rubiin/tsumiki/commit/213037a1f53aa6cbf3423f41f861f89e089579b9))
+* styles and improve tooltip handling across widgets ([f629d37](https://github.com/rubiin/tsumiki/commit/f629d378ce7dd19936b0526d320b40c3e0af500d))
+* **tests:** update test commands to include pre-commit hooks ([7756b69](https://github.com/rubiin/tsumiki/commit/7756b6985ff22c7c715e5f334e4ddf5140d838c8))
+* **ui:** enhance label initialization and tooltip handling in audio and wifi submenus ([e783163](https://github.com/rubiin/tsumiki/commit/e783163df794a7209fc61c0be75c3afb2d82ae91))
+* **ui:** remove dark label mixin and update label color handling in slanted variants ([baabce9](https://github.com/rubiin/tsumiki/commit/baabce9a4582519a2c14b1b1afb1e36e16f2e0c1))
+* **ui:** replace button list with ListBox for improved accessibility in DNS switcher ([5d2e769](https://github.com/rubiin/tsumiki/commit/5d2e76994b24df60f6e20286a68a29315720467d))
+* **ui:** streamline icon handling in search entries for launcher and clipboard ([b74fff4](https://github.com/rubiin/tsumiki/commit/b74fff499d27c528466d85d7e1773e4f5bcda905))
+
 ## [4.6.0](https://github.com/rubiin/tsumiki/compare/v4.5.1...v4.6.0) (2026-08-27)
 
 ### 🚀 New Features
