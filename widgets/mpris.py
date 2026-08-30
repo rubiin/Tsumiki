@@ -27,7 +27,7 @@ class MprisWidget(ButtonWidget, PopoverMixin):
         # Scrolling track label
         self.label = ScrollingLabel(
             name="mpris-label",
-            style_classes="panel-text",
+            style_classes=["panel-text"],
             scroll_on_hover=True,
             max_width=char_limit_to_px(self, self.config.get("truncation_size", 30)),
         )
@@ -124,7 +124,6 @@ class MprisWidget(ButtonWidget, PopoverMixin):
     def _stop_progress_timer(self):
         if self._progress_timer_id is None:
             return
-        self._unregister_repeater(self._progress_timer_id)
         GLib.source_remove(self._progress_timer_id)
         self._progress_timer_id = None
 
@@ -254,7 +253,7 @@ class MprisWidget(ButtonWidget, PopoverMixin):
     def _set_default_values(self):
         self._last_progress_pct = None
         self.cover.set_style(f"background-image: url('{self.default_cover}');")
-        self.label.set_text("Nothing playing")
+        self.label.set_text(_("widget.mpris.nothing_playing"))
         self.meta_box.v_align = "center"
         self.progress.set_visible(False)
         self.progress_fill.set_style("")
