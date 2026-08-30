@@ -78,7 +78,7 @@ temperature = "2800k"
 count = 10
 style = "numbered"
 show_special = false
-urgent_show = true
+show_urgent = false
 
 [widgets.window_title]
 truncation = true

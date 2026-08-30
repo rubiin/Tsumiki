@@ -215,7 +215,7 @@ empty_scroll = false
 label_format = "{id}"
 icon_map = {}
 show_special = false
-urgent_show = true
+show_urgent = false
 ```
 
 ### عنوان النافذة

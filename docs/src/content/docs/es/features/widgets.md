@@ -301,13 +301,13 @@ empty_scroll = false
 label_format = "{id}"
 icon_map = {}
 show_special = false
-urgent_show = true
+show_urgent = false
 ```
 
 - **`style`**: Elige entre `numbered`, `pill`, `icon`, `default`, `underline` o `bubble`.
 - **`icon_map`**: Mapea IDs de espacios de trabajo a iconos personalizados: `{ "1": "", "2": "" }`.- **`label_format`**: Cadena de formato con variable `{id}`.
 - **`show_special`**: Mostrar espacios de trabajo especiales (IDs negativos). Establecer en `false` para ocultarlos.
-- **`urgent_show`**: Mostrar animación de pulso y color en espacios de trabajo con ventanas urgentes. Establecer en `false` para desactivar.
+- **`show_urgent`**: Mostrar animación de pulso y color en espacios de trabajo con ventanas urgentes. Establecer en `false` para desactivar.
 
 ### Título de Ventana
 

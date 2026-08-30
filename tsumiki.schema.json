@@ -1265,9 +1265,9 @@
               "default": false,
               "description": "Show special workspaces (negative IDs) in the workspace indicator."
             },
-            "urgent_show": {
+            "show_urgent": {
               "type": "boolean",
-              "default": true,
+              "default": false,
               "description": "Pulse animation on workspaces with urgent windows."
             }
           },

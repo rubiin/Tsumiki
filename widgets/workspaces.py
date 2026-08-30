@@ -1,4 +1,5 @@
 from fabric.core.widgets import WorkspaceButton
+from fabric.hyprland.service import HyprlandEvent
 from fabric.hyprland.widgets import HyprlandWorkspaces
 
 from shared.widget_container import BoxWidget
@@ -18,10 +19,12 @@ class WorkSpacesWidget(BoxWidget):
         self.workspace_count = self.config.get("count", 8)
         self.hide_unoccupied = self.config.get("hide_unoccupied", False)
         self.show_special = self.config.get("show_special", False)
+        self.show_urgent = self.config.get("show_urgent", False)
         self.style = self.config.get("style", "numbered")
 
         # Create a HyperlandWorkspace widget to manage workspace buttons
-        self.children = HyprlandWorkspaces(
+        self.children = _HyprlandWorkspaces(
+            show_urgent=self.show_urgent,
             name="workspaces_widget",
             style_classes=self.style,
             spacing=4,
@@ -45,7 +48,7 @@ class WorkSpacesWidget(BoxWidget):
             visible=visible,
         )
 
-        setup_cursor_hover(button)
+        setup_cursor_hover(button)  # fix this , do not use this
 
         return button
 
@@ -59,3 +62,16 @@ class WorkSpacesWidget(BoxWidget):
                 for ws_id in range(1, self.workspace_count + 1)
                 if ws_id not in self.ignored_ws
             ]
+
+
+class _HyprlandWorkspaces(HyprlandWorkspaces):
+    """HyprlandWorkspaces subclass that gates urgent handling on config."""
+
+    def __init__(self, show_urgent: bool = False, **kwargs):
+        self._show_urgent = show_urgent
+        super().__init__(**kwargs)
+
+    def on_urgent(self, _, event: HyprlandEvent):
+        if not self._show_urgent:
+            return
+        return super().on_urgent(_, event)
