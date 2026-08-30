@@ -8,7 +8,6 @@ $workspace-transition:
   background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
   border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
-
 // .urgent {
 //   animation: urgentPulse 1.5s ease-in-out infinite;
 // }
@@ -310,8 +309,6 @@ $workspace-transition:
     }
   }
 }
-
-
 
 #workspaces_widget.flat {
   @include workspace-variant {
