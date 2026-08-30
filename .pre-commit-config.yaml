@@ -7,6 +7,7 @@ repos:
       - id: fix-byte-order-marker
       - id: check-case-conflict
       - id: check-symlinks
+      - id: check-toml
       - id: debug-statements
       - id: end-of-file-fixer # Ensures files end with a newline
       - id: trailing-whitespace # Removes trailing whitespace

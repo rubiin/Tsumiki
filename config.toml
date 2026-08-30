@@ -399,7 +399,7 @@ empty_scroll = false
 label_format = "{id}"
 icon_map = {}
 show_special = false
-urgent_show = false
+show_urgent = false
 
 [widgets.world_clock]
 icon = "󰃰"

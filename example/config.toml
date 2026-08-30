@@ -136,7 +136,7 @@ empty_scroll = false
 label_format = "{id}"
 icon_map = {}
 ignored = [-99]
-urgent_show = true
+show_urgent = true
 
 # --- Window Title ---
 [widgets.window_title]
