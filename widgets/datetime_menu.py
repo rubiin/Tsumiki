@@ -37,7 +37,6 @@ class DateMenuNotification(Box):
         self,
         id: int,
         notification: Notification,
-        badge_count: int | None = None,
         on_close=None,
         **kwargs,
     ):
@@ -120,20 +119,7 @@ class DateMenuNotification(Box):
                 style_classes="timestamp",
             ),
         )
-        if badge_count is not None:
-            self.badge_label = Label(
-                label=str(badge_count),
-                style_classes="notification-group-badge-label",
-                name="notification-group-badge-label",
-            )
-        else:
-            self.badge_label = None
-
-        # pack_end children are laid out in reverse pack order, so the close
-        # button must be packed first to keep the count badge before it.
         header_row.pack_end(self.close_button, False, False, 0)
-        if self.badge_label is not None:
-            header_row.pack_end(self.badge_label, False, False, 0)
 
         content_box = Box(
             orientation="v",
@@ -469,8 +455,6 @@ class DateNotificationMenu(Box):
             revealer.set_reveal_child(is_expanded)
             peek_box.set_visible(not is_expanded and len(notifications) > 1)
             group_header.set_visible(is_expanded)
-            if top_notification.badge_label is not None:
-                top_notification.badge_label.set_visible(not is_expanded)
             if is_expanded:
                 deck.add_style_class("group-expanded")
             else:
@@ -537,12 +521,9 @@ class DateNotificationMenu(Box):
         top_notification = DateMenuNotification(
             notification=notifications[0],
             id=self._notification_id(notifications[0]) or 0,
-            badge_count=count,
             style_classes="notification-group-top",
             on_close=_close_group,
         )
-        if top_notification.badge_label is not None:
-            top_notification.badge_label.set_visible(not expanded)
 
         peek_layer_count = max(
             0,
