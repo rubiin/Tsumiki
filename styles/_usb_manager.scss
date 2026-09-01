@@ -67,7 +67,7 @@
 
     .usb-manager-status-icon {
       font-size: variable.$font-size-5xl;
-      opacity: 0.8;
+      opacity: variable.$opacity-faint;
     }
 
     .usb-manager-status-title {
@@ -128,7 +128,7 @@
 
     .usb-manager-device-usage {
       font-size: variable.$font-size-sm;
-      opacity: 0.75;
+      opacity: variable.$opacity-subtle;
       margin-bottom: 4px;
     }
 

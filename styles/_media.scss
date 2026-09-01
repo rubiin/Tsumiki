@@ -79,7 +79,7 @@
       }
 
       &:disabled {
-        opacity: 0.3;
+        opacity: variable.$opacity-disabled;
       }
     }
 
@@ -149,7 +149,7 @@
       }
 
       &:disabled {
-        opacity: 0.4;
+        opacity: variable.$opacity-disabled;
       }
     }
   }

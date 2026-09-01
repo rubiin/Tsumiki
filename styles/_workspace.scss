@@ -21,7 +21,7 @@ $workspace-transition:
 
   50% {
     background-color: color.adjust(theme.$accent-red, $alpha: -0.5);
-    opacity: 0.6;
+    opacity: variable.$opacity-subtle;
   }
 }
 

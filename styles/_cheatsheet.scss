@@ -75,7 +75,7 @@
       .cheatsheet-description {
         font-size: 0.86rem;
         color: theme.$text-main;
-        opacity: 0.9;
+        opacity: variable.$opacity-faint;
         min-width: 0;
       }
     }
@@ -84,7 +84,7 @@
       font-size: 0.86rem;
       color: theme.$text-secondary;
       margin-top: 4px;
-      opacity: 0.8;
+      opacity: variable.$opacity-faint;
     }
   }
 
@@ -115,7 +115,7 @@
       }
 
       &.disabled {
-        opacity: 0.3;
+        opacity: variable.$opacity-disabled;
       }
 
       .cheatsheet-nav-icon {

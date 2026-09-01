@@ -155,6 +155,6 @@ $launcher-transition:
     padding: 8px 10px;
     border-radius: variable.$radius-lg;
     background-color: color.mix(theme.$surface-neutral, transparent, 50%);
-    opacity: 0.85;
+    opacity: variable.$opacity-faint;
   }
 }
