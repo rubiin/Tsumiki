@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from fabric.utils import Gtk, cooldown, invoke_repeater, logger, time
+from fabric.utils import Gtk, bulk_connect, cooldown, invoke_repeater, logger, time
 from fabric.widgets.box import Box
 from fabric.widgets.grid import Grid
 from fabric.widgets.label import Label
@@ -372,8 +372,14 @@ class WeatherWidget(ButtonWidget, BaseWeatherWidget, PopoverMixin):
 
         self._weather_color = None
         self._hover_color = "#080808"
-        self.connect("enter-notify-event", self._on_hover_enter)
-        self.connect("leave-notify-event", self._on_hover_leave)
+
+        bulk_connect(
+            self,
+            {
+                "enter-notify-event": self._on_hover_enter,
+                "leave-notify-event": self._on_hover_leave,
+            },
+        )
 
         self._update_ui(forced=True)
 
