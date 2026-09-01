@@ -1,3 +1,5 @@
+import colorsys
+
 from services.battery import BatteryService
 from shared.widget_container import ButtonWidget
 from utils.functions import format_seconds_to_hours_minutes, send_notification
@@ -292,15 +294,27 @@ class BatteryWidget(ButtonWidget):
         if charging:
             return "#31f491"  # pastel green for charging
 
-        percent = max(0, min(percent, 100)) / 100.0
+        percent = max(0.0, min(percent, 100.0)) / 100.0
 
         # Pastel red (low %) to pastel green (high %)
-        red_start, green_start, blue_start = (252, 56, 56)  # pastel red
-        red_end, green_end, blue_end = (99, 252, 23)  # pastel green
+        r1, g1, b1 = (252, 56, 56)
+        r2, g2, b2 = (99, 252, 23)
 
-        # Linear interpolation
-        r = int(red_start + (red_end - red_start) * percent)
-        g = int(green_start + (green_end - green_start) * percent)
-        b = int(blue_start + (blue_end - blue_start) * percent)
+        # Convert to HLS via colorsys for perceptually smooth interpolation
+        h1, l1, s1 = colorsys.rgb_to_hls(r1 / 255, g1 / 255, b1 / 255)
+        h2, l2, s2 = colorsys.rgb_to_hls(r2 / 255, g2 / 255, b2 / 255)
 
-        return f"#{r:02x}{g:02x}{b:02x}"
+        # Interpolate hue via shortest arc on the colour wheel
+        dh = h2 - h1
+        if dh > 0.5:
+            h1 += 1.0
+        elif dh < -0.5:
+            h2 += 1.0
+        h = h1 + (h2 - h1) * percent
+        h %= 1.0
+        sat = s1 + (s2 - s1) * percent
+        lit = l1 + (l2 - l1) * percent
+
+        r, g, b = colorsys.hls_to_rgb(h, lit, sat)
+
+        return f"#{int(r * 255):02x}{int(g * 255):02x}{int(b * 255):02x}"
