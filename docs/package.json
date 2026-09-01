@@ -16,9 +16,9 @@
     "fmt:check": "oxfmt --check"
   },
   "dependencies": {
-    "@astrojs/starlight": "^0.41.9",
-    "astro": "^7.2.7",
-    "sharp": "^0.35.3"
+    "@astrojs/starlight": "^0.41.10",
+    "astro": "^7.2.10",
+    "sharp": "^0.35.4"
   },
   "devDependencies": {
     "oxfmt": "^0.65.0",

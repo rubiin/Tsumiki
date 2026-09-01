@@ -12,7 +12,7 @@
   min-width: 6px;
   min-height: 6px;
   background-color: color.mix(theme.$surface-disabled, transparent, 70%);
-  transition: all 150ms ease-in-out;
+  transition: background-color 150ms ease-in-out, min-width 150ms ease-in-out;
 
   &:hover {
     background-color: color.mix(theme.$surface-highlight, transparent, 40%);

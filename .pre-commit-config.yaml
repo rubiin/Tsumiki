@@ -8,15 +8,15 @@ repos:
       - id: check-case-conflict
       - id: check-symlinks
       - id: check-toml
+      - id: check-merge-conflict # Prevents unresolved merge conflicts
+      - id: check-executables-have-shebangs
       - id: debug-statements
+      - id: check-added-large-files # Warns on large files being committed
       - id: end-of-file-fixer # Ensures files end with a newline
       - id: trailing-whitespace # Removes trailing whitespace
       - id: mixed-line-ending # Converts mixed line endings to LF
         args: ["--fix=lf"] # Set line endings to LF (Unix-style)
-      - id: check-added-large-files # Warns on large files being committed
         args: ["--maxkb=500"] # Adjust the size limit as needed
-      - id: check-merge-conflict # Prevents unresolved merge conflicts
-      - id: check-executables-have-shebangs
       - id: requirements-txt-fixer
 
   # Ruff for linting, formatting, and import sorting
