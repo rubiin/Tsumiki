@@ -371,7 +371,7 @@ class WeatherWidget(ButtonWidget, BaseWeatherWidget, PopoverMixin):
         self.container_box.add(self.revealer)
 
         self._weather_color = None
-        self._hover_color = "#ffffff"
+        self._hover_color = "#080808"
         self.connect("enter-notify-event", self._on_hover_enter)
         self.connect("leave-notify-event", self._on_hover_leave)
 
