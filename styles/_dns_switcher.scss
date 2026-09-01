@@ -47,7 +47,7 @@
   #dns-scroll {
     padding: 4px 0;
     min-height: 100px;
-    background-color: rgba(theme.$background-alt, 0.5);
+    background-color: color.adjust(theme.$background-alt, $alpha: -0.5);
     border-radius: variable.$radius-lg;
   }
 
@@ -82,7 +82,7 @@
 
         .dns-provider-ip {
           font-size: variable.$font-size-sm;
-          color: rgba(theme.$background-dark, 0.7);
+          color: color.adjust(theme.$background-dark, $alpha: -0.3);
         }
       }
 
@@ -108,11 +108,11 @@
   #dns-add-btn {
     padding: 8px 14px;
     border-radius: variable.$radius-lg;
-    background-color: rgba(theme.$accent-blue, 0.15);
+    background-color: color.adjust(theme.$accent-blue, $alpha: -0.85);
     color: theme.$accent-blue;
 
     &:hover {
-      background-color: rgba(theme.$accent-blue, 0.25);
+      background-color: color.adjust(theme.$accent-blue, $alpha: -0.75);
     }
 
     &.dns-cancel-btn {
@@ -158,11 +158,11 @@
     margin-top: 4px;
     padding: 8px 14px;
     border-radius: variable.$radius-lg;
-    background-color: rgba(theme.$accent-red, 0.15);
+    background-color: color.adjust(theme.$accent-red, $alpha: -0.85);
     color: theme.$accent-red;
 
     &:hover {
-      background-color: rgba(theme.$accent-red, 0.25);
+      background-color: color.adjust(theme.$accent-red, $alpha: -0.75);
     }
 
     .dns-btn-icon {
