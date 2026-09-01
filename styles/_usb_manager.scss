@@ -76,7 +76,7 @@
     }
 
     .usb-manager-status-subtitle {
-      opacity: 0.75;
+      opacity: variable.$opacity-subtle;
     }
   }
 
@@ -98,7 +98,7 @@
 
     .usb-manager-device-meta {
       font-size: variable.$font-size-base;
-      opacity: 0.85;
+      opacity: variable.$opacity-faint;
     }
 
     .usb-manager-device-path {

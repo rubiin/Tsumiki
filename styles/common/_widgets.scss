@@ -503,7 +503,7 @@ $widget-shell-widgets: (
     variable.$modules-activate_linux-border-width
   );
 
-  opacity: 0.6;
+  opacity: variable.$opacity-subtle;
 
   &-box {
     margin: 0rem 5rem 6rem 0rem;

@@ -299,7 +299,7 @@ switch {
   }
 
   &:disabled {
-    opacity: 0.5;
+    opacity: variable.$opacity-muted;
   }
 }
 
