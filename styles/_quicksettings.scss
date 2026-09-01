@@ -79,7 +79,7 @@ $qs-active-fg: theme.$accent-purple;
         border: variable.$border-width solid color.mix(theme.$surface-disabled, white, 10%);
         padding: common.toEm(3) common.toEm(10);
         font-weight: 600;
-        border-radius: 1rem;
+        border-radius: variable.$radius-3xl;
       }
     }
 
@@ -282,8 +282,8 @@ $qs-active-fg: theme.$accent-purple;
       background-color: theme.$background-main;
       margin: common.toEm(2) 0;
       transition:
-        background-color 200ms ease,
-        color 200ms ease;
+        background-color variable.$duration-normal variable.$ease-standard,
+        color variable.$duration-normal variable.$ease-standard;
 
       &:hover {
         background-color: theme.$background-alt;
@@ -395,7 +395,7 @@ $qs-active-fg: theme.$accent-purple;
       border-radius: variable.$radius-large;
 
       background-color: transparent;
-      transition: background-color 200ms ease;
+      transition: background-color variable.$duration-normal variable.$ease-standard;
 
       &:hover {
         background-color: color.adjust(theme.$surface-neutral, $alpha: -0.7);

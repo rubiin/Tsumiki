@@ -135,7 +135,7 @@ grid {
 switch {
   min-width: 44px;
   min-height: 22px;
-  border-radius: 11px;
+  border-radius: variable.$radius-xl;
   background-color: theme.$surface-disabled;
   border: none;
 
@@ -146,7 +146,7 @@ switch {
   slider {
     min-width: 18px;
     min-height: 18px;
-    border-radius: 9px;
+    border-radius: variable.$radius-lg;
     background-color: theme.$text-main;
     margin: 2px;
   }

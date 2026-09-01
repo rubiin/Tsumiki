@@ -19,11 +19,11 @@
 }
 
 .leaf {
-  border-radius: 24px 10px;
+  border-radius: variable.$radius-6xl variable.$radius-lg;
 }
 
 .leaf-inverse {
-  border-radius: 10px 24px;
+  border-radius: variable.$radius-lg variable.$radius-6xl;
 }
 
 .default {

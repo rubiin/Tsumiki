@@ -20,6 +20,7 @@ $font-size-5xl: 22px;
 $radius-large: 9999px;
 
 // ── Border radius scale ────────────────────────────────────────
+$radius-2xs: 2px;
 $radius-xs: 4px;
 $radius-sm: 6px;
 $radius-md: 8px;
@@ -29,6 +30,7 @@ $radius-2xl: 14px;
 $radius-3xl: 16px;
 $radius-4xl: 18px;
 $radius-5xl: 20px;
+$radius-6xl: 24px;
 
 $radius: settings.$border-radius;
 
@@ -37,6 +39,14 @@ $border-color: theme.$surface-disabled;
 $border: settings.$border-width solid $border-color;
 
 $popover-border-color: color.mix($border-color, transparent, 60%);
+
+// ── Transition timing ────────────────────────────────────────
+$duration-fast: 75ms;
+$duration-normal: 200ms;
+$duration-slow: 300ms;
+
+$ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+$ease-decelerate: cubic-bezier(0, 0, 0.2, 1);
 
 // Slider length presets
 $slider-long: 320px;

@@ -15,7 +15,7 @@
 
 #git-companion-window {
   padding: 14px;
-  border-radius: 26px;
+  border-radius: variable.$radius-6xl;
   color: theme.$text-main;
   min-height: 630px;
   min-width: 420px;
@@ -130,7 +130,7 @@
     border: 1px solid theme.$surface-disabled;
     color: theme.$text-main;
     min-height: 44px;
-    transition: background-color 120ms ease-in-out;
+    transition: background-color variable.$duration-fast variable.$ease-standard;
 
     &:hover {
       background-color: theme.$surface-highlight;

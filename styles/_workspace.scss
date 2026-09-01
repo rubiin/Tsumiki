@@ -4,9 +4,9 @@
 @use "sass:color";
 
 $workspace-transition:
-  padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-  background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-  border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  padding variable.$duration-slow variable.$ease-standard,
+  background-color variable.$duration-slow variable.$ease-standard,
+  border-color variable.$duration-slow variable.$ease-standard;
 
 @keyframes urgentPulse {
   0% {
@@ -106,7 +106,7 @@ $workspace-transition:
       &:hover {
         padding-left: 20px;
         padding-right: 20px;
-        border-radius: 40px;
+        border-radius: variable.$radius-large;
 
         label {
           color: theme.$background-dark;

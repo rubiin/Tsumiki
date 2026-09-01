@@ -4,19 +4,19 @@ repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0 # Use the latest stable version
     hooks:
-      - id: fix-byte-order-marker
       - id: check-case-conflict
       - id: check-symlinks
       - id: check-toml
       - id: check-merge-conflict # Prevents unresolved merge conflicts
+      - id: check-added-large-files # Warns on large files being committed
+        args: ["--maxkb=500"] # Adjust the size limit as needed
       - id: check-executables-have-shebangs
       - id: debug-statements
-      - id: check-added-large-files # Warns on large files being committed
       - id: end-of-file-fixer # Ensures files end with a newline
+      - id: fix-byte-order-marker
       - id: trailing-whitespace # Removes trailing whitespace
       - id: mixed-line-ending # Converts mixed line endings to LF
         args: ["--fix=lf"] # Set line endings to LF (Unix-style)
-        args: ["--maxkb=500"] # Adjust the size limit as needed
       - id: requirements-txt-fixer
 
   # Ruff for linting, formatting, and import sorting

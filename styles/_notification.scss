@@ -13,7 +13,7 @@ $hover-transition: background 0.15s ease-in-out;
   opacity: variable.$modules-notification-opacity * 0.01;
   color: theme.$text-main;
   background-color: theme.$background-alt;
-  transition: border 100ms ease-in-out;
+  transition: border variable.$duration-fast variable.$ease-standard;
 
   @include common.widget-border(
     variable.$modules-notification-border-radius,
@@ -112,7 +112,7 @@ $hover-transition: background 0.15s ease-in-out;
       padding: common.toEm(4);
       margin: 0;
       font-weight: 600;
-      border-radius: 3rem;
+      border-radius: variable.$radius-large;
       box-shadow: none;
       background-color: transparent;
       transition: $hover-transition;

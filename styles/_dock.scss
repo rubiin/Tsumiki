@@ -7,9 +7,9 @@
   padding: variable.$modules-dock-padding_y variable.$modules-dock-padding_x;
   margin: variable.$modules-dock-margin_y variable.$modules-dock-margin_x;
   transition:
-    background-color 0.25s cubic-bezier(0.5, 0.25, 0, 1),
-    border-radius 0.25s cubic-bezier(0.5, 0.25, 0, 1),
-    border-color 0.25s cubic-bezier(0.5, 0.25, 0, 1);
+    background-color variable.$duration-normal variable.$ease-standard,
+    border-radius variable.$duration-normal variable.$ease-standard,
+    border-color variable.$duration-normal variable.$ease-standard;
 
   @include common.widget-border(
     variable.$modules-dock-border-radius,

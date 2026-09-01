@@ -20,7 +20,7 @@
 
     #overview-window {
       background-color: color.mix(theme.$general-shadow-color, transparent, 90%);
-      border-radius: 50px;
+      border-radius: variable.$radius-large;
       padding: common.toEm(10);
     }
 
@@ -38,7 +38,7 @@
         margin: common.toEm(5);
         background-color: theme.$general-shadow-color;
         border-color: theme.$surface-disabled;
-        border-radius: 15px;
+        border-radius: variable.$radius-3xl;
         border-width: 2px;
         border-style: solid;
         padding: common.toEm(5);

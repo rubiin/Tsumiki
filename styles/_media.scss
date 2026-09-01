@@ -12,7 +12,9 @@
   min-width: 6px;
   min-height: 6px;
   background-color: color.mix(theme.$surface-disabled, transparent, 70%);
-  transition: background-color 150ms ease-in-out, min-width 150ms ease-in-out;
+  transition:
+    background-color variable.$duration-fast variable.$ease-standard,
+    min-width variable.$duration-fast variable.$ease-standard;
 
   &:hover {
     background-color: color.mix(theme.$surface-highlight, transparent, 40%);
@@ -45,11 +47,11 @@
   min-width: 3px;
   min-height: 22px;
   margin-left: 5px;
-  border-radius: 2px;
+  border-radius: variable.$radius-2xs;
 }
 
 #player-box {
-  border-radius: 15px;
+  border-radius: variable.$radius-3xl;
   padding: 20px;
   background-color: color.mix(theme.$general-shadow-color, transparent, 40%);
   background-blend-mode: multiply;
@@ -131,7 +133,7 @@
       margin-top: 0;
       padding: 0;
       border-radius: variable.$radius-3xl;
-      transition: border-radius 0.25s cubic-bezier(0.5, 0.25, 0, 1);
+      transition: border-radius variable.$duration-normal variable.$ease-standard;
 
       .player-icon-lg {
         font-size: variable.$font-size-2xl;

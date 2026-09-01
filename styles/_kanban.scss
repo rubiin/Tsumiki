@@ -41,11 +41,13 @@
 
     #kanban-row {
       &:first-child > * > * {
-        border-radius: 16px 16px 4px 4px;
+        border-radius: variable.$radius-3xl variable.$radius-3xl variable.$radius-xs
+          variable.$radius-xs;
       }
 
       &:last-child > * > * {
-        border-radius: 4px 4px 16px 16px;
+        border-radius: variable.$radius-xs variable.$radius-xs variable.$radius-3xl
+          variable.$radius-3xl;
       }
     }
 

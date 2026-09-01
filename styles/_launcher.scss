@@ -4,8 +4,8 @@
 @use "common";
 
 $launcher-transition:
-  background-color 150ms ease-in-out,
-  color 150ms ease-in-out;
+  background-color variable.$duration-fast variable.$ease-standard,
+  color variable.$duration-fast variable.$ease-standard;
 
 .launcher-button {
   border-radius: variable.$radius-lg;
@@ -40,7 +40,7 @@ $launcher-transition:
     label {
       font-size: 0.75em;
       color: theme.$text-muted;
-      transition: color 150ms ease-in-out;
+      transition: color variable.$duration-fast variable.$ease-standard;
     }
   }
 
@@ -73,8 +73,8 @@ $launcher-transition:
     margin-bottom: 10px;
     padding: 10px 0;
     transition:
-      border-color 150ms ease-in-out,
-      background-color 150ms ease-in-out;
+      border-color variable.$duration-fast variable.$ease-standard,
+      background-color variable.$duration-fast variable.$ease-standard;
     caret-color: theme.$accent-purple;
 
     &:focus {
@@ -102,7 +102,7 @@ $launcher-transition:
   }
 
   &-contents {
-    border-radius: 15px;
+    border-radius: variable.$radius-3xl;
     border: variable.$border;
     background-color: theme.$background-alt;
     padding: 10px;
