@@ -33,8 +33,7 @@
   }
 
   .countdown-label {
-    font-size: 32px;
-    font-weight: bold;
+    @extend %large_title;
     color: theme.$accent-blue;
   }
 
