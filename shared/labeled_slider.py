@@ -261,7 +261,6 @@ class LabeledSlider(Gtk.DrawingArea, BaseWidget, TeardownMixin):
     @staticmethod
     def _apply_color(cr, sc, css_class, default="#888888"):
         """Try to read a color from the style context; fall back to *default*."""
-        nodes = sc.list_classes()
         # GTK3 doesn't expose per-class colors easily via DrawingArea.
         # We use the base foreground color and rely on SCSS classes for overrides.
         rgba = sc.get_color(Gtk.StateFlags.NORMAL)
