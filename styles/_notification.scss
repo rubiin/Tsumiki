@@ -87,6 +87,8 @@ $hover-transition: background 0.15s ease-in-out;
   }
 
   .close-button {
+    min-width: 32px;
+    min-height: 32px;
     border-radius: variable.$radius-large;
 
     .close-icon {
