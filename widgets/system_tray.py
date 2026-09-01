@@ -271,9 +271,12 @@ class SystemTrayWidget(ButtonWidget, PopoverMixin, BaseSystemTray):
         return
 
     def on_item_added(self, _, item_identifier: str):
+
         item = self._watcher.items.get(item_identifier)
-        if not item:
+        if not item or item.id is None:
             return
+
+        logger.info(f"[SystemTray] Item added: {item_identifier}")
 
         # Get item title for matching
         title = item.get_property("title") or ""
