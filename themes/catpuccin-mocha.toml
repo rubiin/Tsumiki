@@ -17,6 +17,7 @@ muted-dark = "#9399b2" # Dark-muted text
 disabled = "#313244" # Background for disabled items
 neutral = "#45475a" # Neutral surface for cards, panels
 highlight = "#585b70" # Selection and highlights
+popover-border-color = "rgba(29, 30, 40, 0.6)" # Popover borders
 
 
 [dark.accent]
@@ -57,6 +58,7 @@ muted-dark = "#6c664d" # Dark-muted text
 disabled = "#cecdbb" # Background for disabled items
 neutral = "#bab8a5" # Neutral surface for cards, panels
 highlight = "#a7a48f" # Selection and highlights
+popover-border-color = "rgba(123, 123, 112, 0.6)" # Popover borders
 
 
 [light.accent]

@@ -32,6 +32,7 @@ $text-disabled: $outline_variant; // Disabled text
 $surface-disabled: $surface_container_high; // Disabled element backgrounds
 $surface-neutral: $surface_container_highest; // Cards, panels, inputs
 $surface-highlight: $surface_bright; // Hover states, selections
+$surface-popover-border-color: color.mix($surface_container_high, transparent, 60%); // Popover borders
 
 /* ---------------------------- */
 /* Accent Colors                */

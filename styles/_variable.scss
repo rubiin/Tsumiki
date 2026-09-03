@@ -38,7 +38,7 @@ $border-color: theme.$surface-disabled;
 
 $border: settings.$border-width solid $border-color;
 
-$popover-border-color: color.mix($border-color, transparent, 60%);
+$popover-border-color: theme.$surface-popover-border-color;
 
 // ── Transition timing ────────────────────────────────────────
 $duration-fast: 75ms;
