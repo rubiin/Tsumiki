@@ -111,9 +111,9 @@ auto_refresh = true
 [widgets.system_tray]
 icon_size = 16
 
-[widgets.git_companion]
+[widgets.github_tray]
 username = "rubiin"
-repository = "rubiin/tsumiki"
+max_repos = 10
 
 [widgets.weather]
 location = "kathmandu"

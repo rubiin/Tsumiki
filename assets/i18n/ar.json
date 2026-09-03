@@ -88,8 +88,8 @@
       "label": "رمز تعبيري",
       "loading": "جاري تحميل الرموز التعبيرية..."
     },
-    "git_companion": {
-      "label": "رفيق Git",
+    "github_tray": {
+      "label": "تراي GitHub",
       "no_bio": "لا نبذة"
     },
     "hyprpicker": {

@@ -163,9 +163,9 @@ icon = "󱞁"
 [widgets.pomodoro]
 icon = "🍅"
 
-[widgets.git_companion]
+[widgets.github_tray]
 username = "rubiin"
-repository = "rubiin/tsumiki"
+max_repos = 10
 
 [widgets.cloudflare_warp]
 label_text = "WARP"

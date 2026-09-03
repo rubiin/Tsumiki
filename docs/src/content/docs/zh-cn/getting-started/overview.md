@@ -36,7 +36,7 @@ Tsumiki（原名 Hydepanel）是 [Hyprland](https://hyprland.org) Wayland 合成
 - **桌面管理** — 工作区、窗口标题、任务栏
 - **实用工具** — 截图、OCR、剪贴板、屏幕录制
 - **生产力** — 番茄钟、看板、秒表、表情选择器
-- **集成** — 天气、媒体控制、Git 助手、DNS 切换器
+- **集成** — 天气、媒体控制、GitHub Tray、DNS 切换器
 
 每个组件在 `config.toml` 的 `[widgets.<名称>]` 下配置。有关完整列表，请参阅[组件参考](/zh-cn/features/widgets)。
 

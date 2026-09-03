@@ -88,8 +88,8 @@
       "label": "Emoji",
       "loading": "Loading emojis..."
     },
-    "git_companion": {
-      "label": "Git Companion",
+    "github_tray": {
+      "label": "GitHub Tray",
       "no_bio": "No bio"
     },
     "hyprpicker": {

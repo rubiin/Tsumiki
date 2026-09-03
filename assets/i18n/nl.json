@@ -78,7 +78,7 @@
       "reset": "Terug naar standaard (ISP)"
     },
     "emoji_picker": { "tooltip": "Emoji selectie", "label": "Emoji", "loading": "Emojis laden..." },
-    "git_companion": { "label": "Git Gezel", "no_bio": "Geen bio" },
+    "github_tray": { "label": "GitHub Tray", "no_bio": "Geen bio" },
     "hyprpicker": {
       "label": "selectie",
       "tooltip": "Kleur selecteren",

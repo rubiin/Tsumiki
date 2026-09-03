@@ -43,9 +43,9 @@ exec_shell_command_async("nvtop -s", callback=self._on_gpu_stats_received)
 
 **Fix**: Use `exec_shell_command_async()` with a callback. Cache the last result and only update UI on actual changes.
 
-### 52. Git Companion GitHub API Calls Block Main Thread
+### 52. GitHub Tray API Calls Block Main Thread
 
-**Files**: `widgets/git_companion.py` (line 82)
+**Files**: `widgets/github_tray.py` (line 82)
 **Effort**: Small | **Impact**: Medium
 
 `_run_gh_command()` calls `exec_shell_command(cmd_str)` synchronously. GitHub CLI commands (`gh`) can take 1-5 seconds depending on network latency. This blocks the entire GTK main loop during API calls.
@@ -241,7 +241,7 @@ These add import overhead at module load time even when the features are never u
 
 1. **Stats GPU polling** (#50) — Move `nvtop -s` to async, 10 min fix
 2. **USB Manager lsblk** (#51) — Move `lsblk` to async, 10 min fix
-3. **Git Companion GitHub API** (#52) — Move `gh` to async, 15 min fix
+3. **GitHub Tray API** (#52) — Move `gh` to async, 15 min fix
 
 **Top 3 Architectural Improvements (High Impact, Medium Effort):**
 

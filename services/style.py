@@ -289,6 +289,22 @@ class StyleService(SingletonService):
     def _apply_css_to_app(file):
         """Load the compiled CSS file into the running application."""
         try:
+            if file:
+                # Belt-and-braces: GTK3's CSS provider rejects ``@charset``
+                # (``unknown @ rule``), and fabric feeds the file through
+                # ``load_from_data``. The compiler is asked for ``--no-charset``,
+                # but strip any stragglers so a stale file can never fail the
+                # whole stylesheet load.
+                with open(file, encoding="utf-8") as handle:
+                    content = handle.read()
+                stripped = "\n".join(
+                    line
+                    for line in content.splitlines()
+                    if not line.lstrip().startswith("@charset")
+                )
+                if stripped != content:
+                    with open(file, "w", encoding="utf-8") as handle:
+                        handle.write(stripped)
             app = Application.get_default()
             if app:
                 app.set_stylesheet_from_file(file)
@@ -307,8 +323,13 @@ class StyleService(SingletonService):
 
         try:
             logger.info(f"{Colors.INFO}[Theme] Recompiling CSS")
+            # ``--no-charset``: dart-sass emits ``@charset "UTF-8";`` when the
+            # compiled CSS contains non-ASCII bytes, and GTK3's CSS provider
+            # rejects that at-rule (``unknown @ rule``), failing the whole
+            # stylesheet. Unicode inside values/comments is still fine — we
+            # just skip the declaration.
             output = exec_shell_command(
-                f"sass styles/main.scss {CSS_PATH} --no-source-map"
+                f"sass styles/main.scss {CSS_PATH} --no-source-map --no-charset"
             )
 
             if output == "":

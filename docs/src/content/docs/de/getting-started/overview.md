@@ -36,7 +36,7 @@ Widgets sind die einzelnen Bausteine, die in der Leiste erscheinen. Es gibt übe
 - **Desktop-Verwaltung** — Arbeitsbereiche, Fenstertitel, Taskleiste
 - **Dienstprogramme** — Screenshot, OCR, Zwischenablage, Bildschirmaufnahme
 - **Produktivität** — Pomodoro-Timer, Kanban-Board, Stoppuhr, Emoji-Auswahl
-- **Integration** — Wetter, Mediensteuerung, Git-Companion, DNS-Umschalter
+- **Integration** — Wetter, Mediensteuerung, GitHub Tray, DNS-Umschalter
 
 Jedes Widget wird unter `[widgets.<name>]` in `config.toml` konfiguriert. Siehe die [Widgets-Referenz](/de/features/widgets) für die vollständige Liste.
 

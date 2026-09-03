@@ -82,7 +82,7 @@
       "label": "Emoji",
       "loading": "Emoji yukleniyor..."
     },
-    "git_companion": { "label": "Git Yoldasi", "no_bio": "Biyografi yok" },
+    "github_tray": { "label": "GitHub Tepsisi", "no_bio": "Biyografi yok" },
     "hyprpicker": {
       "label": "secici",
       "tooltip": "Renk secin",

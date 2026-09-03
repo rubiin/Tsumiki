@@ -802,17 +802,27 @@ Pomodoro = TypedDict(
 )
 
 
-GitCompanion = TypedDict(
-    "GitCompanion",
+GitHubTray = TypedDict(
+    "GitHubTray",
     {
         **BaseConfig.__annotations__,
         "label_text": str,
         "icon": str,
         "username": str,
-        "repository": str,
+        "hostname": str,
         "avatar_size": int,
         "default_tab": str,
+        "max_repos": int,
+        "sort_by": str,
+        "sort_order": str,
         "cache_ttl": int,
+        "notification_interval": int,
+        "workflow_runs_max": int,
+        "show_notifications": bool,
+        "notify_reasons": dict,
+        "alerts": dict,
+        "local_editor": str,
+        "local_projects": dict,
     },
 )
 
@@ -884,7 +894,7 @@ class Widgets(TypedDict):
     system_tray: SystemTray
     submap: Submap
     taskbar: TaskBar
-    git_companion: GitCompanion
+    github_tray: GitHubTray
     theme: Theme
     theme_switcher: ThemeSwitcher
     usb_manager: USBManager

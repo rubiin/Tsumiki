@@ -82,7 +82,7 @@
       "label": "絵文字",
       "loading": "絵文字を読み込み中..."
     },
-    "git_companion": { "label": "Git コンパニオン", "no_bio": "自己紹介なし" },
+    "github_tray": { "label": "GitHub トレイ", "no_bio": "自己紹介なし" },
     "hyprpicker": {
       "label": "ピッカー",
       "tooltip": "色を選びます",

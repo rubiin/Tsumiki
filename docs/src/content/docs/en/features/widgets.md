@@ -736,21 +736,61 @@ label_text = "Pomo"
 tooltip = true
 ```
 
-### Git Companion
+### GitHub Tray
 
-Displays GitHub repository information (issues, PRs).
+Account-wide GitHub tray: unread notifications, repositories, and per-repository
+issues, pull requests and Actions runs — plus desktop alerts for new stars,
+followers and workflow results.
+
+Every API call goes through the `gh` CLI, so install and authenticate it first:
+
+```bash
+gh auth login
+```
 
 ```toml
-[widgets.git_companion]
+[widgets.github_tray]
 icon = ""
 label = false
-label_text = "Git"
+label_text = "GitHub"
 tooltip = true
-username = "rubiin"
-repository = "rubiin/tsumiki"
+# Optional login used as a fallback while the gh session user is resolved.
+username = ""
+# GitHub Enterprise Server host (must be added to gh), empty = github.com
+hostname = ""
 avatar_size = 44
-default_tab = "issues"      # "issues" | "pull_requests"
-cache_ttl = 300
+default_tab = "inbox"       # "inbox" | "repos"
+max_repos = 10
+sort_by = "updated"        # "updated" | "pushed" | "created" | "stars" | "name"
+sort_order = "desc"
+# Seconds profile and repository data stay cached before a refetch (0 disables).
+cache_ttl = 3600
+notification_interval = 60 # seconds between unread refreshes
+workflow_runs_max = 10
+show_notifications = true
+# Editor used to open locally-mapped repositories.
+local_editor = "code"
+# Map owner/repository to a local folder to open it in your editor from the tray.
+local_projects = { "owner/repository" = "~/code/repository" }
+
+[widgets.github_tray.notify_reasons]
+review_requests = true
+mentions = true
+assignments = true
+pr_comments = true
+issue_comments = true
+
+[widgets.github_tray.alerts]
+enabled = true
+new_stars = true
+new_forks = true
+new_issues = true
+new_followers = true
+new_notifications = true
+workflow_started = true
+workflow_success = true
+workflow_failure = true
+workflow_cancelled = true
 ```
 
 ### Cloudflare WARP

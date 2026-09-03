@@ -706,13 +706,13 @@ tooltip = true
 Muestra información del repositorio de GitHub (issues, PRs).
 
 ```toml
-[widgets.git_companion]
+[widgets.github_tray]
 icon = ""
 label = false
 label_text = "Git"
 tooltip = true
 username = "rubiin"
-repository = "rubiin/tsumiki"
+max_repos = 10
 avatar_size = 44
 default_tab = "issues"      # "issues" | "pull_requests"
 cache_ttl = 300

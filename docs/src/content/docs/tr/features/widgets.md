@@ -71,6 +71,14 @@ bars = 10
 color = "#89b4fa"
 ```
 
+## Entegrasyon
+
+```toml
+[widgets.github_tray]
+username = "rubiin"
+max_repos = 10
+```
+
 ## Gruplar
 
 ```toml

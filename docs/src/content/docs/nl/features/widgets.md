@@ -91,7 +91,7 @@ show_images = true
 [widgets.system_tray]
 icon_size = 16
 
-[widgets.git_companion]
+[widgets.github_tray]
 username = "rubiin"
 
 [widgets.weather]

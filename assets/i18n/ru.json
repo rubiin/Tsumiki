@@ -82,7 +82,7 @@
       "label": "Эмодзи",
       "loading": "Загрузка эмодзи..."
     },
-    "git_companion": { "label": "Git компаньон", "no_bio": "Нет биографии" },
+    "github_tray": { "label": "GitHub-трей", "no_bio": "Нет биографии" },
     "hyprpicker": {
       "label": "Выбор",
       "tooltip": "Выбрать цвет",

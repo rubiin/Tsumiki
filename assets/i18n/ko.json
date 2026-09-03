@@ -82,7 +82,7 @@
       "label": "이모지",
       "loading": "이모지 로딩 중..."
     },
-    "git_companion": { "label": "Git 동반자", "no_bio": "자기소개 없음" },
+    "github_tray": { "label": "GitHub 트레이", "no_bio": "자기소개 없음" },
     "hyprpicker": {
       "label": "선택기",
       "tooltip": "색상 선택",

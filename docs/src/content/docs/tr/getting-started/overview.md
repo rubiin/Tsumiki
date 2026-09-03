@@ -36,7 +36,7 @@ Widget'lar çubukta görünen bireysel yapı taşlarıdır. 45'in üzerinde yerl
 - **Masaüstü yönetimi** — Çalışma alanları, pencere başlığı, görev çubuğu
 - **Araçlar** — Ekran görüntüsü, OCR, pano, ekran kaydı
 - **Verimlilik** — Pomodoro zamanlayıcı, Kanban paneli, kronometre, emoji seçici
-- **Entegrasyon** — Hava durumu, medya kontrolleri, Git arkadaşı, DNS değiştirici
+- **Entegrasyon** — Hava durumu, medya kontrolleri, GitHub Tray, DNS değiştirici
 
 Her widget `config.toml` dosyasında `[widgets.<ad>]` altında yapılandırılır. Tam liste için [Widget'lar Referansı](/tr/features/widgets) bölümüne bakın.
 

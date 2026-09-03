@@ -5,16 +5,49 @@ icon = "view-app-grid-symbolic"
 icon_size = 20
 tooltip = true
 
-[widgets.git_companion]
+[widgets.github_tray]
 icon = ""
 label = false
-label_text = "Git"
+label_text = "GitHub"
 tooltip = true
-username = "rubiin"
-repository = "rubiin/tsumiki"
+# Optional login shown while the gh session user is resolved.
+username = ""
+# GitHub Enterprise Server host, leave empty for github.com.
+# The host must be added to gh first (`gh auth login --hostname ...`).
+hostname = ""
 avatar_size = 44
-default_tab = "issues"
-cache_ttl = 300
+default_tab = "inbox"
+max_repos = 10
+sort_by = "updated"
+sort_order = "desc"
+# Seconds profile and repository data stay cached before a refetch (0 disables caching).
+cache_ttl = 3600
+notification_interval = 60
+workflow_runs_max = 10
+show_notifications = true
+# Editor used to open locally-mapped repositories.
+local_editor = "code"
+# Map owner/repository to an absolute local path (opened in the editor).
+local_projects = { "rubiin/tsumiki" = "~/code/tsumiki" }
+
+[widgets.github_tray.notify_reasons]
+review_requests = true
+mentions = true
+assignments = true
+pr_comments = true
+issue_comments = true
+
+[widgets.github_tray.alerts]
+enabled = true
+new_stars = true
+new_forks = true
+new_issues = true
+new_followers = true
+new_notifications = true
+workflow_started = true
+workflow_success = true
+workflow_failure = true
+workflow_cancelled = true
 
 [widgets.ip_monitor]
 icon = "󰖟"
@@ -645,7 +678,7 @@ layer = "bottom"
 
 [layout]
 left_section = ["@group:workspaces-group"]
-middle_section = ["date_time", "weather", "mpris","launcher_button"]
+middle_section = ["date_time", "weather", "mpris","github_tray"]
 right_section = ["@group:sys-group", "@group:utils-group", "system_tray", "power"]
 
 [general]
@@ -834,11 +867,11 @@ enabled = false
 radius = "16px"
 width = "1px"
 
-[styling.bar.widgets.git_companion]
+[styling.bar.widgets.github_tray]
 icon_size = "12px"
 spacing = "0.125em"
 
-[styling.bar.widgets.git_companion.border]
+[styling.bar.widgets.github_tray.border]
 enabled = false
 radius = "16px"
 width = "1px"

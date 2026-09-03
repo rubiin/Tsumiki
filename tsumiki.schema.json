@@ -84,13 +84,13 @@
             }
           }
         },
-        "git_companion": {
+        "github_tray": {
           "type": "object",
           "properties": {
             "tooltip": {
               "type": "boolean",
               "default": true,
-              "description": "Determines whether the Git Companion widget has a tooltip."
+              "description": "Determines whether the GitHub Tray widget has a tooltip."
             },
             "label": {
               "type": "boolean",
@@ -99,28 +99,23 @@
             },
             "label_text": {
               "type": "string",
-              "default": "Git",
-              "description": "Label displayed in the Git Companion widget."
+              "default": "GitHub",
+              "description": "Label displayed in the GitHub Tray widget."
             },
             "icon": {
               "type": "string",
               "default": "",
-              "description": "Icon displayed in the Git Companion widget."
+              "description": "Icon displayed in the GitHub Tray widget."
             },
             "username": {
               "type": "string",
-              "default": "Thomas-Philippot",
-              "description": "GitHub username used for the profile card."
+              "default": "",
+              "description": "Optional login shown when the gh session user cannot be resolved."
             },
-            "repository": {
-              "type": "string",
-              "default": "Thomas-Philippot/removarr-with-angular",
-              "description": "Repository used for open issues and pull requests."
-            },
-            "token": {
+            "hostname": {
               "type": "string",
               "default": "",
-              "description": "Optional GitHub token for authenticated API requests."
+              "description": "GitHub Enterprise Server host (e.g. github.example.com). Empty uses github.com."
             },
             "avatar_size": {
               "type": "integer",
@@ -129,14 +124,92 @@
             },
             "default_tab": {
               "type": "string",
-              "enum": ["issues", "pull_requests"],
-              "default": "issues",
-              "description": "Tab shown first when popup opens."
+              "enum": ["inbox", "repos"],
+              "default": "inbox",
+              "description": "Tab shown first when the popup opens."
+            },
+            "max_repos": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 50,
+              "default": 10,
+              "description": "Maximum number of repositories shown."
+            },
+            "sort_by": {
+              "type": "string",
+              "enum": ["updated", "pushed", "created", "stars", "name"],
+              "default": "updated",
+              "description": "Sort key for the repositories tab."
+            },
+            "sort_order": {
+              "type": "string",
+              "enum": ["desc", "asc"],
+              "default": "desc",
+              "description": "Sort direction for the repositories tab."
+            },
+            "notification_interval": {
+              "type": "integer",
+              "minimum": 30,
+              "maximum": 600,
+              "default": 60,
+              "description": "Seconds between unread-notification refreshes."
             },
             "cache_ttl": {
               "type": "integer",
-              "default": 300,
-              "description": "Cache time-to-live in seconds before refetching GitHub data."
+              "minimum": 0,
+              "maximum": 86400,
+              "default": 3600,
+              "description": "Seconds profile and repository data are cached before a refetch. 0 disables caching."
+            },
+            "workflow_runs_max": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 50,
+              "default": 10,
+              "description": "Maximum workflow runs shown per repository."
+            },
+            "show_notifications": {
+              "type": "boolean",
+              "default": true,
+              "description": "Show the inbox tab and unread badge."
+            },
+            "notify_reasons": {
+              "type": "object",
+              "description": "Which notification reasons are included in the inbox.",
+              "properties": {
+                "review_requests": { "type": "boolean", "default": true },
+                "mentions": { "type": "boolean", "default": true },
+                "assignments": { "type": "boolean", "default": true },
+                "pr_comments": { "type": "boolean", "default": true },
+                "issue_comments": { "type": "boolean", "default": true }
+              }
+            },
+            "alerts": {
+              "type": "object",
+              "description": "Desktop alerts fired from state changes.",
+              "properties": {
+                "enabled": { "type": "boolean", "default": true },
+                "new_stars": { "type": "boolean", "default": true },
+                "new_forks": { "type": "boolean", "default": true },
+                "new_issues": { "type": "boolean", "default": true },
+                "new_followers": { "type": "boolean", "default": true },
+                "new_notifications": { "type": "boolean", "default": true },
+                "workflow_started": { "type": "boolean", "default": true },
+                "workflow_success": { "type": "boolean", "default": true },
+                "workflow_failure": { "type": "boolean", "default": true },
+                "workflow_cancelled": { "type": "boolean", "default": true }
+              }
+            },
+            "local_editor": {
+              "type": "string",
+              "default": "code",
+              "description": "Editor command used to open mapped repositories."
+            },
+            "local_projects": {
+              "type": "object",
+              "additionalProperties": { "type": "string" },
+              "description": "Map of owner/repository to a local absolute path.",
+              "default": {}
             }
           }
         },
@@ -2162,7 +2235,7 @@
                 "type": "string",
                 "enum": [
                   "launcher_button",
-                  "git_companion",
+                  "github_tray",
                   "ip_monitor",
                   "battery",
                   "bluetooth",
@@ -2255,7 +2328,7 @@
                 "type": "string",
                 "enum": [
                   "launcher_button",
-                  "git_companion",
+                  "github_tray",
                   "ip_monitor",
                   "battery",
                   "bluetooth",
@@ -2348,7 +2421,7 @@
                 "type": "string",
                 "enum": [
                   "launcher_button",
-                  "git_companion",
+                  "github_tray",
                   "ip_monitor",
                   "battery",
                   "bluetooth",
@@ -2449,7 +2522,7 @@
                   "type": "string",
                   "enum": [
                     "launcher_button",
-                    "git_companion",
+                    "github_tray",
                     "ip_monitor",
                     "battery",
                     "bluetooth",

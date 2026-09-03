@@ -36,7 +36,7 @@ Widgets are the individual building blocks that appear in the bar. There are 45+
 - **Desktop management** — Workspaces, window title, taskbar
 - **Utilities** — Screenshot, OCR, clipboard, screen recording
 - **Productivity** — Pomodoro timer, Kanban board, stopwatch, emoji picker
-- **Integration** — Weather, media controls, Git companion, DNS switcher
+- **Integration** — Weather, media controls, GitHub Tray, DNS switcher
 
 Each widget is configured under `[widgets.<name>]` in `config.toml`. See the [Widgets Reference](/en/features/widgets) for the complete list.
 

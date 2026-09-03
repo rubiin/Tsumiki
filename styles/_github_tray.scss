@@ -1,0 +1,432 @@
+@use "sass:color";
+@use "theme";
+@use "common";
+@use "variable";
+
+#github_tray {
+  @include common.widget_border(
+    variable.$bar-widgets-github_tray-border-radius,
+    variable.$bar-widgets-github_tray-border-enabled,
+    variable.$bar-widgets-github_tray-border-width
+  );
+
+  @include common.nerd-icon(variable.$bar-widgets-github_tray-icon_size, null);
+}
+
+/* Popover shell */
+#github-tray-window {
+  padding: 14px;
+  border-radius: variable.$radius-6xl;
+  color: theme.$text-main;
+  min-height: 480px;
+  min-width: 360px;
+}
+
+#github-tray-scroller {
+  padding-right: 2px;
+}
+
+#github-tray-items {
+  padding-top: 2px;
+}
+
+/* Bar button unread badge */
+#github-tray-badge {
+  min-width: 18px;
+  min-height: 18px;
+  border-radius: 9px;
+  padding: 0 4px;
+  background-color: rgba(246, 120, 143, 0.95);
+  border: 1px solid color.adjust(rgba(0, 0, 0, 0.6), $lightness: 18%);
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+/* Shared text */
+.github-tray-text {
+  color: theme.$text-main;
+}
+
+/* Hero row */
+#github-tray-hero {
+  padding: 2px 0 4px;
+}
+
+#github-tray-avatar-box {
+  min-width: 44px;
+  min-height: 44px;
+  border-radius: variable.$radius-large;
+  background-color: theme.$background-alt;
+  border: 2px solid theme.$accent-blue;
+}
+
+#github-tray-avatar {
+  border-radius: variable.$radius-large;
+}
+
+#github-tray-avatar-fallback {
+  min-width: 44px;
+  min-height: 44px;
+  background-color: theme.$background-alt;
+}
+
+.github-tray-avatar-fallback-icon {
+  color: theme.$accent-blue;
+  font-size: variable.$font-size-3xl;
+}
+
+.github-tray-name {
+  color: theme.$text-main;
+  font-size: variable.$font-size-xl;
+  font-weight: 700;
+}
+
+.github-tray-chip {
+  padding: 2px 6px;
+  border-radius: variable.$radius-lg;
+  background-color: theme.$background-alt;
+  border: 1px solid theme.$surface-disabled;
+}
+
+.github-tray-chip-icon {
+  color: theme.$text-disabled;
+  font-size: variable.$font-size-sm;
+}
+
+.github-tray-chip-value {
+  color: theme.$text-main;
+  font-size: variable.$font-size-sm;
+  font-weight: 600;
+}
+
+/* Section headings */
+.github-tray-section-label {
+  color: theme.$text-muted;
+  font-size: variable.$font-size-sm;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+/* Tabs */
+#github-tray-tabs {
+  padding: 3px;
+  border-radius: variable.$radius-4xl;
+  background-color: theme.$background-alt;
+  border: 1px solid theme.$surface-disabled;
+}
+
+/* Segmented tabs - scoped under the container so the generic card chrome
+   (Card widgets carry a `.github-tray-card` class) never overrides the
+   segmented look with borders/padding on each individual tab. */
+#github-tray-tabs .github-tray-tab-btn {
+  min-height: 26px;
+  padding: 0 14px;
+  border: none;
+  border-radius: variable.$radius-2xl;
+  background-color: transparent;
+  color: theme.$text-muted;
+
+  &:hover {
+    background-color: theme.$surface-highlight;
+  }
+
+  &.active {
+    background-color: theme.$accent-teal;
+  }
+}
+
+#github-tray-tabs .github-tray-tab-icon {
+  color: theme.$text-muted;
+  font-size: variable.$font-size-sm;
+}
+
+#github-tray-tabs .github-tray-tab-label {
+  color: theme.$text-main;
+  font-size: variable.$font-size-base;
+}
+
+#github-tray-tabs .github-tray-tab-count {
+  padding: 0 6px;
+  border-radius: variable.$radius-lg;
+  background-color: theme.$surface-disabled;
+  color: theme.$text-main;
+  font-size: variable.$font-size-xs;
+  font-weight: 700;
+}
+
+#github-tray-tabs .github-tray-tab-btn.active .github-tray-tab-label {
+  font-weight: 700;
+}
+
+/* On the selected tab the icon, label and count follow the accent; the
+   count chip turns translucent so it reads as part of the pill. */
+#github-tray-tabs .github-tray-tab-btn.active .github-tray-tab-icon,
+#github-tray-tabs .github-tray-tab-btn.active .github-tray-tab-label,
+#github-tray-tabs .github-tray-tab-btn.active .github-tray-tab-count {
+  color: theme.$background-main;
+}
+
+#github-tray-tabs .github-tray-tab-btn.active .github-tray-tab-count {
+  background-color: color.adjust(theme.$text-main, $alpha: -0.75);
+}
+
+/* Cards */
+.github-tray-card {
+  background-color: theme.$background-alt;
+  border: 1px solid theme.$surface-disabled;
+  border-radius: variable.$radius-lg;
+  color: theme.$text-main;
+  padding: 6px 8px;
+
+  &:hover {
+    background-color: theme.$surface-highlight;
+  }
+
+  &.busy {
+    opacity: 0.5;
+  }
+}
+
+.github-tray-notification-card {
+  min-height: 40px;
+}
+
+.github-tray-notification-icon {
+  color: theme.$accent-purple;
+  font-size: variable.$font-size-xl;
+}
+
+.github-tray-notification-title {
+  color: theme.$text-main;
+  font-size: variable.$font-size-base;
+  font-weight: 600;
+}
+
+.github-tray-notification-repo,
+.github-tray-notification-meta {
+  color: theme.$text-disabled;
+  font-size: variable.$font-size-sm;
+}
+
+/* Repo cards */
+.github-tray-repo-card {
+  padding: 5px 8px;
+}
+
+.github-tray-repo-icon {
+  color: theme.$text-muted;
+  font-size: variable.$font-size-md;
+}
+
+.github-tray-repo-name {
+  color: theme.$text-main;
+  font-size: variable.$font-size-base;
+  font-weight: 700;
+}
+
+.github-tray-repo-language {
+  color: theme.$text-disabled;
+  font-size: variable.$font-size-xs;
+}
+
+.github-tray-repo-age {
+  color: theme.$text-disabled;
+  font-size: variable.$font-size-xs;
+}
+
+.github-tray-repo-description {
+  color: theme.$text-disabled;
+  font-size: variable.$font-size-sm;
+}
+
+/* Metrics */
+.github-tray-metric {
+  background-color: transparent;
+  border: none;
+  padding: 1px 4px;
+  border-radius: variable.$radius-md;
+  border: 1px solid transparent;
+
+  .github-tray-metric-icon {
+    color: theme.$text-disabled;
+    font-size: variable.$font-size-sm;
+  }
+
+  .github-tray-metric-value {
+    color: theme.$text-muted;
+    font-size: variable.$font-size-sm;
+    font-weight: 600;
+  }
+
+  &.warning .github-tray-metric-icon {
+    color: theme.$accent-yellow;
+  }
+
+  &.success .github-tray-metric-icon {
+    color: theme.$accent-green;
+  }
+
+  &.accent .github-tray-metric-icon {
+    color: theme.$accent-purple;
+  }
+
+  &.actionable:hover {
+    background-color: theme.$surface-highlight;
+
+    .github-tray-metric-icon,
+    .github-tray-metric-value {
+      color: theme.$text-main;
+    }
+  }
+}
+
+/* Action icon buttons */
+.github-tray-action-btn {
+  min-width: 22px;
+  min-height: 22px;
+  padding: 0;
+  border-radius: variable.$radius-md;
+  background-color: transparent;
+  border: 1px solid transparent;
+  color: theme.$text-muted;
+
+  &:hover {
+    background-color: theme.$surface-highlight;
+    color: theme.$text-main;
+  }
+}
+
+.github-tray-action-icon {
+  font-size: variable.$font-size-sm;
+}
+
+/* Pills */
+.github-tray-pill {
+  padding: 0 6px;
+  border-radius: variable.$radius-lg;
+  background-color: theme.$surface-disabled;
+  color: theme.$text-muted;
+  font-size: variable.$font-size-xs;
+  font-weight: 700;
+}
+
+/* Empty states / skeleton / sort label */
+.github-tray-empty {
+  padding: 18px 0;
+}
+
+.github-tray-empty-icon {
+  color: theme.$text-disabled;
+  font-size: variable.$font-size-3xl;
+}
+
+.github-tray-empty-title {
+  color: theme.$text-muted;
+  font-size: variable.$font-size-base;
+  font-weight: 700;
+}
+
+.github-tray-empty-subtitle {
+  color: theme.$text-disabled;
+  font-size: variable.$font-size-sm;
+}
+
+.github-tray-skeleton {
+  opacity: 0.5;
+}
+
+.github-tray-skeleton-bar {
+  color: theme.$surface-disabled;
+  font-size: variable.$font-size-sm;
+}
+
+.github-tray-sort-label {
+  color: theme.$text-disabled;
+  font-size: variable.$font-size-sm;
+}
+
+/* Pager */
+#github-tray-pager {
+  padding-top: 2px;
+}
+
+.github-tray-pager-label {
+  color: theme.$text-disabled;
+  font-size: variable.$font-size-sm;
+}
+
+/* Error card */
+.github-tray-error-card {
+  border-color: theme.$surface-disabled;
+}
+
+.github-tray-error-icon {
+  color: theme.$accent-purple;
+  font-size: variable.$font-size-xl;
+}
+
+.github-tray-error-title {
+  color: theme.$text-main;
+  font-size: variable.$font-size-base;
+  font-weight: 700;
+}
+
+.github-tray-error-message {
+  color: theme.$text-disabled;
+  font-size: variable.$font-size-sm;
+}
+
+/* Detail views */
+.github-tray-detail-title {
+  color: theme.$text-main;
+  font-size: variable.$font-size-xl;
+  font-weight: 700;
+}
+
+.github-tray-detail-subtitle {
+  color: theme.$text-disabled;
+  font-size: variable.$font-size-sm;
+}
+
+.github-tray-detail-number {
+  color: theme.$text-disabled;
+  font-size: variable.$font-size-base;
+  font-weight: 700;
+}
+
+.github-tray-detail-item-title {
+  color: theme.$text-main;
+  font-size: variable.$font-size-base;
+  font-weight: 600;
+}
+
+.github-tray-run-title {
+  color: theme.$text-main;
+  font-size: variable.$font-size-base;
+  font-weight: 600;
+}
+
+.github-tray-run-icon {
+  color: theme.$text-muted;
+  font-size: variable.$font-size-xl;
+}
+
+.github-tray-detail-meta {
+  color: theme.$text-disabled;
+  font-size: variable.$font-size-sm;
+}
+
+.github-tray-detail-card {
+  min-height: 44px;
+}
+
+/* Toast */
+#github-tray-toast {
+  padding: 4px 10px;
+  border-radius: variable.$radius-lg;
+  background-color: theme.$background-alt;
+  border: 1px solid theme.$surface-disabled;
+  color: theme.$text-main;
+  font-size: variable.$font-size-sm;
+}

@@ -472,12 +472,12 @@ tooltip = true
 يعرض معلومات مستودع GitHub.
 
 ```toml
-[widgets.git_companion]
+[widgets.github_tray]
 icon = ""
 label = false
 tooltip = true
 username = "rubiin"
-repository = "rubiin/tsumiki"
+max_repos = 10
 ```
 
 ### Cloudflare WARP

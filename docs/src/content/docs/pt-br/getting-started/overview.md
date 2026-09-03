@@ -36,7 +36,7 @@ Widgets são os blocos de construção individuais que aparecem na barra. Existe
 - **Gerenciamento da área de trabalho** — Espaços de trabalho, título da janela, barra de tarefas
 - **Utilitários** — Captura de tela, OCR, área de transferência, gravação de tela
 - **Produtividade** — Temporizador Pomodoro, quadro Kanban, cronômetro, seletor de emoji
-- **Integração** — Clima, controles de mídia, Git companion, alternador de DNS
+- **Integração** — Clima, controles de mídia, GitHub Tray, alternador de DNS
 
 Cada widget é configurado em `[widgets.<nome>]` no `config.toml`. Consulte a [Referência de Widgets](/pt-br/features/widgets) para a lista completa.
 

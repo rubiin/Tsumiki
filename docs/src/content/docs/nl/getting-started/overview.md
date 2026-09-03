@@ -36,7 +36,7 @@ Widgets zijn de individuele bouwstenen die in de balk verschijnen. Er zijn meer 
 - **Desktopbeheer** — Werkruimten, venstertitel, taakbalk
 - **Hulpprogramma's** — Schermafbeelding, OCR, klembord, schermopname
 - **Productiviteit** — Pomodoro-timer, Kanban-bord, stopwatch, emoji-picker
-- **Integratie** — Weer, mediaregeling, Git-companion, DNS-schakelaar
+- **Integratie** — Weer, mediaregeling, GitHub Tray, DNS-schakelaar
 
 Elke widget wordt geconfigureerd onder `[widgets.<naam>]` in `config.toml`. Zie de [Widgets-referentie](/nl/features/widgets) voor de volledige lijst.
 

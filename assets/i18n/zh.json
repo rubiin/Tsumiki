@@ -78,7 +78,7 @@
       "reset": "重置为默认 (ISP)"
     },
     "emoji_picker": { "tooltip": "表情选择器", "label": "表情", "loading": "加载表情中..." },
-    "git_companion": { "label": "Git 伴侣", "no_bio": "无简介" },
+    "github_tray": { "label": "GitHub 托盘", "no_bio": "无简介" },
     "hyprpicker": { "label": "取色器", "tooltip": "选取颜色", "script_not_found": "脚本未找到" },
     "ip_monitor": { "tooltip": "IP 信息", "refresh": "刷新" },
     "kanban": { "label": "看板", "tooltip": "看板面板" },
