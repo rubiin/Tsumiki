@@ -30,16 +30,16 @@
   padding-top: 2px;
 }
 
-/* Bar button unread badge */
+/* Bar button unread badge — drawn over the icon's top-right corner with
+   negative margins (sibling of the icon, not an overlay). Theme-driven,
+   mirrors the notification count badge used in the date menu popover. */
 #github-tray-badge {
-  min-width: 18px;
-  min-height: 18px;
-  border-radius: 9px;
   padding: 0 4px;
-  background-color: rgba(246, 120, 143, 0.95);
-  border: 1px solid color.adjust(rgba(0, 0, 0, 0.6), $lightness: 18%);
-  color: #ffffff;
-  font-size: 10px;
+  margin-left: -4px;
+  border-radius: variable.$radius-large;
+  background-color: theme.$accent-purple;
+  color: theme.$background-main;
+  font-size: variable.$font-size-xs;
   font-weight: 700;
 }
 
@@ -205,7 +205,7 @@
 
 .github-tray-notification-repo,
 .github-tray-notification-meta {
-  color: theme.$text-disabled;
+  color: theme.$text-muted;
   font-size: variable.$font-size-sm;
 }
 
@@ -226,17 +226,17 @@
 }
 
 .github-tray-repo-language {
-  color: theme.$text-disabled;
+  color: theme.$text-muted;
   font-size: variable.$font-size-xs;
 }
 
 .github-tray-repo-age {
-  color: theme.$text-disabled;
+  color: theme.$text-muted;
   font-size: variable.$font-size-xs;
 }
 
 .github-tray-repo-description {
-  color: theme.$text-disabled;
+  color: theme.$text-muted;
   font-size: variable.$font-size-sm;
 }
 
@@ -328,7 +328,7 @@
 }
 
 .github-tray-empty-subtitle {
-  color: theme.$text-disabled;
+  color: theme.$text-muted;
   font-size: variable.$font-size-sm;
 }
 
@@ -342,7 +342,7 @@
 }
 
 .github-tray-sort-label {
-  color: theme.$text-disabled;
+  color: theme.$text-muted;
   font-size: variable.$font-size-sm;
 }
 
@@ -352,7 +352,7 @@
 }
 
 .github-tray-pager-label {
-  color: theme.$text-disabled;
+  color: theme.$text-muted;
   font-size: variable.$font-size-sm;
 }
 
@@ -362,7 +362,7 @@
 }
 
 .github-tray-error-icon {
-  color: theme.$accent-purple;
+  color: theme.$accent-red;
   font-size: variable.$font-size-xl;
 }
 
@@ -373,7 +373,7 @@
 }
 
 .github-tray-error-message {
-  color: theme.$text-disabled;
+  color: theme.$text-muted;
   font-size: variable.$font-size-sm;
 }
 
@@ -385,12 +385,12 @@
 }
 
 .github-tray-detail-subtitle {
-  color: theme.$text-disabled;
+  color: theme.$text-muted;
   font-size: variable.$font-size-sm;
 }
 
 .github-tray-detail-number {
-  color: theme.$text-disabled;
+  color: theme.$text-muted;
   font-size: variable.$font-size-base;
   font-weight: 700;
 }
@@ -412,8 +412,22 @@
   font-size: variable.$font-size-xl;
 }
 
+/* Workflow-run state tints — decorative reinforcement only; the pill text
+   and glyph already convey the status (never color alone). */
+.github-tray-run-icon.running {
+  color: theme.$accent-blue;
+}
+
+.github-tray-run-icon.success {
+  color: theme.$accent-green;
+}
+
+.github-tray-run-icon.failure {
+  color: theme.$accent-red;
+}
+
 .github-tray-detail-meta {
-  color: theme.$text-disabled;
+  color: theme.$text-muted;
   font-size: variable.$font-size-sm;
 }
 

@@ -62,6 +62,31 @@ class StateFormattingTests(unittest.TestCase):
             tray_state.glyph("cancelled"),
         )
 
+    def test_run_tint(self):
+        self.assertEqual(tray_state.run_tint({"status": "in_progress"}), "running")
+        self.assertEqual(tray_state.run_tint({"status": "queued"}), "running")
+        self.assertEqual(
+            tray_state.run_tint({"status": "completed", "conclusion": "success"}),
+            "success",
+        )
+        self.assertEqual(
+            tray_state.run_tint({"status": "completed", "conclusion": "failure"}),
+            "failure",
+        )
+        self.assertEqual(
+            tray_state.run_tint({"status": "completed", "conclusion": "timed_out"}),
+            "failure",
+        )
+        self.assertEqual(tray_state.run_tint({"status": "completed"}), "")
+        self.assertEqual(
+            tray_state.run_tint({"status": "completed", "conclusion": "cancelled"}),
+            "",
+        )
+        self.assertEqual(
+            tray_state.run_tint({"status": "completed", "conclusion": "skipped"}),
+            "",
+        )
+
     def test_notification_semantics(self):
         item = {
             "id": "1",

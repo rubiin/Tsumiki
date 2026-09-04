@@ -38,7 +38,7 @@ pr_comments = true
 issue_comments = true
 
 [widgets.github_tray.alerts]
-enabled = true
+enabled = false
 new_stars = true
 new_forks = true
 new_issues = true
@@ -868,7 +868,7 @@ radius = "16px"
 width = "1px"
 
 [styling.bar.widgets.github_tray]
-icon_size = "12px"
+icon_size = "16px"
 spacing = "0.125em"
 
 [styling.bar.widgets.github_tray.border]

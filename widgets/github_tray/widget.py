@@ -17,7 +17,6 @@ from time import monotonic
 from fabric.utils import GLib, idle_add
 from fabric.widgets.box import Box
 from fabric.widgets.label import Label
-from fabric.widgets.overlay import Overlay
 from fabric.widgets.scrolledwindow import ScrolledWindow
 
 import utils.functions as helpers
@@ -116,12 +115,14 @@ class GitHubTrayWidget(ButtonWidget, PopoverMixin):
     def _build_button(self):
         content = Box(
             orientation="h",
-            spacing=4,
+            spacing=0,
             style_classes="github-tray-bar-content",
         )
-        content.children = nerd_font_icon(
-            icon=self.config.get("icon", _GLYPH_BRAND),
-            props={"style_classes": ["panel-font-icon"]},
+        content.add(
+            nerd_font_icon(
+                icon=self.config.get("icon", _GLYPH_BRAND),
+                props={"style_classes": ["panel-font-icon"]},
+            )
         )
         if self.config.get("label", False):
             content.add(
@@ -131,16 +132,21 @@ class GitHubTrayWidget(ButtonWidget, PopoverMixin):
                 )
             )
 
+        # Unread-count bubble drawn over the icon's top-right corner. It is a
+        # sibling of the icon rather than an Overlay child: the chip's negative
+        # margins pull it onto the icon, so the glyph stays visible underneath
+        # instead of being swallowed by an overlay sized to the icon alone.
         self.badge_label = Label(
             label="",
             name="github-tray-badge",
             style_classes="github-tray-badge",
-            h_align="end",
             v_align="start",
             visible=False,
         )
-        overlay = Overlay(child=content, overlays=[self.badge_label])
-        self.container_box.add(overlay)
+        self.badge_label.set_xalign(0.5)
+        self.badge_label.set_yalign(0.5)
+        content.add(self.badge_label)
+        self.container_box.add(content)
 
         tooltip_text = str(
             self.config.get("tooltip_text", _("widget.github_tray.label"))
@@ -1097,6 +1103,7 @@ class GitHubTrayPopoverContent(Box):
                                                 style_classes="github-tray-notification-meta",
                                                 max_width=16,
                                             ),
+                                            Box(h_expand=True),
                                             make_label(
                                                 tray_state.relative_time(
                                                     item.get("updated_at")
@@ -1219,16 +1226,20 @@ class GitHubTrayPopoverContent(Box):
             )
             language = str(repo.get("language") or "")
             metrics = [
+                # Stars/Forks are read-only (no detail view); dropping the
+                # actionable flag removes the misleading tooltip/affordance.
                 MetricButton(
                     icon=tray_state.glyph("star"),
                     value=tray_state.format_count(repo.get("stargazers_count")),
                     tooltip="Stars",
                     tint="warning",
+                    actionable=False,
                 ),
                 MetricButton(
                     icon=tray_state.glyph("fork"),
                     value=tray_state.format_count(repo.get("forks_count")),
                     tooltip="Forks",
+                    actionable=False,
                 ),
                 MetricButton(
                     icon=tray_state.glyph("issue"),
@@ -1498,6 +1509,7 @@ class GitHubTrayPopoverContent(Box):
                 "cancelled",
                 "timed_out",
             )
+            run_tint = tray_state.run_tint(run)
             content = vbox(
                 spacing=3,
                 children=[
@@ -1506,7 +1518,11 @@ class GitHubTrayPopoverContent(Box):
                         children=[
                             make_icon(
                                 tray_state.workflow_icon(run),
-                                style_classes="github-tray-run-icon",
+                                style_classes=(
+                                    ["github-tray-run-icon", run_tint]
+                                    if run_tint
+                                    else "github-tray-run-icon"
+                                ),
                             ),
                             make_label(
                                 str(

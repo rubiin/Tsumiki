@@ -210,6 +210,24 @@ def workflow_icon(run: dict) -> str:
     return glyph("skipped")
 
 
+def run_tint(run: dict) -> str:
+    """Semantic colour class for a workflow run's icon (status is already
+    conveyed by the pill text + glyph, the tint only reinforces it).
+
+    Returns one of ``"running"``, ``"success"``, ``"failure"`` or ``""``
+    (neutral — queued/skipped/cancelled read as muted, like GitHub).
+    """
+    status = run.get("status")
+    conclusion = run.get("conclusion")
+    if status != "completed":
+        return "running"
+    if conclusion == "success":
+        return "success"
+    if conclusion in ("failure", "timed_out"):
+        return "failure"
+    return ""
+
+
 _LANGUAGE_COLORS = {
     "JavaScript": "#f1e05a",
     "TypeScript": "#3178c6",
