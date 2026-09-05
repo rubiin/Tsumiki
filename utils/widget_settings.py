@@ -815,6 +815,7 @@ GitHubTray = TypedDict(
         "max_repos": int,
         "sort_by": str,
         "sort_order": str,
+        "own_repos_only": bool,
         "cache_ttl": int,
         "notification_interval": int,
         "workflow_runs_max": int,

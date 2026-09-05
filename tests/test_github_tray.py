@@ -127,6 +127,20 @@ class StateFormattingTests(unittest.TestCase):
         limited = tray_state.sort_repos(repos, "updated", "desc", max_repos=1)
         self.assertEqual(len(limited), 1)
 
+    def test_filter_own_repos(self):
+        repos = [
+            {"name": "mine", "owner": {"login": "octo"}},
+            {"name": "org-repo", "owner": {"login": "some-org"}},
+            {"name": "collab", "owner": {"login": "other-user"}},
+            {"name": "no-owner"},
+        ]
+        own = tray_state.filter_own_repos(repos, "octo", enabled=True)
+        self.assertEqual([r["name"] for r in own], ["mine", "no-owner"])
+        self.assertEqual(
+            len(tray_state.filter_own_repos(repos, "octo", enabled=False)), 4
+        )
+        self.assertEqual(tray_state.filter_own_repos([], "octo", enabled=True), [])
+
     def test_mappings(self):
         text = json.dumps({"owner/repo": "~/dev/repo", "o2/r2": "/abs/path"})
         self.assertEqual(

@@ -298,6 +298,16 @@ def is_own_repo(repo: dict, username: str) -> bool:
     return not owner or owner.get("login") == username
 
 
+def filter_own_repos(
+    repos: list[dict], username: str, enabled: bool = False
+) -> list[dict]:
+    """Repos to display; with ``enabled`` keep only repos owned by the user
+    and drop organization/collaborator ones."""
+    if not enabled:
+        return repos
+    return [repo for repo in repos if is_own_repo(repo, username)]
+
+
 def sort_label(sort_by: str, sort_order: str) -> str:
     label_map = {
         "updated": "by update",

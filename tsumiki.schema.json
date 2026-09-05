@@ -147,6 +147,11 @@
               "default": "desc",
               "description": "Sort direction for the repositories tab."
             },
+            "own_repos_only": {
+              "type": "boolean",
+              "default": false,
+              "description": "Only display repositories owned by your account; hides organization and collaborator repositories."
+            },
             "notification_interval": {
               "type": "integer",
               "minimum": 30,

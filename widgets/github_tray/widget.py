@@ -273,13 +273,21 @@ class GitHubTrayWidget(ButtonWidget, PopoverMixin):
         except Exception as error:
             idle_add(self._apply_notifications, generation, None, error)
 
+    def _visible_repos(self, repos: list, username: str) -> list:
+        """Repos to display; ``own_repos_only`` hides org/collaborator repos."""
+        return tray_state.filter_own_repos(
+            repos, username, enabled=self.config.get("own_repos_only", False)
+        )
+
     @helpers.run_in_thread
     def _load_menu_async(self, generation: int):
         try:
             payload = self._client.fetch_menu(
                 username_fallback=str(self.config.get("username", ""))
             )
-            workflows = self._fetch_mapped_workflows(payload["repos"])
+            username = str((payload.get("user") or {}).get("login") or "")
+            repos = self._visible_repos(payload.get("repos", []) or [], username)
+            workflows = self._fetch_mapped_workflows(repos)
             idle_add(self._apply_menu, generation, payload, workflows, None)
         except Exception as error:
             idle_add(self._apply_menu, generation, None, None, error)
@@ -375,7 +383,9 @@ class GitHubTrayWidget(ButtonWidget, PopoverMixin):
         self.error_message = ""
         previous_state = tray_state.load_state_file(STATE_FILE)
         self.user = payload.get("user", {}) or {}
-        self.repos = payload.get("repos", []) or []
+        self.repos = self._visible_repos(
+            payload.get("repos", []) or [], str(self.user.get("login") or "")
+        )
         self.followers = payload.get("followers", []) or []
         self.web_base = payload.get("web") or self._client.web_base
         self.loaded_once = True
@@ -419,11 +429,15 @@ class GitHubTrayWidget(ButtonWidget, PopoverMixin):
         self.loading = False
         self._busy = False
         self.error_message = ""
-        same_snapshot = (self.user or {}).get("login") == (
-            payload.get("user") or {}
-        ).get("login") and len(self.repos) == len(payload.get("repos") or [])
-        self.user = payload.get("user", {}) or {}
-        self.repos = payload.get("repos", []) or []
+        user = payload.get("user", {}) or {}
+        repos = self._visible_repos(
+            payload.get("repos", []) or [], str(user.get("login") or "")
+        )
+        same_snapshot = (self.user or {}).get("login") == user.get("login") and len(
+            self.repos
+        ) == len(repos)
+        self.user = user
+        self.repos = repos
         self.followers = payload.get("followers", []) or []
         self.web_base = payload.get("web") or self._client.web_base
         self.loaded_once = True

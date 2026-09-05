@@ -189,6 +189,7 @@ DEFAULT_CONFIG = {
             "max_repos": 10,
             "sort_by": "updated",
             "sort_order": "desc",
+            "own_repos_only": False,
             "cache_ttl": 3600,
             "notification_interval": 60,
             "workflow_runs_max": 10,

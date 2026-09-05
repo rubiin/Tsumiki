@@ -763,6 +763,7 @@ default_tab = "inbox"       # "inbox" | "repos"
 max_repos = 10
 sort_by = "updated"        # "updated" | "pushed" | "created" | "stars" | "name"
 sort_order = "desc"
+own_repos_only = false     # only show repos owned by your account (hide org/collaborator)
 # Seconds profile and repository data stay cached before a refetch (0 disables).
 cache_ttl = 3600
 notification_interval = 60 # seconds between unread refreshes
