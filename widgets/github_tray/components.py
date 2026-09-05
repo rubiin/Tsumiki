@@ -39,9 +39,6 @@ def make_label(
         line_wrap="word-char" if wrap else "none",
         **kwargs,
     )
-    # Ellipsize whenever the text can outgrow its box: single-line labels
-    # (no wrap) or wrapped labels capped at N lines (the Nth line gets the
-    # ellipsis). Full wrapped text (e.g. error messages) stays untruncated.
     if max_width or not wrap or (wrap and lines):
         if max_width:
             label.set_max_width_chars(max_width)
@@ -127,23 +124,6 @@ class Card(Button):
             **kwargs,
         )
 
-        # Nested interactive guards. Card hosts inner buttons (mark-read,
-        # re-run, metric detail links, ...). A GtkButton has its own event
-        # window, so presses over a nested button are normally dispatched to
-        # that button only — but when an event *does* reach the card (window
-        # routing differences, key handling), swallowing the press keeps the
-        # card from starting its own press/click cycle on top of the inner
-        # action's. Clicks on the card's own surface are untouched.
-        self.connect("button-press-event", self._guard_nested_press)
-
-    @staticmethod
-    def _guard_nested_press(widget, event) -> bool:
-        event_window = getattr(event, "window", None)
-        if event_window is None:
-            return False
-        # The event belongs to a child button (own window) → consume it so
-        # the card never activates; anything else falls through to the card.
-        return event_window != widget.get_window()
 
 
 class Pill(Label):

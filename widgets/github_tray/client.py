@@ -1,13 +1,4 @@
 """GitHub API access for the GitHub tray widget.
-
-Every API call goes through the ``gh`` CLI (``gh api`` / ``gh api graphql``)
-using the user's own ``gh`` authentication session. Optional ``--hostname``
-support covers GitHub Enterprise Server.
-
-This module is free of GTK/Fabric imports so it can be unit-tested without
-a display. Callers must invoke the sync methods from worker threads (see the
-``run_in_thread`` decorator in ``utils.decorators``), never from GTK
-callbacks directly.
 """
 
 from __future__ import annotations

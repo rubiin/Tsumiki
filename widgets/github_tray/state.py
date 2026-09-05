@@ -1,8 +1,6 @@
 """Pure helpers for the GitHub tray widget: display formatting, notification
 semantics, repository sorting, mapping parsing and alert diffing.
 
-This module must stay free of GTK/Fabric imports so it is unit-testable
-without a display.
 """
 
 from __future__ import annotations
