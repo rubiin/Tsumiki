@@ -96,7 +96,14 @@ class ActionIconButton(Button):
 
 
 class Card(Button):
-    """A bordered, hoverable card row (notification / repo / detail)."""
+    """A bordered, hoverable card row (notification / repo / detail).
+
+    Only use this when the card contains no other interactive widgets. GTK3
+    buttons are windowless and claim the whole subtree for themselves, so any
+    button nested inside a ``Card`` never receives pointer events. Rows that
+    host sibling action buttons must use ``CardBox`` + ``CardMainButton``
+    instead.
+    """
 
     def __init__(
         self,
@@ -124,6 +131,59 @@ class Card(Button):
             **kwargs,
         )
 
+
+class CardBox(Box):
+    """Card chrome as a plain ``Box`` (no click semantics).
+
+    Interactive rows put their default action on a ``CardMainButton`` and
+    their action controls as *siblings* inside this box; because nothing here
+    is a ``Button`` ancestor, every control stays clickable.
+    """
+
+    def __init__(
+        self,
+        style_classes: str | list[str] | None = None,
+        name: str | None = None,
+        **kwargs,
+    ):
+        classes = ["github-tray-card"]
+        if style_classes:
+            classes += (
+                style_classes.split()
+                if isinstance(style_classes, str)
+                else list(style_classes)
+            )
+        super().__init__(
+            name=name,
+            style_classes=classes,
+            **kwargs,
+        )
+
+
+class CardMainButton(Button):
+    """Transparent full-row button used inside a ``CardBox``.
+
+    Gives the row its default action (e.g. open the repo / notification)
+    without swallowing presses aimed at sibling action buttons.
+    """
+
+    def __init__(
+        self,
+        on_clicked=None,
+        name: str | None = None,
+        child=None,
+        **kwargs,
+    ):
+        options: dict = {}
+        if on_clicked is not None:
+            options["on_clicked"] = on_clicked
+        super().__init__(
+            name=name,
+            style_classes="github-tray-card-main",
+            child=child or Box(),
+            **options,
+            **kwargs,
+        )
 
 
 class Pill(Label):

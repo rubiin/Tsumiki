@@ -271,17 +271,6 @@ show_icon = true
 
 El color seleccionado se copia al portapapeles. En modo silencioso, no se muestra ninguna notificación.
 
-### Indicador de Privacidad
-
-Muestra cuándo las aplicaciones están usando el micrófono, la cámara o compartiendo pantalla.
-
-```toml
-[widgets.privacy_indicator]
-tooltip = true
-hide_when_inactive = true
-modules = ["camera", "microphone", "screen"]
-```
-
 ---
 
 ## Widgets de Escritorio y Espacios de Trabajo

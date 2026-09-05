@@ -299,17 +299,6 @@ show_icon = true
 
 The selected color is copied to clipboard. In quiet mode, no notification is shown.
 
-### Privacy Indicator
-
-Shows when applications are using the microphone, camera, or screen sharing.
-
-```toml
-[widgets.privacy_indicator]
-tooltip = true
-hide_when_inactive = true
-modules = ["camera", "microphone", "screen"]
-```
-
 ---
 
 ## Desktop & Workspace Widgets

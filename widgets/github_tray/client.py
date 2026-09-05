@@ -1,5 +1,4 @@
-"""GitHub API access for the GitHub tray widget.
-"""
+"""GitHub API access for the GitHub tray widget."""
 
 from __future__ import annotations
 

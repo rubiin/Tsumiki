@@ -33,6 +33,8 @@ from .client import GitHubClient, GitHubClientError
 from .components import (
     ActionIconButton,
     Card,
+    CardBox,
+    CardMainButton,
     EmptyState,
     MetricButton,
     Pill,
@@ -824,43 +826,45 @@ class GitHubTrayPopoverContent(Box):
                 tooltip="Retry",
                 on_clicked=lambda *_: widget.refresh(manual=True),
             )
-            card = Card(
+            # Chrome box (not a Button): the retry / open buttons below must
+            # stay clickable siblings — a Button card would claim the whole
+            # row and swallow their presses.
+            card = CardBox(
                 name="github-tray-error",
                 style_classes="github-tray-error-card",
-                child=vbox(
-                    spacing=6,
-                    children=[
-                        hbox(
-                            spacing=8,
-                            children=[
-                                make_icon(
-                                    tray_state.glyph("error"),
-                                    style_classes="github-tray-error-icon",
-                                ),
-                                make_label(
-                                    "Could not reach GitHub",
-                                    style_classes="github-tray-error-title",
-                                ),
-                            ],
-                        ),
-                        make_label(
-                            widget.error_message,
-                            style_classes="github-tray-error-message",
-                            wrap=True,
-                        ),
-                        hbox(
-                            spacing=6,
-                            children=[
-                                retry,
-                                ActionIconButton(
-                                    icon=tray_state.glyph("open_link"),
-                                    tooltip="Open github.com",
-                                    on_clicked=lambda *_: widget.open_web(),
-                                ),
-                            ],
-                        ),
-                    ],
-                ),
+                orientation="v",
+                spacing=6,
+                children=[
+                    hbox(
+                        spacing=8,
+                        children=[
+                            make_icon(
+                                tray_state.glyph("error"),
+                                style_classes="github-tray-error-icon",
+                            ),
+                            make_label(
+                                "Could not reach GitHub",
+                                style_classes="github-tray-error-title",
+                            ),
+                        ],
+                    ),
+                    make_label(
+                        widget.error_message,
+                        style_classes="github-tray-error-message",
+                        wrap=True,
+                    ),
+                    hbox(
+                        spacing=6,
+                        children=[
+                            retry,
+                            ActionIconButton(
+                                icon=tray_state.glyph("open_link"),
+                                tooltip="Open github.com",
+                                on_clicked=lambda *_: widget.open_web(),
+                            ),
+                        ],
+                    ),
+                ],
             )
             card.set_tooltip_text(widget.error_message)
             return card
@@ -1079,63 +1083,80 @@ class GitHubTrayPopoverContent(Box):
             subject = item.get("subject") or {}
             repo = item.get("repository") or {}
             state = tray_state.notification_state(item)
+            # Chrome box hosting sibling controls: clicking the text row runs
+            # the card action, the mark-as-read button is its own target.
             cards.append(
-                Card(
+                CardBox(
                     name="github-tray-notification",
                     style_classes="github-tray-notification-card",
-                    on_clicked=lambda _i=item: widget.mark_read(_i, open_after=True),
-                    child=hbox(
-                        spacing=8,
-                        children=[
-                            make_icon(
-                                tray_state.notification_icon(item),
-                                style_classes="github-tray-notification-icon",
+                    orientation="h",
+                    spacing=8,
+                    children=[
+                        CardMainButton(
+                            h_expand=True,
+                            on_clicked=lambda *_, _i=item: widget.mark_read(
+                                _i, open_after=True
                             ),
-                            vbox(
-                                spacing=2,
-                                h_expand=True,
+                            child=hbox(
+                                spacing=8,
                                 children=[
-                                    make_label(
-                                        str(subject.get("title") or "Untitled"),
-                                        style_classes="github-tray-notification-title",
-                                        wrap=True,
-                                        lines=2,
+                                    make_icon(
+                                        tray_state.notification_icon(item),
+                                        style_classes="github-tray-notification-icon",
                                     ),
-                                    hbox(
-                                        spacing=6,
+                                    vbox(
+                                        spacing=2,
+                                        h_expand=True,
                                         children=[
                                             make_label(
-                                                str(repo.get("full_name") or ""),
-                                                style_classes="github-tray-notification-repo",
-                                                max_width=18,
+                                                str(subject.get("title") or "Untitled"),
+                                                style_classes="github-tray-notification-title",
+                                                wrap=True,
+                                                lines=2,
                                             ),
-                                            Pill(text=state) if state else Box(),
-                                            make_label(
-                                                tray_state.reason_label(
-                                                    item.get("reason")
-                                                ),
-                                                style_classes="github-tray-notification-meta",
-                                                max_width=16,
-                                            ),
-                                            Box(h_expand=True),
-                                            make_label(
-                                                tray_state.relative_time(
-                                                    item.get("updated_at")
-                                                ),
-                                                style_classes="github-tray-notification-meta",
+                                            hbox(
+                                                spacing=6,
+                                                children=[
+                                                    make_label(
+                                                        str(
+                                                            repo.get("full_name") or ""
+                                                        ),
+                                                        style_classes="github-tray-notification-repo",
+                                                        max_width=18,
+                                                    ),
+                                                    (
+                                                        Pill(text=state)
+                                                        if state
+                                                        else Box()
+                                                    ),
+                                                    make_label(
+                                                        tray_state.reason_label(
+                                                            item.get("reason")
+                                                        ),
+                                                        style_classes="github-tray-notification-meta",
+                                                        max_width=16,
+                                                    ),
+                                                    Box(h_expand=True),
+                                                    make_label(
+                                                        tray_state.relative_time(
+                                                            item.get("updated_at")
+                                                        ),
+                                                        style_classes="github-tray-notification-meta",
+                                                    ),
+                                                ],
                                             ),
                                         ],
                                     ),
                                 ],
                             ),
-                            ActionIconButton(
-                                icon=tray_state.glyph("check"),
-                                tooltip="Mark as read",
-                                style_classes="github-tray-mark-btn",
-                                on_clicked=lambda _i=item: widget.mark_read(_i),
-                            ),
-                        ],
-                    ),
+                        ),
+                        ActionIconButton(
+                            icon=tray_state.glyph("check"),
+                            tooltip="Mark as read",
+                            style_classes="github-tray-mark-btn",
+                            on_clicked=lambda *_, _i=item: widget.mark_read(_i),
+                        ),
+                    ],
                 )
             )
             if str(item.get("id")) == widget.pending_notification_id:
@@ -1260,26 +1281,26 @@ class GitHubTrayPopoverContent(Box):
                     value=tray_state.format_count(repo.get("_issuesCount")),
                     tooltip="Open issues",
                     tint="success",
-                    on_clicked=lambda _r=repo: widget.load_details(_r, "issues"),
+                    on_clicked=lambda *_, _r=repo: widget.load_details(_r, "issues"),
                 ),
                 MetricButton(
                     icon=tray_state.glyph("pull"),
                     value=tray_state.format_count(repo.get("_pullsCount")),
                     tooltip="Open pull requests",
                     tint="accent",
-                    on_clicked=lambda _r=repo: widget.load_details(_r, "pulls"),
+                    on_clicked=lambda *_, _r=repo: widget.load_details(_r, "pulls"),
                 ),
             ]
             actions = [
                 ActionIconButton(
                     icon=tray_state.glyph("play"),
                     tooltip="Workflow runs",
-                    on_clicked=lambda _r=repo: widget.load_details(_r, "workflows"),
+                    on_clicked=lambda *_, _r=repo: widget.load_details(_r, "workflows"),
                 ),
                 ActionIconButton(
                     icon=tray_state.glyph("open_link"),
                     tooltip="Open on GitHub",
-                    on_clicked=lambda _r=repo: (
+                    on_clicked=lambda *_, _r=repo: (
                         widget.open_url(_r.get("html_url")),
                         widget.hide_popover(),
                     ),
@@ -1291,7 +1312,7 @@ class GitHubTrayPopoverContent(Box):
                     ActionIconButton(
                         icon=tray_state.glyph("folder_open"),
                         tooltip=f"Open in {widget.editor_command()}\n{local}",
-                        on_clicked=lambda _r=repo: widget.open_repo(_r),
+                        on_clicked=lambda *_, _r=repo: widget.open_repo(_r),
                     )
                 )
 
@@ -1327,22 +1348,30 @@ class GitHubTrayPopoverContent(Box):
                     lines=2,
                 )
 
-            content = vbox(
+            # Chrome box (not a Button): the metrics (issues / PRs) and action
+            # icons below must stay clickable siblings — a Button card would
+            # claim the whole row and swallow their presses.
+            card = CardBox(
+                name="github-tray-repo",
+                style_classes="github-tray-repo-card",
+                orientation="v",
                 spacing=2,
                 children=[
-                    top_row,
-                    *([desc_row] if desc_row else []),
+                    CardMainButton(
+                        on_clicked=lambda *_, _r=repo: widget.open_repo(_r),
+                        child=vbox(
+                            spacing=2,
+                            children=[
+                                top_row,
+                                *([desc_row] if desc_row else []),
+                            ],
+                        ),
+                    ),
                     hbox(
                         spacing=2,
                         children=[*metrics, Box(h_expand=True), *actions],
                     ),
                 ],
-            )
-            card = Card(
-                name="github-tray-repo",
-                style_classes="github-tray-repo-card",
-                on_clicked=lambda _r=repo: widget.open_repo(_r),
-                child=content,
             )
             card.set_tooltip_text(str(repo.get("html_url") or full_name))
             cards.append(card)
@@ -1495,7 +1524,7 @@ class GitHubTrayPopoverContent(Box):
                 Card(
                     name="github-tray-detail-item",
                     style_classes="github-tray-detail-card",
-                    on_clicked=lambda _i=item: (
+                    on_clicked=lambda *_, _i=item: (
                         widget.open_url(_i.get("html_url")),
                         widget.hide_popover(),
                     ),
@@ -1524,62 +1553,76 @@ class GitHubTrayPopoverContent(Box):
                 "timed_out",
             )
             run_tint = tray_state.run_tint(run)
-            content = vbox(
-                spacing=3,
-                children=[
-                    hbox(
-                        spacing=6,
-                        children=[
-                            make_icon(
-                                tray_state.workflow_icon(run),
-                                style_classes=(
-                                    ["github-tray-run-icon", run_tint]
-                                    if run_tint
-                                    else "github-tray-run-icon"
-                                ),
-                            ),
-                            make_label(
-                                str(
-                                    run.get("display_title")
-                                    or run.get("name")
-                                    or "Workflow"
-                                ),
-                                style_classes="github-tray-run-title",
-                                wrap=True,
-                                lines=2,
-                                h_expand=True,
-                            ),
-                        ],
-                    ),
-                    hbox(
-                        spacing=6,
-                        children=[
-                            Pill(text=status),
-                            make_label(
-                                meta,
-                                style_classes="github-tray-detail-meta",
-                                max_width=40,
-                                h_expand=True,
-                            ),
-                            ActionIconButton(
-                                icon=tray_state.glyph("refresh"),
-                                tooltip="Re-run failed jobs",
-                                on_clicked=lambda _r=run: widget.rerun(_r),
-                                visible=can_rerun,
-                            ),
-                        ],
-                    ),
-                ],
-            )
+
+            def _open_run(*_, _r=run):
+                widget.open_url(_r.get("html_url"))
+                widget.hide_popover()
+
+            # Chrome box (not a Button): the re-run button must stay a
+            # clickable sibling — a Button card would claim the whole row.
             cards.append(
-                Card(
+                CardBox(
                     name="github-tray-run",
                     style_classes="github-tray-detail-card",
-                    on_clicked=lambda _r=run: (
-                        widget.open_url(_r.get("html_url")),
-                        widget.hide_popover(),
-                    ),
-                    child=content,
+                    orientation="v",
+                    spacing=3,
+                    children=[
+                        CardMainButton(
+                            h_expand=True,
+                            on_clicked=_open_run,
+                            child=hbox(
+                                spacing=6,
+                                children=[
+                                    make_icon(
+                                        tray_state.workflow_icon(run),
+                                        style_classes=(
+                                            ["github-tray-run-icon", run_tint]
+                                            if run_tint
+                                            else "github-tray-run-icon"
+                                        ),
+                                    ),
+                                    make_label(
+                                        str(
+                                            run.get("display_title")
+                                            or run.get("name")
+                                            or "Workflow"
+                                        ),
+                                        style_classes="github-tray-run-title",
+                                        wrap=True,
+                                        lines=2,
+                                        h_expand=True,
+                                    ),
+                                ],
+                            ),
+                        ),
+                        hbox(
+                            spacing=6,
+                            children=[
+                                CardMainButton(
+                                    h_expand=True,
+                                    on_clicked=_open_run,
+                                    child=hbox(
+                                        spacing=6,
+                                        children=[
+                                            Pill(text=status),
+                                            make_label(
+                                                meta,
+                                                style_classes="github-tray-detail-meta",
+                                                max_width=40,
+                                                h_expand=True,
+                                            ),
+                                        ],
+                                    ),
+                                ),
+                                ActionIconButton(
+                                    icon=tray_state.glyph("refresh"),
+                                    tooltip="Re-run failed jobs",
+                                    on_clicked=lambda *_, _r=run: widget.rerun(_r),
+                                    visible=can_rerun,
+                                ),
+                            ],
+                        ),
+                    ],
                 )
             )
         return cards

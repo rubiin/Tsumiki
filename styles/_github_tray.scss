@@ -188,6 +188,24 @@
   }
 }
 
+/* Transparent row button inside a CardBox chrome. The chrome box provides
+   the card background/padding; this button only carries the row's default
+   action + hover so sibling action controls stay independently clickable. */
+.github-tray-card-main {
+  background-color: transparent;
+  border: none;
+  border-radius: variable.$radius-md;
+  padding: 0;
+
+  &:hover {
+    background-color: theme.$surface-highlight;
+  }
+
+  &.busy {
+    opacity: 0.5;
+  }
+}
+
 .github-tray-notification-card {
   min-height: 40px;
 }

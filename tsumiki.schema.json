@@ -375,22 +375,6 @@
           },
           "required": ["icon", "tooltip", "label"]
         },
-        "privacy_indicator": {
-          "type": "object",
-          "properties": {
-            "tooltip": {
-              "type": "boolean",
-              "default": true,
-              "description": "Determines whether to show the tooltip."
-            },
-            "hide_when_inactive": {
-              "type": "boolean",
-              "default": false,
-              "description": "Determines whether to hide the widget when inactive."
-            }
-          },
-          "required": ["tooltip", "hide_when_inactive"]
-        },
         "usb_manager": {
           "type": "object",
           "properties": {
@@ -2290,8 +2274,7 @@
                   "world_clock",
                   "theme_switcher",
                   "wallpaper",
-                  "usb_manager",
-                  "privacy_indicator"
+                  "usb_manager"
                 ],
                 "description": "Specifies the widget to display."
               },
@@ -2383,8 +2366,7 @@
                   "world_clock",
                   "theme_switcher",
                   "wallpaper",
-                  "usb_manager",
-                  "privacy_indicator"
+                  "usb_manager"
                 ],
                 "description": "Specifies the widget to display."
               },
@@ -2476,8 +2458,7 @@
                   "world_clock",
                   "theme_switcher",
                   "wallpaper",
-                  "usb_manager",
-                  "privacy_indicator"
+                  "usb_manager"
                 ],
                 "description": "Specifies the widget to display."
               },
@@ -2577,8 +2558,7 @@
                     "world_clock",
                     "theme_switcher",
                     "wallpaper",
-                    "usb_manager",
-                    "privacy_indicator"
+                    "usb_manager"
                   ],
                   "description": "Specifies the widget to display."
                 },
@@ -2706,8 +2686,7 @@
                     "world_clock",
                     "theme_switcher",
                     "wallpaper",
-                    "usb_manager",
-                    "privacy_indicator"
+                    "usb_manager"
                   ],
                   "description": "Specifies the widget to display."
                 },

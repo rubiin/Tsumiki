@@ -329,10 +329,6 @@ DEFAULT_CONFIG = {
                 "logout": "loginctl terminate-user $USER",
             },
         },
-        "privacy_indicator": {
-            "tooltip": True,
-            "hide_when_inactive": True,
-        },
         "recorder": {
             "path": "Videos/Screencasting",
             "tooltip": True,
@@ -795,11 +791,6 @@ DEFAULT_CONFIG = {
                 "power": {
                     "border": {"enabled": False, "radius": "16px", "width": "1px"},
                     "icon_size": "14px",
-                    "spacing": "0.125em",
-                },
-                "privacy_indicator": {
-                    "border": {"enabled": False, "radius": "16px", "width": "1px"},
-                    "icon_size": "12px",
                     "spacing": "0.125em",
                 },
                 "quick_settings": {

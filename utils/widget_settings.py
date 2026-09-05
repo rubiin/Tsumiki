@@ -776,20 +776,6 @@ Recording = TypedDict(
     },
 )
 
-# Privacy indicator configuration
-PrivacyIndicator = TypedDict(
-    "PrivacyIndicator",
-    {
-        "tooltip": bool,
-        "hide_when_inactive": bool,
-        "mic_ignored": list[str],
-        "cam_ignored": list[str],
-        "notify": bool,
-        "modules": list[str],
-    },
-)
-
-
 IpMonitor = TypedDict(
     "IpMonitor",
     {**BaseConfig.__annotations__, "label_text": str, "icon": str},
@@ -885,7 +871,6 @@ class Widgets(TypedDict):
     overview_button: Overview_Button
     wallpaper: WallPaper
     power: PowerButton
-    privacy_indicator: PrivacyIndicator
     quick_settings: QuickSettings
     recorder: Recording
     screenshot: ScreenShot

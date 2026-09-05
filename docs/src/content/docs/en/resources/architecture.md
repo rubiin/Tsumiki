@@ -138,19 +138,18 @@ class MyWidget(ButtonWidget, PopoverMixin):
 
 ## Services Reference
 
-| Service             | File                              | Source                 | Description                       |
-| ------------------- | --------------------------------- | ---------------------- | --------------------------------- |
-| Battery             | `services/battery.py`             | UPower D-Bus           | Battery level, charging state     |
-| Network             | `services/network.py`             | NetworkManager D-Bus   | WiFi, Ethernet, signal strength   |
-| Brightness          | `services/brightness.py`          | brightnessctl          | Screen/keyboard brightness        |
-| Weather             | `services/weather.py`             | Open-Meteo / wttr.in   | Weather conditions, forecast      |
-| MPRIS               | `services/mpris.py`               | Playerctl D-Bus        | Media playback, track info        |
-| Screen Record       | `services/screen_record.py`       | wf-recorder, grimblast | Recording, screenshots            |
-| Matugen             | `services/matugen.py`             | matugen binary         | Material You palette generation   |
-| Privacy             | `services/privacy.py`             | PipeWire, procfs       | Mic/camera/screen usage detection |
-| Network Speed       | `services/networkspeed.py`        | /proc/net              | Real-time bandwidth monitoring    |
-| Quotes              | `services/quotes.py`              | External API           | Inspirational quotes              |
-| Custom Notification | `services/custom_notification.py` | —                      | Programmatic notification API     |
+| Service             | File                              | Source                 | Description                     |
+| ------------------- | --------------------------------- | ---------------------- | ------------------------------- |
+| Battery             | `services/battery.py`             | UPower D-Bus           | Battery level, charging state   |
+| Network             | `services/network.py`             | NetworkManager D-Bus   | WiFi, Ethernet, signal strength |
+| Brightness          | `services/brightness.py`          | brightnessctl          | Screen/keyboard brightness      |
+| Weather             | `services/weather.py`             | Open-Meteo / wttr.in   | Weather conditions, forecast    |
+| MPRIS               | `services/mpris.py`               | Playerctl D-Bus        | Media playback, track info      |
+| Screen Record       | `services/screen_record.py`       | wf-recorder, grimblast | Recording, screenshots          |
+| Matugen             | `services/matugen.py`             | matugen binary         | Material You palette generation |
+| Network Speed       | `services/networkspeed.py`        | /proc/net              | Real-time bandwidth monitoring  |
+| Quotes              | `services/quotes.py`              | External API           | Inspirational quotes            |
+| Custom Notification | `services/custom_notification.py` | —                      | Programmatic notification API   |
 
 ## Shared Components
 
