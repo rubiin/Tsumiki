@@ -139,7 +139,7 @@ wheels = [
 [[package]]
 name = "fabric"
 version = "0.0.2"
-source = { git = "https://github.com/Fabric-Development/fabric.git#d54883db239841c0722d0970ec782f635e632e2c" }
+source = { git = "https://github.com/Fabric-Development/fabric.git?rev=8ae7550978c443d45984ba68f79158536dc26dd7#8ae7550978c443d45984ba68f79158536dc26dd7" }
 dependencies = [
     { name = "click" },
     { name = "loguru" },
@@ -466,7 +466,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "click", specifier = ">=8.5.0" },
-    { name = "fabric", git = "https://github.com/Fabric-Development/fabric.git" },
+    { name = "fabric", git = "https://github.com/Fabric-Development/fabric.git?rev=8ae7550978c443d45984ba68f79158536dc26dd7" },
     { name = "httpx", specifier = "==0.28.1" },
     { name = "ijson", specifier = ">=3.5.1" },
     { name = "loguru", specifier = ">=0.7.3" },
