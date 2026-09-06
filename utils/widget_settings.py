@@ -178,6 +178,8 @@ Notification = TypedDict(
         "dismiss_on_hover": bool,
         "dnd_on_screencast": bool,
         "max_actions": int,
+        "copy_code_action": bool,
+        "show_timestamp": bool,
         "per_app_limits": dict[str, int],
         "transition_type": Reveal_Animations,
         "transition_duration": int,

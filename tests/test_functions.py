@@ -10,14 +10,19 @@ from utils.functions import (
     convert_seconds_to_milliseconds,
     convert_to_12hr_format,
     convert_to_percent,
+    copy_to_clipboard_async,
     deep_merge,
     exclude_keys,
+    extract_body_image,
+    extract_one_time_code,
     find_executable,
     flatten_dict,
+    format_relative_timestamp,
     format_seconds_to_hours_minutes,
     get_relative_time,
     is_valid_gjs_color,
     mix_colors,
+    parse_markup,
     rgb_to_css,
     rgb_to_hex,
     tint_color,
@@ -186,6 +191,139 @@ class FunctionsTest(unittest.TestCase):
             validate_config_enums(
                 {"modules": {"bar": {"location": "middle"}}}, str(schema_path)
             )
+
+
+class ParseMarkupTest(unittest.TestCase):
+    """Test the SwayNC-inspired markup whitelist in parse_markup()."""
+
+    def test_plain_text_untouched(self):
+        self.assertEqual(parse_markup("hello world"), "hello world")
+
+    def test_newlines_are_flattened(self):
+        self.assertEqual(parse_markup("line1\nline2"), "line1 line2")
+
+    def test_html_is_escaped(self):
+        self.assertEqual(
+            parse_markup("<script>alert(1)</script> & <b>bold</b>"),
+            "&lt;script&gt;alert(1)&lt;/script&gt; &amp; <b>bold</b>",
+        )
+
+    def test_whitelisted_tags_are_re_enabled(self):
+        self.assertEqual(
+            parse_markup("<b>b</b> <i>i</i> <u>u</u>"), "<b>b</b> <i>i</i> <u>u</u>"
+        )
+
+    def test_malformed_markup_falls_back_to_escaped(self):
+        self.assertEqual(
+            parse_markup("<b>unclosed <i>mess"), "&lt;b&gt;unclosed &lt;i&gt;mess"
+        )
+
+    def test_double_escaped_entities_are_unescaped(self):
+        # Discord sends literal "<" pre-escaped as "&lt;"; after our own
+        # escaping it would render as "&lt;" unless "&amp;" is restored to "&".
+        self.assertEqual(parse_markup("&lt;b&gt;hi&lt;/b&gt;"), "&lt;b&gt;hi&lt;/b&gt;")
+        self.assertEqual(parse_markup("a &amp;lt; b"), "a &amp;lt; b")
+
+
+class ExtractOneTimeCodeTest(unittest.TestCase):
+    """Test 2FA/OTP code detection from notification bodies."""
+
+    def test_plain_code(self):
+        self.assertEqual(extract_one_time_code("Your code is 482913"), "482913")
+
+    def test_hyphenated_pair(self):
+        self.assertEqual(extract_one_time_code("code: 123-456."), "123456")
+
+    def test_google_prefix(self):
+        self.assertEqual(
+            extract_one_time_code("G-741258 is your verification code"), "741258"
+        )
+
+    def test_code_inside_markup_tags(self):
+        self.assertEqual(extract_one_time_code("G-<b>741258</b>"), "741258")
+
+    def test_no_code(self):
+        self.assertIsNone(extract_one_time_code("no code here"))
+        self.assertIsNone(extract_one_time_code(""))
+        self.assertIsNone(extract_one_time_code("version 123 is out"))
+
+    def test_first_match_wins(self):
+        self.assertEqual(extract_one_time_code("1111 or 2222"), "1111")
+
+
+class ExtractBodyImageTest(unittest.TestCase):
+    """Test <img src=...> extraction from notification bodies."""
+
+    def test_extracts_first_image_and_strips_tags(self):
+        cleaned, src = extract_body_image('look <img src="/tmp/a.png" alt="x"> now')
+        self.assertEqual(src, "/tmp/a.png")
+        self.assertNotIn("<img", cleaned)
+
+    def test_single_quoted_src(self):
+        self.assertEqual(extract_body_image("<img src='~/b.png'>")[1], "~/b.png")
+
+    def test_no_image(self):
+        self.assertEqual(extract_body_image("just text"), ("just text", None))
+        self.assertEqual(extract_body_image(""), ("", None))
+
+
+class FormatRelativeTimestampTest(unittest.TestCase):
+    """Test compact relative timestamp formatting (time is pinned)."""
+
+    def test_formats(self):
+        now = 1_000_000.0
+        with mock.patch.object(functions.time, "time", return_value=now):
+            self.assertEqual(format_relative_timestamp(None), "")
+            self.assertEqual(format_relative_timestamp("garbage"), "")
+            self.assertEqual(format_relative_timestamp(now), "Now")
+            self.assertEqual(format_relative_timestamp(now - 90), "1m ago")
+            self.assertEqual(format_relative_timestamp(now - 3 * 3600), "3h ago")
+            self.assertEqual(format_relative_timestamp(now - 2 * 86400), "2d ago")
+            # Millisecond input is normalized.
+            self.assertEqual(format_relative_timestamp(now * 1000), "Now")
+
+
+class CopyToClipboardAsyncTest(unittest.TestCase):
+    """Test clipboard tool selection for the non-blocking copy helper."""
+
+    def _make_launcher(self):
+        launcher = mock.Mock()
+        launcher.spawnv.return_value = mock.Mock()
+        return launcher
+
+    def test_prefers_wl_copy(self):
+        launcher = self._make_launcher()
+        with (
+            mock.patch.object(functions, "find_executable", return_value="wl-copy"),
+            mock.patch.object(
+                functions.Gio.SubprocessLauncher, "new", return_value=launcher
+            ),
+        ):
+            copy_to_clipboard_async("123456")
+        launcher.spawnv.assert_called_once_with(["wl-copy", "--type", "text/plain"])
+
+    def test_falls_back_to_xclip(self):
+        launcher = self._make_launcher()
+
+        def find(name):
+            return "xclip" if name == "xclip" else None
+
+        with (
+            mock.patch.object(functions, "find_executable", side_effect=find),
+            mock.patch.object(
+                functions.Gio.SubprocessLauncher, "new", return_value=launcher
+            ),
+        ):
+            copy_to_clipboard_async("123456")
+        launcher.spawnv.assert_called_once_with(["xclip", "-selection", "clipboard"])
+
+    def test_no_tool_is_a_noop(self):
+        with (
+            mock.patch.object(functions, "find_executable", return_value=None),
+            mock.patch.object(functions.Gio.SubprocessLauncher, "new") as launcher_new,
+        ):
+            copy_to_clipboard_async("123456")
+        launcher_new.assert_not_called()
 
 
 class FindExecutableTest(unittest.TestCase):

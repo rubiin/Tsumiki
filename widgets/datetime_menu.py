@@ -1,5 +1,4 @@
 import contextlib
-from datetime import datetime
 
 from fabric.notifications import Notification
 from fabric.utils import Gtk, bulk_connect, logger, math
@@ -144,24 +143,9 @@ class DateMenuNotification(Box):
         self.add(content_box)
 
     def _format_time(self) -> str:
-        ts = getattr(self._notification, "time", None)
-        if ts is None:
-            return ""
-        try:
-            ts_value = float(ts)
-            if ts_value > 1e12:
-                ts_value /= 1000.0
-            diff = datetime.now().timestamp() - ts_value
-            if diff < 60:
-                return "Now"
-            if diff < 3600:
-                return f"{int(diff / 60)}m ago"
-            if diff < 86400:
-                return f"{int(diff / 3600)}h ago"
-            return f"{int(diff / 86400)}d ago"
-        except Exception as e:
-            logger.warning(f"[DateTime] Failed to format time: {e}")
-            return ""
+        return helpers.format_relative_timestamp(
+            getattr(self._notification, "time", None)
+        )
 
     def remove_notification(self, *_):
         notification_service.remove_notification(self._id)

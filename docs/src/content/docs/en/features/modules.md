@@ -46,6 +46,8 @@ transition_duration = 350
 per_app_limits = {}
 play_sound = false
 max_actions = 3
+copy_code_action = true
+show_timestamp = true
 dismiss_on_hover = false
 sound_file = "notification4"
 max_lines = 4
@@ -69,6 +71,8 @@ max_count = 200
 - **`respect_expire`**: Whether to respect the expire timeout from the notification sender.
 - **`dnd_on_screencast`**: Enables Do Not Disturb mode during screen recording.
 - **`per_app_limits`**: Limit notifications per application: `{ "app_name": 5 }`.
+- **`copy_code_action`**: Detects one-time (2FA) codes in the body and shows a `Copy "123456"` action that copies the code to the clipboard and dismisses the notification.
+- **`show_timestamp`**: Shows a relative timestamp (e.g. `5m ago`) in the notification header.
 - **`persist`**: Save notifications to disk for recall after restart.
 
 ---

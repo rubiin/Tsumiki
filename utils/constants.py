@@ -501,6 +501,8 @@ DEFAULT_CONFIG = {
             "per_app_limits": {},
             "play_sound": False,
             "max_actions": 3,
+            "copy_code_action": True,  # Offer COPY for one-time (2FA) codes in body
+            "show_timestamp": True,  # Relative timestamp in notification header
             "dismiss_on_hover": False,
             "sound_file": "notification4",
             "persist": {

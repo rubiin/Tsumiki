@@ -14,6 +14,7 @@ from functools import lru_cache
 from io import BytesIO
 from typing import Any, Callable, Iterable, List, Literal, Optional, TypeVar
 
+import gi
 from fabric.hyprland import HyprlandReply
 from fabric.utils import (
     Gdk,
@@ -47,6 +48,26 @@ from .constants import (
 from .decorators import run_in_thread, thread
 from .exceptions import ExecutableNotFoundError
 from .icons import get_text_icon
+
+gi.require_version("Pango", "1.0")
+from gi.repository import Pango  # noqa: E402
+
+# Formatting tags re-enabled by ``parse_markup`` after escaping (SwayNC-inspired).
+_ALLOWED_MARKUP_TAGS_RE = re.compile(r"&lt;(/?(?:b|i|u))&gt;")
+# Double-escaped entities some apps send (e.g. Discord escapes "<" itself).
+_DOUBLE_ESCAPED_ENTITIES_RE = re.compile(
+    r"&amp;(lt;|gt;|amp;|apos;|quot;|#60;|#x3C;|#x3c;|#62;|#x3E;|#x3e;|#39;|#34;)"
+)
+# One-time codes (2FA / OTP) in notification bodies, e.g. "123-456" or "482913",
+# delimited by whitespace/string boundaries and optional trailing punctuation.
+# The optional literal "G-" prefix covers Google's "G-123456" sender format.
+_ONE_TIME_CODE_RE = re.compile(
+    r"(?:^|(?<=\s))(?:G-)?(\d{3}[- ]\d{3}|\d{4,8})(?=$|[\s.,])"
+)
+# ``<img src="...">`` tags embedded in notification bodies.
+_BODY_IMAGE_TAG_RE = re.compile(r"<img[^>]*\ssrc=(\"([^\"]*)\"|'([^']*)')[^>]*>")
+# Residual markup tags (e.g. <b>) stripped before one-time code extraction.
+_MARKUP_TAG_RE = re.compile(r"<[^>]+>")
 
 
 def register_temp_resource(path: str):
@@ -216,7 +237,111 @@ def get_simple_palette_threaded(
 
 # Function to escape the markup
 def parse_markup(text: str) -> str:
-    return html.escape(text.replace("\n", " "))
+    """Escape *text* for Pango markup, re-enabling a small whitelist of
+    formatting tags (b/i/u) so apps can send basic formatting without being
+    able to inject arbitrary markup (inspired by SwayNotificationCenter).
+
+    Falls back to fully-escaped output when the re-enabled markup does not
+    parse (e.g. unclosed tags), so malformed bodies can never break rendering.
+    """
+    escaped = html.escape(text.replace("\n", " "))
+    # Re-enable whitelisted tags first (real ``<b>`` tags survive escaping as
+    # ``&lt;b&gt;``), then fix double-escaped entities: apps like Discord send
+    # pre-escaped text, so a literal "<" arrives as "&lt;" and would render as
+    # "&lt;" without unescaping "&amp;" back to "&" first (SwayNC behavior).
+    candidate = _ALLOWED_MARKUP_TAGS_RE.sub(r"<\1>", escaped)
+    candidate = _DOUBLE_ESCAPED_ENTITIES_RE.sub(r"&\1", candidate)
+    if candidate == escaped:
+        return escaped
+    try:
+        Pango.parse_markup(candidate, -1, "\0")
+    except GLib.Error:
+        return escaped
+    return candidate
+
+
+def extract_one_time_code(text: str) -> str | None:
+    """Return the first one-time (2FA) code found in *text*, else ``None``.
+
+    Matches 4-8 digit codes and ``123-456`` / ``123 456`` pairs delimited by
+    whitespace or string boundaries, plus Google's ``G-123456`` format
+    (SwayNC-inspired). Returns digits only, ready for pasting into OTP fields.
+    """
+    if not text:
+        return None
+    # Strip residual markup tags so codes wrapped in e.g. <b>...</b> are found.
+    text = _MARKUP_TAG_RE.sub("", text)
+    match = _ONE_TIME_CODE_RE.search(text)
+    if not match:
+        return None
+    return "".join(c for c in match.group(1) if c.isdigit()) or None
+
+
+def extract_body_image(text: str) -> tuple[str, str | None]:
+    """Strip ``<img src=...>`` tags from *text* and return a tuple of the
+    cleaned text and the first image source, or ``None`` (SwayNC-inspired).
+
+    The returned source is not resolved to a path; use ``expand_env`` and
+    ``os.path.exists`` at the call site.
+    """
+    if not text or "<img" not in text:
+        return text, None
+    match = _BODY_IMAGE_TAG_RE.search(text)
+    cleaned = _BODY_IMAGE_TAG_RE.sub("", text)
+    if not match:
+        return cleaned, None
+    src = (match.group(2) or match.group(3) or "").strip()
+    return cleaned, src or None
+
+
+def format_relative_timestamp(ts: float | None) -> str:
+    """Format a unix timestamp as a compact relative label, e.g. "Now",
+    "5m ago", "2h ago", "3d ago". Accepts seconds or milliseconds; returns an
+    empty string for missing/invalid input."""
+    if ts is None:
+        return ""
+    try:
+        ts_value = float(ts)
+        if ts_value > 1e12:  # already in milliseconds
+            ts_value /= 1000.0
+        diff = time.time() - ts_value
+        if diff < 60:
+            return "Now"
+        if diff < 3600:
+            return f"{int(diff / 60)}m ago"
+        if diff < 86400:
+            return f"{int(diff / 3600)}h ago"
+        return f"{int(diff / 86400)}d ago"
+    except (TypeError, ValueError, OSError, OverflowError):
+        logger.warning(f"Failed to format relative timestamp for {ts!r}")
+        return ""
+
+
+def copy_to_clipboard_async(text: str) -> None:
+    """Copy *text* to the system clipboard without blocking the UI thread
+    (wl-copy, falling back to xclip)."""
+    text = text or ""
+    argv: list[str] | None = None
+    if find_executable("wl-copy"):
+        argv = ["wl-copy", "--type", "text/plain"]
+    elif find_executable("xclip"):
+        argv = ["xclip", "-selection", "clipboard"]
+    if argv is None:
+        logger.warning("[CLIPBOARD] No clipboard tool (wl-copy/xclip) found")
+        return
+    try:
+        launcher = Gio.SubprocessLauncher.new(Gio.SubprocessFlags.STDIN_PIPE)
+        proc = launcher.spawnv(argv)
+        proc.communicate_utf8_async(text, None, _on_clipboard_copy_finished)
+    except Exception:
+        logger.exception("[CLIPBOARD] Failed to copy to clipboard")
+
+
+def _on_clipboard_copy_finished(proc: Gio.Subprocess, result: Gio.AsyncResult):
+    try:
+        proc.communicate_utf8_finish(result)
+    except Exception as e:
+        logger.warning(f"[CLIPBOARD] Copy failed: {e}")
 
 
 def read_json_file(file_path: str) -> Optional[dict | list]:

@@ -3277,6 +3277,16 @@
               "description": "Maximum number of expanded lines to show in a notification",
               "default": 20
             },
+            "copy_code_action": {
+              "type": "boolean",
+              "description": "Show a COPY action when the body contains a one-time (2FA) code; clicking copies the code and dismisses the notification.",
+              "default": true
+            },
+            "show_timestamp": {
+              "type": "boolean",
+              "description": "Show a relative timestamp (e.g. '5m ago') in the notification header.",
+              "default": true
+            },
             "play_sound": {
               "type": "boolean",
               "description": "Determines whether to play a sound when a notification is received",

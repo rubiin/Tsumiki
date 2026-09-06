@@ -1,3 +1,4 @@
+import os
 from typing import ClassVar
 
 from fabric.notifications import (
@@ -7,6 +8,7 @@ from fabric.notifications import (
 )
 from fabric.utils import (
     Gdk,
+    GdkPixbuf,
     GLib,
     Gtk,
     bulk_connect,
@@ -185,7 +187,11 @@ class NotificationWidget(EventBox):
 
         self._wire_events()
 
-        body_text = self._notification.body or ""
+        # Strip inline <img src=...> tags from the body; the first source is
+        # rendered as an image when the notification has no image hint.
+        body_text, body_image_src = helpers.extract_body_image(
+            self._notification.body or ""
+        )
         max_collapsed_lines = self.config.get("max_lines", 4)
         max_expanded_lines = self.config.get("max_expanded_lines", 20)
         is_long_content = (
@@ -196,9 +202,14 @@ class NotificationWidget(EventBox):
             notification, is_long_content, max_collapsed_lines, max_expanded_lines
         )
         body = self._build_body(
-            notification, is_long_content, max_collapsed_lines, max_expanded_lines
+            notification,
+            body_text,
+            body_image_src,
+            is_long_content,
+            max_collapsed_lines,
+            max_expanded_lines,
         )
-        self.actions_container_grid = self._build_actions(notification)
+        self.actions_container_grid = self._build_actions(notification, body_text)
 
         self.notification_box.children = (
             self.progress_timeout,
@@ -300,17 +311,30 @@ class NotificationWidget(EventBox):
         if self.expand_button:
             header_container.pack_end(self.expand_button, False, False, 0)
 
+        if self.config.get("show_timestamp", True):
+            header_container.pack_end(
+                Label(
+                    label=helpers.format_relative_timestamp(self._notification.time),
+                    v_align="center",
+                    style_classes="timestamp",
+                ),
+                False,
+                False,
+                0,
+            )
+
         return header_container
 
     def _build_body(
         self,
         notification: Notification,
+        body_text: str,
+        body_image_src: str | None,
         is_long_content: bool,
         max_collapsed_lines: int,
         max_expanded_lines: int,
     ) -> Box:
         """Build notification body: optional image and expandable text label."""
-        body_text = self._notification.body or ""
         body_container = Box(
             spacing=4,
             orientation="h",
@@ -319,7 +343,11 @@ class NotificationWidget(EventBox):
             h_align="start",
         )
 
-        if image_pixbuf := get_notification_image_pixbuf(self._notification):
+        image_pixbuf = get_notification_image_pixbuf(self._notification)
+        if image_pixbuf is None and body_image_src:
+            image_pixbuf = self._load_body_image_pixbuf(body_image_src)
+
+        if image_pixbuf is not None:
             body_container.add(
                 CircularImage(
                     pixbuf=image_pixbuf,
@@ -328,7 +356,6 @@ class NotificationWidget(EventBox):
                     size=constants.NOTIFICATION_IMAGE_SIZE,
                 ),
             )
-            del image_pixbuf
 
         if is_long_content:
             self.body_label = Label(
@@ -356,11 +383,45 @@ class NotificationWidget(EventBox):
 
         return body_container
 
-    def _build_actions(self, notification: Notification) -> Grid:
-        """Build the actions grid from notification actions."""
+    def _load_body_image_pixbuf(self, src: str) -> GdkPixbuf.Pixbuf | None:
+        """Resolve an inline ``<img src=...>`` body image to a pixbuf or None."""
+        path = helpers.expand_env(src)
+        if path.startswith("file://"):
+            path = path[len("file://") :]
+        if not path or not os.path.exists(path):
+            return None
+        try:
+            return GdkPixbuf.Pixbuf.new_from_file_at_size(
+                path,
+                constants.NOTIFICATION_IMAGE_SIZE,
+                constants.NOTIFICATION_IMAGE_SIZE,
+            )
+        except Exception:
+            logger.exception(f"[Notification] Failed to load body image: {src}")
+            return None
+
+    def _build_actions(self, notification: Notification, body_text: str) -> Grid:
+        """Build the actions grid from notification actions.
+
+        When the body contains a one-time (2FA) code, a COPY button is
+        prepended that copies the code and dismisses the notification.
+        """
         max_actions = self.config.get("max_actions", 3)
         actions = notification.actions[:max_actions]
-        actions_count = len(actions)
+
+        copy_code = None
+        if self.config.get("copy_code_action", True):
+            copy_code = helpers.extract_one_time_code(body_text)
+
+        copy_offset = 1 if copy_code else 0
+        total_actions = len(actions) + copy_offset
+        buttons: list[Button] = [
+            ActionButton(action, i + copy_offset, total_actions)
+            for i, action in enumerate(actions)
+        ]
+        if copy_code:
+            buttons.insert(0, CopyCodeButton(copy_code, 0, total_actions, notification))
+
         grid = Grid(
             orientation="h",
             name="notification-action-box",
@@ -368,13 +429,7 @@ class NotificationWidget(EventBox):
             row_homogeneous=True,
             column_spacing=4,
         )
-        grid.attach_flow(
-            [
-                ActionButton(action, i, actions_count)
-                for i, action in enumerate(actions)
-            ],
-            max_actions,
-        )
+        grid.attach_flow(buttons, max_actions)
         return grid
 
     def _toggle_expand(self, collapsed_lines: int, expanded_lines: int):
@@ -597,6 +652,42 @@ class NotificationRevealer(Revealer):
         self._is_closing = True
         # Trigger close animation - destroy happens in on_child_revealed
         self.set_reveal_child(False)
+
+
+class CopyCodeButton(HoverButton):
+    """A button that copies a one-time code from the body to the clipboard,
+    then dismisses the notification (SwayNC-inspired)."""
+
+    def __init__(
+        self,
+        code: str,
+        action_number: int,
+        total_actions: int,
+        notification: Notification | None = None,
+        **kwargs,
+    ):
+        super().__init__(
+            label=f'Copy "{code}"',
+            h_expand=True,
+            on_clicked=self.on_click,
+            style_classes="notification-action",
+            **kwargs,
+        )
+
+        self.code = code
+        self._notification = notification
+
+        if action_number == 0:
+            self.add_style_class("start-action")
+        elif action_number == total_actions - 1:
+            self.add_style_class("end-action")
+        else:
+            self.add_style_class("middle-action")
+
+    def on_click(self, *_):
+        helpers.copy_to_clipboard_async(self.code)
+        if self._notification:
+            self._notification.close("dismissed-by-user")
 
 
 class ActionButton(HoverButton):
