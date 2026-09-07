@@ -59,8 +59,7 @@
 /// Generate widget-shell blocks for simple widgets (border + optional nerd-icon only).
 $widget-shell-widgets: (
   (
-    "window_count" // 3-param widgets (no icon/spacing)
-    ,
+    "window_count", // 3-param widgets (no icon/spacing)
     variable.$bar-widgets-window_count-border-radius,
     variable.$bar-widgets-window_count-border-enabled,
     variable.$bar-widgets-window_count-border-width,
@@ -84,8 +83,7 @@ $widget-shell-widgets: (
     null
   ),
   (
-    "cpu" // 5-param widgets (border + icon + spacing)
-    ,
+    "cpu", // 5-param widgets (border + icon + spacing)
     variable.$bar-widgets-cpu-border-radius,
     variable.$bar-widgets-cpu-border-enabled,
     variable.$bar-widgets-cpu-border-width,
