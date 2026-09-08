@@ -2,16 +2,14 @@
 
 ## [4.8.1](https://github.com/rubiin/tsumiki/compare/v4.8.0...v4.8.1) (2026-09-08)
 
-
 ### 🚀 New Features
 
-* add COPY action for one-time codes and show relative timestamps in notifications ([6a24ed7](https://github.com/rubiin/tsumiki/commit/6a24ed7881605099f20ff968e11fabbe6c6f2fa6))
-* enhance notification handling and grouping ([f9487ec](https://github.com/rubiin/tsumiki/commit/f9487ec3a33090d90b3a7231dee07ee24a3f64c0))
-
+- add COPY action for one-time codes and show relative timestamps in notifications ([6a24ed7](https://github.com/rubiin/tsumiki/commit/6a24ed7881605099f20ff968e11fabbe6c6f2fa6))
+- enhance notification handling and grouping ([f9487ec](https://github.com/rubiin/tsumiki/commit/f9487ec3a33090d90b3a7231dee07ee24a3f64c0))
 
 ### ⚙️ Chores
 
-* release 4.8.1 ([e9bc7e8](https://github.com/rubiin/tsumiki/commit/e9bc7e872acc6ac33717c36d0b2e6b43f7dfe897))
+- release 4.8.1 ([e9bc7e8](https://github.com/rubiin/tsumiki/commit/e9bc7e872acc6ac33717c36d0b2e6b43f7dfe897))
 
 ## [4.8.0](https://github.com/rubiin/tsumiki/compare/v4.7.0...v4.8.0) (2026-09-06)
 
