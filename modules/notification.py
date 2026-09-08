@@ -87,12 +87,26 @@ class NotificationPopup(BaseWindow):
     def on_new_notification(self, fabric_notification: Notifications, id):
         notification = fabric_notification.get_notification_from_id(id)
 
-        # Check if the notification is in the "do not disturb" mode, hacky way
+        replaces_id = getattr(notification, "replaces_id", 0) or 0
+
+        # Check if the notification is in the "do not disturb" mode, hacky way.
+        # A hidden replacement still removes the old notification (SwayNC
+        # parity): DND/ignored notifications never reach the popup, but a
+        # stale visible revealer for the replaced one must not linger.
         if self._server.dont_disturb or notification.app_name in self.ignored_apps:
+            if replaces_id:
+                self._server.drop_registry_entry(replaces_id)
+                old_box = self._active_notifications.pop(replaces_id, None)
+                if old_box is not None:
+                    old_box.notification_box.stop_timeout()
+                    old_box.destroy()
             return
 
-        replaces_id = getattr(notification, "replaces_id", 0) or 0
         if replaces_id:
+            # Drop the replaced notification from the server's in-memory
+            # registry so its Notification object doesn't leak there.
+            self._server.drop_registry_entry(replaces_id)
+
             old_box = self._active_notifications.pop(replaces_id, None)
             if old_box is not None:
                 old_box.replace_notification(notification)

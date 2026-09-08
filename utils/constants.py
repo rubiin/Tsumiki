@@ -173,6 +173,7 @@ DEFAULT_CONFIG = {
                 "enabled": True,
                 "count": True,
                 "hide_count_on_zero": False,
+                "notification_grouping": True,  # Group history by app in the date menu
             },
         },
         "divider": {"size": 2},

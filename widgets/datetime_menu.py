@@ -174,6 +174,10 @@ class DateNotificationMenu(Box):
         self.config = config
         self.pixel_size = 13
         self.notification_enabled = config.get("notification", {}).get("enabled", True)
+        # Grouping toggle lives in this widget's notification sub-config.
+        self.grouping_enabled = config.get("notification", {}).get(
+            "notification_grouping", True
+        )
         self._vadj_handler = None
 
         if self.notification_enabled:
@@ -361,8 +365,36 @@ class DateNotificationMenu(Box):
 
         return str(app_name or "Unknown")
 
+    def _notification_urgency(self, notification: Notification) -> int:
+        """Get urgency (0=low, 1=normal, 2=critical) for both serialized
+        and deserialized objects."""
+        urgency = getattr(notification, "urgency", None)
+        if urgency is None and hasattr(notification, "__getitem__"):
+            try:
+                urgency = notification["urgency"]
+            except Exception:
+                urgency = None
+        try:
+            return int(urgency) if urgency is not None else 1
+        except (TypeError, ValueError):
+            return 1
+
     def _rebuild_grouped_entries(self):
         """Build app-wise deck entries."""
+        if not self.grouping_enabled:
+            # Flat list (grouping disabled): one entry per notification,
+            # newest first.
+            ordered = sorted(
+                self.all_notifications,
+                key=lambda n: self._notification_id(n) or 0,
+                reverse=True,
+            )
+            self._app_expand_state.clear()
+            self.grouped_entries = [
+                (self._notification_app_name(n), [n]) for n in ordered
+            ]
+            return
+
         grouped: dict[str, list[Notification]] = {}
 
         for notification in self.all_notifications:
@@ -378,11 +410,16 @@ class DateNotificationMenu(Box):
                 reverse=True,
             )
 
-        # Order app decks by most recent notification first.
+        # Order app decks by urgency first (any critical member), then by
+        # latest notification (matches SwayNC's list_box_sort_func).
         app_order = sorted(
             grouped,
-            key=lambda app: self._notification_id(grouped[app][0]) or 0,
-            reverse=True,
+            key=lambda app: (
+                0
+                if any(self._notification_urgency(n) == 2 for n in grouped[app])
+                else 1,
+                -(self._notification_id(grouped[app][0]) or 0),
+            ),
         )
 
         entries: list[tuple[str, list[Notification]]] = []
@@ -670,6 +707,16 @@ class DateNotificationMenu(Box):
         fabric_notification: Notification = (
             fabric_notification.get_notification_from_id(id)
         )
+
+        # A replacement supersedes the entry it targets - drop the stale one
+        # so in-place updates don't stack up duplicates in the menu.
+        replaces_id = getattr(fabric_notification, "replaces_id", 0) or 0
+        if replaces_id:
+            self.all_notifications = [
+                n
+                for n in self.all_notifications
+                if self._notification_id(n) != replaces_id
+            ]
 
         # The notification_count handler may already have synced this
         # notification in from the service - avoid inserting it twice.

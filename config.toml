@@ -244,6 +244,7 @@ nepali_date = true
 enabled = true
 count = true
 hide_count_on_zero = true
+notification_grouping = true   # Group notification history by app in the date menu
 
 [widgets.divider]
 size = "2px"

@@ -1,0 +1,57 @@
+import unittest
+from unittest import mock
+
+try:
+    import gi
+
+    gi.require_version("Playerctl", "2.0")
+    from services.mpris import MprisPlayer
+
+    HAS_PLAYERCTL = True
+except ImportError:  # playerctl library / bindings unavailable
+    HAS_PLAYERCTL = False
+
+
+@unittest.skipUnless(HAS_PLAYERCTL, "Playerctl bindings unavailable")
+class MprisPlayerSafetyTest(unittest.TestCase):
+    """Playerctl's sync getters abort the process (g_error) when the
+    player's DBus name is gone - e.g. while VLC restarts its MPRIS service
+    on media change. Our getters must never call into a dead player.
+    """
+
+    def _make_player(self, name: str = "no-such-player") -> MprisPlayer:
+        raw = mock.Mock()
+        raw.get_property.return_value = name
+        player = MprisPlayer(raw)
+        player._player = None  # simulate exit without touching the bus
+        return player
+
+    def test_dead_player_is_not_alive(self):
+        player = self._make_player()
+        self.assertFalse(player._alive())
+
+    def test_getters_return_defaults_when_player_gone(self):
+        player = self._make_player()
+        self.assertEqual(player.metadata, {})
+        self.assertEqual(player.title, "")
+        self.assertEqual(player.artist, "")
+        self.assertEqual(player.playback_status, "unknown")
+        self.assertEqual(player.position, 0)
+        self.assertFalse(player.can_pause)
+        self.assertFalse(player.can_go_next)
+
+    def test_unowned_name_never_reaches_playerctl(self):
+        raw = mock.Mock()
+        raw.get_property.return_value = "definitely-not-a-real-player-zzz"
+        player = MprisPlayer(raw)
+
+        self.assertFalse(player._alive())
+        self.assertEqual(player.metadata, {})
+
+        # __init__ read the local player-name only; the metadata getter must
+        # not have triggered any further playerctl calls.
+        self.assertEqual(raw.get_property.call_count, 1)
+
+
+if __name__ == "__main__":
+    unittest.main()

@@ -1540,9 +1540,14 @@
                   "type": "boolean",
                   "default": true,
                   "description": "Hide event count if zero."
+                },
+                "notification_grouping": {
+                  "type": "boolean",
+                  "default": true,
+                  "description": "Group notification history by app in the date menu. When false, notifications are shown as a flat list."
                 }
               },
-              "required": ["enabled", "count", "hide_count_on_zero"]
+              "required": ["enabled", "count", "hide_count_on_zero", "notification_grouping"]
             },
             "nepali_date": {
               "type": "boolean",

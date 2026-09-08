@@ -65,9 +65,11 @@ requested, never as a side effect of an unrelated change:
 
 - Confirm whether the task is a **feature, bugfix, or refactor**.
 - Check whether it touches the **public config schema** (`tsumiki.schema.json`).
-- Decide whether it needs **new tests**.
+- Decide whether it needs **new tests** (default: yes for any new logic or a
+  bugfix with a reproduction case — see §14).
 - Decide whether it needs **doc updates** (README, docs site, or schema).
 - For unfamiliar areas, skim `README.md`, `CONTRIBUTING.md`, and `doc.md` first.
+- Plan to run `ruff` + the test suite before finishing (see §14).
 
 ## 7. Editing Conventions
 
@@ -410,34 +412,45 @@ python3 -c "from widgets.my_module import MyModuleWidget; print('OK: widget')"
   duplicate timers, and destroy/cleanup paths (see §12).
 - If a change touches config schema, update `tsumiki.schema.json`, `utils/config.py`,
   and `config.toml` examples in sync.
+- Add a regression test when the bug has a clear reproduction case (see §14).
 
-## 14. Post-Implementation Verification
+## 14. Definition of Done — Run After EVERY Feature, Bugfix, or Refactor
 
-After completing a feature, bugfix, or refactor, run the following checks:
+A task is **not complete** until the checks below pass. Run them every time
+one feature or bugfix is finished — not just at the end of a large batch.
 
 ```bash
-# 1. Lint Python code
+# 1. Lint Python code — REQUIRED after every change
 uv run ruff check .
 
-# 2. Compile SCSS (only if styles were modified)
+# 2. Run the test suite
+uv run python -m unittest discover tests -q
+
+# 3. Compile SCSS (only if styles were modified)
 sass styles/main.scss ~/tmp/style.css --no-source-map
 
-# 3. Run pre-commit hooks
+# 4. Run pre-commit hooks
 prek run --all-files
-
-# 4. Run test suite
-uv run python -m unittest discover tests -q
 ```
 
-- **Ruff**: Fix any lint errors before finishing.
+- **Ruff**: Must pass before finishing — no exceptions. Fix any lint errors
+  and re-run until clean.
+- **Tests**:
+  - All existing tests must pass.
+  - **Add tests whenever possible.** Default to writing a unit/regression test
+    for any new functionality or a bugfix with a clear reproduction case; a
+    fix without a test is incomplete. UI-only changes with no testable logic
+    may skip adding tests, but state that explicitly.
+  - Follow `tests/` conventions: plain `unittest`, mock services/DBus/GTK
+    rather than requiring a display (see `tests/test_functions.py`,
+    `tests/test_notification_service.py`, `tests/test_mpris.py`).
 - **SCSS compilation**: Verify styles compile without errors; this catches
   syntax issues, undefined variables, and import problems.
 - **Pre-commit**: All hooks must pass; fix any issues flagged by hooks
   before finishing.
-- **Tests**: All tests must pass; add new tests if the change introduces new
-  functionality or fixes a bug with a clear reproduction case.
 
-If any check fails, fix the issue and re-run until all pass.
+If any check fails, fix the issue and re-run until all pass. Do not mark the
+task done while checks are failing.
 
 ## 15. Architecture Notes
 

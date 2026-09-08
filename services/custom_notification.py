@@ -15,6 +15,14 @@ from utils.widget_utils import get_notification_image_pixbuf
 
 _MAX_CACHED_PIXBUF = 100  # Hard cap on pixbuf cache entries
 
+# Hint keys apps use to mark notifications that replace each other (SwayNC
+# checks these in order; the hint's value is the shared sync key).
+_SYNC_HINT_KEYS = (
+    "synchronous",
+    "private-synchronous",
+    "x-canonical-private-synchronous",
+)
+
 
 class CustomNotifications(Notifications):
     """A service to manage the notifications."""
@@ -59,6 +67,8 @@ class CustomNotifications(Notifications):
         self._dont_disturb = False
         # Cache for pre-scaled pixbufs: {notification_id: {size: GdkPixbuf.Pixbuf}}
         self._pixbuf_cache: dict[int, dict[int, GdkPixbuf.Pixbuf]] = {}
+        # Sync-hint map: {sync key: last notification id} (SwayNC parity).
+        self._synchronous_ids: dict[str, int] = {}
         self._load_notifications()
 
     def _load_notifications(self):
@@ -103,6 +113,13 @@ class CustomNotifications(Notifications):
 
             self.all_notifications = valid_notifications
             self._count = highest_id
+            # Restore the sync-hint map from persisted entries so the mapping
+            # survives restarts.
+            self._synchronous_ids = {
+                n["sync-key"]: n["id"]
+                for n in valid_notifications
+                if n.get("sync-key")
+            }
 
             del valid_notifications
             del original_data
@@ -123,6 +140,16 @@ class CustomNotifications(Notifications):
 
                 if len(self.all_notifications) == 0:
                     self.emit("clear_all", True)
+
+    def drop_registry_entry(self, notification_id: int):
+        """Remove a notification from the in-memory registry only.
+
+        History, persistence, and the ``notification-closed`` signal are left
+        untouched. ``remove_notification`` is overridden here to operate on
+        persisted history, so registry cleanup for replaced notifications needs
+        this dedicated path (mirrors ``Notifications.remove_notification``).
+        """
+        return super().remove_notification(notification_id)
 
     def get_cached_pixbuf(
         self, notification_id: int, size: int | None = None
@@ -189,11 +216,28 @@ class CustomNotifications(Notifications):
                 self.cache_pixbuf(notification_id, scaled_small, smaller_size)
 
     def cache_notification(self, widget_config, data: Notification, max_count: int):
-        """Cache a notification, ensuring thread safety."""
+        """Cache a notification, ensuring thread safety.
+
+        Notifications carrying a ``replaces_id`` (or a synchronous hint) that
+        targets an existing entry are updated in place instead of being
+        appended, so progress-style updates don't stack up duplicates in the
+        persisted history.
+        """
         with self._lock:
             self._cleanup_invalid_notifications()
+
+            target_id = self._replacement_target_id(data)
+            if target_id is not None:
+                self._replace_notification_in_place(target_id, data)
+                return
+
             new_notification = self._create_serialized_notification(data)
             notification_id = new_notification["id"]
+
+            sync_key = self._get_sync_key(data)
+            if sync_key:
+                self._synchronous_ids[sync_key] = notification_id
+                new_notification["sync-key"] = sync_key
 
             # Cache the pixbuf before the notification object is potentially GC'd
             self.cache_pixbuf_from_notification(notification_id, data)
@@ -202,6 +246,73 @@ class CustomNotifications(Notifications):
             self.all_notifications.append(new_notification)
             self._enforce_global_limit(max_count)
             self._persist_and_emit()
+
+    def _notification_exists(self, notification_id: int) -> bool:
+        """Return whether a notification with the given id is in history."""
+        return any(n["id"] == notification_id for n in self.all_notifications)
+
+    def _get_sync_key(self, data: Notification) -> str | None:
+        """Return the sync-hint key for a notification, or ``None``.
+
+        Apps use the ``synchronous`` hint (or its private/canonical variants)
+        to mark notifications that replace each other; the hint's value is the
+        shared key (mirrors SwayNC's ``synchronous_ids`` map).
+        """
+        getter = getattr(data, "do_get_hint_entry", None)
+        if getter is None:
+            return None
+        for hint in _SYNC_HINT_KEYS:
+            try:
+                value = getter(hint)
+            except Exception:
+                value = None
+            if value:
+                return str(value)
+        return None
+
+    def _replacement_target_id(self, data: Notification) -> int | None:
+        """Compute the id of the entry this notification should replace.
+
+        ``replaces_id`` wins when it points at a live entry; otherwise the
+        synchronous-hint map is consulted. Returns ``None`` when there is no
+        target, in which case the notification is appended instead (mirrors
+        SwayNC's fallback to ``add_notification``).
+        """
+        replaces_id = getattr(data, "replaces_id", 0) or 0
+        if replaces_id and self._notification_exists(replaces_id):
+            return replaces_id
+
+        sync_key = self._get_sync_key(data)
+        if sync_key:
+            previous_id = self._synchronous_ids.get(sync_key)
+            if previous_id and self._notification_exists(previous_id):
+                return previous_id
+        return None
+
+    def _replace_notification_in_place(self, target_id: int, data: Notification):
+        """Update an existing history entry with a replacement notification.
+
+        The original id (and list position) is preserved, keeping the pixbuf
+        cache and any id-based bookkeeping consistent. ``_count`` is not
+        advanced and per-app/global limits are not re-enforced: the replaced
+        entry is already counted.
+        """
+        serialized = data.serialize()
+        serialized.update({"id": target_id, "app_name": data.app_name})
+
+        sync_key = self._get_sync_key(data)
+        if sync_key:
+            self._synchronous_ids[sync_key] = target_id
+            serialized["sync-key"] = sync_key
+
+        for i, entry in enumerate(self.all_notifications):
+            if entry["id"] == target_id:
+                self.all_notifications[i] = serialized
+                break
+
+        # Re-cache the pixbuf (id is unchanged, so the old entry is reused)
+        self.cache_pixbuf_from_notification(target_id, data)
+        self._persist_and_emit()
 
     def _cleanup_invalid_notifications(self):
         """Remove any invalid notifications."""
