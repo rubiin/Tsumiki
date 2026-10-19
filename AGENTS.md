@@ -166,8 +166,8 @@ class MyWidget(ButtonWidget, PopoverMixin):
 ```toml
 [layout]
 bar = [
-    # ... existing widgets ...
-    "my_widget",
+  # ... existing widgets ...
+  "my_widget",
 ]
 
 [widgets.my_widget]

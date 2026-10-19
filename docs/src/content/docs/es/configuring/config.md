@@ -164,7 +164,7 @@ El widget de espacios de trabajo soporta seis estilos de visualización:
 
 ```toml
 [widgets.workspaces]
-style = "numbered"   # "numbered" | "pill" | "icon" | "minimal" | "underline" | "bubble"
+style = "numbered" # "numbered" | "pill" | "icon" | "minimal" | "underline" | "bubble"
 ```
 
 - **numbered** — Números con indicador activo en forma de píldora (predeterminado)

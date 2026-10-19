@@ -88,5 +88,4 @@ Referenzieren Sie im Layout mit `@collapsible:utility-tools`.
 ```toml
 
 right_section = ["@collapsible:utility-tools", "system_tray"]
-
 ```

@@ -119,5 +119,4 @@ Reference in layout with `@collapsible:utility-tools`.
 ```toml
 
 right_section = ["@collapsible:utility-tools", "system_tray"]
-
 ```

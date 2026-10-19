@@ -24,7 +24,7 @@ tooltip = true
 round = true
 temperature_unit = "celsius"
 sensor = "acpitz"
-mode = "graph"          # "label" | "graph" | "circular"
+mode = "graph" # "label" | "graph" | "circular"
 graph_length = 4
 ```
 
@@ -36,7 +36,7 @@ graph_length = 4
 [widgets.memory]
 label_format = ""
 tooltip = true
-mode = "label"          # "label" | "graph" | "circular"
+mode = "label" # "label" | "graph" | "circular"
 graph_length = 4
 unit = "gb"
 ```
@@ -49,7 +49,7 @@ unit = "gb"
 [widgets.gpu]
 label_format = ""
 tooltip = true
-mode = "circular"       # "label" | "graph" | "circular"
+mode = "circular" # "label" | "graph" | "circular"
 graph_length = 4
 ```
 
@@ -204,7 +204,7 @@ tooltip = true
 [widgets.workspaces]
 count = 10
 hide_unoccupied = true
-style = "numbered"       # "numbered" | "pill" | "icon" | "default" | "underline" | "bubble"
+style = "numbered" # "numbered" | "pill" | "icon" | "default" | "underline" | "bubble"
 empty_scroll = false
 label_format = "{id}"
 icon_map = {}

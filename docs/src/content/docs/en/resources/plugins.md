@@ -34,8 +34,8 @@ Plugins live under `[modules.launcher]`:
 [modules.launcher]
 enabled = true
 plugins_enabled = true
-plugins_dir = ""          # default: the bundled plugins/ directory
-plugins = ["calc", "emoji"]  # strict allowlist; an empty list loads none
+plugins_dir = "" # default: the bundled plugins/ directory
+plugins = ["calc", "emoji"] # strict allowlist; an empty list loads none
 ```
 
 - **`plugins_enabled`**: Turns the slash-command system on or off.

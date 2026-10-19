@@ -88,5 +88,4 @@ Düzende `@collapsible:utility-tools` ile referans verin.
 ```toml
 
 right_section = ["@collapsible:utility-tools", "system_tray"]
-
 ```

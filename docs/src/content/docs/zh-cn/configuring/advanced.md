@@ -88,5 +88,4 @@ style_classes = ["utility-tools"]
 ```toml
 
 right_section = ["@collapsible:utility-tools", "system_tray"]
-
 ```

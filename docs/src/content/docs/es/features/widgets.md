@@ -24,7 +24,7 @@ tooltip = true
 round = true
 temperature_unit = "celsius"
 sensor = "acpitz"
-mode = "graph"          # "label" | "graph" | "circular"
+mode = "graph" # "label" | "graph" | "circular"
 graph_length = 4
 ```
 
@@ -40,9 +40,9 @@ Muestra el uso de memoria con múltiples modos de visualización.
 [widgets.memory]
 label_format = ""
 tooltip = true
-mode = "label"          # "label" | "graph" | "circular"
+mode = "label" # "label" | "graph" | "circular"
 graph_length = 4
-unit = "gb"             # Unidad de visualización para valores de memoria
+unit = "gb" # Unidad de visualización para valores de memoria
 ```
 
 ### GPU
@@ -53,7 +53,7 @@ Muestra el uso de la GPU (soporta AMD via `amdgpu` y NVIDIA via `nvidia-smi`).
 [widgets.gpu]
 label_format = ""
 tooltip = true
-mode = "circular"       # "label" | "graph" | "circular"
+mode = "circular" # "label" | "graph" | "circular"
 graph_length = 4
 ```
 
@@ -83,7 +83,7 @@ upload_threshold = 1024
 download_threshold = 1024
 kb_digits = 0
 mb_digits = 2
-interval = 2000         # Intervalo de sondeo en milisegundos
+interval = 2000 # Intervalo de sondeo en milisegundos
 ```
 
 Variables disponibles en `label_format`: `{upload}`, `{download}`.
@@ -273,7 +273,7 @@ count = 10
 hide_unoccupied = true
 ignored = [-99]
 reverse_scroll = false
-style = "numbered"       # "numbered" | "pill" | "icon" | "default" | "underline" | "bubble"
+style = "numbered" # "numbered" | "pill" | "icon" | "default" | "underline" | "bubble"
 empty_scroll = false
 label_format = "{id}"
 icon_map = {}
@@ -352,7 +352,7 @@ Muestra la fecha/hora actual con un popover de calendario y notificaciones de ev
 [widgets.date_time]
 date_format = " %a %b %d,"
 calendar = true
-clock_format = "12h"   # "12h" | "24h"
+clock_format = "12h" # "12h" | "24h"
 hover_reveal = false
 reveal_duration = 500
 
@@ -667,7 +667,7 @@ tooltip = true
 username = "rubiin"
 max_repos = 10
 avatar_size = 44
-default_tab = "issues"      # "issues" | "pull_requests"
+default_tab = "issues" # "issues" | "pull_requests"
 cache_ttl = 300
 ```
 
@@ -763,12 +763,12 @@ location = "kathmandu"
 label_format = "{temperature} {condition}"
 tooltip = true
 expanded = true
-temperature_unit = "celsius"   # "celsius" | "fahrenheit"
-wind_speed_unit = "kmh"        # "kmh" | "mph" | "ms" | "beaufort"
+temperature_unit = "celsius" # "celsius" | "fahrenheit"
+wind_speed_unit = "kmh" # "kmh" | "mph" | "ms" | "beaufort"
 interval = 86400
 hover_reveal = true
 reveal_duration = 500
-provider = "open-meteo"        # "open-meteo" | "wttr"
+provider = "open-meteo" # "open-meteo" | "wttr"
 ```
 
 Variables disponibles en `label_format`: `{temperature}`, `{condition}`.

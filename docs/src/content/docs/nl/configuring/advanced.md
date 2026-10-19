@@ -88,5 +88,4 @@ Verwijs in de lay-out met `@collapsible:utility-tools`.
 ```toml
 
 right_section = ["@collapsible:utility-tools", "system_tray"]
-
 ```
