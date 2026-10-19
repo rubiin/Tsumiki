@@ -17,10 +17,10 @@ La barra en sí misma es un módulo. Configura la posición, capa y comportamien
 
 ```toml
 [modules.bar]
-layer = "top"           # "top" | "overlay" | "bottom" | "background"
+layer = "top" # "top" | "overlay" | "bottom" | "background"
 auto_hide = false
-auto_hide_timeout = 3000   # milisegundos
-location = "top"           # "top" | "bottom"
+auto_hide_timeout = 3000 # milisegundos
+location = "top" # "top" | "bottom"
 ```
 
 - **`layer`**: Capa de Hyprland — `top` se renderiza sobre las ventanas, `background` debajo.
@@ -41,7 +41,7 @@ auto_dismiss = true
 respect_expire = true
 dnd_on_screencast = true
 ignored = []
-transition_type = "slide-left"       # "slide-left" | "slide-right" | "slide-up" | "slide-down" | "crossfade"
+transition_type = "slide-left" # "slide-left" | "slide-right" | "slide-up" | "slide-down" | "crossfade"
 transition_duration = 350
 per_app_limits = {}
 play_sound = false
@@ -82,7 +82,7 @@ Un lanzador de aplicaciones ancladas con intellihide, vistas previas de ventanas
 enabled = false
 ignored = []
 icon_size = 40
-behavior = "intellihide"            # "intellihide" | "always_show"
+behavior = "intellihide" # "intellihide" | "always_show"
 tooltip = false
 layer = "top"
 show_when_no_windows = false
@@ -94,7 +94,7 @@ orientation = "horizontal"
 always_show_focused = true
 hide_special_workspace_apps = false
 show_launcher = true
-launcher_position = "last"          # "first" | "last"
+launcher_position = "last" # "first" | "last"
 ignored = []
 ```
 
@@ -126,7 +126,7 @@ Vista general a pantalla completa de todos los espacios de trabajo y sus ventana
 enabled = false
 layer = "top"
 anchor = "center"
-transition_type = "crossfade"       # "crossfade" | "slide-left" | "slide-right" | "slide-up" | "slide-down"
+transition_type = "crossfade" # "crossfade" | "slide-left" | "slide-right" | "slide-up" | "slide-down"
 transition_duration = 350
 ```
 
@@ -146,11 +146,11 @@ icon_size = 35
 anchor = "center"
 width = 280
 height = 320
-layout = "grid"                    # "grid" | "list"
+layout = "grid" # "grid" | "list"
 grid_columns = 3
 grid_spacing = 12
-plugins_enabled = true              # comandos slash (/calc, /translate)
-plugins_dir = ""                    # predeterminado: <config>/plugins
+plugins_enabled = true # comandos slash (/calc, /translate)
+plugins_dir = "" # predeterminado: <config>/plugins
 ```
 
 - **`layout`**: `grid` muestra iconos en cuadrícula; `list` los muestra como lista con nombres.
@@ -195,7 +195,7 @@ anchor = "bottom-center"
 orientation = "horizontal"
 percentage = true
 icon_size = 28
-transition_type = "slide-up"       # "slide-up" | "slide-down" | "slide-left" | "slide-right" | "crossfade"
+transition_type = "slide-up" # "slide-up" | "slide-down" | "slide-left" | "slide-right" | "crossfade"
 transition_duration = 500
 osds = ["brightness", "volume"]
 ```
@@ -212,7 +212,7 @@ Una superposición decorativa de reloj en el escritorio (capa inferior).
 ```toml
 [modules.desktop_clock]
 enabled = false
-type = "cookie"                    # Tipo de widget de reloj
+type = "cookie" # Tipo de widget de reloj
 layer = "bottom"
 anchor = "bottom-right"
 date_format = "%A, %d %B %Y"
@@ -244,7 +244,7 @@ Muestra citas inspiradoras rotativas en el escritorio.
 enabled = false
 anchor = "bottom-right"
 layer = "bottom"
-interval = 600      # Segundos entre rotaciones de citas
+interval = 600 # Segundos entre rotaciones de citas
 ```
 
 Las citas se obtienen de una API externa.

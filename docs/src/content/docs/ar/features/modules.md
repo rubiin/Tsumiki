@@ -17,10 +17,10 @@ sidebar:
 
 ```toml
 [modules.bar]
-layer = "top"           # "top" | "overlay" | "bottom" | "background"
+layer = "top" # "top" | "overlay" | "bottom" | "background"
 auto_hide = false
-auto_hide_timeout = 3000   # مللي ثانية
-location = "top"           # "top" | "bottom"
+auto_hide_timeout = 3000 # مللي ثانية
+location = "top" # "top" | "bottom"
 ```
 
 - **`layer`**: طبقة هيبرلاند — `top` يُعرض فوق النوافذ، `background` يُعرض تحتها.
@@ -41,7 +41,7 @@ auto_dismiss = true
 respect_expire = true
 dnd_on_screencast = true
 ignored = []
-transition_type = "slide-left"       # "slide-left" | "slide-right" | "slide-up" | "slide-down" | "crossfade"
+transition_type = "slide-left" # "slide-left" | "slide-right" | "slide-up" | "slide-down" | "crossfade"
 transition_duration = 350
 per_app_limits = {}
 play_sound = false
@@ -82,7 +82,7 @@ max_count = 200
 enabled = false
 ignored = []
 icon_size = 40
-behavior = "intellihide"            # "intellihide" | "always_show"
+behavior = "intellihide" # "intellihide" | "always_show"
 tooltip = false
 layer = "top"
 show_when_no_windows = false
@@ -92,7 +92,7 @@ orientation = "horizontal"
 always_show_focused = true
 hide_special_workspace_apps = false
 show_launcher = true
-launcher_position = "last"          # "first" | "last"
+launcher_position = "last" # "first" | "last"
 ignored = []
 ```
 
@@ -104,7 +104,7 @@ ignored = []
 
 ### اختصارات لوحة المفاتيح
 
-| الإجراء                   | الاختصار                      |
+| الإجراء                    | الاختصار                       |
 | ------------------------- | ----------------------------- |
 | التركيز على العميل التالي | `Super+Tab`                   |
 | التركيز على العميل السابق | `Super+Shift+Tab`             |
@@ -142,11 +142,11 @@ icon_size = 35
 anchor = "center"
 width = 280
 height = 320
-layout = "grid"                    # "grid" | "list"
+layout = "grid" # "grid" | "list"
 grid_columns = 3
 grid_spacing = 12
-plugins_enabled = true              # إضافات الأوامر المائلة (/calc, /translate)
-plugins_dir = ""                    # الافتراضي: <config>/plugins
+plugins_enabled = true # إضافات الأوامر المائلة (/calc, /translate)
+plugins_dir = "" # الافتراضي: <config>/plugins
 ```
 
 - **`layout`**: `grid` يعرض أيقونات التطبيقات في شبكة؛ `list` يعرضها كقائمة بالأسماء.

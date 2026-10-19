@@ -15,7 +15,7 @@ Les widgets sont configurés sous `[widgets.<nom>]` dans `config.toml` et placé
 
 ```toml
 [widgets.cpu]
-mode = "graph"          # "label" | "graph" | "circular"
+mode = "graph" # "label" | "graph" | "circular"
 graph_length = 4
 
 [widgets.memory]

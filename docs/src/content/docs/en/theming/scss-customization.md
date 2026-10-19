@@ -131,7 +131,7 @@ Widget groups and individual widgets can use custom style classes:
 [[widget_groups]]
 widgets = ["workspaces", "window_title"]
 spacing = 2
-style_classes = ["compact"]     # Tighter spacing variant
+style_classes = ["compact"] # Tighter spacing variant
 ```
 
 Available built-in style classes:

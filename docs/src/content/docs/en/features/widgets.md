@@ -25,7 +25,7 @@ tooltip = true
 round = true
 temperature_unit = "celsius"
 sensor = "acpitz"
-mode = "graph"          # "label" | "graph" | "circular"
+mode = "graph" # "label" | "graph" | "circular"
 graph_length = 4
 ```
 
@@ -42,9 +42,9 @@ Displays memory usage with multiple display modes.
 show_icon = true
 icon = ""
 tooltip = true
-mode = "label"          # "label" | "graph" | "circular"
+mode = "label" # "label" | "graph" | "circular"
 graph_length = 4
-unit = "gb"             # Display unit for memory values
+unit = "gb" # Display unit for memory values
 ```
 
 ### GPU
@@ -56,7 +56,7 @@ Displays GPU usage (supports AMD via `amdgpu` and NVIDIA via `nvidia-smi`).
 show_icon = true
 icon = ""
 tooltip = true
-mode = "circular"       # "label" | "graph" | "circular"
+mode = "circular" # "label" | "graph" | "circular"
 graph_length = 4
 ```
 
@@ -69,7 +69,7 @@ Displays disk usage for a given path.
 path = "/"
 show_icon = true
 icon = "󰋊"
-mode = "label"          # "label" | "graph" | "circular"
+mode = "label" # "label" | "graph" | "circular"
 tooltip = true
 graph_length = 4
 unit = "gb"
@@ -87,7 +87,7 @@ upload_threshold = 1024
 download_threshold = 1024
 kb_digits = 0
 mb_digits = 2
-interval = 2000         # Polling interval in milliseconds
+interval = 2000 # Polling interval in milliseconds
 ```
 
 Variables available in `label_format`: `{upload}`, `{download}`.
@@ -104,7 +104,7 @@ no_updates_icon = "󰏖"
 os = "arch"
 hover_reveal = true
 reveal_duration = 500
-interval = 3600         # Refresh interval in seconds
+interval = 3600 # Refresh interval in seconds
 tooltip = true
 terminal = "kitty"
 pad_zero = false
@@ -140,7 +140,7 @@ label_format = "{icon} {percent}"
 [widgets.battery.notifications.low_battery]
 enabled = false
 threshold = 10
-message = ""                              # {percent} placeholder supported
+message = "" # {percent} placeholder supported
 
 [widgets.battery.notifications.full_battery]
 enabled = false
@@ -311,7 +311,7 @@ count = 10
 hide_unoccupied = true
 ignored = [-99]
 reverse_scroll = false
-style = "numbered"       # "numbered" | "pill" | "icon" | "default" | "underline" | "bubble"
+style = "numbered" # "numbered" | "pill" | "icon" | "default" | "underline" | "bubble"
 empty_scroll = false
 label_format = "{id}"
 icon_map = {}
@@ -337,7 +337,7 @@ truncation_size = 50
 tooltip = true
 mappings = true
 title_map = []
-fallback = "class"       # "class" | "title"
+fallback = "class" # "class" | "title"
 ```
 
 - **`title_map`**: List of mapping rules to rename window titles.
@@ -391,7 +391,7 @@ Shows the current date/time with a calendar popover and event notifications.
 [widgets.date_time]
 date_format = " %a %b %d,"
 calendar = true
-clock_format = "12h"   # "12h" | "24h"
+clock_format = "12h" # "12h" | "24h"
 hover_reveal = false
 reveal_duration = 500
 nepali_date = false
@@ -668,7 +668,7 @@ Quickly switch between installed themes.
 ```toml
 [widgets.theme_switcher]
 icon = ""
-notify = false    # Show notification on theme change
+notify = false # Show notification on theme change
 ```
 
 ### Cheatsheet
@@ -745,11 +745,11 @@ username = ""
 # GitHub Enterprise Server host (must be added to gh), empty = github.com
 hostname = ""
 avatar_size = 44
-default_tab = "inbox"       # "inbox" | "repos"
+default_tab = "inbox" # "inbox" | "repos"
 max_repos = 10
-sort_by = "updated"        # "updated" | "pushed" | "created" | "stars" | "name"
+sort_by = "updated" # "updated" | "pushed" | "created" | "stars" | "name"
 sort_order = "desc"
-own_repos_only = false     # only show repos owned by your account (hide org/collaborator)
+own_repos_only = false # only show repos owned by your account (hide org/collaborator)
 # Seconds profile and repository data stay cached before a refetch (0 disables).
 cache_ttl = 3600
 notification_interval = 60 # seconds between unread refreshes
@@ -878,12 +878,12 @@ location = "kathmandu"
 label_format = "{temperature} {condition}"
 tooltip = true
 expanded = true
-temperature_unit = "celsius"   # "celsius" | "fahrenheit"
-wind_speed_unit = "kmh"        # "kmh" | "mph" | "ms" | "beaufort"
+temperature_unit = "celsius" # "celsius" | "fahrenheit"
+wind_speed_unit = "kmh" # "kmh" | "mph" | "ms" | "beaufort"
 interval = 86400
 hover_reveal = true
 reveal_duration = 500
-provider = "open-meteo"        # "open-meteo" | "wttr"
+provider = "open-meteo" # "open-meteo" | "wttr"
 ```
 
 Variables available in `label_format`: `{temperature}`, `{condition}`.
