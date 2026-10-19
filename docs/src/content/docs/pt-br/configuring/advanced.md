@@ -85,7 +85,6 @@ Referencie no layout com `@collapsible:utility-tools`.
 ```toml
 
 right_section = ["@collapsible:utility-tools", "system_tray"]
-
 ```
 
 ## Botão Personalizado

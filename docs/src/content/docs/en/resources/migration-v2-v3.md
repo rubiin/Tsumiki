@@ -76,8 +76,8 @@ If you use bar auto-hide, set it in `[modules.bar]`:
 
 ```toml
 [modules.bar]
-auto_hide = true          # hide bar after timeout
-auto_hide_timeout = 3000  # milliseconds
+auto_hide = true # hide bar after timeout
+auto_hide_timeout = 3000 # milliseconds
 ```
 
 ### 5. Update widget groups syntax
