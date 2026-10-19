@@ -167,7 +167,7 @@ The workspace widget supports six display styles:
 
 ```toml
 [widgets.workspaces]
-style = "numbered"   # "numbered" | "pill" | "icon" | "minimal" | "underline" | "bubble"
+style = "numbered" # "numbered" | "pill" | "icon" | "minimal" | "underline" | "bubble"
 ```
 
 - **numbered** — Numbers with pill-shaped active indicator (default)

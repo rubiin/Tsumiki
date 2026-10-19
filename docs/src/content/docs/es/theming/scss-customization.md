@@ -130,7 +130,7 @@ Los grupos de widgets y widgets individuales pueden usar clases de estilo person
 [[widget_groups]]
 widgets = ["workspaces", "window_title"]
 spacing = 2
-style_classes = ["compact"]     # Variante de espaciado más ajustado
+style_classes = ["compact"] # Variante de espaciado más ajustado
 ```
 
 Clases de estilo integradas disponibles:

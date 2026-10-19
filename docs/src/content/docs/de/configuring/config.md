@@ -166,7 +166,7 @@ Das Arbeitsbereichs-Widget unterstützt sechs Anzeigestile:
 
 ```toml
 [widgets.workspaces]
-style = "numbered"   # "numbered" | "pill" | "icon" | "minimal" | "underline" | "bubble"
+style = "numbered" # "numbered" | "pill" | "icon" | "minimal" | "underline" | "bubble"
 ```
 
 - **numbered** — Zahlen mit pillenförmigem Aktiv-Indikator (Standard)

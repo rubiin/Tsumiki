@@ -25,7 +25,7 @@ tooltip = true
 round = true
 temperature_unit = "celsius"
 sensor = "acpitz"
-mode = "graph"          # "label" | "graph" | "circular"
+mode = "graph" # "label" | "graph" | "circular"
 graph_length = 4
 ```
 
@@ -38,7 +38,7 @@ graph_length = 4
 show_icon = true
 icon = ""
 tooltip = true
-mode = "label"          # "label" | "graph" | "circular"
+mode = "label" # "label" | "graph" | "circular"
 graph_length = 4
 unit = "gb"
 ```
@@ -52,7 +52,7 @@ unit = "gb"
 show_icon = true
 icon = ""
 tooltip = true
-mode = "circular"       # "label" | "graph" | "circular"
+mode = "circular" # "label" | "graph" | "circular"
 graph_length = 4
 ```
 
@@ -65,7 +65,7 @@ graph_length = 4
 path = "/"
 show_icon = true
 icon = "󰋊"
-mode = "label"          # "label" | "graph" | "circular"
+mode = "label" # "label" | "graph" | "circular"
 tooltip = true
 graph_length = 4
 unit = "gb"
@@ -208,7 +208,7 @@ tooltip = true
 [widgets.workspaces]
 count = 10
 hide_unoccupied = true
-style = "numbered"       # "numbered" | "pill" | "icon" | "default" | "underline" | "bubble"
+style = "numbered" # "numbered" | "pill" | "icon" | "default" | "underline" | "bubble"
 empty_scroll = false
 label_format = "{id}"
 icon_map = {}
@@ -226,7 +226,7 @@ icon = true
 truncation = true
 truncation_size = 50
 tooltip = true
-fallback = "class"       # "class" | "title"
+fallback = "class" # "class" | "title"
 ```
 
 ### عدد النوافذ
@@ -264,7 +264,7 @@ show_current_workspace_only = false
 [widgets.date_time]
 date_format = " %a %b %d,"
 calendar = true
-clock_format = "12h"   # "12h" | "24h"
+clock_format = "12h" # "12h" | "24h"
 nepali_date = false
 ```
 
