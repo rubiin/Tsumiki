@@ -38,7 +38,7 @@ style_classes = ["bordered"]
 [[collapsible_groups]]
 widgets = ["ocr", "screenshot", "recorder"]
 spacing = 4
-icon = "󰒓"
+label_format = "󰍽"
 tooltip = "أدوات مساعدة"
 style_classes = ["utility-tools"]
 
@@ -54,7 +54,6 @@ hide_unoccupied = true
 
 [widgets.date_time]
 date_format = "%b %d %H:%M"
-nepali_date = false
 
 [widgets.volume]
 tooltip = true
@@ -100,12 +99,11 @@ right_section = ["@group:1", "system_tray", "power"]
 
 أنواع المرجع المتاحة:
 
-| المرجع             | مثال                 | الوصف                        |
-| ------------------ | -------------------- | ---------------------------- |
-| اسم الأداة          | `"workspaces"`       | مرجع مباشر للأداة             |
-| `@group:N`         | `"@group:0"`         | مجموعة أدوات حسب الفهرس      |
-| `@collapsible:N`   | `"@collapsible:0"`   | مجموعة قابلة للطي حسب الفهرس |
-| `@custom_button:N` | `"@custom_button:0"` | زر مخصص حسب الفهرس           |
+| المرجع           | مثال               | الوصف                        |
+| ---------------- | ------------------ | ---------------------------- |
+| اسم الأداة       | `"workspaces"`     | مرجع مباشر للأداة            |
+| `@group:N`       | `"@group:0"`       | مجموعة أدوات حسب الفهرس      |
+| `@collapsible:N` | `"@collapsible:0"` | مجموعة قابلة للطي حسب الفهرس |
 
 ### `modules`
 
@@ -193,7 +191,7 @@ style_classes = ["bordered"]
 [[collapsible_groups]]
 widgets = ["ocr", "screenshot", "recorder"]
 spacing = 4
-icon = "󰒓"
+label_format = "󰍽"
 tooltip = "أدوات مساعدة"
 style_classes = ["utility-tools"]
 ```
@@ -214,10 +212,6 @@ contrast = 0.0
 ```
 
 راجع [التثيم مع Matugen](/ar/theming/matugen) للتفاصيل.
-
-## ملاحظة الترحيل
-
-إذا كنت تقوم بالترقية من إصدارات أقدم، راجع [الترحيل من v2 إلى v3](/ar/resources/migration-v2-v3) قبل نسخ كتل الإعدادات القديمة.
 
 ## سير العمل الموصى به
 

@@ -7,15 +7,10 @@ from fabric.utils import (
     invoke_repeater,
     logger,
 )
-from fabric.widgets.label import Label
-from fabric.widgets.revealer import Revealer
 
 from shared.widget_container import ButtonWidget
 from utils.colors import Colors
 from utils.constants import ASSETS_DIR
-from utils.widget_utils import (
-    nerd_font_icon,
-)
 
 
 class UpdatesWidget(ButtonWidget):
@@ -32,25 +27,12 @@ class UpdatesWidget(ButtonWidget):
 
         self.base_command = self._build_base_command()
 
-        if self.config.get("show_icon", True):
-            self.icon = nerd_font_icon(
-                icon=self.config.get("no_updates_icon", "󰒲"),
-                props={"style_classes": ["panel-font-icon"]},
-            )
-            self.container_box.add(self.icon)
-
-        if self.config.get("label", True):
-            self.update_label = Label(label="0", style_classes="panel-text")
-
-            if self.config.get("hover_reveal", True):
-                self.revealer = Revealer(
-                    child=self.update_label,
-                    transition_duration=self.config.get("reveal_duration", 500),
-                    transition_type="slide_right",
-                )
-                self.container_box.add(self.revealer)
-            else:
-                self.container_box.add(self.update_label)
+        self.label_format = self.config.get("label_format", "{total}")
+        self.add_formatted_label(
+            self.label_format,
+            self.config.get("no_updates_icon", "󰒒"),
+            total=self._format_total(0),
+        )
 
         self.connect("button-press-event", self.on_click)
 
@@ -85,41 +67,34 @@ class UpdatesWidget(ButtonWidget):
             self.update_time = datetime.now()
         return True
 
+    def _format_total(self, total: int) -> str:
+        """Render *total* for the ``{total}`` field, honouring ``pad_zero``.
+
+        Zero stays a bare ``0`` so an idle bar does not show a padded count.
+        """
+        if total == 0 or not self.config.get("pad_zero", True):
+            return str(total)
+        return str(total).rjust(2, "0")
+
     def _update_values(self, value: str):
         """Update the UI based on the returned update data."""
         try:
             data = json.loads(value)
             total = int(data.get("total", "0"))
 
-            # Update label
-            if self.config.get("label", True):
-                label_text = (
-                    str(total).rjust(2, "0")
-                    if self.config.get("pad_zero", True)
-                    else str(total)
-                )
-
-                # dont show '0' if total is 0 and pad_zero is True
-                if total == 0:
-                    label_text = str(total)
-
-                self.update_label.set_label(label_text)
-
-            # Update icon
-            if self.config.get("show_icon", True):
-                icon = (
-                    self.config.get("available_icon")
-                    if total > 0
-                    else self.config.get("no_updates_icon", "󰒲")
-                )
-                self.icon.set_label(icon)
+            icon = (
+                self.config.get("available_icon", "󰏗")
+                if total > 0
+                else self.config.get("no_updates_icon", "󰒒")
+            )
+            self.refresh_formatted_label(icon, total=self._format_total(total))
 
             # Tooltip
             self.set_tooltip_if_enabled(data.get("tooltip", ""), default=True)
 
             # Auto-hide logic
-            if self.config.get("auto_hide", False):
-                self.set_visible(total > 0)
+            if self.config.get("auto_hide", False) and self.is_visible():
+                self.set_visible(False)
 
         except (json.JSONDecodeError, ValueError) as e:
             logger.exception(

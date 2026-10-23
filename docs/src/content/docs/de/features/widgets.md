@@ -37,7 +37,7 @@ interval = 3600
 
 ```toml
 [widgets.battery]
-label_format = "{icon} {percent}"
+label_format = "{percent}"
 
 [widgets.volume]
 step_size = 5
@@ -46,7 +46,7 @@ step_size = 5
 step_size = 5
 
 [widgets.power]
-icon = "󰐥"
+label_format = ""
 confirm = true
 ```
 
@@ -61,6 +61,7 @@ show_urgent = false
 
 [widgets.window_title]
 truncation = true
+fallback_icon = "󰣆"
 
 [widgets.taskbar]
 icon_size = 22
@@ -72,7 +73,6 @@ show_current_workspace_only = false
 ```toml
 [widgets.date_time]
 clock_format = "12h"
-nepali_date = false
 
 [widgets.world_clock]
 timezones = ["America/New_York", "Asia/Tokyo"]
@@ -93,15 +93,18 @@ color = "#89b4fa"
 
 ```toml
 [widgets.screenshot]
+label_format = ""
 annotation = true
 
 [widgets.recorder]
 audio = true
 
 [widgets.clipboard]
+label_format = ""
 show_images = true
 
 [widgets.usb_manager]
+label_format = ""
 auto_refresh = true
 ```
 
@@ -131,6 +134,6 @@ style_classes = ["compact"]
 [[collapsible_groups]]
 widgets = ["ocr", "screenshot", "recorder"]
 spacing = 4
-icon = "󰒓"
+label_format = "󰍽"
 tooltip = "Werkzeuge"
 ```

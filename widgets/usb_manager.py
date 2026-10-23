@@ -574,11 +574,8 @@ class USBManagerWidget(ButtonWidget, PopoverMixin):
     def __init__(self, **kwargs):
         super().__init__(name="usb_manager", **kwargs)
 
-        self.add_panel_content(
-            self.config.get("icon", ""),
-            _("widget.usb_manager.label"),
-            show_label=self.config.get("label", False),
-        )
+        self.label_format = self.config.get("label_format", "")
+        self.add_formatted_label(self.label_format)
 
         self.set_tooltip_if_enabled(_("widget.usb_manager.tooltip"), default=True)
 
@@ -599,3 +596,5 @@ class USBManagerWidget(ButtonWidget, PopoverMixin):
         if count:
             text = f"{text} ({count})"
         self.set_tooltip_if_enabled(text, default=True)
+        # The panel only learns a count once the popover has been opened once.
+        self.refresh_formatted_label(count=str(count) if count else "")

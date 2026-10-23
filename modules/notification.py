@@ -83,6 +83,7 @@ class NotificationPopup(BaseWindow):
         super().__init__(
             anchor=self.config.get("anchor", "center"),
             layer="overlay",
+            margin="0px 12px 0px 0px",
             all_visible=True,
             visible=True,
             exclusive=False,
@@ -354,8 +355,6 @@ class NotificationWidget(EventBox, TeardownMixin):
             body_container.add(
                 CircularImage(
                     pixbuf=image_pixbuf,
-                    h_expand=True,
-                    v_expand=True,
                     size=constants.NOTIFICATION_IMAGE_SIZE,
                 ),
             )

@@ -38,7 +38,7 @@ style_classes = ["bordered"]
 [[collapsible_groups]]
 widgets = ["ocr", "screenshot", "recorder"]
 spacing = 4
-icon = "󰒓"
+label_format = "󰍽"
 tooltip = "Outils utilitaires"
 style_classes = ["utility-tools"]
 
@@ -54,7 +54,6 @@ hide_unoccupied = true
 
 [widgets.date_time]
 date_format = "%b %d %H:%M"
-nepali_date = false
 
 [widgets.volume]
 tooltip = true
@@ -100,12 +99,11 @@ right_section = ["@group:1", "system_tray", "power"]
 
 Types de référence disponibles :
 
-| Référence          | Exemple              | Description                   |
-| ------------------ | -------------------- | ----------------------------- |
-| Nom du widget      | `"workspaces"`       | Référence directe au widget   |
-| `@group:N`         | `"@group:0"`         | Groupe de widgets par index   |
-| `@collapsible:N`   | `"@collapsible:0"`   | Groupe pliable par index      |
-| `@custom_button:N` | `"@custom_button:0"` | Bouton personnalisé par index |
+| Référence        | Exemple            | Description                 |
+| ---------------- | ------------------ | --------------------------- |
+| Nom du widget    | `"workspaces"`     | Référence directe au widget |
+| `@group:N`       | `"@group:0"`       | Groupe de widgets par index |
+| `@collapsible:N` | `"@collapsible:0"` | Groupe pliable par index    |
 
 ### `modules`
 
@@ -193,7 +191,7 @@ Les groupes pliables cachent les widgets derrière un bouton :
 [[collapsible_groups]]
 widgets = ["ocr", "screenshot", "recorder"]
 spacing = 4
-icon = "󰒓"
+label_format = "󰍽"
 tooltip = "Outils utilitaires"
 style_classes = ["utility-tools"]
 ```
@@ -214,10 +212,6 @@ contrast = 0.0
 ```
 
 Voir [Thématisation avec Matugen](/fr/theming/matugen) pour plus de détails.
-
-## Note de Migration
-
-Si vous effectuez une mise à niveau depuis des versions plus anciennes, consultez [Migration v2 vers v3](/fr/resources/migration-v2-v3) avant de copier d'anciens blocs de configuration.
 
 ## Flux de Travail Recommandé
 

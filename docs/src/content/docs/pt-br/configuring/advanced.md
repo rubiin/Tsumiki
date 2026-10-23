@@ -13,8 +13,8 @@ Widgets personalizados compatíveis com Waybar que executam comandos shell exter
 [[widgets.custom_widget]]
 id = "volume"
 exec = "pamixer --get-volume"
-format = "󰕾 {}%"
-interval = 1
+label_format = "󰕾 {}%"
+interval = 1000
 on_scroll_up = "pamixer -i 5"
 on_scroll_down = "pamixer -d 5"
 exec_on_event = true
@@ -25,26 +25,29 @@ left_section = ["@custom_widget:volume", "workspaces"]
 
 Opções completas de configuração:
 
-| Chave              | Tipo   | Padrão      | Descrição                                                               |
-| ------------------ | ------ | ----------- | ----------------------------------------------------------------------- |
-| `id`               | string | —           | Identificador único para referência no layout (`@custom_widget:meu-id`) |
-| `exec`             | string | obrigatório | Comando shell a ser executado                                           |
-| `interval`         | int    | `0`         | Intervalo de atualização em segundos (0 = executar uma vez)             |
-| `return_type`      | string | `"plain"`   | Formato de saída: `"plain"` ou `"json"`                                 |
-| `label_format`     | string | `"{}"`      | String de formato onde `{}` é substituído pela saída                    |
-| `exec_on_event`    | bool   | `false`     | Reexecutar comando após clique/rolagem                                  |
-| `max_length`       | int    | `0`         | Comprimento máximo do texto (0 = sem limite)                            |
-| `min_length`       | int    | `0`         | Comprimento mínimo do texto (preenche com espaços)                      |
-| `rotate`           | int    | `0`         | Rotacionar texto em graus                                               |
-| `tooltip`          | bool   | `true`      | Mostrar dica de ferramenta com a saída                                  |
-| `tooltip_format`   | string | —           | String de formato da dica de ferramenta                                 |
-| `on_click`         | string | —           | Comando de clique esquerdo                                              |
-| `on_click_right`   | string | —           | Comando de clique direito                                               |
-| `on_click_middle`  | string | —           | Comando de clique do meio                                               |
-| `on_scroll_up`     | string | —           | Comando de rolagem para cima                                            |
-| `on_scroll_down`   | string | —           | Comando de rolagem para baixo                                           |
-| `signal`           | int    | —           | Número do sinal para gatilhos de eventos sig*                           |
-| `restart_interval` | int    | —           | Intervalo de reinicialização para scripts persistentes                  |
+| Chave              | Tipo   | Padrão    | Descrição                                                               |
+| ------------------ | ------ | --------- | ----------------------------------------------------------------------- |
+| `id`               | string | —         | Identificador único para referência no layout (`@custom_widget:meu-id`) |
+| `exec`             | string | —         | Comando shell a ser executado; omita para um botão só de clique         |
+| `icon`             | string | —         | Glifo de ícone estático, equivalente a `format_icons.default`           |
+| `interval`         | int    | `0`       | Intervalo de atualização em milissegundos (0 = executar uma vez)        |
+| `return_type`      | string | `"plain"` | Formato de saída: `"plain"` ou `"json"`                                 |
+| `label_format`     | string | `"{}"`    | String de formato onde `{}` é substituído pela saída                    |
+| `format`           | string | —         | O nome de `label_format` no Waybar                                      |
+| `exec_on_event`    | bool   | `false`   | Reexecutar comando após clique/rolagem                                  |
+| `max_length`       | int    | `0`       | Comprimento máximo do texto (0 = sem limite)                            |
+| `min_length`       | int    | `0`       | Comprimento mínimo do texto (preenche com espaços)                      |
+| `rotate`           | int    | `0`       | Rotacionar texto em graus                                               |
+| `tooltip`          | bool   | `true`    | Mostrar dica de ferramenta com a saída                                  |
+| `tooltip_format`   | string | —         | String de formato da dica de ferramenta                                 |
+| `tooltip_text`     | string | —         | Dica estática, para um widget cuja saída nunca muda                     |
+| `on_click`         | string | —         | Comando de clique esquerdo                                              |
+| `on_click_right`   | string | —         | Comando de clique direito                                               |
+| `on_click_middle`  | string | —         | Comando de clique do meio                                               |
+| `on_scroll_up`     | string | —         | Comando de rolagem para cima                                            |
+| `on_scroll_down`   | string | —         | Comando de rolagem para baixo                                           |
+| `signal`           | int    | —         | Número do sinal para gatilhos de eventos sig*                           |
+| `restart_interval` | int    | —         | Intervalo de reinicialização para scripts persistentes                  |
 
 ## Grupos de Widgets
 
@@ -75,7 +78,7 @@ Oculte widgets menos usados atrás de uma alternância:
 id = "utility-tools"
 widgets = ["ocr", "screenshot", "recorder"]
 spacing = 4
-icon = "󰒓"
+label_format = "󰍽"
 tooltip = "Ferramentas"
 style_classes = ["utility-tools"]
 ```
@@ -85,48 +88,4 @@ Referencie no layout com `@collapsible:utility-tools`.
 ```toml
 
 right_section = ["@collapsible:utility-tools", "system_tray"]
-```
-
-## Botão Personalizado
-
-Um botão personalizado independente que executa um comando shell quando clicado. Referencie-o diretamente pelo nome em uma seção do layout.
-
-```toml
-[widgets.custom_button]
-command = "firefox"
-icon = "󰈹"
-label_text = "Firefox"
-tooltip_text = "Abrir navegador Firefox"
-show_icon = true
-label = false
-tooltip = true
-```
-
-Coloque-o no layout como qualquer widget normal:
-
-```toml
-[layout]
-left_section = ["custom_button", "workspaces"]
-```
-
-## Grupo de Botões Personalizados
-
-Um grupo de botões de comando personalizados. Cada botão no grupo pode ser referenciado via `@custom_button:N` ou `@custom_button:id`:
-
-```toml
-[widgets.custom_button_group]
-spacing = 4
-
-[[widgets.custom_button_group.buttons]]
-id = "firefox"
-command = "firefox"
-icon = "󰈹"
-label_text = "Firefox"
-tooltip_text = "Abrir navegador Firefox"
-show_icon = true
-label = false
-tooltip = true
-
-[layout]
-left_section = ["@custom_button:firefox"]
 ```

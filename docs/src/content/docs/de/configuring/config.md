@@ -38,7 +38,7 @@ style_classes = ["bordered"]
 [[collapsible_groups]]
 widgets = ["ocr", "screenshot", "recorder"]
 spacing = 4
-icon = "󰒓"
+label_format = "󰍽"
 tooltip = "Werkzeuge"
 style_classes = ["utility-tools"]
 
@@ -54,7 +54,6 @@ hide_unoccupied = true
 
 [widgets.date_time]
 date_format = "%b %d %H:%M"
-nepali_date = false
 
 [widgets.volume]
 tooltip = true
@@ -100,12 +99,11 @@ right_section = ["@group:1", "system_tray", "power"]
 
 Verfügbare Referenztypen:
 
-| Referenz           | Beispiel             | Beschreibung                          |
-| ------------------ | -------------------- | ------------------------------------- |
-| Widget-Name        | `"workspaces"`       | Direkte Widget-Referenz               |
-| `@group:N`         | `"@group:0"`         | Widget-Gruppe nach Index              |
-| `@collapsible:N`   | `"@collapsible:0"`   | Einklappbare Gruppe nach Index        |
-| `@custom_button:N` | `"@custom_button:0"` | Benutzerdefinierter Button nach Index |
+| Referenz         | Beispiel           | Beschreibung                   |
+| ---------------- | ------------------ | ------------------------------ |
+| Widget-Name      | `"workspaces"`     | Direkte Widget-Referenz        |
+| `@group:N`       | `"@group:0"`       | Widget-Gruppe nach Index       |
+| `@collapsible:N` | `"@collapsible:0"` | Einklappbare Gruppe nach Index |
 
 ### `modules`
 
@@ -193,7 +191,7 @@ Einklappbare Gruppen verbergen Widgets hinter einem Umschalter:
 [[collapsible_groups]]
 widgets = ["ocr", "screenshot", "recorder"]
 spacing = 4
-icon = "󰒓"
+label_format = "󰍽"
 tooltip = "Werkzeuge"
 style_classes = ["utility-tools"]
 ```
@@ -214,10 +212,6 @@ contrast = 0.0
 ```
 
 Siehe [Theming mit Matugen](/de/theming/matugen) für Details.
-
-## Migrationshinweis
-
-Wenn Sie von älteren Versionen aktualisieren, lesen Sie [Migration v2 zu v3](/de/resources/migration-v2-v3), bevor Sie alte Konfigurationsblöcke kopieren.
 
 ## Empfohlener Arbeitsablauf
 

@@ -13,8 +13,8 @@ description: أنماط إعدادات متقدمة لتسوميكي
 [[widgets.custom_widget]]
 id = "volume"
 exec = "pamixer --get-volume"
-format = "󰕾 {}%"
-interval = 1
+label_format = "󰕾 {}%"
+interval = 1000
 on_scroll_up = "pamixer -i 5"
 on_scroll_down = "pamixer -d 5"
 exec_on_event = true
@@ -25,26 +25,29 @@ left_section = ["@custom_widget:volume", "workspaces"]
 
 خيارات التهيئة الكاملة:
 
-| المفتاح            | النوع  | الافتراضي  | الوصف                                                |
-| ------------------ | ------ | --------- | ---------------------------------------------------- |
-| `id`               | string | —         | معرف فريد للإشارة في التخطيط (`@custom_widget:معرفي`) |
-| `exec`             | string | مطلوب     | أمر shell للتنفيذ                                    |
-| `interval`         | int    | `0`       | فترة التحديث بالثواني (0 = تنفيذ مرة واحدة)          |
-| `return_type`      | string | `"plain"` | تنسيق المخرجات: `"plain"` أو `"json"`                |
-| `label_format`     | string | `"{}"`    | سلسلة تنسيق حيث يتم استبدال `{}` بالمخرجات           |
-| `exec_on_event`    | bool   | `false`   | إعادة تشغيل الأمر بعد النقر/التمرير                   |
-| `max_length`       | int    | `0`       | الحد الأقصى لطول النص (0 = بدون حد)                   |
+| المفتاح            | النوع  | الافتراضي | الوصف                                                  |
+| ------------------ | ------ | --------- | ------------------------------------------------------ |
+| `id`               | string | —         | معرف فريد للإشارة في التخطيط (`@custom_widget:معرفي`)  |
+| `exec`             | string | —         | أمر shell للتنفيذ؛ احذفه لزر ينفّذ الأمر عند النقر فقط |
+| `icon`             | string | —         | أيقونة ثابتة، تعادل `format_icons.default`             |
+| `interval`         | int    | `0`       | فترة التحديث بالمللي ثانية (0 = تنفيذ مرة واحدة)       |
+| `return_type`      | string | `"plain"` | تنسيق المخرجات: `"plain"` أو `"json"`                  |
+| `label_format`     | string | `"{}"`    | سلسلة تنسيق حيث يتم استبدال `{}` بالمخرجات             |
+| `format`           | string | —         | الاسم المستخدم في Waybar لـ `label_format`             |
+| `exec_on_event`    | bool   | `false`   | إعادة تشغيل الأمر بعد النقر/التمرير                    |
+| `max_length`       | int    | `0`       | الحد الأقصى لطول النص (0 = بدون حد)                    |
 | `min_length`       | int    | `0`       | الحد الأدنى لطول النص (يملأ بمسافات)                   |
-| `rotate`           | int    | `0`       | تدوير النص بالدرجات                                  |
-| `tooltip`          | bool   | `true`    | إظهار تلميح مع المخرجات                              |
-| `tooltip_format`   | string | —         | سلسلة تنسيق التلميح                                  |
-| `on_click`         | string | —         | أمر النقر الأيسر                                      |
-| `on_click_right`   | string | —         | أمر النقر الأيمن                                      |
-| `on_click_middle`  | string | —         | أمر النقر الأوسط                                      |
-| `on_scroll_up`     | string | —         | أمر التمرير لأعلى                                     |
-| `on_scroll_down`   | string | —         | أمر التمرير لأسفل                                     |
-| `signal`           | int    | —         | رقم الإشارة لمشغلات الأحداث sig*                        |
-| `restart_interval` | int    | —         | فترة إعادة التشغيل للنصوص البرمجية المستمرة          |
+| `rotate`           | int    | `0`       | تدوير النص بالدرجات                                    |
+| `tooltip`          | bool   | `true`    | إظهار تلميح مع المخرجات                                |
+| `tooltip_format`   | string | —         | سلسلة تنسيق التلميح                                    |
+| `tooltip_text`     | string | —         | تلميح ثابت، لwidget لا تتغير مخرجاته أبدًا             |
+| `on_click`         | string | —         | أمر النقر الأيسر                                       |
+| `on_click_right`   | string | —         | أمر النقر الأيمن                                       |
+| `on_click_middle`  | string | —         | أمر النقر الأوسط                                       |
+| `on_scroll_up`     | string | —         | أمر التمرير لأعلى                                      |
+| `on_scroll_down`   | string | —         | أمر التمرير لأسفل                                      |
+| `signal`           | int    | —         | رقم الإشارة لمشغلات الأحداث sig*                       |
+| `restart_interval` | int    | —         | فترة إعادة التشغيل للنصوص البرمجية المستمرة            |
 
 ## مجموعات الأدوات
 
@@ -75,7 +78,7 @@ right_section = ["@group:sys-group", "system_tray"]
 id = "utility-tools"
 widgets = ["ocr", "screenshot", "recorder"]
 spacing = 4
-icon = "󰒓"
+label_format = "󰍽"
 tooltip = "أدوات مساعدة"
 style_classes = ["utility-tools"]
 ```
@@ -85,48 +88,4 @@ style_classes = ["utility-tools"]
 ```toml
 
 right_section = ["@collapsible:utility-tools", "system_tray"]
-```
-
-## زر مخصص
-
-زر مخصص مستقل يقوم بتشغيل أمر shell عند النقر عليه. أشر إليه مباشرة باسمه في قسم التخطيط.
-
-```toml
-[widgets.custom_button]
-command = "firefox"
-icon = "󰈹"
-label_text = "Firefox"
-tooltip_text = "فتح متصفح فايرفوكس"
-show_icon = true
-label = false
-tooltip = true
-```
-
-ضعه في التخطيط مثل أي ويدجت عادية:
-
-```toml
-[layout]
-left_section = ["custom_button", "workspaces"]
-```
-
-## مجموعة أزرار مخصصة
-
-مجموعة من أزرار الأوامر المخصصة. يمكن الإشارة إلى كل زر في المجموعة عبر `@custom_button:N` أو `@custom_button:id` :
-
-```toml
-[widgets.custom_button_group]
-spacing = 4
-
-[[widgets.custom_button_group.buttons]]
-id = "firefox"
-command = "firefox"
-icon = "󰈹"
-label_text = "Firefox"
-tooltip_text = "فتح متصفح فايرفوكس"
-show_icon = true
-label = false
-tooltip = true
-
-[layout]
-left_section = ["@custom_button:firefox"]
 ```

@@ -32,12 +32,43 @@ _SCROLL_HANDLERS = {
     Gdk.ScrollDirection.DOWN: "on_scroll_down",
 }
 
+# Config keys naming a command run on interaction. One of these without an
+# ``exec`` makes a click-only button, which is not a misconfiguration.
+_EVENT_HANDLER_KEYS = (
+    "on_click",
+    "on_click_middle",
+    "on_click_right",
+    "on_scroll_up",
+    "on_scroll_down",
+)
+
+
+# ``{value}`` is the command output, named like every other widget's
+# ``label_format`` fields so a config reads the same whichever widget it styles.
+_VALUE_PLACEHOLDER = "{value}"
+
 
 def _get_config_value(module_config: dict, *keys: str, default=None):
     for key in keys:
         if key in module_config:
             return module_config[key]
     return default
+
+
+def _apply_format(template: str, value: str) -> str:
+    """Fill a format string with the command output.
+
+    A template with no ``{value}`` shows the raw output, so an unrecognised
+    format degrades to the command result rather than blanking the label.
+    """
+    if not template or _VALUE_PLACEHOLDER not in template:
+        return value
+    return template.replace(_VALUE_PLACEHOLDER, value)
+
+
+def _resolve_icon(module_config: dict):
+    """Return the widget's static glyph, which is ``format_icons.default``."""
+    return (module_config.get("format_icons") or {}).get("default")
 
 
 class CustomWidgetPresenter:
@@ -48,9 +79,7 @@ class CustomWidgetPresenter:
         self._text_label = text_label
         self._icon = icon
         self._host_widget = host_widget
-        self._format_str = _get_config_value(
-            module_config, "label_format", default="{}"
-        )
+        self._format_str = module_config.get("label_format", _VALUE_PLACEHOLDER)
         self._max_len = _get_config_value(
             module_config,
             "max_length",
@@ -72,7 +101,12 @@ class CustomWidgetPresenter:
             "tooltip-format",
             default=None,
         )
+        # Static tooltip, for a widget whose text never changes.
+        self._tooltip_text = _get_config_value(module_config, "tooltip_text")
         self._last_class: str | None = None
+
+        if self._tooltip_enabled and self._tooltip_text:
+            self._host_widget.set_tooltip_text(self._tooltip_text)
 
     def handle_output(self, output: str):
         if not output:
@@ -86,11 +120,7 @@ class CustomWidgetPresenter:
         self._handle_text_output(stripped)
 
     def _format_text(self, text: str) -> str:
-        display_text = (
-            self._format_str.replace("{}", str(text))
-            if "{}" in self._format_str
-            else text
-        )
+        display_text = _apply_format(self._format_str, text)
         if self._min_len > 0 and len(display_text) < self._min_len:
             display_text = display_text.ljust(self._min_len)
         if self._max_len > 0 and len(display_text) > self._max_len:
@@ -98,8 +128,8 @@ class CustomWidgetPresenter:
         return display_text
 
     def _format_tooltip(self, tooltip_text: str) -> str:
-        if self._tooltip_format and "{}" in self._tooltip_format:
-            return self._tooltip_format.replace("{}", tooltip_text)
+        if self._tooltip_format:
+            return _apply_format(self._tooltip_format, tooltip_text)
         return tooltip_text
 
     def _update_icon(self, alt: str | None, percentage: int | None):
@@ -197,15 +227,16 @@ class CustomWidgetExecutor:
 
     def start(self):
         if not self._exec_cmd:
-            logger.warning(
-                f"{Colors.WARNING}[CustomWidget] No 'exec' command specified"
-            )
+            if not _get_config_value(self._config, *_EVENT_HANDLER_KEYS):
+                logger.warning(
+                    f"{Colors.WARNING}[CustomWidget] No 'exec' command specified"
+                )
             return
 
         if self._interval > 0:
             self.execute_once()
             self._repeater_handler_id = invoke_repeater(
-                self._interval * 1000,
+                self._interval,
                 self._periodic_execute,
             )
             return
@@ -319,7 +350,7 @@ class CustomWidget(ButtonWidget):
             default=False,
         )
 
-        icon = self.module_config.get("format_icons", {}).get("default")
+        icon = _resolve_icon(self.module_config)
         if icon:
             self.icon = nerd_font_icon(
                 icon=icon,

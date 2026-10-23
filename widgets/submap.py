@@ -1,11 +1,9 @@
 from fabric.hyprland.widgets import HyprlandEvent
 from fabric.utils import logger
-from fabric.widgets.label import Label
 
 from shared.widget_container import ButtonWidget
 from utils.hyprland import hyprland_service
 from utils.i18n import _
-from utils.widget_utils import nerd_font_icon
 
 
 class SubMapWidget(ButtonWidget):
@@ -14,19 +12,8 @@ class SubMapWidget(ButtonWidget):
     def __init__(self, **kwargs):
         super().__init__(name="submap", **kwargs)
 
-        self.submap_label = Label(
-            label=_("widget.submap.label"), style_classes="panel-text"
-        )
-
-        self.container_box.add(self.submap_label)
-
-        if self.config.get("show_icon", True):
-            # Create a TextIcon with the specified icon and size
-            self.icon = nerd_font_icon(
-                icon=self.config.get("icon"),
-                props={"style_classes": ["panel-font-icon"]},
-            )
-            self.container_box.add(self.icon)
+        self.label_format = self.config.get("label_format", "{submap}")
+        self.add_formatted_label(self.label_format)
 
         self._register_handlers(
             hyprland_service,
@@ -45,7 +32,7 @@ class SubMapWidget(ButtonWidget):
         if submap == "unknown request":
             submap = "default"
 
-        self.submap_label.set_label(submap)
+        self.refresh_formatted_label(submap=submap)
 
         if self.config.get("hide_on_default", False):
             if submap == "default":

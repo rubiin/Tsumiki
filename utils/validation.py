@@ -149,14 +149,12 @@ def _validate_schema_enums(
         min_items = schema_node.get("minItems")
         if isinstance(min_items, int) and len(value) < min_items:
             raise ValueError(
-                f"{path}: expected at least {min_items} item(s), "
-                f"got {len(value)}"
+                f"{path}: expected at least {min_items} item(s), got {len(value)}"
             )
         max_items = schema_node.get("maxItems")
         if isinstance(max_items, int) and len(value) > max_items:
             raise ValueError(
-                f"{path}: expected at most {max_items} item(s), "
-                f"got {len(value)}"
+                f"{path}: expected at most {max_items} item(s), got {len(value)}"
             )
 
     if isinstance(value, dict):
@@ -215,12 +213,6 @@ def validate_config_enums(config_data: dict, schema_file_path: str) -> None:
 
 def _get_config_collection(parsed_data: dict, widget_type: str) -> list:
     """Return the collection for *widget_type* in *parsed_data*."""
-    if widget_type == "custom_button":
-        return (
-            parsed_data.get("widgets", {})
-            .get("custom_button_group", {})
-            .get("buttons", [])
-        )
     if widget_type == "group":
         return parsed_data.get("widget_groups", [])
     if widget_type == "collapsible":
@@ -244,7 +236,6 @@ def _validate_indexed_reference(
     supports_id_lookup = collection_name in (
         "collapsible group",
         "custom widget",
-        "custom button",
         "widget group",
     )
     if supports_id_lookup:
@@ -276,7 +267,6 @@ def _validate_indexed_reference(
 
 
 _COLLECTION_NAMES = {
-    "custom_button": "custom button",
     "group": "widget group",
     "collapsible": "collapsible group",
     "custom_widget": "custom widget",
@@ -379,13 +369,25 @@ def _get_named_format_keys(fmt: str) -> set[str]:
 
 _VALID_LABEL_FORMATS = {
     "battery": {
-        "label_format": set(["icon", "percent", "time_remaining"]),
+        "label_format": set(
+            ["percent", "time_remaining", "capacity", "temperature", "state"]
+        ),
     },
     "network_usage": {
         "label_format": set(["download", "upload"]),
     },
     "weather": {
-        "label_format": set(["temperature", "condition"]),
+        "label_format": set(
+            [
+                "temperature",
+                "condition",
+                "location",
+                "humidity",
+                "wind_speed",
+                "sunrise",
+                "sunset",
+            ]
+        ),
     },
     "workspaces": {
         "label_format": set(["id"]),
@@ -396,34 +398,259 @@ _VALID_LABEL_FORMATS = {
     "mpris": {
         "label_format": set(["title", "artist", "album", "name"]),
     },
+    # Widgets whose label also carries live state the widget feeds back in.
+    "keyboard": {
+        "label_format": set(["layout"]),
+    },
+    "language": {
+        "label_format": set(["language"]),
+    },
+    "submap": {
+        "label_format": set(["submap"]),
+    },
+    "updates": {
+        "label_format": set(["total"]),
+    },
+    "hypridle": {
+        "label_format": set(["state"]),
+    },
+    "hyprsunset": {
+        "label_format": set(["state"]),
+    },
+    "bluetooth": {
+        "label_format": set(["state"]),
+    },
+    "cloudflare_warp": {
+        "label_format": set(["state"]),
+    },
+    "dns_switcher": {
+        "label_format": set(["current_dns"]),
+    },
+    "microphone": {
+        "label_format": set(["state"]),
+    },
+    "ocr": {
+        "label_format": set(["lang"]),
+    },
+    "theme_switcher": {
+        "label_format": set(["theme"]),
+    },
+    "usb_manager": {
+        "label_format": set(["count"]),
+    },
+    "github_tray": {
+        "label_format": set(["unread"]),
+    },
+    # These take no field at all: the config author writes the glyph straight
+    # into ``label_format``, so anything in braces there is a typo.
+    "breathe": {
+        "label_format": set(),
+    },
+    "cheatsheet": {
+        "label_format": set(),
+    },
+    "clipboard": {
+        "label_format": set(),
+    },
+    "emoji_picker": {
+        "label_format": set(),
+    },
+    "hyprpicker": {
+        "label_format": set(),
+    },
+    "ip_monitor": {
+        "label_format": set(),
+    },
+    "kanban": {
+        "label_format": set(),
+    },
+    "launcher_button": {
+        "label_format": set(),
+    },
+    "overview_button": {
+        "label_format": set(),
+    },
+    "pomodoro": {
+        "label_format": set(),
+    },
+    "power": {
+        "label_format": set(),
+    },
+    "screenshot": {
+        "label_format": set(),
+    },
+    "wallpaper": {
+        "label_format": set(),
+    },
+    "world_clock": {
+        "label_format": set(),
+    },
 }
+
+# Indexed collections hold their config per entry rather than under ``widgets``,
+# so an entry here labels its own toggle button, not a panel widget.
+_VALID_COLLECTION_LABEL_FORMATS = {
+    "collapsible_groups": {
+        "label_format": set(),
+    },
+}
+
+# A custom widget's formats only ever carry its command output.
+_VALID_CUSTOM_WIDGET_FORMATS = {
+    "label_format": {"value"},
+    "tooltip_format": {"value"},
+}
+
+
+# Keys renamed after v4.8.3, mapped to what a config should use instead.
+_RENAMED_WIDGET_KEYS = {
+    "label": 'label_format (e.g. label_format = "\U000f0493")',
+    "label_text": 'label_format (e.g. label_format = "\U000f0493")',
+    "show_icon": 'label_format = "\U000f0493"',
+}
+
+# Top-level collections whose entries label a panel button, so they answer to the
+# same renamed keys as ``widgets.<name>``.
+_COLLECTIONS_WITH_RENAMED_KEYS = ("collapsible_groups",)
+
+# ``widgets.cheatsheet`` kept only the panel button; the overlay's own settings
+# moved to the module block. ``None`` marks a key dropped with no replacement.
+_MOVED_CHEATSHEET_KEYS = {
+    "title": "modules.cheatsheet.title",
+    "columns": "modules.cheatsheet.columns",
+    "groups_per_page": "modules.cheatsheet.groups_per_page",
+    "max_entries_per_group": None,
+}
+
+_RENAMED_MODULE_KEYS = {
+    ("osd", "duration"): "modules.osd.timeout",
+    ("osd", "style"): (
+        "nothing -- the OSD look now comes from orientation, anchor, "
+        "transition_type and transition_duration"
+    ),
+}
+
+
+def warn_deprecated_keys(parsed_data: dict) -> None:
+    """Warn about keys renamed or removed after v4.8.3.
+
+    Nothing rejects an undeclared key: ``validate_config_enums`` only walks the
+    properties the schema does declare, so a stale key is dropped in silence.
+    These warnings are the only signal a migrating user gets.
+    """
+    widgets = parsed_data.get("widgets", {})
+    if isinstance(widgets, dict):
+        for name, config in widgets.items():
+            if isinstance(config, dict):
+                _warn_renamed_widget_keys(f"widgets.{name}", config)
+            elif isinstance(config, list):
+                # custom_widget holds a list of entries.
+                for index, entry in enumerate(config):
+                    if isinstance(entry, dict):
+                        _warn_renamed_widget_keys(f"widgets.{name}[{index}]", entry)
+
+        _warn_moved_cheatsheet_keys(widgets.get("cheatsheet"))
+
+    for collection_name in _COLLECTIONS_WITH_RENAMED_KEYS:
+        entries = parsed_data.get(collection_name)
+        if not isinstance(entries, list):
+            continue
+        for index, entry in enumerate(entries):
+            if isinstance(entry, dict):
+                _warn_renamed_widget_keys(f"{collection_name}[{index}]", entry)
+
+    modules = parsed_data.get("modules", {})
+    for (module, key), replacement in _RENAMED_MODULE_KEYS.items():
+        config = modules.get(module) if isinstance(modules, dict) else None
+        if isinstance(config, dict) and key in config:
+            logger.warning(
+                f"[Config] modules.{module}.{key} was renamed to {replacement}."
+            )
+
+
+def _warn_renamed_widget_keys(path: str, config: dict) -> None:
+    for old_key, replacement in _RENAMED_WIDGET_KEYS.items():
+        if old_key in config:
+            logger.warning(
+                f"[Config] {path}.{old_key} is no longer supported; use {replacement}."
+            )
+
+
+def _warn_moved_cheatsheet_keys(config) -> None:
+    if not isinstance(config, dict):
+        return
+
+    for old_key, replacement in _MOVED_CHEATSHEET_KEYS.items():
+        if old_key not in config:
+            continue
+        if replacement is None:
+            logger.warning(
+                f"[Config] widgets.cheatsheet.{old_key} was removed with no "
+                "replacement."
+            )
+        else:
+            logger.warning(
+                f"[Config] widgets.cheatsheet.{old_key} moved to {replacement}; "
+                "the key under widgets.cheatsheet is ignored."
+            )
+
+
+def _warn_unknown_format_keys(
+    section: str, config: dict, formats: dict[str, set[str]]
+) -> None:
+    for config_key, valid_keys in formats.items():
+        fmt = config.get(config_key)
+        if not isinstance(fmt, str):
+            continue
+        try:
+            used = _get_named_format_keys(fmt)
+        except (ValueError, KeyError):
+            logger.warning(f"[Config] {section}.{config_key}: invalid format")
+            continue
+        unknown = used - valid_keys
+        if unknown:
+            logger.warning(
+                f"[Config] {section}.{config_key}: "
+                f"unknown key(s) {sorted(unknown)!r}. "
+                f"Valid keys: {sorted(valid_keys)!r}"
+            )
 
 
 def validate_format_strings(parsed_data: dict) -> None:
     """Warn when format strings in widget settings reference unknown keys."""
     widgets = parsed_data.get("widgets", {})
-    for widget_name in _VALID_LABEL_FORMATS:
+    for widget_name, formats in _VALID_LABEL_FORMATS.items():
         widget_cfg = widgets.get(widget_name, {})
         if not isinstance(widget_cfg, dict):
             continue
-        for config_key, valid_keys in _VALID_LABEL_FORMATS[widget_name].items():
-            fmt = widget_cfg.get(config_key)
-            if not isinstance(fmt, str):
-                continue
-            try:
-                used = _get_named_format_keys(fmt)
-            except (ValueError, KeyError):
-                logger.warning(
-                    f"[Config] widgets.{widget_name}.{config_key}: invalid format"
-                )
-                continue
-            unknown = used - valid_keys
-            if unknown:
-                logger.warning(
-                    f"[Config] widgets.{widget_name}.{config_key}: "
-                    f"unknown key(s) {sorted(unknown)!r}. "
-                    f"Valid keys: {sorted(valid_keys)!r}"
-                )
+        _warn_unknown_format_keys(f"widgets.{widget_name}", widget_cfg, formats)
+
+    for collection_name, formats in _VALID_COLLECTION_LABEL_FORMATS.items():
+        for index, entry in enumerate(parsed_data.get(collection_name, []) or []):
+            if isinstance(entry, dict):
+                _warn_unknown_format_keys(f"{collection_name}[{index}]", entry, formats)
+
+    _warn_custom_widget_format_keys(widgets.get("custom_widget"))
+
+
+def _warn_custom_widget_format_keys(collection) -> None:
+    """Custom widgets are keyed by index or by name, so both shapes are walked."""
+    if isinstance(collection, list):
+        entries = [
+            (f"widgets.custom_widget[{index}]", entry)
+            for index, entry in enumerate(collection)
+        ]
+    elif isinstance(collection, dict):
+        entries = [
+            (f"widgets.custom_widget.{name}", entry)
+            for name, entry in collection.items()
+        ]
+    else:
+        return
+
+    for path, entry in entries:
+        if isinstance(entry, dict):
+            _warn_unknown_format_keys(path, entry, _VALID_CUSTOM_WIDGET_FORMATS)
 
 
 def _validate_unique_ids(parsed_data: dict) -> None:
@@ -478,4 +705,5 @@ def validate_widgets(parsed_data, default_config):
                             widget, parsed_data, default_config, f"{group_type}[{idx}]"
                         )
 
+    warn_deprecated_keys(parsed_data)
     validate_format_strings(parsed_data)

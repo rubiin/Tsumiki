@@ -22,6 +22,7 @@ from utils.validation import (
     validate_format_strings,
     validate_widget_reference,
     validate_widgets,
+    warn_deprecated_keys,
 )
 
 
@@ -257,11 +258,6 @@ class ValidateSchemaEnumsTest(unittest.TestCase):
 class GetConfigCollectionTest(unittest.TestCase):
     """Test _get_config_collection dispatcher for different widget types."""
 
-    def test_custom_button(self):
-        data = {"widgets": {"custom_button_group": {"buttons": [{"id": "b1"}]}}}
-        result = _get_config_collection(data, "custom_button")
-        self.assertEqual(result, [{"id": "b1"}])
-
     def test_group(self):
         data = {"widget_groups": [{"id": "g1"}]}
         self.assertEqual(_get_config_collection(data, "group"), [{"id": "g1"}])
@@ -422,11 +418,290 @@ class ValidateFormatStringsTest(unittest.TestCase):
         validate_format_strings({"widgets": {"mpris": {"label_format": 42}}})
 
     @mock.patch("utils.validation.logger")
+    def test_collapsible_group_rejects_the_icon_field(self, mock_logger):
+        """The toggle glyph is written into the format, so there is no field."""
+        validate_format_strings({"collapsible_groups": [{"label_format": "{icon}"}]})
+        msg = mock_logger.warning.call_args[0][0]
+        self.assertIn("collapsible_groups[0].label_format", msg)
+
+    @mock.patch("utils.validation.logger")
+    def test_collapsible_group_unknown_field_warns(self, mock_logger):
+        validate_format_strings(
+            {"collapsible_groups": [{"id": "tools", "label_format": "{label}"}]}
+        )
+        msg = mock_logger.warning.call_args[0][0]
+        self.assertIn("collapsible_groups[0].label_format", msg)
+
+    @mock.patch("utils.validation.logger")
+    def test_a_non_string_custom_widget_format_is_ignored(self, mock_logger):
+        validate_format_strings({"widgets": {"custom_widget": [{"label_format": 42}]}})
+        mock_logger.warning.assert_not_called()
+
+    def test_a_custom_widget_accepts_the_value_field(self):
+        validate_format_strings(
+            {"widgets": {"custom_widget": [{"label_format": "{value}%"}]}}
+        )
+
+    @mock.patch("utils.validation.logger")
+    def test_a_custom_widget_rejects_another_field(self, mock_logger):
+        validate_format_strings(
+            {"widgets": {"custom_widget": [{"label_format": "{text}"}]}}
+        )
+        msg = mock_logger.warning.call_args[0][0]
+        self.assertIn("widgets.custom_widget[0].label_format", msg)
+
+    @mock.patch("utils.validation.logger")
+    def test_a_custom_widget_tooltip_format_is_checked(self, mock_logger):
+        validate_format_strings(
+            {"widgets": {"custom_widget": [{"tooltip_format": "{icon}"}]}}
+        )
+        msg = mock_logger.warning.call_args[0][0]
+        self.assertIn("widgets.custom_widget[0].tooltip_format", msg)
+
+    @mock.patch("utils.validation.logger")
+    def test_a_custom_widget_named_by_id_is_checked(self, mock_logger):
+        validate_format_strings(
+            {"widgets": {"custom_widget": {"volume": {"label_format": "{icon}"}}}}
+        )
+        msg = mock_logger.warning.call_args[0][0]
+        self.assertIn("widgets.custom_widget.volume.label_format", msg)
+
+    @mock.patch("utils.validation.logger")
     def test_invalid_format_string_warns(self, mock_logger):
         validate_format_strings({"widgets": {"mpris": {"label_format": "{unclosed"}}})
         mock_logger.warning.assert_called()
         msg = mock_logger.warning.call_args[0][0]
         self.assertIn("invalid format", msg)
+
+    @mock.patch("utils.validation.logger")
+    def test_keyboard_rejects_the_icon_field(self, mock_logger):
+        """Its glyph is literal in the format; only ``{layout}`` remains."""
+        validate_format_strings({"widgets": {"keyboard": {"label_format": "{icon}"}}})
+        msg = mock_logger.warning.call_args[0][0]
+        self.assertIn("widgets.keyboard.label_format", msg)
+
+    @mock.patch("utils.validation.logger")
+    def test_icon_only_widgets_reject_other_fields(self, mock_logger):
+        validate_format_strings({"widgets": {"keyboard": {"label_format": "{count}"}}})
+        msg = mock_logger.warning.call_args[0][0]
+        self.assertIn("widgets.keyboard.label_format", msg)
+
+    @mock.patch("utils.validation.logger")
+    def test_the_cheatsheet_takes_no_fields(self, mock_logger):
+        validate_format_strings(
+            {"widgets": {"cheatsheet": {"label_format": "{label}"}}}
+        )
+        msg = mock_logger.warning.call_args[0][0]
+        self.assertIn("widgets.cheatsheet.label_format", msg)
+
+    @mock.patch("utils.validation.logger")
+    def test_the_icon_gated_widgets_reject_other_fields(self, mock_logger):
+        """Every widget that bakes its glyph in accepts no field but its own."""
+        for name in (
+            "dns_switcher",
+            "pomodoro",
+            "cloudflare_warp",
+            "bluetooth",
+            "clipboard",
+            "emoji_picker",
+            "hypridle",
+            "hyprsunset",
+            "kanban",
+            "overview_button",
+            "screenshot",
+            "wallpaper",
+        ):
+            with self.subTest(widget=name):
+                validate_format_strings(
+                    {"widgets": {name: {"label_format": "{count}"}}}
+                )
+                msg = mock_logger.warning.call_args[0][0]
+                self.assertIn(f"widgets.{name}.label_format", msg)
+
+    @mock.patch("utils.validation.logger")
+    def test_the_icon_gated_widgets_reject_the_icon_field(self, mock_logger):
+        """An empty valid set still names the offender, so a stale config is caught."""
+        for name in ("cheatsheet", "world_clock"):
+            with self.subTest(widget=name):
+                mock_logger.reset_mock()
+                validate_format_strings({"widgets": {name: {"label_format": "{icon}"}}})
+                msg = mock_logger.warning.call_args[0][0]
+                self.assertIn(f"widgets.{name}.label_format", msg)
+                self.assertIn("Valid keys: []", msg)
+
+    @mock.patch("utils.validation.logger")
+    def test_the_newly_fielded_widgets_accept_their_own_field(self, mock_logger):
+        """theme_switcher, usb_manager and github_tray grew a field."""
+        for name, field in (
+            ("theme_switcher", "{theme}"),
+            ("usb_manager", "{count}"),
+            ("github_tray", "{unread}"),
+        ):
+            with self.subTest(widget=name):
+                mock_logger.reset_mock()
+                validate_format_strings({"widgets": {name: {"label_format": field}}})
+                mock_logger.warning.assert_not_called()
+
+    @mock.patch("utils.validation.logger")
+    def test_the_newly_fielded_widgets_reject_the_icon_field(self, mock_logger):
+        """``{icon}`` is gone everywhere; these three now name their real key."""
+        for name in ("theme_switcher", "usb_manager", "github_tray"):
+            with self.subTest(widget=name):
+                mock_logger.reset_mock()
+                validate_format_strings({"widgets": {name: {"label_format": "{icon}"}}})
+                msg = mock_logger.warning.call_args[0][0]
+                self.assertIn(f"widgets.{name}.label_format", msg)
+                self.assertNotIn("Valid keys: []", msg)
+
+    @mock.patch("utils.validation.logger")
+    def test_the_state_widgets_accept_the_state_field(self, mock_logger):
+        """Bluetooth, microphone and WARP drive their label through {state}."""
+        for name in ("bluetooth", "microphone", "cloudflare_warp"):
+            with self.subTest(widget=name):
+                mock_logger.reset_mock()
+                validate_format_strings(
+                    {"widgets": {name: {"label_format": "{state}"}}}
+                )
+                mock_logger.warning.assert_not_called()
+
+    @mock.patch("utils.validation.logger")
+    def test_battery_accepts_the_health_fields(self, mock_logger):
+        validate_format_strings(
+            {
+                "widgets": {
+                    "battery": {
+                        "label_format": "{percent} {capacity} {temperature} {state}"
+                    }
+                }
+            }
+        )
+        mock_logger.warning.assert_not_called()
+
+    @mock.patch("utils.validation.logger")
+    def test_weather_accepts_every_declared_field(self, mock_logger):
+        validate_format_strings(
+            {
+                "widgets": {
+                    "weather": {
+                        "label_format": (
+                            "{location} {temperature} {condition} {humidity} "
+                            "{wind_speed} {sunrise} {sunset}"
+                        )
+                    }
+                }
+            }
+        )
+        mock_logger.warning.assert_not_called()
+
+    @mock.patch("utils.validation.logger")
+    def test_dns_and_ocr_accept_their_fields(self, mock_logger):
+        validate_format_strings(
+            {"widgets": {"dns_switcher": {"label_format": "{current_dns}"}}}
+        )
+        validate_format_strings({"widgets": {"ocr": {"label_format": "{lang}"}}})
+        mock_logger.warning.assert_not_called()
+
+
+class DeprecationWarningTest(unittest.TestCase):
+    """Renamed keys are dropped in silence, so each one must warn.
+
+    ``validate_config_enums`` only walks the properties the schema declares and
+    nothing rejects an unknown one, so a config still setting ``label`` or
+    ``modules.osd.duration`` loses the setting with no other signal.
+    """
+
+    def _warnings(self, parsed: dict) -> list[str]:
+        with mock.patch("utils.validation.logger") as mock_logger:
+            warn_deprecated_keys(parsed)
+            return [call[0][0] for call in mock_logger.warning.call_args_list]
+
+    @mock.patch("utils.validation.logger")
+    def test_label_and_label_text_warn(self, mock_logger):
+        warn_deprecated_keys({"widgets": {"battery": {"label": True}}})
+        msg = mock_logger.warning.call_args[0][0]
+        self.assertIn("widgets.battery.label", msg)
+        self.assertIn("label_format", msg)
+
+        warn_deprecated_keys({"widgets": {"mpris": {"label_text": "Now playing"}}})
+        msg = mock_logger.warning.call_args[0][0]
+        self.assertIn("widgets.mpris.label_text", msg)
+
+    @mock.patch("utils.validation.logger")
+    def test_show_icon_warns_again(self, mock_logger):
+        """``e0b7806e`` dropped this warning; ``show_icon`` is still unread."""
+        warn_deprecated_keys({"widgets": {"cpu": {"show_icon": False}}})
+        msg = mock_logger.warning.call_args[0][0]
+        self.assertIn("widgets.cpu.show_icon", msg)
+
+    @mock.patch("utils.validation.logger")
+    def test_collapsible_group_entries_warn(self, mock_logger):
+        warn_deprecated_keys(
+            {
+                "collapsible_groups": [
+                    {"icon": "x", "show_icon": False, "label": "Tools"}
+                ]
+            }
+        )
+        warnings = [call[0][0] for call in mock_logger.warning.call_args_list]
+        self.assertTrue(
+            any("collapsible_groups[0].show_icon" in msg for msg in warnings), warnings
+        )
+        self.assertTrue(
+            any("collapsible_groups[0].label" in msg for msg in warnings), warnings
+        )
+
+    @mock.patch("utils.validation.logger")
+    def test_label_warns_inside_list_entries(self, mock_logger):
+        warn_deprecated_keys({"widgets": {"custom_widget": [{"label": "Go"}]}})
+        msg = mock_logger.warning.call_args[0][0]
+        self.assertIn("widgets.custom_widget[0].label", msg)
+
+    @mock.patch("utils.validation.logger")
+    def test_moved_cheatsheet_keys_point_at_the_module(self, mock_logger):
+        warn_deprecated_keys({"widgets": {"cheatsheet": {"columns": 3}}})
+        msg = mock_logger.warning.call_args[0][0]
+        self.assertIn("widgets.cheatsheet.columns", msg)
+        self.assertIn("modules.cheatsheet.columns", msg)
+
+    @mock.patch("utils.validation.logger")
+    def test_dropped_cheatsheet_key_says_so(self, mock_logger):
+        """``max_entries_per_group`` has no replacement, so name none."""
+        warn_deprecated_keys(
+            {"widgets": {"cheatsheet": {"max_entries_per_group": 5}}}
+        )
+        msg = mock_logger.warning.call_args[0][0]
+        self.assertIn("max_entries_per_group", msg)
+        self.assertIn("no replacement", msg)
+
+    @mock.patch("utils.validation.logger")
+    def test_renamed_module_keys_warn(self, mock_logger):
+        warn_deprecated_keys({"modules": {"osd": {"duration": 2000}}})
+        msg = mock_logger.warning.call_args[0][0]
+        self.assertIn("modules.osd.duration", msg)
+        self.assertIn("modules.osd.timeout", msg)
+
+    @mock.patch("utils.validation.logger")
+    def test_removed_osd_style_warns(self, mock_logger):
+        warn_deprecated_keys({"modules": {"osd": {"style": "notification"}}})
+        msg = mock_logger.warning.call_args[0][0]
+        self.assertIn("modules.osd.style", msg)
+
+    def test_current_config_is_silent(self):
+        """The shipped config must not trip its own deprecation warnings."""
+        root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        for name in ("config.toml", "example/config.toml"):
+            with self.subTest(config=name):
+                import tomllib
+
+                with open(os.path.join(root, name), "rb") as handle:
+                    parsed = tomllib.load(handle)
+                self.assertEqual([], self._warnings(parsed))
+
+    def test_validate_widgets_runs_the_deprecation_check(self):
+        with mock.patch("utils.validation.logger") as mock_logger:
+            validate_widgets({"widgets": {"battery": {"label": True}}}, {})
+            messages = [call[0][0] for call in mock_logger.warning.call_args_list]
+        self.assertTrue(any("widgets.battery.label" in msg for msg in messages))
 
 
 class ValidateWidgetsTest(unittest.TestCase):
