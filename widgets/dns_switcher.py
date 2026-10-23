@@ -270,26 +270,19 @@ class DnsSwitcherPopover(Box):
 
 
 class DnsSwitcherWidget(ButtonWidget, PopoverMixin):
-    """Bar widget showing current DNS provider (icon + dynamic label)."""
+    """Bar widget showing the current DNS provider as its icon."""
 
     def __init__(self, **kwargs):
         super().__init__(name="dns_switcher", **kwargs)
 
         self._service = dns_switcher_service
 
-        # ── Icon ──
-        self._icon = nerd_font_icon(
-            icon=self.config.get("icon", "󰚘"),
-            props={"style_classes": ["panel-font-icon"]},
+        # ── Panel label ──
+        self.label_format = self.config.get("label_format", "󰚘")
+        self.add_formatted_label(
+            self.label_format,
+            current_dns=self._current_dns_text(),
         )
-        self.container_box.add(self._icon)
-
-        # ── Dynamic label (like original: shows current provider name) ──
-        self._label = Label(
-            label=self.config.get("label_text", "DNS"),
-            style_classes="panel-text",
-        )
-        self.container_box.add(self._label)
 
         self.set_tooltip_if_enabled(_("widget.dns_switcher.tooltip"), default=True)
 
@@ -300,11 +293,17 @@ class DnsSwitcherWidget(ButtonWidget, PopoverMixin):
 
         self.setup_popover(lambda: DnsSwitcherPopover(parent=self))
 
-    def _on_current_changed(self, *_args):
+    def _current_dns_text(self) -> str:
+        """The active provider, or the default label when DNS is untouched."""
         current = self._service.current
         if current and current != "Default":
-            self._label.set_label(current)
+            return current
+        return _("widget.dns_switcher.default")
+
+    def _on_current_changed(self, *_args):
+        current = self._service.current
+        self.refresh_formatted_label(current_dns=self._current_dns_text())
+        if current and current != "Default":
             self.set_tooltip_text(_("widget.dns_switcher.current", provider=current))
         else:
-            self._label.set_label(self.config.get("label_text", "DNS"))
             self.set_tooltip_text(_("widget.dns_switcher.default"))

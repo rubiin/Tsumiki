@@ -31,7 +31,7 @@ os = "arch"
 
 ```toml
 [widgets.battery]
-label_format = "{icon} {percent}"
+label_format = "{percent}"
 
 [widgets.volume]
 step_size = 5
@@ -54,6 +54,7 @@ show_urgent = false
 
 [widgets.window_title]
 truncation = true
+fallback_icon = "󰣆"
 
 [widgets.taskbar]
 icon_size = 22
@@ -90,5 +91,5 @@ style_classes = ["compact"]
 [[collapsible_groups]]
 widgets = ["ocr", "screenshot", "recorder"]
 spacing = 4
-icon = "󰒓"
+label_format = "󰍽"
 ```

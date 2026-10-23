@@ -1,12 +1,8 @@
 from fabric.utils import logger
-from fabric.widgets.label import Label
 
 import utils.functions as helpers
 from utils.change_cache import ChangeCache
 from utils.i18n import _
-from utils.widget_utils import (
-    nerd_font_icon,
-)
 
 from .widget_container import ButtonWidget
 
@@ -34,9 +30,8 @@ class CommandSwitcher(ButtonWidget):
             **kwargs,
         )
 
-        # A missing binary must not take down the whole bar: this widget is
-        # constructed during layout, so raising here would abort every widget
-        # after it. Degrade to a disabled toggle instead.
+        # A missing binary must not take down the whole bar: raising here
+        # would abort every widget laid out after this one.
         self.command_available = True
         try:
             helpers.check_executable_exists(self.command)
@@ -51,21 +46,8 @@ class CommandSwitcher(ButtonWidget):
         self.label = label
         self.tooltip = tooltip
 
-        self.icon = nerd_font_icon(
-            icon=enabled_icon,
-            props={"style_classes": ["panel-font-icon"]},
-        )
-
-        self.container_box.add(
-            self.icon,
-        )
-
-        if self.label:
-            self.label_text = Label(
-                label=_("common.enabled"),
-                style_classes="panel-text",
-            )
-            self.container_box.add(self.label_text)
+        self.label_format = self.config.get("label_format", "{state}")
+        self.add_formatted_label(self.label_format, enabled_icon, state="")
 
         self.connect("clicked", self.on_click)
 
@@ -103,11 +85,14 @@ class CommandSwitcher(ButtonWidget):
 
         label = _("common.enabled") if is_running else _("common.disabled")
 
-        if self.label:
-            self._changes.apply("label", label, self.label_text.set_label)
-
         icon = self.enabled_icon if is_running else self.disabled_icon
-        self._changes.apply("icon", icon, self.icon.set_label)
+        # Keyed on icon *and* state: hypridle passes one glyph for both states,
+        # so an icon-only key would skip the text when just the state flips.
+        self._changes.apply(
+            "panel",
+            (icon, label if self.label else ""),
+            lambda value: self.refresh_formatted_label(value[0], state=value[1]),
+        )
 
         if self.tooltip and self.tooltips_enabled:
             if self.command_available:

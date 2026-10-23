@@ -20,7 +20,7 @@ from .types import (
 )
 
 # Common configuration fields that will be reused
-BaseConfig = TypedDict("BaseConfig", {"label": bool, "tooltip": bool})
+BaseConfig = TypedDict("BaseConfig", {"tooltip": bool})
 
 # Layout configuration
 Layout = TypedDict(
@@ -32,8 +32,7 @@ Layout = TypedDict(
 WallPaper = TypedDict(
     "WallPaper",
     {
-        "icon": str,
-        "label": bool,
+        "label_format": str,
         "tooltip": bool,
     },
 )
@@ -42,12 +41,11 @@ WallPaper = TypedDict(
 PowerButton = TypedDict(
     "PowerButton",
     {
-        "icon": str,
         "tooltip": bool,
         "items_per_row": int,
+        "item_shortcuts": dict,
         "icon_size": int,
-        "label": bool,
-        "show_icon": bool,
+        "label_format": str,
         "confirm": bool,
         "buttons": dict[
             dict[
@@ -64,6 +62,7 @@ HyprSunset = TypedDict(
     "HyprSunset",
     {
         **BaseConfig.__annotations__,
+        "label_format": str,
         "temperature": str,
         "enabled_icon": str,
         "disabled_icon": str,
@@ -97,7 +96,12 @@ SystemTray = TypedDict(
 # HyprIdle configuration
 HyprIdle = TypedDict(
     "HyprIdle",
-    {**BaseConfig.__annotations__, "enabled_icon": str, "disabled_icon": str},
+    {
+        **BaseConfig.__annotations__,
+        "label_format": str,
+        "enabled_icon": str,
+        "disabled_icon": str,
+    },
 )
 
 # Window Count configuration
@@ -120,12 +124,8 @@ Battery = TypedDict(
         "hide_when_missing": bool,
         "notifications": dict,
         "hide_percent_when_full": bool,
-        "icons": list[str],
     },
 )
-
-# Theme configuration
-Theme = TypedDict("Theme", {"name": str})
 
 # ClickCounter configuration
 ClickCounter = TypedDict("ClickCounter", {"count": int})
@@ -176,7 +176,6 @@ Notification = TypedDict(
         "play_sound": bool,
         "sound_file": str,
         "dismiss_on_hover": bool,
-        "dnd_on_screencast": bool,
         "max_actions": int,
         "copy_code_action": bool,
         "show_timestamp": bool,
@@ -195,6 +194,18 @@ DesktopClock = TypedDict(
         "layer": Layer,
         "date_format": str,
         "time_format": str,
+        "type": str,
+        "cookie_size": int,
+        "cookie_sides": int,
+        "cookie_dial_style": str,
+        "cookie_hour_hand_style": str,
+        "cookie_minute_hand_style": str,
+        "cookie_second_hand_style": str,
+        "cookie_date_style": str,
+        "cookie_show_seconds": bool,
+        "cookie_show_hour_marks": bool,
+        "cookie_background_opacity": float,
+        "cookie_widget_scale": float,
     },
 )
 
@@ -233,16 +244,27 @@ Overview = TypedDict(
     },
 )
 
-# Overview configuration
-Cheatsheet = TypedDict(
-    "Cheatsheet",
+# Cheatsheet overlay module configuration
+CheatsheetModule = TypedDict(
+    "CheatsheetModule",
     {
         "enabled": bool,
         "anchor": Anchor,
         "layer": Layer,
+        "title": str,
+        "icon": str,
+        "refresh_icon": str,
+        "close_icon": str,
+        "columns": int,
+        "groups_per_page": int,
+        "column_width": int,
+        "key_width": int,
+        "accent_keys": list,
         "transition_type": Reveal_Animations,
         "transition_duration": int,
+        "sections": list,
     },
+    total=False,
 )
 
 # ScreenCorners configuration
@@ -259,6 +281,7 @@ OSD = TypedDict(
         "timeout": int,
         "anchor": Anchor,
         "percentage": bool,
+        "orientation": str,
         "icon_size": int,
         "transition_type": Reveal_Animations,
         "transition_duration": int,
@@ -297,6 +320,12 @@ Launcher = TypedDict(
         "plugins_enabled": bool,
         "plugins_dir": str,
         "plugins": list[str],
+        "anchor": Anchor,
+        "width": int,
+        "height": int,
+        "layout": str,
+        "grid_columns": int,
+        "grid_spacing": int,
     },
 )
 
@@ -325,7 +354,8 @@ Modules = TypedDict(
         "notification": Notification,
         "launcher": Launcher,
         "activate_linux": ActivateLinux,
-        "cheatsheet": Cheatsheet,
+        "overview": Overview,
+        "cheatsheet": CheatsheetModule,
     },
 )
 
@@ -350,7 +380,7 @@ Cpu = TypedDict(
     {
         **BaseConfig.__annotations__,
         "mode": Widget_Mode,
-        "show_icon": bool,
+        "label_format": str,
         "sensor": str,
         "temperature_unit": Temperature_Unit,
         "round": bool,
@@ -376,8 +406,7 @@ Memory = TypedDict(
     {
         **BaseConfig.__annotations__,
         "mode": Widget_Mode,
-        "show_icon": bool,
-        "icon": str,
+        "label_format": str,
         "graph_length": int,
         "unit": Data_Unit,
     },
@@ -388,8 +417,7 @@ Gpu = TypedDict(
     "Gpu",
     {
         **BaseConfig.__annotations__,
-        "show_icon": bool,
-        "icon": str,
+        "label_format": str,
         "mode": Widget_Mode,
         "graph_length": int,
     },
@@ -400,8 +428,7 @@ Submap = TypedDict(
     "Submap",
     {
         **BaseConfig.__annotations__,
-        "icon": str,
-        "show_icon": bool,
+        "label_format": str,
         "hide_on_default": bool,
     },
 )
@@ -413,6 +440,8 @@ NetworkUsage = TypedDict(
     {
         **BaseConfig.__annotations__,
         "label_format": str,
+        "upload": bool,
+        "download": bool,
         "upload_threshold": int,
         "download_threshold": int,
         "interval": int,
@@ -427,8 +456,7 @@ Storage = TypedDict(
     {
         "mode": Widget_Mode,
         "tooltip": bool,
-        "show_icon": bool,
-        "icon": str,
+        "label_format": str,
         "path": str,
         "graph_length": int,
         "unit": Data_Unit,
@@ -448,6 +476,7 @@ Workspaces = TypedDict(
         "style": str,
         "empty_scroll": bool,
         "show_special": bool,
+        "show_urgent": bool,
     },
 )
 
@@ -459,8 +488,10 @@ WindowTitle = TypedDict(
         "tooltip": bool,
         "truncation": bool,
         "truncation_size": int,
+        "mappings": bool,
         "title_map": list[dict[str, str]],
         "fallback": Title_Fallback,
+        "fallback_icon": str,
     },
 )
 
@@ -469,18 +500,15 @@ Updates = TypedDict(
     "Updates",
     {
         **BaseConfig.__annotations__,
-        "show_icon": bool,
+        "label_format": str,
+        "pad_zero": bool,
         "available_icon": str,
         "no_updates_icon": str,
-        "hover_reveal": bool,
-        "reveal_duration": int,
         "os": str,
         "terminal": str,
         "auto_hide": bool,
         "interval": int,
-        "pad_zero": bool,
         "tooltip": bool,
-        "label": bool,
         "flatpak": bool,
         "snap": bool,
         "brew": bool,
@@ -489,7 +517,9 @@ Updates = TypedDict(
 
 
 # Bluetooth configuration
-BlueTooth = TypedDict("BlueTooth", {**BaseConfig.__annotations__, "icon_size": int})
+BlueTooth = TypedDict(
+    "BlueTooth", {**BaseConfig.__annotations__, "label_format": str}
+)
 
 # Weather configuration
 Weather = TypedDict(
@@ -509,23 +539,26 @@ Weather = TypedDict(
 )
 
 Launcher_Button = TypedDict(
-    "LauncherButton", {"tooltip": bool, "icon": str, "icon_size": int}
+    "LauncherButton", {"tooltip": bool, "label_format": str}
 )
 
 # Keyboard configuration
 Keyboard = TypedDict(
-    "Keyboard", {**BaseConfig.__annotations__, "icon": str, "show_icon": bool}
+    "Keyboard", {**BaseConfig.__annotations__, "label_format": str}
 )
 
 # MicroPhone configuration
-MicroPhone = TypedDict("MicroPhone", {**BaseConfig.__annotations__, "show_icon": bool})
+MicroPhone = TypedDict(
+    "MicroPhone", {**BaseConfig.__annotations__, "label_format": str}
+)
 
 # Cava configuration
 Cava = TypedDict("Cava", {"bars": int, "color": str})
 
 # Overview configuration
 Overview_Button = TypedDict(
-    "Overview_Button", {"icon": str, **BaseConfig.__annotations__}
+    "Overview_Button",
+    {**BaseConfig.__annotations__, "label_format": str}
 )
 
 
@@ -533,17 +566,25 @@ ClipBoard = TypedDict(
     "ClipBoard",
     {
         **BaseConfig.__annotations__,
-        "icon": str,
+        "label_format": str,
+        "enable_pinning": bool,
         "show_images": bool,
         "item_tooltip": bool,
     },
 )
 
-Kanban = TypedDict("kanban", {"icon": str, **BaseConfig.__annotations__})
+Kanban = TypedDict(
+    "kanban", {**BaseConfig.__annotations__, "label_format": str}
+)
 
 EmojiPicker = TypedDict(
     "emoji_picker",
-    {"icon": str, **BaseConfig.__annotations__, "per_row": int, "per_column": int},
+    {
+        **BaseConfig.__annotations__,
+        "label_format": str,
+        "per_row": int,
+        "per_column": int,
+    },
 )
 
 
@@ -565,35 +606,11 @@ DateTimeMenu = TypedDict(
         "notification": DateTimeNotification,
         "calendar": bool,
         "hover_reveal": bool,
-        "transition_type": str,
-        "transition_duration": int,
+        "clock_format": str,
         "reveal_duration": int,
     },
 )
 
-
-Custom_Button_Group = TypedDict(
-    "Custom_Button_Group",
-    {
-        "buttons": list[dict[str, str]],
-        "spacing": int,
-    },
-)
-
-
-Custom_Button = TypedDict(
-    "Custom_Button",
-    {
-        "id": str,
-        "command": str,
-        "icon": str,
-        "label_text": str,
-        "tooltip_text": str,
-        "show_icon": bool,
-        "label": bool,
-        "tooltip": bool,
-    },
-)
 
 # Custom Widget configuration (Waybar-compatible)
 CustomWidgetConfig = TypedDict(
@@ -605,6 +622,7 @@ CustomWidgetConfig = TypedDict(
         "interval": int,
         "return_type": Return_Type,
         "label_format": str,
+        "tooltip_text": str,
         "max_length": int,
         "min_length": int,
         "rotate": int,
@@ -626,34 +644,34 @@ CustomWidgetConfig = TypedDict(
 WorldClock = TypedDict(
     "WorldClock",
     {
-        "icon": str,
-        "show_icon": bool,
+        "label_format": str,
         "timezones": list[str],
         "use_24hr": bool,
     },
 )
 
 # ThemeSwitcher configuration
-ThemeSwitcher = TypedDict("ThemeSwitcher", {**BaseConfig.__annotations__, "icon": str})
+ThemeSwitcher = TypedDict("ThemeSwitcher", {"label_format": str, "notify": bool})
 
 # USB manager configuration
 USBManager = TypedDict(
     "USBManager",
     {
         **BaseConfig.__annotations__,
-        "icon": str,
+        "label_format": str,
     },
 )
 
 # Hyprpicker configuration
 HyprPicker = TypedDict(
     "HyprPicker",
-    {**BaseConfig.__annotations__, "icon": str, "show_icon": bool, "quiet": bool},
+    {**BaseConfig.__annotations__, "label_format": str, "quiet": bool},
 )
 
 # OCR configuration
 OCR = TypedDict(
-    "OCR", {**BaseConfig.__annotations__, "icon": str, "quiet": bool, "show_icon": bool}
+    "OCR",
+    {**BaseConfig.__annotations__, "quiet": bool, "label_format": str},
 )
 
 Collapsible_Group = TypedDict(
@@ -662,7 +680,7 @@ Collapsible_Group = TypedDict(
         "widgets": list[str],
         "id": str,
         "spacing": int,
-        "icon": str,
+        "label_format": str,
         "tooltip": str,
         "style_classes": list[str],
     },
@@ -739,15 +757,44 @@ QuickSettings = TypedDict(
     },
 )
 
-# Spacing configuration
-Spacing = TypedDict("Spacing", {"size": int})
 
-# Divider configuration
-Divider = TypedDict("Divider", {"size": int})
+# Cheatsheet configuration
+Cheatsheet = TypedDict(
+    "Cheatsheet",
+    {
+        "label_format": str,
+        "tooltip": bool,
+    },
+)
+
+# Cloudflare WARP configuration
+CloudflareWarp = TypedDict(
+    "CloudflareWarp",
+    {
+        "tooltip": bool,
+        "label_format": str,
+        "connected_icon": str,
+        "disconnected_icon": str,
+    },
+)
+
+# DNS switcher configuration
+DNSSwitcher = TypedDict(
+    "DNSSwitcher",
+    {
+        "tooltip": bool,
+        "label_format": str,
+    },
+)
 
 # Language configuration
 Language = TypedDict(
-    "Language", {**BaseConfig.__annotations__, "icon": str, "truncation_size": int}
+    "Language",
+    {
+        **BaseConfig.__annotations__,
+        "label_format": str,
+        "truncation_size": int,
+    }
 )
 
 # Volume configuration
@@ -771,13 +818,13 @@ Recording = TypedDict(
 
 IpMonitor = TypedDict(
     "IpMonitor",
-    {**BaseConfig.__annotations__, "label_text": str, "icon": str},
+    {**BaseConfig.__annotations__, "label_format": str},
 )
 
 
 Pomodoro = TypedDict(
     "Pomodoro",
-    {**BaseConfig.__annotations__, "label_text": str, "icon": str},
+    {**BaseConfig.__annotations__, "label_format": str},
 )
 
 
@@ -785,8 +832,7 @@ GitHubTray = TypedDict(
     "GitHubTray",
     {
         **BaseConfig.__annotations__,
-        "label_text": str,
-        "icon": str,
+        "label_format": str,
         "username": str,
         "hostname": str,
         "avatar_size": int,
@@ -813,9 +859,7 @@ ScreenShot = TypedDict(
     {
         "path": str,
         "tooltip": bool,
-        "icon_size": int,
-        "label": bool,
-        "icon": str,
+        "label_format": str,
         "annotation": bool,
         "capture_sound": bool,
         "delayed": bool,
@@ -826,7 +870,7 @@ ScreenShot = TypedDict(
 # Breathe configuration
 Breathe = TypedDict(
     "Breathe",
-    {"tooltip": bool, "label": bool, "icon": str},
+    {"tooltip": bool, "label_format": str},
 )
 
 
@@ -838,15 +882,13 @@ class Widgets(TypedDict):
     breathe: Breathe
     brightness: Brightness
     cava: Cava
+    cheatsheet: Cheatsheet
     click_counter: ClickCounter
     cpu: Cpu
-    custom_button_group: Custom_Button_Group
-    custom_button: Custom_Button
     custom_widget: list[CustomWidgetConfig]
     emoji_picker: EmojiPicker
     kanban: Kanban
     date_time: DateTimeMenu
-    divider: Divider
     hypridle: HyprIdle
     hyprsunset: HyprSunset
     hyprpicker: HyprPicker
@@ -867,14 +909,12 @@ class Widgets(TypedDict):
     quick_settings: QuickSettings
     recorder: Recording
     screenshot: ScreenShot
-    spacing: Spacing
     stopwatch: StopWatch
     storage: Storage
     system_tray: SystemTray
     submap: Submap
     taskbar: TaskBar
     github_tray: GitHubTray
-    theme: Theme
     theme_switcher: ThemeSwitcher
     usb_manager: USBManager
     updates: Updates
@@ -885,6 +925,8 @@ class Widgets(TypedDict):
     workspaces: Workspaces
     world_clock: WorldClock
     clipboard: ClipBoard
+    cloudflare_warp: CloudflareWarp
+    dns_switcher: DNSSwitcher
 
 
 class BarConfig(TypedDict):

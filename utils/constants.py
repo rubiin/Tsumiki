@@ -47,33 +47,28 @@ DEFAULT_CONFIG = {
     "$schema": f"./{APPLICATION_NAME}.schema.json",
     "widgets": {
         "launcher_button": {
-            "icon": "view-app-grid-symbolic",
-            "icon_size": 16,
+            "label_format": "\U000f003b",
             "tooltip": True,
         },
         "clipboard": {
-            "icon": "",
-            "label": False,
+            "label_format": "",
             "tooltip": True,
             "item_tooltip": False,
             "show_images": True,
             "enable_pinning": True,
         },
         "breathe": {
-            "icon": "",
-            "label": False,
+            "label_format": "",
             "tooltip": True,
         },
         "emoji_picker": {
-            "icon": "",
-            "label": False,
+            "label_format": "",
             "tooltip": True,
             "per_row": 9,
             "per_column": 4,
         },
         "kanban": {
-            "icon": "󱞁",
-            "label": True,
+            "label_format": "󱞁",
             "tooltip": True,
         },
         "battery": {
@@ -81,7 +76,7 @@ DEFAULT_CONFIG = {
             "hide_percent_when_full": True,
             "hide_when_missing": True,
             "tooltip": True,
-            "label_format": "{icon} {percent}",
+            "label_format": "{percent}",
             "notifications": {
                 "low_battery": {
                     "enabled": False,
@@ -132,35 +127,31 @@ DEFAULT_CONFIG = {
             },
         },
         "bluetooth": {
-            "label": True,
             "tooltip": True,
+            "label_format": "",
         },
         "brightness": {
             "tooltip": True,
             "step_size": 5,
         },
-        "wallpaper": {"icon": "󰸉", "label": False, "tooltip": True},
+        "wallpaper": {"label_format": "󰸉", "tooltip": True},
         "cava": {"bars": 10, "color": "#89b4fa"},
-        "overview_button": {"icon": "󰡃", "tooltip": True, "label": False},
+        "overview_button": {"tooltip": True, "label_format": "󰡃"},
         "click_counter": {"count": 0},
         "dns_switcher": {
             "tooltip": True,
-            "label": False,
-            "label_text": "DNS",
-            "icon": "󰚘",
+            "label_format": "󰚘",
             "count": 0,
         },
         "cloudflare_warp": {
             "tooltip": True,
-            "label": False,
-            "label_text": "WARP",
+            "label_format": "",
             "connected_icon": "",
             "disconnected_icon": "",
             "count": 0,
         },
         "cpu": {
-            "show_icon": True,
-            "icon": "",
+            "label_format": "",
             "tooltip": True,
             "round": True,
             "temperature_unit": "celsius",
@@ -169,21 +160,18 @@ DEFAULT_CONFIG = {
             "graph_length": 4,
         },
         "gpu": {
-            "show_icon": True,
-            "icon": "",
+            "label_format": "",
             "tooltip": True,
             "mode": "circular",
             "graph_length": 4,
         },
-        "settings": {"icon": "󰒓", "tooltip": True, "label": False},
+        "settings": {"tooltip": True, "label_format": "󰒓"},
         "date_time": {
             "date_format": "%b %d",
             "calendar": True,
             "clock_format": "12h",
             "hover_reveal": False,
             "reveal_duration": 500,
-            "nepali_date": False,
-            "extended_date": False,
             "notification": {
                 "enabled": True,
                 "count": True,
@@ -191,12 +179,12 @@ DEFAULT_CONFIG = {
                 "notification_grouping": True,  # Group history by app in the date menu
             },
         },
-        "divider": {},
-        "cheatsheet": {},
+        "cheatsheet": {
+            "label_format": "󰌌",
+            "tooltip": True,
+        },
         "github_tray": {
-            "icon": "",
-            "label": False,
-            "label_text": "GitHub",
+            "label_format": "",
             "tooltip": True,
             "username": "",
             "hostname": "",
@@ -233,42 +221,34 @@ DEFAULT_CONFIG = {
             "local_projects": {},
         },
         "pomodoro": {
-            "icon": "🍅",
-            "label": True,
-            "label_text": "Pomo",
+            "label_format": "🍅",
             "tooltip": True,
         },
         "ip_monitor": {
             "tooltip": True,
-            "label": False,
-            "label_text": "IP",
-            "icon": "󰖟",
+            "label_format": "󰖟",
         },
         "hypridle": {
             "enabled_icon": "",
+            "label_format": "{state}",
             "disabled_icon": "",
-            "label": True,
             "tooltip": True,
         },
         "hyprpicker": {
-            "icon": "",
             "tooltip": True,
-            "label": False,
             "quiet": False,
-            "show_icon": True,
+            "label_format": "",
         },
         "hyprsunset": {
             "temperature": "2800k",
             "enabled_icon": "󱩌",
+            "label_format": "{state}",
             "disabled_icon": "󰛨",
-            "label": True,
             "tooltip": True,
         },
         "keyboard": {
-            "icon": "󰌌",
-            "label": True,
             "tooltip": True,
-            "show_icon": True,
+            "label_format": "󰌌 {layout}",
         },
         "window_count": {
             "label_format": " [{count}]",
@@ -276,14 +256,12 @@ DEFAULT_CONFIG = {
             "tooltip": True,
         },
         "language": {
-            "icon": "",
             "tooltip": True,
             "truncation_size": 2,
-            "show_icon": True,
+            "label_format": " {language}",
         },
         "memory": {
-            "show_icon": True,
-            "icon": "",
+            "label_format": "",
             "tooltip": True,
             "mode": "circular",
             "graph_length": 4,
@@ -299,9 +277,8 @@ DEFAULT_CONFIG = {
             "interval": 2000,
         },
         "microphone": {
-            "label": False,
             "tooltip": True,
-            "show_icon": True,
+            "label_format": "",
         },
         "mpris": {
             "truncation_size": 20,
@@ -311,19 +288,15 @@ DEFAULT_CONFIG = {
             "ignore": [],
         },
         "ocr": {
-            "icon": "󰐳",
             "tooltip": True,
-            "label": False,
-            "show_icon": True,
+            "label_format": "󰐳",
             "quiet": False,
         },
         "power": {
-            "icon": "󰐥",
             "tooltip": True,
             "items_per_row": 3,
             "icon_size": 100,
-            "show_icon": True,
-            "label": False,
+            "label_format": "󰐥",
             "confirm": True,
             "item_shortcuts": {},
             "buttons": {
@@ -344,29 +317,25 @@ DEFAULT_CONFIG = {
         },
         "screenshot": {
             "path": "Pictures/Screenshots",
-            "icon": "󰄀",
+            "label_format": "󰄀",
             "tooltip": True,
             "annotation": True,
             "delayed": False,
             "delayed_timeout": 5000,
-            "label": False,
             "capture_sound": False,
         },
         "stopwatch": {"stopped_icon": "󱫞", "running_icon": "󱫠"},
         "storage": {
             "path": "/",
-            "show_icon": True,
-            "icon": "󰋊",
+            "label_format": "󰋊",
             "mode": "circular",
             "tooltip": True,
             "graph_length": 4,
             "unit": "gb",  # Default unit for storage
         },
         "submap": {
-            "icon": "󰌌",
-            "label": True,
             "tooltip": True,
-            "show_icon": True,
+            "label_format": "󰌌 {submap}",
             "hide_on_default": False,
         },
         "system_tray": {
@@ -383,29 +352,25 @@ DEFAULT_CONFIG = {
             "show_current_workspace_only": False,
         },
         "theme_switcher": {
-            "icon": "",
+            "label_format": "",
             "notify": False,  # Whether to show a notification when the theme is changed
         },
         "updates": {
-            "show_icon": True,
+            "label_format": "{total}",
+            "pad_zero": True,  # Whether to zero-pad the update count to two digits
             "available_icon": "󰏗",
             "no_updates_icon": "󰏖",
             "os": "arch",
-            "hover_reveal": False,  # Whether to reveal the updates on hover
-            "reveal_duration": 500,
             "interval": HIGH_POLL_INTERVAL,
             "tooltip": True,
             "terminal": "kitty",
-            "pad_zero": True,  # Whether to pad the number of updates with zero
-            "label": True,
             "auto_hide": False,  # Whether to auto-hide there are no updates
             "flatpak": False,
             "snap": False,
             "brew": False,
         },
         "usb_manager": {
-            "icon": "",
-            "label": False,
+            "label_format": "",
             "tooltip": True,
         },
         "volume": {
@@ -432,6 +397,7 @@ DEFAULT_CONFIG = {
             "mappings": True,
             "title_map": [],
             "fallback": "class",
+            "fallback_icon": "\U000f08c6",
         },
         "workspaces": {
             "count": 10,
@@ -446,14 +412,9 @@ DEFAULT_CONFIG = {
             "show_urgent": False,
         },
         "world_clock": {
-            "icon": "󱉊",
             "use_24hr": True,
-            "show_icon": True,
+            "label_format": "󰃰",
             "timezones": ["America/New_York", "Asia/Tokyo"],
-        },
-        "custom_button_group": {
-            "buttons": [],
-            "spacing": 4,
         },
     },
     "layout": {
@@ -474,6 +435,23 @@ DEFAULT_CONFIG = {
             "anchor": "center",
             "transition_type": "crossfade",
             "transition_duration": 350,
+        },
+        "cheatsheet": {
+            "enabled": False,
+            "layer": "overlay",
+            "anchor": "center",
+            "title": "Hyprland Keymap",
+            "icon": "",
+            "refresh_icon": "",
+            "close_icon": "",
+            "columns": 4,
+            "groups_per_page": 8,
+            "column_width": 300,
+            "key_width": 190,
+            "accent_keys": ["super"],
+            "transition_type": "crossfade",
+            "transition_duration": 200,
+            "sections": [],
         },
         "osd": {
             "enabled": False,
@@ -504,7 +482,6 @@ DEFAULT_CONFIG = {
             "enabled": True,
             "anchor": "top-right",
             "auto_dismiss": True,
-            "dnd_on_screencast": False,  # Enable Do Not Disturb mode when screencasting
             "ignored": [],
             "respect_expire": True,  # Whether to respect the expire timeout sent by the notification
             "timeout": {"low": 3000, "normal": 8000, "critical": 15000},
@@ -563,7 +540,6 @@ DEFAULT_CONFIG = {
             "cookie_show_hour_marks": False,
             "cookie_background_opacity": 1.0,
             "cookie_widget_scale": 1.0,
-            "nepali_date": False,
         },
         "desktop_quotes": {
             "enabled": False,
@@ -698,11 +674,6 @@ DEFAULT_CONFIG = {
                     "spacing": "0.125em",
                 },
                 "cpu": {
-                    "border": {"enabled": False, "radius": "16px", "width": "1px"},
-                    "icon_size": "12px",
-                    "spacing": "0.125em",
-                },
-                "custom_button": {
                     "border": {"enabled": False, "radius": "16px", "width": "1px"},
                     "icon_size": "12px",
                     "spacing": "0.125em",
@@ -1904,7 +1875,7 @@ TEMP_PATHS = set()
 
 # Pre-computed constants
 SPECIAL_WIDGET_TYPES = frozenset(
-    ("custom_button", "group", "collapsible", "custom_widget")
+    ("group", "collapsible", "custom_widget")
 )
 GROUP_TYPES = frozenset(("widget_groups", "collapsible_groups"))
 URGENCY_LEVELS = frozenset(("low", "normal", "critical"))

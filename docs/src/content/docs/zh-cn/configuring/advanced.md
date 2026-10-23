@@ -13,8 +13,8 @@ description: Tsumiki 高级配置模式
 [[widgets.custom_widget]]
 id = "volume"
 exec = "pamixer --get-volume"
-format = "󰕾 {}%"
-interval = 1
+label_format = "󰕾 {}%"
+interval = 1000
 on_scroll_up = "pamixer -i 5"
 on_scroll_down = "pamixer -d 5"
 exec_on_event = true
@@ -28,16 +28,19 @@ left_section = ["@custom_widget:volume", "workspaces"]
 | 键                 | 类型   | 默认值    | 描述                                              |
 | ------------------ | ------ | --------- | ------------------------------------------------- |
 | `id`               | string | —         | 在布局中引用的唯一标识符 (`@custom_widget:my-id`) |
-| `exec`             | string | 必需      | 要执行的 shell 命令                               |
-| `interval`         | int    | `0`       | 刷新间隔（秒），0 = 仅执行一次                    |
+| `exec`             | string | —         | 要执行的 shell 命令；纯点击按钮可省略             |
+| `icon`             | string | —         | 静态图标字形，等同于 `format_icons.default`       |
+| `interval`         | int    | `0`       | 刷新间隔（毫秒），0 = 仅执行一次                  |
 | `return_type`      | string | `"plain"` | 输出格式：`"plain"` 或 `"json"`                   |
 | `label_format`     | string | `"{}"`    | 格式字符串，`{}` 将被输出替换                     |
+| `format`           | string | —         | Waybar 中 `label_format` 的名称                   |
 | `exec_on_event`    | bool   | `false`   | 点击/滚动后重新执行命令                           |
 | `max_length`       | int    | `0`       | 最大文本长度（0 = 无限制）                        |
 | `min_length`       | int    | `0`       | 最小文本长度（用空格填充）                        |
 | `rotate`           | int    | `0`       | 文本旋转角度（度）                                |
 | `tooltip`          | bool   | `true`    | 显示带输出的工具提示                              |
 | `tooltip_format`   | string | —         | 工具提示格式字符串                                |
+| `tooltip_text`     | string | —         | 静态工具提示，用于输出永不变化的组件              |
 | `on_click`         | string | —         | 左键单击命令                                      |
 | `on_click_right`   | string | —         | 右键单击命令                                      |
 | `on_click_middle`  | string | —         | 中键单击命令                                      |
@@ -75,7 +78,7 @@ right_section = ["@group:sys-group", "system_tray"]
 id = "utility-tools"
 widgets = ["ocr", "screenshot", "recorder"]
 spacing = 4
-icon = "󰒓"
+label_format = "󰍽"
 tooltip = "工具"
 style_classes = ["utility-tools"]
 ```
@@ -85,48 +88,4 @@ style_classes = ["utility-tools"]
 ```toml
 
 right_section = ["@collapsible:utility-tools", "system_tray"]
-```
-
-## 自定义按钮
-
-点击时执行 shell 命令的独立自定义按钮。在布局部分直接使用其名称引用。
-
-```toml
-[widgets.custom_button]
-command = "firefox"
-icon = "󰈹"
-label_text = "Firefox"
-tooltip_text = "打开 Firefox 浏览器"
-show_icon = true
-label = false
-tooltip = true
-```
-
-像任何普通组件一样将其放置在布局中：
-
-```toml
-[layout]
-left_section = ["custom_button", "workspaces"]
-```
-
-## 自定义按钮组
-
-一组自定义命令按钮。组中的每个按钮可以通过 `@custom_button:N` 或 `@custom_button:id` 引用：
-
-```toml
-[widgets.custom_button_group]
-spacing = 4
-
-[[widgets.custom_button_group.buttons]]
-id = "firefox"
-command = "firefox"
-icon = "󰈹"
-label_text = "Firefox"
-tooltip_text = "打开 Firefox 浏览器"
-show_icon = true
-label = false
-tooltip = true
-
-[layout]
-left_section = ["@custom_button:firefox"]
 ```

@@ -23,7 +23,6 @@ from shared.widget_container import ButtonWidget
 from utils.constants import APP_DATA_DIRECTORY
 from utils.functions import get_http_client, send_notification
 from utils.i18n import _
-from utils.widget_utils import nerd_font_icon
 
 from . import state as tray_state
 from .client import GitHubClient, GitHubClientError
@@ -114,19 +113,9 @@ class GitHubTrayWidget(ButtonWidget, PopoverMixin):
             spacing=0,
             style_classes="github-tray-bar-content",
         )
-        content.add(
-            nerd_font_icon(
-                icon=self.config.get("icon", BRAND_GLYPH),
-                props={"style_classes": ["panel-font-icon"]},
-            )
-        )
-        if self.config.get("label", False):
-            content.add(
-                Label(
-                    label=self.config.get("label_text", "GitHub"),
-                    style_classes="panel-text",
-                )
-            )
+        self.label_format = self.config.get("label_format", BRAND_GLYPH)
+        self.add_formatted_label(self.label_format)
+        content.add(self.panel_label)
 
         # Sibling of the icon, not an Overlay: negative margins pull it over the glyph.
         self.badge_label = Label(
@@ -573,14 +562,19 @@ class GitHubTrayWidget(ButtonWidget, PopoverMixin):
     def _update_badge(self):
         count = self.unread_count
         if count > 0:
-            self.badge_label.set_label("99+" if count > 99 else str(count))
+            # The badge and ``{unread}`` share one capped string, so dropping the
+            # badge for the format field shows the same number.
+            capped = "99+" if count > 99 else str(count)
+            self.badge_label.set_label(capped)
             self.badge_label.set_visible(True)
+            self.refresh_formatted_label(unread=capped)
             # Routed through the per-widget flag, and restorable when the count
             # drops back to zero.
             self.set_tooltip_if_enabled(f"GitHub Tray — {count} unread", default=True)
         else:
             self.badge_label.set_visible(False)
             self.badge_label.set_label("")
+            self.refresh_formatted_label(unread="")
             self.set_tooltip_if_enabled(self._base_tooltip, default=True)
 
     def _popover_content(self):

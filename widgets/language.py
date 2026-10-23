@@ -3,7 +3,6 @@ from fabric.utils import FormattedString, truncate
 from fabric.widgets.label import Label
 
 from shared.widget_container import ButtonWidget
-from utils.widget_utils import nerd_font_icon
 
 
 class LanguageWidget(ButtonWidget):
@@ -30,15 +29,16 @@ class LanguageWidget(ButtonWidget):
                 style_classes="panel-text",
             )
 
-        if self.config.get("show_icon", True):
-            self.icon = nerd_font_icon(
-                icon=self.config.get("icon"),
-                props={
-                    "style_classes": ["panel-font-icon"],
-                },
-            )
-            self.container_box.add(self.icon)
-
-        self.container_box.add(self.lang)
+        self.label_format = self.config.get("label_format", "{language}")
+        # HyprlandLanguage stays off the panel: it is the data source, and its
+        # text is folded into the single formatted label.
+        self.add_formatted_label(self.label_format, language=self.lang.get_label())
+        self._register_handlers(self.lang, {"layout_changed": self._refresh_language})
 
         self.set_tooltip_if_enabled(f"Language: {self.lang.get_label()}")
+
+    def _refresh_language(self, *_args) -> None:
+        """Mirror the live language widget into the panel label and tooltip."""
+        language = self.lang.get_label()
+        self.refresh_formatted_label(language=language)
+        self.set_tooltip_if_enabled(f"Language: {language}")

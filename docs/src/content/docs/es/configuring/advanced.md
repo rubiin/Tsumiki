@@ -13,8 +13,8 @@ Widgets personalizados compatibles con Waybar que ejecutan comandos shell extern
 [[widgets.custom_widget]]
 id = "volume"
 exec = "pamixer --get-volume"
-format = "󰕾 {}%"
-interval = 1
+label_format = "󰕾 {}%"
+interval = 1000
 on_scroll_up = "pamixer -i 5"
 on_scroll_down = "pamixer -d 5"
 exec_on_event = true
@@ -28,16 +28,19 @@ Opciones de configuración completas:
 | Clave              | Tipo   | Predeterminado | Descripción                                                                |
 | ------------------ | ------ | -------------- | -------------------------------------------------------------------------- |
 | `id`               | string | —              | Identificador único para referenciar en el diseño (`@custom_widget:mi-id`) |
-| `exec`             | string | requerido      | Comando shell a ejecutar                                                   |
-| `interval`         | int    | `0`            | Intervalo de actualización en segundos (0 = ejecutar una vez)              |
+| `exec`             | string | —              | Comando shell a ejecutar; omítalo para un botón solo de clic               |
+| `icon`             | string | —              | Glifo de icono estático, equivalente a `format_icons.default`              |
+| `interval`         | int    | `0`            | Intervalo de actualización en milisegundos (0 = ejecutar una vez)          |
 | `return_type`      | string | `"plain"`      | Formato de salida: `"plain"` o `"json"`                                    |
 | `label_format`     | string | `"{}"`         | Cadena de formato donde `{}` se reemplaza con la salida                    |
+| `format`           | string | —              | El nombre de `label_format` en Waybar                                      |
 | `exec_on_event`    | bool   | `false`        | Re-ejecutar comando después de clic/desplazamiento                         |
 | `max_length`       | int    | `0`            | Longitud máxima de texto (0 = sin límite)                                  |
 | `min_length`       | int    | `0`            | Longitud mínima de texto (rellena con espacios)                            |
 | `rotate`           | int    | `0`            | Rotar texto en grados                                                      |
 | `tooltip`          | bool   | `true`         | Mostrar tooltip con la salida                                              |
 | `tooltip_format`   | string | —              | Cadena de formato del tooltip                                              |
+| `tooltip_text`     | string | —              | Tooltip estático, para un widget cuya salida nunca cambia                  |
 | `on_click`         | string | —              | Comando de clic izquierdo                                                  |
 | `on_click_right`   | string | —              | Comando de clic derecho                                                    |
 | `on_click_middle`  | string | —              | Comando de clic medio                                                      |
@@ -75,7 +78,7 @@ Oculta widgets menos usados detrás de un alternador:
 id = "utility-tools"
 widgets = ["ocr", "screenshot", "recorder"]
 spacing = 4
-icon = "󰒓"
+label_format = "󰍽"
 tooltip = "Utilidades"
 style_classes = ["utility-tools"]
 ```
@@ -85,48 +88,4 @@ Referencia en el diseño con `@collapsible:utility-tools`.
 ```toml
 
 right_section = ["@collapsible:utility-tools", "system_tray"]
-```
-
-## Botón Personalizado
-
-Un botón personalizado independiente que ejecuta un comando shell al hacer clic. Referéncialo directamente por su nombre en una sección de diseño.
-
-```toml
-[widgets.custom_button]
-command = "firefox"
-icon = "󰈹"
-label_text = "Firefox"
-tooltip_text = "Abrir navegador Firefox"
-show_icon = true
-label = false
-tooltip = true
-```
-
-Colócalo en el diseño como cualquier widget normal:
-
-```toml
-[layout]
-left_section = ["custom_button", "workspaces"]
-```
-
-## Grupo de Botones Personalizados
-
-Un grupo de botones de comando personalizados. Cada botón del grupo se puede referenciar mediante `@custom_button:N` o `@custom_button:id`:
-
-```toml
-[widgets.custom_button_group]
-spacing = 4
-
-[[widgets.custom_button_group.buttons]]
-id = "firefox"
-command = "firefox"
-icon = "󰈹"
-label_text = "Firefox"
-tooltip_text = "Abrir navegador Firefox"
-show_icon = true
-label = false
-tooltip = true
-
-[layout]
-left_section = ["@custom_button:firefox"]
 ```

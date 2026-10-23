@@ -38,7 +38,7 @@ style_classes = ["bordered"]
 [[collapsible_groups]]
 widgets = ["ocr", "screenshot", "recorder"]
 spacing = 4
-icon = "󰒓"
+label_format = "󰍽"
 tooltip = "Utility Tools"
 style_classes = ["utility-tools"]
 
@@ -54,7 +54,6 @@ hide_unoccupied = true
 
 [widgets.date_time]
 date_format = "%b %d %H:%M"
-nepali_date = false
 
 [widgets.volume]
 tooltip = true
@@ -105,7 +104,6 @@ Available reference types:
 | Widget name                              | `"workspaces"`                                      | Direct widget reference                 |
 | `@group:N` / `@group:id`                 | `"@group:0"` / `"@group:workspaces-group"`          | Widget group by index or string id      |
 | `@collapsible:N` / `@collapsible:id`     | `"@collapsible:0"` / `"@collapsible:utility-tools"` | Collapsible group by index or string id |
-| `@custom_button:N` / `@custom_button:id` | `"@custom_button:0"` / `"@custom_button:firefox"`   | Custom button by index or string id     |
 | `@custom_widget:N` / `@custom_widget:id` | `"@custom_widget:0"` / `"@custom_widget:volume"`    | Custom widget by index or string id     |
 
 ### `modules`
@@ -214,10 +212,12 @@ Collapsible groups hide widgets behind a toggle:
 [[collapsible_groups]]
 widgets = ["ocr", "screenshot", "recorder"]
 spacing = 4
-icon = "󰒓"
+label_format = "󰍽"
 tooltip = "Utility Tools"
 style_classes = ["utility-tools"]
 ```
+
+The toggle button is one label, driven by `label_format` like every other panel widget, with the glyph written straight into the string: literal text is kept, so `"󰍽 Tools"` puts a caption next to the glyph. The old `show_icon` / `label` keys are no longer read.
 
 Reference groups in layout with `@group:N` (numeric index) or `@group:id` (string id).
 
@@ -234,7 +234,7 @@ style_classes = ["compact"]
 id = "utility-tools"
 widgets = ["ocr", "screenshot", "recorder"]
 spacing = 4
-icon = "󰒓"
+label_format = "󰍽"
 tooltip = "Utility Tools"
 style_classes = ["utility-tools"]
 
@@ -257,10 +257,6 @@ contrast = 0.0
 ```
 
 See [Theming with Matugen](/en/theming/matugen) for details.
-
-## Migration Note
-
-If you are upgrading from older versions, review [Migration v2 to v3](/en/resources/migration-v2-v3) before copying old config blocks.
 
 ## Recommended Workflow
 

@@ -13,8 +13,8 @@ Waybar-kompatible benutzerdefinierte Widgets, die externe Shell-Befehle mit konf
 [[widgets.custom_widget]]
 id = "volume"
 exec = "pamixer --get-volume"
-format = "󰕾 {}%"
-interval = 1
+label_format = "󰕾 {}%"
+interval = 1000
 on_scroll_up = "pamixer -i 5"
 on_scroll_down = "pamixer -d 5"
 exec_on_event = true
@@ -25,26 +25,29 @@ left_section = ["@custom_widget:volume", "workspaces"]
 
 Vollständige Konfigurationsoptionen:
 
-| Schlüssel          | Typ    | Standard     | Beschreibung                                                          |
-| ------------------ | ------ | ------------ | --------------------------------------------------------------------- |
-| `id`               | string | —            | Eindeutige Kennung für Referenz im Layout (`@custom_widget:meine-id`) |
-| `exec`             | string | erforderlich | Auszuführender Shell-Befehl                                           |
-| `interval`         | int    | `0`          | Aktualisierungsintervall in Sekunden (0 = einmal ausführen)           |
-| `return_type`      | string | `"plain"`    | Ausgabeformat: `"plain"` oder `"json"`                                |
-| `label_format`     | string | `"{}"`       | Formatzeichenfolge, bei der `{}` durch die Ausgabe ersetzt wird       |
-| `exec_on_event`    | bool   | `false`      | Befehl nach Klick/Scrollen erneut ausführen                           |
-| `max_length`       | int    | `0`          | Maximale Textlänge (0 = kein Limit)                                   |
-| `min_length`       | int    | `0`          | Minimale Textlänge (füllt mit Leerzeichen)                            |
-| `rotate`           | int    | `0`          | Text um Grad drehen                                                   |
-| `tooltip`          | bool   | `true`       | Tooltip mit Ausgabe anzeigen                                          |
-| `tooltip_format`   | string | —            | Tooltip-Formatzeichenfolge                                            |
-| `on_click`         | string | —            | Linksklick-Befehl                                                     |
-| `on_click_right`   | string | —            | Rechtsklick-Befehl                                                    |
-| `on_click_middle`  | string | —            | Mittelklick-Befehl                                                    |
-| `on_scroll_up`     | string | —            | Scrollen-nach-oben-Befehl                                             |
-| `on_scroll_down`   | string | —            | Scrollen-nach-unten-Befehl                                            |
-| `signal`           | int    | —            | Signalnummer für sig* Ereignisauslöser                                |
-| `restart_interval` | int    | —            | Neustartintervall für persistente Skripte                             |
+| Schlüssel          | Typ    | Standard  | Beschreibung                                                          |
+| ------------------ | ------ | --------- | --------------------------------------------------------------------- |
+| `id`               | string | —         | Eindeutige Kennung für Referenz im Layout (`@custom_widget:meine-id`) |
+| `exec`             | string | —         | Auszuführender Shell-Befehl; weglassen für einen reinen Klick-Button  |
+| `icon`             | string | —         | Statisches Icon, entspricht `format_icons.default`                    |
+| `interval`         | int    | `0`       | Aktualisierungsintervall in Millisekunden (0 = einmal ausführen)      |
+| `return_type`      | string | `"plain"` | Ausgabeformat: `"plain"` oder `"json"`                                |
+| `label_format`     | string | `"{}"`    | Formatzeichenfolge, bei der `{}` durch die Ausgabe ersetzt wird       |
+| `format`           | string | —         | Waybars Name für `label_format`                                       |
+| `exec_on_event`    | bool   | `false`   | Befehl nach Klick/Scrollen erneut ausführen                           |
+| `max_length`       | int    | `0`       | Maximale Textlänge (0 = kein Limit)                                   |
+| `min_length`       | int    | `0`       | Minimale Textlänge (füllt mit Leerzeichen)                            |
+| `rotate`           | int    | `0`       | Text um Grad drehen                                                   |
+| `tooltip`          | bool   | `true`    | Tooltip mit Ausgabe anzeigen                                          |
+| `tooltip_format`   | string | —         | Tooltip-Formatzeichenfolge                                            |
+| `tooltip_text`     | string | —         | Statischer Tooltip, wenn sich die Ausgabe nie ändert                  |
+| `on_click`         | string | —         | Linksklick-Befehl                                                     |
+| `on_click_right`   | string | —         | Rechtsklick-Befehl                                                    |
+| `on_click_middle`  | string | —         | Mittelklick-Befehl                                                    |
+| `on_scroll_up`     | string | —         | Scrollen-nach-oben-Befehl                                             |
+| `on_scroll_down`   | string | —         | Scrollen-nach-unten-Befehl                                            |
+| `signal`           | int    | —         | Signalnummer für sig* Ereignisauslöser                                |
+| `restart_interval` | int    | —         | Neustartintervall für persistente Skripte                             |
 
 ## Widget-Gruppen
 
@@ -75,7 +78,7 @@ Verbergen Sie weniger verwendete Widgets hinter einem Umschalter:
 id = "utility-tools"
 widgets = ["ocr", "screenshot", "recorder"]
 spacing = 4
-icon = "󰒓"
+label_format = "󰍽"
 tooltip = "Werkzeuge"
 style_classes = ["utility-tools"]
 ```
@@ -85,48 +88,4 @@ Referenzieren Sie im Layout mit `@collapsible:utility-tools`.
 ```toml
 
 right_section = ["@collapsible:utility-tools", "system_tray"]
-```
-
-## Benutzerdefinierter Button
-
-Ein eigenständiger benutzerdefinierter Button, der beim Klicken einen Shell-Befehl ausführt. Referenzieren Sie ihn direkt mit seinem Namen in einem Layout-Abschnitt.
-
-```toml
-[widgets.custom_button]
-command = "firefox"
-icon = "󰈹"
-label_text = "Firefox"
-tooltip_text = "Firefox Browser öffnen"
-show_icon = true
-label = false
-tooltip = true
-```
-
-Platzieren Sie ihn wie jedes normale Widget im Layout:
-
-```toml
-[layout]
-left_section = ["custom_button", "workspaces"]
-```
-
-## Benutzerdefinierte Button-Gruppe
-
-Eine Gruppe von benutzerdefinierten Befehls-Buttons. Jeder Button in der Gruppe kann über `@custom_button:N` oder `@custom_button:id` referenziert werden:
-
-```toml
-[widgets.custom_button_group]
-spacing = 4
-
-[[widgets.custom_button_group.buttons]]
-id = "firefox"
-command = "firefox"
-icon = "󰈹"
-label_text = "Firefox"
-tooltip_text = "Firefox Browser öffnen"
-show_icon = true
-label = false
-tooltip = true
-
-[layout]
-left_section = ["@custom_button:firefox"]
 ```

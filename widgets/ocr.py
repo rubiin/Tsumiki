@@ -5,7 +5,6 @@ from fabric.utils import Gdk, GLib, Gtk, exec_shell_command_async, os
 from shared.widget_container import ButtonWidget
 from utils.constants import ASSETS_DIR
 from utils.i18n import _
-from utils.widget_utils import nerd_font_icon
 
 
 class OCRWidget(ButtonWidget):
@@ -21,17 +20,8 @@ class OCRWidget(ButtonWidget):
         self._lang_lines: list[str] = []
         self._lang_finalize_id = 0
 
-        if self.config.get("show_icon", True):
-            # Create a TextIcon with the specified icon and size
-            self.icon = nerd_font_icon(
-                icon=self.config.get("icon"),
-                props={"style_classes": ["panel-font-icon"]},
-            )
-            self.add_panel_content(
-                self.icon,
-                _("widget.ocr.label"),
-                show_label=self.config.get("label", True),
-            )
+        self.label_format = self.config.get("label_format", "")
+        self.add_formatted_label(self.label_format, lang=self.current_lang)
 
         # Left click for OCR
         self.connect("button-press-event", self.on_button_press)
@@ -121,4 +111,5 @@ class OCRWidget(ButtonWidget):
 
     def on_language_selected(self, _sender, lang):
         self.current_lang = lang
+        self.refresh_formatted_label(lang=lang)
         self.set_tooltip_if_enabled(_("widget.ocr.lang_selected", lang=lang))

@@ -15,7 +15,9 @@
 }
 
 #desktop-clock-box {
-  margin: 0 15rem 15rem 15rem;
+  // Inner margin, not a layer-shell one: it already widens the window.
+  margin: 0 variable.$modules-desktop_clock-margin_x variable.$modules-desktop_clock-margin_y
+    variable.$modules-desktop_clock-margin_x;
 
   #clock > label {
     font-size: 9rem;
@@ -30,7 +32,8 @@
 }
 
 #desktop-clock-cookie {
-  margin: 0 8rem 8rem 8rem;
+  margin: 0 variable.$modules-desktop_clock-cookie-margin_x
+    variable.$modules-desktop_clock-cookie-margin_y variable.$modules-desktop_clock-cookie-margin_x;
 }
 
 #divider {
@@ -129,14 +132,6 @@ $widget-shell-widgets: (
     variable.$bar-widgets-brightness-border-width,
     variable.$bar-widgets-brightness-icon_size,
     variable.$bar-widgets-brightness-spacing
-  ),
-  (
-    "custom_button",
-    variable.$bar-widgets-custom_button-border-radius,
-    variable.$bar-widgets-custom_button-border-enabled,
-    variable.$bar-widgets-custom_button-border-width,
-    variable.$bar-widgets-custom_button-icon_size,
-    variable.$bar-widgets-custom_button-spacing
   ),
   (
     "custom_widget",
@@ -522,7 +517,8 @@ $widget-shell-widgets: (
   );
 
   &-box {
-    margin: 0rem 4rem 4rem 0rem;
+    margin: 0rem variable.$modules-desktop_quotes-margin_x variable.$modules-desktop_quotes-margin_y
+      0rem;
 
     label {
       font-size: 1.5rem;

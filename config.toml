@@ -1,19 +1,14 @@
-"$schema" = "https://raw.githubusercontent.com/rubiin/tsumiki/refs/heads/dev/tsumiki.schema.json"
+"$schema" = "https://raw.githubusercontent.com/rubiin/tsumiki/refs/heads/master/tsumiki.schema.json"
 
 [widgets.launcher_button]
-icon = "view-app-grid-symbolic"
-icon_size = 20
+label_format = "󰀻"
 tooltip = true
 
+# {unread}
 [widgets.github_tray]
-icon = ""
-label = false
-label_text = "GitHub"
+label_format = ""
 tooltip = true
-# Optional login shown while the gh session user is resolved.
 username = ""
-# GitHub Enterprise Server host, leave empty for github.com.
-# The host must be added to gh first (`gh auth login --hostname ...`).
 hostname = ""
 avatar_size = 44
 default_tab = "inbox"
@@ -52,39 +47,38 @@ workflow_failure = true
 workflow_cancelled = true
 
 [widgets.ip_monitor]
-icon = "󰖟"
-label = false
-label_text = "IP"
+label_format = "󰖟"
 tooltip = true
 
 [widgets.clipboard]
-icon = ""
-label = false
+label_format = ""
 tooltip = true
 item_tooltip = false
 show_images = true
 enable_pinning = true
 
+[widgets.breathe]
+label_format = ""
+tooltip = true
+
 [widgets.emoji_picker]
-icon = ""
-label = false
+label_format = ""
 tooltip = true
 per_row = 9
 per_column = 4
 
 [widgets.kanban]
-icon = "󱞁"
-label = false
+label_format = "󱞁"
 tooltip = true
 
 [widgets.battery]
 full_battery_level = 100
 hide_when_missing = false
 hide_percent_when_full = true
-label = true
 tooltip = true
 icon_size = 14
-label_format = "{icon} {percent}"
+# variables: {percent} {time_remaining} {capacity} {temperature} {state}
+label_format = "{percent}"
 
 
 [widgets.battery.notifications]
@@ -159,7 +153,8 @@ tooltip = "Launch Code"
 icon_size = 18
 
 [widgets.bluetooth]
-label = true
+# {state} -> "on" / "off"
+label_format = ""
 tooltip = true
 
 [widgets.brightness]
@@ -167,8 +162,7 @@ tooltip = true
 step_size = 5
 
 [widgets.wallpaper]
-icon = "󰸉"
-label = false
+label_format = "󰸉"
 tooltip = true
 
 [widgets.cava]
@@ -176,16 +170,14 @@ bars = 10
 color = "#89b4fa"
 
 [widgets.overview_button]
-icon = "󰡃"
+label_format = "󰡃"
 tooltip = true
-label = false
 
 [widgets.click_counter]
 count = 0
 
 [widgets.cpu]
-show_icon = true
-icon = ""
+label_format = ""
 tooltip = true
 round = true
 temperature_unit = "celsius"
@@ -194,8 +186,7 @@ mode = "graph"
 graph_length = 4
 
 [widgets.gpu]
-show_icon = true
-icon = ""
+label_format = ""
 tooltip = true
 mode = "circular"
 graph_length = 4
@@ -203,22 +194,21 @@ graph_length = 4
 
 [widgets.storage]
 path = "/"
-show_icon = true
-icon = "󰋊"
+label_format = "󰋊"
 mode = "label"
 tooltip = true
 graph_length = 4
 unit = "gb"
 
+# {count}
 [widgets.usb_manager]
-icon = "󰕓"
-label = false
+label_format = "󰕓"
 tooltip = true
 
 
+# {used} {total} {percentage}
 [widgets.memory]
-show_icon = true
-icon = ""
+label_format = ""
 tooltip = true
 mode = "label"
 graph_length = 4
@@ -227,7 +217,6 @@ unit = "gb"
 [widgets.settings]
 icon = "󰒓"
 tooltip = true
-label = false
 
 [widgets.date_time]
 date_format = " %a %b %d,"
@@ -235,7 +224,6 @@ calendar = true
 clock_format = "12h"
 hover_reveal = false
 reveal_duration = 500
-nepali_date = true
 
 [widgets.date_time.notification]
 enabled = true
@@ -245,29 +233,27 @@ notification_grouping = true   # Group notification history by app in the date m
 
 [widgets.hypridle]
 enabled_icon = ""
+label_format = "{state}"
 disabled_icon = ""
-label = true
 tooltip = true
 
 [widgets.hyprpicker]
-icon = ""
 tooltip = true
-label = false
 quiet = false
-show_icon = true
+label_format = ""
 
+
+# {temp}
 [widgets.hyprsunset]
 temperature = "2800k"
 enabled_icon = "󱩌"
+label_format = "{state}"
 disabled_icon = "󰛨"
-label = true
 tooltip = true
 
 [widgets.keyboard]
-icon = "󰌌"
-label = true
 tooltip = true
-show_icon = false
+label_format = "󰌌 {layout}"
 
 [widgets.window_count]
 label_format = " [{count}]"
@@ -275,14 +261,15 @@ hide_when_zero = true
 tooltip = true
 
 [widgets.language]
-icon = ""
 tooltip = true
 truncation_size = 2
-show_icon = false
+label_format = " {language}"
 
 
 [widgets.network_usage]
 tooltip = true
+upload = true
+download = true
 label_format = "{upload}   {download} "
 upload_threshold = 1024
 download_threshold = 1024
@@ -291,31 +278,27 @@ mb_digits = 2
 interval = 2000
 
 [widgets.microphone]
-label = false
 tooltip = true
-show_icon = true
+label_format = "{state}"
 
 [widgets.mpris]
-truncation_size = 10
+truncation_size = 15
 tooltip = false
 hide_when_no_player = true
 label_format = "{title} - {artist}"
 ignore = []
 
 [widgets.ocr]
-icon = "󰐳"
 tooltip = true
-label = false
-show_icon = true
+# {lang} -> active tesseract language (e.g. "eng")
+label_format = "󰐳"
 quiet = false
 
 [widgets.power]
-icon = "󰐥"
 tooltip = true
 items_per_row = 3
 icon_size = 100
-show_icon = true
-label = false
+label_format = "󰐥"
 confirm = true
 
 [widgets.power.item_shortcuts]
@@ -343,12 +326,11 @@ delayed_timeout = 5000
 
 [widgets.screenshot]
 path = "Pictures/Screenshots"
-icon = "󰄀"
+label_format = "󰄀"
 tooltip = true
 annotation = false
 delayed = false
 delayed_timeout = 5000
-label = false
 capture_sound = false
 
 [widgets.stopwatch]
@@ -357,10 +339,8 @@ running_icon = "󱫠"
 
 
 [widgets.submap]
-icon = "󰌌"
-label = true
 tooltip = true
-show_icon = false
+label_format = "󰌌 {submap}"
 hide_on_default = false
 
 [widgets.system_tray]
@@ -368,6 +348,7 @@ icon_size = 16
 ignored = []
 hidden = []
 hide_when_empty = false
+tooltip = true
 
 [widgets.taskbar]
 icon_size = 22
@@ -376,21 +357,18 @@ tooltip = true
 show_current_workspace_only = false
 
 [widgets.theme_switcher]
-icon = ""
+label_format = ""
 notify = false
 
 [widgets.updates]
-show_icon = true
+label_format = "{total}"
+pad_zero = true
 available_icon = "󰏗"
 no_updates_icon = "󰏖"
 os = "arch"
-hover_reveal = true
-reveal_duration = 500
 interval = 3600
 tooltip = true
 terminal = "kitty"
-pad_zero = false
-label = true
 auto_hide = false
 flatpak = true
 snap = false
@@ -420,6 +398,7 @@ tooltip = true
 mappings = true
 title_map = []
 fallback = "class"
+fallback_icon = "󰣆"
 
 [widgets.workspaces]
 count = 10
@@ -434,60 +413,57 @@ show_special = false
 show_urgent = false
 
 [widgets.world_clock]
-icon = "󰃰"
 use_24hr = true
-show_icon = true
+label_format = "󰃰"
 timezones = ["America/New_York", "Asia/Tokyo"]
 
-[widgets.custom_button_group]
-spacing = 4
-
-[[widgets.custom_button_group.buttons]]
-id = "spotify"
-command = "spotify"
-icon = ""
-label_text = "Spotify"
-tooltip_text = "Open Spotify"
-show_icon = true
-label = false
-tooltip = true
-
 [widgets.cheatsheet]
-icon = "󰌌"
-label = true
-label_text = "Keys"
+label_format = "󰌌"
 tooltip = true
-title = "Hyprland Cheatsheet"
-columns = 3
-groups_per_page = 6
-max_entries_per_group = 8
 
 [widgets.pomodoro]
-icon = "🍅"
-label = true
-label_text = "Pomo"
+label_format = "🍅"
 tooltip = true
 
 [widgets.dns_switcher]
-icon = "󰚘"
-label_text = "DNS"
+# {current_dns} -> active provider, or the default label
+label_format = "󰚘"
 tooltip = true
 
 [widgets.cloudflare_warp]
 connected_icon = ""
 disconnected_icon = ""
-label = false
-label_text = "WARP"
+# {state} -> "connected" / "disconnected"
+label_format = ""
 tooltip = true
 
 [[widgets.custom_widget]]
 id = "volume"
 exec = "pamixer --get-volume"
-format = "󰕾 {}%"
-interval = 1
+exec_on_event = true
+interval = 1000                      # Milliseconds between updates (0 = run once)
+return_type = "plain"                # "plain" | "json" (Waybar JSON protocol)
+label_format = "󰕾 {value}%"
+max_length = 0                       # 0 = no limit
+min_length = 0                       # Pads the output with spaces
+rotate = 0                           # Degrees to rotate the text
+tooltip = true
+tooltip_format = ""                  # {value} is replaced with the output
+on_click = ""
+on_click_right = ""
+on_click_middle = ""
 on_scroll_up = "pamixer -i 5"
 on_scroll_down = "pamixer -d 5"
-exec_on_event = true
+# signal = 1                         # SIGRTMIN+N (1-30) used to trigger a refresh
+restart_interval = 0                 # Restart a continuous command after N seconds
+format_icons = {}                    # Percentage/state to icon map, e.g. { "50" = "󰕾" }
+
+# A click-only button: no `exec`, just a glyph and the command to run.
+# [[widgets.custom_widget]]
+# id = "spotify"
+# format_icons = { default = "" }  # The button glyph
+# on_click = "spotify"
+# tooltip_text = "Open Spotify"
 
 [[widget_groups]]
 id = "workspaces-group"
@@ -517,7 +493,7 @@ reveal_duration = 500
 id = "utility-tools"
 widgets = ["ocr", "screenshot", "recorder"]
 spacing = 4
-icon = "󰒓"
+label_format = "󰍽"  # the toggle button's whole label
 tooltip = "Utility Tools"
 style_classes = ["utility-tools"]
 
@@ -533,6 +509,313 @@ layer = "top"
 anchor = "center"
 transition_type = "crossfade"
 transition_duration = 350
+
+# ── Keymap cheatsheet ─────────────────────────────────
+# A centered overlay listing `sections`. Sections flow into the currently
+# shortest column, so their order decides where each one lands.
+[modules.cheatsheet]
+enabled = true
+layer = "overlay"
+anchor = "center"
+title = "Hyprland Keymap"
+icon = ""
+refresh_icon = ""
+close_icon = ""
+columns = 4
+groups_per_page = 8   # Sections per page; extra sections spill onto the next page
+column_width = 300   # Fixed column width in px
+key_width = 190       # Key badge column width in px, so descriptions line up
+accent_keys = ["super"]
+transition_type = "crossfade"
+transition_duration = 200
+
+[[modules.cheatsheet.sections]]
+title = "WINDOW MANAGEMENT"
+
+[[modules.cheatsheet.sections.rows]]
+keys = ["Super", "F"]
+description = "Fullscreen (with bar)"
+
+[[modules.cheatsheet.sections.rows]]
+keys = ["Super", "Shift", "F"]
+description = "Fullscreen (pure)"
+
+[[modules.cheatsheet.sections.rows]]
+keys = ["Super", "Q"]
+description = "Floating Mode"
+
+[[modules.cheatsheet.sections.rows]]
+keys = ["Super", "W"]
+description = "Tiled Mode"
+
+[[modules.cheatsheet.sections.rows]]
+keys = ["Super", "1"]
+description = "Rotate Split"
+
+[[modules.cheatsheet.sections.rows]]
+keys = ["Super", "BRACKETLEFT"]
+description = "Preselect Left"
+
+[[modules.cheatsheet.sections.rows]]
+keys = ["Super", "BRACKETRIGHT"]
+description = "Preselect Right"
+
+[[modules.cheatsheet.sections.rows]]
+keys = ["Super", "TAB"]
+description = "Next Tab"
+
+[[modules.cheatsheet.sections.rows]]
+keys = ["Super", "Shift", "TAB"]
+description = "Previous Tab"
+
+[[modules.cheatsheet.sections.rows]]
+keys = ["Super", "Shift", "Q"]
+description = "Remove from Group"
+
+[[modules.cheatsheet.sections.rows]]
+keys = ["Super", "Shift", "0"]
+description = "Insert to Group (Left)"
+
+[[modules.cheatsheet.sections.rows]]
+keys = ["Super", "Shift", "9"]
+description = "Insert to Group (Right)"
+
+[[modules.cheatsheet.sections.rows]]
+keys = ["Super", "CTRL", "Left"]
+description = "Insert to Group (Up)"
+
+[[modules.cheatsheet.sections.rows]]
+keys = ["Super", "CTRL", "Down"]
+description = "Insert to Group (Down)"
+
+[[modules.cheatsheet.sections]]
+title = "MULTIMEDIA AND BRIGHTNESS"
+
+[[modules.cheatsheet.sections.rows]]
+keys = ["Vol Up"]
+description = "Volume Up"
+
+[[modules.cheatsheet.sections.rows]]
+keys = ["Vol Down"]
+description = "Volume Down"
+
+[[modules.cheatsheet.sections.rows]]
+keys = ["Mute"]
+description = "Mute"
+
+[[modules.cheatsheet.sections.rows]]
+keys = ["Play"]
+description = "Play / Pause"
+
+[[modules.cheatsheet.sections.rows]]
+keys = ["Next"]
+description = "Next Track"
+
+[[modules.cheatsheet.sections.rows]]
+keys = ["Prev"]
+description = "Previous Track"
+
+[[modules.cheatsheet.sections.rows]]
+keys = ["Bright Up"]
+description = "Brightness +"
+
+[[modules.cheatsheet.sections.rows]]
+keys = ["Bright Down"]
+description = "Brightness -"
+
+[[modules.cheatsheet.sections]]
+title = "NAVIGATION (FOCUS)"
+
+[[modules.cheatsheet.sections.rows]]
+keys = ["Super", "LEFT"]
+description = "Focus Left"
+
+[[modules.cheatsheet.sections.rows]]
+keys = ["Super", "RIGHT"]
+description = "Focus Right"
+
+[[modules.cheatsheet.sections.rows]]
+keys = ["Super", "UP"]
+description = "Focus Up"
+
+[[modules.cheatsheet.sections.rows]]
+keys = ["Super", "DOWN"]
+description = "Focus Down"
+
+[[modules.cheatsheet.sections]]
+title = "MOVING WINDOWS"
+
+[[modules.cheatsheet.sections.rows]]
+keys = ["Super", "Shift", "LEFT"]
+description = "Move Left"
+
+[[modules.cheatsheet.sections.rows]]
+keys = ["Super", "Shift", "RIGHT"]
+description = "Move Right"
+
+[[modules.cheatsheet.sections.rows]]
+keys = ["Super", "Shift", "UP"]
+description = "Move Up"
+
+[[modules.cheatsheet.sections.rows]]
+keys = ["Super", "Shift", "DOWN"]
+description = "Move Down"
+
+[[modules.cheatsheet.sections]]
+title = "WORKSPACES"
+
+[[modules.cheatsheet.sections.rows]]
+keys = ["Super", "1"]
+description = "Workspace 1"
+
+[[modules.cheatsheet.sections.rows]]
+keys = ["Super", "2"]
+description = "Workspace 2"
+
+[[modules.cheatsheet.sections.rows]]
+keys = ["Super", "3"]
+description = "Workspace 3"
+
+[[modules.cheatsheet.sections.rows]]
+keys = ["Super", "4"]
+description = "Workspace 4"
+
+[[modules.cheatsheet.sections.rows]]
+keys = ["Super", "5"]
+description = "Workspace 5"
+
+[[modules.cheatsheet.sections.rows]]
+keys = ["Super", "SHIFT", "1"]
+description = "Send to Workspace 1"
+
+[[modules.cheatsheet.sections.rows]]
+keys = ["Super", "SHIFT", "2"]
+description = "Send to Workspace 2"
+
+[[modules.cheatsheet.sections.rows]]
+keys = ["Super", "SHIFT", "3"]
+description = "Send to Workspace 3"
+
+[[modules.cheatsheet.sections.rows]]
+keys = ["Super", "SHIFT", "4"]
+description = "Send to Workspace 4"
+
+[[modules.cheatsheet.sections.rows]]
+keys = ["Super", "SHIFT", "5"]
+description = "Send to Workspace 5"
+
+[[modules.cheatsheet.sections.rows]]
+keys = ["Super", "S"]
+description = "Next Workspace"
+
+[[modules.cheatsheet.sections.rows]]
+keys = ["Super", "SHIFT", "S"]
+description = "Previous Workspace"
+
+[[modules.cheatsheet.sections.rows]]
+keys = ["Super", "V"]
+description = "Move Window with Mouse"
+
+[[modules.cheatsheet.sections.rows]]
+keys = ["Super", "CTRL"]
+description = "Resize Window with Mouse"
+
+[[modules.cheatsheet.sections]]
+title = "APPLICATIONS"
+
+[[modules.cheatsheet.sections.rows]]
+keys = ["Super", "Q"]
+description = "Browser"
+
+[[modules.cheatsheet.sections.rows]]
+keys = ["Super", "RETURN"]
+description = "Terminal"
+
+[[modules.cheatsheet.sections.rows]]
+keys = ["Super", "C"]
+description = "Close Window"
+
+[[modules.cheatsheet.sections.rows]]
+keys = ["Super", "V"]
+description = "Yield"
+
+[[modules.cheatsheet.sections.rows]]
+keys = ["Super", "E"]
+description = "Exit Hyprland"
+
+[[modules.cheatsheet.sections.rows]]
+keys = ["Super", "H"]
+description = "Hibernate"
+
+[[modules.cheatsheet.sections.rows]]
+keys = ["Super", "N"]
+description = "Keybinds List"
+
+[[modules.cheatsheet.sections.rows]]
+keys = ["Super", "SPACE"]
+description = "Gw-wlr Layer Launcher"
+
+[[modules.cheatsheet.sections.rows]]
+keys = ["CTRL", "F5"]
+description = "Screenshot Area - path starting with ~/ to Clipboard"
+
+[[modules.cheatsheet.sections.rows]]
+keys = ["Super", "PRINT"]
+description = "Screenshot Area to Clipboard"
+
+[[modules.cheatsheet.sections]]
+title = "NOVTALIA (QUICKSHELL) INTEGRATION"
+
+[[modules.cheatsheet.sections.rows]]
+keys = ["Super", "G"]
+description = "Calculator"
+
+[[modules.cheatsheet.sections.rows]]
+keys = ["Super", "J"]
+description = "Calendar"
+
+[[modules.cheatsheet.sections.rows]]
+keys = ["Super", "K"]
+description = "Power Menu"
+
+[[modules.cheatsheet.sections.rows]]
+keys = ["Super", "N"]
+description = "Change Wallpaper"
+
+[[modules.cheatsheet.sections.rows]]
+keys = ["Super", ","]
+description = "Notifications"
+
+[[modules.cheatsheet.sections.rows]]
+keys = ["Super", "ESCAPE"]
+description = "Lock Screen"
+
+[[modules.cheatsheet.sections.rows]]
+keys = ["Super", "PRINT"]
+description = "Record Screen"
+
+[[modules.cheatsheet.sections.rows]]
+keys = ["Super", "M"]
+description = "Hibernate"
+
+[[modules.cheatsheet.sections.rows]]
+keys = ["Super", "SHIFT", ","]
+description = "Steam Overlay"
+
+[[modules.cheatsheet.sections.rows]]
+keys = ["Super", "."]
+description = "Discord Overlay"
+
+[[modules.cheatsheet.sections]]
+title = "Clipper"
+
+[[modules.cheatsheet.sections.rows]]
+keys = ["Super", "V"]
+description = "Clipper"
+
+[[modules.cheatsheet.sections.rows]]
+keys = ["Super", "SHIFT", "G"]
+description = "Todo do Todo"
 
 [modules.osd]
 enabled = true
@@ -555,6 +838,8 @@ height = 320
 layout = "list"
 grid_columns = 3
 grid_spacing = 12
+plugins_enabled = true
+plugins_dir = ""
 plugins = [
     "calc",
     "clipboard-history",
@@ -573,7 +858,6 @@ enabled = true
 anchor = "top-right"
 auto_dismiss = true
 respect_expire = true
-dnd_on_screencast = true
 ignored = []
 transition_type = "slide-left"
 transition_duration = 350
@@ -650,7 +934,11 @@ layer = "bottom"
 
 [layout]
 left_section = ["@group:workspaces-group"]
-middle_section = ["date_time", "weather", "mpris"]
+middle_section = [
+    "date_time",
+    "weather",
+    "mpris"
+]
 right_section = ["@group:sys-group", "@group:utils-group", "system_tray", "power"]
 
 [general]
@@ -661,6 +949,7 @@ auto_restart = true
 restart_delay = 1500
 multi_monitor = false
 tooltips = true
+language = "en"
 
 [styling]
 border-radius = "10px"
@@ -862,15 +1151,6 @@ icon_size = "12px"
 spacing = "0.125em"
 
 [styling.bar.widgets.custom_widget.border]
-enabled = false
-radius = "16px"
-width = "1px"
-
-[styling.bar.widgets.custom_button]
-icon_size = "12px"
-spacing = "0.125em"
-
-[styling.bar.widgets.custom_button.border]
 enabled = false
 radius = "16px"
 width = "1px"
@@ -1098,7 +1378,7 @@ radius = "16px"
 width = "1px"
 
 [styling.bar.widgets.quick_settings.sliders]
-height = "7px"
+height = "5px"
 knob = true
 knob_height = "8px"
 
@@ -1286,7 +1566,13 @@ opacity = 100
 spread = 0
 
 [styling.modules.desktop_clock]
+margin_x = "15rem"
+margin_y = "15rem"
 spacing = "0.125em"
+
+[styling.modules.desktop_clock.cookie]
+margin_x = "8rem"
+margin_y = "8rem"
 
 [styling.modules.desktop_clock.border]
 enabled = false
@@ -1294,6 +1580,8 @@ radius = "16px"
 width = "1px"
 
 [styling.modules.desktop_quotes]
+margin_x = "4rem"
+margin_y = "4rem"
 spacing = "0.125em"
 
 [styling.modules.desktop_quotes.border]
@@ -1322,8 +1610,8 @@ opacity = 100
 spread = 0
 
 [styling.modules.notification]
-margin_x = "0"
-margin_y = "1.25em"
+margin_x = "12px"   # keeps the card off the anchored screen edge
+margin_y = "12px"
 opacity = 100
 padding_x = "0.9em"
 padding_y = "0.9em"
@@ -1343,10 +1631,10 @@ spread = 0
 
 [styling.modules.osd]
 margin_x = "0"
-margin_y = "1.25em"
+margin_y = "100px"
 opacity = 100
-padding_x = "0.8em"
-padding_y = "0.6em"
+padding_x = "1.25em"   # was hardcoded toEm(20)
+padding_y = "0.75em"
 scaling = 100
 widget_style = "default"
 
