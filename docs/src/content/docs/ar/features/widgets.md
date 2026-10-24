@@ -61,7 +61,7 @@ graph_length = 4
 [widgets.storage]
 path = "/"
 label_format = "󰋊"
-mode = "label"          # "label" | "graph" | "circular"
+mode = "label" # "label" | "graph" | "circular"
 tooltip = true
 graph_length = 4
 unit = "gb"
@@ -222,7 +222,7 @@ icon = true
 truncation = true
 truncation_size = 50
 tooltip = true
-fallback = "class"       # "class" | "title"
+fallback = "class" # "class" | "title"
 fallback_icon = "󰣆"
 ```
 
@@ -261,7 +261,7 @@ show_current_workspace_only = false
 [widgets.date_time]
 date_format = " %a %b %d,"
 calendar = true
-clock_format = "12h"   # "12h" | "24h"
+clock_format = "12h" # "12h" | "24h"
 ```
 
 ### ساعة عالمية

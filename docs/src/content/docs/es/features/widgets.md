@@ -65,7 +65,7 @@ Muestra el uso del disco para una ruta dada.
 [widgets.storage]
 path = "/"
 label_format = "󰋊"
-mode = "label"          # "label" | "graph" | "circular"
+mode = "label" # "label" | "graph" | "circular"
 tooltip = true
 graph_length = 4
 unit = "gb"
@@ -99,7 +99,7 @@ pad_zero = true
 available_icon = "󰏗"
 no_updates_icon = "󰏖"
 os = "arch"
-interval = 3600         # Intervalo de actualización en segundos
+interval = 3600 # Intervalo de actualización en segundos
 tooltip = true
 terminal = "kitty"
 auto_hide = false
@@ -298,7 +298,7 @@ truncation_size = 50
 tooltip = true
 mappings = true
 title_map = []
-fallback = "class"       # "class" | "title"
+fallback = "class" # "class" | "title"
 fallback_icon = "󰣆"
 ```
 
@@ -607,7 +607,7 @@ Cambia rápidamente entre temas instalados.
 ```toml
 [widgets.theme_switcher]
 label_format = ""
-notify = false    # Mostrar notificación al cambiar de tema
+notify = false # Mostrar notificación al cambiar de tema
 ```
 
 ### Cheatsheet
