@@ -488,7 +488,6 @@ widgets = ["workspaces", "window_title"]
 [[widgets.custom_widget]]
 id = "volume"
 exec = "pamixer --get-volume"
-
 ```
 
 **Implementation layers (all must be kept in sync):**
