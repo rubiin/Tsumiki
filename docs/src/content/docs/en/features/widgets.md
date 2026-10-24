@@ -16,10 +16,10 @@ Widgets are configured under `[widgets.<name>]` in `config.toml` and placed in t
 A widget whose glyph changes with state — Bluetooth, microphone mute, the update count, the WARP connection — supplies that glyph itself and leads the label with it, so its `label_format` holds only the text you want beside it.
 
 ```toml
-label_format = "󰌌 {layout}"       # a fixed glyph plus literal text
-label_format = "🍅"                # a fixed glyph only
-label_format = "Settings"          # text only, no glyph
-label_format = ""                  # nothing at all
+label_format = "󰌌 {layout}" # a fixed glyph plus literal text
+label_format = "🍅" # a fixed glyph only
+label_format = "Settings" # text only, no glyph
+label_format = "" # nothing at all
 ```
 
 This replaced the old per-widget `show_icon` boolean and the `label` / `label_text` keys, none of which are read any more — a config that still sets `show_icon` logs a warning at startup and falls back to the default.
@@ -84,7 +84,7 @@ Displays disk usage for a given path.
 [widgets.storage]
 path = "/"
 label_format = "󰋊"
-mode = "label"          # "label" | "graph" | "circular"
+mode = "label" # "label" | "graph" | "circular"
 tooltip = true
 graph_length = 4
 unit = "gb"
@@ -118,7 +118,7 @@ pad_zero = true
 available_icon = "󰏗"
 no_updates_icon = "󰏖"
 os = "arch"
-interval = 3600         # Refresh interval in seconds
+interval = 3600 # Refresh interval in seconds
 tooltip = true
 terminal = "kitty"
 auto_hide = false
@@ -350,8 +350,8 @@ truncation_size = 50
 tooltip = true
 mappings = true
 title_map = []
-fallback = "class"       # "class" | "title"
-fallback_icon = "󰣆"   # Glyph for the fallback title; "" drops it
+fallback = "class" # "class" | "title"
+fallback_icon = "󰣆" # Glyph for the fallback title; "" drops it
 ```
 
 - **`title_map`**: List of mapping rules to rename window titles.
@@ -676,7 +676,7 @@ Quickly switch between installed themes.
 ```toml
 [widgets.theme_switcher]
 label_format = ""
-notify = false    # Show notification on theme change
+notify = false # Show notification on theme change
 ```
 
 ### Cheatsheet
@@ -685,7 +685,7 @@ Displays a searchable keybind cheatsheet for Hyprland.
 
 ```toml
 [widgets.cheatsheet]
-label_format = "󰌌"              # the fixed glyph; "" for no label at all
+label_format = "󰌌" # the fixed glyph; "" for no label at all
 tooltip = true
 title = "Hyprland Cheatsheet"
 columns = 3
